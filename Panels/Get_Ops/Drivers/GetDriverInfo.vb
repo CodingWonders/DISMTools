@@ -1017,6 +1017,31 @@ Public Class GetDriverInfo
                 Label42.Text = InstalledDriverList(ListView1.FocusedItem.Index).ClassGuid
                 Label44.Text = Casters.CastDismSignatureStatus(InstalledDriverList(ListView1.FocusedItem.Index).DriverSignature, True)
                 Label46.Text = InstalledDriverList(ListView1.FocusedItem.Index).CatalogFile
+                Dim signer As String = DriverSignerViewer.GetSignerInfo(InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+                If Not (signer Is Nothing OrElse signer = "") Then
+                    Debug.WriteLine("Driver file: {0} ; Signer: {1}", Path.GetFileName(InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName), signer)
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Label44.Text &= " by " & signer
+                                Case "ESN"
+                                    Label44.Text &= " por " & signer
+                                Case "FRA"
+                                    Label44.Text &= " par " & signer
+                                Case "PTB", "PTG"
+                                    Label44.Text &= " por " & signer
+                            End Select
+                        Case 1
+                            Label44.Text &= " by " & signer
+                        Case 2
+                            Label44.Text &= " por " & signer
+                        Case 3
+                            Label44.Text &= " par " & signer
+                        Case 4
+                            Label44.Text &= " por " & signer
+                    End Select
+                End If
             Else
                 Panel4.Visible = False
                 Panel7.Visible = True

@@ -66,7 +66,7 @@ Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Microsoft.Dism.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
-Source: ".\files\ScintillaNET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\Scintilla.NET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Drawing.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Management.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
@@ -78,6 +78,7 @@ Source: ".\files\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{#pfDir}"; Flags: 
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\runtimes\*"; DestDir: "{#pfDir}\runtimes"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\videos\*"; DestDir: "{#pfDir}\videos"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

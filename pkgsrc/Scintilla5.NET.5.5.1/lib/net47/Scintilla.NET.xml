@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>ScintillaNET</name>
+        <name>Scintilla.NET</name>
     </assembly>
     <members>
         <member name="T:ScintillaNET.Annotation">
@@ -28,6 +28,38 @@
             <summary>
             Annotations are indented to match the text.
             </summary>
+        </member>
+        <member name="T:ScintillaNET.AutoCSelectionChangeEventArgs">
+            <summary>
+            Provides data for the <see cref="E:ScintillaNET.Scintilla.AutoCSelectionChange" /> event.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.AutoCSelectionChangeEventArgs.ListType">
+            <summary>
+            Gets the list type of the user list or 0 for an autocompletion.
+            </summary>
+            <returns>The list type of the user list or 0 for an autocompletion.</returns>
+        </member>
+        <member name="P:ScintillaNET.AutoCSelectionChangeEventArgs.Position">
+            <summary>
+            Gets the position where the list was displayed at.
+            </summary>
+            <returns>The zero-based document position where the list was displayed.</returns>
+        </member>
+        <member name="P:ScintillaNET.AutoCSelectionChangeEventArgs.Text">
+            <summary>
+            Gets the text of the selected autocompletion item.
+            </summary>
+            <returns>The selected autocompletion item text.</returns>
+        </member>
+        <member name="M:ScintillaNET.AutoCSelectionChangeEventArgs.#ctor(ScintillaNET.Scintilla,System.IntPtr,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScintillaNET.AutoCSelectionChangeEventArgs" /> class.
+            </summary>
+            <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla" /> control that generated this event.</param>
+            <param name="text">A pointer to the selected autocompletion text.</param>
+            <param name="bytePosition">The zero-based byte position within the document where the list was displayed.</param>
+            <param name="listType">The list type of the user list, or 0 for an autocompletion.</param>
         </member>
         <member name="T:ScintillaNET.AutoCSelectionEventArgs">
             <summary>
@@ -118,11 +150,8 @@
             Gets the text being inserted or deleted.
             </summary>
             <returns>
-            The text about to be inserted or deleted, or null when the the source of the modification is an undo/redo operation.
+            The text about to be inserted or deleted.
             </returns>
-            <remarks>
-            This property will return null when <see cref="P:ScintillaNET.BeforeModificationEventArgs.Source" /> is <see cref="F:ScintillaNET.ModificationSource.Undo" /> or <see cref="F:ScintillaNET.ModificationSource.Redo" />.
-            </remarks>
         </member>
         <member name="M:ScintillaNET.BeforeModificationEventArgs.#ctor(ScintillaNET.Scintilla,ScintillaNET.ModificationSource,System.Int32,System.Int32,System.IntPtr)">
             <summary>
@@ -133,6 +162,128 @@
             <param name="bytePosition">The zero-based byte position within the document where text is being modified.</param>
             <param name="byteLength">The length in bytes of the text being modified.</param>
             <param name="text">A pointer to the text being inserted.</param>
+        </member>
+        <member name="T:ScintillaNET.BiDirectionalDisplayType">
+            <summary>
+            The display type for the <see cref="P:ScintillaNET.Scintilla.BiDirectionality"/> property.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.BiDirectionalDisplayType.Disabled">
+            <summary>
+            The bi-directional display type is disabled.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.BiDirectionalDisplayType.LeftToRight">
+            <summary>
+            The bi-directional display type is left-to-right.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.BiDirectionalDisplayType.RightToLeft">
+            <summary>
+            The bi-directional display type is right-to-left.
+            </summary>
+        </member>
+        <member name="T:ScintillaNET.BorderStyle">
+            <summary>
+            Specifies the border style for a control.
+            </summary>
+            <remarks>
+            Use the members of this enumeration to set the border style for controls that have a changeable border.
+            </remarks>
+        </member>
+        <member name="F:ScintillaNET.BorderStyle.None">
+            <summary>
+            No border.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.BorderStyle.FixedSingle">
+            <summary>
+            A single-line border.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.BorderStyle.Fixed3D">
+            <summary>
+            A three-dimensional border (classic).
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.BorderStyle.Fixed3DVisualStyles">
+            <summary>
+            A three-dimensional border. When visual styles are enabled, the border is displayed like that of a <see cref="T:System.Windows.Forms.TextBox"/>.
+            When visual styles are not enabled, this is equivalent to <see cref="F:ScintillaNET.BorderStyle.Fixed3D"/>.
+            </summary>
+        </member>
+        <member name="T:ScintillaNET.CallTipClickEventArgs">
+            <summary>
+            Provides data for the <see cref="E:ScintillaNET.Scintilla.CallTipClick" /> event.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.CallTipClickEventArgs.CallTipClickType">
+            <summary>
+            Gets the type of the call tip click.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.CallTipClickEventArgs.#ctor(ScintillaNET.Scintilla,ScintillaNET.CallTipClickType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScintillaNET.DwellEventArgs" /> class.
+            </summary>
+            <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla" /> control that generated this event.</param>
+            /// <param name="callTipClickType">Type of the call tip click.</param>
+        </member>
+        <member name="T:ScintillaNET.CallTipClickType">
+            <summary>
+            The type of a call tip click.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CallTipClickType.Elsewhere">
+            <summary>
+            The call tip was clicked elsewhere; not the up or down arrows.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CallTipClickType.UpArrow">
+            <summary>
+            The call tip up arrow was clicked.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CallTipClickType.DownArrow">
+            <summary>
+            The call tip down arrow was clicked.
+            </summary>
+        </member>
+        <member name="T:ScintillaNET.CaretPolicy">
+            <summary>
+            The caret policy.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CaretPolicy.Slop">
+            <summary>
+            If set, we can define a slop value: caretSlop. This value defines an unwanted zone (UZ)
+            where the caret is... unwanted. This zone is defined as a number of pixels near the
+            vertical margins, and as a number of lines near the horizontal margins. By keeping the
+            caret away from the edges, it is seen within its context. This makes it likely that the
+            identifier that the caret is on can be completely seen, and that the current line is seen
+            with some of the lines following it, which are often dependent on that line.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CaretPolicy.Strict">
+            <summary>
+            If set, the policy set by CARET_SLOP is enforced... strictly. The caret is centered on the
+            display if caretSlop is not set, and cannot go in the UZ if caretSlop is set.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CaretPolicy.Jumps">
+            <summary>
+            If set, the display is moved more energetically so the caret can move in the same direction
+            longer before the policy is applied again. '3UZ' notation is used to indicate three time
+            the size of the UZ as a distance to the margin.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.CaretPolicy.Even">
+            <summary>
+            If not set, instead of having symmetrical UZs, the left and bottom UZs are extended up to
+            right and top UZs respectively. This way, we favour the displaying of useful information:
+            the beginning of lines, where most code reside, and the lines after the caret, for example,
+            the body of a function.
+            </summary>
         </member>
         <member name="T:ScintillaNET.CaretStyle">
             <summary>
@@ -171,6 +322,31 @@
             </summary>
             <param name="line">The zero-based line index of the annotation that changed.</param>
         </member>
+        <member name="T:ScintillaNET.ChangeHistory">
+            <summary>
+            Bit-flags for whether Scintilla should keep track of document change history and in which ways it should display the difference.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Disabled">
+            <summary>
+            The default: change history turned off.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Enabled">
+            <summary>
+            Track changes to the document.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Markers">
+            <summary>
+            Display changes in the margin using the SC_MARKNUM_HISTORY markers.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ChangeHistory.Indicators">
+            <summary>
+            Display changes in the text using the INDICATOR_HISTORY indicators.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.CharAddedEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.CharAdded" /> event.
@@ -187,6 +363,38 @@
             Initializes a new instance of the <see cref="T:ScintillaNET.CharAddedEventArgs" /> class.
             </summary>
             <param name="ch">The character added.</param>
+        </member>
+        <member name="T:ScintillaNET.OkLab">
+            <summary>
+            OkLab color.
+            </summary>
+            <param name="L">Luminance (perceived lightness) in range [0.0, 1.0].</param>
+            <param name="a">How green/red the color is in range [-0.233887, +0.276216].</param>
+            <param name="b">How blue/yellow the color is in range [-0.311528, +0.198570].</param>
+        </member>
+        <member name="M:ScintillaNET.OkLab.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            OkLab color.
+            </summary>
+            <param name="L">Luminance (perceived lightness) in range [0.0, 1.0].</param>
+            <param name="a">How green/red the color is in range [-0.233887, +0.276216].</param>
+            <param name="b">How blue/yellow the color is in range [-0.311528, +0.198570].</param>
+        </member>
+        <member name="T:ScintillaNET.Srgb">
+            <summary>
+            sRGB color.
+            </summary>
+            <param name="R">Red component.</param>
+            <param name="G">Green component.</param>
+            <param name="B">Blue component.</param>
+        </member>
+        <member name="M:ScintillaNET.Srgb.#ctor(System.Single,System.Single,System.Single)">
+            <summary>
+            sRGB color.
+            </summary>
+            <param name="R">Red component.</param>
+            <param name="G">Green component.</param>
+            <param name="B">Blue component.</param>
         </member>
         <member name="T:ScintillaNET.Command">
             <summary>
@@ -583,6 +791,11 @@
             Transposes the current and previous lines.
             </summary>
         </member>
+        <member name="F:ScintillaNET.Command.LineReverse">
+            <summary>
+            Reverses the current line.
+            </summary>
+        </member>
         <member name="F:ScintillaNET.Command.LineDuplicate">
             <summary>
             Duplicates the current line.
@@ -879,6 +1092,23 @@
             Line Feed '\n' (0x0A).
             </summary>
         </member>
+        <member name="F:ScintillaNET.FlagsEditorControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.FlagsEditorControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:ScintillaNET.FlagsEditorControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.FoldAction">
             <summary>
             Fold actions.
@@ -997,6 +1227,54 @@
             <summary>
             Specifies that ClearType anti-aliasing should be used when rendering text, if the font supports it.
             </summary>
+        </member>
+        <member name="T:ScintillaNET.HelperMethods">
+            <summary>
+            Helper methods for the <see cref="T:ScintillaNET.Scintilla"/> control.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.FromWin32Color(System.Int32)">
+            <summary>
+            Converts a 32-bit WinAPI color to <see cref="T:System.Drawing.Color"/>.
+            </summary>
+            <param name="color">The color value to convert.</param>
+            <returns>A <see cref="T:System.Drawing.Color"/> equivalent of the 32-bit WinAPI color.</returns>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.ToWin32Color(System.Drawing.Color)">
+            <summary>
+            Converts a <see cref="T:System.Drawing.Color"/> to 32-bit WinAPI color.
+            </summary>
+            <param name="color">The <see cref="T:System.Drawing.Color"/> instance to convert.</param>
+            <returns>32-bit WinAPI color value of the <see cref="T:System.Drawing.Color"/> instance.</returns>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.GetFoldingState(ScintillaNET.Scintilla,System.String)">
+            <summary>
+            Gets the folding state of the control as a delimited string containing line indexes.
+            </summary>
+            <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla"/> control instance.</param>
+            <param name="separator">The string to use as a separator.</param>
+            <returns>The folding state of the control.</returns>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.SetFoldingState(ScintillaNET.Scintilla,System.String,System.String)">
+            <summary>
+            Sets the folding state of the state of the control with specified index string.
+            </summary>
+            <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla"/> control instance.</param>
+            <param name="foldingState">A string containing the folded line indexes separated with the <paramref name="separator"/> to restore the folding.</param>
+            <param name="separator">The string to use as a separator.</param>
+        </member>
+        <member name="M:ScintillaNET.Helpers.MaxIndex``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Int32})">
+            <summary>Returns index of the maximum value in a generic sequence.</summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A sequence of values to determine the index of the maximum value of.</param>
+            <param name="comparer">The <see cref="T:System.Collections.Generic.IComparer`1" /> to compare values.</param>
+            <returns>The index of the maximum value in the sequence.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source" /> is <see langword="null" />.</exception>
+            <exception cref="T:System.ArgumentException">No object in <paramref name="source" /> implements the <see cref="T:System.IComparable" /> or <see cref="T:System.IComparable`1" /> interface.</exception>
+            <remarks>
+            <para>If type <typeparamref name="TSource" /> implements <see cref="T:System.IComparable`1" />, the <see cref="M:ScintillaNET.Helpers.MaxIndex``1(System.Collections.Generic.IEnumerable{``0})" /> method uses that implementation to compare values. Otherwise, if type <typeparamref name="TSource" /> implements <see cref="T:System.IComparable" />, that implementation is used to compare values.</para>
+            <para>If <typeparamref name="TSource" /> is a reference type and the source sequence is empty or contains only values that are <see langword="null" />, this method returns -1.</para>
+            </remarks>
         </member>
         <member name="T:ScintillaNET.HotspotClickEventArgs">
             <summary>
@@ -1253,24 +1531,6 @@
             <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla" /> control that created this indicator.</param>
             <param name="index">The index of this style within the <see cref="T:ScintillaNET.IndicatorCollection" /> that created it.</param>
         </member>
-        <member name="T:ScintillaNET.IndicatorReleaseEventArgs">
-            <summary>
-            Provides data for the <see cref="E:ScintillaNET.Scintilla.IndicatorRelease" /> event.
-            </summary>
-        </member>
-        <member name="P:ScintillaNET.IndicatorReleaseEventArgs.Position">
-            <summary>
-            Gets the zero-based document position of the text clicked.
-            </summary>
-            <returns>The zero-based character position within the document of the clicked text.</returns>
-        </member>
-        <member name="M:ScintillaNET.IndicatorReleaseEventArgs.#ctor(ScintillaNET.Scintilla,System.Int32)">
-            <summary>
-            Initializes a new instance of the <see cref="T:ScintillaNET.IndicatorReleaseEventArgs" /> class.
-            </summary>
-            <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla" /> control that generated this event.</param>
-            <param name="bytePosition">The zero-based byte position of the clicked text.</param>
-        </member>
         <member name="T:ScintillaNET.IndicatorClickEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.IndicatorClick" /> event.
@@ -1341,6 +1601,24 @@
             and will use that instead of the value specified in the <see cref="P:ScintillaNET.Indicator.ForeColor" /> property. This allows
             an indicator to display more than one color.
             </summary>
+        </member>
+        <member name="T:ScintillaNET.IndicatorReleaseEventArgs">
+            <summary>
+            Provides data for the <see cref="E:ScintillaNET.Scintilla.IndicatorRelease" /> event.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.IndicatorReleaseEventArgs.Position">
+            <summary>
+            Gets the zero-based document position of the text clicked.
+            </summary>
+            <returns>The zero-based character position within the document of the clicked text.</returns>
+        </member>
+        <member name="M:ScintillaNET.IndicatorReleaseEventArgs.#ctor(ScintillaNET.Scintilla,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ScintillaNET.IndicatorReleaseEventArgs" /> class.
+            </summary>
+            <param name="scintilla">The <see cref="T:ScintillaNET.Scintilla" /> control that generated this event.</param>
+            <param name="bytePosition">The zero-based byte position of the clicked text.</param>
         </member>
         <member name="T:ScintillaNET.IndicatorStyle">
             <summary>
@@ -1415,6 +1693,11 @@
             <see cref="P:ScintillaNET.Indicator.Alpha" /> and <see cref="P:ScintillaNET.Indicator.OutlineAlpha" />.
             </summary>
         </member>
+        <member name="F:ScintillaNET.IndicatorStyle.SquigglePixmap">
+            <summary>
+            A version of Squiggle that draws using a pixmap instead of as a series of line segments for performance.
+            </summary>
+        </member>
         <member name="F:ScintillaNET.IndicatorStyle.CompositionThick">
             <summary>
             A 2-pixel thick underline with 1 pixel insets on either side.
@@ -1446,6 +1729,21 @@
             A triangle below the center of the first character of the indicator range.
             </summary>
         </member>
+        <member name="F:ScintillaNET.IndicatorStyle.Gradient">
+            <summary>
+            A vertical gradient between a color and alpha at top to fully transparent at bottom.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.IndicatorStyle.GradientCenter">
+            <summary>
+            A vertical gradient with color and alpha in the mid-line fading to fully transparent at top and bottom.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.IndicatorStyle.PointTop">
+            <summary>
+            A triangle above the start of the indicator range.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.InsertCheckEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.InsertCheck" /> event.
@@ -1472,161 +1770,762 @@
             <param name="byteLength">The length in bytes of the inserted text.</param>
             <param name="text">A pointer to the text being inserted.</param>
         </member>
+        <member name="T:ScintillaNET.Layer">
+            <summary>
+            The layer on which a <see cref="T:ScintillaNET.Scintilla"/> control will draw elements like for example the text selection.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Layer.Base">
+            <summary>
+            Draw the selection background opaquely on the base layer.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Layer.UnderText">
+            <summary>
+            Draw the selection background translucently under the text. This will not work in single phase drawing mode.
+            (<see cref="F:ScintillaNET.Phases.One"/>) as there is no under-text phase.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Layer.OverText">
+            <summary>
+            Draw the selection background translucently over the text.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.Lexer">
             <summary>
-            Specifies the lexer to use for syntax highlighting in a <see cref="T:ScintillaNET.Scintilla" /> control.
+            Supported lexer names helper.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Container">
+        <member name="F:ScintillaNET.Lexer.SCLEX_A68K">
             <summary>
-            Lexing is performed by the <see cref="T:ScintillaNET.Scintilla" /> control container (host) using
-            the <see cref="E:ScintillaNET.Scintilla.StyleNeeded" /> event.
+            Lexer for Assembler, just for the MASM syntax
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Null">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ADPL">
             <summary>
-            No lexing should be performed.
+            Lexer for APDL. Based on the lexer for Assembler by The Black Horus.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Ada">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASYMPTOTE">
             <summary>
-            The Ada (95) language lexer.
+            This lexer is for the Asymptote vector graphics language
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Asm">
+        <member name="F:ScintillaNET.Lexer.SCLEX_AU3">
             <summary>
-            The assembly language lexer.
+            Lexer for AutoIt3
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Batch">
+        <member name="F:ScintillaNET.Lexer.SCLEX_AVE">
             <summary>
-            The batch file lexer.
+            Lexer for Avenue
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Cpp">
+        <member name="F:ScintillaNET.Lexer.SCLEX_AVS">
             <summary>
-            The C language family (C++, C, C#, Java, JavaScript, etc...) lexer.
+            Lexer for AviSynth
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Css">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ABAQUS">
             <summary>
-            The Cascading Style Sheets (CSS, SCSS) lexer.
+            Lexer for ABAQUS. Based on the lexer for APDL by Hadar Raz.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Fortran">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ADA">
             <summary>
-            The Fortran language lexer.
+            Lexer for Ada 95
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.FreeBasic">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASCIIDOC">
             <summary>
-            The FreeBASIC language lexer.
+            Lexer for Asciidoc
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Html">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASM">
             <summary>
-            The HyperText Markup Language (HTML) lexer.
+            Lexer for Assembler, just for the MASM syntax
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Json">
+        <member name="F:ScintillaNET.Lexer.SCLEX_AS">
             <summary>
-            JavaScript Object Notation (JSON) lexer.
+            Lexer for Assembler
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Lisp">
+        <member name="F:ScintillaNET.Lexer.SCLEX_ASN1">
             <summary>
-            The Lisp language lexer.
+            Lexer for ASN.1
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Lua">
+        <member name="F:ScintillaNET.Lexer.SCLEX_BAAN">
             <summary>
-            The Lua scripting language lexer.
+            Lexer for Baan.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Pascal">
+        <member name="F:ScintillaNET.Lexer.SCLEX_BASH">
             <summary>
-            The Pascal language lexer.
+            Lexer for Bash.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Perl">
+        <member name="F:ScintillaNET.Lexer.SCLEX_BLITZBASIC">
             <summary>
-            The Perl language lexer.
+            Lexer for BlitzBasic.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.PhpScript">
+        <member name="F:ScintillaNET.Lexer.SCLEX_PUREBASIC">
             <summary>
-            The PHP: Hypertext Preprocessor (PHP) script lexer.
+            Lexer for PureBasic.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.PowerShell">
+        <member name="F:ScintillaNET.Lexer.SCLEX_FREEBASIC">
             <summary>
-            PowerShell script lexer.
+            Lexer for FreeBasic.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Properties">
+        <member name="F:ScintillaNET.Lexer.SCLEX_BATCH">
             <summary>
-            Properties file (INI) lexer.
+            Lexer for batch files
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.PureBasic">
+        <member name="F:ScintillaNET.Lexer.SCLEX_BIBTEX">
             <summary>
-            The PureBasic language lexer.
+            Lexer for BibTeX coloring scheme.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Python">
+        <member name="F:ScintillaNET.Lexer.SCLEX_BULLANT">
             <summary>
-            The Python language lexer.
+            Lexer for Bullant
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Ruby">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CIL">
             <summary>
-            The Ruby language lexer.
+            Lexer for Common Intermediate Language (CIL)
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Smalltalk">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CLW">
             <summary>
-            The SmallTalk language lexer.
+            Case Sensitive Clarion Language Lexer
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Sql">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CLWNOCASE">
             <summary>
-            The Structured Query Language (SQL) lexer.
+            Lexer for Clarion with no case sensitivity.
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Vb">
+        <member name="F:ScintillaNET.Lexer.SCLEX_COBOL">
             <summary>
-            The Visual Basic (VB) lexer.
+            Lexer for COBOL
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.VbScript">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CPP">
             <summary>
-            The Visual Basic Script (VBScript) lexer.
+            Lexer for Case Sensitive C++
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Verilog">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CPPNOCASE">
             <summary>
-            The Verilog hardware description language lexer.
+            Lexer for no case sensitivity C++
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Xml">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CSHARP">
             <summary>
-            The Extensible Markup Language (XML) lexer.
+            Lexer for C#
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.BlitzBasic">
+        <member name="F:ScintillaNET.Lexer.SCLEX_CSS">
             <summary>
-            The Blitz (Blitz3D, BlitzMax, etc...) variant of Basic lexer.
+            Lexer for Cascading Style Sheets
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.Markdown">
+        <member name="F:ScintillaNET.Lexer.SCLEX_JAVA">
             <summary>
-            The Markdown syntax lexer.
+            Lexer for Java
             </summary>
         </member>
-        <member name="F:ScintillaNET.Lexer.R">
+        <member name="F:ScintillaNET.Lexer.SCLEX_JAVASCRIPT">
             <summary>
-            The R programming language lexer.
+            Lexer for JavaScript
             </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CAML">
+            <summary>
+            Lexer for Objective Caml.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CMAKE">
+            <summary>
+            Lexer for Cmake
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_COFFEESCRIPT">
+            <summary>
+            Lexer for CoffeeScript.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CONF">
+            <summary>
+            Apache Configuration Files
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NNCRONTAB">
+            <summary>
+            Lexer to use with extended crontab files used by a powerful
+            Windows scheduler/event monitor/automation manager nnCron.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_CSOUND">
+            <summary>
+            Lexer for Csound (Orchestra and Score)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_D">
+            <summary>
+            Lexer for D
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DMAP">
+            <summary>
+            Lexer for MSC Nastran DMAP.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DMIS">
+            <summary>
+            Lexer for DMIS.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DATAFLEX">
+            <summary>
+            Lexer for DataFlex.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_DIFF">
+            <summary>
+            Lexer for diff results.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ECL">
+            <summary>
+            Lexer for ECL.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_EDIFACT">
+            <summary>
+            Lexer for EDIFACT
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ESCRIPT">
+            <summary>
+            Lexer for ESCRIPT
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_EIFFEL">
+            <summary>
+            Lexer for Eiffel.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_EIFFELKW">
+            <summary>
+            Lexer for EiffelKW
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ERLANG">
+            <summary>
+            Lexer for Erlang.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_ERRORLIST">
+            <summary>
+            Lexer for error lists. Used for the output pane in SciTE
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FSHARP">
+            <summary>
+            Lexer for F# 5.0
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FLAGSHIP">
+            <summary>
+            Lexer for Harbour and FlagShip.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FORTH">
+            <summary>
+            Lexer for Forth
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_FORTRAN">
+            <summary>
+            Lexer for Fortran
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_F77">
+            <summary>
+            Lexer for Fortran 77
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_GAP">
+            <summary>
+            Lexer for the GAP language. (The GAP System for Computational Discrete Algebra)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_GDSCRIPT">
+            <summary>
+            Lexer for GDScript.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_GUI4CLI">
+            <summary>
+            This is the Lexer for Gui4Cli, included in SciLexer.dll
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_HTML">
+            <summary>
+            Lexer for HTML
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_XML">
+            <summary>
+            Lexer for XML
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PHPSCRIPT">
+            <summary>
+            Lexer for PHPScript
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_HASKELL">
+            <summary>
+            A haskell lexer for the scintilla code control.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LITERATEHASKELL">
+            <summary>
+            Lexer for Literate Haskell
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SREC">
+            <summary>
+            Lexer for Motorola S-Record.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_IHEX">
+            <summary>
+            Lexer for Intel HEX
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TEHEX">
+            <summary>
+            Lexer for Tektronix extended HEX
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_HOLLYWOOD">
+            <summary>
+            Lexer for Hollywood
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_INDENT">
+            <summary>
+            Lexer for no language. Used for indentation-based folding of files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_INNOSETUP">
+            <summary>
+            Lexer for Inno Setup scripts.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_JSON">
+            <summary>
+            Lexer for JSON and JSON-LD formats
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_JULIA">
+            <summary>
+            Lexer for Julia
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_KIX">
+            <summary>
+            Lexer for KIX-Scripts.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_KVIRC">
+            <summary>
+            Lexer for KVIrc script.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LATEX">
+            <summary>
+            Lexer for LaTeX2e.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LISP">
+            <summary>
+            Lexer for Lisp
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LOUT">
+            <summary>
+            Lexer for the Basser Lout (>= version 3) typesetting language
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LUA">
+            <summary>
+            Lexer for Lua language
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MMIXAL">
+            <summary>
+            Lexer for MMIX Assembler Language.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_LOT">
+            <summary>
+            Lexer for MPT specific files. Based on LexOthers.cxx
+            LOT = the text log file created by the MPT application while running a test program
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MSSQL">
+            <summary>
+            Lexer for MSSQL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MAGIK">
+            <summary>
+            Lexer for GE(r) Smallworld(tm) MagikSF
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MAKEFILE">
+            <summary>
+            Lexer for make files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MARKDOWN">
+            <summary>
+            A simple Markdown lexer for scintilla.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MATLAB">
+            <summary>
+            Lexer for Matlab.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_OCTAVE">
+            <summary>
+            Lexer for Octave
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MAXIMA">
+            <summary>
+            Lexer for Maxima 
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_METAPOST">
+            <summary>
+            Lexer for general context conformant metapost coloring scheme
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MODULA">
+            <summary>
+            Lexer for Modula-2/3 documents.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_MYSQL">
+            <summary>
+            Lexer for MySQL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NIM">
+            <summary>
+            Lexer for NIM
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NIMROD">
+            <summary>
+            Lexer for NIMROD
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NSIS">
+            <summary>
+            Lexer for NSIS
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_NULL">
+            <summary>
+            Lexer for no language. Used for plain text and unrecognized files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_OSCRIPT">
+            <summary>
+            Lexer for OScript sources; ocx files and/or OSpace dumps.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_OPAL">
+            <summary>
+            Lexer for OPAL (functional language similar to Haskell)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POWERBASIC">
+            <summary>
+            Lexer for PowerBasic 
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PLM">
+            <summary>
+            Lexer for PL/M
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PO">
+            <summary>
+            Lexer for GetText Translation (PO) files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POV">
+            <summary>
+            Lexer for POV-Ray SDL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POSTSCRIPT">
+            <summary>
+            Lexer for PostScript
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PASCAL">
+            <summary>
+            Lexer for Pascal
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PERL">
+            <summary>
+            Lexer for Perl
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POWERPRO">
+            <summary>
+            Lexer for PowerPro
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_POWERSHELL">
+            <summary>
+            Lexer for PowerShellj scripts
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PROGRESS">
+            <summary>
+            Lexer for Progress 4GL.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PROPERTIES">
+            <summary>
+            Lexer for properties files.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_PYTHON">
+            <summary>
+            Lexer for Python
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_R">
+            <summary>
+            Lexer for R.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_S">
+            <summary>
+            Lexer for S.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SPLUS">
+            <summary>
+            Lexer for SPlus Statistics Program.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_RAKU">
+            <summary>
+            Lexer for Raku
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_REBOL">
+            <summary>
+            Lexer for REBOL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_REGISTRY">
+            <summary>
+            Lexer for Windows registration files(.reg)
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_RUBY">
+            <summary>
+            Lexer for Ruby
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_RUST">
+            <summary>
+            Lexer for Rust
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SAS">
+            <summary>
+            Lexer for SAS
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SML">
+            <summary>
+            Lexer for SML
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SQL">
+            <summary>
+            Lexer for SQL, including PL/SQL and SQL*Plus.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_STTXT">
+            <summary>
+            Lexer for Structured Text language.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SCRIPTOL">
+            <summary>
+            Lexer for Scriptol
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SMALLTALK">
+            <summary>
+            Lexer for SmallTalk
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SORCUS">
+            <summary>
+            Lexer for SORCUS installation files
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SPECMAN">
+            <summary>
+            Lexer for Specman E language.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_SPICE">
+            <summary>
+            Lexer for SPICE
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_STATA">
+            <summary>
+            Lexer for Stata
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TACL">
+            <summary>
+            Lexer for TACL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TADS3">
+            <summary>
+            Lexer for TADS3
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TAL">
+            <summary>
+            Lexer for TAL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TCL">
+            <summary>
+            Lexer for TCL
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TCMD">
+            <summary>
+            Lexer for Take Command / TCC batch scripts (.bat, .btm, .cmd).
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TEX">
+            <summary>
+            Lexer for LaTeX general context conformant tex coloring scheme
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_TXT2TAGS">
+            <summary>
+            A simple Txt2tags lexer for scintilla.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VB">
+            <summary>
+            Visual Basic
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VBSCRIPT">
+            <summary>
+            Visual Basic Script
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VHDL">
+            <summary>
+            Lexer for vhdl
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VERILOG">
+            <summary>
+            Lexer for Verilog
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_VISUALPROLOG">
+            <summary>
+            Lexer for Visual Prolog
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_X12">
+            <summary>
+            Lexer for X12
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Lexer.SCLEX_YAML">
+            <summary>
+            Lexer for Yaml
+            </summary>
+        </member>
+        <member name="T:ScintillaNET.Lexilla">
+            <summary>
+            A class containing methods for interacting with the Lexilla library.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.Lexilla.#ctor(System.IntPtr)">
+            <summary>
+            Initializes the Lexilla.dll library.
+            </summary>
+            <param name="lexillaHandle">The handle to the Lexilla.dll file.</param>
+        </member>
+        <member name="M:ScintillaNET.Lexilla.GetLexerCount">
+            <summary>
+            Gets the lexer count in the Lexilla library.
+            </summary>
+            <returns>Amount of lexers defined in the Lexilla library.</returns>
+        </member>
+        <member name="M:ScintillaNET.Lexilla.CreateLexer(System.String)">
+            <summary>
+            Creates a lexer with the specified name.
+            </summary>
+            <param name="lexerName">The name of the lexer to create.</param>
+            <returns>A <see cref="T:System.IntPtr"/> containing the lexer interface pointer.</returns>
+        </member>
+        <member name="M:ScintillaNET.Lexilla.GetLexerName(System.Int32)">
+            <summary>
+            Gets the name of the lexer specified by an index number.
+            </summary>
+            <param name="index">The index.</param>
+            <returns>The name of the lexer if one was found with the specified index; <c>null</c> otherwise.</returns>
+        </member>
+        <member name="M:ScintillaNET.Lexilla.LexerNameFromId(System.Int32)">
+            <summary>
+            Returns a lexer name with the specified identifier.
+            </summary>
+            <param name="identifier">The lexer identifier.</param>
+            <returns>The name of the lexer if one was found with the specified identifier; <c>null</c> otherwise.</returns>
+        </member>
+        <member name="M:ScintillaNET.Lexilla.GetLexerNames">
+            <summary>
+            Gets the lexer names contained in the Lexilla library.
+            </summary>
+            <returns>An IEnumerable&lt;System.String&gt; value with the lexer names.</returns>
         </member>
         <member name="T:ScintillaNET.Line">
             <summary>
@@ -1882,6 +2781,11 @@
             Sets or gets the line indentation.
             </summary>
             <returns>The indentation measured in character columns, which corresponds to the width of space characters.</returns>
+        </member>
+        <member name="P:ScintillaNET.Line.IndentPosition">
+            <summary>
+            This returns the position at the end of indentation of a line.
+            </summary>
         </member>
         <member name="P:ScintillaNET.Line.Visible">
             <summary>
@@ -2283,6 +3187,32 @@
             An unsigned 32-bit mask of all <see cref="T:ScintillaNET.Margin" /> indexes where each bit cooresponds to a margin index.
             </summary>
         </member>
+        <member name="F:ScintillaNET.Marker.MaskHistory">
+            <summary>
+            An unsigned 32-bit mask of history <see cref="T:ScintillaNET.Margin" /> indexes (21 through 24) where each bit cooresponds to a margin index.
+            </summary>
+            <seealso cref="P:ScintillaNET.Margin.Mask" />
+        </member>
+        <member name="F:ScintillaNET.Marker.HistoryRevertedToOrigin">
+            <summary>
+            A change was made to this line and saved but then reverted to its original state.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Marker.HistorySaved">
+            <summary>
+            This line was modified and saved.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Marker.HistoryModified">
+            <summary>
+            This line was modified but not yet saved.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Marker.HistoryRevertedToModified">
+            <summary>
+            A change was made to this line and saved but then reverted but not to its original state.
+            </summary>
+        </member>
         <member name="F:ScintillaNET.Marker.MaskFolders">
             <summary>
             An unsigned 32-bit mask of folder <see cref="T:ScintillaNET.Margin" /> indexes (25 through 31) where each bit cooresponds to a margin index.
@@ -2617,6 +3547,16 @@
             A left-rotated bookmark.
             </summary>
         </member>
+        <member name="F:ScintillaNET.MarkerSymbol.VerticalBookmark">
+            <summary>
+            A bookmark.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.MarkerSymbol.Bar">
+            <summary>
+            A slim  rectangular vertical bar.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.ModificationEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.Insert" /> and <see cref="E:ScintillaNET.Scintilla.Delete" /> events.
@@ -2880,105 +3820,15 @@
             A string property.
             </summary>
         </member>
-        <member name="T:ScintillaNET.ScintillaReader">
-            <summary>
-            Implements a TextReader that reads from a Scintilla control.
-            </summary>
-        </member>
-        <member name="F:ScintillaNET.ScintillaReader.DefaultBufferSize">
-            <summary>
-            Arbitrarily chosen default buffer size
-            </summary>
-        </member>
-        <member name="P:ScintillaNET.ScintillaReader.BufferRemaining">
-            <summary>
-            Returns the number of buffered characters left to be read.
-            </summary>
-        </member>
-        <member name="P:ScintillaNET.ScintillaReader.UnbufferedRemaining">
-            <summary>
-            Returns the number of unbuffered characters left to be read.
-            </summary>
-        </member>
-        <member name="P:ScintillaNET.ScintillaReader.TotalRemaining">
-            <summary>
-            Returns the total number of characters left to be read.
-            </summary>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla)">
-            <summary>
-            Initializes a new instance of the ScintillaReader class that reads all text from the specified Scintilla control.
-            </summary>
-            <param name="scintilla">The Scintilla control from which to read.</param>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla,System.Int32)">
-            <summary>
-            Initializes a new instance of the ScintillaReader class that reads all text from the specified Scintilla control.
-            </summary>
-            <param name="scintilla">The Scintilla control from which to read.</param>
-            <param name="bufferSize">The number of characters to buffer at a time.</param>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla,System.Int32,System.Int32)">
-            <summary>
-            Initializes a new instance of the ScintillaReader class that reads a subsection from the specified Scintilla control.
-            </summary>
-            <param name="scintilla">The Scintilla control from which to read.</param>
-            <param name="start">The index of the first character to read.</param>
-            <param name="end">The index just past the last character to read.</param>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla,System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Initializes a new instance of the ScintillaReader class that reads a subsection from the specified Scintilla control.
-            </summary>
-            <param name="scintilla">The Scintilla control from which to read.</param>
-            <param name="start">The index of the first character to read.</param>
-            <param name="end">The index just past the last character to read.</param>
-            <param name="bufferSize">The number of characters to buffer at a time.</param>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.Peek">
-            <summary>
-            Returns the next character to be read from the reader without actually removing it from the stream. Returns -1 if no characters are available.
-            </summary>
-            <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.Read">
-            <summary>
-            Removes a character from the stream and returns it. Returns -1 if no characters are available.
-            </summary>
-            <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.Read(System.Char[],System.Int32,System.Int32)">
-            <summary>
-             Reads a maximum of count characters from the current stream and writes the data to buffer, beginning at index.
-            </summary>
-            <param name="buffer">The buffer to receive the characters.</param>
-            <param name="index">The position in buffer at which to begin writing.</param>
-            <param name="count">The maximum number of characters to read.</param>
-            <returns>The actual number of characters that have been read. The number will be less than or equal to count.</returns>
-            <exception cref="T:System.ArgumentNullException">buffer is null.</exception>
-            <exception cref="T:System.ArgumentException">The buffer length minus index is less than count.</exception>
-            <exception cref="T:System.ArgumentException">index or count is negative.</exception>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.ReadBlock(System.Char[],System.Int32,System.Int32)">
-            <summary>
-             Reads a maximum of count characters from the current stream and writes the data to buffer, beginning at index.
-            </summary>
-            <param name="buffer">The buffer to receive the characters.</param>
-            <param name="index">The position in buffer at which to begin writing.</param>
-            <param name="count">The maximum number of characters to read.</param>
-            <returns>The actual number of characters that have been read. The number will be less than or equal to count.</returns>
-            <exception cref="T:System.ArgumentNullException">buffer is null.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">The buffer length minus index is less than count.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">index or count is negative.</exception>
-        </member>
-        <member name="M:ScintillaNET.ScintillaReader.BufferNextRegion">
-            <summary>
-            Fills the buffer with the next section of text.
-            </summary>
-        </member>
         <member name="T:ScintillaNET.Scintilla">
             <summary>
             Represents a Scintilla editor control.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.EnumerateSatelliteLibrarySearchPaths">
+            <summary>
+            Enumerates a list of folder paths that the native satellite libraries
+            ('Scintilla.dll' &amp; 'Lexilla.dll') are searched in.
             </summary>
         </member>
         <member name="F:ScintillaNET.Scintilla.TimeForever">
@@ -2990,6 +3840,13 @@
             <summary>
             A constant used to specify an invalid document position.
             </summary>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.SetLexerByName(System.String)">
+            <summary>
+            Sets the name of the lexer by its name.
+            </summary>
+            <param name="lexerName">Name of the lexer.</param>
+            <returns><c>true</c> if the lexer was successfully set, <c>false</c> otherwise.</returns>
         </member>
         <member name="M:ScintillaNET.Scintilla.AddRefDocument(ScintillaNET.Document)">
             <summary>
@@ -3011,6 +3868,14 @@
             </summary>
             <param name="text">The text to insert at the current caret position.</param>
             <remarks>The caret position is set to the end of the inserted text, but it is not scrolled into view.</remarks>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.AllocateSubstyles(System.Int32,System.Int32)">
+            <summary>
+            Allocates some number of substyles for a particular base style. Substyles are allocated contiguously.
+            </summary>
+            <param name="styleBase">The lexer style integer</param>
+            <param name="numberStyles">The amount of substyles to allocate</param>
+            <returns>Returns the first substyle number allocated.</returns>
         </member>
         <member name="M:ScintillaNET.Scintilla.AnnotationClearAll">
             <summary>
@@ -3154,7 +4019,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.ChangeLexerState(System.Int32,System.Int32)">
             <summary>
-            Indicates to the current <see cref="P:ScintillaNET.Scintilla.Lexer" /> that the internal lexer state has changed in the specified
+            Indicates to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> that the internal lexer state has changed in the specified
             range and therefore may need to be redrawn.
             </summary>
             <param name="startPos">The zero-based document position at which the lexer state change starts.</param>
@@ -3313,17 +4178,17 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.DescribeKeywordSets">
             <summary>
-            Retrieves a description of keyword sets supported by the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Retrieves a description of keyword sets supported by the current lexer />.
             </summary>
             <returns>A String describing each keyword set separated by line breaks for the current lexer.</returns>
         </member>
         <member name="M:ScintillaNET.Scintilla.DescribeProperty(System.String)">
             <summary>
-            Retrieves a brief description of the specified property name for the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Retrieves a brief description of the specified property name for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
-            <param name="name">A property name supported by the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.</param>
+            <param name="name">A property name supported by the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.</param>
             <returns>A String describing the lexer property name if found; otherwise, String.Empty.</returns>
-            <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.Lexer" /> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
+            <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
         </member>
         <member name="M:ScintillaNET.Scintilla.DirectMessage(System.Int32,System.IntPtr,System.IntPtr)">
             <summary>
@@ -3390,6 +4255,11 @@
             <remarks>The text tag to display on a folded line can be set using <see cref="M:ScintillaNET.Line.ToggleFoldShowText(System.String)" />.</remarks>
             <seealso cref="M:ScintillaNET.Line.ToggleFoldShowText(System.String)" />.
         </member>
+        <member name="M:ScintillaNET.Scintilla.FreeSubstyles">
+            <summary>
+            Frees all allocated substyles.
+            </summary>
+        </member>
         <member name="M:ScintillaNET.Scintilla.GetCharAt(System.Int32)">
             <summary>
             Returns the character as the specified document position.
@@ -3410,9 +4280,26 @@
             </summary>
             <returns>The zero-based document position of the last styled character.</returns>
         </member>
+        <member name="P:ScintillaNET.Scintilla.ScintillaVersion">
+            <summary>
+            Gets the product version of the Scintilla.dll user by the control.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.LexillaVersion">
+            <summary>
+            Gets the product version of the Lexilla.dll user by the control.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetPrimaryStyleFromStyle(System.Int32)">
+            <summary>
+            Gets the Primary style associated with the given Secondary style.
+            </summary>
+            <param name="style">The secondary style</param>
+            <returns>For a secondary style, return the primary style, else return the argument.</returns>
+        </member>
         <member name="M:ScintillaNET.Scintilla.GetProperty(System.String)">
             <summary>
-            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <param name="name">The property name to lookup.</param>
             <returns>
@@ -3423,7 +4310,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.GetPropertyExpanded(System.String)">
             <summary>
-            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.Lexer" /> and expand any embedded property macros.
+            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> and expand any embedded property macros.
             </summary>
             <param name="name">The property name to lookup.</param>
             <returns>
@@ -3434,7 +4321,7 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.GetPropertyInt(System.String,System.Int32)">
             <summary>
-            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.Lexer" /> and convert it to an integer.
+            Lookup a property value for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> and convert it to an integer.
             </summary>
             <param name="name">The property name to lookup.</param>
             <param name="defaultValue">A default value to return if the property name is not found or has no value.</param>
@@ -3451,6 +4338,27 @@
             <param name="position">The zero-based document position of the character to get the style for.</param>
             <returns>The zero-based <see cref="T:ScintillaNET.Style" /> index used at the specified <paramref name="position" />.</returns>
         </member>
+        <member name="M:ScintillaNET.Scintilla.GetStyleFromSubstyle(System.Int32)">
+            <summary>
+            Gets the lexer base style of a substyle.
+            </summary>
+            <param name="subStyle">The integer index of the substyle</param>
+            <returns>Returns the base style, else returns the argument.</returns>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetSubstylesLength(System.Int32)">
+            <summary>
+            Gets the length of the number of substyles allocated for a given lexer base style.
+            </summary>
+            <param name="styleBase">The lexer style integer</param>
+            <returns>Returns the length of the substyles allocated for a base style.</returns>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetSubstylesStart(System.Int32)">
+            <summary>
+            Gets the start index of the substyles for a given lexer base style.
+            </summary>
+            <param name="styleBase">The lexer style integer</param>
+            <returns>Returns the start of the substyles allocated for a base style.</returns>
+        </member>
         <member name="M:ScintillaNET.Scintilla.GetTag(System.Int32)">
             <summary>
             Returns the capture group text of the most recent regular expression search.
@@ -3458,6 +4366,22 @@
             <param name="tagNumber">The capture group (1 through 9) to get the text for.</param>
             <returns>A String containing the capture group text if it participated in the match; otherwise, an empty string.</returns>
             <seealso cref="M:ScintillaNET.Scintilla.SearchInTarget(System.String)" />
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetWideTextRange(System.Int32,System.Int32)">
+            <summary>
+            Gets a range of text from the document accounting for wide characters.
+            </summary>
+            <param name="position">The zero-based starting character position of the range to get.</param>
+            <param name="length">The number of characters (including wide) to get.</param>
+            <returns>A string representing the text range.</returns>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetLexerIDFromLexer(ScintillaNET.Lexer)">
+            <summary>
+            Map Lexer enum value to supported lexer ID
+            </summary>
+            <param name="lexer">Supported Lexer enum value</param>
+            <returns>LexerName string for corresponding lexer value</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
         </member>
         <member name="M:ScintillaNET.Scintilla.GetTextRange(System.Int32,System.Int32)">
             <summary>
@@ -3524,6 +4448,14 @@
             </summary>
             <param name="position">The zero-based character position within the document to start filling.</param>
             <param name="length">The number of characters to fill.</param>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.InitControlProps">
+            <summary>
+            Default Attribute values do not always get applied to the control.
+            https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.defaultvalueattribute
+            "A DefaultValueAttribute will not cause a member to be automatically initialized with the attribute's value. You must set the initial value in your code."
+            This function is created to be called in the OnHandleCreated event so that we can force the default values to be applied.
+            </summary>
         </member>
         <member name="M:ScintillaNET.Scintilla.InsertText(System.Int32,System.String)">
             <summary>
@@ -3663,6 +4595,12 @@
             </summary>
             <param name="e">An <see cref="T:ScintillaNET.AutoCSelectionEventArgs" /> that contains the event data.</param>
         </member>
+        <member name="M:ScintillaNET.Scintilla.OnAutoCSelectionChange(ScintillaNET.AutoCSelectionChangeEventArgs)">
+            <summary>
+            Raises the <see cref="E:ScintillaNET.Scintilla.AutoCSelectionChange" /> event.
+            </summary>
+            <param name="e">An <see cref="T:ScintillaNET.AutoCSelectionChangeEventArgs" /> that contains the event data.</param>
+        </member>
         <member name="M:ScintillaNET.Scintilla.OnBeforeDelete(ScintillaNET.BeforeModificationEventArgs)">
             <summary>
             Raises the <see cref="E:ScintillaNET.Scintilla.BeforeDelete" /> event.
@@ -3716,6 +4654,12 @@
             Raises the <see cref="E:ScintillaNET.Scintilla.DwellStart" /> event.
             </summary>
             <param name="e">A <see cref="T:ScintillaNET.DwellEventArgs" /> that contains the event data.</param>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.OnCallTipClick(ScintillaNET.CallTipClickEventArgs)">
+            <summary>
+            Raises the <see cref="E:ScintillaNET.Scintilla.CallTipClick" /> event.
+            </summary>
+            <param name="e">A <see cref="T:ScintillaNET.CallTipClickEventArgs" /> that contains the event data.</param>
         </member>
         <member name="M:ScintillaNET.Scintilla.OnHandleCreated(System.EventArgs)">
             <summary>
@@ -3852,17 +4796,17 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.PropertyNames">
             <summary>
-            Retrieves a list of property names that can be set for the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Retrieves a list of property names that can be set for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <returns>A String of property names separated by line breaks.</returns>
         </member>
         <member name="M:ScintillaNET.Scintilla.PropertyType(System.String)">
             <summary>
-            Retrieves the data type of the specified property name for the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Retrieves the data type of the specified property name for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
-            <param name="name">A property name supported by the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.</param>
+            <param name="name">A property name supported by the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.</param>
             <returns>One of the <see cref="M:ScintillaNET.Scintilla.PropertyType(System.String)" /> enumeration values. The default is <see cref="F:ScintillaNET.PropertyType.Boolean" />.</returns>
-            <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.Lexer" /> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
+            <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
         </member>
         <member name="M:ScintillaNET.Scintilla.Redo">
             <summary>
@@ -4006,15 +4950,22 @@
             <param name="color">The global fold margin highlight color.</param>
             <seealso cref="M:ScintillaNET.Scintilla.SetFoldMarginColor(System.Boolean,System.Drawing.Color)" />
         </member>
+        <member name="M:ScintillaNET.Scintilla.SetIdentifiers(System.Int32,System.String)">
+            <summary>
+            Similar to <see cref="M:ScintillaNET.Scintilla.SetKeywords(System.Int32,System.String)" /> but for substyles.
+            </summary>
+            <param name="style">The substyle integer index</param>
+            <param name="identifiers">A list of words separated by whitespace (space, tab, '\n', '\r') characters.</param>
+        </member>
         <member name="M:ScintillaNET.Scintilla.SetKeywords(System.Int32,System.String)">
             <summary>
-            Updates a keyword set used by the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Updates a keyword set used by the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <param name="set">The zero-based index of the keyword set to update.</param>
             <param name="keywords">
-            A list of keywords pertaining to the current <see cref="P:ScintillaNET.Scintilla.Lexer" /> separated by whitespace (space, tab, '\n', '\r') characters.
+            A list of keywords pertaining to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> separated by whitespace (space, tab, '\n', '\r') characters.
             </param>
-            <remarks>The keywords specified will be styled according to the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.</remarks>
+            <remarks>The keywords specified will be styled according to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.</remarks>
             <seealso cref="M:ScintillaNET.Scintilla.DescribeKeywordSets" />
         </member>
         <member name="M:ScintillaNET.Scintilla.SetDestroyHandleBehavior(System.Boolean)">
@@ -4027,24 +4978,14 @@
             </param>
             <remarks>This method must be called prior to the first <see cref="T:ScintillaNET.Scintilla" /> control being created.</remarks>
         </member>
-        <member name="M:ScintillaNET.Scintilla.SetModulePath(System.String)">
-            <summary>
-            Sets the application-wide default module path of the native Scintilla library.
-            </summary>
-            <param name="modulePath">The native Scintilla module path.</param>
-            <remarks>
-            This method must be called prior to the first <see cref="T:ScintillaNET.Scintilla" /> control being created.
-            The <paramref name="modulePath" /> can be relative or absolute.
-            </remarks>
-        </member>
         <member name="M:ScintillaNET.Scintilla.SetProperty(System.String,System.String)">
             <summary>
-            Passes the specified property name-value pair to the current <see cref="P:ScintillaNET.Scintilla.Lexer" />.
+            Passes the specified property name-value pair to the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>.
             </summary>
             <param name="name">The property name to set.</param>
             <param name="value">
             The property value. Values can refer to other property names using the syntax $(name), where 'name' is another property
-            name for the current <see cref="P:ScintillaNET.Scintilla.Lexer" />. When the property value is retrieved by a call to <see cref="M:ScintillaNET.Scintilla.GetPropertyExpanded(System.String)" />
+            name for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see>. When the property value is retrieved by a call to <see cref="M:ScintillaNET.Scintilla.GetPropertyExpanded(System.String)" />
             the embedded property name macro will be replaced (expanded) with that current property value.
             </param>
             <remarks>Property names are case-sensitive.</remarks>
@@ -4091,6 +5032,11 @@
             <param name="color">The global selection foreground color.</param>
             <seealso cref="M:ScintillaNET.Scintilla.SetSelectionBackColor(System.Boolean,System.Drawing.Color)" />
         </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionLayer">
+            <summary>
+            Gets or sets the layer where the text selection will be painted. Default value is <see cref="F:ScintillaNET.Layer.Base"/>
+            </summary>
+        </member>
         <member name="M:ScintillaNET.Scintilla.SetStyling(System.Int32,System.Int32)">
             <summary>
             Styles the specified length of characters.
@@ -4136,6 +5082,20 @@
             <remarks>When not overridden globally, the whitespace foreground color is determined by the current lexer.</remarks>
             <seealso cref="P:ScintillaNET.Scintilla.ViewWhitespace" />
             <seealso cref="M:ScintillaNET.Scintilla.SetWhitespaceBackColor(System.Boolean,System.Drawing.Color)" />
+        </member>
+        <member name="M:ScintillaNET.Scintilla.SetXCaretPolicy(ScintillaNET.CaretPolicy,System.Int32)">
+            <summary>
+            Sets the X caret policy.
+            </summary>
+            <param name="caretPolicy">a combination of <see cref="T:ScintillaNET.CaretPolicy"/> values.</param>
+            <param name="caretSlop">the caretSlop value</param>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.SetYCaretPolicy(ScintillaNET.CaretPolicy,System.Int32)">
+            <summary>
+            Sets the Y caret policy.
+            </summary>
+            <param name="caretPolicy">a combination of <see cref="T:ScintillaNET.CaretPolicy"/> values.</param>
+            <param name="caretSlop">the caretSlop value</param>
         </member>
         <member name="M:ScintillaNET.Scintilla.ShowLines(System.Int32,System.Int32)">
             <summary>
@@ -4254,6 +5214,51 @@
             </summary>
             <seealso cref="P:ScintillaNET.Scintilla.Zoom" />
         </member>
+        <member name="M:ScintillaNET.Scintilla.SetRepresentation(System.String,System.String)">
+            <summary>
+            Sets the representation for a specified character string.
+            </summary>
+            <param name="encodedString">The encoded string. I.e. the Ohm character: Ω = \u2126.</param>
+            <param name="representationString">The representation string for the <paramref name="encodedString"/>. I.e. "OHM".</param>
+            <remarks>The <see cref="P:ScintillaNET.Scintilla.ViewWhitespace"/> must be set to <see cref="F:ScintillaNET.WhitespaceMode.VisibleAlways"/> for this to work.</remarks>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetRepresentation(System.String)">
+            <summary>
+            Sets the representation for a specified character string.
+            </summary>
+            <param name="encodedString">The encoded string. I.e. the Ohm character: Ω = \u2126.</param>
+            <returns>The representation string for the <paramref name="encodedString"/>. I.e. "OHM".</returns>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.ClearRepresentation(System.String)">
+            <summary>
+            Clears the representation from a specified character string.
+            </summary>
+            <param name="encodedString">The encoded string. I.e. the Ohm character: Ω = \u2126.</param>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.ClearChangeHistory">
+            <summary>
+            Clears the change history so that scintilla does not show any saved/modified markers.
+            Undo buffer is cleared but <see cref="M:ScintillaNET.Scintilla.SetSavePoint"/> is not called.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla._ScintillaManagedDragDrop">
+            <summary>
+            Gets or sets whether Scintilla's native drag &amp; drop should be used instead of WinForms based one.
+            </summary>
+            <value><c>true</c> if Scintilla's native drag &amp; drop should be used; otherwise, <c>false</c>. The default is false.</value>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.BiDirectionality">
+            <summary>
+            Gets or sets the bi-directionality of the Scintilla control.
+            </summary>
+            <value>The bi-directionality of the Scintilla control.</value>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.UseRightToLeftReadingLayout">
+            <summary>
+            Gets or sets a value indicating whether the reading layout is from right to left.
+            </summary>
+            <value><c>true</c> if reading layout is from right to left; otherwise, <c>false</c>.</value>
+        </member>
         <member name="P:ScintillaNET.Scintilla.AdditionalCaretForeColor">
             <summary>
             Gets or sets the caret foreground color for additional selections.
@@ -4303,6 +5308,26 @@
             Gets or sets the display of annotations.
             </summary>
             <returns>One of the <see cref="T:ScintillaNET.Annotation" /> enumeration values. The default is <see cref="F:ScintillaNET.Annotation.Hidden" />.</returns>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.AutocompleteListTextColor">
+            <summary>
+            Gets or sets the text color in autocompletion lists.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.AutocompleteListBackColor">
+            <summary>
+            Gets or sets the background color in autocompletion lists.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.AutocompleteListSelectedTextColor">
+            <summary>
+            Gets or sets the text color of selected item in autocompletion lists.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.AutocompleteListSelectedBackColor">
+            <summary>
+            Gets or sets the background color of selected item in autocompletion lists.
+            </summary>
         </member>
         <member name="P:ScintillaNET.Scintilla.AutoCActive">
             <summary>
@@ -4362,7 +5387,7 @@
             <summary>
             Gets or sets the maximum height of the autocompletion list measured in rows.
             </summary>
-            <returns>The max number of rows to display in an autocompletion window. The default is 5.</returns>
+            <returns>The max number of rows to display in an autocompletion window. The default is 9.</returns>
             <remarks>If there are more items in the list than max rows, a vertical scrollbar is shown.</remarks>
         </member>
         <member name="P:ScintillaNET.Scintilla.AutoCMaxWidth">
@@ -4425,6 +5450,12 @@
             <summary>
             Not supported.
             </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.BackspaceUnindents">
+            <summary>
+            Gets or sets whether backspace deletes a character, or unindents.
+            </summary>
+            <returns>Whether backspace deletes a character, (false) or unindents (true).</returns>
         </member>
         <member name="P:ScintillaNET.Scintilla.BorderStyle">
             <summary>
@@ -4489,11 +5520,28 @@
             The value 256 will disable alpha transparency. The default is 256.
             </returns>
         </member>
+        <member name="P:ScintillaNET.Scintilla.CaretLineFrame">
+            <summary>
+            Gets or sets the width of the caret line frame.
+            </summary>
+            <returns><see cref="P:ScintillaNET.Scintilla.CaretLineVisible" /> must be set to true. A value of 0 disables the frame. The default is 0.</returns>
+        </member>
         <member name="P:ScintillaNET.Scintilla.CaretLineVisible">
             <summary>
             Gets or sets whether the caret line is visible (highlighted).
             </summary>
-            <returns>true if the caret line is visible; otherwise, false. The default is false.</returns>
+            <returns>true if the caret line is visible; otherwise, false. The default is true.</returns>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.CaretLineVisibleAlways">
+            <summary>
+            Gets or sets whether the caret line is always visible even when the window is not in focus.
+            </summary>
+            <returns>true if the caret line is always visible; otherwise, false. The default is false.</returns>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.CaretLineLayer">
+            <summary>
+            Gets or sets the layer where the line caret will be painted. Default value is <see cref="F:ScintillaNET.Layer.Base"/>
+            </summary>
         </member>
         <member name="P:ScintillaNET.Scintilla.CaretPeriod">
             <summary>
@@ -4520,6 +5568,11 @@
             The caret width can only be set to a value of 0, 1, 2 or 3 pixels and is only effective
             when the <see cref="P:ScintillaNET.Scintilla.CaretStyle" /> property is set to <see cref="F:ScintillaNET.CaretStyle.Line" />.
             </remarks>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.ChangeHistory">
+            <summary>
+            Gets or sets whether Scintilla should keep track of document change history and in which ways it should display the difference.
+            </summary>
         </member>
         <member name="P:ScintillaNET.Scintilla.CreateParams">
             <summary>
@@ -4561,6 +5614,12 @@
             </summary>
             <returns>The default Size of the control.</returns>
         </member>
+        <member name="P:ScintillaNET.Scintilla.DistanceToSecondaryStyles">
+            <summary>
+            Gets a value indicating the start index of the secondary styles.
+            </summary>
+            <returns>Returns the distance between a primary style and its corresponding secondary style.</returns>
+        </member>
         <member name="P:ScintillaNET.Scintilla.Document">
             <summary>
             Gets or sets the current document used by the control.
@@ -4577,7 +5636,7 @@
             Gets or sets the background color to use when indicating long lines with
             <see cref="F:ScintillaNET.EdgeMode.Background" />.
             </summary>
-            <returns>The background Color. The default is Silver.</returns>
+            <returns>The background Color.</returns>
         </member>
         <member name="P:ScintillaNET.Scintilla.EdgeColumn">
             <summary>
@@ -4632,8 +5691,9 @@
         </member>
         <member name="P:ScintillaNET.Scintilla.Font">
             <summary>
-            Not supported.
+            Gets or sets the font of the text displayed by the control.
             </summary>
+            <returns>The <see cref="T:System.Drawing.Font" /> to apply to the text displayed by the control. The default is the value of the <see cref="P:System.Windows.Forms.Control.DefaultFont" /> property.</returns>
         </member>
         <member name="P:ScintillaNET.Scintilla.FontQuality">
             <summary>
@@ -4703,11 +5763,18 @@
             </summary>
             <returns>The indicator value to apply when calling <see cref="M:ScintillaNET.Scintilla.IndicatorFillRange(System.Int32,System.Int32)" />.</returns>
         </member>
-        <member name="P:ScintillaNET.Scintilla.Lexer">
+        <member name="P:ScintillaNET.Scintilla.InternalFocusFlag">
             <summary>
-            Gets or sets the current lexer.
+            This is used by clients that have complex focus requirements such as having their own window
+            that gets the real focus but with the need to indicate that Scintilla has the logical focus.
             </summary>
-            <returns>One of the <see cref="P:ScintillaNET.Scintilla.Lexer" /> enumeration values. The default is <see cref="F:ScintillaNET.Lexer.Container" />.</returns>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.LexerName">
+            <summary>
+            Gets or sets the name of the lexer.
+            </summary>
+            <value>The name of the lexer.</value>
+            <exception cref="T:System.InvalidOperationException">Lexer with the name of 'Value' was not found.</exception>
         </member>
         <member name="P:ScintillaNET.Scintilla.LexerLanguage">
             <summary>
@@ -4870,7 +5937,7 @@
             <summary>
             Gets or sets the range of the horizontal scroll bar.
             </summary>
-            <returns>The range in pixels of the horizontal scroll bar. The default is 2000.</returns>
+            <returns>The range in pixels of the horizontal scroll bar.</returns>
             <remarks>The width will automatically increase as needed when <see cref="P:ScintillaNET.Scintilla.ScrollWidthTracking" /> is enabled.</remarks>
         </member>
         <member name="P:ScintillaNET.Scintilla.ScrollWidthTracking">
@@ -4912,6 +5979,86 @@
             Gets or sets whether to fill past the end of a line with the selection background color.
             </summary>
             <returns>true to fill past the end of the line; otherwise, false. The default is false.</returns>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.WhitespaceTextColor">
+            <summary>
+            Gets or sets the color of visible white space.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.WhitespaceBackColor">
+            <summary>
+            Gets or sets the background color of visible white space.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.ActiveHotspotTextColor">
+            <summary>
+            Gets or sets the text color of active hot spot.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.ActiveHotspotBackColor">
+            <summary>
+            Gets or sets the background color of active hot spot.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionTextColor">
+            <summary>
+            Gets or sets the text color of main selection.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionBackColor">
+            <summary>
+            Gets or sets the background color of main selection.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionAdditionalTextColor">
+            <summary>
+            Gets or sets the text color of additional selections.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionAdditionalBackColor">
+            <summary>
+            Gets or sets the background color of additional selections.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionSecondaryTextColor">
+            <summary>
+            Gets or sets the text colour of selections when another window contains the primary selection.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionSecondaryBackColor">
+            <summary>
+            Gets or sets the background color of selections when another window contains the primary selection.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionInactiveTextColor">
+            <summary>
+            Gets or sets the text colour of selections when the control has no focus.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionInactiveBackColor">
+            <summary>
+            Gets or sets the selection highlight color to use when the control has no focus.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionInactiveAdditionalTextColor">
+            <summary>
+            Gets or sets the selected text color to use when the control has no focus.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.SelectionInactiveAdditionalBackColor">
+            <summary>
+            Gets or sets the selection highlight color to use when the control has no focus.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.FoldLineBackColor">
+            <summary>
+            Gets or sets the color of fold lines.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.FoldLineStripColor">
+            <summary>
+            Gets or sets the color of line drawn to show there are lines hidden at that point.
+            </summary>
         </member>
         <member name="P:ScintillaNET.Scintilla.Selections">
             <summary>
@@ -4956,6 +6103,12 @@
             The default is <see cref="F:ScintillaNET.TabDrawMode.LongArrow" />.
             </returns>
             <seealso cref="P:ScintillaNET.Scintilla.ViewWhitespace" />
+        </member>
+        <member name="P:ScintillaNET.Scintilla.TabIndents">
+            <summary>
+            Gets or sets whether tab inserts a tab character, or indents.
+            </summary>
+            <returns>Whether tab inserts a tab character (false), or indents (true).</returns>
         </member>
         <member name="P:ScintillaNET.Scintilla.TabWidth">
             <summary>
@@ -5053,6 +6206,12 @@
             </summary>
             <returns>true to display the vertical scroll bar when needed; otherwise, false. The default is true.</returns>
         </member>
+        <member name="P:ScintillaNET.Scintilla.WhitespaceChars">
+            <summary>
+            Gets or sets the characters considered 'whitespace' characters when using any word-based logic.
+            </summary>
+            <returns>A string of whitespace characters.</returns>
+        </member>
         <member name="P:ScintillaNET.Scintilla.WhitespaceSize">
             <summary>
             Gets or sets the size of the dots used to mark whitespace.
@@ -5071,7 +6230,7 @@
             Gets or sets the line wrapping indent mode.
             </summary>
             <returns>
-            One of the <see cref="T:ScintillaNET.WrapIndentMode" /> enumeration values. 
+            One of the <see cref="T:ScintillaNET.WrapIndentMode" /> enumeration values.
             The default is <see cref="F:ScintillaNET.WrapIndentMode.Fixed" />.
             </returns>
         </member>
@@ -5080,7 +6239,7 @@
             Gets or sets the line wrapping mode.
             </summary>
             <returns>
-            One of the <see cref="T:ScintillaNET.WrapMode" /> enumeration values. 
+            One of the <see cref="T:ScintillaNET.WrapMode" /> enumeration values.
             The default is <see cref="F:ScintillaNET.WrapMode.None" />.
             </returns>
         </member>
@@ -5148,6 +6307,11 @@
             </summary>
             <remarks>Automatic insertion can be cancelled by calling <see cref="M:ScintillaNET.Scintilla.AutoCCancel" /> from the event handler.</remarks>
         </member>
+        <member name="E:ScintillaNET.Scintilla.AutoCSelectionChange">
+            <summary>
+            Occurs when a user has highlighted an item in an autocompletion list.
+            </summary>
+        </member>
         <member name="E:ScintillaNET.Scintilla.BackColorChanged">
             <summary>
             Not supported.
@@ -5206,6 +6370,11 @@
         <member name="E:ScintillaNET.Scintilla.DwellEnd">
             <summary>
             Occurs when the mouse moves or another activity such as a key press ends a <see cref="E:ScintillaNET.Scintilla.DwellStart" /> event.
+            </summary>
+        </member>
+        <member name="E:ScintillaNET.Scintilla.CallTipClick">
+            <summary>
+            Occurs when the mouse clicked over a call tip displayed by the <see cref="M:ScintillaNET.Scintilla.CallTipShow(System.Int32,System.String)" /> method.
             </summary>
         </member>
         <member name="E:ScintillaNET.Scintilla.DwellStart">
@@ -5314,7 +6483,7 @@
             Occurs when the control is about to display or print text and requires styling.
             </summary>
             <remarks>
-            This event is only raised when <see cref="P:ScintillaNET.Scintilla.Lexer" /> is set to <see cref="F:ScintillaNET.Lexer.Container" />.
+            This event is only raised when LexerName is set to Container />.
             The last position styled correctly can be determined by calling <see cref="M:ScintillaNET.Scintilla.GetEndStyled" />.
             </remarks>
             <seealso cref="M:ScintillaNET.Scintilla.GetEndStyled" />
@@ -5333,6 +6502,108 @@
         <member name="M:ScintillaNET.Scintilla.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:ScintillaNET.Scintilla" /> class.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.Scintilla.RightToLeft">
+            <summary>
+            Gets or sets a value indicating whether control's elements are aligned to support locales using right-to-left fonts.
+            </summary>
+            <value>The right to left.</value>
+        </member>
+        <member name="T:ScintillaNET.ScintillaReader">
+            <summary>
+            Implements a TextReader that reads from a Scintilla control.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.ScintillaReader.DefaultBufferSize">
+            <summary>
+            Arbitrarily chosen default buffer size
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.ScintillaReader.BufferRemaining">
+            <summary>
+            Returns the number of buffered characters left to be read.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.ScintillaReader.UnbufferedRemaining">
+            <summary>
+            Returns the number of unbuffered characters left to be read.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.ScintillaReader.TotalRemaining">
+            <summary>
+            Returns the total number of characters left to be read.
+            </summary>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla)">
+            <summary>
+            Initializes a new instance of the ScintillaReader class that reads all text from the specified Scintilla control.
+            </summary>
+            <param name="scintilla">The Scintilla control from which to read.</param>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla,System.Int32)">
+            <summary>
+            Initializes a new instance of the ScintillaReader class that reads all text from the specified Scintilla control.
+            </summary>
+            <param name="scintilla">The Scintilla control from which to read.</param>
+            <param name="bufferSize">The number of characters to buffer at a time.</param>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the ScintillaReader class that reads a subsection from the specified Scintilla control.
+            </summary>
+            <param name="scintilla">The Scintilla control from which to read.</param>
+            <param name="start">The index of the first character to read.</param>
+            <param name="end">The index just past the last character to read.</param>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.#ctor(ScintillaNET.Scintilla,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the ScintillaReader class that reads a subsection from the specified Scintilla control.
+            </summary>
+            <param name="scintilla">The Scintilla control from which to read.</param>
+            <param name="start">The index of the first character to read.</param>
+            <param name="end">The index just past the last character to read.</param>
+            <param name="bufferSize">The number of characters to buffer at a time.</param>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.Peek">
+            <summary>
+            Returns the next character to be read from the reader without actually removing it from the stream. Returns -1 if no characters are available.
+            </summary>
+            <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.Read">
+            <summary>
+            Removes a character from the stream and returns it. Returns -1 if no characters are available.
+            </summary>
+            <returns>The next character from the input stream, or -1 if no more characters are available.</returns>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.Read(System.Char[],System.Int32,System.Int32)">
+            <summary>
+             Reads a maximum of count characters from the current stream and writes the data to buffer, beginning at index.
+            </summary>
+            <param name="buffer">The buffer to receive the characters.</param>
+            <param name="index">The position in buffer at which to begin writing.</param>
+            <param name="count">The maximum number of characters to read.</param>
+            <returns>The actual number of characters that have been read. The number will be less than or equal to count.</returns>
+            <exception cref="T:System.ArgumentNullException">buffer is null.</exception>
+            <exception cref="T:System.ArgumentException">The buffer length minus index is less than count.</exception>
+            <exception cref="T:System.ArgumentException">index or count is negative.</exception>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.ReadBlock(System.Char[],System.Int32,System.Int32)">
+            <summary>
+             Reads a maximum of count characters from the current stream and writes the data to buffer, beginning at index.
+            </summary>
+            <param name="buffer">The buffer to receive the characters.</param>
+            <param name="index">The position in buffer at which to begin writing.</param>
+            <param name="count">The maximum number of characters to read.</param>
+            <returns>The actual number of characters that have been read. The number will be less than or equal to count.</returns>
+            <exception cref="T:System.ArgumentNullException">buffer is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The buffer length minus index is less than count.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">index or count is negative.</exception>
+        </member>
+        <member name="M:ScintillaNET.ScintillaReader.BufferNextRegion">
+            <summary>
+            Fills the buffer with the next section of text.
             </summary>
         </member>
         <member name="T:ScintillaNET.SearchFlags">
@@ -5566,6 +6837,15 @@
             <returns>One of the <see cref="T:ScintillaNET.StyleCase" /> enum values. The default is <see cref="F:ScintillaNET.StyleCase.Mixed" />.</returns>
             <remarks>This does not affect how text is stored, only displayed.</remarks>
         </member>
+        <member name="P:ScintillaNET.Style.Changeable">
+            <summary>
+            This is an experimental and incompletely implemented style attribute. The default setting is changeable set true
+            but when set false it makes text read-only. The user can not move the caret within not-changeable text and
+            not-changeable text may not be deleted by the user. The application may delete not-changeable text by calling
+            <see cref="M:ScintillaNET.Scintilla.DeleteRange(System.Int32,System.Int32)"/>.
+            </summary>
+            <returns>false to make the text read-only, true otherwise. The default is true.</returns>
+        </member>
         <member name="P:ScintillaNET.Style.FillLine">
             <summary>
             Gets or sets whether the remainder of the line is filled with the <see cref="P:ScintillaNET.Style.BackColor" />
@@ -5645,7 +6925,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Ada">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Ada" /> lexer.
+            Style constants for use with the Ada lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Ada.Default">
@@ -5710,7 +6990,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Asm">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Asm" /> lexer.
+            Style constants for use with the Asm lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Asm.Default">
@@ -5795,7 +7075,7 @@
         </member>
         <member name="T:ScintillaNET.Style.BlitzBasic">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.BlitzBasic" /> lexer.
+            Style constants for use with the BlitzBasic lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.BlitzBasic.Default">
@@ -5915,7 +7195,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Batch">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Batch" /> lexer.
+            Style constants for use with the Batch lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Batch.Default">
@@ -5958,9 +7238,99 @@
             Operator style index.
             </summary>
         </member>
+        <member name="T:ScintillaNET.Style.CLW">
+            <summary>
+            Style constants for use with the Clw lexer.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Attributes">
+            <summary>
+            Attributes style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.BuiltInProceduresFunction">
+            <summary>
+            Built in procedures function style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Comment">
+            <summary>
+            Comment style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.CompilerDirective">
+            <summary>
+            Compiler directive style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Default">
+            <summary>
+            Default (whitespace) style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Depreciated">
+            <summary>
+            Depreciated style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Error">
+            <summary>
+            Error style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.IntegerConstant">
+            <summary>
+            Integer Constant style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Keyword">
+            <summary>
+            Keyword style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.Label">
+            <summary>
+            Label string style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.PictureString">
+            <summary>
+            Real Constant style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.RealConstant">
+            <summary>
+            Real Constant style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.RuntimeExpressions">
+            <summary>
+            Runtime expressions style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.StandardEquates">
+            <summary>
+            Standard equates style index
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.String">
+            <summary>
+            Single-quoted string style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.StructureDataTypes">
+            <summary>
+            Structure data type style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.CLW.UserIdentifier">
+            <summary>
+            User Identifier style index.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.Style.Cpp">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Cpp" /> lexer.
+            Style constants for use with the Cpp lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Cpp.Default">
@@ -6105,7 +7475,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Css">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Css" /> lexer.
+            Style constants for use with the Css lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Css.Default">
@@ -6230,7 +7600,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Fortran">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Fortran" /> lexer.
+            Style constants for use with the Fortran lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Fortran.Default">
@@ -6310,7 +7680,7 @@
         </member>
         <member name="T:ScintillaNET.Style.FreeBasic">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.FreeBasic" /> lexer.
+            Style constants for use with the FreeBasic lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.FreeBasic.Default">
@@ -6430,7 +7800,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Html">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Html" /> lexer.
+            Style constants for use with the Html lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Html.Default">
@@ -6538,9 +7908,79 @@
             Script engine comment (&lt;%--) style index.
             </summary>
         </member>
+        <member name="T:ScintillaNET.Style.JavaScript">
+            <summary>
+            Embedded JavaScript style constants for use with the JavaScript lexer.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Start">
+            <summary>
+            Start style index (allows EOL filled background to not start on same line as SCRIPT tag).
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Default">
+            <summary>
+            Default style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Comment">
+            <summary>
+            Comment style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.CommentLine">
+            <summary>
+            Line comment style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.CommentDoc">
+            <summary>
+            Doc comment style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Number">
+            <summary>
+            Number style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Word">
+            <summary>
+            Word style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Keyword">
+            <summary>
+            Keyword style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.DoubleString">
+            <summary>
+            Double-quoted string style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.SingleString">
+            <summary>
+            Single-quoted string style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Symbols">
+            <summary>
+            Symbols style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.StringEol">
+            <summary>
+            Unclosed string EOL style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.JavaScript.Regex">
+            <summary>
+            Regular expression style index.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.Style.Json">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Json" /> lexer.
+            Style constants for use with the Json lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Json.Default">
@@ -6615,7 +8055,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Lisp">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Lisp" /> lexer.
+            Style constants for use with the Lisp lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Lisp.Default">
@@ -6680,7 +8120,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Lua">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Lua" /> lexer.
+            Style constants for use with the Lua lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Lua.Default">
@@ -6788,9 +8228,59 @@
             Label style index.
             </summary>
         </member>
+        <member name="T:ScintillaNET.Style.Matlab">
+            <summary>
+            Style constants for use with the Matlab lexer.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Default">
+            <summary>
+            Default (whitespace) style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Comment">
+            <summary>
+            Line comment style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Number">
+            <summary>
+            Number style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.String">
+            <summary>
+            String style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Command">
+            <summary>
+            Command style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Keyword">
+            <summary>
+            Keyword style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.DoubleQuoteString">
+            <summary>
+            Double quote string style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Identifier">
+            <summary>
+            Identifier style index.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Style.Matlab.Operator">
+            <summary>
+            Operator style index.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.Style.Pascal">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Pascal" /> lexer.
+            Style constants for use with the Pascal lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Pascal.Default">
@@ -6870,7 +8360,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Perl">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Perl" /> lexer.
+            Style constants for use with the Perl lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Perl.Default">
@@ -7095,7 +8585,7 @@
         </member>
         <member name="T:ScintillaNET.Style.PhpScript">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.PhpScript" /> lexer.
+            Style constants for use with the PhpScript lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.PhpScript.ComplexVariable">
@@ -7155,7 +8645,7 @@
         </member>
         <member name="T:ScintillaNET.Style.PowerShell">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.PowerShell" /> lexer.
+            Style constants for use with the PowerShell lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.PowerShell.Default">
@@ -7245,7 +8735,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Properties">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Properties" /> lexer.
+            Style constants for use with the Properties lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Properties.Default">
@@ -7280,7 +8770,7 @@
         </member>
         <member name="T:ScintillaNET.Style.PureBasic">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.PureBasic" /> lexer.
+            Style constants for use with the PureBasic lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.PureBasic.Default">
@@ -7400,7 +8890,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Python">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Python" /> lexer.
+            Style constants for use with the Python lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Python.Default">
@@ -7485,7 +8975,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Ruby">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Ruby" /> lexer.
+            Style constants for use with the Ruby lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Ruby.Default">
@@ -7655,7 +9145,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Smalltalk">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Smalltalk" /> lexer.
+            Style constants for use with the Smalltalk lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Smalltalk.Default">
@@ -7745,7 +9235,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Sql">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Sql" /> lexer.
+            Style constants for use with the Sql lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Sql.Default">
@@ -7865,7 +9355,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Markdown">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Markdown" /> lexer.
+            Style constants for use with the Markdown lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Markdown.Default">
@@ -7980,7 +9470,7 @@
         </member>
         <member name="T:ScintillaNET.Style.R">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.R" /> lexer.
+            Style constants for use with the R lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.R.Default">
@@ -8045,7 +9535,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Vb">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Vb" /> lexer.
+            Style constants for use with the Vb lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Vb.Default">
@@ -8165,7 +9655,7 @@
         </member>
         <member name="T:ScintillaNET.Style.VbScript">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.VbScript" /> lexer.
+            Style constants for use with the VbScript lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.VbScript.Default">
@@ -8285,7 +9775,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Verilog">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Verilog" /> lexer.
+            Style constants for use with the Verilog lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Verilog.Default">
@@ -8385,7 +9875,7 @@
         </member>
         <member name="T:ScintillaNET.Style.Xml">
             <summary>
-            Style constants for use with the <see cref="F:ScintillaNET.Lexer.Xml" /> lexer.
+            Style constants for use with the Xml lexer.
             </summary>
         </member>
         <member name="F:ScintillaNET.Style.Xml.Default">
