@@ -63,7 +63,7 @@ function Get-MenuItems
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [int] $selImage,
-        [Parameter(Mandatory = $true, Position = 1)] [Object[]] $mountedImages
+        [Parameter(Position = 1)] [Object[]] $mountedImages
     )
     try
     {
