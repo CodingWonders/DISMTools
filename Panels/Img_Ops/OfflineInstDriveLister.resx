@@ -120,4 +120,7 @@
   <data name="Label1.Text" xml:space="preserve">
     <value>To begin performing offline installation management, please choose a disk shown in the list below. If additional disks that contain Windows installations have been added or removed, simply click the Refresh button.</value>
   </data>
+  <metadata name="Timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
