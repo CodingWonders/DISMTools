@@ -59,7 +59,7 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 - **Easily create configuration lists.** With the *DISM Configuration List Editor* you can quickly create your configuration list to exclude certain items during operations like capturing an image:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/5b472424-4595-4082-9574-c147babba64b" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/f82873b6-b59a-4e12-9682-1624872e6d30" />
 </p>
 
 - **Quickly manage all your mounted images in one interface.** The mounted image manager lets you perform basic image management tasks with your mounted images:
@@ -130,12 +130,19 @@ DISMTools is compatible with the following operating systems:
 
 ## Downloading
 
-You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet (`winget install CodingWondersSoftware.DISMTools.Stable`). This program is also 100% Free.
+You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet:
+
+- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`)
+- Preview version: `winget install CodingWondersSoftware.DISMTools.Preview` (moniker: `DISMTools-pre`)
+
+This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: March 16, 2024 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: April 28, 2024 (Alexandra Sava)</i></p>
 </p>
+
+The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
 
 ## Building
 
@@ -172,20 +179,14 @@ You should have this setting configured like this:
 
 If you want to contribute to this project, you can do so in many ways:
 
-- Code changes: changes that WILL make it to the next release. If you want to do these, do the following:
-
-  1. Create your separate branch, based on the **latest** `dt_pre_****` one (you don't want to work on your changes based on an outdated source tree). This will make sure your change can arrive in the next preview
-  2. Clone the newly created branch or, if you already cloned the repository, fetch the origin (`git fetch origin`) and switch to your branch
-  3. Work on your changes **and test them**. We want to make sure your changes work as expected, and there aren't any [regressions](https://en.wikipedia.org/wiki/Regression_testing) because of them
-  4. Commit your changes and create a pull request. If not set automatically, select the **latest** `dt_pre_****` branch to merge the contents to it. We'll review your changes and, if they're ready, we'll merge them.
-
+- Code changes: changes that WILL make it to the next release. If you want to do these, please read [the contribution guidelines](https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md)
 - Documentation and/or artwork: if you like the visual side of things more, we recommend contributing to the help system! Check out the last section for instructions.
 
 ## Testing the latest
 
-We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every Sunday.
+We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2424_relcndid/Installer/Output/dt_setup.exe).
+<!-- However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2424_relcndid/Installer/Output/dt_setup.exe). -->
 
 <!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.4.2, and will be deleted once this version gets published as a stable release -->
 
