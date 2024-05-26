@@ -22,6 +22,7 @@ Public Class MainForm
     Dim latestVer As String
     Dim relTag As String
     Dim needsMigration As Boolean
+    Dim minNoMig As Version
 
     Dim ReleaseDownloader As New WebClient()
 
@@ -225,6 +226,15 @@ Public Class MainForm
                         relTag = Line.Replace("ReleaseTag = ", "").Trim()
                     ElseIf Line.StartsWith("MigrateSettings") Then
                         needsMigration = If(Line.Replace("MigrateSettings = ", "").Trim() = "True", True, False)
+                    ElseIf Line.StartsWith("MinNoMig") Then
+                        Try
+                            Dim minNoMigStr As String = Line.Replace("MinNoMig = ", "").Trim()
+                            minNoMig = New Version(minNoMigStr)
+                            Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
+                            needsMigration = Not (New Version(fv) >= minNoMig)
+                        Catch ex As Exception
+                            Debug.WriteLine("Could not get minimum version for no migrations")
+                        End Try
                     End If
                 Next
                 Label17.Visible = needsMigration
