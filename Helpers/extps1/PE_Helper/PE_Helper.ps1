@@ -1038,8 +1038,26 @@ function Set-Serviceability
         [Parameter(Mandatory = $true, Position = 0)] [string] $ImagePath
     )
     Write-Host "Starting serviceability tests..."
-    # Bit of a mouthful, but good for PowerShell verbs
-    dism /image=$ImagePath /is-serviceable
+    # Follow Panther engine steps (https://github.com/CodingWonders/Panther-Diagram)
+    Write-Host "Creating temporary directory for serviceability operations..."
+    $scratchDir = ""
+    try
+    {
+        $folderPath = $ImagePath.Replace("\", "").Trim()
+        if (-not (Test-Path "$folderPath\`$DISMTOOLS.~LS")) { New-Item -Path "$folderPath\`$DISMTOOLS.~LS" -ItemType Directory | Out-Null }
+        $guidStr = [System.Guid]::NewGuid().Guid
+        New-Item -Path "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr" -ItemType Directory | Out-Null
+        Write-Host "Successfully created the scratch directory."
+        $scratchDir = "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr"
+        # Bit of a mouthful, but good for PowerShell verbs (+ scratch dir support)
+        dism /image=$ImagePath /scratchdir="$scratchDir" /is-serviceable
+    }
+    catch
+    {
+        Write-Host "Could not create temporary directory. Continuing without one. Do note that the serviceability tests might fail."
+        # Bit of a mouthful, but good for PowerShell verbs
+        dism /image=$ImagePath /is-serviceable
+    }
     if ($?)
     {
         Write-Host "Serviceability tests have succeeded. The image is valid."
@@ -1047,6 +1065,11 @@ function Set-Serviceability
     else
     {
         Write-Host "Serviceability tests have failed. The image is not valid."        
+    }
+    if (($scratchDir -ne "") -and (Test-Path -Path "$scratchDir"))
+    {
+        Write-Host "Removing temporary directory..."
+        Remove-Item -Path "$scratchDir" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 }
 
