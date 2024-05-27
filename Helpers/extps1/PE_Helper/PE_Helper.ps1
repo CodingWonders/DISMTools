@@ -1104,7 +1104,7 @@ function New-BootFiles
             {
                 foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
                 {
-                    if ($disk.BootPartition)
+                    if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
                     {
                         $MSRAssign = @'
                         sel dis #DISKID#
@@ -1135,7 +1135,7 @@ function New-BootFiles
             {
                 foreach ($disk in $(Get-CimInstance -ClassName Win32_DiskPartition))
                 {
-                    if ($disk.BootPartition)
+                    if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
                     {
                         $MSRAssign = @'
                         sel dis #DISKID#
