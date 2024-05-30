@@ -311,6 +311,27 @@ Public Class GetFeatureInfoDlg
                                 cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                             Next
                             PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            cPropValue.Text = "Please select or expand an entry."
+                                        Case "ESN"
+                                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
+                                        Case "FRA"
+                                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
+                                        Case "PTB", "PTG"
+                                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
+                                    End Select
+                                Case 1
+                                    cPropValue.Text = "Please select or expand an entry."
+                                Case 2
+                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
+                                Case 3
+                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
+                                Case 4
+                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
+                            End Select
                         Else
                             Select Case MainForm.Language
                                 Case 0
