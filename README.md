@@ -191,7 +191,8 @@ If you want to grab a copy straight from the source code, follow these instructi
 1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
-4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+4. Scroll down on the Solution Explorer until you find `UnpEax`, right-click it and select Build
+5. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 ### Additional startup flags
 
