@@ -758,6 +758,12 @@ Public Class ProgressPanel
         PkgErrorText.RichTextBox1.Clear()
         FeatErrorText.RichTextBox1.Clear()
         DismApi.Initialize(DismLogLevel.LogErrors)
+        Dim OperationUseQuotes As Boolean
+        Dim targetImage As String = ""
+        If MountDir <> "" Then
+            OperationUseQuotes = Not Path.GetPathRoot(MountDir) = MountDir
+            targetImage = If(OperationUseQuotes, Quote & MountDir & Quote, MountDir)
+        End If
         If opNum = 0 Then
             Select Case Language
                 Case 0
@@ -2185,7 +2191,7 @@ Public Class ProgressPanel
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-package /packagepath=" & Quote & pkgSource & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
                 End If
@@ -2303,7 +2309,7 @@ Public Class ProgressPanel
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
                     DISMProc.StartInfo.FileName = DismProgram
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
                     End If
@@ -2492,7 +2498,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         DISMProc.WaitForExit()
@@ -2594,7 +2600,7 @@ Public Class ProgressPanel
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
                         DISMProc.StartInfo.FileName = DismProgram
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
+                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
                         DISMProc.StartInfo.Arguments = CommandArgs
                         DISMProc.Start()
                         DISMProc.WaitForExit()
@@ -2783,7 +2789,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -2975,7 +2981,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
@@ -3050,7 +3056,7 @@ Public Class ProgressPanel
             End Select
             ' Initialize command
             DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /cleanup-image"
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
                     Select Case Language
@@ -3305,7 +3311,7 @@ Public Class ProgressPanel
                                "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
                                "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
             DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
             DISMProc.WaitForExit()
@@ -3511,7 +3517,7 @@ Public Class ProgressPanel
                 Else
                     ' Initialize command
                     DISMProc.StartInfo.FileName = DismProgram
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-provisionedappxpackage "
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
                     If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
                         CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
                     Else
@@ -3739,7 +3745,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & _
                                    "Processing package...")
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 DISMProc.WaitForExit()
@@ -3890,7 +3896,7 @@ Public Class ProgressPanel
                 Finally
                     DismApi.Shutdown()
                 End Try
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
@@ -4059,7 +4065,7 @@ Public Class ProgressPanel
                     DismApi.Shutdown()
                 End Try
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 DISMProc.WaitForExit()
@@ -4227,7 +4233,7 @@ Public Class ProgressPanel
                                        "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
                 End If
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
                 End If
@@ -4424,7 +4430,7 @@ Public Class ProgressPanel
                     DismApi.Shutdown()
                 End Try
                 DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
                 DISMProc.WaitForExit()
@@ -4505,10 +4511,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not supported
                         Case Is >= 2
-                            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
                     End Select
                 Case 10
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
             End Select
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -4594,7 +4600,7 @@ Public Class ProgressPanel
             End Try
             If Directory.Exists(Application.StartupPath & "\export_temp") Then
                 LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
-                CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & Quote & MountDir & Quote) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
+                CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
                 DISMProc.StartInfo.FileName = DismProgram
                 DISMProc.StartInfo.Arguments = CommandArgs
                 DISMProc.Start()
@@ -4636,7 +4642,7 @@ Public Class ProgressPanel
                     End Select
                     LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
                     CommandArgs = BckArgs
-                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & Quote & MountDir & Quote) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()
                     DISMProc.WaitForExit()
@@ -4691,7 +4697,7 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Setting the Windows PE scratch space..." & CrLf & _
                                "- New scratch space amount: " & peNewScratchSpace & " MB")
-            CommandArgs &= " /image=" & Quote & MountDir & Quote & " /set-scratchspace=" & peNewScratchSpace
+            CommandArgs &= " /image=" & targetImage & " /set-scratchspace=" & peNewScratchSpace
             DISMProc.StartInfo.FileName = DismProgram
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
@@ -4740,7 +4746,7 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf & _
                                "- New target path: " & Quote & peNewTargetPath & Quote)
-            CommandArgs &= " /image=" & Quote & MountDir & Quote & " /set-targetpath=" & peNewTargetPath
+            CommandArgs &= " /image=" & targetImage & " /set-targetpath=" & peNewTargetPath
             DISMProc.StartInfo.FileName = DismProgram
             DISMProc.StartInfo.Arguments = CommandArgs
             DISMProc.Start()
