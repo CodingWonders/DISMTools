@@ -297,30 +297,30 @@ Public Class GetCapabilityInfoDlg
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                     Case "ENU", "ENG"
-                                        Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                            "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
+                                        Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                            "Install size: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")
                                     Case "ESN"
-                                        Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                            "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
+                                        Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                            "Tamaño de instalación: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")
                                     Case "FRA"
-                                        Label42.Text = "Taille du téléchargement : " & capInfo.DownloadSize & " octets (~" & Converters.BytesToReadableSize(capInfo.DownloadSize, True) & ")" & CrLf & _
-                                            "Taille d'installation : " & capInfo.InstallSize & " octets (~" & Converters.BytesToReadableSize(capInfo.InstallSize, True) & ")"
+                                        Label42.Text = "Taille du téléchargement : " & capInfo.DownloadSize & " octets" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize, True) & ")", "") & CrLf & _
+                                            "Taille d'installation : " & capInfo.InstallSize & " octets" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize, True) & ")", "")
                                     Case "PTB", "PTG"
-                                        Label42.Text = "Tamanho do descarregamento: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                            "Tamanho da instalação: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
+                                        Label42.Text = "Tamanho do descarregamento: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                            "Tamanho da instalação: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")
                                 End Select
                             Case 1
-                                Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                    "Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
+                                Label42.Text = "Download size: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                    "Install size: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")
                             Case 2
-                                Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                    "Tamaño de instalación: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
+                                Label42.Text = "Tamaño de descarga: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                    "Tamaño de instalación: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")
                             Case 3
-                                Label42.Text = "Taille du téléchargement : " & capInfo.DownloadSize & " octets (~" & Converters.BytesToReadableSize(capInfo.DownloadSize, True) & ")" & CrLf & _
-                                    "Taille d'installation : " & capInfo.InstallSize & " octets (~" & Converters.BytesToReadableSize(capInfo.InstallSize, True) & ")"
+                                Label42.Text = "Taille du téléchargement : " & capInfo.DownloadSize & " octets" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize, True) & ")", "") & CrLf & _
+                                    "Taille d'installation : " & capInfo.InstallSize & " octets" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize, True) & ")", "")
                             Case 4
-                                Label42.Text = "Tamanho do descarregamento: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                    "Tamanho da instalação: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")"
+                                Label42.Text = "Tamanho do descarregamento: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                    "Tamanho da instalação: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")
                         End Select
                     End Using
                 Catch NRE As NullReferenceException
