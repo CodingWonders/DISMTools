@@ -612,7 +612,7 @@ function Start-OSApplication
             } until ($driveLetter -ne "")
         }
     }
-    wpeutil createpagefile /path="$($driveLetter):\pagefile.sys" /size=256
+    wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
     Write-Host "Applying Windows image. This can take some time..."
