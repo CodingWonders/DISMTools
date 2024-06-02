@@ -1697,8 +1697,8 @@ Public Class ImgInfoSaveDlg
                                         "    - Display name: " & capInfo.DisplayName & CrLf & _
                                         "    - Capability description: " & capInfo.Description & CrLf & _
                                         "    - Sizes:" & CrLf & _
-                                        "      - Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                        "      - Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")" & CrLf & CrLf
+                                        "      - Download size: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                        "      - Install size: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "") & CrLf & CrLf
                         Next
                         Contents &= "  - Complete capability information has been gathered" & CrLf & CrLf
                     ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(3)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then

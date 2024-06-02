@@ -162,7 +162,7 @@ Public Class AppInstallerDownloader
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         AddHandler Downloader.DownloadProgressChanged, AddressOf WebClient_DownloadProgressChanged
         AddHandler Downloader.DownloadFileCompleted, AddressOf WebClient_DownloadFileCompleted
-        Downloader.DownloadFileAsync(New Uri(AppInstallerUri), Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & ".appxbundle")
+        Downloader.DownloadFileAsync(New Uri(AppInstallerUri), Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
     End Sub
 
 #Region "WebClient event handlers"
@@ -197,6 +197,34 @@ Public Class AppInstallerDownloader
     End Sub
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
+        If e.Error IsNot Nothing Then
+            Dim msg As String = ""
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "An error occurred while downloading the file: " & e.Error.Message
+                        Case "ESN"
+                            msg = "Se produjo un error al descargar el archivo: " & e.Error.Message
+                        Case "FRA"
+                            msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
+                        Case "PTB", "PTG"
+                            msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
+                    End Select
+                Case 1
+                    msg = "An error occurred while downloading the file: " & e.Error.Message
+                Case 2
+                    msg = "Se produjo un error al descargar el archivo: " & e.Error.Message
+                Case 3
+                    msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
+                Case 4
+                    msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
+            If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
+                File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
+            End If
+        End If
         Thread.Sleep(500)
         Close()
     End Sub
