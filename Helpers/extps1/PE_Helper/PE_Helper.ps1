@@ -1041,9 +1041,11 @@ function Set-Serviceability
     # Follow Panther engine steps (https://github.com/CodingWonders/Panther-Diagram)
     Write-Host "Creating temporary directory for serviceability operations..."
     $scratchDir = ""
+    $driveLetter = ""
     try
     {
         $folderPath = $ImagePath.Replace("\", "").Trim()
+        $driveLetter = $folderPath
         if (-not (Test-Path "$folderPath\`$DISMTOOLS.~LS")) { New-Item -Path "$folderPath\`$DISMTOOLS.~LS" -ItemType Directory | Out-Null }
         $guidStr = [System.Guid]::NewGuid().Guid
         New-Item -Path "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr" -ItemType Directory | Out-Null
@@ -1070,6 +1072,7 @@ function Set-Serviceability
     {
         Write-Host "Removing temporary directory..."
         Remove-Item -Path "$scratchDir" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        Remove-Item -Path "$driveLetter\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 }
 
