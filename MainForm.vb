@@ -3633,6 +3633,20 @@ Public Class MainForm
         Return False
     End Function
 
+    Public Event APIExceptionThrown(errorEx As Exception)
+
+    Private Sub APIExceptionHandler(errorEx As Exception) Handles Me.APIExceptionThrown
+        MsgBox(errorEx.Message, vbOKOnly + vbExclamation, "API error")
+    End Sub
+
+    Sub ThrowAPIException(APIException As DismException)
+        Dim errorEx As New Exception("An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
+                                     APIException.Message & CrLf & CrLf &
+                                     "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
+                                     "Error code: " & Hex(APIException.HResult), APIException)
+        RaiseEvent APIExceptionThrown(errorEx)
+    End Sub
+
     ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
@@ -3664,6 +3678,8 @@ Public Class MainForm
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -3827,6 +3843,8 @@ Public Class MainForm
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -4011,6 +4029,8 @@ Public Class MainForm
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -4246,6 +4266,8 @@ Public Class MainForm
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -4413,6 +4435,8 @@ Public Class MainForm
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try

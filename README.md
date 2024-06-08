@@ -14,6 +14,17 @@
 
 DISMTools is a front-end for DISM that lets you manage your Windows Imaging (WIM) files and a whole lot more.
 
+## About this project
+
+This project was created simply because of the lack of free, open-source, and updated graphical interfaces for DISM. Before this tool was started, these popular UIs were available:
+
+- [NTLite](https://www.ntlite.com/), which is the most popular offering. This software is free, but puts certain features (like downloading OS and program updates) behind a paywall, so it may not be for you if you are looking for a free, fully-featured program
+- [MSMG Toolkit](https://forums.mydigitallife.net/threads/msmg-toolkit.50572/), which is one popular alternative. This is free and open-source (given that it is a script), but it may not be easily accessible for download, and may not be intuitive given its command-line user interface (TUI)
+- [DISM GUI](https://github.com/mikecel79/DISMGUI), the first popular, .NET powered GUI that lets you perform a couple of actions with your Windows images. While it is open-source (with its source code available on GitHub), it has not been updated since 2017
+- [DISM++](https://github.com/Chuyu-Team/Dism-Multi-language), another fully-featured, CBS-powered GUI. However, it has not been updated since 2023 and it is not open-source (even though there is a GitHub repository, it is only meant for the website and language translations)
+
+There are also more GUIs for DISM, but they are way less known, so they are not mentioned here. Given this situation, this project was created to be a viable alternative to NTLite that was free, open-source, easily accessible, and constantly updated.
+
 ## Key features
 
 ### Working with projects
@@ -31,6 +42,10 @@ The program also supports setting and removing file associations for projects wi
 ### Manage your active installation, or installations on any drive
 
 With the **online** and **offline installation management modes**, you can easily manage any installation of a modern Windows version.
+
+### Compatibility and performance go hand in hand
+
+Unlike other user interfaces for DISM that use either the DISM API or the DISM executable, DISMTools uses both, providing great performance to get the information you want from your images and installations quickly, and compatibility, allowing you to use any version of the DISM program, ranging from the Windows 7 version all the way up to the latest versions in Windows 10 and 11, so that your existing command-line workflows are not affected when you move to the graphical interface.
 
 ### An advanced front-end
 
@@ -176,7 +191,8 @@ If you want to grab a copy straight from the source code, follow these instructi
 1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
-4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+4. Scroll down on the Solution Explorer until you find `UnpEax`, right-click it and select Build
+5. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 ### Additional startup flags
 

@@ -22,6 +22,7 @@ Public Class MainForm
     Dim latestVer As String
     Dim relTag As String
     Dim needsMigration As Boolean
+    Dim minNoMig As Version
 
     Dim ReleaseDownloader As New WebClient()
 
@@ -209,7 +210,7 @@ Public Class MainForm
         Using client As New WebClient()
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             Try
-                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("pre"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
                 MsgBox("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, Text)
                 Environment.Exit(1)
@@ -225,6 +226,15 @@ Public Class MainForm
                         relTag = Line.Replace("ReleaseTag = ", "").Trim()
                     ElseIf Line.StartsWith("MigrateSettings") Then
                         needsMigration = If(Line.Replace("MigrateSettings = ", "").Trim() = "True", True, False)
+                    ElseIf Line.StartsWith("MinNoMig") Then
+                        Try
+                            Dim minNoMigStr As String = Line.Replace("MinNoMig = ", "").Trim()
+                            minNoMig = New Version(minNoMigStr)
+                            Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
+                            needsMigration = Not (New Version(fv) >= minNoMig)
+                        Catch ex As Exception
+                            Debug.WriteLine("Could not get minimum version for no migrations")
+                        End Try
                     End If
                 Next
                 Label17.Visible = needsMigration

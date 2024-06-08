@@ -1882,6 +1882,19 @@ Public Class AddProvAppxPackage
         End If
     End Sub
 
+    Function GetDownloadedPackageExtensionFromAppInstaller(PkgFile As String) As String
+        Dim appExtensions() As String = New String(7) {".appx", ".appxbundle", ".msix", ".msixbundle", ".eappx", ".eappxbundle", ".emsix", ".emsixbundle"}
+        Try
+            For Each appExtension In appExtensions
+                Dim targetFile As String = PkgFile.Replace(Path.GetExtension(PkgFile), appExtension)
+                If File.Exists(targetFile) Then Return appExtension
+            Next
+        Catch ex As Exception
+            Return Nothing
+        End Try
+        Return Nothing
+    End Function
+
     Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         Cursor = Cursors.WaitCursor
@@ -1894,9 +1907,10 @@ Public Class AddProvAppxPackage
             ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
                 If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
                 AppInstallerDownloader.AppInstallerFile = PackageFile
-                If Not File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                If File.Exists(PackageFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", ".appxbundle").Trim())
+                If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then AppInstallerDownloader.ShowDialog(Me)
+                If File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
             ElseIf File.GetAttributes(PackageFile) = FileAttributes.Directory Then
+                Dim msg As String = ""
                 ' Temporary support for directories
                 If File.Exists(PackageFile & "\AppxSignature.p7x") And File.Exists(PackageFile & "\AppxMetadata\AppxBundleManifest.xml") Or File.Exists(PackageFile & "\AppxManifest.xml") Then
                     ScanAppxPackage(True, PackageFile)
@@ -1906,151 +1920,40 @@ Public Class AddProvAppxPackage
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                 Case "ENU", "ENG"
-                                    If MsgBox("The following directory:" & CrLf & Quote & PackageFile & Quote & CrLf & "contains application packages. Do you want to process them as well?" & CrLf & CrLf & "NOTE: this will scan this directory recursively, so it may take longer for this operation to complete", vbYesNo + vbQuestion, "Add provisioned AppX packages") = MsgBoxResult.Yes Then
-                                        For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                                Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                                ScanAppxPackage(False, AppPkg)
-                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                                If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                                AppInstallerDownloader.AppInstallerFile = AppPkg
-                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                            Else
-                                                Continue For
-                                            End If
-                                        Next
-                                    Else
-                                        Continue For
-                                    End If
+                                    msg = "The following directory:" & CrLf & Quote & PackageFile & Quote & CrLf & "contains application packages. Do you want to process them as well?" & CrLf & CrLf & "NOTE: this will scan this directory recursively, so it may take longer for this operation to complete"
                                 Case "ESN"
-                                    If MsgBox("El siguiente directorio:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene paquetes de aplicación. ¿Desea procesarlos también?" & CrLf & CrLf & "NOTA: esto escaneará este directorio de una forma recursiva, así que esta operación podría tardar más tiempo en completar", vbYesNo + vbQuestion, "Añadir paquetes aprovisionados AppX") = MsgBoxResult.Yes Then
-                                        For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                                Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                                ScanAppxPackage(False, AppPkg)
-                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                                If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                                AppInstallerDownloader.AppInstallerFile = AppPkg
-                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                            Else
-                                                Continue For
-                                            End If
-                                        Next
-                                    Else
-                                        Continue For
-                                    End If
+                                    msg = "El siguiente directorio:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene paquetes de aplicación. ¿Desea procesarlos también?" & CrLf & CrLf & "NOTA: esto escaneará este directorio de una forma recursiva, así que esta operación podría tardar más tiempo en completar"
                                 Case "FRA"
-                                    If MsgBox("Le répertoire suivant :" & CrLf & Quote & PackageFile & Quote & CrLf & "contient des paquets d'application. Voulez-vous les traiter également ?" & CrLf & CrLf & "REMARQUE : l'analyse de ce répertoire se fera de manière récursive, ce qui peut prolonger la durée de l'opération.", vbYesNo + vbQuestion, "Ajouter des paquets AppX provisionnés") = MsgBoxResult.Yes Then
-                                        For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                                Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                                ScanAppxPackage(False, AppPkg)
-                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                                If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                                AppInstallerDownloader.AppInstallerFile = AppPkg
-                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                            Else
-                                                Continue For
-                                            End If
-                                        Next
-                                    Else
-                                        Continue For
-                                    End If
+                                    msg = "Le répertoire suivant :" & CrLf & Quote & PackageFile & Quote & CrLf & "contient des paquets d'application. Voulez-vous les traiter également ?" & CrLf & CrLf & "REMARQUE : l'analyse de ce répertoire se fera de manière récursive, ce qui peut prolonger la durée de l'opération."
                                 Case "PTB", "PTG"
-                                    If MsgBox("O seguinte diretório:" & CrLf & Quote & PackageFile & Quote & CrLf & "contém pacotes de aplicações. Deseja processá-los também?" & CrLf & CrLf & "NOTA: esta operação irá analisar este diretório recursivamente, pelo que poderá demorar mais tempo a ser concluída", vbYesNo + vbQuestion, "Adicionar pacotes AppX provisionados") = MsgBoxResult.Yes Then
-                                        For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                                Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                                ScanAppxPackage(False, AppPkg)
-                                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                                If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                                AppInstallerDownloader.AppInstallerFile = AppPkg
-                                                If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                                If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                            Else
-                                                Continue For
-                                            End If
-                                        Next
-                                    Else
-                                        Continue For
-                                    End If
+                                    msg = "O seguinte diretório:" & CrLf & Quote & PackageFile & Quote & CrLf & "contém pacotes de aplicações. Deseja processá-los também?" & CrLf & CrLf & "NOTA: esta operação irá analisar este diretório recursivamente, pelo que poderá demorar mais tempo a ser concluída"
                             End Select
                         Case 1
-                            If MsgBox("The following directory:" & CrLf & Quote & PackageFile & Quote & CrLf & "contains application packages. Do you want to process them as well?" & CrLf & CrLf & "NOTE: this will scan this directory recursively, so it may take longer for this operation to complete", vbYesNo + vbQuestion, "Add provisioned AppX packages") = MsgBoxResult.Yes Then
-                                For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                    If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                        Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                        ScanAppxPackage(False, AppPkg)
-                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                        If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                        AppInstallerDownloader.AppInstallerFile = AppPkg
-                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                    Else
-                                        Continue For
-                                    End If
-                                Next
-                            Else
-                                Continue For
-                            End If
+                            msg = "The following directory:" & CrLf & Quote & PackageFile & Quote & CrLf & "contains application packages. Do you want to process them as well?" & CrLf & CrLf & "NOTE: this will scan this directory recursively, so it may take longer for this operation to complete"
                         Case 2
-                            If MsgBox("El siguiente directorio:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene paquetes de aplicación. ¿Desea procesarlos también?" & CrLf & CrLf & "NOTA: esto escaneará este directorio de una forma recursiva, así que esta operación podría tardar más tiempo en completar", vbYesNo + vbQuestion, "Añadir paquetes aprovisionados AppX") = MsgBoxResult.Yes Then
-                                For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                    If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                        Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                        ScanAppxPackage(False, AppPkg)
-                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                        If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                        AppInstallerDownloader.AppInstallerFile = AppPkg
-                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                    Else
-                                        Continue For
-                                    End If
-                                Next
-                            Else
-                                Continue For
-                            End If
+                            msg = "El siguiente directorio:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene paquetes de aplicación. ¿Desea procesarlos también?" & CrLf & CrLf & "NOTA: esto escaneará este directorio de una forma recursiva, así que esta operación podría tardar más tiempo en completar"
                         Case 3
-                            If MsgBox("Le répertoire suivant :" & CrLf & Quote & PackageFile & Quote & CrLf & "contient des paquets d'application. Voulez-vous les traiter également ?" & CrLf & CrLf & "REMARQUE : l'analyse de ce répertoire se fera de manière récursive, ce qui peut prolonger la durée de l'opération.", vbYesNo + vbQuestion, "Ajouter des paquets AppX provisionnés") = MsgBoxResult.Yes Then
-                                For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                    If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                        Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                        ScanAppxPackage(False, AppPkg)
-                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                        If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                        AppInstallerDownloader.AppInstallerFile = AppPkg
-                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                    Else
-                                        Continue For
-                                    End If
-                                Next
-                            Else
-                                Continue For
-                            End If
+                            msg = "Le répertoire suivant :" & CrLf & Quote & PackageFile & Quote & CrLf & "contient des paquets d'application. Voulez-vous les traiter également ?" & CrLf & CrLf & "REMARQUE : l'analyse de ce répertoire se fera de manière récursive, ce qui peut prolonger la durée de l'opération."
                         Case 4
-                            If MsgBox("O seguinte diretório:" & CrLf & Quote & PackageFile & Quote & CrLf & "contém pacotes de aplicações. Deseja processá-los também?" & CrLf & CrLf & "NOTA: esta operação irá analisar este diretório recursivamente, pelo que poderá demorar mais tempo a ser concluída", vbYesNo + vbQuestion, "Adicionar pacotes AppX provisionados") = MsgBoxResult.Yes Then
-                                For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                                    If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
-                                        Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
-                                        ScanAppxPackage(False, AppPkg)
-                                    ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
-                                        If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
-                                        AppInstallerDownloader.AppInstallerFile = AppPkg
-                                        If Not File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
-                                        If File.Exists(AppPkg.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", ".appxbundle").Trim())
-                                    Else
-                                        Continue For
-                                    End If
-                                Next
+                            msg = "O seguinte diretório:" & CrLf & Quote & PackageFile & Quote & CrLf & "contém pacotes de aplicações. Deseja processá-los também?" & CrLf & CrLf & "NOTA: esta operação irá analisar este diretório recursivamente, pelo que poderá demorar mais tempo a ser concluída"
+                    End Select
+                    If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+                        For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
+                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
+                                Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
+                                ScanAppxPackage(False, AppPkg)
+                            ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
+                                AppInstallerDownloader.AppInstallerFile = AppPkg
+                                If Not File.Exists(AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg))) Then AppInstallerDownloader.ShowDialog(Me)
+                                If File.Exists(AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg))) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg)))
                             Else
                                 Continue For
                             End If
-                    End Select
+                        Next
+                    Else
+                        Continue For
+                    End If
                 End If
             Else
                 Select Case MainForm.Language

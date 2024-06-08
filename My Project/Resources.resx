@@ -1119,15 +1119,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed some splash screen issues if the program is run on Windows 7/Server 2008 R2 or if the program is run without administrative privileges (thanks liliactr on the My Digital Life forums for spotting)
+- Fixed an issue in the CLI version of the mounted image manager that would throw an error at startup if no images were mounted
+- If the download or install sizes of capabilities are less than 1024 bytes, the program will no longer show "(~)"
+- Fixed a critical issue where all DISM commands would fail for offline installations if the mount directory were a drive (thanks @Xhib-ba for spotting)
 
 New features:
 
-- Existing PowerShell tooling (excluding the PE Helper) has been refactored and cleaned up for increased code readability and quality
-- If you were to add multiple installation images to your customized ISO files, the PE helper will now ask you what image to apply
-- You can now get who signed a driver when saving installed driver information to a file
-- The way custom properties of packages and features are viewed has been improved, better showing the hierarchy of these properties
-- The Scintilla.NET library has been updated to version 5.5.1</value>
+- The program update system has had some improvements:
+  - A minimum version threshold has been added to update information files. The currently running version is compared with this threshold to determine if settings should be migrated
+- The 7-Zip component has been updated to version 24.06
+- The Preinstallation Environment (PE) helper has had some improvements:
+  - The OS installer now creates a scratch directory on the target drive to avoid any DISM serviceability warnings
+  - Disk volume checks have been improved to ensure that the correct boot volume is selected when creating boot files
+- The App Installer downloader now informs of download errors and saves target files using the extension in the URL
+- The custom property viewer can now prompt you to select a property if you haven't done so
+- The program can now detect and inform about DISM API errors to you</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
