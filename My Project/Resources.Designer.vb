@@ -2178,13 +2178,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed some splash screen issues if the program is run on Windows 7/Server 2008 R2 or if the program is run without administrative privileges (thanks liliactr on the My Digital Life forums for spotting)
+        '''- Fixed an issue in the CLI version of the mounted image manager that would throw an error at startup if no images were mounted
+        '''- If the download or install sizes of capabilities are less than 1024 bytes, the program will no longer show &quot;(~)&quot;
+        '''- Fixed a critical issue where all DISM commands would fail for offline installations if the mount directory were a drive (thanks @Xhib-ba for spotting)
         '''
         '''New features:
         '''
-        '''- Existing PowerShell tooling (excluding the PE Helper) has been refactored and cleaned up for increased code readability and quality
-        '''- If you were to add multiple installation images to your customized ISO files, the PE helper will now ask you what image to apply
-        '''- You ca [resto de la cadena truncado]&quot;;.
+        '''- The program update system has had some improvements:
+        '''  - A minimum version thr [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
