@@ -3524,7 +3524,7 @@ Public Class ProgressPanel
                         CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
                     End If
                     If appxAdditionPackageList(x).PackageLicenseFile <> "" And File.Exists(appxAdditionPackageList(x).PackageLicenseFile) Then
-                        CommandArgs &= " /licensefile=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
+                        CommandArgs &= " /licensepath=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
                     Else
                         If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
                             LogView.AppendText(CrLf & _
