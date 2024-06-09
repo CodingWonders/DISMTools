@@ -97,7 +97,7 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/102d829d-aeb1-4697-9225-27775bea2b61" />
 </p>
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/eb0e2332-520c-4d2f-9cee-27c608546f6f" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/af2a2655-02de-4618-9423-30882303b424" />
 </p>
 
 > [!NOTE]
