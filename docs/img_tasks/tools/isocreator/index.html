@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>Feature information - DISMTools Help Documentation</title>
+    <title>ISO creation tools - DISMTools Help Documentation</title>
     <link rel="stylesheet" href="../../../css/theme.css" />
     <link rel="stylesheet" href="../../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Feature information";
-        var mkdocs_page_input_path = "img_tasks\\info\\feat_info.md";
+        var mkdocs_page_name = "ISO creation tools";
+        var mkdocs_page_input_path = "img_tasks\\tools\\isocreator.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -55,8 +55,8 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../offline_inst_mgmt/">Offline installation management mode</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
-    <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
+    <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
@@ -75,31 +75,23 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/unmount_image/">Unmounting an image</a>
                 </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="#">Image information dialogs</a>
-    <ul class="current">
-                <li class="toctree-l3"><a class="reference internal" href="../infodlgs/">Overview</a>
+                <li class="toctree-l2"><a class="reference internal" href="#">Image information dialogs</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/infodlgs/">Overview</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../img_info/">Image file information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/img_info/">Image file information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../pkg_info/">Package information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/pkg_info/">Package information</a>
                 </li>
-                <li class="toctree-l3 current"><a class="reference internal current" href="./">Feature information</a>
-    <ul class="current">
-    <li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#a-better-way-of-viewing-custom-properties">A better way of viewing custom properties</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
-    </li>
-    </ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/feat_info/">Feature information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../appxpkg_info/">AppX package information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/appxpkg_info/">AppX package information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../cap_info/">Capability information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/cap_info/">Capability information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../drv_info/">Driver information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/drv_info/">Driver information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../winpe_info/">Windows PE configuration information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/winpe_info/">Windows PE configuration information</a>
                 </li>
     </ul>
                 </li>
@@ -165,17 +157,27 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Tools</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/mimgmgr/">Mounted image manager</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Tools</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../mimgmgr/">Mounted image manager</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/wim2esd/">Image conversion</a>
+                <li class="toctree-l2"><a class="reference internal" href="../wim2esd/">Image conversion</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
+                <li class="toctree-l2"><a class="reference internal" href="../swm2wim/">SWM file merger</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                <li class="toctree-l2"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">ISO creation tools</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#the-preinstallation-environment-pe-helper">The Preinstallation Environment (PE) Helper</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
+    </ul>
                 </li>
     </ul>
                   </li>
@@ -214,9 +216,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Image tasks</li>
-          <li class="breadcrumb-item">Image management</li>
-          <li class="breadcrumb-item">Image information dialogs</li>
-      <li class="breadcrumb-item active">Feature information</li>
+          <li class="breadcrumb-item">Tools</li>
+      <li class="breadcrumb-item active">ISO creation tools</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -225,34 +226,64 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="feature-information">Feature information</h1>
+                <h1 id="testing-your-windows-images-with-the-iso-creation-tools">Testing your Windows images with the ISO creation tools</h1>
 <p align="center">
-    <img src="../../../res/img_tasks/info/feat_info.png" />
+    <img src="../../../res/img_tasks/tools/isocreator/isocreator.png" />
 </p>
 
-<p>With DISMTools you can get the information about the features present in Windows images and installations of every type.</p>
-<p><em>This action is supported on DISMTools 0.3.1 and newer.</em></p>
+<p>If you want to test the changes made to a Windows image, you can easily do so with the ISO creation tools, which include the <strong>ISO creator</strong> and the <strong>Preinstallation Environment (PE) Helper</strong>.</p>
+<p>You will need the Windows Assessment and Deployment Kit (ADK), which you can download using the convenient link on the bottom left.</p>
+<p><em>This tool is available in DISMTools 0.5</em></p>
 <h2 id="usage">Usage</h2>
-<ul>
-<li>When no features are selected or when the dialog is launched for the first time in the execution of the program, you'll only see brief information about all features, which includes the feature name and its state</li>
-<li>To get information about a specific feature, <strong>select it from the list</strong>. You'll then see that information on the right</li>
-</ul>
-<h2 id="a-better-way-of-viewing-custom-properties">A better way of viewing custom properties</h2>
-<p>DISMTools 0.5 introduces a new way of viewing custom properties of features. This new view allows you to better understand the hierarchy of the properties in a tree view.</p>
+<p>To create a new ISO file, do the following:</p>
+<ol>
+<li><strong>Pick your Windows image.</strong> You can either browse through your computer for a Windows image to copy, pick an image from the pop-up mounted image picker, or pick the currently loaded one. Once you pick a Windows image, you will see information about each index in the image</li>
+<li><strong>Choose the architecture for the Preinstallation Environment</strong> by using the architecture list. It is recommended to pick the one that the image supports</li>
+<li><strong>Choose the target location of the ISO file.</strong> If the target image exists, you will be asked if you want to replace it when clicking Create</li>
+</ol>
+<p>This process can take between 5 to 10 minutes, depending on the size of the Windows image and the speed of your computer's disk drive.</p>
+<h3 id="the-preinstallation-environment-pe-helper">The Preinstallation Environment (PE) Helper</h3>
+<p>All ISO creation and OS installation procedures are performed by a script known as the <strong>Preinstallation Environment (PE) Helper</strong>. This has 2 modes: environment generation and OS installation.</p>
+<h4 id="environment-generation">Environment generation</h4>
+<p>The PE Helper will do the following during this phase:</p>
+<ol>
+<li>Copy PE files to a temporary directory in the program files directory</li>
+<li>Mount the Windows PE image</li>
+<li>Copy operating system packages to the temporary directory</li>
+<li>Add the following packages: .NET Framework (<code>WinPE-NetFx</code>), WMI support (<code>WinPE-WMI</code>), PowerShell (<code>WinPE-PowerShell</code>) and Deployment Image Servicing and Management (DISM) cmdlets (<code>WinPE-DismCmdlets</code>)</li>
+<li>Perform the following customizations: set up a custom wallpaper, configure startup and command prompt settings and scratch space</li>
+<li>Save changes and unmount the WinPE image</li>
+<li>Copy the source image file to test</li>
+<li>Copy scripts, including the PE Helper</li>
+<li>Create the ISO file</li>
+</ol>
+<h4 id="os-installation">OS installation</h4>
+<p>During OS installation, the PE helper will do the following:</p>
+<ol>
+<li>Ask you what disk and partition will be used for OS installation</li>
+<li>Write disk configuration tailored to the system configuration (BIOS/UEFI)</li>
+<li>Ask you the index of the source image to apply</li>
+<li>Apply the source image</li>
+<li>Run serviceability tests</li>
+<li>Create boot files tailored to the system configuration (BIOS/UEFI)</li>
+<li>Reboot your system</li>
+</ol>
 <p align="center">
-    <img src="../../../res/img_tasks/info/cprop_viewer.png" />
+    <img src="../../../res/img_tasks/tools/isocreator/DISMTools_PE.png" />
 </p>
 
-<h2 id="related-content">Related content</h2>
+<h4 id="serviceability-tests">Serviceability tests</h4>
+<p>Serviceability tests are performed during OS installation to make sure that the image that has been applied is valid. They are only run if the architectures of the PE and the image are the same, and must pass in order to successfully complete the installation of the operating system.</p>
+<p>If these tests fail, you may need to repair the component store of your Windows image.</p>
+<h2 id="remarks">Remarks</h2>
 <ul>
-<li><a href="../infodlgs/">Image information dialogs</a></li>
+<li><strong>Please make sure to commit your unsaved changes to your image before creating the ISO file</strong></li>
 </ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../pkg_info/" class="btn btn-neutral float-left" title="Package information"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../appxpkg_info/" class="btn btn-neutral float-right" title="AppX package information">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../configlisteditor/" class="btn btn-neutral float-left" title="DISM Configuration List Editor"><span class="icon icon-circle-arrow-left"></span> Previous</a>
     </div>
 
   <hr/>
@@ -275,10 +306,8 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../pkg_info/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../configlisteditor/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
-    
-      <span><a href="../appxpkg_info/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

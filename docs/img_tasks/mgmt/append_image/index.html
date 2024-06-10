@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>Applying an image - DISMTools Help Documentation</title>
+    <title>Appending to an image - DISMTools Help Documentation</title>
     <link rel="stylesheet" href="../../../css/theme.css" />
     <link rel="stylesheet" href="../../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Applying an image";
+        var mkdocs_page_name = "Appending to an image";
         var mkdocs_page_input_path = "img_tasks\\mgmt\\append_image.md";
         var mkdocs_page_url = null;
       </script>
@@ -48,20 +48,32 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
-              <ul>
+              <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../online_inst_mgmt/">Online installation management mode</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../offline_inst_mgmt/">Offline installation management mode</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
-    <ul>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">Appending to an image</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#options">Options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration-lists">Configuration lists</a>
+    </li>
+    </ul>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mount_image/">Mounting an image</a>
                 </li>
@@ -163,6 +175,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -199,7 +213,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Applying an image</li>
+          <li class="breadcrumb-item">Image tasks</li>
+          <li class="breadcrumb-item">Image management</li>
+      <li class="breadcrumb-item active">Appending to an image</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -208,30 +224,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="applying-an-image">Applying an image</h1>
+                <h1 id="appending-mount-directories-to-a-windows-image">Appending mount directories to a Windows image</h1>
 <p align="center">
-    <img src="../../../res/img_tasks/mgmt/apply_image.png" />
+    <img src="../../../res/img_tasks/mgmt/append_image.png" />
 </p>
 
-<p>With DISMTools you can easily apply your Windows images to a directory or a drive.</p>
+<p>If you have made some changes to your Windows image that you want to save to a new index in the source image, you can do that easily with this dialog.</p>
+<p><i>This action is supported on DISMTools 0.5 and newer.</i></p>
 <h2 id="usage">Usage</h2>
+<p>This procedure is similar to the one you would follow when <a href="../capture_image">capturing a directory or a drive to an image</a>.</p>
 <ol>
-<li>Specify the source image file to apply. It can be a WIM, SWM or ESD file. If you have loaded a project with an image already mounted, you can also use it</li>
-<li>Specify the index to apply in the Options group by picking an entry in the "Image index:" combo box</li>
-<li>Specify the directory or drive to apply the image to. For regular application operations, you can just use the directory option, as applications to a drive are designed for Full Flash Utility (FFU) files</li>
+<li>Specify the source directory to append and the image file to append the contents to</li>
+<li>Specify a name for the new Windows image and, if you want, a description</li>
 </ol>
 <h2 id="options">Options</h2>
-<p>The options you can perform when applying the image follow the command-line guides, which you can take a look at <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14?view=windows-11#apply-image">here</a>.</p>
-<h2 id="swm-naming-patterns">SWM naming patterns</h2>
-<p>When you specify a SWM file, you can specify the naming pattern to use when applying the image.</p>
-<p>The program will automatically perform operations required so that you can easily apply it. However, if you want to review these operations, keep reading this section.</p>
-<p>To reference SWM files, check the "Reference SWM files" check box, and specify the naming pattern of the SWM files. You can either use the file name of the image as a naming pattern, or specify a naming pattern manually. Click the "Scan pattern" button to test your naming pattern and, if files are found, entries will appear on the list below.</p>
-<p align="center">
-    <img src="../../../res/img_tasks/mgmt/apply_image_swm_pattern.png" />
-</p>
+<p>The options you can perform when applying the image follow the command-line guides, which you can take a look at <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14?view=windows-11#append-image">here</a>.</p>
+<h2 id="configuration-lists">Configuration lists</h2>
+<p>This task lets you specify configuration lists to exclude certain files. This is useful to avoid experiencing image appendix errors (mostly with user OneDrive folders on Windows installations) or to avoid having an extremely large resulting image.</p>
+<p>Refer to the <a href="../../tools/configlisteditor">DISM Configuration List Editor</a> utility and the <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-configuration-list-and-wimscriptini-files-winnext?view=windows-11">configuration list reference</a> for more information.</p>
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../offline_inst_mgmt/" class="btn btn-neutral float-left" title="Offline installation management mode"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../apply_image/" class="btn btn-neutral float-right" title="Applying an image">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -253,6 +270,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="../../offline_inst_mgmt/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../apply_image/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

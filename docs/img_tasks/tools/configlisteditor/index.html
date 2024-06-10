@@ -57,11 +57,15 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
     <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -167,11 +171,15 @@
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#adding-an-entry">Adding an entry</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#excluding-onedrive-folders">Excluding OneDrive folders</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#related-content">Related content</a>
     </li>
     </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -236,6 +244,13 @@
     <img src="../../../res/img_tasks/tools/configlisteditor/new_entry.png" />
 </p>
 
+<h3 id="excluding-onedrive-folders">Excluding OneDrive folders</h3>
+<p>DISMTools 0.4.2 introduces the ability to automatically exclude user OneDrive folders, which might cause errors in the tasks in which you can specify these files:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/configlisteditor/onedrive_exclusion.png" />
+</p>
+
+<p>To exclude user OneDrive folders in a drive, simply browse through your computer until you find it, and then click Exclude. User OneDrive folders will be automatically detected and added to the configuration list file.</p>
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-configuration-list-and-wimscriptini-files-winnext?view=windows-11">Configuration list reference</a></li>
@@ -243,6 +258,10 @@
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../swm2wim/" class="btn btn-neutral float-left" title="SWM file merger"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../isocreator/" class="btn btn-neutral float-right" title="ISO creation tools">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -266,6 +285,8 @@
     
       <span><a href="../swm2wim/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
+    
+      <span><a href="../isocreator/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
