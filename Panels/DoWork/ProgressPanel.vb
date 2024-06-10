@@ -892,6 +892,9 @@ Public Class ProgressPanel
                 IsSuccessful = False
             End Try
         ElseIf opNum = 1 Then
+            ' This variable tells the program to use quotes when appending a mount directory in a drive.
+            ' This is false when we want to append an entire drive.
+            Dim AppendixUseQuotes As Boolean = Not Path.GetPathRoot(AppendixSourceDir) = AppendixSourceDir
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -947,10 +950,10 @@ Public Class ProgressPanel
                         Case 1
                             ' Not available
                         Case Is >= 2
-                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & Quote & AppendixSourceDir & Quote & " /name=" & Quote & AppendixName & Quote
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & If(AppendixUseQuotes, Quote, "") & AppendixSourceDir & If(AppendixUseQuotes, Quote, "") & " /name=" & Quote & AppendixName & Quote
                     End Select
                 Case 10
-                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & Quote & AppendixSourceDir & Quote & " /name=" & Quote & AppendixName & Quote
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & If(AppendixUseQuotes, Quote, "") & AppendixSourceDir & If(AppendixUseQuotes, Quote, "") & " /name=" & Quote & AppendixName & Quote
             End Select
             If AppendixDescription <> "" Then
                 CommandArgs &= " /description=" & Quote & AppendixDescription & Quote
