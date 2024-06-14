@@ -4,6 +4,7 @@ Public Class HelpBrowserForm
 
     Dim TitleMsg As String = ""
     Dim CurrentSite As String = ""
+    Dim DocTitle As String = ""
 
     Private Sub HelpBrowserForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -39,7 +40,12 @@ Public Class HelpBrowserForm
             Process.Start(e.Url.AbsoluteUri)
             WebBrowser1.Navigate(CurrentSite)
         End If
-        Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
+        If WebBrowser1.DocumentTitle = "" Then
+            Text = DocTitle & " - " & TitleMsg
+        Else
+            Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
+            DocTitle = WebBrowser1.DocumentTitle
+        End If
         CurrentSite = e.Url.AbsoluteUri
     End Sub
 
