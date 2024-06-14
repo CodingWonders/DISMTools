@@ -44,7 +44,7 @@ Public Class HelpBrowserForm
             Text = DocTitle & " - " & TitleMsg
         Else
             Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
-            DocTitle = WebBrowser1.DocumentTitle
+            If e.Url.AbsoluteUri.StartsWith("file:///") Then DocTitle = WebBrowser1.DocumentTitle
         End If
         CurrentSite = e.Url.AbsoluteUri
     End Sub
