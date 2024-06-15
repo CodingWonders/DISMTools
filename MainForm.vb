@@ -2382,13 +2382,27 @@ Public Class MainForm
             ImgBW.ReportProgress(99)
             If PendingTasks(0) Then GetImagePackages(True, OnlineMode)
             If PendingTasks(1) Then GetImageFeatures(True, OnlineMode)
-            If PendingTasks(2) Then GetImageAppxPackages(True, OnlineMode)
-            If PendingTasks(3) Then GetImageCapabilities(True, OnlineMode)
+            If PendingTasks(2) Then
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (imgInstType.Contains("Nano") Or imgInstType.Contains("Core")) Then
+                        GetImageAppxPackages(True, OnlineMode)
+                    End If
+                End If
+            End If
+            If PendingTasks(3) Then
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not imgInstType.Contains("Nano") Then
+                        GetImageCapabilities(True, OnlineMode)
+                    End If
+                End If
+            End If
             If PendingTasks(4) Then GetImageDrivers(True, OnlineMode)
-        End If
-        DeleteTempFiles()
-        If UseApi And session IsNot Nothing Then
-            DismApi.CloseSession(session)
+            DeleteTempFiles()
+            If UseApi And session IsNot Nothing Then
+                DismApi.CloseSession(session)
+            End If
         End If
     End Sub
 
