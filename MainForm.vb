@@ -3647,18 +3647,70 @@ Public Class MainForm
         Return False
     End Function
 
-    Public Event APIExceptionThrown(errorEx As Exception)
+    Public Event APIExceptionThrown(errorEx As Exception, windowTitle As String)
 
-    Private Sub APIExceptionHandler(errorEx As Exception) Handles Me.APIExceptionThrown
-        MsgBox(errorEx.Message, vbOKOnly + vbExclamation, "API error")
+    Private Sub APIExceptionHandler(errorEx As Exception, windowTitle As String) Handles Me.APIExceptionThrown
+        MsgBox(errorEx.Message, vbOKOnly + vbExclamation, windowTitle)
     End Sub
 
     Sub ThrowAPIException(APIException As DismException)
-        Dim errorEx As New Exception("An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
-                                     APIException.Message & CrLf & CrLf &
-                                     "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
-                                     "Error code: " & Hex(APIException.HResult), APIException)
-        RaiseEvent APIExceptionThrown(errorEx)
+        Dim errorMsg As String = ""
+        Dim wndTitle As String = ""
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        wndTitle = "API error"
+                        errorMsg = "An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
+                                   "Error code: " & Hex(APIException.HResult)
+                    Case "ESN"
+                        wndTitle = "Error de la API"
+                        errorMsg = "Se produjo un error al obtener información con la API de DISM. Considere leer el mensaje de abajo para más información:" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "Esto no indica un error del programa, pero implica que no podrá realizar algunas operaciones a menos que el error sea resuelto." & CrLf & CrLf &
+                                   "Código de error: " & Hex(APIException.HResult)
+                    Case "FRA"
+                        wndTitle = "Erreur API"
+                        errorMsg = "Une erreur s'est produite lors de l'obtention d'informations avec l'API DISM. Veuillez lire le message ci-dessous pour plus d'informations :" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "Ceci n'indique pas une erreur de programme, mais implique que vous ne pourrez pas effectuer certaines opérations tant que le problème n'aura pas été résolu." & CrLf & CrLf &
+                                   "Code d'erreur : " & Hex(APIException.HResult)
+                    Case "PTB"
+                        wndTitle = "Erro da API"
+                        errorMsg = "Ocorreu um erro ao obter informações com a API DISM. Considere ler a mensagem abaixo para obter mais informações:" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "Isto não indica um erro de programa, mas implica que não poderá efetuar algumas operações a menos que o problema seja resolvido." & CrLf & CrLf &
+                                   "Código de erro: " & Hex(APIException.HResult)
+                End Select
+            Case 1
+                wndTitle = "API error"
+                errorMsg = "An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
+                           "Error code: " & Hex(APIException.HResult)
+            Case 2
+                wndTitle = "Error de la API"
+                errorMsg = "Se produjo un error al obtener información con la API de DISM. Considere leer el mensaje de abajo para más información:" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "Esto no indica un error del programa, pero implica que no podrá realizar algunas operaciones a menos que el error sea resuelto." & CrLf & CrLf &
+                           "Código de error: " & Hex(APIException.HResult)
+            Case 3
+                wndTitle = "Erreur API"
+                errorMsg = "Une erreur s'est produite lors de l'obtention d'informations avec l'API DISM. Veuillez lire le message ci-dessous pour plus d'informations :" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "Ceci n'indique pas une erreur de programme, mais implique que vous ne pourrez pas effectuer certaines opérations tant que le problème n'aura pas été résolu." & CrLf & CrLf &
+                           "Code d'erreur : " & Hex(APIException.HResult)
+            Case 4
+                wndTitle = "Erro da API"
+                errorMsg = "Ocorreu um erro ao obter informações com a API DISM. Considere ler a mensagem abaixo para obter mais informações:" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "Isto não indica um erro de programa, mas implica que não poderá efetuar algumas operações a menos que o problema seja resolvido." & CrLf & CrLf &
+                           "Código de erro: " & Hex(APIException.HResult)
+        End Select
+        Dim errorEx As New Exception(errorMsg, APIException)
+        RaiseEvent APIExceptionThrown(errorEx, wndTitle)
     End Sub
 
     ''' <summary>
