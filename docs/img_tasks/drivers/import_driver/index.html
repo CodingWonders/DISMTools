@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>Windows PE configuration information - DISMTools Help Documentation</title>
+    <title>Importing drivers - DISMTools Help Documentation</title>
     <link rel="stylesheet" href="../../../css/theme.css" />
     <link rel="stylesheet" href="../../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Windows PE configuration information";
-        var mkdocs_page_input_path = "img_tasks\\info\\winpe_info.md";
+        var mkdocs_page_name = "Importing drivers";
+        var mkdocs_page_input_path = "img_tasks\\drivers\\import_driver.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -59,8 +59,8 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../offline_inst_mgmt/">Offline installation management mode</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
-    <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
+    <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
@@ -79,27 +79,23 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/unmount_image/">Unmounting an image</a>
                 </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="#">Image information dialogs</a>
-    <ul class="current">
-                <li class="toctree-l3"><a class="reference internal" href="../infodlgs/">Overview</a>
+                <li class="toctree-l2"><a class="reference internal" href="#">Image information dialogs</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/infodlgs/">Overview</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../img_info/">Image file information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/img_info/">Image file information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../pkg_info/">Package information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/pkg_info/">Package information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../feat_info/">Feature information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/feat_info/">Feature information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../appxpkg_info/">AppX package information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/appxpkg_info/">AppX package information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../cap_info/">Capability information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/cap_info/">Capability information</a>
                 </li>
-                <li class="toctree-l3"><a class="reference internal" href="../drv_info/">Driver information</a>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/drv_info/">Driver information</a>
                 </li>
-                <li class="toctree-l3 current"><a class="reference internal current" href="./">Windows PE configuration information</a>
-    <ul class="current">
-    <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
-    </li>
-    </ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../info/winpe_info/">Windows PE configuration information</a>
                 </li>
     </ul>
                 </li>
@@ -145,17 +141,25 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Drivers</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../drivers/drvs/">Overview</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Drivers</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../drvs/">Overview</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../drivers/add_driver/">Adding drivers</a>
+                <li class="toctree-l2"><a class="reference internal" href="../add_driver/">Adding drivers</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
+                <li class="toctree-l2"><a class="reference internal" href="../export_driver/">Exporting drivers</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">Importing drivers</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#target-os-support">Target OS support</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
+    </ul>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
+                <li class="toctree-l2"><a class="reference internal" href="../remove_driver/">Removing drivers</a>
                 </li>
     </ul>
                   </li>
@@ -216,9 +220,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Image tasks</li>
-          <li class="breadcrumb-item">Image management</li>
-          <li class="breadcrumb-item">Image information dialogs</li>
-      <li class="breadcrumb-item active">Windows PE configuration information</li>
+          <li class="breadcrumb-item">Drivers</li>
+      <li class="breadcrumb-item active">Importing drivers</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -227,25 +230,82 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="windows-pe-configuration-information">Windows PE configuration information</h1>
+                <h1 id="importing-drivers">Importing drivers</h1>
 <p align="center">
-    <img src="../../../res/img_tasks/info/winpe_info.png" />
+    <img src="../../../res/img_tasks/drivers/import_driver.png" />
 </p>
 
-<p>With DISMTools you can get the configuration of your Windows PE images, such as the target path and the scratch space. You can also set them up to your needs.</p>
-<p><em>This action is supported on DISMTools 0.3.2 and newer.</em></p>
-<h2 id="related-content">Related content</h2>
+<p>With DISMTools you can easily import all third-party drivers of a Windows image to another image. This guarantees that the resulting image will have the same hardware compatibility as the source image. This action can be accessed by clicking Commands &gt; Drivers &gt; Import driver packages...</p>
+<h2 id="target-os-support">Target OS support</h2>
+<p>This action is supported on the following platforms:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Platform</th>
+<th style="text-align: center;">Supported?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Windows 7/Server 2008 R2</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8/Server 2012</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8.1/Server 2012 R2</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 10/Server 2016/2019/2022</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 11/Server vNext</td>
+<td style="text-align: center;">✔</td>
+</tr>
+</tbody>
+</table>
+<p><i>This action is supported on DISMTools 0.4.1 and newer</i></p>
+<h2 id="usage">Usage</h2>
+<ol>
+<li>
+<p>Specify the source from which to export the drivers:</p>
 <ul>
-<li><a href="../infodlgs/">Image information dialogs</a></li>
-<li><a href="https://example.com">Setting up the target path</a></li>
-<li><a href="https://example.com">Setting up the scratch space</a></li>
+<li><strong>Image file</strong> will import all third-party drivers of another image. You will need to specify the source image, which you can pick from the list of mounted images</li>
+</ul>
+<p><p align="center">
+    <img src="../../../res/img_tasks/drivers/import_driver_winimage.png" />
+</p></p>
+<ul>
+<li><strong>Online installation</strong> will import all third-party drivers of your active installation</li>
+</ul>
+<p><p align="center">
+    <img src="../../../res/img_tasks/drivers/import_driver_active.png" />
+</p></p>
+<ul>
+<li><strong>Offline installation</strong> will import all third-party drivers of the desired deployed image. Simply specify the source drive</li>
+</ul>
+<p><p align="center">
+    <img src="../../../res/img_tasks/drivers/import_driver_deployed.png" />
+</p></p>
+</li>
+<li>
+<p>Click OK after you've made your selection</p>
+</li>
+</ol>
+<h2 id="remarks">Remarks</h2>
+<ul>
+<li>Once drivers have been imported, the target image <strong>should not be used</strong> on computers other than the computer with the drivers of the source image, <strong>unless they are removed</strong></li>
 </ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../drv_info/" class="btn btn-neutral float-left" title="Driver information"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../../packages/pkgs/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../export_driver/" class="btn btn-neutral float-left" title="Exporting drivers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../remove_driver/" class="btn btn-neutral float-right" title="Removing drivers">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -268,10 +328,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../drv_info/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../export_driver/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../../packages/pkgs/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../remove_driver/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
