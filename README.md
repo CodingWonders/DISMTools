@@ -127,6 +127,8 @@ The following actions are supported by DISMTools:
   - SWM file merger
   - Component cleanup
   - Image splitting
+  - Appending changes to Windows images
+  - Exporting Windows images to new image files
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
@@ -174,7 +176,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: April 28, 2024 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: May 25, 2024 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -210,6 +212,10 @@ You should have this setting configured like this:
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
 </p>
+
+### JetBrains users
+
+If you use an IDE from JetBrains, you can also work on DISMTools. However, you can only modify the source code of forms, so there will not be any designer.
 
 ## Contributions
 
