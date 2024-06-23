@@ -2176,16 +2176,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''- Fixed an issue in the CLI version of the mounted image manager that would throw an error at startup if no images were mounted
-        '''- If the download or install sizes of capabilities are less than 1024 bytes, the program will no longer show &quot;(~)&quot;
-        '''- Fixed a critical issue where all DISM commands would fail for offline installations if the mount directory were a drive (thanks @Xhib-ba for spotting)
+        '''Bugfixes:
         '''
-        '''New features:
-        '''
-        '''- The program update system has had some improvements:
-        '''  - A minimum version thr [resto de la cadena truncado]&quot;;.
+        '''- A case where the program would still show &quot;(~)&quot; when saving capability information has been fixed
+        '''- Fixed an issue where AppX package addition would fail if you applied a license file
+        '''- The Help Documentation browser no longer displays an empty website title in the title bar after clicking external links
+        '''- AppX package and capability background processes are no longer run on Windows PE images if they remain
+        '''- DISM and image version detections have been  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
