@@ -17069,7 +17069,11 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel12.LinkColor = Color.FromArgb(0, 151, 251)
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel12.LinkColor = Color.FromArgb(0, 251, 99)
+            Else
+                LinkLabel12.LinkColor = Color.FromArgb(0, 123, 48)
+            End If
         End If
     End Sub
 
@@ -17078,7 +17082,11 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel13.LinkColor = Color.FromArgb(0, 151, 251)
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel13.LinkColor = Color.FromArgb(0, 251, 99)
+            Else
+                LinkLabel13.LinkColor = Color.FromArgb(0, 123, 48)
+            End If
         End If
     End Sub
 
@@ -17195,7 +17203,7 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel22.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel22.LinkColor = Color.FromArgb(0, 123, 48)
         End If
     End Sub
 
@@ -17216,7 +17224,7 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel23.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel23.LinkColor = Color.FromArgb(0, 123, 48)
         End If
     End Sub
 
@@ -17237,7 +17245,7 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel24.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel24.LinkColor = Color.FromArgb(0, 123, 48)
         End If
     End Sub
 
