@@ -23,7 +23,7 @@ Namespace My
         Private Sub CatchEmAll(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
             ExceptionForm.ErrorText.Text = e.Exception.ToString() & CrLf & CrLf &
                                            "Error Message: " & e.Exception.Message & CrLf & CrLf &
-                                           "Error Code (HRESULT): " & e.Exception.HResult
+                                           "Error Code (HRESULT): " & Hex(e.Exception.HResult)
             Try
                 ' Get basic information about the system. This does not include any personally identifiable information (PII) or
                 ' serial numbers that can identify the computer this program is run on
