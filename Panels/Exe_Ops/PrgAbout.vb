@@ -418,7 +418,7 @@ Public Class PrgAbout
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel1.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel1.LinkColor = Color.Lime
         End If
     End Sub
 
@@ -427,7 +427,7 @@ Public Class PrgAbout
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel2.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel2.LinkColor = Color.Lime
         End If
     End Sub
 
@@ -436,7 +436,7 @@ Public Class PrgAbout
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel3.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel3.LinkColor = Color.Lime
         End If
     End Sub
 #End Region

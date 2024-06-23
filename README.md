@@ -97,7 +97,7 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/102d829d-aeb1-4697-9225-27775bea2b61" />
 </p>
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/eb0e2332-520c-4d2f-9cee-27c608546f6f" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/af2a2655-02de-4618-9423-30882303b424" />
 </p>
 
 > [!NOTE]
@@ -127,6 +127,8 @@ The following actions are supported by DISMTools:
   - SWM file merger
   - Component cleanup
   - Image splitting
+  - Appending changes to Windows images
+  - Exporting Windows images to new image files
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
@@ -174,7 +176,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: April 28, 2024 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: May 25, 2024 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -211,6 +213,10 @@ You should have this setting configured like this:
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
 </p>
 
+### JetBrains users
+
+If you use an IDE from JetBrains, you can also work on DISMTools. However, you can only modify the source code of forms, so there will not be any designer.
+
 ## Contributions
 
 If you want to contribute to this project, you can do so in many ways:
@@ -222,9 +228,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2461/Installer/Nightly/dt_setup.exe).
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2462_relcndid/Installer/Nightly/dt_setup.exe).
 
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.4.2, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.5, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

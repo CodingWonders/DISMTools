@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
@@ -57,11 +61,15 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
     <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -92,6 +100,8 @@
     <li class="toctree-l4"><a class="reference internal" href="#going-through-hardware-targets">Going through hardware targets</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#saving-this-information">Saving this information</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#additional-search-functionality">Additional search functionality</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
     </li>
@@ -151,6 +161,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -172,6 +184,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -270,6 +284,8 @@
 <h2 id="saving-this-information">Saving this information</h2>
 <p>You can save this information to a report file by clicking the Save button on the bottom right and specifying a target file. Do note that this option is disabled in the driver file view if no drivers were specified.</p>
 <p>Also note that, if you have background processes configured to not detect all drivers, you will be asked if you want to save the information of all of them.</p>
+<h2 id="additional-search-functionality">Additional search functionality</h2>
+<p>With the Search functionality introduced in DISMTools 0.5 you can search through your installed drivers more easily. This will default to the first column. However, if you want to search through installed drivers based on their original file names (second column), you can <strong>prepend your search query with <code>og:</code></strong>.</p>
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="../infodlgs/">Image information dialogs</a></li>
@@ -277,6 +293,10 @@
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../cap_info/" class="btn btn-neutral float-left" title="Capability information"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../winpe_info/" class="btn btn-neutral float-right" title="Windows PE configuration information">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 

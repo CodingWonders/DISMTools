@@ -532,7 +532,12 @@ Public Class AddProvAppxPackage
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
-        GroupBox3.Enabled = If(FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart < 10 Or Not MainForm.imgVersionInfo.Major >= 10, False, True)
+        If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
+            (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+            GroupBox3.Enabled = True
+        Else
+            GroupBox3.Enabled = False
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

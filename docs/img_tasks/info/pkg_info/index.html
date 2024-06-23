@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
@@ -57,11 +61,15 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
     <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -84,6 +92,8 @@
     <li class="toctree-l4"><a class="reference internal" href="#saving-this-information">Saving this information</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#questions">Questions</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#a-better-way-of-viewing-custom-properties">A better way of viewing custom properties</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
     </li>
@@ -151,6 +161,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -172,6 +184,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -257,6 +271,12 @@
 <li><strong>Q: Why can't I drop files from a normal program?</strong></li>
 <li><strong>A:</strong> this is a common issue where you can't drop content from a non-elevated program to an elevated program. The workaround is to run the program you're dropping the content from as an administrator. If you opened the program from the Run dialog, you can easily launch it as Admin by holding the CTRL + Shift keys and pressing Enter</li>
 </ul>
+<h2 id="a-better-way-of-viewing-custom-properties">A better way of viewing custom properties</h2>
+<p>DISMTools 0.5 introduces a new way of viewing custom properties of features. This new view allows you to better understand the hierarchy of the properties in a tree view.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/info/cprop_viewer.png" />
+</p>
+
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="../infodlgs/">Image information dialogs</a></li>
@@ -264,6 +284,10 @@
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../img_info/" class="btn btn-neutral float-left" title="Image file information"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../feat_info/" class="btn btn-neutral float-right" title="Feature information">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 

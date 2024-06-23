@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>Applying an image - DISMTools Help Documentation</title>
+    <title>Exporting a Windows image - DISMTools Help Documentation</title>
     <link rel="stylesheet" href="../../../css/theme.css" />
     <link rel="stylesheet" href="../../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Applying an image";
+        var mkdocs_page_name = "Exporting a Windows image";
         var mkdocs_page_input_path = "img_tasks\\mgmt\\export_image.md";
         var mkdocs_page_url = null;
       </script>
@@ -47,21 +47,37 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
-              <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Image tasks</span></p>
+              <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../online_inst_mgmt/">Online installation management mode</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../offline_inst_mgmt/">Offline installation management mode</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
-    <ul>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">Exporting a Windows image</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#options">Options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
+    </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mount_image/">Mounting an image</a>
                 </li>
@@ -141,6 +157,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -162,6 +180,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -199,7 +219,9 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">Applying an image</li>
+          <li class="breadcrumb-item">Image tasks</li>
+          <li class="breadcrumb-item">Image management</li>
+      <li class="breadcrumb-item active">Exporting a Windows image</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -208,30 +230,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="applying-an-image">Applying an image</h1>
+                <h1 id="exporting-a-windows-image-to-a-new-image-file">Exporting a Windows image to a new image file</h1>
 <p align="center">
-    <img src="../../../res/img_tasks/mgmt/apply_image.png" />
+    <img src="../../../res/img_tasks/mgmt/export_image.png" />
 </p>
 
-<p>With DISMTools you can easily apply your Windows images to a directory or a drive.</p>
+<p>If you want to separate your work made on a Windows image from the rest of the images in the image file, you can easily export it to a new image file with this dialog.</p>
+<p><i>This action is supported on DISMTools 0.5 and newer.</i></p>
 <h2 id="usage">Usage</h2>
 <ol>
-<li>Specify the source image file to apply. It can be a WIM, SWM or ESD file. If you have loaded a project with an image already mounted, you can also use it</li>
-<li>Specify the index to apply in the Options group by picking an entry in the "Image index:" combo box</li>
-<li>Specify the directory or drive to apply the image to. For regular application operations, you can just use the directory option, as applications to a drive are designed for Full Flash Utility (FFU) files</li>
+<li>Specify the source image file from which to export the Windows image you have made changes to</li>
+<li>Specify a location for the exported Windows image</li>
+<li>Choose the index to export using the index picker</li>
 </ol>
 <h2 id="options">Options</h2>
-<p>The options you can perform when applying the image follow the command-line guides, which you can take a look at <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14?view=windows-11#apply-image">here</a>.</p>
-<h2 id="swm-naming-patterns">SWM naming patterns</h2>
-<p>When you specify a SWM file, you can specify the naming pattern to use when applying the image.</p>
-<p>The program will automatically perform operations required so that you can easily apply it. However, if you want to review these operations, keep reading this section.</p>
-<p>To reference SWM files, check the "Reference SWM files" check box, and specify the naming pattern of the SWM files. You can either use the file name of the image as a naming pattern, or specify a naming pattern manually. Click the "Scan pattern" button to test your naming pattern and, if files are found, entries will appear on the list below.</p>
-<p align="center">
-    <img src="../../../res/img_tasks/mgmt/apply_image_swm_pattern.png" />
-</p>
+<p>The options you can perform when applying the image follow the command-line guides, which you can take a look at <a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/dism-image-management-command-line-options-s14?view=windows-11#export-image">here</a>.</p>
+<h2 id="remarks">Remarks</h2>
+<ul>
+<li>You can specify a custom name for the new image file. However, if you don't specify one, the program will use the one already established by the source image file</li>
+</ul>
               
             </div>
           </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../delete_image/" class="btn btn-neutral float-left" title="Removing volume images from an image file"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../mount_image/" class="btn btn-neutral float-right" title="Mounting an image">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
 
   <hr/>
 
@@ -253,6 +277,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
+      <span><a href="../delete_image/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../mount_image/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

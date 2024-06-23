@@ -2285,7 +2285,7 @@ Partial Class MainForm
         '
         'LinkLabel22
         '
-        Me.LinkLabel22.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel22.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel22.AutoSize = True
         Me.LinkLabel22.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel22.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
@@ -2299,7 +2299,7 @@ Partial Class MainForm
         '
         'LinkLabel23
         '
-        Me.LinkLabel23.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel23.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel23.AutoSize = True
         Me.LinkLabel23.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel23.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
@@ -2313,7 +2313,7 @@ Partial Class MainForm
         '
         'LinkLabel24
         '
-        Me.LinkLabel24.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel24.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel24.AutoSize = True
         Me.LinkLabel24.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.LinkLabel24.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
@@ -3773,7 +3773,7 @@ Partial Class MainForm
         '
         'LinkLabel12
         '
-        Me.LinkLabel12.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel12.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel12.AutoSize = True
         Me.LinkLabel12.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel12.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -3789,7 +3789,7 @@ Partial Class MainForm
         '
         'LinkLabel13
         '
-        Me.LinkLabel13.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel13.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel13.AutoSize = True
         Me.LinkLabel13.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel13.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -3971,7 +3971,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.42009!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.57991!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 126.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 128.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -4020,7 +4020,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(56, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(106, 23)
+        Me.Panel8.Size = New System.Drawing.Size(104, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -4029,7 +4029,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(106, 23)
+        Me.projName.Size = New System.Drawing.Size(104, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4039,7 +4039,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(106, 21)
+        Me.projNameText.Size = New System.Drawing.Size(104, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -5185,7 +5185,7 @@ Partial Class MainForm
         Me.ImgSpecialToolsCMS.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.GetImageFileInformationToolStripMenuItem, Me.ToolStripSeparator39, Me.SaveCompleteImageInformationToolStripMenuItem, Me.ToolStripSeparator40, Me.CreateDiscImageWithThisFileToolStripMenuItem})
         Me.ImgSpecialToolsCMS.Name = "ImgSpecialToolsCMS"
         Me.ImgSpecialToolsCMS.ShowImageMargin = False
-        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(238, 104)
+        Me.ImgSpecialToolsCMS.Size = New System.Drawing.Size(238, 82)
         '
         'GetImageFileInformationToolStripMenuItem
         '
