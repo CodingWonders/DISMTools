@@ -168,6 +168,8 @@ function Start-PEGeneration
             Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
             New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -ItemType Directory | Out-Null
             Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+            New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
+            Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
             Write-Host "Deleting temporary files..."
             Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
             if ($?)
@@ -370,18 +372,76 @@ function Start-PECustomization
                 Write-Host "Could not change wallpaper..."
             }
         }
-        Write-Host "CUSTOMIZATION STEP - Change Terminal Settings" -BackgroundColor DarkGreen
-        Write-Host "Opening registry..."
-        if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $true)
+        try
         {
-            Write-Host "Setting window position..."
-            Set-ItemProperty -Path "HKLM:\PE_DefUser\Console" -Name "WindowPosition" -Value 6291480
-            Write-Host "Closing registry..."
-            Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $false
+            Write-Host "CUSTOMIZATION STEP - Change Terminal Settings" -BackgroundColor DarkGreen
+            Write-Host "Opening registry..."
+            if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $true)
+            {
+                Write-Host "Setting window position..."
+                Set-ItemProperty -Path "HKLM:\PE_DefUser\Console" -Name "WindowPosition" -Value 6291480
+                Write-Host "Closing registry..."
+                Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $false
+            }
+            else
+            {
+                Write-Host "Could not modify terminal settings"
+            }
         }
-        else
+        catch
         {
-            Write-Host "Could not modify terminal settings"
+            Write-Host "Could not modify terminal settings"            
+        }
+        if (($arch.ToString() -eq "x86") -or ($arch.ToString() -eq "amd64"))
+        {
+            try
+            {
+                Write-Host "CUSTOMIZATION STEP - Prepare System for Graphical Applications" -BackgroundColor DarkGreen
+                Write-Host "Opening registry..."
+                if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)
+                {
+                    Write-Host "Setting CLSID keys..."
+                    $clsidKey = "HKLM:\WINPESOFT\Classes\CLSID\{AE054212-3535-4430-83ED-D501AA6680E6}"
+                    New-Item -Path "$clsidKey" -Force | Out-Null
+                    Set-ItemProperty -Path "$clsidKey" -Name "(Default)" -Value "Shell Name Space ListView"
+                    New-Item -Path "$clsidKey\InprocServer32" -Force | Out-Null
+                    New-ItemProperty -Path "$clsidKey\InprocServer32" -Name "(Default)" -Value "%SystemRoot%\system32\explorerframe.dll" -PropertyType ExpandString
+                    Set-ItemProperty -Path "$clsidKey\InprocServer32" -Name "ThreadingModel" -Value "Apartment"
+                    Write-Host "Waiting for 5 seconds to allow image registry to be unlocked..."
+                    Start-Sleep -Seconds 5
+                    Write-Host "Closing registry..."
+                    reg unload "HKLM\WINPESOFT"
+                    if (-not $?)
+                    {
+                        do
+                        {
+                            Start-Sleep -Milliseconds 500
+                            reg unload "HKLM\WINPESOFT"
+                        } until ($?)
+                    }
+                }
+                else
+                {
+                    Write-Host "Could not modify terminal settings"
+                }
+                Write-Host "Copying DLL files..."
+                switch ($arch)
+                {
+                    x86 {
+                        Copy-Item -Path "\Windows\system32\ExplorerFrame.dll" -Destination "$imagePath\Windows\system32" -Force -Verbose
+                    }
+                    amd64 {
+                        Copy-Item -Path "\Windows\system32\ExplorerFrame.dll" -Destination "$imagePath\Windows\system32" -Force -Verbose
+                        Copy-Item -Path "\Windows\SysWOW64\ExplorerFrame.dll" -Destination "$imagePath\Windows\SysWOW64" -Force -Verbose
+                    }
+                }
+                Write-Host "Creating folders..."
+                New-Item -Path "$imagePath\Windows\system32\config\systemprofile\Desktop" -ItemType Directory -Force
+            }
+            catch
+            {
+                Write-Host "Could not modify terminal settings"
+            }
         }
         try
         {
@@ -632,6 +692,43 @@ function Start-OSApplication
     wpeutil reboot
 }
 
+function Get-SystemArchitecture
+{
+    # Detect CPU architecture and compare with list
+    switch (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture).ToString())
+    {
+        # AMD64
+        "0"{
+            return "i386"
+        }
+        "1"{
+            return "mips"
+        }
+        "2"{
+            return "alpha"
+        }
+        "3"{
+            return "powerpc"
+        }
+        "5"{
+            return "arm"
+        }
+        "6"{
+            return "ia64"
+        }
+        "9"{
+            return "amd64"
+        }
+        "12" {
+            return "arm64"
+        }
+        default {
+            return ""
+        }
+    }
+    return ""
+}
+
 function Get-Disks
 {
     <#
@@ -648,6 +745,10 @@ function Get-Disks
         Write-Host "DISKPART scripts not found."
         return "ERROR"
     }
+
+    # Show additional tools
+    Write-Host "If you cannnot see your disks, you may need to add drivers. Type `"DIM`" and press ENTER to launch the Driver Installation Module."
+
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"    
     $destDrive = -1
     try
@@ -657,8 +758,31 @@ function Get-Disks
     }
     catch 
     {
-        Write-Host "Please specify a number and try again.`n"
-        Get-Disks
+        switch ($destDisk)
+        {
+            "DIM" {
+                # Get CPU architecture and launch Driver Installation Module
+                $supportedArchitectures = [List[string]]::new()
+                $supportedArchitectures.Add("i386")
+                $supportedArchitectures.Add("amd64")
+                $systemArchitecture = Get-SystemArchitecture
+
+                if ($supportedArchitectures.Contains($systemArchitecture))
+                {
+                    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe")
+                    {
+                        Clear-Host
+                        Write-Host "Starting the Driver Installation Module..."
+                        Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
+                    }
+                }
+                Get-Disks
+            }
+            default {
+                Write-Host "Please specify a number and try again.`n"
+                Get-Disks
+            }
+        }
     }
 }
 
