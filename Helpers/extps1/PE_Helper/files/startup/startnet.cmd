@@ -1,7 +1,7 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 title DISMTools Preinstallation Environment
-set version=0.5
+set version=0.5.1
 echo DISMTools %version% - Preinstallation Environment
 echo (c) 2024. CodingWonders Software
 echo.

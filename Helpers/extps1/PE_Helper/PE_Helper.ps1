@@ -3,7 +3,7 @@
 #                                         .'^""""""^.            
 #      '^`'.                            '^"""""""^.              
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.5                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.5.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -66,7 +66,7 @@ function Start-PEGeneration
             Generates a Preinstallation Environment (PE) that contains the Windows image specified in the GUI or via the command line
     #>
     $architecture = [PE_Arch]::($arch)
-    $version = "0.5"
+    $version = "0.5.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
