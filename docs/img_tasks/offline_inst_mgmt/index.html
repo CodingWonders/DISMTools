@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../img_tasks/">Overview</a>
@@ -67,11 +71,15 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
     <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -151,6 +159,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -172,6 +182,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -220,7 +232,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="offline-installation-management-mode">Offline installation management mode</h1>
-<p>DISMTools 0.4 lets you manage installations in any partition (referred to as an "offline installation") using the same interface you are used to when managing standard projects and Windows images.</p>
+<p>DISMTools 0.4 and later let you manage installations in any partition (referred to as an "offline installation") using the same interface you are used to when managing standard projects and Windows images.</p>
 <p align="center">
     <img src="../../res/img_tasks/offline_inst_mgmt/offline_inst_mgmt.png" />
 </p>
@@ -261,7 +273,7 @@
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../online_inst_mgmt/" class="btn btn-neutral float-left" title="Online installation management mode"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../mgmt/apply_image/" class="btn btn-neutral float-right" title="Applying an image">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../mgmt/append_image/" class="btn btn-neutral float-right" title="Appending to an image">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -287,7 +299,7 @@
       <span><a href="../online_inst_mgmt/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../mgmt/apply_image/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../mgmt/append_image/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -298,7 +310,7 @@
       <script src="../../search/main.js"></script>
     <script>
         jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable(false);
         });
     </script>
 

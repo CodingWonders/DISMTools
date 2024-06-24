@@ -15,6 +15,7 @@ We can provide a short description of all scripts in this directory:
 | `extbatch\options.bat` | (Functionality _to be added_) Options script that configures the Command Console |
 | `extps1\extappx.ps1` | The Extended AppX package getter script, which is run when managing online installations |
 | `extps1\mImgMgr.ps1` | The CLI version of the mounted image manager, which lets you manage your mounted Windows images |
+| `extps1\PE_Helper\PE_Helper.ps1` | The DISMTools Preinstallation Environment (PE) Helper |
 
 This list of scripts will be updated as we add new scripts in this directory.
 

@@ -127,8 +127,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Dim dt_codeName As String = "lisbon"
+    Public dtBranch As String = "dt_preview_relcndid"
+    Public dt_codeName As String = "DTV"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -241,6 +241,12 @@ Public Class MainForm
     Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
 
     Public GoToNewView As Boolean
+
+    Public ColorSchemes As Integer = 0           ' Color scheme for the status bar and panels. 0 = green (v0.5+); 1 = blue (v0.1.1-v0.4.2)
+
+    Public AutoCleanMounts As Boolean
+
+    Public ExpandedProgressPanel As Boolean      ' Determine whether to show the progress panel in its expanded form
 
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
@@ -427,6 +433,42 @@ Public Class MainForm
             recentProject.Order = RecentList.IndexOf(recentProject)
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
     End Sub
 
     Function LoadVideos(filePath As String) As List(Of Video)
@@ -573,6 +615,42 @@ Public Class MainForm
                         RecentsLV.Items.Add(If(Project.ProjName <> "", Project.ProjName, _
                                                                        Path.GetFileNameWithoutExtension(Project.ProjPath)))
                     Next
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
                 End If
             End If
         End If
@@ -1298,6 +1376,8 @@ Public Class MainForm
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
                 GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
+                ColorSchemes = PersKey.GetValue("ColorSchemes")
+                ExpandedProgressPanel = (CInt(PersKey.GetValue("ExpandedProgressPanel")) = 1)
                 If GoToNewView Then
                     ProjectView.Visible = True
                     SplitPanels.Visible = False
@@ -1339,6 +1419,9 @@ Public Class MainForm
                 StartupRemount = (CInt(StartupKey.GetValue("RemountImages")) = 1)
                 StartupUpdateCheck = (CInt(StartupKey.GetValue("CheckForUpdates")) = 1)
                 StartupKey.Close()
+                Dim ShutdownKey As RegistryKey = Key.OpenSubKey("Shutdown")
+                AutoCleanMounts = (CInt(ShutdownKey.GetValue("AutoCleanMounts")) = 1)
+                ShutdownKey.Close()
                 Dim WndKey As RegistryKey = Key.OpenSubKey("WndParams")
                 Width = CInt(WndKey.GetValue("WndWidth"))
                 Height = CInt(WndKey.GetValue("WndHeight"))
@@ -1466,6 +1549,16 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NewDesign=0") Then
                     GoToNewView = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=0") Then
+                    ColorSchemes = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=1") Then
+                    ColorSchemes = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=0") Then
+                    ExpandedProgressPanel = 0
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
+                    ExpandedProgressPanel = 1
+                End If
                 If GoToNewView Then
                     ProjectView.Visible = True
                     SplitPanels.Visible = False
@@ -1583,6 +1676,11 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("CheckForUpdates=0") Then
                     StartupUpdateCheck = False
                 End If
+                If DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=1") Then
+                    AutoCleanMounts = True
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoCleanMounts=0") Then
+                    AutoCleanMounts = False
+                End If
                 If DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=1") Then
                     WindowState = FormWindowState.Maximized
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("WndMaximized=0") Then
@@ -1624,6 +1722,12 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
+        Select Case ColorSchemes
+            Case 0
+                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
+            Case 1
+                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+        End Select
         If Debugger.IsAttached Then
             Debug.WriteLine("Settings:" & CrLf & _
                             "DISMExe              =    " & Quote & DismExe & Quote & CrLf & _
@@ -2278,13 +2382,27 @@ Public Class MainForm
             ImgBW.ReportProgress(99)
             If PendingTasks(0) Then GetImagePackages(True, OnlineMode)
             If PendingTasks(1) Then GetImageFeatures(True, OnlineMode)
-            If PendingTasks(2) Then GetImageAppxPackages(True, OnlineMode)
-            If PendingTasks(3) Then GetImageCapabilities(True, OnlineMode)
+            If PendingTasks(2) Then
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (imgInstType.Contains("Nano") Or imgInstType.Contains("Core")) Then
+                        GetImageAppxPackages(True, OnlineMode)
+                    End If
+                End If
+            End If
+            If PendingTasks(3) Then
+                If imgEdition Is Nothing Then imgEdition = ""
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                    If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not imgInstType.Contains("Nano") Then
+                        GetImageCapabilities(True, OnlineMode)
+                    End If
+                End If
+            End If
             If PendingTasks(4) Then GetImageDrivers(True, OnlineMode)
-        End If
-        DeleteTempFiles()
-        If UseApi And session IsNot Nothing Then
-            DismApi.CloseSession(session)
+            DeleteTempFiles()
+            If UseApi And session IsNot Nothing Then
+                DismApi.CloseSession(session)
+            End If
         End If
     End Sub
 
@@ -3529,6 +3647,72 @@ Public Class MainForm
         Return False
     End Function
 
+    Public Event APIExceptionThrown(errorEx As Exception, windowTitle As String)
+
+    Private Sub APIExceptionHandler(errorEx As Exception, windowTitle As String) Handles Me.APIExceptionThrown
+        MsgBox(errorEx.Message, vbOKOnly + vbExclamation, windowTitle)
+    End Sub
+
+    Sub ThrowAPIException(APIException As DismException)
+        Dim errorMsg As String = ""
+        Dim wndTitle As String = ""
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        wndTitle = "API error"
+                        errorMsg = "An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
+                                   "Error code: " & Hex(APIException.HResult)
+                    Case "ESN"
+                        wndTitle = "Error de la API"
+                        errorMsg = "Se produjo un error al obtener información con la API de DISM. Considere leer el mensaje de abajo para más información:" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "Esto no indica un error del programa, pero implica que no podrá realizar algunas operaciones a menos que el error sea resuelto." & CrLf & CrLf &
+                                   "Código de error: " & Hex(APIException.HResult)
+                    Case "FRA"
+                        wndTitle = "Erreur API"
+                        errorMsg = "Une erreur s'est produite lors de l'obtention d'informations avec l'API DISM. Veuillez lire le message ci-dessous pour plus d'informations :" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "Ceci n'indique pas une erreur de programme, mais implique que vous ne pourrez pas effectuer certaines opérations tant que le problème n'aura pas été résolu." & CrLf & CrLf &
+                                   "Code d'erreur : " & Hex(APIException.HResult)
+                    Case "PTB"
+                        wndTitle = "Erro da API"
+                        errorMsg = "Ocorreu um erro ao obter informações com a API DISM. Considere ler a mensagem abaixo para obter mais informações:" & CrLf & CrLf &
+                                   APIException.Message & CrLf & CrLf &
+                                   "Isto não indica um erro de programa, mas implica que não poderá efetuar algumas operações a menos que o problema seja resolvido." & CrLf & CrLf &
+                                   "Código de erro: " & Hex(APIException.HResult)
+                End Select
+            Case 1
+                wndTitle = "API error"
+                errorMsg = "An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
+                           "Error code: " & Hex(APIException.HResult)
+            Case 2
+                wndTitle = "Error de la API"
+                errorMsg = "Se produjo un error al obtener información con la API de DISM. Considere leer el mensaje de abajo para más información:" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "Esto no indica un error del programa, pero implica que no podrá realizar algunas operaciones a menos que el error sea resuelto." & CrLf & CrLf &
+                           "Código de error: " & Hex(APIException.HResult)
+            Case 3
+                wndTitle = "Erreur API"
+                errorMsg = "Une erreur s'est produite lors de l'obtention d'informations avec l'API DISM. Veuillez lire le message ci-dessous pour plus d'informations :" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "Ceci n'indique pas une erreur de programme, mais implique que vous ne pourrez pas effectuer certaines opérations tant que le problème n'aura pas été résolu." & CrLf & CrLf &
+                           "Code d'erreur : " & Hex(APIException.HResult)
+            Case 4
+                wndTitle = "Erro da API"
+                errorMsg = "Ocorreu um erro ao obter informações com a API DISM. Considere ler a mensagem abaixo para obter mais informações:" & CrLf & CrLf &
+                           APIException.Message & CrLf & CrLf &
+                           "Isto não indica um erro de programa, mas implica que não poderá efetuar algumas operações a menos que o problema seja resolvido." & CrLf & CrLf &
+                           "Código de erro: " & Hex(APIException.HResult)
+        End Select
+        Dim errorEx As New Exception(errorMsg, APIException)
+        RaiseEvent APIExceptionThrown(errorEx, wndTitle)
+    End Sub
+
     ''' <summary>
     ''' Gets installed packages in an image and puts them in separate arrays
     ''' </summary>
@@ -3560,6 +3744,8 @@ Public Class MainForm
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -3723,6 +3909,8 @@ Public Class MainForm
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -3907,6 +4095,8 @@ Public Class MainForm
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -4142,6 +4332,8 @@ Public Class MainForm
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -4309,6 +4501,8 @@ Public Class MainForm
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
+            Catch ex As DismException
+                ThrowAPIException(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -4469,7 +4663,7 @@ Public Class MainForm
 #End Region
 
     Sub GenerateDTSettings()
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.4.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.5) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -4490,6 +4684,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4557,6 +4753,8 @@ Public Class MainForm
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
         PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("ColorSchemes", 0, RegistryValueKind.DWord)
+        PersKey.SetValue("ExpandedProgressPanel", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4591,6 +4789,9 @@ Public Class MainForm
         StartupKey.SetValue("RemountImages", 1, RegistryValueKind.DWord)
         StartupKey.SetValue("CheckForUpdates", 1, RegistryValueKind.DWord)
         StartupKey.Close()
+        Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Startup")
+        ShutdownKey.SetValue("AutoCleanMounts", 0, RegistryValueKind.DWord)
+        ShutdownKey.Close()
         Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
         WndKey.SetValue("WndWidth", 1280, RegistryValueKind.DWord)
         WndKey.SetValue("WndHeight", 720, RegistryValueKind.DWord)
@@ -4619,7 +4820,7 @@ Public Class MainForm
                     File.Delete(Application.StartupPath & "\settings.ini")
                 End If
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.4.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.5) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -4663,6 +4864,17 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=0")
+                End If
+                Select Case ColorSchemes
+                    Case 0
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
+                    Case 1
+                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=1")
+                End Select
+                If ExpandedProgressPanel Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -4771,6 +4983,12 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "CheckForUpdates=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Shutdown]" & CrLf)
+                If AutoCleanMounts Then
+                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText("AutoCleanMounts=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[WndParams]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("WndWidth=" & WndWidth)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "WndHeight=" & WndHeight)
@@ -4813,6 +5031,8 @@ Public Class MainForm
                 PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
+                PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
+                PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
                 LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
@@ -4847,6 +5067,9 @@ Public Class MainForm
                 StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
                 StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
                 StartupKey.Close()
+                Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Shutdown")
+                ShutdownKey.SetValue("AutoCleanMounts", If(AutoCleanMounts, 1, 0), RegistryValueKind.DWord)
+                ShutdownKey.Close()
                 Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
                 WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
                 WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
@@ -4936,8 +5159,6 @@ Public Class MainForm
                                 Continue For
                             End Try
                         Next
-                        StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-                        StatusStrip.ForeColor = Color.White
                         TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                         TabPage1.ForeColor = Color.White
                         TabPage2.BackColor = Color.FromArgb(40, 40, 43)
@@ -4993,12 +5214,14 @@ Public Class MainForm
                         AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
                         AppxRelatedLinksCMS.ForeColor = Color.White
                         TreeViewCMS.ForeColor = Color.White
                         AppxResCMS.ForeColor = Color.White
+                        ImgSpecialToolsCMS.ForeColor = Color.White
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -5052,8 +5275,6 @@ Public Class MainForm
                                 Continue For
                             End Try
                         Next
-                        StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-                        StatusStrip.ForeColor = Color.White
                         TabPage1.BackColor = Color.White
                         TabPage1.ForeColor = Color.Black
                         TabPage2.BackColor = Color.White
@@ -5109,12 +5330,14 @@ Public Class MainForm
                         AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
                         AppxRelatedLinksCMS.ForeColor = Color.Black
                         TreeViewCMS.ForeColor = Color.Black
                         AppxResCMS.ForeColor = Color.Black
+                        ImgSpecialToolsCMS.ForeColor = Color.Black
                         Dim items = TreeViewCMS.Items
                         Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                         For Each item As ToolStripDropDownItem In mItem
@@ -5172,8 +5395,6 @@ Public Class MainForm
                         Continue For
                     End Try
                 Next
-                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-                StatusStrip.ForeColor = Color.White
                 TabPage1.BackColor = Color.White
                 TabPage1.ForeColor = Color.Black
                 TabPage2.BackColor = Color.White
@@ -5229,12 +5450,14 @@ Public Class MainForm
                 AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
                 AppxRelatedLinksCMS.ForeColor = Color.Black
                 TreeViewCMS.ForeColor = Color.Black
                 AppxResCMS.ForeColor = Color.Black
+                ImgSpecialToolsCMS.ForeColor = Color.Black
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -5288,8 +5511,6 @@ Public Class MainForm
                         Continue For
                     End Try
                 Next
-                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-                StatusStrip.ForeColor = Color.White
                 TabPage1.BackColor = Color.FromArgb(40, 40, 43)
                 TabPage1.ForeColor = Color.White
                 TabPage2.BackColor = Color.FromArgb(40, 40, 43)
@@ -5345,12 +5566,14 @@ Public Class MainForm
                 AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
                 AppxRelatedLinksCMS.ForeColor = Color.White
                 TreeViewCMS.ForeColor = Color.White
                 AppxResCMS.ForeColor = Color.White
+                ImgSpecialToolsCMS.ForeColor = Color.White
                 Dim items = TreeViewCMS.Items
                 Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
                 For Each item As ToolStripDropDownItem In mItem
@@ -5401,6 +5624,57 @@ Public Class MainForm
         TextBox1.ForeColor = ForeColor
         TextBox2.BackColor = BackColor
         TextBox2.ForeColor = ForeColor
+        ' New project view header and side panel tints
+        If BackColor = Color.FromArgb(48, 48, 48) Then
+            ProjectViewHeader.BackColor = Color.FromArgb(32, 90, 25)
+            ProjectSidePanel.BackColor = Color.FromArgb(32, 90, 25)
+            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+            PictureBox9.Image = My.Resources.info_glyph_dark
+            PictureBox10.Image = My.Resources.explorer_view_glyph_dark
+            PictureBox11.Image = My.Resources.prj_unload_glyph_dark
+            PictureBox14.Image = My.Resources.info_glyph_dark
+            PictureBox15.Image = My.Resources.openfile_dark
+        ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
+            ProjectViewHeader.BackColor = Color.FromArgb(196, 229, 192)
+            ProjectSidePanel.BackColor = Color.FromArgb(196, 229, 192)
+            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = ForeColor
+            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = ForeColor
+            PictureBox9.Image = My.Resources.info_glyph
+            PictureBox10.Image = My.Resources.explorer_view_glyph
+            PictureBox11.Image = My.Resources.prj_unload_glyph
+            PictureBox14.Image = My.Resources.info_glyph
+            PictureBox15.Image = My.Resources.openfile
+        End If
+        ProjectViewHeader.ForeColor = ForeColor
+        ProjectSidePanel.ForeColor = ForeColor
+        For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
+            LinkCtrl.LinkColor = ForeColor
+        Next
+        For Each LinkCtrl As LinkLabel In PrjTasks.Controls.OfType(Of LinkLabel)()
+            LinkCtrl.LinkColor = ForeColor
+        Next
+        For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
+            LinkCtrl.LinkColor = ForeColor
+        Next
+        Select Case ColorSchemes
+            Case 0
+                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
+            Case 1
+                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+        End Select
+        StatusStrip.ForeColor = Color.White
+        ' Set foreground color on the recent list in File menu
+        Dim recItems = RecentProjectsListMenu.DropDownItems
+        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In remItems
+                dropDownItem.BackColor = RecentProjectsListMenu.BackColor
+                dropDownItem.ForeColor = RecentProjectsListMenu.ForeColor
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -5421,6 +5695,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+                        RecentProjectsListMenu.Text = "Recent projects"
                         SaveProjectToolStripMenuItem.Text = "&Save project..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                         ExitToolStripMenuItem.Text = "E&xit"
@@ -5554,6 +5829,7 @@ Public Class MainForm
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                         ReportManagerToolStripMenuItem.Text = "Report manager"
                         MountedImageManagerTSMI.Text = "Mounted image manager"
+                        CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
                         WimScriptEditorCommand.Text = "Configuration list editor"
                         ActionEditorToolStripMenuItem.Text = "Action editor"
                         OptionsToolStripMenuItem.Text = "Options"
@@ -5642,6 +5918,9 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                         UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                        GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Specify the project file to load"
                         LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -5789,6 +6068,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
+                        RecentProjectsListMenu.Text = "Proyectos recientes"
                         SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                         SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                         ExitToolStripMenuItem.Text = "Sa&lir"
@@ -5922,6 +6202,7 @@ Public Class MainForm
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                         ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                         MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                        CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
                         WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
                         ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                         OptionsToolStripMenuItem.Text = "Opciones"
@@ -6010,6 +6291,9 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                         UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crear archivo de disco con este archivo..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                         LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -6157,6 +6441,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
+                        RecentProjectsListMenu.Text = "Projets récents"
                         SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                         SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                         ExitToolStripMenuItem.Text = "Sor&tir"
@@ -6290,6 +6575,7 @@ Public Class MainForm
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
                         ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                         MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
+                        CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
                         WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
                         ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                         OptionsToolStripMenuItem.Text = "Paramètres"
@@ -6378,6 +6664,9 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
                         UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
                         ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Créer une image disque avec ce fichier..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                         LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -6525,6 +6814,7 @@ Public Class MainForm
                         OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
                         ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
+                        RecentProjectsListMenu.Text = "Projectos recentes"
                         SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
                         SaveProjectasToolStripMenuItem.Text = "Save project &como..."
                         ExitToolStripMenuItem.Text = "Sa&ir"
@@ -6658,6 +6948,7 @@ Public Class MainForm
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
                         ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                         MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
+                        CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
                         WimScriptEditorCommand.Text = "Editor de listas de configuração"
                         ActionEditorToolStripMenuItem.Text = "Editor de acções"
                         OptionsToolStripMenuItem.Text = "Opções"
@@ -6745,6 +7036,9 @@ Public Class MainForm
                         DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
                         UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
                         ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
+                        GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
+                        SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
+                        CreateDiscImageWithThisFileToolStripMenuItem.Text = "Criar imagem de disco com este ficheiro..."
                         ' OpenFileDialogs and FolderBrowsers
                         OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                         LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -6897,6 +7191,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Open existing project"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Manage online installation"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Manage o&ffline installation..."
+                RecentProjectsListMenu.Text = "Recent projects"
                 SaveProjectToolStripMenuItem.Text = "&Save project..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &as..."
                 ExitToolStripMenuItem.Text = "E&xit"
@@ -7030,6 +7325,7 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
+                CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
                 WimScriptEditorCommand.Text = "Configuration list editor"
                 ActionEditorToolStripMenuItem.Text = "Action editor"
                 OptionsToolStripMenuItem.Text = "Options"
@@ -7118,6 +7414,9 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Discard changes and unmount image"
                 UnmountSettingsToolStripMenuItem.Text = "Unmount settings..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "View package directory"
+                GetImageFileInformationToolStripMenuItem.Text = "Get image file information..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Save complete image information..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Specify the project file to load"
                 LocalMountDirFBD.Description = "Please specify the mount directory you want to load into this project:"
@@ -7265,6 +7564,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir proyecto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "Administrar &instalación activa"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Administrar instalación &fuera de línea..."
+                RecentProjectsListMenu.Text = "Proyectos recientes"
                 SaveProjectToolStripMenuItem.Text = "&Guardar proyecto..."
                 SaveProjectasToolStripMenuItem.Text = "Guardar proyecto &como..."
                 ExitToolStripMenuItem.Text = "Sa&lir"
@@ -7398,6 +7698,7 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
+                CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
                 WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
                 ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                 OptionsToolStripMenuItem.Text = "Opciones"
@@ -7486,6 +7787,9 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Descartar cambios y desmontar imagen"
                 UnmountSettingsToolStripMenuItem.Text = "Configuración de desmontaje..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver directorio del paquete"
+                GetImageFileInformationToolStripMenuItem.Text = "Obtener información del archivo de imagen..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar información completa de la imagen..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crear archivo de disco con este archivo..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique el archivo de proyecto a cargar"
                 LocalMountDirFBD.Description = "Especifique el directorio de montaje que desea cargar en este proyecto:"
@@ -7632,6 +7936,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Ouvrir un projet existant"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gérer l'installation en ligne"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gérer l'installation &hors ligne..."
+                RecentProjectsListMenu.Text = "Projets récents"
                 SaveProjectToolStripMenuItem.Text = "&Sauvegarder le projet..."
                 SaveProjectasToolStripMenuItem.Text = "Sauvegarder le projet so&us..."
                 ExitToolStripMenuItem.Text = "Sor&tir"
@@ -7765,6 +8070,7 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
                 ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                 MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
+                CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
                 WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
                 ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                 OptionsToolStripMenuItem.Text = "Paramètres"
@@ -7853,6 +8159,9 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Annuler les modifications et démonter l'image"
                 UnmountSettingsToolStripMenuItem.Text = "Configurer les paramètres de démontage......"
                 ViewPackageDirectoryToolStripMenuItem.Text = "Afficher le répertoire des paquets"
+                GetImageFileInformationToolStripMenuItem.Text = "Obtenir des informations sur le fichier image..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Enregistrer les informations complètes sur l'image..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Créer une image disque avec ce fichier..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Spécifier le fichier de projet à charger"
                 LocalMountDirFBD.Description = "Veuillez spécifier le répertoire de montage que vous souhaitez charger dans ce projet:"
@@ -8000,6 +8309,7 @@ Public Class MainForm
                 OpenExistingProjectToolStripMenuItem.Text = "&Abrir projeto existente"
                 ManageOnlineInstallationToolStripMenuItem.Text = "&Gerir a instalação em linha"
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gerir a instalação o&ffline..."
+                RecentProjectsListMenu.Text = "Projectos recentes"
                 SaveProjectToolStripMenuItem.Text = "&Guardar projeto..."
                 SaveProjectasToolStripMenuItem.Text = "Save project &como..."
                 ExitToolStripMenuItem.Text = "Sa&ir"
@@ -8133,6 +8443,7 @@ Public Class MainForm
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
                 ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                 MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
+                CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
                 WimScriptEditorCommand.Text = "Editor de listas de configuração"
                 ActionEditorToolStripMenuItem.Text = "Editor de acções"
                 OptionsToolStripMenuItem.Text = "Opções"
@@ -8220,6 +8531,9 @@ Public Class MainForm
                 DiscardAndUnmountTSMI.Text = "Descartar alterações e desmontar a imagem"
                 UnmountSettingsToolStripMenuItem.Text = "Desmontar definições..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Ver diretório de pacotes"
+                GetImageFileInformationToolStripMenuItem.Text = "Obter informações sobre o ficheiro de imagem..."
+                SaveCompleteImageInformationToolStripMenuItem.Text = "Guardar informações completas sobre a imagem..."
+                CreateDiscImageWithThisFileToolStripMenuItem.Text = "Criar imagem de disco com este ficheiro..."
                 ' OpenFileDialogs and FolderBrowsers
                 OpenFileDialog1.Title = "Especifique o ficheiro de projeto a carregar"
                 LocalMountDirFBD.Description = "Especifique o diretório de montagem que pretende carregar para este projeto:"
@@ -11384,7 +11698,43 @@ Public Class MainForm
                             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
                         Next
                     End If
-                End If
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
+            End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
             End If
@@ -11681,6 +12031,13 @@ Public Class MainForm
         Catch ex As Exception
             ' Don't save the recent item. The recent list may not have been initialized
         End Try
+        If AutoCleanMounts Then
+            ' Clean up corrupted mount points. Use the DISM executable to avoid slowing down program closure
+            Dim DismProc As New Process()
+            DismProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
+            DismProc.StartInfo.Arguments = "/cleanup-mountpoints"
+            DismProc.Start()
+        End If
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
@@ -13386,6 +13743,42 @@ Public Class MainForm
                             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
                         Next
                     End If
+                    Try
+                        RecentProject1ToolStripMenuItem.Text = " "
+                        RecentProject2ToolStripMenuItem.Text = " "
+                        RecentProject3ToolStripMenuItem.Text = " "
+                        RecentProject4ToolStripMenuItem.Text = " "
+                        RecentProject5ToolStripMenuItem.Text = " "
+                        RecentProject6ToolStripMenuItem.Text = " "
+                        RecentProject7ToolStripMenuItem.Text = " "
+                        RecentProject8ToolStripMenuItem.Text = " "
+                        RecentProject9ToolStripMenuItem.Text = " "
+                        RecentProject10ToolStripMenuItem.Text = " "
+
+                        ' Reconfigure text
+                        RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                        RecentProject1ToolStripMenuItem.Visible = True
+                        RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                        RecentProject2ToolStripMenuItem.Visible = True
+                        RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                        RecentProject3ToolStripMenuItem.Visible = True
+                        RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                        RecentProject4ToolStripMenuItem.Visible = True
+                        RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                        RecentProject5ToolStripMenuItem.Visible = True
+                        RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                        RecentProject6ToolStripMenuItem.Visible = True
+                        RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                        RecentProject7ToolStripMenuItem.Visible = True
+                        RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                        RecentProject8ToolStripMenuItem.Visible = True
+                        RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                        RecentProject9ToolStripMenuItem.Visible = True
+                        RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                        RecentProject10ToolStripMenuItem.Visible = True
+                    Catch ex As Exception
+                        ' Don't do anything special here
+                    End Try
                 End If
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(OpenFileDialog1.FileName, Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName), False, False)
@@ -15103,6 +15496,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15141,7 +15535,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
-        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel12.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), Color.Black)
         LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
         SidePanel_ProjectView.Visible = True
         SidePanel_ImageView.Visible = False
@@ -15149,7 +15543,7 @@ Public Class MainForm
 
     Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
         LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
-        LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+        LinkLabel13.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), Color.Black)
         SidePanel_ProjectView.Visible = False
         SidePanel_ImageView.Visible = True
     End Sub
@@ -15413,6 +15807,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15557,6 +15952,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 2
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -15869,6 +16265,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16079,6 +16476,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16355,6 +16753,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OfflineMode = OfflineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16531,6 +16930,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AllDrivers = AllDrivers
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 7
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16554,6 +16954,7 @@ Public Class MainForm
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
@@ -16649,7 +17050,7 @@ Public Class MainForm
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
         If SidePanel_ProjectView.Visible Then
-            LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
+            LinkLabel12.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), ForeColor)
         Else
             LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
         End If
@@ -16657,27 +17058,35 @@ Public Class MainForm
 
     Private Sub LinkLabel13_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel13.MouseLeave
         If SidePanel_ImageView.Visible Then
-            LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
+            LinkLabel13.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), ForeColor)
         Else
             LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
         End If
     End Sub
 
     Private Sub LinkLabel12_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel12.MouseEnter
-        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Or LinkLabel12.LinkColor = ForeColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel12.LinkColor = Color.FromArgb(0, 151, 251)
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel12.LinkColor = Color.FromArgb(0, 251, 99)
+            Else
+                LinkLabel12.LinkColor = Color.FromArgb(0, 123, 48)
+            End If
         End If
     End Sub
 
     Private Sub LinkLabel13_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel13.MouseEnter
-        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Or LinkLabel13.LinkColor = ForeColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel13.LinkColor = Color.FromArgb(0, 151, 251)
+            If BackColor = Color.FromArgb(48, 48, 48) Then
+                LinkLabel13.LinkColor = Color.FromArgb(0, 251, 99)
+            Else
+                LinkLabel13.LinkColor = Color.FromArgb(0, 123, 48)
+            End If
         End If
     End Sub
 
@@ -16794,7 +17203,7 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel22.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel22.LinkColor = Color.FromArgb(0, 123, 48)
         End If
     End Sub
 
@@ -16815,7 +17224,7 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel23.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel23.LinkColor = Color.FromArgb(0, 123, 48)
         End If
     End Sub
 
@@ -16836,7 +17245,7 @@ Public Class MainForm
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel24.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel24.LinkColor = Color.FromArgb(0, 123, 48)
         End If
     End Sub
 
@@ -17267,6 +17676,42 @@ Public Class MainForm
                            True, False)
             End If
             RecentRemoveLink.Visible = False
+            Try
+                RecentProject1ToolStripMenuItem.Text = " "
+                RecentProject2ToolStripMenuItem.Text = " "
+                RecentProject3ToolStripMenuItem.Text = " "
+                RecentProject4ToolStripMenuItem.Text = " "
+                RecentProject5ToolStripMenuItem.Text = " "
+                RecentProject6ToolStripMenuItem.Text = " "
+                RecentProject7ToolStripMenuItem.Text = " "
+                RecentProject8ToolStripMenuItem.Text = " "
+                RecentProject9ToolStripMenuItem.Text = " "
+                RecentProject10ToolStripMenuItem.Text = " "
+
+                ' Reconfigure text
+                RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+                RecentProject1ToolStripMenuItem.Visible = True
+                RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+                RecentProject2ToolStripMenuItem.Visible = True
+                RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+                RecentProject3ToolStripMenuItem.Visible = True
+                RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+                RecentProject4ToolStripMenuItem.Visible = True
+                RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+                RecentProject5ToolStripMenuItem.Visible = True
+                RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+                RecentProject6ToolStripMenuItem.Visible = True
+                RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+                RecentProject7ToolStripMenuItem.Visible = True
+                RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+                RecentProject8ToolStripMenuItem.Visible = True
+                RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+                RecentProject9ToolStripMenuItem.Visible = True
+                RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+                RecentProject10ToolStripMenuItem.Visible = True
+            Catch ex As Exception
+                ' Don't do anything special here
+            End Try
         End If
     End Sub
 
@@ -17284,16 +17729,65 @@ Public Class MainForm
             RecentsLV.Items.Add(If(recentProject.ProjName <> "", recentProject.ProjName, Path.GetFileNameWithoutExtension(recentProject.ProjPath)))
         Next
         RecentRemoveLink.Visible = False
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
+
+        ' An empty item will appear at the end. Make it hidden
+        Dim recItems = RecentProjectsListMenu.DropDownItems
+        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In remItems
+                If dropDownItem.Text = " " Then
+                    dropDownItem.Visible = False
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
-    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
-        ' Alt-B (Background process panel)
-        If e.KeyCode = Keys.B And e.Alt Then
-            If Not HomePanel.Visible Then
-                BackgroundProcessesButton.PerformClick()
-                Focus()
-            End If
-        End If
+    Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
+        ImgExport.ShowDialog()
+    End Sub
+
+    Private Sub CleanupMountpoints_Click(sender As Object, e As EventArgs) Handles CleanupMountpoints.Click
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        ProgressPanel.OperationNum = 7
+        ProgressPanel.ShowDialog(Me)
     End Sub
 
     Sub LoadVideo(ID As String, Name As String, Description As String)
@@ -17332,6 +17826,20 @@ Public Class MainForm
         LoadVideo(VideoList(ListView2.FocusedItem.Index).YT_ID,
                   VideoList(ListView2.FocusedItem.Index).VideoName,
                   VideoList(ListView2.FocusedItem.Index).VideoDesc)
+    End Sub
+
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        ' Alt-B (Background process panel)
+        If e.KeyCode = Keys.B And e.Alt Then
+            If Not HomePanel.Visible Then
+                BackgroundProcessesButton.PerformClick()
+                Focus()
+            End If
+        End If
+    End Sub
+
+    Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
+        ImgAppend.ShowDialog()
     End Sub
 
     Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
@@ -17388,5 +17896,143 @@ Public Class MainForm
             VideoErrorPanel.Visible = True
             TextBox2.Text = ex.ToString() & " - " & ex.Message
         End Try
+    End Sub
+
+    Sub LoadRecentsFromMenu(itemOrder As Integer)
+        Dim itmOrder As Integer = 0
+        If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
+            If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
+            If ImgBW.IsBusy Then Exit Sub
+            itmOrder = itemOrder
+            Dim recentProj As Recents = RecentList(itmOrder)
+            ChangeRecentListOrder(recentProj, itmOrder)
+            ProgressPanel.OperationNum = 990
+            LoadDTProj(recentProj.ProjPath, _
+                       If(recentProj.ProjName <> "", _
+                          recentProj.ProjName, _
+                          Path.GetFileNameWithoutExtension(recentProj.ProjPath)), _
+                       True, False)
+        End If
+        RecentRemoveLink.Visible = False
+        Try
+            RecentProject1ToolStripMenuItem.Text = " "
+            RecentProject2ToolStripMenuItem.Text = " "
+            RecentProject3ToolStripMenuItem.Text = " "
+            RecentProject4ToolStripMenuItem.Text = " "
+            RecentProject5ToolStripMenuItem.Text = " "
+            RecentProject6ToolStripMenuItem.Text = " "
+            RecentProject7ToolStripMenuItem.Text = " "
+            RecentProject8ToolStripMenuItem.Text = " "
+            RecentProject9ToolStripMenuItem.Text = " "
+            RecentProject10ToolStripMenuItem.Text = " "
+
+            ' Reconfigure text
+            RecentProject1ToolStripMenuItem.Text = RecentList(0).ProjPath
+            RecentProject1ToolStripMenuItem.Visible = True
+            RecentProject2ToolStripMenuItem.Text = RecentList(1).ProjPath
+            RecentProject2ToolStripMenuItem.Visible = True
+            RecentProject3ToolStripMenuItem.Text = RecentList(2).ProjPath
+            RecentProject3ToolStripMenuItem.Visible = True
+            RecentProject4ToolStripMenuItem.Text = RecentList(3).ProjPath
+            RecentProject4ToolStripMenuItem.Visible = True
+            RecentProject5ToolStripMenuItem.Text = RecentList(4).ProjPath
+            RecentProject5ToolStripMenuItem.Visible = True
+            RecentProject6ToolStripMenuItem.Text = RecentList(5).ProjPath
+            RecentProject6ToolStripMenuItem.Visible = True
+            RecentProject7ToolStripMenuItem.Text = RecentList(6).ProjPath
+            RecentProject7ToolStripMenuItem.Visible = True
+            RecentProject8ToolStripMenuItem.Text = RecentList(7).ProjPath
+            RecentProject8ToolStripMenuItem.Visible = True
+            RecentProject9ToolStripMenuItem.Text = RecentList(8).ProjPath
+            RecentProject9ToolStripMenuItem.Visible = True
+            RecentProject10ToolStripMenuItem.Text = RecentList(9).ProjPath
+            RecentProject10ToolStripMenuItem.Visible = True
+        Catch ex As Exception
+            ' Don't do anything special here
+        End Try
+    End Sub
+
+    Private Sub RecentProject10ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject10ToolStripMenuItem.Click
+        LoadRecentsFromMenu(9)
+    End Sub
+
+    Private Sub RecentProject9ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject9ToolStripMenuItem.Click
+        LoadRecentsFromMenu(8)
+    End Sub
+
+    Private Sub RecentProject8ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject8ToolStripMenuItem.Click
+        LoadRecentsFromMenu(7)
+    End Sub
+
+    Private Sub RecentProject7ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject7ToolStripMenuItem.Click
+        LoadRecentsFromMenu(6)
+    End Sub
+
+    Private Sub RecentProject6ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject6ToolStripMenuItem.Click
+        LoadRecentsFromMenu(5)
+    End Sub
+
+    Private Sub RecentProject5ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject5ToolStripMenuItem.Click
+        LoadRecentsFromMenu(4)
+    End Sub
+
+    Private Sub RecentProject4ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject4ToolStripMenuItem.Click
+        LoadRecentsFromMenu(3)
+    End Sub
+
+    Private Sub RecentProject3ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject3ToolStripMenuItem.Click
+        LoadRecentsFromMenu(2)
+    End Sub
+
+    Private Sub RecentProject2ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject2ToolStripMenuItem.Click
+        LoadRecentsFromMenu(1)
+    End Sub
+
+    Private Sub RecentProject1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentProject1ToolStripMenuItem.Click
+        LoadRecentsFromMenu(0)
+    End Sub
+
+    Private Sub CreateDiscImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageToolStripMenuItem.Click
+        ISOCreator.Show()
+    End Sub
+
+    Private Sub GetImageFileInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GetImageFileInformationToolStripMenuItem.Click
+        GetImgInfoDlg.RadioButton1.Checked = False
+        GetImgInfoDlg.RadioButton2.Checked = True
+        GetImgInfoDlg.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        GetImgInfoDlg.ShowDialog(MountedImgMgr)
+    End Sub
+
+    Private Sub SaveCompleteImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveCompleteImageInformationToolStripMenuItem.Click
+        If ImgInfoSFD.ShowDialog(MountedImgMgr) = Windows.Forms.DialogResult.OK Then
+            If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
+            ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
+            ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+            ImgInfoSaveDlg.ImgMountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
+            ImgInfoSaveDlg.OnlineMode = OnlineManagement
+            ImgInfoSaveDlg.OfflineMode = OfflineManagement
+            ImgInfoSaveDlg.AllDrivers = AllDrivers
+            ImgInfoSaveDlg.SkipQuestions = SkipQuestions
+            ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = True
+            ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ShowDialog(MountedImgMgr)
+            InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Private Sub CreateDiscImageWithThisFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageWithThisFileToolStripMenuItem.Click
+        If ISOCreator.BackgroundWorker1.IsBusy Then Exit Sub
+        ISOCreator.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
+        If ISOCreator.Visible Then
+            If ISOCreator.WindowState = FormWindowState.Minimized Then
+                ISOCreator.WindowState = FormWindowState.Normal
+            Else
+                ISOCreator.BringToFront()
+            End If
+            ISOCreator.Focus()
+        Else
+            ISOCreator.Show()
+        End If
     End Sub
 End Class

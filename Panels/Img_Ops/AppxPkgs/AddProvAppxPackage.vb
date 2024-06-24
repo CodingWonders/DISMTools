@@ -532,7 +532,12 @@ Public Class AddProvAppxPackage
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
-        GroupBox3.Enabled = If(FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart < 10 Or Not MainForm.imgVersionInfo.Major >= 10, False, True)
+        If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
+            (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+            GroupBox3.Enabled = True
+        Else
+            GroupBox3.Enabled = False
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -634,14 +639,194 @@ Public Class AddProvAppxPackage
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.3.1
+    ''' DISMTools AppX header scanner component: version 0.5
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
     ''' <remarks>Scans the header of AppX packages to gather application name, publisher, and version information</remarks>
     Sub ScanAppxPackage(IsFolder As Boolean, Package As String)
         ' Detect if the package specified is encrypted
-        If Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) Then
+        If Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+            If Not Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
+                Dim uEAppProc As New Process()
+                uEAppProc.StartInfo.FileName = Application.StartupPath & "\Tools\UnpEax\UnpEax.exe"
+                uEAppProc.StartInfo.Arguments = Quote & Package & Quote
+                If Not Debugger.IsAttached Then
+                    uEAppProc.StartInfo.CreateNoWindow = True
+                    uEAppProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                End If
+                uEAppProc.Start()
+                uEAppProc.WaitForExit()
+                If uEAppProc.ExitCode = 0 Then
+                    If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
+                    Directory.CreateDirectory(Application.StartupPath & "\appxscan")
+                    Directory.CreateDirectory(Application.StartupPath & "\appxscan\Assets")
+                    For Each asset In Directory.GetFiles(Path.Combine(Application.StartupPath, Package.Replace(Path.GetExtension(Package), "").Trim(), "Assets"))
+                        File.Copy(asset, Path.Combine(Application.StartupPath, "appxscan\Assets", Path.GetFileName(asset)))
+                    Next
+                    File.Copy(Path.Combine(Application.StartupPath, Package.Replace(Path.GetExtension(Package), "").Trim(), "AppxManifest.xml"), Application.StartupPath & "\appxscan\AppxManifest.xml")
+                    If Directory.Exists(Path.Combine(Application.StartupPath, Package.Replace(Path.GetExtension(Package), "").Trim())) Then
+                        Directory.Delete(Path.Combine(Application.StartupPath, Package.Replace(Path.GetExtension(Package), "").Trim()), True)
+                    End If
+                    Dim EScannerRTB As New RichTextBox()
+                    EScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
+                    Dim EIdScanner As String
+                    Dim EcurrentAppxName As String = ""
+                    Dim EcurrentAppxPublisher As String = ""
+                    Dim EcurrentAppxVersion As String = ""
+                    Dim EcurrentAppxArchitecture As String = ""
+                    For x = 0 To EScannerRTB.Lines.Count - 1
+                        If EScannerRTB.Lines(x).Contains("<Identity") Then
+                            EIdScanner = EScannerRTB.Lines(x)
+                            Dim serializer As New XmlSerializer(GetType(AppxPackage))
+                            Using tReader As TextReader = New StringReader(EIdScanner)
+                                Using reader As XmlReader = XmlReader.Create(tReader)
+                                    Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    EcurrentAppxName = id.PackageName
+                                    EcurrentAppxPublisher = id.PackagePublisher
+                                    EcurrentAppxVersion = id.PackageVersion
+                                    EcurrentAppxArchitecture = id.PackageArchitecture
+                                End Using
+                            End Using
+                            AppxNameList.Add(EcurrentAppxName)
+                            AppxPublisherList.Add(EcurrentAppxPublisher)
+                            AppxVersionList.Add(EcurrentAppxVersion)
+                            AppxNames = AppxNameList.ToArray()
+                            AppxPublishers = AppxPublisherList.ToArray()
+                            AppxVersion = AppxVersionList.ToArray()
+                            ' Add the package right away
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            If IsFolder Then
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked (Encrypted)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            Else
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed (Encrypted)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            End If
+                                        Case "ESN"
+                                            If IsFolder Then
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            Else
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            End If
+                                        Case "FRA"
+                                            If IsFolder Then
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté (Crypté)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            Else
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté (Crypté)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            End If
+                                        Case "PTB", "PTG"
+                                            If IsFolder Then
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            Else
+                                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                            End If
+                                    End Select
+                                Case 1
+                                    If IsFolder Then
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked (Encrypted)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    Else
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed (Encrypted)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    End If
+                                Case 2
+                                    If IsFolder Then
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    Else
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    End If
+                                Case 3
+                                    If IsFolder Then
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté (Crypté)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    Else
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté (Crypté)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    End If
+                                Case 4
+                                    If IsFolder Then
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    Else
+                                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado (Encriptado)", EcurrentAppxName, EcurrentAppxPublisher, EcurrentAppxVersion}))
+                                    End If
+                            End Select
+                            Exit For
+                        End If
+                    Next
+                    Dim extPackage As New AppxPackage()
+                    extPackage.PackageFile = Package
+                    extPackage.PackageName = EcurrentAppxName
+                    extPackage.PackagePublisher = EcurrentAppxPublisher
+                    extPackage.PackageVersion = EcurrentAppxVersion
+                    extPackage.PackageArchitecture = EcurrentAppxArchitecture
+                    If Not Packages.Contains(extPackage) Then Packages.Add(extPackage)
+                    Button3.Enabled = True
+                    GetApplicationStoreLogoAssets("", False, False, Package, EcurrentAppxName)
+                    Exit Sub
+                End If
+            End If
+            ' Add the package right away
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                            End If
+                        Case "ESN"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                            End If
+                        Case "FRA"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                            End If
+                        Case "PTB", "PTG"
+                            If IsFolder Then
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                            End If
+                    End Select
+                Case 1
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Unpacked (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Packed (Encrypted)", "Encrypted application", "Encrypted application", "Encrypted application"}))
+                    End If
+                Case 2
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Desempaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Empaquetado (Encriptado)", "Aplicación encriptada", "Aplicación encriptada", "Aplicación encriptada"}))
+                    End If
+                Case 3
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Décompacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Compacté (Crypté)", "Application cryptée", "Application cryptée", "Application cryptée"}))
+                    End If
+                Case 4
+                    If IsFolder Then
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Desembalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                    Else
+                        ListView1.Items.Add(New ListViewItem(New String() {Package, "Embalado (Encriptado)", "Aplicação encriptada", "Aplicação encriptada", "Aplicação encriptada"}))
+                    End If
+            End Select
+            Dim encPackage As New AppxPackage()
+            encPackage.PackageFile = Package
+            encPackage.PackageName = "<Encrypted>"
+            encPackage.PackagePublisher = "<Encrypted>"
+            encPackage.PackageVersion = "<Encrypted>"
+            encPackage.PackageArchitecture = "<Encrypted>"
+            If Not Packages.Contains(encPackage) Then Packages.Add(encPackage)
+            Button3.Enabled = True
+            Exit Sub
+        ElseIf Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not MainForm.OnlineManagement Then
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -1221,16 +1406,22 @@ Public Class AddProvAppxPackage
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
                     Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
                     If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
-                        ' Try extracting small, store and large assets
-                        AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
-                        AppxScanner.Start()
-                        AppxScanner.WaitForExit()
-                        AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
-                        AppxScanner.Start()
-                        AppxScanner.WaitForExit()
-                        AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
-                        AppxScanner.Start()
-                        AppxScanner.WaitForExit()
+                        If Path.GetExtension(SourcePackage).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) Then
+                            For Each asset In Directory.GetFiles(Application.StartupPath & "\appxscan\Assets")
+                                File.Copy(asset, Application.StartupPath & "\temp\storeassets\" & AppxPackageName & "\" & Path.GetFileName(asset))
+                            Next
+                        Else
+                            ' Try extracting small, store and large assets
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.Start()
+                            AppxScanner.WaitForExit()
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.Start()
+                            AppxScanner.WaitForExit()
+                            AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
+                            AppxScanner.Start()
+                            AppxScanner.WaitForExit()
+                        End If
                     End If
                 End If
             End If
@@ -1372,6 +1563,10 @@ Public Class AddProvAppxPackage
             PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
         End Try
+
+        If ListView1.FocusedItem IsNot Nothing Then
+            FlowLayoutPanel1.Enabled = Not Path.GetExtension(ListView1.FocusedItem.SubItems(0).Text).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase)
+        End If
 
         ' Detect properties obtained by the AppxPackage Element
         Try

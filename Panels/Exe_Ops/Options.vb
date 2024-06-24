@@ -107,11 +107,6 @@ Public Class Options
         End If
         MainForm.LogFile = TextBox2.Text
         MainForm.LogLevel = TrackBar1.Value + 1
-        'If RadioButton1.Checked Then
-        '    MainForm.ImgOperationMode = 0
-        'Else
-        '    MainForm.ImgOperationMode = 1
-        'End If
         If CheckBox2.Checked Then
             MainForm.QuietOperations = True
         Else
@@ -176,6 +171,7 @@ Public Class Options
         MainForm.NotificationFrequency = ComboBox6.SelectedIndex
         MainForm.StartupRemount = CheckBox12.Checked
         MainForm.StartupUpdateCheck = CheckBox13.Checked
+        MainForm.AutoCleanMounts = CheckBox22.Checked
         MainForm.AutoLogs = CheckBox10.Checked
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
@@ -195,6 +191,14 @@ Public Class Options
             MainForm.ProjectView.Visible = False
             MainForm.SplitPanels.Visible = True
         End If
+        MainForm.ColorSchemes = If(RadioButton1.Checked, 0, 1)
+        Select Case MainForm.ColorSchemes
+            Case 0
+                MainForm.StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
+            Case 1
+                MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+        End Select
+        MainForm.ExpandedProgressPanel = CheckBox7.Checked
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -331,6 +335,7 @@ Public Class Options
                         Label56.Text = "Image detection"
                         Label57.Text = "File associations"
                         Label58.Text = "Startup options"
+                        Label34.Text = "Shutdown options"
                         Label2.Text = "DISM executable path:"
                         Label3.Text = "Version:"
                         Label5.Text = "Save settings on:"
@@ -343,7 +348,7 @@ Public Class Options
                         Label12.Text = "Operation log file:"
                         Label13.Text = "When performing image operations in the command line, specify the " & Quote & "/LogPath" & Quote & " argument to save the image operation log to the target log file."
                         Label14.Text = "Log file level:"
-                        'Label17.Text = "Perform image operations on:"
+                        Label17.Text = "Color scheme of status bar and panels:"
                         Label18.Text = "When quietly performing operations, the program will hide information and progress output. Error messages will still be shown." & CrLf & "This option will not be used when getting information of, for example, packages or features." & CrLf & "Also, when performing image servicing, your computer may restart automatically."
                         Label19.Text = "When this option is checked, your computer will not restart automatically; even when quietly performing operations"
                         Label20.Text = "Please specify the scratch directory to be used for DISM operations:"
@@ -354,6 +359,10 @@ Public Class Options
                         Label27.Text = "Some reports do not allow being shown as a table."
                         Label28.Text = "When should the program notify you about background processes being started?"
                         Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
+                        Label30.Text = "Previews:"
+                        Label31.Text = "Idle"
+                        Label32.Text = "Performing operations"
+                        Label33.Text = "Progress panel:"
                         Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                         Label36.Text = "Review the status of this background process:"
                         Label37.Text = "Status:"
@@ -382,6 +391,7 @@ Public Class Options
                         CheckBox4.Text = "Use a scratch directory"
                         CheckBox5.Text = "Show command output in English"
                         CheckBox6.Text = "Notify me when background processes have started"
+                        CheckBox7.Text = "Show log view on the progress panel by default"
                         CheckBox8.Text = "Detect mounted images at all times"
                         CheckBox9.Text = "Use uppercase menus"
                         CheckBox10.Text = "Automatically create logs for each operation performed"
@@ -395,16 +405,19 @@ Public Class Options
                         CheckBox18.Text = "Capabilities"
                         CheckBox19.Text = "Installed drivers"
                         CheckBox20.Text = "Use the new project view design"
+                        CheckBox22.Text = "Automatically clean up mount points (launches a separate process)"
                         DismOFD.Title = "Specify the DISM executable to use"
                         Label59.Text = "Log customization"
+                        Label60.Text = "Set options you would like to perform when the program closes:"
+                        Label61.Text = "Preview:"
                         GroupBox5.Text = "Associations"
                         Label9.Text = "Saving image information"
                         LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
                         LinkLabel2.Text = "Learn more about background processes"
                         LogSFD.Title = "Specify the location of the log file"
-                        'RadioButton1.Text = "Mounted Windows image"
-                        'RadioButton2.Text = "Active installation"
+                        RadioButton1.Text = "DISMTools 0.5 Color Scheme (Green)"
+                        RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
                         RadioButton3.Text = "Use the project or program scratch directory"
                         RadioButton4.Text = "Use the specified scratch directory"
                         RadioButton5.Text = "Modern"
@@ -423,6 +436,7 @@ Public Class Options
                         Label56.Text = "Detección de imágenes"
                         Label57.Text = "Asociaciones de archivos"
                         Label58.Text = "Opciones de inicio"
+                        Label34.Text = "Opciones de cierre"
                         Label2.Text = "Ruta del ejecutable:"
                         Label3.Text = "Versión:"
                         Label5.Text = "Guardar configuraciones en:"
@@ -435,7 +449,7 @@ Public Class Options
                         Label12.Text = "Archivo de registro:"
                         Label13.Text = "Cuando se realizan operaciones en la línea de comandos, especifique el argumento " & Quote & "/LogPath" & Quote & " para guardar el registro de operaciones en el archivo de destino"
                         Label14.Text = "Nivel de registro:"
-                        'Label17.Text = "Realizar operaciones en:"
+                        Label17.Text = "Esquema de color de la barra de estado y los paneles:"
                         Label18.Text = "Cuando se realizan operaciones silenciosamente, el programa ocultará información y salida del progreso." & CrLf & "Esta opción no se usará al obtener información de, por ejemplo, paquetes o características." & CrLf & "También, al realizar un servicio de imágenes, su sistema podría reiniciarse automáticamente."
                         Label19.Text = "Cuando esta opción está marcada, su sistema no se reiniciará automáticamente; incluso si se realizan operaciones silenciosamente"
                         Label20.Text = "Especifique el directorio temporal a ser usado en operaciones de DISM:"
@@ -446,6 +460,10 @@ Public Class Options
                         Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                         Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                         Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
+                        Label30.Text = "Vistas previas:"
+                        Label31.Text = "En reposo"
+                        Label32.Text = "Realizando operaciones"
+                        Label33.Text = "Panel de progreso:"
                         Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                         Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                         Label37.Text = "Estado:"
@@ -474,6 +492,7 @@ Public Class Options
                         CheckBox4.Text = "Usar un directorio temporal"
                         CheckBox5.Text = "Mostrar salida del programa en inglés"
                         CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
+                        CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
                         CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                         CheckBox9.Text = "Usar menús en mayúscula"
                         CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
@@ -487,16 +506,19 @@ Public Class Options
                         CheckBox18.Text = "Funcionalidades"
                         CheckBox19.Text = "Controladores instalados"
                         CheckBox20.Text = "Utilizar el nuevo diseño de la vista de proyectos"
+                        CheckBox22.Text = "Limpiar puntos de montaje automáticamente (inicia un proceso separado)"
                         DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                         Label59.Text = "Personalización del registro"
+                        Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
+                        Label61.Text = "Vista previa:"
                         GroupBox5.Text = "Asociaciones"
                         Label9.Text = "Guardando información de la imagen"
                         LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
                         LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                         LogSFD.Title = "Especifique la ubicación del archivo de registro"
-                        'RadioButton1.Text = "Imagen de Windows montada"
-                        'RadioButton2.Text = "Instalación actual"
+                        RadioButton1.Text = "Esquema de color de DISMTools 0.5 (Verde)"
+                        RadioButton2.Text = "Esquema de color de DISMTools 0.1.1-0.4.2 (Azul)"
                         RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                         RadioButton4.Text = "Utilizar el directorio temporal especificado"
                         RadioButton5.Text = "Moderno"
@@ -515,6 +537,7 @@ Public Class Options
                         Label56.Text = "Détection des images"
                         Label57.Text = "Associations de fichiers"
                         Label58.Text = "Paramètres de démarrage"
+                        Label34.Text = "Paramètres de fermeture"
                         Label2.Text = "Chemin d'accès à l'exécutable DISM :"
                         Label3.Text = "Version:"
                         Label5.Text = "Sauvegarder les paramètres sur :"
@@ -527,7 +550,7 @@ Public Class Options
                         Label12.Text = "Fichier journal des opérations :"
                         Label13.Text = "Lorsque vous effectuez des opérations sur les images dans la ligne de commande, spécifiez l'argument " & Quote & "/LogPath" & Quote & " pour sauvegarder le journal des opérations sur les images dans le fichier journal cible."
                         Label14.Text = "Niveau du fichier journal :"
-                        'Label17.Text = "Effectuer des opérations sur les images :"
+                        Label17.Text = "Schéma de couleurs de la barre d'état et des panneaux :"
                         Label18.Text = "Lors de l'exécution silencieuse d'une opération, le programme masquera les informations et la progression de l'opération. Les messages d'erreur seront toujours affichés." & CrLf & "Cette option ne sera pas utilisée pour obtenir des informations, par exemple, sur les paquets ou les caractéristiques." & CrLf & "En outre, lors de la maintenance de l'image, votre ordinateur peut redémarrer automatiquement."
                         Label19.Text = "Lorsque cette option est cochée, l'ordinateur ne redémarre pas automatiquement, même lorsqu'il effectue des opérations en silence."
                         Label20.Text = "Veuillez indiquer le répertoire temporaire à utiliser pour les opérations DISM :"
@@ -538,6 +561,10 @@ Public Class Options
                         Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                         Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                         Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
+                        Label30.Text = "Aperçu :"
+                        Label31.Text = "Oisiveté"
+                        Label32.Text = "Exécution des opérations"
+                        Label33.Text = "Panneau de progrès :"
                         Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
                         Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
                         Label37.Text = "État :"
@@ -566,6 +593,7 @@ Public Class Options
                         CheckBox4.Text = "Utiliser un répertoire temporaire"
                         CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                         CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
+                        CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
                         CheckBox8.Text = "Détecter les images montées à tout moment"
                         CheckBox9.Text = "Utiliser des menus en majuscules"
                         CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
@@ -579,16 +607,19 @@ Public Class Options
                         CheckBox18.Text = "Capacités"
                         CheckBox19.Text = "Pilotes installés"
                         CheckBox20.Text = "Utiliser le nouveau design de la vue du projet"
+                        CheckBox22.Text = "Nettoyer automatiquement les points de montage (lance un processus séparé)"
                         DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                         Label59.Text = "Personnalisation du journal"
+                        Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
+                        Label61.Text = "Aperçu :"
                         GroupBox5.Text = "Associations"
                         Label9.Text = "Sauvegarde des informations de l'image"
                         LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                         LinkLabel1.LinkArea = New LinkArea(122, 126)
                         LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
                         LogSFD.Title = "Spécifier l'emplacement du fichier journal"
-                        'RadioButton1.Text = "Image de Windows montée"
-                        'RadioButton2.Text = "Installation active"
+                        RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5 (vert)"
+                        RadioButton2.Text = "Schéma de couleurs de DISMTools 0.1.1-0.4.2 (bleu)"
                         RadioButton3.Text = "Utiliser le répertoire temporaire du projet ou du programme"
                         RadioButton4.Text = "Utiliser le répertoire temporaire spécifié"
                         RadioButton5.Text = "Moderne"
@@ -607,6 +638,7 @@ Public Class Options
                         Label56.Text = "Deteção de imagens"
                         Label57.Text = "Associações de ficheiros"
                         Label58.Text = "Opções de arranque"
+                        Label34.Text = "Opções de encerramento"
                         Label2.Text = "Localização do executável DISM:"
                         Label3.Text = "Versão:"
                         Label5.Text = "Guardar configurações em:"
@@ -619,7 +651,7 @@ Public Class Options
                         Label12.Text = "Ficheiro de registo de operações:"
                         Label13.Text = "Quando efetuar operações de imagem na linha de comandos, especifique o argumento " & Quote & "/LogPath" & Quote & " para guardar o registo da operação de imagem no ficheiro de registo de destino."
                         Label14.Text = "Nível do ficheiro de registo:"
-                        'Label17.Text = "Efetuar operações de imagem em:"
+                        Label17.Text = "Esquema de cores da barra de estado e dos painéis:"
                         Label18.Text = "Quando as operações são efectuadas em silêncio, o programa oculta as informações e o progresso. As mensagens de erro continuarão a ser mostradas." & CrLf & "Esta opção não será utilizada para obter informações sobre, por exemplo, pacotes ou funcionalidades." & CrLf & "Além disso, ao efetuar operações de imagem, o computador pode reiniciar-se automaticamente."
                         Label19.Text = "Se esta opção estiver selecionada, o computador não será reiniciado automaticamente, mesmo quando estiver a efetuar operações silenciosas"
                         Label20.Text = "Especifique o diretório de rascunho a utilizar para as operações DISM:"
@@ -630,6 +662,10 @@ Public Class Options
                         Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                         Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                         Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
+                        Label30.Text = "Pré-visualizações:"
+                        Label31.Text = "Inativo"
+                        Label32.Text = "Execução de operações"
+                        Label33.Text = "Painel de progresso:"
                         Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
                         Label36.Text = "Rever o estado deste processo em segundo plano:"
                         Label37.Text = "Estado:"
@@ -658,6 +694,7 @@ Public Class Options
                         CheckBox4.Text = "Utilizar um diretório de rascunho"
                         CheckBox5.Text = "Mostrar a saída do comando em inglês"
                         CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
+                        CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
                         CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                         CheckBox9.Text = "Utilizar menus em maiúsculas"
                         CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
@@ -671,16 +708,19 @@ Public Class Options
                         CheckBox18.Text = " Capacidades"
                         CheckBox19.Text = "Controladores instalados"
                         CheckBox20.Text = "Utilizar o novo design da vista de projeto"
+                        CheckBox22.Text = "Limpar automaticamente os pontos de montagem (inicia um processo separado)"
                         DismOFD.Title = "Especificar o executável DISM a utilizar"
                         Label59.Text = "Personalização do registo"
+                        Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
+                        Label61.Text = "Pré-visualização:"
                         GroupBox5.Text = "Associações"
                         Label9.Text = "Guardar informação da imagem"
                         LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
                         LinkLabel1.LinkArea = New LinkArea(107, 118)
                         LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                         LogSFD.Title = "Especificar a localização do ficheiro de registo"
-                        'RadioButton1.Text = "Imagem do Windows montada"
-                        'RadioButton2.Text = "Instalação ativa"
+                        RadioButton1.Text = "Esquema de cores do DISMTools 0.5 (verde)"
+                        RadioButton2.Text = "Esquema de cores do DISMTools 0.1.1-0.4.2 (azul)"
                         RadioButton3.Text = "Utilizar o diretório de rascunho do projeto ou do programa"
                         RadioButton4.Text = "Utilizar o diretório de rascunho especificado"
                         RadioButton5.Text = "Moderna"
@@ -700,6 +740,7 @@ Public Class Options
                 Label56.Text = "Image detection"
                 Label57.Text = "File associations"
                 Label58.Text = "Startup options"
+                Label34.Text = "Shutdown options"
                 Label2.Text = "DISM executable path:"
                 Label3.Text = "Version:"
                 Label5.Text = "Save settings on:"
@@ -712,7 +753,7 @@ Public Class Options
                 Label12.Text = "Operation log file:"
                 Label13.Text = "When performing image operations in the command line, specify the " & Quote & "/LogPath" & Quote & " argument to save the image operation log to the target log file."
                 Label14.Text = "Log file level:"
-                'Label17.Text = "Perform image operations on:"
+                Label17.Text = "Color scheme of status bar and panels:"
                 Label18.Text = "When quietly performing operations, the program will hide information and progress output. Error messages will still be shown." & CrLf & "This option will not be used when getting information of, for example, packages or features." & CrLf & "Also, when performing image servicing, your computer may restart automatically."
                 Label19.Text = "When this option is checked, your computer will not restart automatically; even when quietly performing operations"
                 Label20.Text = "Please specify the scratch directory to be used for DISM operations:"
@@ -723,6 +764,10 @@ Public Class Options
                 Label27.Text = "Some reports do not allow being shown as a table."
                 Label28.Text = "When should the program notify you about background processes being started?"
                 Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
+                Label30.Text = "Previews:"
+                Label31.Text = "Idle"
+                Label32.Text = "Performing operations"
+                Label33.Text = "Progress panel:"
                 Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                 Label36.Text = "Review the status of this background process:"
                 Label37.Text = "Status:"
@@ -751,6 +796,7 @@ Public Class Options
                 CheckBox4.Text = "Use a scratch directory"
                 CheckBox5.Text = "Show command output in English"
                 CheckBox6.Text = "Notify me when background processes have started"
+                CheckBox7.Text = "Show log view on the progress panel by default"
                 CheckBox8.Text = "Detect mounted images at all times"
                 CheckBox9.Text = "Use uppercase menus"
                 CheckBox10.Text = "Automatically create logs for each operation performed"
@@ -764,16 +810,19 @@ Public Class Options
                 CheckBox18.Text = "Capabilities"
                 CheckBox19.Text = "Installed drivers"
                 CheckBox20.Text = "Use the new project view design"
+                CheckBox22.Text = "Automatically clean up mount points (launches a separate process)"
                 DismOFD.Title = "Specify the DISM executable to use"
                 Label59.Text = "Log customization"
+                Label60.Text = "Set options you would like to perform when the program closes:"
+                Label61.Text = "Preview:"
                 GroupBox5.Text = "Associations"
                 Label9.Text = "Saving image information"
                 LinkLabel1.Text = "The program will enable or disable certain features according to what the DISM version supports. How is it going to affect my usage of this program, and which features will be disabled accordingly?"
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
                 LinkLabel2.Text = "Learn more about background processes"
                 LogSFD.Title = "Specify the location of the log file"
-                'RadioButton1.Text = "Mounted Windows image"
-                'RadioButton2.Text = "Active installation"
+                RadioButton1.Text = "DISMTools 0.5 Color Scheme (Green)"
+                RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
                 RadioButton3.Text = "Use the project or program scratch directory"
                 RadioButton4.Text = "Use the specified scratch directory"
                 RadioButton5.Text = "Modern"
@@ -792,6 +841,7 @@ Public Class Options
                 Label56.Text = "Detección de imágenes"
                 Label57.Text = "Asociaciones de archivos"
                 Label58.Text = "Opciones de inicio"
+                Label34.Text = "Opciones de cierre"
                 Label2.Text = "Ruta del ejecutable:"
                 Label3.Text = "Versión:"
                 Label5.Text = "Guardar configuraciones en:"
@@ -804,7 +854,7 @@ Public Class Options
                 Label12.Text = "Archivo de registro:"
                 Label13.Text = "Cuando se realizan operaciones en la línea de comandos, especifique el argumento " & Quote & "/LogPath" & Quote & " para guardar el registro de operaciones en el archivo de destino"
                 Label14.Text = "Nivel de registro:"
-                'Label17.Text = "Realizar operaciones en:"
+                Label17.Text = "Esquema de color de la barra de estado y los paneles:"
                 Label18.Text = "Cuando se realizan operaciones silenciosamente, el programa ocultará información y salida del progreso." & CrLf & "Esta opción no se usará al obtener información de, por ejemplo, paquetes o características." & CrLf & "También, al realizar un servicio de imágenes, su sistema podría reiniciarse automáticamente."
                 Label19.Text = "Cuando esta opción está marcada, su sistema no se reiniciará automáticamente; incluso si se realizan operaciones silenciosamente"
                 Label20.Text = "Especifique el directorio temporal a ser usado en operaciones de DISM:"
@@ -815,6 +865,10 @@ Public Class Options
                 Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                 Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                 Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
+                Label30.Text = "Vistas previas:"
+                Label31.Text = "En reposo"
+                Label32.Text = "Realizando operaciones"
+                Label33.Text = "Panel de progreso:"
                 Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                 Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                 Label37.Text = "Estado:"
@@ -843,6 +897,7 @@ Public Class Options
                 CheckBox4.Text = "Usar un directorio temporal"
                 CheckBox5.Text = "Mostrar salida del programa en inglés"
                 CheckBox6.Text = "Notificarme cuando los procesos en segundo plano se hayan iniciado"
+                CheckBox7.Text = "Mostrar vista de registro en el panel de progreso por defecto"
                 CheckBox8.Text = "Detectar imágenes montadas todo el tiempo"
                 CheckBox9.Text = "Usar menús en mayúscula"
                 CheckBox10.Text = "Crear registros para cada operación realizada automáticamente"
@@ -856,16 +911,19 @@ Public Class Options
                 CheckBox18.Text = "Funcionalidades"
                 CheckBox19.Text = "Controladores instalados"
                 CheckBox20.Text = "Utilizar el nuevo diseño de la vista de proyectos"
+                CheckBox22.Text = "Limpiar puntos de montaje automáticamente (inicia un proceso separado)"
                 DismOFD.Title = "Especifique el ejecutable de DISM a usar"
                 Label59.Text = "Personalización del registro"
+                Label60.Text = "Establezca las opciones que le gustaría realizar cuando el programa se cierra:"
+                Label61.Text = "Vista previa:"
                 GroupBox5.Text = "Asociaciones"
                 Label9.Text = "Guardando información de la imagen"
                 LinkLabel1.Text = "El programa habilitará o deshabilitará algunas características atendiendo a lo que soporte la versión de DISM. ¿Cómo va a afectar esto mi uso del programa, y qué características serán deshabilitadas?"
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
                 LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                 LogSFD.Title = "Especifique la ubicación del archivo de registro"
-                'RadioButton1.Text = "Imagen de Windows montada"
-                'RadioButton2.Text = "Instalación actual"
+                RadioButton1.Text = "Esquema de color de DISMTools 0.5 (Verde)"
+                RadioButton2.Text = "Esquema de color de DISMTools 0.1.1-0.4.2 (Azul)"
                 RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                 RadioButton4.Text = "Utilizar el directorio temporal especificado"
                 RadioButton5.Text = "Moderno"
@@ -884,6 +942,7 @@ Public Class Options
                 Label56.Text = "Détection des images"
                 Label57.Text = "Associations de fichiers"
                 Label58.Text = "Paramètres de démarrage"
+                Label34.Text = "Paramètres de fermeture"
                 Label2.Text = "Chemin d'accès à l'exécutable DISM :"
                 Label3.Text = "Version:"
                 Label5.Text = "Sauvegarder les paramètres sur :"
@@ -896,7 +955,7 @@ Public Class Options
                 Label12.Text = "Fichier journal des opérations :"
                 Label13.Text = "Lorsque vous effectuez des opérations sur les images dans la ligne de commande, spécifiez l'argument " & Quote & "/LogPath" & Quote & " pour sauvegarder le journal des opérations sur les images dans le fichier journal cible."
                 Label14.Text = "Niveau du fichier journal :"
-                'Label17.Text = "Effectuer des opérations sur les images :"
+                Label17.Text = "Schéma de couleurs de la barre d'état et des panneaux :"
                 Label18.Text = "Lors de l'exécution silencieuse d'une opération, le programme masquera les informations et la progression de l'opération. Les messages d'erreur seront toujours affichés." & CrLf & "Cette option ne sera pas utilisée pour obtenir des informations, par exemple, sur les paquets ou les caractéristiques." & CrLf & "En outre, lors de la maintenance de l'image, votre ordinateur peut redémarrer automatiquement."
                 Label19.Text = "Lorsque cette option est cochée, l'ordinateur ne redémarre pas automatiquement, même lorsqu'il effectue des opérations en silence."
                 Label20.Text = "Veuillez indiquer le répertoire temporaire à utiliser pour les opérations DISM :"
@@ -907,6 +966,10 @@ Public Class Options
                 Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                 Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                 Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
+                Label30.Text = "Aperçu :"
+                Label31.Text = "Oisiveté"
+                Label32.Text = "Exécution des opérations"
+                Label33.Text = "Panneau de progrès :"
                 Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
                 Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
                 Label37.Text = "État :"
@@ -935,6 +998,7 @@ Public Class Options
                 CheckBox4.Text = "Utiliser un répertoire temporaire"
                 CheckBox5.Text = "Afficher la sortie de la commande en anglais"
                 CheckBox6.Text = "M'avertir lorsque des processus en arrière plan ont démarré"
+                CheckBox7.Text = "Afficher par défaut la vue du journal dans le panneau de progression"
                 CheckBox8.Text = "Détecter les images montées à tout moment"
                 CheckBox9.Text = "Utiliser des menus en majuscules"
                 CheckBox10.Text = "Créer automatiquement des journaux pour chaque opération effectuée"
@@ -948,16 +1012,19 @@ Public Class Options
                 CheckBox18.Text = "Capacités"
                 CheckBox19.Text = "Pilotes installés"
                 CheckBox20.Text = "Utiliser le nouveau design de la vue du projet"
+                CheckBox22.Text = "Nettoyer automatiquement les points de montage (lance un processus séparé)"
                 DismOFD.Title = "Spécifier l'exécutable DISM à utiliser"
                 Label59.Text = "Personnalisation du journal"
+                Label60.Text = "Définissez les paramètres que vous souhaitez effectuer à la fermeture du programme :"
+                Label61.Text = "Aperçu :"
                 GroupBox5.Text = "Associations"
                 Label9.Text = "Sauvegarde des informations de l'image"
                 LinkLabel1.Text = "Le programme activera ou désactivera certaines caractéristiques en fonction de ce que la version de DISM prend en charge. Comment cela va-t-il affecter mon utilisation de ce programme, et quelles caractéristiques seront désactivées en conséquence ?"
                 LinkLabel1.LinkArea = New LinkArea(122, 126)
                 LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
                 LogSFD.Title = "Spécifier l'emplacement du fichier journal"
-                'RadioButton1.Text = "Image de Windows montée"
-                'RadioButton2.Text = "Installation active"
+                RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5 (vert)"
+                RadioButton2.Text = "Schéma de couleurs de DISMTools 0.1.1-0.4.2 (bleu)"
                 RadioButton3.Text = "Utiliser le répertoire temporaire du projet ou du programme"
                 RadioButton4.Text = "Utiliser le répertoire temporaire spécifié"
                 RadioButton5.Text = "Moderne"
@@ -976,6 +1043,7 @@ Public Class Options
                 Label56.Text = "Deteção de imagens"
                 Label57.Text = "Associações de ficheiros"
                 Label58.Text = "Opções de arranque"
+                Label34.Text = "Opções de encerramento"
                 Label2.Text = "Localização do executável DISM:"
                 Label3.Text = "Versão:"
                 Label5.Text = "Guardar configurações em:"
@@ -988,7 +1056,7 @@ Public Class Options
                 Label12.Text = "Ficheiro de registo de operações:"
                 Label13.Text = "Quando efetuar operações de imagem na linha de comandos, especifique o argumento " & Quote & "/LogPath" & Quote & " para guardar o registo da operação de imagem no ficheiro de registo de destino."
                 Label14.Text = "Nível do ficheiro de registo:"
-                'Label17.Text = "Efetuar operações de imagem em:"
+                Label17.Text = "Esquema de cores da barra de estado e dos painéis:"
                 Label18.Text = "Quando as operações são efectuadas em silêncio, o programa oculta as informações e o progresso. As mensagens de erro continuarão a ser mostradas." & CrLf & "Esta opção não será utilizada para obter informações sobre, por exemplo, pacotes ou funcionalidades." & CrLf & "Além disso, ao efetuar operações de imagem, o computador pode reiniciar-se automaticamente."
                 Label19.Text = "Se esta opção estiver selecionada, o computador não será reiniciado automaticamente, mesmo quando estiver a efetuar operações silenciosas"
                 Label20.Text = "Especifique o diretório de rascunho a utilizar para as operações DISM:"
@@ -999,6 +1067,10 @@ Public Class Options
                 Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                 Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                 Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
+                Label30.Text = "Pré-visualizações:"
+                Label31.Text = "Inativo"
+                Label32.Text = "Execução de operações"
+                Label33.Text = "Painel de progresso:"
                 Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
                 Label36.Text = "Rever o estado deste processo em segundo plano:"
                 Label37.Text = "Estado:"
@@ -1027,6 +1099,7 @@ Public Class Options
                 CheckBox4.Text = "Utilizar um diretório de rascunho"
                 CheckBox5.Text = "Mostrar a saída do comando em inglês"
                 CheckBox6.Text = "Notificar-me quando os processos em segundo plano tiverem iniciado"
+                CheckBox7.Text = "Mostrar a vista de registo no painel de progresso por predefinição"
                 CheckBox8.Text = "Detetar imagens montadas a todo o momento"
                 CheckBox9.Text = "Utilizar menus em maiúsculas"
                 CheckBox10.Text = "Criar automaticamente registos para cada operação realizada"
@@ -1040,16 +1113,19 @@ Public Class Options
                 CheckBox18.Text = " Capacidades"
                 CheckBox19.Text = "Controladores instalados"
                 CheckBox20.Text = "Utilizar o novo design da vista de projeto"
+                CheckBox22.Text = "Limpar automaticamente os pontos de montagem (inicia um processo separado)"
                 DismOFD.Title = "Especificar o executável DISM a utilizar"
                 Label59.Text = "Personalização do registo"
+                Label60.Text = "Configurar as opções que gostaria de executar quando o programa fecha:"
+                Label61.Text = "Pré-visualização:"
                 GroupBox5.Text = "Associações"
                 Label9.Text = "Guardar informação da imagem"
                 LinkLabel1.Text = "O programa irá ativar ou desativar determinadas funcionalidades de acordo com o que a versão DISM suporta. Como é que isso vai afetar a minha utilização deste programa e que funcionalidades serão desactivadas em conformidade?"
                 LinkLabel1.LinkArea = New LinkArea(107, 118)
                 LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                 LogSFD.Title = "Especificar a localização do ficheiro de registo"
-                'RadioButton1.Text = "Imagem do Windows montada"
-                'RadioButton2.Text = "Instalação ativa"
+                RadioButton1.Text = "Esquema de cores do DISMTools 0.5 (verde)"
+                RadioButton2.Text = "Esquema de cores do DISMTools 0.1.1-0.4.2 (azul)"
                 RadioButton3.Text = "Utilizar o diretório de rascunho do projeto ou do programa"
                 RadioButton4.Text = "Utilizar o diretório de rascunho especificado"
                 RadioButton5.Text = "Moderna"
@@ -1428,6 +1504,16 @@ Public Class Options
         CheckBox18.Checked = MainForm.AutoCompleteInfo(3)
         CheckBox19.Checked = MainForm.AutoCompleteInfo(4)
         CheckBox20.Checked = MainForm.GoToNewView
+        CheckBox22.Checked = MainForm.AutoCleanMounts
+        Select Case MainForm.ColorSchemes
+            Case 0
+                RadioButton1.Checked = True
+                RadioButton2.Checked = False
+            Case 1
+                RadioButton1.Checked = False
+                RadioButton2.Checked = True
+        End Select
+        CheckBox7.Checked = MainForm.ExpandedProgressPanel
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -2211,6 +2297,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2221,6 +2308,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2231,6 +2319,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 1
                 Options_Program.Visible = False
                 Options_Personalization.Visible = True
@@ -2242,6 +2331,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2252,6 +2342,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2262,6 +2353,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 2
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2273,6 +2365,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Bold)
@@ -2283,6 +2376,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = BackColor
@@ -2293,6 +2387,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 3
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2304,6 +2399,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2314,6 +2410,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2324,6 +2421,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 4
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2335,6 +2433,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2345,6 +2444,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2355,6 +2455,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 5
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2366,6 +2467,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2376,6 +2478,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2386,6 +2489,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 6
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2397,6 +2501,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2407,6 +2512,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2417,6 +2523,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 7
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2428,6 +2535,7 @@ Public Class Options
                 Options_ImgDetection.Visible = True
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2438,6 +2546,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2448,6 +2557,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 8
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2459,6 +2569,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = True
                 Options_Startup.Visible = False
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2469,6 +2580,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Bold)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2479,6 +2591,7 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = BackColor
                 StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
             Case 9
                 Options_Program.Visible = False
                 Options_Personalization.Visible = False
@@ -2490,6 +2603,7 @@ Public Class Options
                 Options_ImgDetection.Visible = False
                 Options_FileAssocs.Visible = False
                 Options_Startup.Visible = True
+                Options_Shutdown.Visible = False
                 Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
@@ -2500,6 +2614,7 @@ Public Class Options
                 Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 Label58.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Regular)
                 ProgramSectionBtn.BackColor = Win10Title.BackColor
                 PersonalizationSectionBtn.BackColor = Win10Title.BackColor
                 LogSectionBtn.BackColor = Win10Title.BackColor
@@ -2510,6 +2625,41 @@ Public Class Options
                 ImgDetectSectionBtn.BackColor = Win10Title.BackColor
                 AssocsSectionBtn.BackColor = Win10Title.BackColor
                 StartupSectionBtn.BackColor = BackColor
+                ShutdownSectionBtn.BackColor = Win10Title.BackColor
+            Case 10
+                Options_Program.Visible = False
+                Options_Personalization.Visible = False
+                Options_Logs.Visible = False
+                Options_ImgOps.Visible = False
+                Options_Scratch.Visible = False
+                Options_Output.Visible = False
+                Options_BgProcs.Visible = False
+                Options_ImgDetection.Visible = False
+                Options_FileAssocs.Visible = False
+                Options_Startup.Visible = False
+                Options_Shutdown.Visible = True
+                Label49.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label50.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label51.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label52.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label53.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label54.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label55.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label56.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label57.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label58.Font = New Font("Segoe UI", 9, FontStyle.Regular)
+                Label34.Font = New Font("Segoe UI", 9, FontStyle.Bold)
+                ProgramSectionBtn.BackColor = Win10Title.BackColor
+                PersonalizationSectionBtn.BackColor = Win10Title.BackColor
+                LogSectionBtn.BackColor = Win10Title.BackColor
+                ImgOpsSectionBtn.BackColor = Win10Title.BackColor
+                ScDirSectionBtn.BackColor = Win10Title.BackColor
+                OutputSectionBtn.BackColor = Win10Title.BackColor
+                BgProcsSectionBtn.BackColor = Win10Title.BackColor
+                ImgDetectSectionBtn.BackColor = Win10Title.BackColor
+                AssocsSectionBtn.BackColor = Win10Title.BackColor
+                StartupSectionBtn.BackColor = Win10Title.BackColor
+                ShutdownSectionBtn.BackColor = BackColor
         End Select
         SectionNum = Number
     End Sub
@@ -2554,5 +2704,25 @@ Public Class Options
         ChangeSections(9)
     End Sub
 
+    Private Sub ShutdownSectionBtn_Click(sender As Object, e As EventArgs) Handles ShutdownSectionBtn.Click, Label34.Click, PictureBox20.Click
+        ChangeSections(10)
+    End Sub
+
 #End Region
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        If RadioButton1.Checked Then
+            StatusBar_Idle.Image = My.Resources.CS_Idle_Green
+            StatusBar_Ops.Image = My.Resources.CS_Ops_Green
+            ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Green
+        Else
+            StatusBar_Idle.Image = My.Resources.CS_Idle_Blue
+            StatusBar_Ops.Image = My.Resources.CS_Ops_Blue
+            ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Blue
+        End If
+    End Sub
+
+    Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
+        ProgressPanelPic.Image = If(CheckBox7.Checked, My.Resources.progresspanel_logview_shown, My.Resources.progresspanel_logview_hidden)
+    End Sub
 End Class

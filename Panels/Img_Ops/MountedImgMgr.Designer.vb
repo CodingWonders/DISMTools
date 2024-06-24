@@ -34,6 +34,7 @@ Partial Class MountedImgMgr
         Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ActionsTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.Button6 = New System.Windows.Forms.Button()
+        Me.Button7 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
@@ -61,7 +62,7 @@ Partial Class MountedImgMgr
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.ColumnCount = 1
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.6734695!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.67347!))
         Me.TableLayoutPanel1.Controls.Add(Me.ListView1, 0, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.ActionsTLP, 0, 1)
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(16, 52)
@@ -116,14 +117,16 @@ Partial Class MountedImgMgr
         '
         'ActionsTLP
         '
-        Me.ActionsTLP.ColumnCount = 6
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
-        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.6666698!))
+        Me.ActionsTLP.ColumnCount = 7
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667!))
+        Me.ActionsTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42.0!))
         Me.ActionsTLP.Controls.Add(Me.Button6, 5, 0)
+        Me.ActionsTLP.Controls.Add(Me.Button7, 6, 0)
         Me.ActionsTLP.Controls.Add(Me.Button4, 3, 0)
         Me.ActionsTLP.Controls.Add(Me.Button3, 2, 0)
         Me.ActionsTLP.Controls.Add(Me.Button2, 1, 0)
@@ -143,21 +146,35 @@ Partial Class MountedImgMgr
         Me.Button6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button6.Enabled = False
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button6.Location = New System.Drawing.Point(1023, 3)
+        Me.Button6.Location = New System.Drawing.Point(988, 3)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(204, 23)
-        Me.Button6.TabIndex = 6
+        Me.Button6.Size = New System.Drawing.Size(191, 23)
+        Me.Button6.TabIndex = 7
         Me.Button6.Text = "Load into project"
         Me.Button6.UseVisualStyleBackColor = True
+        '
+        'Button7
+        '
+        Me.Button7.AutoEllipsis = True
+        Me.Button7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button7.Enabled = False
+        Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button7.Location = New System.Drawing.Point(1185, 3)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(42, 23)
+        Me.Button7.TabIndex = 6
+        Me.Button7.Text = "..."
+        Me.Button7.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.Button7.UseVisualStyleBackColor = True
         '
         'Button4
         '
         Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button4.Enabled = False
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(615, 3)
+        Me.Button4.Location = New System.Drawing.Point(594, 3)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(198, 23)
+        Me.Button4.Size = New System.Drawing.Size(191, 23)
         Me.Button4.TabIndex = 5
         Me.Button4.Text = "Open mount directory"
         Me.Button4.UseVisualStyleBackColor = True
@@ -168,9 +185,9 @@ Partial Class MountedImgMgr
         Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(411, 3)
+        Me.Button3.Location = New System.Drawing.Point(397, 3)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(198, 23)
+        Me.Button3.Size = New System.Drawing.Size(191, 23)
         Me.Button3.TabIndex = 3
         Me.Button3.Text = "Enable write permissions"
         Me.Button3.UseVisualStyleBackColor = True
@@ -181,9 +198,9 @@ Partial Class MountedImgMgr
         Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button2.Enabled = False
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(207, 3)
+        Me.Button2.Location = New System.Drawing.Point(200, 3)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(198, 23)
+        Me.Button2.Size = New System.Drawing.Size(191, 23)
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Reload servicing"
         Me.Button2.UseVisualStyleBackColor = True
@@ -194,9 +211,9 @@ Partial Class MountedImgMgr
         Me.Button5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button5.Enabled = False
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(819, 3)
+        Me.Button5.Location = New System.Drawing.Point(791, 3)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(198, 23)
+        Me.Button5.Size = New System.Drawing.Size(191, 23)
         Me.Button5.TabIndex = 1
         Me.Button5.Text = "Remove volume images..."
         Me.Button5.UseVisualStyleBackColor = True
@@ -209,7 +226,7 @@ Partial Class MountedImgMgr
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button1.Location = New System.Drawing.Point(3, 3)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(198, 23)
+        Me.Button1.Size = New System.Drawing.Size(191, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Unmount image"
         Me.Button1.UseVisualStyleBackColor = True
@@ -270,7 +287,8 @@ Partial Class MountedImgMgr
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents Button7 As System.Windows.Forms.Button
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents DetectorBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Button6 As System.Windows.Forms.Button
 End Class

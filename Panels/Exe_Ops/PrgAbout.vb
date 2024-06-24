@@ -18,7 +18,7 @@ Public Class PrgAbout
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "About this program"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                         Label3.Text = "These resources and components were used in the creation of this program:"
                         Label4.Text = "Resources"
@@ -37,7 +37,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (NuGet package)"
                         Label17.Text = "Branding assets"
-                        Label18.Text = "Windows Home Server wallpaper"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CREDITS"
                         LinkLabel2.Text = "LICENSES"
                         LinkLabel3.Text = "WHAT'S NEW"
@@ -49,13 +49,13 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(59, 29)
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visit website"
                         LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de este programa"
-                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                         Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                         Label4.Text = "Recursos"
@@ -74,7 +74,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (paquete NuGet)"
                         Label17.Text = "Recursos publicitarios"
-                        Label18.Text = "Fondo de pantalla de Windows Home Server"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CRÉDITOS"
                         LinkLabel2.Text = "LICENCIAS"
                         LinkLabel3.Text = "NOVEDADES"
@@ -86,14 +86,14 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(86, 29)
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visitar sitio"
                         LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
                     Case "FRA"
                         Text = "À propos de ce programme"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
                         Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                         Label4.Text = "Ressources"
@@ -112,7 +112,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (paquet NuGet)"
                         Label17.Text = "Les atouts de la marque"
-                        Label18.Text = "Fond d'écran Windows Home Server"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CRÉDITS"
                         LinkLabel2.Text = "LICENCES"
                         LinkLabel3.Text = "QUOI DE NEUF"
@@ -124,14 +124,14 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(79, 41)
                         LinkLabel9.Text = "Site web"
                         LinkLabel10.Text = "Site web"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Site web"
                         LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
-                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                         Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                         Label4.Text = "Recursos"
@@ -150,7 +150,7 @@ Public Class PrgAbout
                         End If
                         Label16.Text = "ManagedDism (pacote NuGet)"
                         Label17.Text = "Activos de marca"
-                        Label18.Text = "Papel de parede do Windows Home Server"
+                        Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CRÉDITOS"
                         LinkLabel2.Text = "LICENÇAS"
                         LinkLabel3.Text = "O QUE HÁ DE NOVO"
@@ -162,7 +162,7 @@ Public Class PrgAbout
                         LinkLabel8.LinkArea = New LinkArea(76, 56)
                         LinkLabel9.Text = "Sítio Web"
                         LinkLabel10.Text = "Sítio Web"
-                        LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                        LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Sítio Web"
                         LinkLabel13.Text = "Sítio Web"
                         OK_Button.Text = "OK"
@@ -170,7 +170,7 @@ Public Class PrgAbout
                 End Select
             Case 1
                 Text = "About this program"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                 Label3.Text = "These resources and components were used in the creation of this program:"
                 Label4.Text = "Resources"
@@ -189,7 +189,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (NuGet package)"
                 Label17.Text = "Branding assets"
-                Label18.Text = "Windows Home Server wallpaper"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CREDITS"
                 LinkLabel2.Text = "LICENSES"
                 LinkLabel3.Text = "WHAT'S NEW"
@@ -201,14 +201,14 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(59, 29)
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Visit website"
                 LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Check for updates"
             Case 2
                 Text = "Acerca de este programa"
-                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                 Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                 Label4.Text = "Recursos"
@@ -227,7 +227,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (paquete NuGet)"
                 Label17.Text = "Recursos publicitarios"
-                Label18.Text = "Fondo de pantalla de Windows Home Server"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CRÉDITOS"
                 LinkLabel2.Text = "LICENCIAS"
                 LinkLabel3.Text = "NOVEDADES"
@@ -239,14 +239,14 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(86, 29)
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Visitar sitio"
                 LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
             Case 3
                 Text = "À propos de ce programme"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
                 Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                 Label4.Text = "Ressources"
@@ -265,7 +265,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (paquet NuGet)"
                 Label17.Text = "Les atouts de la marque"
-                Label18.Text = "Fond d'écran Windows Home Server"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CRÉDITS"
                 LinkLabel2.Text = "LICENCES"
                 LinkLabel3.Text = "QUOI DE NEUF"
@@ -277,14 +277,14 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(79, 41)
                 LinkLabel9.Text = "Site web"
                 LinkLabel10.Text = "Site web"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Site web"
                 LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
             Case 4
                 Text = "Acerca deste programa"
-                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                 Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                 Label4.Text = "Recursos"
@@ -303,7 +303,7 @@ Public Class PrgAbout
                 End If
                 Label16.Text = "ManagedDism (pacote NuGet)"
                 Label17.Text = "Activos de marca"
-                Label18.Text = "Papel de parede do Windows Home Server"
+                Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CRÉDITOS"
                 LinkLabel2.Text = "LICENÇAS"
                 LinkLabel3.Text = "O QUE HÁ DE NOVO"
@@ -315,7 +315,7 @@ Public Class PrgAbout
                 LinkLabel8.LinkArea = New LinkArea(76, 56)
                 LinkLabel9.Text = "Sítio Web"
                 LinkLabel10.Text = "Sítio Web"
-                LinkLabel11.Text = "Microsoft, Kýnan Antos"
+                LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Sítio Web"
                 LinkLabel13.Text = "Sítio Web"
                 OK_Button.Text = "OK"
@@ -324,6 +324,7 @@ Public Class PrgAbout
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
         ForeColor = Color.White
+        Label15.ForeColor = Color.Black
         PictureBox1.Image = If(MainForm.dtBranch.Contains("preview"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
         If CreditsPanel.Visible Then
             LinkLabel1.LinkColor = Color.FromArgb(241, 241, 241)
@@ -417,7 +418,7 @@ Public Class PrgAbout
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel1.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel1.LinkColor = Color.Lime
         End If
     End Sub
 
@@ -426,7 +427,7 @@ Public Class PrgAbout
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel2.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel2.LinkColor = Color.Lime
         End If
     End Sub
 
@@ -435,7 +436,7 @@ Public Class PrgAbout
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel3.LinkColor = Color.FromArgb(0, 151, 251)
+            LinkLabel3.LinkColor = Color.Lime
         End If
     End Sub
 #End Region

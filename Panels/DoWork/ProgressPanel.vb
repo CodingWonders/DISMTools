@@ -223,6 +223,19 @@ Public Class ProgressPanel
     Public projPath As String
     Public MountAfterCreation As Boolean
 
+    ' OperationNum: 1
+    Public AppendixSourceDir As String                      ' Source directory containing the image to append
+    Public AppendixDestinationImage As String               ' The destination image to append to
+    Public AppendixName As String                           ' Appended image name
+    Public AppendixDescription As String                    ' Appended image description
+    Public AppendixWimScriptConfig As String                ' Path for WimScript.ini (configuration list file)
+    Public AppendixUseWimBoot As Boolean                    ' Determine whether to append the image with WIMBoot configuration
+    Public AppendixBootable As Boolean                      ' Determine whether to make target image bootable (Windows PE only)
+    Public AppendixCheckIntegrity As Boolean                ' Determine whether to check integrity of the WIM file
+    Public AppendixVerify As Boolean                        ' Determine whether to check for errors and file duplication
+    Public AppendixReparsePt As Boolean                     ' Determine whether to use the reparse point tag fix
+    Public AppendixCaptureExtendedAttribs As Boolean        ' Determine whether to capture extended attributes
+
     ' OperationNum: 3
     Public ApplicationSourceImg As String                   ' String which determines which image to apply
     Public ApplicationIndex As Integer                      ' Index to apply to destination
@@ -259,6 +272,17 @@ Public Class ProgressPanel
     Public imgIndexDeletionUnmount As Boolean               ' Determine whether to unmount source image if it is mounted
     Public imgIndexDeletionLastName As String               ' Last name of index checked
     Public imgIndexDeletionCount As Integer                 ' Volume image removal count
+
+    ' OperationNum: 10
+    Public imgExportSourceImage As String                   ' The source image to export
+    Public imgExportSourceIndex As Integer                  ' The source index to export
+    Public imgExportDestinationImage As String              ' The export target
+    Public imgExportDestinationUseCustomName As Boolean     ' Determine whether to use a custom destination name
+    Public imgExportDestinationName As String               ' The custom destination name
+    Public imgExportCompressType As Integer                 ' Compression used for the export (0: none; 1: fast; 2: max; 3: recovery)
+    Public imgExportMarkBootable As Boolean                 ' Determine whether to mark the target image as bootable (Windows PE only)
+    Public imgExportUseWimBoot As Boolean                   ' Determine whether to append the target image with WIMBoot configurations
+    Public imgExportCheckIntegrity As Boolean               ' Determine whether to check the integrity of the image before exporting it
 
     ' OperationNum: 11
     Public GetFromMountedImg As Boolean                     ' Get information from mounted image
@@ -540,6 +564,8 @@ Public Class ProgressPanel
     Sub GetTasks(opNum As Integer)
         If opNum = 0 Then
             taskCount = 1
+        ElseIf opNum = 1 Then
+            taskCount = 1
         ElseIf opNum = 3 Then
             taskCount = 1
         ElseIf opNum = 6 Then
@@ -548,6 +574,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 7 Then
+            taskCount = 1
         ElseIf opNum = 8 Then
             taskCount = 1
         ElseIf opNum = 9 Then
@@ -556,6 +584,8 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
+        ElseIf opNum = 10 Then
+            taskCount = 1
         ElseIf opNum = 15 Then
             taskCount = 1
         ElseIf opNum = 18 Then
@@ -771,7 +801,7 @@ Public Class ProgressPanel
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "settings")
-                CurrentPB.Value = 33.329999999999998
+                CurrentPB.Value = 33.33
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "mount")
@@ -806,7 +836,7 @@ Public Class ProgressPanel
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\amd64")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm64")
-                CurrentPB.Value = 66.659999999999997
+                CurrentPB.Value = 66.66
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 File.WriteAllText(projPath & "\" & projName & "\" & "settings\project.ini", _
@@ -837,7 +867,7 @@ Public Class ProgressPanel
                                   "ImageLang=N/A" & CrLf & CrLf & _
                                   "[Params]" & CrLf & _
                                   "ImageReadWrite=N/A", ASCII)
-                CurrentPB.Value = 83.329999999999998
+                CurrentPB.Value = 83.33
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
                 File.WriteAllText(projPath & "\" & projName & "\" & projName & ".dtproj", _
@@ -861,6 +891,113 @@ Public Class ProgressPanel
                 End If
                 IsSuccessful = False
             End Try
+        ElseIf opNum = 1 Then
+            ' This variable tells the program to use quotes when appending a mount directory in a drive.
+            ' This is false when we want to append an entire drive.
+            Dim AppendixUseQuotes As Boolean = Not Path.GetPathRoot(AppendixSourceDir) = AppendixSourceDir
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Appending to image..."
+                            currentTask.Text = "Appending specified mount directory to the specified target image..."
+                        Case "ESN"
+                            allTasks.Text = "Anexando a la imagen..."
+                            currentTask.Text = "Anexando el directorio de montaje especificado a la imagen de destino..."
+                        Case "FRA"
+                            allTasks.Text = "Annexe à l'image... "
+                            currentTask.Text = "Annexe du répertoire de montage spécifié à l'image cible spécifiée..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Anexo à imagem..."
+                            currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Appending to image..."
+                    currentTask.Text = "Appending specified mount directory to the specified target image..."
+                Case 2
+                    allTasks.Text = "Anexando a la imagen..."
+                    currentTask.Text = "Anexando el directorio de montaje especificado a la imagen de destino..."
+                Case 3
+                    allTasks.Text = "Annexe à l'image... "
+                    currentTask.Text = "Annexe du répertoire de montage spécifié à l'image cible spécifiée..."
+                Case 4
+                    allTasks.Text = "Anexo à imagem..."
+                    currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
+            End Select
+            LogView.AppendText(CrLf & "Appending mount directory to specified target image..." & CrLf & "Options:" & CrLf &
+                               "- Source image directory: " & AppendixSourceDir & CrLf &
+                               "- Destination image file: " & AppendixDestinationImage & CrLf &
+                               "- Destination image name: " & AppendixName & CrLf &
+                               "- Destination image description: " & If(AppendixDescription = "", "(none specified)", AppendixDescription) & CrLf)
+            If AppendixWimScriptConfig = "" Then
+                LogView.AppendText("- Configuration list file: not specified" & CrLf)
+            Else
+                LogView.AppendText("- Configuration list file: " & Quote & AppendixWimScriptConfig & Quote & CrLf)
+                If Not File.Exists(AppendixWimScriptConfig) Then
+                    LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
+                End If
+            End If
+            LogView.AppendText("- Append image with WIMBoot configuration? " & If(AppendixUseWimBoot, "Yes", "No") & CrLf &
+                               "- Make image bootable? " & If(AppendixBootable, "Yes", "No") & CrLf &
+                               "- Verify image integrity? " & If(AppendixCheckIntegrity, "Yes", "No") & CrLf &
+                               "- Check for file errors? " & If(AppendixVerify, "Yes", "No") & CrLf &
+                               "- Use the reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No") & CrLf &
+                               "- Capture extended attributes? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
+            DISMProc.StartInfo.FileName = DismProgram
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not available
+                        Case Is >= 2
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & If(AppendixUseQuotes, Quote, "") & AppendixSourceDir & If(AppendixUseQuotes, Quote, "") & " /name=" & Quote & AppendixName & Quote
+                    End Select
+                Case 10
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & If(AppendixUseQuotes, Quote, "") & AppendixSourceDir & If(AppendixUseQuotes, Quote, "") & " /name=" & Quote & AppendixName & Quote
+            End Select
+            If AppendixDescription <> "" Then
+                CommandArgs &= " /description=" & Quote & AppendixDescription & Quote
+            End If
+            If AppendixWimScriptConfig <> "" AndAlso File.Exists(AppendixWimScriptConfig) Then
+                CommandArgs &= " /configfile=" & Quote & AppendixWimScriptConfig & Quote
+            End If
+            If AppendixBootable Then CommandArgs &= " /bootable"
+            If AppendixUseWimBoot Then CommandArgs &= " /wimboot"
+            If AppendixCheckIntegrity Then CommandArgs &= " /checkintegrity"
+            If AppendixVerify Then CommandArgs &= " /verify"
+            If Not AppendixReparsePt Then CommandArgs &= " /norpfix"
+            If AppendixCaptureExtendedAttribs Then CommandArgs &= " /EA"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
         ElseIf opNum = 3 Then
             ' My love with DISM came from this very YouTube video:
             ' https://www.youtube.com/watch?v=JxJ6a-PY1KA (Enderman - Manually installing Windows 10)
@@ -1063,7 +1200,7 @@ Public Class ProgressPanel
                 If File.Exists(CaptureWimScriptConfig) Then
                     CommandArgs &= " /configfile=" & Quote & CaptureWimScriptConfig & Quote
                 Else
-                    LogView.AppendText("   WARNING: the following file does not exist in the file system. Skipping file..." & CrLf)
+                    LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
                 End If
             End If
             If CaptureCompressType = 0 Then
@@ -1139,6 +1276,79 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
+        ElseIf opNum = 7 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Cleaning up mount points..."
+                            currentTask.Text = "Deleting resources from old or corrupted images..."
+                        Case "ESN"
+                            allTasks.Text = "Limpiando puntos de montaje..."
+                            currentTask.Text = "Eliminando recursos de imágenes antiguas o corruptas..."
+                        Case "FRA"
+                            allTasks.Text = "Nettoyage des points de montage en cours..."
+                            currentTask.Text = "Suppression des ressources des images anciennes ou corrompues en cours..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Limpeza de pontos de montagem..."
+                            currentTask.Text = "Eliminar recursos de imagens antigas ou corrompidas..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Cleaning up mount points..."
+                    currentTask.Text = "Deleting resources from old or corrupted images..."
+                Case 2
+                    allTasks.Text = "Limpiando puntos de montaje..."
+                    currentTask.Text = "Eliminando recursos de imágenes antiguas o corruptas..."
+                Case 3
+                    allTasks.Text = "Nettoyage des points de montage en cours..."
+                    currentTask.Text = "Suppression des ressources des images anciennes ou corrompues en cours..."
+                Case 4
+                    allTasks.Text = "Limpeza de pontos de montagem..."
+                    currentTask.Text = "Eliminar recursos de imagens antigas ou corrompidas..."
+            End Select
+            LogView.AppendText(CrLf & "Cleaning up mount points..." & CrLf & CrLf &
+                               "This can take some time, depending on the drives connected to this system.")
+            Try
+                DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DismApi.CleanupMountpoints()
+            Catch ex As DismException
+                errCode = Hex(ex.ErrorCode)
+            Finally
+                DismApi.Shutdown()
+            End Try
+            CurrentPB.Value = 50
+            AllPB.Value = CurrentPB.Value
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            If errCode Is Nothing Then
+                errCode = 0
+                IsSuccessful = True
+            End If
             If errCode.Length >= 8 Then
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             Else
@@ -1332,6 +1542,119 @@ Public Class ProgressPanel
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = 100
             GetErrorCode(False)
+        ElseIf opNum = 10 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Exporting image..."
+                            currentTask.Text = "Exporting specified image..."
+                        Case "ESN"
+                            allTasks.Text = "Exportando imagen..."
+                            currentTask.Text = "Exportando imagen especificada..."
+                        Case "FRA"
+                            allTasks.Text = "Exportation de l'image en cours..."
+                            currentTask.Text = "Exportation de l'image spécifiée en cours..."
+                        Case "PTB"
+                            allTasks.Text = "Exportar imagem..."
+                            currentTask.Text = "Exportar imagem especificada..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Exporting image..."
+                    currentTask.Text = "Exporting specified image..."
+                Case 2
+                    allTasks.Text = "Exportando imagen..."
+                    currentTask.Text = "Exportando imagen especificada..."
+                Case 3
+                    allTasks.Text = "Exportation de l'image en cours..."
+                    currentTask.Text = "Exportation de l'image spécifiée en cours..."
+                Case 4
+                    allTasks.Text = "Exportar imagem..."
+                    currentTask.Text = "Exportar imagem especificada..."
+            End Select
+            LogView.AppendText(CrLf & "Exporting the specified image to a destination image..." & CrLf & "Options:" & CrLf &
+                               "- Source image file: " & imgExportSourceImage & CrLf &
+                               "- Source image index: " & imgExportSourceIndex & CrLf &
+                               "- Destination image file: " & imgExportDestinationImage & CrLf &
+                               If(imgExportDestinationUseCustomName, "- Destination image name: " & imgExportDestinationName, ""))
+            Select Case imgExportCompressType
+                Case 0
+                    LogView.AppendText(CrLf & "- Compression type: no compression")
+                Case 1
+                    LogView.AppendText(CrLf & "- Compression type: fast compression")
+                Case 2
+                    LogView.AppendText(CrLf & "- Compression type: maximum compression")
+                Case 3
+                    LogView.AppendText(CrLf & "- Compression type: ESD conversion (recovery)")
+            End Select
+            LogView.AppendText(CrLf & "- Mark the image as bootable? " & If(imgExportMarkBootable, "Yes", "No") & CrLf &
+                               "- Append image with WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No") & CrLf &
+                               "- Check image integrity before exporting the image? " & If(imgExportCheckIntegrity, "Yes", "No"))
+            ' Show information regarding SWM files
+            If Path.GetExtension(imgExportSourceImage).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                LogView.AppendText(CrLf & CrLf & "NOTE: the source image contains an asterisk sign (*) in the file name to merge all SWM files")
+            End If
+            DISMProc.StartInfo.FileName = DismProgram
+            ' Configure basic command arguments
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not available
+                        Case Is >= 2
+                            CommandArgs &= " /export-image /sourceimagefile=" & Quote & imgExportSourceImage & Quote & " /sourceindex=" & imgExportSourceIndex & " /destinationimagefile=" & Quote & imgExportDestinationImage & Quote
+                    End Select
+                Case 10
+                    CommandArgs &= " /export-image /sourceimagefile=" & Quote & imgExportSourceImage & Quote & " /sourceindex=" & imgExportSourceIndex & " /destinationimagefile=" & Quote & imgExportDestinationImage & Quote
+            End Select
+            ' Configure additional command arguments
+            If imgExportDestinationUseCustomName Then
+                CommandArgs &= " /destinationname=" & Quote & imgExportDestinationName & Quote
+            End If
+            Select Case imgExportCompressType
+                Case 0
+                    CommandArgs &= " /compress:none"
+                Case 1
+                    CommandArgs &= " /compress:fast"
+                Case 2
+                    CommandArgs &= " /compress:max"
+                Case 3
+                    CommandArgs &= " /compress:recovery"
+            End Select
+            If imgExportMarkBootable Then CommandArgs &= " /bootable"
+            If imgExportUseWimBoot Then CommandArgs &= " /wimboot"
+            If imgExportCheckIntegrity Then CommandArgs &= " /checkintegrity"
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+            End If
         ElseIf opNum = 11 Then
             ' Operation handled by the image file information dialog - Redundant OpNum
         ElseIf opNum = 15 Then
@@ -3150,59 +3473,104 @@ Public Class ProgressPanel
                                    "- Application name: " & appxAdditionPackageList(x).PackageName & CrLf & _
                                    "- Application publisher: " & appxAdditionPackageList(x).PackagePublisher & CrLf & _
                                    "- Application version: " & appxAdditionPackageList(x).PackageVersion & CrLf)
-
-                ' Initialize command
-                DISMProc.StartInfo.FileName = DismProgram
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
-                If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
-                    CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
-                Else
-                    CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
-                End If
-                If appxAdditionPackageList(x).PackageLicenseFile <> "" And File.Exists(appxAdditionPackageList(x).PackageLicenseFile) Then
-                    CommandArgs &= " /licensefile=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
-                Else
-                    If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
-                        LogView.AppendText(CrLf & _
-                                           "Warning: the license file does not exist. Continuing without one..." & CrLf & _
-                                           "         Do note that, if this app requires a license file, it may fail addition." & CrLf & _
-                                           "         Also, this may compromise the image.")
-                    End If
-                    CommandArgs &= " /skiplicense"
-                End If
-                ' Inform user that a package will be installed with dependencies
-                If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
-                    LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
-                End If
-                ' Add dependencies
-                For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
-                    If File.Exists(Dependency.DependencyFile) Then
-                        LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
-                        CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
+                ' Detect if it is an encrypted application
+                If Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso OnlineMgmt Then
+                    ' Run PowerShell command. Support will be improved
+                    LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Since the program is managing the active installation, a PowerShell command will be run." & CrLf)
+                    Dim AppxAuxProc As New Process()
+                    AppxAuxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                    CommandArgs = "-Command Add-AppxPackage -Path '" & appxAdditionPackageList(x).PackageFile & "'"
+                    AppxAuxProc.StartInfo.Arguments = CommandArgs
+                    AppxAuxProc.Start()
+                    AppxAuxProc.WaitForExit()
+                    LogView.AppendText(CrLf & "Getting error level...")
+                    If Hex(AppxAuxProc.ExitCode).Length < 8 Then
+                        errCode = AppxAuxProc.ExitCode
                     Else
-                        LogView.AppendText(CrLf & _
-                                           "Warning: the dependency" & CrLf & _
-                                           Quote & Dependency.DependencyFile & Quote & CrLf & _
-                                           "does not exist in the file system. Skipping dependency...")
-                        Continue For
+                        errCode = Hex(AppxAuxProc.ExitCode)
                     End If
-                Next
-                If appxAdditionPackageList(x).PackageCustomDataFile <> "" And File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
-                    CommandArgs &= " /customdatapath=" & Quote & appxAdditionCustomDataFile & Quote
-                ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
-                    LogView.AppendText(CrLf & _
-                                       "Warning: the custom data file does not exist. Continuing without one...")
-                End If
-                If FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And ImgVersion.Major = 10 Then
-                    If appxAdditionPackageList(x).PackageRegions = "" Then
-                        CommandArgs &= " /region:all"
+                    If AppxAuxProc.ExitCode = 0 Then
+                        appxSuccessfulAdditions += 1
                     Else
-                        CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
+                        appxFailedAdditions += 1
                     End If
+                    If errCode.Length >= 8 Then
+                        LogView.AppendText(" Error level : 0x" & errCode)
+                    Else
+                        LogView.AppendText(" Error level : " & errCode)
+                    End If
+                    If PkgErrorText.RichTextBox1.Text = "" Then
+                        If errCode.Length >= 8 Then
+                            PkgErrorText.RichTextBox1.AppendText("0x" & errCode)
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(errCode)
+                        End If
+                    Else
+                        If errCode.Length >= 8 Then
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & "0x" & errCode)
+                        Else
+                            PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                        End If
+                    End If
+                    Continue For
+                ElseIf Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not OnlineMgmt Then
+                    ' Continue loop without installing application
+                    LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Encrypted packages can only be added to active installations. Skipping this package..." & CrLf)
+                    Continue For
+                Else
+                    ' Initialize command
+                    DISMProc.StartInfo.FileName = DismProgram
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
+                    If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
+                        CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
+                    Else
+                        CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
+                    End If
+                    If appxAdditionPackageList(x).PackageLicenseFile <> "" And File.Exists(appxAdditionPackageList(x).PackageLicenseFile) Then
+                        CommandArgs &= " /licensepath=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
+                    Else
+                        If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
+                            LogView.AppendText(CrLf & _
+                                               "Warning: the license file does not exist. Continuing without one..." & CrLf & _
+                                               "         Do note that, if this app requires a license file, it may fail addition." & CrLf & _
+                                               "         Also, this may compromise the image.")
+                        End If
+                        CommandArgs &= " /skiplicense"
+                    End If
+                    ' Inform user that a package will be installed with dependencies
+                    If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
+                        LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
+                    End If
+                    ' Add dependencies
+                    For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
+                        If File.Exists(Dependency.DependencyFile) Then
+                            LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
+                            CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
+                        Else
+                            LogView.AppendText(CrLf & _
+                                               "Warning: the dependency" & CrLf & _
+                                               Quote & Dependency.DependencyFile & Quote & CrLf & _
+                                               "does not exist in the file system. Skipping dependency...")
+                            Continue For
+                        End If
+                    Next
+                    If appxAdditionPackageList(x).PackageCustomDataFile <> "" And File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
+                        CommandArgs &= " /customdatapath=" & Quote & appxAdditionCustomDataFile & Quote
+                    ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
+                        LogView.AppendText(CrLf & _
+                                           "Warning: the custom data file does not exist. Continuing without one...")
+                    End If
+                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
+                        If appxAdditionPackageList(x).PackageRegions = "" Then
+                            CommandArgs &= " /region:all"
+                        Else
+                            CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
+                        End If
+                    End If
+                    DISMProc.StartInfo.Arguments = CommandArgs
+                    DISMProc.Start()
+                    DISMProc.WaitForExit()
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -5454,7 +5822,7 @@ Public Class ProgressPanel
             End Select
             ActionRunning = False
             TaskList.Clear()
-            MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+            MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
             MainForm.ToolStripButton4.Visible = False
             If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
             MainForm.WatcherTimer.Enabled = True
@@ -5616,7 +5984,7 @@ Public Class ProgressPanel
                 Case 4
                     MainForm.MenuDesc.Text = "Pronto"
             End Select
-            MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
+            MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
         End If
     End Sub
@@ -5721,6 +6089,9 @@ Public Class ProgressPanel
                 allTasks.Text = "Aguarde..."
                 currentTask.Text = "Por favor, aguarde..."
         End Select
+        If MainForm.ExpandedProgressPanel AndAlso Height = 240 Then
+            LogButton.PerformClick()
+        End If
         taskCountLbl.Visible = False
         MainForm.bwBackgroundProcessAction = 0
         MainForm.bwGetImageInfo = True
@@ -5817,7 +6188,7 @@ Public Class ProgressPanel
             Case 4
                 MainForm.MenuDesc.Text = "Realização de operações de imagem. Por favor, aguarde..."
         End Select
-        MainForm.StatusStrip.BackColor = Color.FromArgb(14, 99, 156)
+        MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(18, 51, 14), Color.FromArgb(14, 99, 156))
         If Debugger.IsAttached Then
             IsDebugged = True
         Else
@@ -6019,7 +6390,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
-        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
     End Sub
 
     Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing

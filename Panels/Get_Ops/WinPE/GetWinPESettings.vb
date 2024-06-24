@@ -244,6 +244,7 @@ Public Class GetWinPESettings
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()

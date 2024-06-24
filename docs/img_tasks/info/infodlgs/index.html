@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
@@ -57,11 +61,15 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
     <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -78,6 +86,8 @@
     <li class="toctree-l4"><a class="reference internal" href="#available-dialogs">Available dialogs</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#saving-image-information">Saving image information</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#searching-through-this-information">Searching through this information</a>
     </li>
     </ul>
                 </li>
@@ -147,6 +157,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -168,6 +180,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -287,6 +301,25 @@
 <p align="center">
     <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/c236375b-ce3d-46bb-8ef4-e9749205265d" />
 </p>
+
+<h2 id="searching-through-this-information">Searching through this information</h2>
+<p>DISMTools 0.5 introduces <strong>Search capabilities</strong> to the information dialogs, allowing you to get the results you want more easily.</p>
+<p>This search technology uses <strong>linear search</strong>, a method that is easy to implement (code-wise) and fast at returning results.</p>
+<!-- Anything is better than Windows Search though! -->
+
+<p>To get started, simply click on the search box text and start typing.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/info/search_example.gif" />
+</p>
+
+<p>The following items support this functionality:</p>
+<ul>
+<li>Installed packages</li>
+<li>Features</li>
+<li>Installed AppX packages (only if the extended AppX getter script is not run)</li>
+<li>Capabilities</li>
+<li>Installed drivers</li>
+</ul>
               
             </div>
           </div><footer>
@@ -329,7 +362,7 @@
       <script src="../../../search/main.js"></script>
     <script>
         jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable(false);
         });
     </script>
 

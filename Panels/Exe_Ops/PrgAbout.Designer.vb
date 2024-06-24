@@ -241,7 +241,7 @@ Partial Class PrgAbout
         Me.LinkLabel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel8.LinkArea = New System.Windows.Forms.LinkArea(59, 29)
         Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel8.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel8.Location = New System.Drawing.Point(3, 261)
         Me.LinkLabel8.Name = "LinkLabel8"
         Me.LinkLabel8.Size = New System.Drawing.Size(414, 37)
@@ -296,7 +296,7 @@ Partial Class PrgAbout
         '
         Me.LinkLabel4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel4.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel4.Location = New System.Drawing.Point(337, 63)
         Me.LinkLabel4.Name = "LinkLabel4"
         Me.TableLayoutPanel2.SetRowSpan(Me.LinkLabel4, 2)
@@ -340,7 +340,7 @@ Partial Class PrgAbout
         Me.LinkLabel5.AutoSize = True
         Me.LinkLabel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel5.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel5.Location = New System.Drawing.Point(337, 114)
         Me.LinkLabel5.Name = "LinkLabel5"
         Me.LinkLabel5.Size = New System.Drawing.Size(80, 15)
@@ -354,7 +354,7 @@ Partial Class PrgAbout
         Me.LinkLabel6.AutoSize = True
         Me.LinkLabel6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel6.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel6.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel6.Location = New System.Drawing.Point(337, 129)
         Me.LinkLabel6.Name = "LinkLabel6"
         Me.LinkLabel6.Size = New System.Drawing.Size(80, 15)
@@ -369,7 +369,7 @@ Partial Class PrgAbout
         Me.LinkLabel9.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel9.LinkArea = New System.Windows.Forms.LinkArea(0, 13)
         Me.LinkLabel9.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel9.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel9.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel9.Location = New System.Drawing.Point(337, 144)
         Me.LinkLabel9.Name = "LinkLabel9"
         Me.LinkLabel9.Size = New System.Drawing.Size(80, 15)
@@ -384,7 +384,7 @@ Partial Class PrgAbout
         Me.LinkLabel10.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel10.LinkArea = New System.Windows.Forms.LinkArea(0, 13)
         Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel10.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel10.Location = New System.Drawing.Point(337, 159)
         Me.LinkLabel10.Name = "LinkLabel10"
         Me.LinkLabel10.Size = New System.Drawing.Size(80, 15)
@@ -435,7 +435,7 @@ Partial Class PrgAbout
         Me.LinkLabel7.AutoSize = True
         Me.LinkLabel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel7.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel7.Location = New System.Drawing.Point(337, 225)
         Me.LinkLabel7.Name = "LinkLabel7"
         Me.LinkLabel7.Size = New System.Drawing.Size(80, 15)
@@ -479,7 +479,7 @@ Partial Class PrgAbout
         Me.LinkLabel12.AutoSize = True
         Me.LinkLabel12.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel12.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel12.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel12.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel12.Location = New System.Drawing.Point(337, 174)
         Me.LinkLabel12.Name = "LinkLabel12"
         Me.LinkLabel12.Size = New System.Drawing.Size(80, 15)
@@ -502,7 +502,7 @@ Partial Class PrgAbout
         Me.LinkLabel13.AutoSize = True
         Me.LinkLabel13.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel13.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel13.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel13.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel13.Location = New System.Drawing.Point(337, 189)
         Me.LinkLabel13.Name = "LinkLabel13"
         Me.LinkLabel13.Size = New System.Drawing.Size(80, 15)
@@ -515,14 +515,14 @@ Partial Class PrgAbout
         '
         Me.LinkLabel11.AutoSize = True
         Me.LinkLabel11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LinkLabel11.LinkArea = New System.Windows.Forms.LinkArea(0, 0)
         Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel11.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel11.LinkColor = System.Drawing.Color.Lime
         Me.LinkLabel11.Location = New System.Drawing.Point(337, 319)
         Me.LinkLabel11.Name = "LinkLabel11"
-        Me.LinkLabel11.Size = New System.Drawing.Size(80, 30)
+        Me.LinkLabel11.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel11.TabIndex = 9
-        Me.LinkLabel11.TabStop = True
-        Me.LinkLabel11.Text = "Microsoft, Kýnan Antos"
+        Me.LinkLabel11.Text = "Microsoft"
         Me.LinkLabel11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label18
@@ -530,9 +530,9 @@ Partial Class PrgAbout
         Me.Label18.AutoSize = True
         Me.Label18.Location = New System.Drawing.Point(3, 319)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(181, 15)
+        Me.Label18.Size = New System.Drawing.Size(154, 15)
         Me.Label18.TabIndex = 2
-        Me.Label18.Text = "Windows Home Server wallpaper"
+        Me.Label18.Text = "Windows Home Server 2011"
         '
         'LicensesPanel
         '
@@ -546,7 +546,7 @@ Partial Class PrgAbout
         '
         'RichTextBox1
         '
-        Me.RichTextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(7, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(73, Byte), Integer))
+        Me.RichTextBox1.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(25, Byte), Integer))
         Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
@@ -569,7 +569,7 @@ Partial Class PrgAbout
         '
         'RichTextBox2
         '
-        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(7, Byte), Integer), CType(CType(28, Byte), Integer), CType(CType(73, Byte), Integer))
+        Me.RichTextBox2.BackColor = System.Drawing.Color.FromArgb(CType(CType(31, Byte), Integer), CType(CType(90, Byte), Integer), CType(CType(25, Byte), Integer))
         Me.RichTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.RichTextBox2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.RichTextBox2.Location = New System.Drawing.Point(0, 0)
@@ -600,7 +600,7 @@ Partial Class PrgAbout
         '
         'LinkLabel3
         '
-        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel3.AutoSize = True
         Me.LinkLabel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -616,7 +616,7 @@ Partial Class PrgAbout
         '
         'LinkLabel2
         '
-        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel2.AutoSize = True
         Me.LinkLabel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -632,7 +632,7 @@ Partial Class PrgAbout
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(151, Byte), Integer), CType(CType(251, Byte), Integer))
+        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(123, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

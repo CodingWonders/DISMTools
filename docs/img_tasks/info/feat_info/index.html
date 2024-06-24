@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
@@ -57,11 +61,15 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Image management</a>
     <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -82,6 +90,8 @@
                 <li class="toctree-l3 current"><a class="reference internal current" href="./">Feature information</a>
     <ul class="current">
     <li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#a-better-way-of-viewing-custom-properties">A better way of viewing custom properties</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
     </li>
@@ -147,6 +157,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -168,6 +180,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -229,6 +243,12 @@
 <li>When no features are selected or when the dialog is launched for the first time in the execution of the program, you'll only see brief information about all features, which includes the feature name and its state</li>
 <li>To get information about a specific feature, <strong>select it from the list</strong>. You'll then see that information on the right</li>
 </ul>
+<h2 id="a-better-way-of-viewing-custom-properties">A better way of viewing custom properties</h2>
+<p>DISMTools 0.5 introduces a new way of viewing custom properties of features. This new view allows you to better understand the hierarchy of the properties in a tree view.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/info/cprop_viewer.png" />
+</p>
+
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="../infodlgs/">Image information dialogs</a></li>
@@ -275,7 +295,7 @@
       <script src="../../../search/main.js"></script>
     <script>
         jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable(false);
         });
     </script>
 

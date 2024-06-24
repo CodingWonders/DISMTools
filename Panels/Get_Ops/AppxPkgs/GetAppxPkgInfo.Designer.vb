@@ -50,6 +50,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Label9 = New System.Windows.Forms.Label()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label10 = New System.Windows.Forms.Label()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label55 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label36 = New System.Windows.Forms.Label()
@@ -60,6 +61,10 @@ Partial Class GetAppxPkgInfoDlg
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.SearchPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.FeatureInfoPanel.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
@@ -74,6 +79,9 @@ Partial Class GetAppxPkgInfoDlg
         Me.Panel7.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SearchPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'FeatureInfoPanel
@@ -97,6 +105,7 @@ Partial Class GetAppxPkgInfoDlg
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.Controls.Add(Me.Panel2)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.SearchPanel)
         '
         'SplitContainer2.Panel2
         '
@@ -112,7 +121,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(440, 396)
+        Me.Panel2.Size = New System.Drawing.Size(440, 372)
         Me.Panel2.TabIndex = 1
         '
         'ListBox1
@@ -121,7 +130,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.Location = New System.Drawing.Point(0, 0)
         Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(440, 396)
+        Me.ListBox1.Size = New System.Drawing.Size(440, 372)
         Me.ListBox1.TabIndex = 0
         '
         'Panel3
@@ -169,6 +178,7 @@ Partial Class GetAppxPkgInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label9)
         Me.FlowLayoutPanel3.Controls.Add(Me.PictureBox2)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label10)
+        Me.FlowLayoutPanel3.Controls.Add(Me.LinkLabel1)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
@@ -406,10 +416,23 @@ Partial Class GetAppxPkgInfoDlg
     "incorrect result. If that happens, please report an issue on the GitHub reposito" & _
     "ry"
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(7, 493)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.LinkLabel1.Size = New System.Drawing.Size(194, 15)
+        Me.LinkLabel1.TabIndex = 3
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "This asset is not the one I'm looking for"
+        '
         'Label55
         '
         Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 493)
+        Me.Label55.Location = New System.Drawing.Point(7, 508)
         Me.Label55.Name = "Label55"
         Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label55.Size = New System.Drawing.Size(405, 16)
@@ -508,6 +531,47 @@ Partial Class GetAppxPkgInfoDlg
         Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'SearchPanel
+        '
+        Me.SearchPanel.Controls.Add(Me.Panel1)
+        Me.SearchPanel.Controls.Add(Me.SearchPic)
+        Me.SearchPanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.SearchPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchPanel.Location = New System.Drawing.Point(0, 372)
+        Me.SearchPanel.Name = "SearchPanel"
+        Me.SearchPanel.Size = New System.Drawing.Size(440, 24)
+        Me.SearchPanel.TabIndex = 7
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.SearchBox1)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(24, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(416, 24)
+        Me.Panel1.TabIndex = 3
+        '
+        'SearchBox1
+        '
+        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SearchBox1.cueBanner = "Type here to search for an application..."
+        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
+        Me.SearchBox1.Name = "SearchBox1"
+        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.TabIndex = 1
+        '
+        'SearchPic
+        '
+        Me.SearchPic.Dock = System.Windows.Forms.DockStyle.Left
+        Me.SearchPic.Image = Global.DISMTools.My.Resources.Resources.search_light
+        Me.SearchPic.Location = New System.Drawing.Point(0, 0)
+        Me.SearchPic.Name = "SearchPic"
+        Me.SearchPic.Size = New System.Drawing.Size(24, 24)
+        Me.SearchPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.SearchPic.TabIndex = 2
+        Me.SearchPic.TabStop = False
+        '
         'GetAppxPkgInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -540,6 +604,10 @@ Partial Class GetAppxPkgInfoDlg
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SearchPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -581,5 +649,10 @@ Partial Class GetAppxPkgInfoDlg
     Friend WithEvents Label10 As System.Windows.Forms.Label
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents SearchPanel As System.Windows.Forms.Panel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents SearchBox1 As DISMTools.SearchBox
+    Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
 
 End Class

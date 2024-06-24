@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Overview</a>
@@ -63,11 +67,15 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
     <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -147,6 +155,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -168,6 +178,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -234,8 +246,12 @@
 <li>
 <p>Image management</p>
 <ul>
+<li>Appending changes to a new index in the Windows image</li>
 <li>Applying Windows images</li>
 <li>Capturing Windows images</li>
+<li>Cleaning up mount points</li>
+<li>Exporting Windows images</li>
+<li>Getting image file information</li>
 <li>Performing image cleanup</li>
 </ul>
 </li>
@@ -244,6 +260,7 @@
 <ul>
 <li>Adding packages</li>
 <li>Removing packages</li>
+<li>Getting package information</li>
 </ul>
 </li>
 <li>
@@ -251,14 +268,15 @@
 <ul>
 <li>Enabling features</li>
 <li>Disabling features</li>
+<li>Getting feature information</li>
 </ul>
 </li>
 <li>
 <p>AppX package management</p>
 <ul>
-<li>AppX package documentation</li>
 <li>Adding AppX packages</li>
 <li>Removing AppX packages</li>
+<li>Getting installed AppX package information</li>
 </ul>
 </li>
 <li>
@@ -266,6 +284,7 @@
 <ul>
 <li>Adding capabilities</li>
 <li>Removing capabilities</li>
+<li>Getting capability information</li>
 </ul>
 </li>
 <li>
@@ -273,6 +292,9 @@
 <ul>
 <li>Adding drivers</li>
 <li>Removing drivers</li>
+<li>Exporting drivers to a folder</li>
+<li>Importing drivers from another image or installation</li>
+<li>Getting driver information</li>
 </ul>
 </li>
 </ul>
@@ -280,7 +302,7 @@
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../../getting_started/start/" class="btn btn-neutral float-left" title="Getting started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../whats_new/highlights/" class="btn btn-neutral float-left" title="What's new"><span class="icon icon-circle-arrow-left"></span> Previous</a>
         <a href="../online_inst_mgmt/" class="btn btn-neutral float-right" title="Online installation management mode">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
@@ -304,7 +326,7 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../../getting_started/start/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../../whats_new/highlights/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
       <span><a href="../online_inst_mgmt/" style="color: #fcfcfc">Next &raquo;</a></span>
@@ -318,7 +340,7 @@
       <script src="../../search/main.js"></script>
     <script>
         jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable(false);
         });
     </script>
 

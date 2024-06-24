@@ -1277,7 +1277,7 @@ Public Class ProjProperties
                     Case Is = 18363
                         FeatUpd = "1909 (Vanadium)"
                     Case 18826 To 19041
-                        FeatUpd = "2004 (Vibranium"
+                        FeatUpd = "2004 (Vibranium)"
                     Case 19041 To 19489
                         FeatUpd = "2004+ (Vibranium)"
                     Case 19489 To 19645
@@ -1302,8 +1302,10 @@ Public Class ProjProperties
                         FeatUpd = "23H2 (Zinc)"
                     Case 25801 To 25941
                         FeatUpd = "24H1 (Gallium)"
-                    Case 25942 To 27000     ' 27000 is a relative number
+                    Case 25942 To 27500
                         FeatUpd = "24H2 (Germanium)"
+                    Case Is >= 27500
+                        FeatUpd = "25H1 (Dilithium)"
                 End Select
             Case Else
                 Exit Sub

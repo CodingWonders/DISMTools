@@ -473,6 +473,76 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property create_iso() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("create_iso", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Idle_Blue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Idle_Blue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Idle_Green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Idle_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Ops_Blue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Ops_Blue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_Ops_Green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_Ops_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_ProgressPanel_Blue() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_ProgressPanel_Blue", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property CS_ProgressPanel_Green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("CS_ProgressPanel_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("delete_imgindex", resourceCulture)
@@ -1628,6 +1698,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property progresspanel_logview_hidden() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("progresspanel_logview_hidden", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property progresspanel_logview_shown() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("progresspanel_logview_shown", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property proj_name_edit() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("proj_name_edit", resourceCulture)
@@ -1751,6 +1841,26 @@ Namespace My.Resources
         Friend ReadOnly Property save_glyph_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("save_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property search_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("search_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property search_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("search_light", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2066,9 +2176,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.4.2_upd3.1.
+        '''Bugfixes:
+        '''
+        '''- A case where the program would still show &quot;(~)&quot; when saving capability information has been fixed
+        '''- Fixed an issue where AppX package addition would fail if you applied a license file
+        '''- The Help Documentation browser no longer displays an empty website title in the title bar after clicking external links
+        '''- AppX package and capability background processes are no longer run on Windows PE images if they remain
+        '''- DISM and image version detections have been  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -47,6 +47,10 @@
                 <li class="toctree-l1"><a class="reference internal" href="../../../getting_started/start/">Getting started</a>
                 </li>
               </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
               <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
@@ -57,11 +61,15 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
     <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/apply_image/">Applying an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/capture_image/">Capturing an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
@@ -125,6 +133,8 @@
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#app-installer-support">App Installer support</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#encrypted-application-support">Encrypted application support</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#options">Options</a>
@@ -157,6 +167,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
@@ -178,6 +190,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
     </ul>
                   </li>
@@ -259,7 +273,7 @@
 <td style="text-align: center;">✔</td>
 </tr>
 <tr>
-<td style="text-align: center;">Windows 11/Server vNext</td>
+<td style="text-align: center;">Windows 11/Server 2025</td>
 <td style="text-align: center;">✔</td>
 </tr>
 </tbody>
@@ -274,6 +288,15 @@
 <h3 id="app-installer-support">App Installer support</h3>
 <p>DISMTools 0.3.2 expands the AppX addition capabilities by supporting App Installer files. Simply specify an <code>.appinstaller</code> file or drop it in the package addition list view, and let the program deal with it.</p>
 <p>You can learn more about App Installer files <a href="../appx/#app-installer-files">here</a>.</p>
+<h3 id="encrypted-application-support">Encrypted application support</h3>
+<p>DISMTools 0.5 introduces the ability to add encrypted application packages (<code>.eappx</code>, <code>.emsix</code>, <code>.eappxbundle</code>, and <code>.emsixbundle</code> files) to <strong>active installations</strong>. Simply add those, just like you would with regular applications.</p>
+<p>For standard encrypted applications (not bundles), you can also view standard information about them, thanks to a modified version of <a href="https://github.com/dalion619/UnpEax">UnpEax</a>:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/appx/eappx_support.png" />
+</p>
+
+<p><em>Encrypted application bundle package support will come in a future version.</em></p>
+<p>You may notice that all options are disabled. This is because the program uses a PowerShell command to add these applications, as they can't be added using DISM.</p>
 <h2 id="options">Options</h2>
 <ul>
 <li>A <strong>license file</strong> may be required for an application to be installed, which you can specify in the license file text box. Otherwise, select "Skip license"</li>
@@ -367,7 +390,7 @@
       <script src="../../../search/main.js"></script>
     <script>
         jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
+            SphinxRtdTheme.Navigation.enable(false);
         });
     </script>
 

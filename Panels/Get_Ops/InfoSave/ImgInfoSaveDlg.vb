@@ -48,6 +48,8 @@ Public Class ImgInfoSaveDlg
     Public SkipQuestions As Boolean
     Public AutoCompleteInfo(4) As Boolean
 
+    Public ForceAppxApi As Boolean
+
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -921,6 +923,9 @@ Public Class ImgInfoSaveDlg
         End Select
         Contents &= "----> AppX package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        If MainForm.imgEdition Is Nothing Then
+            MainForm.imgEdition = " "
+        End If
         ' Detect if the image is Windows 8 or later. If not, skip this task
         If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= "    This task is not supported on the specified Windows image. Check that it contains Windows 8 or a later Windows version, and that it isn't a Windows PE image. Skipping task..." & CrLf & CrLf
@@ -983,15 +988,19 @@ Public Class ImgInfoSaveDlg
                                 instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                             End If
                         Next
-                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                            Else
-                                instDir = ""
+                        Try
+                            If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                    instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                    instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                Else
+                                    instDir = "Unknown"
+                                End If
                             End If
-                        End If
+                        Catch ex As Exception
+                            instDir = "Unknown"
+                        End Try
                         Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
                         ' Get store logo asset directory
                         Dim assetDir As String = ""
@@ -1081,7 +1090,7 @@ Public Class ImgInfoSaveDlg
                         ReportChanges(msg(0), 10)
                         If SkipQuestions And AutoCompleteInfo(2) Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                            If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
+                            If Not ForceAppxApi AndAlso MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
                                 For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                                     If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
                                     Select Case MainForm.Language
@@ -1135,15 +1144,19 @@ Public Class ImgInfoSaveDlg
                                             instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                                         End If
                                     Next
-                                    If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                                        If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                                        ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                                        Else
-                                            instDir = ""
+                                    Try
+                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                            Else
+                                                instDir = "Unknown"
+                                            End If
                                         End If
-                                    End If
+                                    Catch ex As Exception
+                                        instDir = "Unknown"
+                                    End Try
                                     Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
                                     ' Get store logo asset directory
                                     Dim assetDir As String = ""
@@ -1354,15 +1367,19 @@ Public Class ImgInfoSaveDlg
                                             instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
                                         End If
                                     Next
-                                    If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                                        If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                                        ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                            instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                                        Else
-                                            instDir = ""
+                                    Try
+                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                            Else
+                                                instDir = "Unknown"
+                                            End If
                                         End If
-                                    End If
+                                    Catch ex As Exception
+                                        instDir = "Unknown"
+                                    End Try
                                     Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
                                     ' Get store logo asset directory
                                     Dim assetDir As String = ""
@@ -1628,6 +1645,9 @@ Public Class ImgInfoSaveDlg
         End Select
         Contents &= "----> Capability information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        If MainForm.imgEdition Is Nothing Then
+            MainForm.imgEdition = " "
+        End If
         If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= "    This task is not supported on the specified Windows image. Check that it contains Windows 10 or a later Windows version, and that it isn't a Windows PE image. Skipping task..." & CrLf & CrLf
             Exit Sub
@@ -1734,8 +1754,8 @@ Public Class ImgInfoSaveDlg
                                         "    - Display name: " & capInfo.DisplayName & CrLf & _
                                         "    - Capability description: " & capInfo.Description & CrLf & _
                                         "    - Sizes:" & CrLf & _
-                                        "      - Download size: " & capInfo.DownloadSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")" & CrLf & _
-                                        "      - Install size: " & capInfo.InstallSize & " bytes (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")" & CrLf & CrLf
+                                        "      - Download size: " & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & CrLf & _
+                                        "      - Install size: " & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "") & CrLf & CrLf
                         Next
                         Contents &= "  - Complete capability information has been gathered" & CrLf & CrLf
                     Else

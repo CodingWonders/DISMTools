@@ -18,13 +18,22 @@ Public Class GetPkgInfoDlg
             ForeColor = Color.White
             ListBox1.BackColor = Color.FromArgb(31, 31, 31)
             ListBox2.BackColor = Color.FromArgb(31, 31, 31)
+            cPropPathView.BackColor = Color.FromArgb(31, 31, 31)
+            cPropValue.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             ListBox1.BackColor = Color.FromArgb(238, 238, 242)
             ListBox2.BackColor = Color.FromArgb(238, 238, 242)
+            cPropPathView.BackColor = Color.FromArgb(238, 238, 242)
+            cPropValue.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        SearchBox1.BackColor = BackColor
+        SearchBox1.ForeColor = ForeColor
+        cPropPathView.ForeColor = ForeColor
+        cPropValue.ForeColor = ForeColor
+        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -89,6 +98,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                         PackageFileLink.Text = "I want to get information about package files"
                         OpenFileDialog1.Title = "Locate package files"
+                        SearchBox1.cueBanner = "Type here to search for a package..."
                     Case "ESN"
                         Text = "Obtener información de paquetes"
                         Label1.Text = Text
@@ -150,6 +160,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
                         PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
                         OpenFileDialog1.Title = "Ubique los archivos de paquetes"
+                        SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
                     Case "FRA"
                         Text = "Obtenir des informations sur les paquets"
                         Label1.Text = Text
@@ -211,6 +222,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
                         PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
                         OpenFileDialog1.Title = "Localiser les fichiers des paquets"
+                        SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
                     Case "PTB", "PTG"
                         Text = "Obter informações sobre o pacote"
                         Label1.Text = Text
@@ -272,6 +284,7 @@ Public Class GetPkgInfoDlg
                         InstalledPackageLink.Text = "Pretendo obter informações sobre os pacotes instalados na imagem"
                         PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
                         OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
+                        SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
                 End Select
             Case 1
                 Text = "Get package information"
@@ -334,6 +347,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "I want to get information about installed packages in the image"
                 PackageFileLink.Text = "I want to get information about package files"
                 OpenFileDialog1.Title = "Locate package files"
+                SearchBox1.cueBanner = "Type here to search for a package..."
             Case 2
                 Text = "Obtener información de paquetes"
                 Label1.Text = Text
@@ -395,6 +409,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "Deseo obtener información acerca de paquetes instalados en la imagen"
                 PackageFileLink.Text = "Deseo obtener información acerca de archivos de paquetes"
                 OpenFileDialog1.Title = "Ubique los archivos de paquetes"
+                SearchBox1.cueBanner = "Escriba aquí para buscar un paquete..."
             Case 3
                 Text = "Obtenir des informations sur les paquets"
                 Label1.Text = Text
@@ -456,6 +471,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "Je souhaite obtenir des informations sur les paquets installés dans l'image."
                 PackageFileLink.Text = "Je souhaite obtenir des informations sur les fichiers de paquets"
                 OpenFileDialog1.Title = "Localiser les fichiers des paquets"
+                SearchBox1.cueBanner = "Tapez ici pour rechercher un paquet..."
             Case 4
                 Text = "Obter informações sobre o pacote"
                 Label1.Text = Text
@@ -517,6 +533,7 @@ Public Class GetPkgInfoDlg
                 InstalledPackageLink.Text = "Pretendo obter informações sobre os pacotes instalados na imagem"
                 PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
                 OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
+                SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
         End Select
         ListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
@@ -537,6 +554,7 @@ Public Class GetPkgInfoDlg
         PackageFileInfoPanel.Visible = False
         Panel4.Visible = False
         Panel7.Visible = True
+        SearchBox1.Text = ""
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -627,6 +645,9 @@ Public Class GetPkgInfoDlg
                     Application.DoEvents()
                     Thread.Sleep(100)
                 End While
+                cPropPathView.Nodes.Clear()
+                cPropName.Text = ""
+                cPropValue.Text = ""
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -704,9 +725,34 @@ Public Class GetPkgInfoDlg
                         Label57.Text = ""
                         Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
                         If cProps.Count > 0 Then
+                            Label57.Visible = False
+                            CPropViewer.Visible = True
+                            Dim cPropContents As String = ""
                             For Each cProp As DismCustomProperty In cProps
-                                Label57.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
+                                cPropContents &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
                             Next
+                            PopulateTreeView(cPropPathView, cPropContents.Replace("- ", "").Trim())
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            cPropValue.Text = "Please select or expand an entry."
+                                        Case "ESN"
+                                            cPropValue.Text = "Por favor, seleccione o expanda una entrada."
+                                        Case "FRA"
+                                            cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
+                                        Case "PTB", "PTG"
+                                            cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
+                                    End Select
+                                Case 1
+                                    cPropValue.Text = "Please select or expand an entry."
+                                Case 2
+                                    cPropValue.Text = "Por favor, seleccione o expanda una entrada."
+                                Case 3
+                                    cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
+                                Case 4
+                                    cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
+                            End Select
                         Else
                             Select Case MainForm.Language
                                 Case 0
@@ -729,6 +775,8 @@ Public Class GetPkgInfoDlg
                                 Case 4
                                     Label57.Text = "Nenhum"
                             End Select
+                            Label57.Visible = True
+                            CPropViewer.Visible = False
                         End If
                         Label59.Text = ""
                         Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
@@ -795,6 +843,74 @@ Public Class GetPkgInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+    End Sub
+
+    Private Sub PopulateTreeView(treeView As TreeView, input As String)
+        Dim lines As String() = input.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
+        For Each line As String In lines
+            ' Split the line at the last colon to get the path and value
+            Dim colonIndex As Integer = line.LastIndexOf(": ")
+            If colonIndex = -1 Then Continue For ' Skip lines without a colon
+            Dim path As String = line.Substring(0, colonIndex).Trim()
+            Dim value As String = line.Substring(colonIndex + 1).Trim()
+            Dim pathParts As String() = path.Split("\"c)
+            AddNodeRecursive(treeView.Nodes, pathParts, 0, value)
+        Next
+    End Sub
+
+    Private Sub AddNodeRecursive(parentNodes As TreeNodeCollection, parts As String(), startIndex As Integer, value As String)
+        If startIndex >= parts.Length Then
+            Return
+        End If
+        Dim nodeName As String = parts(startIndex).Trim()
+        Dim existingNode As TreeNode = parentNodes.Cast(Of TreeNode)().FirstOrDefault(Function(n) n.Text = nodeName)
+        If existingNode Is Nothing Then
+            existingNode = New TreeNode(nodeName)
+            parentNodes.Add(existingNode)
+        Else
+            If startIndex = parts.Length - 1 Then
+                ' If the node already exists and we are at the last part, add a new node
+                Dim newNode As New TreeNode(nodeName)
+                newNode.Tag = value
+                parentNodes.Add(newNode)
+                Return
+            End If
+        End If
+        If startIndex = parts.Length - 1 Then
+            existingNode.Tag = value
+        Else
+            AddNodeRecursive(existingNode.Nodes, parts, startIndex + 1, value)
+        End If
+    End Sub
+
+    Private Sub cPropPathView_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles cPropPathView.AfterSelect
+        cPropName.Text = cPropPathView.SelectedNode.Text
+        Dim selectedNode As TreeNode = cPropPathView.SelectedNode
+        If selectedNode IsNot Nothing AndAlso selectedNode.Tag IsNot Nothing Then
+            cPropValue.Text = selectedNode.Tag.ToString()
+        Else
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
+                        Case "ESN"
+                            cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
+                        Case "FRA"
+                            cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
+                        Case "PTB", "PTG"
+                            cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
+                    End Select
+                Case 1
+                    cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
+                Case 2
+                    cPropValue.Text = "No se ha definido un valor. Si el elemento seleccionado tiene elementos secundarios, expándalo."
+                Case 3
+                    cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
+                Case 4
+                    cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
+            End Select
+        End If
     End Sub
 
     Sub GetPackageFileInformation()
@@ -1143,6 +1259,7 @@ Public Class GetPkgInfoDlg
             ImgInfoSaveDlg.OnlineMode = MainForm.OnlineManagement
             ImgInfoSaveDlg.SkipQuestions = MainForm.SkipQuestions
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
+            ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = If(InfoFromPackageFilesPanel.Visible, 3, 2)
             If InfoFromPackageFilesPanel.Visible Then
                 For Each pkgFile In ListBox1.Items
@@ -1151,6 +1268,27 @@ Public Class GetPkgInfoDlg
             End If
             ImgInfoSaveDlg.ShowDialog()
             InfoSaveResults.Show()
+        End If
+    End Sub
+
+    Sub SearchPackages(sQuery As String)
+        If InstalledPkgInfo.Count > 0 Then
+            For Each InstalledPackage As DismPackage In InstalledPkgInfo
+                If InstalledPackage.PackageName.ToLower().Contains(sQuery.ToLower()) Then
+                    ListBox2.Items.Add(InstalledPackage.PackageName)
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
+        ListBox2.Items.Clear()
+        If SearchBox1.Text <> "" Then
+            SearchPackages(SearchBox1.Text)
+        Else
+            For Each InstalledPackage As DismPackage In InstalledPkgInfo
+                ListBox2.Items.Add(InstalledPackage.PackageName)
+            Next
         End If
     End Sub
 End Class

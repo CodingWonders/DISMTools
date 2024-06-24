@@ -1,10 +1,4 @@
-<!--
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c753c9a-1440-44cb-a742-04e71d077dff">
-</p>
--->
-
-![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/7f55a099-7e51-498e-9a31-c433fab7d8b9)
+![Product image](https://github.com/CodingWonders/DISMTools/assets/101426328/84dda638-1475-48c8-8d90-39a85115cc20)
 
 <!-- Tags (powered by Shields.io) -->
 
@@ -35,7 +29,15 @@ There are also more GUIs for DISM, but they are way less known, so they are not 
 
 ### Working with projects
 
-DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+
+DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c39c657-30fa-4cb7-99eb-c502574efc00" />
+</p>
+
+The program also supports setting and removing file associations for projects with the click of a button (only on portable installations), so you can load your projects instantly by double-clicking them. You can also **copy your installed deployment tools** to your projects, allowing you to use those anywhere you take them.
 
 ### Manage your active installation, or installations on any drive
 
@@ -58,7 +60,7 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 - **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/ad39f3ba-b29d-4874-a219-f2595bf8073a" />
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/54b561f7-cc62-4b6f-8683-73ca382af4d2" />
 </p>
 
 - **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
@@ -89,6 +91,24 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/d668f94e-0d39-49bb-b98f-ec045fed725b" />
 </p>
 
+- **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/102d829d-aeb1-4697-9225-27775bea2b61" />
+</p>
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/af2a2655-02de-4618-9423-30882303b424" />
+</p>
+
+> [!NOTE]
+> The Windows ADK and its Windows PE plugin are required for this feature to work
+
+- **View who signed an installed driver.** When getting installed driver information, you can view the signer information of a driver if it is signed:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/9c84b0c3-6571-4b28-8ee4-44c4e6511e89" />
+</p>
+
 ## Supported actions
 
 The following actions are supported by DISMTools:
@@ -107,6 +127,8 @@ The following actions are supported by DISMTools:
   - SWM file merger
   - Component cleanup
   - Image splitting
+  - Appending changes to Windows images
+  - Exporting Windows images to new image files
 - OS packages and features
   - Package addition and removal
   - Feature enablement and disablement
@@ -154,7 +176,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: April 28, 2024 (Alexandra Sava)</i></p>
+	<p align="center"><i>Last updated: May 25, 2024 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -171,7 +193,8 @@ If you want to grab a copy straight from the source code, follow these instructi
 1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
-4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+4. Scroll down on the Solution Explorer until you find `UnpEax`, right-click it and select Build
+5. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 ### Additional startup flags
 
@@ -190,6 +213,10 @@ You should have this setting configured like this:
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/4c9c9384-71bd-45fc-9e17-460f107a50f9" />
 </p>
 
+### JetBrains users
+
+If you use an IDE from JetBrains, you can also work on DISMTools. However, you can only modify the source code of forms, so there will not be any designer.
+
 ## Contributions
 
 If you want to contribute to this project, you can do so in many ways:
@@ -201,9 +228,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-<!-- However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2424_relcndid/Installer/Output/dt_setup.exe). -->
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2462_relcndid/Installer/Nightly/dt_setup.exe).
 
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.4.2, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.5, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

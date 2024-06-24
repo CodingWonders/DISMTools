@@ -31,6 +31,10 @@ Partial Class GetFeatureInfoDlg
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.SearchPanel = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.SearchBox1 = New DISMTools.SearchBox()
+        Me.SearchPic = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
@@ -45,7 +49,12 @@ Partial Class GetFeatureInfoDlg
         Me.Label41 = New System.Windows.Forms.Label()
         Me.Label40 = New System.Windows.Forms.Label()
         Me.Label43 = New System.Windows.Forms.Label()
-        Me.Label42 = New System.Windows.Forms.Label()
+        Me.CPropViewer = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.cPropPathView = New System.Windows.Forms.TreeView()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.cPropValue = New System.Windows.Forms.TextBox()
+        Me.cPropName = New System.Windows.Forms.Label()
         Me.Label55 = New System.Windows.Forms.Label()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.Label36 = New System.Windows.Forms.Label()
@@ -54,6 +63,7 @@ Partial Class GetFeatureInfoDlg
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
+        Me.Label42 = New System.Windows.Forms.Label()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FeatureInfoPanel.SuspendLayout()
@@ -62,9 +72,15 @@ Partial Class GetFeatureInfoDlg
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.SearchPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         Me.Panel4.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
+        Me.CPropViewer.SuspendLayout()
+        Me.TableLayoutPanel1.SuspendLayout()
+        Me.Panel6.SuspendLayout()
         Me.Panel5.SuspendLayout()
         Me.Panel7.SuspendLayout()
         Me.SuspendLayout()
@@ -123,6 +139,7 @@ Partial Class GetFeatureInfoDlg
         'SplitContainer2.Panel1
         '
         Me.SplitContainer2.Panel1.Controls.Add(Me.Panel2)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.SearchPanel)
         '
         'SplitContainer2.Panel2
         '
@@ -138,7 +155,7 @@ Partial Class GetFeatureInfoDlg
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(440, 396)
+        Me.Panel2.Size = New System.Drawing.Size(440, 372)
         Me.Panel2.TabIndex = 1
         '
         'ListView1
@@ -148,7 +165,7 @@ Partial Class GetFeatureInfoDlg
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(0, 0)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(440, 396)
+        Me.ListView1.Size = New System.Drawing.Size(440, 372)
         Me.ListView1.TabIndex = 5
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -162,6 +179,47 @@ Partial Class GetFeatureInfoDlg
         '
         Me.ColumnHeader2.Text = "Feature state"
         Me.ColumnHeader2.Width = 118
+        '
+        'SearchPanel
+        '
+        Me.SearchPanel.Controls.Add(Me.Panel1)
+        Me.SearchPanel.Controls.Add(Me.SearchPic)
+        Me.SearchPanel.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.SearchPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchPanel.Location = New System.Drawing.Point(0, 372)
+        Me.SearchPanel.Name = "SearchPanel"
+        Me.SearchPanel.Size = New System.Drawing.Size(440, 24)
+        Me.SearchPanel.TabIndex = 6
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.SearchBox1)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(24, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(416, 24)
+        Me.Panel1.TabIndex = 3
+        '
+        'SearchBox1
+        '
+        Me.SearchBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.SearchBox1.cueBanner = "Type here to search for a feature..."
+        Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
+        Me.SearchBox1.Name = "SearchBox1"
+        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.TabIndex = 1
+        '
+        'SearchPic
+        '
+        Me.SearchPic.Dock = System.Windows.Forms.DockStyle.Left
+        Me.SearchPic.Image = Global.DISMTools.My.Resources.Resources.search_light
+        Me.SearchPic.Location = New System.Drawing.Point(0, 0)
+        Me.SearchPic.Name = "SearchPic"
+        Me.SearchPic.Size = New System.Drawing.Size(24, 24)
+        Me.SearchPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.SearchPic.TabIndex = 2
+        Me.SearchPic.TabStop = False
         '
         'Panel3
         '
@@ -199,6 +257,7 @@ Partial Class GetFeatureInfoDlg
         Me.FlowLayoutPanel3.Controls.Add(Me.Label40)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label43)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label42)
+        Me.FlowLayoutPanel3.Controls.Add(Me.CPropViewer)
         Me.FlowLayoutPanel3.Controls.Add(Me.Label55)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
@@ -327,25 +386,79 @@ Partial Class GetFeatureInfoDlg
         Me.Label43.TabIndex = 0
         Me.Label43.Text = "Custom properties:"
         '
-        'Label42
+        'CPropViewer
         '
-        Me.Label42.AutoEllipsis = True
-        Me.Label42.AutoSize = True
-        Me.Label42.Location = New System.Drawing.Point(7, 179)
-        Me.Label42.Name = "Label42"
-        Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label42.Size = New System.Drawing.Size(38, 15)
-        Me.Label42.TabIndex = 0
-        Me.Label42.Text = "Label8"
-        Me.Label42.UseMnemonic = False
+        Me.CPropViewer.Controls.Add(Me.TableLayoutPanel1)
+        Me.CPropViewer.Location = New System.Drawing.Point(7, 197)
+        Me.CPropViewer.Name = "CPropViewer"
+        Me.CPropViewer.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.CPropViewer.Size = New System.Drawing.Size(405, 337)
+        Me.CPropViewer.TabIndex = 2
+        '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 1
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Controls.Add(Me.cPropPathView, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Panel6, 0, 1)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 2)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(405, 335)
+        Me.TableLayoutPanel1.TabIndex = 1
+        '
+        'cPropPathView
+        '
+        Me.cPropPathView.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.cPropPathView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cPropPathView.Location = New System.Drawing.Point(3, 3)
+        Me.cPropPathView.Name = "cPropPathView"
+        Me.cPropPathView.Size = New System.Drawing.Size(399, 161)
+        Me.cPropPathView.TabIndex = 0
+        '
+        'Panel6
+        '
+        Me.Panel6.Controls.Add(Me.cPropValue)
+        Me.Panel6.Controls.Add(Me.cPropName)
+        Me.Panel6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel6.Location = New System.Drawing.Point(3, 170)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(399, 162)
+        Me.Panel6.TabIndex = 1
+        '
+        'cPropValue
+        '
+        Me.cPropValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cPropValue.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.cPropValue.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cPropValue.Location = New System.Drawing.Point(1, 24)
+        Me.cPropValue.Multiline = True
+        Me.cPropValue.Name = "cPropValue"
+        Me.cPropValue.ReadOnly = True
+        Me.cPropValue.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.cPropValue.Size = New System.Drawing.Size(395, 135)
+        Me.cPropValue.TabIndex = 1
+        '
+        'cPropName
+        '
+        Me.cPropName.AutoEllipsis = True
+        Me.cPropName.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cPropName.Location = New System.Drawing.Point(4, 4)
+        Me.cPropName.Name = "cPropName"
+        Me.cPropName.Size = New System.Drawing.Size(392, 15)
+        Me.cPropName.TabIndex = 0
         '
         'Label55
         '
         Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(7, 194)
+        Me.Label55.Location = New System.Drawing.Point(7, 537)
         Me.Label55.Name = "Label55"
         Me.Label55.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label55.Size = New System.Drawing.Size(405, 16)
+        Me.Label55.Size = New System.Drawing.Size(405, 6)
         Me.Label55.TabIndex = 1
         Me.Label55.UseMnemonic = False
         '
@@ -417,6 +530,19 @@ Partial Class GetFeatureInfoDlg
         Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
         '
+        'Label42
+        '
+        Me.Label42.AutoEllipsis = True
+        Me.Label42.AutoSize = True
+        Me.Label42.Location = New System.Drawing.Point(7, 179)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label42.Size = New System.Drawing.Size(38, 15)
+        Me.Label42.TabIndex = 3
+        Me.Label42.Text = "Label8"
+        Me.Label42.UseMnemonic = False
+        Me.Label42.Visible = False
+        '
         'GetFeatureInfoDlg
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -443,10 +569,18 @@ Partial Class GetFeatureInfoDlg
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer2.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.SearchPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.SearchPic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel3.ResumeLayout(False)
         Me.Panel4.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.FlowLayoutPanel3.PerformLayout()
+        Me.CPropViewer.ResumeLayout(False)
+        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
         Me.Panel5.ResumeLayout(False)
         Me.Panel7.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -476,14 +610,24 @@ Partial Class GetFeatureInfoDlg
     Friend WithEvents Label41 As System.Windows.Forms.Label
     Friend WithEvents Label40 As System.Windows.Forms.Label
     Friend WithEvents Label43 As System.Windows.Forms.Label
-    Friend WithEvents Label42 As System.Windows.Forms.Label
     Friend WithEvents Panel5 As System.Windows.Forms.Panel
     Friend WithEvents Label36 As System.Windows.Forms.Label
     Friend WithEvents Panel7 As System.Windows.Forms.Panel
     Friend WithEvents Label37 As System.Windows.Forms.Label
     Friend WithEvents FlowLayoutPanel4 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label55 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
+    Friend WithEvents SearchPanel As System.Windows.Forms.Panel
+    Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents SearchBox1 As DISMTools.SearchBox
+    Friend WithEvents CPropViewer As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents cPropPathView As System.Windows.Forms.TreeView
+    Friend WithEvents Panel6 As System.Windows.Forms.Panel
+    Friend WithEvents cPropValue As System.Windows.Forms.TextBox
+    Friend WithEvents cPropName As System.Windows.Forms.Label
+    Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents Label42 As System.Windows.Forms.Label
 
 End Class
