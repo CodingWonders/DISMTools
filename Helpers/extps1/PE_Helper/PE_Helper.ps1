@@ -413,11 +413,14 @@ function Start-PECustomization
                     reg unload "HKLM\WINPESOFT"
                     if (-not $?)
                     {
+                        $attempts = 0
                         do
                         {
+                            $attempts += 1
                             Start-Sleep -Milliseconds 500
                             reg unload "HKLM\WINPESOFT"
                         } until ($?)
+                        Write-Host "Registry closed successfully after $attempts attempt(s)"
                     }
                 }
                 else
@@ -694,7 +697,7 @@ function Start-OSApplication
         foreach ($driver in $drivers)
         {
             Write-Host "Adding driver `"$driver`"..."
-            Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false
+            Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false | Out-Null
         }
         # Perform serviceability tests one more time
         if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
@@ -715,7 +718,6 @@ function Get-SystemArchitecture
     # Detect CPU architecture and compare with list
     switch (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture).ToString())
     {
-        # AMD64
         "0"{
             return "i386"
         }
