@@ -1250,6 +1250,12 @@
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_x86.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\DIM\amd64\DT-DIM.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
