@@ -685,6 +685,24 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
+    $driverPath = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))DT_InstDrvs.txt"
+    if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
+    {
+        Write-Host "Adding drivers to the target image..."
+        # Add drivers that were previously added to the Windows PE using the DIM
+        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        foreach ($driver in $drivers)
+        {
+            Write-Host "Adding driver `"$driver`"..."
+            Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false
+        }
+        # Perform serviceability tests one more time
+        if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
+    }
+    if (Test-Path "$($driveLetter):\`$DISMTOOLS.~LS")
+    {
+        Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+    }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
@@ -1121,13 +1139,35 @@ function Start-DismCommand
                 Remove-WindowsCapability -Path "$ImagePath" -Name $CapabilityRemovalName -NoRestart | Out-Null
             }
             "Add-Driver" {
+                $scratchDir = ""
+                if ((Test-Path -Path "$($ImagePath)`$DISMTOOLS.~LS") -and ((Get-ChildItem "$($ImagePath)`$DISMTOOLS.~LS\PackageTemp" -Directory).Count -eq 1))
+                {
+                    foreach ($dir in (Get-ChildItem "$($ImagePath)`$DISMTOOLS.~LS\PackageTemp" -Directory))
+                    {
+                        $scratchDir = $dir.FullName
+                    }
+                }
                 if ($DriverAdditionRecurse)
                 {
-                    Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -Recurse -NoRestart | Out-Null
+                    if ($scratchDir -ne "")
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -ScratchDirectory "$scratchDir" -Recurse | Out-Null
+                    }
+                    else
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -Recurse | Out-Null
+                    }
                 }
                 else
                 {
-                    Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -NoRestart | Out-Null
+                    if ($scratchDir -ne "")
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -ScratchDirectory "$scratchDir" | Out-Null
+                    }
+                    else
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" | Out-Null
+                    }
                 }
             }
             default {
@@ -1190,13 +1230,13 @@ function Set-Serviceability
     }
     else
     {
-        Write-Host "Serviceability tests have failed. The image is not valid."        
-    }
-    if (($scratchDir -ne "") -and (Test-Path -Path "$scratchDir"))
-    {
-        Write-Host "Removing temporary directory..."
-        Remove-Item -Path "$scratchDir" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-        Remove-Item -Path "$driveLetter\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        Write-Host "Serviceability tests have failed. The image is not valid."
+        if (($scratchDir -ne "") -and (Test-Path -Path "$scratchDir"))
+        {
+            Write-Host "Removing temporary directory..."
+            Remove-Item -Path "$scratchDir" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+            Remove-Item -Path "$driveLetter\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        }
     }
 }
 
