@@ -1,0 +1,5 @@
+﻿Windows Registry Editor Version 5.00
+
+; Set registry to let DISMTools detect Windows ADKs from Windows 11 onwards (ADK MUST BE INSTALLED BEFORE MERGING THIS KEY!!!)
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WIMMount]
+"AdkInstallation"=dword:00000001
