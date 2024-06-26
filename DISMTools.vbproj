@@ -1659,6 +1659,9 @@ IF NOT EXIST scratch (
 :: Copy the Internet Explorer browser emulation registry file to the program directory
 copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
 
+:: Copy registry file for ADK installations
+copy /y "$(SolutionDir)Tools\DT_WinADK.reg" "DT_WinADK.reg"
+
 IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	md "Tools\UnpEax"
 	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
