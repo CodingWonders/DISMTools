@@ -67,6 +67,17 @@ Public Class ExceptionForm
                 Exit_Btn.Text = "Sair"
                 copySuccess = "Esta informação foi copiada para a área de transferência."
                 copyFail = "Terá de copiar esta informação manualmente."
+            Case "ITA"
+                Text = "DISMTools - Errore interno"
+                Label1.Text = "Ci scusiamo per l'inconveniente, ma DISMTools ha riscontrato un errore che non è stato in grado di gestire e abbiamo bisogno del vostro aiuto per continuare." & CrLf & CrLf & "Ecco le informazioni sull'errore se ne avete bisogno:"
+                Label2.Text = "Per favore, aiutateci a risolvere questo problema"
+                Label3.Text = "Per evitare che questo problema si ripeta, vorremmo saperne di più segnalando un problema sul repository GitHub. Per segnalare un feedback è necessario un account GitHub"
+                Label4.Text = "È possibile continuare a eseguire il programma facendo clic su Continua. Tuttavia, se questo errore viene visualizzato per la seconda volta, è possibile chiudere forzatamente il programma facendo clic su Exit. Si noti che le modifiche apportate ai progetti e quelle nell'elenco dei Recenti non verranno salvate." & CrLf & CrLf & "Cosa si desidera fare?"
+                Issue_Btn.Text = "Segnala questo problema"
+                Continue_Btn.Text = "Continua"
+                Exit_Btn.Text = "Esci"
+                copySuccess = "Queste informazioni sono state copiate negli appunti"
+                copyFail = "È necessario copiare queste informazioni manualmente"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

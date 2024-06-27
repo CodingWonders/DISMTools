@@ -32,6 +32,10 @@ Public Class OSNoRollbackErrorDlg
                         Label1.Text = "Não é possível retroceder para uma versão anterior"
                         Label2.Text = "Não foram detectadas versões antigas, porque os seus ficheiros não foram encontrados. Poderá ter esta versão há mais tempo do que a janela de desinstalação lhe permite, ou poderá ter eliminado os ficheiros da versão antiga (para poupar espaço). Não precisa de fazer nada"
                         OK_Button.Text = "OK"
+                    Case "ITA"
+                        Label1.Text = "Non è possibile tornare a una versione precedente"
+                        Label2.Text = "Non è stata rilevata alcuna vecchia versione, perché i suoi file non sono stati trovati. È possibile che si disponga di questa versione da un tempo superiore a quello consentito dalla finestra di disinstallazione, oppure che siano stati cancellati i file della vecchia versione (per risparmiare spazio). Non è necessario fare nulla"
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Label1.Text = "You can't roll back to an older version"
@@ -48,6 +52,10 @@ Public Class OSNoRollbackErrorDlg
             Case 4
                 Label1.Text = "Não é possível retroceder para uma versão anterior"
                 Label2.Text = "Não foram detectadas versões antigas, porque os seus ficheiros não foram encontrados. Poderá ter esta versão há mais tempo do que a janela de desinstalação lhe permite, ou poderá ter eliminado os ficheiros da versão antiga (para poupar espaço). Não precisa de fazer nada"
+                OK_Button.Text = "OK"
+            Case 5
+                Label1.Text = "Non è possibile tornare a una versione precedente"
+                Label2.Text = "Non è stata rilevata alcuna vecchia versione, perché i suoi file non sono stati trovati. È possibile che si disponga di questa versione da un tempo superiore a quello consentito dalla finestra di disinstallazione, oppure che siano stati cancellati i file della vecchia versione (per risparmiare spazio). Non è necessario fare nulla"
                 OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

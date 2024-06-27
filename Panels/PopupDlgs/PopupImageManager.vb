@@ -53,6 +53,17 @@ Public Class PopupImageManager
                         ListView1.Columns(3).Text = "Estado"
                         ListView1.Columns(4).Text = "Permissões de leitura/escrita?"
                         ListView1.Columns(5).Text = "Versão"
+                    Case "ITA"
+                        Text = "Scegli immagine"
+                        Button1.Text = "OK"
+                        Button2.Text = "Annulla"
+                        Label1.Text = "Scegli un'immagine dall'elenco sottostante:"
+                        ListView1.Columns(0).Text = "File immagine"
+                        ListView1.Columns(1).Text = "Indice"
+                        ListView1.Columns(2).Text = "Directory di montaggio"
+                        ListView1.Columns(3).Text = "Stato"
+                        ListView1.Columns(4).Text = "Permessi di lettura/scrittura?"
+                        ListView1.Columns(5).Text = "Versione"
                 End Select
             Case 1
                 Text = "Pick image"
@@ -98,6 +109,17 @@ Public Class PopupImageManager
                 ListView1.Columns(3).Text = "Estado"
                 ListView1.Columns(4).Text = "Permissões de leitura/escrita?"
                 ListView1.Columns(5).Text = "Versão"
+            Case 5
+                Text = "Scegli immagine"
+                Button1.Text = "OK"
+                Button2.Text = "Annulla"
+                Label1.Text = "Scegli un'immagine dall'elenco sottostante:"
+                ListView1.Columns(0).Text = "File immagine"
+                ListView1.Columns(1).Text = "Indice"
+                ListView1.Columns(2).Text = "Directory di montaggio"
+                ListView1.Columns(3).Text = "Stato"
+                ListView1.Columns(4).Text = "Permessi di lettura/scrittura?"
+                ListView1.Columns(5).Text = "Versione"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -127,6 +149,8 @@ Public Class PopupImageManager
                             MsgBox("Veuillez sélectionner une image et réessayer.", vbOKOnly + vbInformation, Text)
                         Case "PTB", "PTG"
                             MsgBox("Seleccione uma imagem e tente novamente.", vbOKOnly + vbInformation, Text)
+                        Case "ITA"
+                            MsgBox("Selezionare un'immagine e riprovare", vbOKOnly + vbInformation, Text)
                     End Select
                 Case 1
                     MsgBox("Please select an image and try again.", vbOKOnly + vbInformation, Text)
@@ -136,6 +160,8 @@ Public Class PopupImageManager
                     MsgBox("Veuillez sélectionner une image et réessayer.", vbOKOnly + vbInformation, Text)
                 Case 4
                     MsgBox("Seleccione uma imagem e tente novamente.", vbOKOnly + vbInformation, Text)
+                Case 5
+                    MsgBox("Selezionare un'immagine e riprovare", vbOKOnly + vbInformation, Text)
             End Select
             Exit Sub
         End If

@@ -24,6 +24,8 @@ Public Class EnableFeat
                             MessageBox.Show(MainForm, "Veuillez sélectionner les caractéristiques à activer et réessayer.", "Aucune caractéristique sélectionnée", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         Case "PTB", "PTG"
                             MessageBox.Show(MainForm, "Por favor, seleccione as características a ativar e tente novamente.", "Nenhuma caraterística selecionada", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Case "ITA"
+                            MessageBox.Show(MainForm, "Selezionare le caratteristiche da abilitare e riprovare", "Nessuna funzione selezionata", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Select
                 Case 1
                     MessageBox.Show(MainForm, "Please select features to enable, and try again.", "No features selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -33,6 +35,8 @@ Public Class EnableFeat
                     MessageBox.Show(MainForm, "Veuillez sélectionner les caractéristiques à activer et réessayer.", "Aucune caractéristique sélectionnée", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Case 4
                     MessageBox.Show(MainForm, "Por favor, seleccione as características a ativar e tente novamente.", "Nenhuma caraterística selecionada", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Case 5
+                    MessageBox.Show(MainForm, "Selezionare le caratteristiche da abilitare e riprovare", "Nessuna funzione selezionata", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Select
             Exit Sub
         Else
@@ -48,7 +52,7 @@ Public Class EnableFeat
             End Try
             For x = 0 To featEnablementCount - 1
                 If MainForm.OnlineManagement And CheckBox4.Checked Then Exit For
-                If ListView1.CheckedItems(x).SubItems(1).Text = "Removed" Or ListView1.CheckedItems(x).SubItems(1).Text = "Eliminado" Or ListView1.CheckedItems(x).SubItems(1).Text = "Supprimée" Or ListView1.CheckedItems(x).SubItems(1).Text = "Removido" Then
+                If ListView1.CheckedItems(x).SubItems(1).Text = "Removed" Or ListView1.CheckedItems(x).SubItems(1).Text = "Eliminado" Or ListView1.CheckedItems(x).SubItems(1).Text = "Supprimée" Or ListView1.CheckedItems(x).SubItems(1).Text = "Removido" Or ListView1.CheckedItems(x).SubItems(1).Text = "Rimosso" Then
                     If RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
                         Select Case MainForm.Language
                             Case 0
@@ -73,6 +77,11 @@ Public Class EnableFeat
                                             CheckBox2.Checked = True
                                             Button2.PerformClick()
                                         End If
+                                    Case "ITA"
+                                        If MsgBox("Alcune caratteristiche di questa immagine richiedono l'indicazione di un'origine per essere abilitate. L'origine specificata non è valida per questa operazione." & CrLf & CrLf & If(RichTextBox1.Text = "", "Specificare un'origine valida e riprovare.", "Assicurarsi che l'origine esista nel file system e riprovare"), vbOKOnly + vbCritical, "Abilitare le caratteristiche") = MsgBoxResult.Ok Then
+                                            CheckBox2.Checked = True
+                                            Button2.PerformClick()
+                                        End If
                                 End Select
                             Case 1
                                 If MsgBox("Some features in this image require specifying a source for them to be enabled. The specified source is not valid for this operation." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please specify a valid source and try again.", "Please make sure the source exists in the file system and try again."), vbOKOnly + vbCritical, "Enable features") = MsgBoxResult.Ok Then
@@ -91,6 +100,11 @@ Public Class EnableFeat
                                 End If
                             Case 4
                                 If MsgBox("Algumas características desta imagem requerem a especificação de uma origem para serem activadas. A origem especificada não é válida para esta operação." & CrLf & CrLf & If(RichTextBox1.Text = "", "Especifique uma origem válida e tente novamente.", "Certifique-se de que a origem existe no sistema de ficheiros e tente novamente."), vbOKOnly + vbCritical, "Ativar características") = MsgBoxResult.Ok Then
+                                    CheckBox2.Checked = True
+                                    Button2.PerformClick()
+                                End If
+                            Case 5
+                                If MsgBox("Alcune caratteristiche di questa immagine richiedono l'indicazione di un'origine per essere abilitate. L'origine specificata non è valida per questa operazione." & CrLf & CrLf & If(RichTextBox1.Text = "", "Specificare un'origine valida e riprovare.", "Assicurarsi che l'origine esista nel file system e riprovare"), vbOKOnly + vbCritical, "Abilitare le caratteristiche") = MsgBoxResult.Ok Then
                                     CheckBox2.Checked = True
                                     Button2.PerformClick()
                                 End If
@@ -123,6 +137,8 @@ Public Class EnableFeat
                                     MsgBox("La source spécifiée n'est pas valide. Veuillez indiquer une source valide et réessayer", vbOKOnly + vbCritical, "Activer les caractéristiques")
                                 Case "PTB", "PTG"
                                     MsgBox("A origem especificada não é válida. Por favor, especifique uma origem válida e tente novamente", vbOKOnly + vbCritical, "Ativar características")
+                                Case "ITA"
+                                    MsgBox("La fonte specificata non è valida. Specificare un'origine valida e riprovare", vbOKOnly + vbCritical, "Abilita funzioni")
                             End Select
                         Case 1
                             MsgBox("The specified source is not valid. Please specify a valid source and try again", vbOKOnly + vbCritical, "Enable features")
@@ -132,6 +148,8 @@ Public Class EnableFeat
                             MsgBox("La source spécifiée n'est pas valide. Veuillez indiquer une source valide et réessayer", vbOKOnly + vbCritical, "Activer les caractéristiques")
                         Case 4
                             MsgBox("A origem especificada não é válida. Por favor, especifique uma origem válida e tente novamente", vbOKOnly + vbCritical, "Ativar características")
+                        Case 5
+                            MsgBox("La fonte specificata non è valida. Specificare un'origine valida e riprovare", vbOKOnly + vbCritical, "Abilita funzioni")
                     End Select
                     Exit Sub
                 Else
@@ -256,6 +274,26 @@ Public Class EnableFeat
                         ListView1.Columns(0).Text = "Nome da caraterística"
                         ListView1.Columns(1).Text = "Estado"
                         FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
+                    Case "ITA"
+                        Text = "Abilita funzionalità"
+                        Label1.Text = Text
+                        Label3.Text = "Nome pacchetto:"
+                        Label4.Text = "Origine caratteristiche:"
+                        Button1.Text = "Cerca..."
+                        Button2.Text = "Sfoglia..."
+                        Button3.Text = "Rileva da criteri di gruppo"
+                        Cancel_Button.Text = "Annulla"
+                        OK_Button.Text = "OK"
+                        GroupBox1.Text = "Caratteristiche"
+                        GroupBox2.Text = "Opzioni"
+                        CheckBox1.Text = "Specifica il nome del pacchetto padre per le funzioni"
+                        CheckBox2.Text = "Specificare l'origine delle caratteristiche"
+                        CheckBox3.Text = "Abilita tutte le funzioni genitore"
+                        CheckBox4.Text = "Contatta Windows Update per le immagini online"
+                        CheckBox5.Text = "Impegna l'immagine dopo aver abilitato le funzioni"
+                        ListView1.Columns(0).Text = "Nome della funzione"
+                        ListView1.Columns(1).Text = "Stato"
+                        FolderBrowserDialog1.Description = "Specificare una cartella che fungerà da origine delle caratteristiche:"
                 End Select
             Case 1
                 Text = "Enable features"
@@ -337,6 +375,26 @@ Public Class EnableFeat
                 ListView1.Columns(0).Text = "Nome da caraterística"
                 ListView1.Columns(1).Text = "Estado"
                 FolderBrowserDialog1.Description = "Especificar uma pasta que actuará como fonte da caraterística:"
+            Case 5
+                Text = "Abilita funzionalità"
+                Label1.Text = Text
+                Label3.Text = "Nome pacchetto:"
+                Label4.Text = "Origine caratteristiche:"
+                Button1.Text = "Cerca..."
+                Button2.Text = "Sfoglia..."
+                Button3.Text = "Rileva da criteri di gruppo"
+                Cancel_Button.Text = "Annulla"
+                OK_Button.Text = "OK"
+                GroupBox1.Text = "Caratteristiche"
+                GroupBox2.Text = "Opzioni"
+                CheckBox1.Text = "Specifica il nome del pacchetto padre per le funzioni"
+                CheckBox2.Text = "Specificare l'origine delle caratteristiche"
+                CheckBox3.Text = "Abilita tutte le funzioni genitore"
+                CheckBox4.Text = "Contatta Windows Update per le immagini online"
+                CheckBox5.Text = "Impegna l'immagine dopo aver abilitato le funzioni"
+                ListView1.Columns(0).Text = "Nome della funzione"
+                ListView1.Columns(1).Text = "Stato"
+                FolderBrowserDialog1.Description = "Specificare una cartella che fungerà da origine delle caratteristiche:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -376,6 +434,8 @@ Public Class EnableFeat
                         Label2.Text &= " Seules les caractéristiques désactivées (" & ListView1.Items.Count & ") sont représentées"
                     Case "PTB", "PTG"
                         Label2.Text &= " Só são mostradas as características desactivadas (" & ListView1.Items.Count & ")"
+                    Case "ITA"
+                        Label2.Text &= " Vengono mostrate solo le caratteristiche disabilitate (" & ListView1.Items.Count & ")"
                 End Select
             Case 1
                 Label2.Text &= " Only disabled features (" & ListView1.Items.Count & ") are shown"
@@ -385,6 +445,8 @@ Public Class EnableFeat
                 Label2.Text &= " Seules les caractéristiques désactivées (" & ListView1.Items.Count & ") sont représentées"
             Case 4
                 Label2.Text &= " Só são mostradas as características desactivadas (" & ListView1.Items.Count & ")"
+            Case 5
+                Label2.Text &= " Vengono mostrate solo le caratteristiche disabilitate (" & ListView1.Items.Count & ")"
         End Select
         CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then

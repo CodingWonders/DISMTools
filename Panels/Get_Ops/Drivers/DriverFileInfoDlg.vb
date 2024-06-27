@@ -65,6 +65,13 @@ Public Class DriverFileInfoDlg
                         ListView1.Columns(1).Text = "Valor"
                         OK_Button.Text = "OK"
                         Copy_Button.Text = "Copiar"
+                    Case "ITA"
+                        Text = "Informazioni sul file del driver"
+                        Label1.Text = "Informazioni sul file del driver: " & Path.GetFileName(GetDriverInfo.ListBox1.Items(GetDriverInfo.ListBox1.SelectedIndex))
+                        ListView1.Columns(0).Text = "Proprietà"
+                        ListView1.Columns(1).Text = "Valore"
+                        OK_Button.Text = "OK"
+                        Copy_Button.Text = "Copia"
                 End Select
             Case 1
                 Text = "Driver file information"
@@ -94,6 +101,13 @@ Public Class DriverFileInfoDlg
                 ListView1.Columns(1).Text = "Valor"
                 OK_Button.Text = "OK"
                 Copy_Button.Text = "Copiar"
+            Case 5
+                Text = "Informazioni sul file del driver"
+                Label1.Text = "Informazioni sul file del driver: " & Path.GetFileName(GetDriverInfo.ListBox1.Items(GetDriverInfo.ListBox1.SelectedIndex))
+                ListView1.Columns(0).Text = "Proprietà"
+                ListView1.Columns(1).Text = "Valore"
+                OK_Button.Text = "OK"
+                Copy_Button.Text = "Copia"
         End Select
         ListView1.Items.Clear()
         drvPkg = Nothing
@@ -157,6 +171,19 @@ Public Class DriverFileInfoDlg
                                     ListView1.Items.Add(New ListViewItem(New String() {"Data", drvPkg.Date}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Estado da assinatura", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                                     ListView1.Items.Add(New ListViewItem(New String() {"Ficheiro de catálogo", drvPkg.CatalogFile}))
+                                Case "ITA"
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Nome pubblicato", drvPkg.PublishedName}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Nome del file originale", drvPkg.OriginalFileName}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"È critico per il processo di avvio?", If(drvPkg.BootCritical, "Sì", "No")}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Fa parte della distribuzione di Windows?", If(drvPkg.InBox, "Sì", "No")}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Version", drvPkg.Version.ToString()}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Nome classe", drvPkg.ClassName}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Class description", drvPkg.ClassDescription}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Class GUID", drvPkg.ClassGuid}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Nome del provider", drvPkg.ProviderName}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Date", drvPkg.Date}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"Stato della firma", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
+                                    ListView1.Items.Add(New ListViewItem(New String() {"File catalogo", drvPkg.CatalogFile}))
                             End Select
                         Case 1
                             ListView1.Items.Add(New ListViewItem(New String() {"Published name", drvPkg.PublishedName}))
@@ -210,6 +237,19 @@ Public Class DriverFileInfoDlg
                             ListView1.Items.Add(New ListViewItem(New String() {"Data", drvPkg.Date}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Estado da assinatura", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
                             ListView1.Items.Add(New ListViewItem(New String() {"Ficheiro de catálogo", drvPkg.CatalogFile}))
+                        Case 5
+                            ListView1.Items.Add(New ListViewItem(New String() {"Nome pubblicato", drvPkg.PublishedName}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Nome del file originale", drvPkg.OriginalFileName}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"È critico per il processo di avvio?", If(drvPkg.BootCritical, "Sì", "No")}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Fa parte della distribuzione di Windows?", If(drvPkg.InBox, "Sì", "No")}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Version", drvPkg.Version.ToString()}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Nome classe", drvPkg.ClassName}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Class description", drvPkg.ClassDescription}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Class GUID", drvPkg.ClassGuid}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Nome del provider", drvPkg.ProviderName}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Date", drvPkg.Date}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"Stato della firma", Casters.CastDismSignatureStatus(drvPkg.DriverSignature, True)}))
+                            ListView1.Items.Add(New ListViewItem(New String() {"File catalogo", drvPkg.CatalogFile}))
                     End Select
                 End If
             End Using

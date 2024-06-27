@@ -48,6 +48,8 @@ Public Class AddPackageDlg
                                 MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à ajouter et réessayer. Vous pouvez également continuer à laisser DISM analyser les paquets applicables", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "PTB", "PTG"
                                 MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a adicionar e tente novamente. Também pode continuar a deixar o DISM verificar os pacotes aplicáveis", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ITA"
+                                MessageBox.Show(MainForm, "Selezionare i pacchetti da aggiungere e riprovare. È anche possibile continuare a lasciare che DISM esegua la scansione dei pacchetti applicabili", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End Select
                     Case 1
                         MessageBox.Show(MainForm, "Please select packages to add, and try again. You can also continue with letting DISM scan applicable packages", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -57,6 +59,8 @@ Public Class AddPackageDlg
                         MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à ajouter et réessayer. Vous pouvez également continuer à laisser DISM analyser les paquets applicables", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Case 4
                         MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a adicionar e tente novamente. Também pode continuar a deixar o DISM verificar os pacotes aplicáveis", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 5
+                        MessageBox.Show(MainForm, "Selezionare i pacchetti da aggiungere e riprovare. È anche possibile continuare a lasciare che DISM esegua la scansione dei pacchetti applicabili", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Select
             Else
                 If pkgCount > 65535 Then
@@ -118,6 +122,8 @@ Public Class AddPackageDlg
                         Label4.Text = "Recherche des paquets dans le répertoire en cours. Veuillez patienter..."
                     Case "PTB", "PTG"
                         Label4.Text = "A analisar o diretório em busca de pacotes. Aguarde..."
+                    Case "ITA"
+                        Label4.Text = "Scansione della directory per i pacchetti. Attendere..."
                 End Select
             Case 1
                 Label4.Text = "Scanning directory for packages. Please wait..."
@@ -127,6 +133,8 @@ Public Class AddPackageDlg
                 Label4.Text = "Recherche des paquets dans le répertoire en cours. Veuillez patienter..."
             Case 4
                 Label4.Text = "A analisar o diretório em busca de pacotes. Aguarde..."
+            Case 5
+                Label4.Text = "Scansione della directory per i pacchetti. Attendere..."
         End Select
         Refresh()
         ' TODO: show CheckedListBox items without full path
@@ -179,6 +187,8 @@ Public Class AddPackageDlg
                             Label4.Text = "Ce répertoire ne contient aucun paquet. Veuillez utiliser une autre source et réessayer"
                         Case "PTB", "PTG"
                             Label4.Text = "Esta pasta não contém quaisquer pacotes. Utilize uma origem diferente e tente novamente"
+                        Case "ITA"
+                            Label4.Text = "Questa cartella non contiene pacchetti. Utilizzare un'altra origine e riprovare"
                     End Select
                 Case 1
                     Label4.Text = "This folder does not contain any packages. Please use a different source and try again"
@@ -188,6 +198,8 @@ Public Class AddPackageDlg
                     Label4.Text = "Ce répertoire ne contient aucun paquet. Veuillez utiliser une autre source et réessayer"
                 Case 4
                     Label4.Text = "Esta pasta não contém quaisquer pacotes. Utilize uma origem diferente e tente novamente"
+                Case 5
+                    Label4.Text = "Questa cartella non contiene pacchetti. Utilizzare un'altra origine e riprovare"
             End Select
             Beep()
         Else
@@ -202,6 +214,8 @@ Public Class AddPackageDlg
                             Label4.Text = "Ce répertoire contient " & CheckedListBox1.Items.Count & " paquet" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
                         Case "PTB", "PTG"
                             Label4.Text = "Esta pasta contém " & CheckedListBox1.Items.Count & " pacote" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                        Case "ITA"
+                            Label4.Text = "Questa cartella contiene " & CheckedListBox1.Items.Count & " pacchett" & If(CheckedListBox1.Items.Count = 1, "o.", "i.")
                     End Select
                 Case 1
                     Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " package" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
@@ -211,6 +225,8 @@ Public Class AddPackageDlg
                     Label4.Text = "Ce répertoire contient " & CheckedListBox1.Items.Count & " paquet" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
                 Case 4
                     Label4.Text = "Esta pasta contém " & CheckedListBox1.Items.Count & " pacote" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                Case 5
+                    Label4.Text = "Questa cartella contiene " & CheckedListBox1.Items.Count & " pacchett" & If(CheckedListBox1.Items.Count = 1, "o.", "i.")
             End Select
         End If
     End Sub
@@ -291,6 +307,24 @@ Public Class AddPackageDlg
                         FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes CAB ou MSU:"
                         GroupBox1.Text = "Pacotes"
                         GroupBox2.Text = "Opções"
+                    Case "ITA"
+                        Text = "Aggiungi pacchetti"
+                        Label1.Text = Text
+                        Label2.Text = "Origine pacchetto:"
+                        Label3.Text = "Operazione pacchetto:"
+                        Button1.Text = "Sfoglia..."
+                        Button2.Text = "Seleziona tutto"
+                        Button3.Text = "Seleziona nessuno"
+                        Cancel_Button.Text = "Annullare"
+                        OK_Button.Text = "OK"
+                        RadioButton1.Text = "Scansiona la cartella in modo ricorsivo per i pacchetti"
+                        RadioButton2.Text = "Scegliere quali pacchetti aggiungere:"
+                        CheckBox1.Text = "Ignorare i controlli di applicabilità (non consigliato)"
+                        CheckBox2.Text = "Salta l'installazione del pacchetto se sono in corso operazioni online"
+                        CheckBox3.Text = "Impegna l'immagine dopo l'aggiunta dei pacchetti"
+                        FolderBrowserDialog1.Description = "Specificare la cartella contenente i pacchetti CAB o MSU:"
+                        GroupBox1.Text = "Pacchetti"
+                        GroupBox2.Text = "Opzioni"
                 End Select
             Case 1
                 Text = "Add packages"
@@ -364,6 +398,24 @@ Public Class AddPackageDlg
                 FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes CAB ou MSU:"
                 GroupBox1.Text = "Pacotes"
                 GroupBox2.Text = "Opções"
+            Case 5
+                Text = "Aggiungi pacchetti"
+                Label1.Text = Text
+                Label2.Text = "Origine pacchetto:"
+                Label3.Text = "Operazione pacchetto:"
+                Button1.Text = "Sfoglia..."
+                Button2.Text = "Seleziona tutto"
+                Button3.Text = "Seleziona nessuno"
+                Cancel_Button.Text = "Annullare"
+                OK_Button.Text = "OK"
+                RadioButton1.Text = "Scansiona la cartella in modo ricorsivo per i pacchetti"
+                RadioButton2.Text = "Scegliere quali pacchetti aggiungere:"
+                CheckBox1.Text = "Ignorare i controlli di applicabilità (non consigliato)"
+                CheckBox2.Text = "Salta l'installazione del pacchetto se sono in corso operazioni online"
+                CheckBox3.Text = "Impegna l'immagine dopo l'aggiunta dei pacchetti"
+                FolderBrowserDialog1.Description = "Specificare la cartella contenente i pacchetti CAB o MSU:"
+                GroupBox1.Text = "Pacchetti"
+                GroupBox2.Text = "Opzioni"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -401,6 +453,8 @@ Public Class AddPackageDlg
                             Label4.Text = "Veuillez indiquer un répertoire où se trouvent les fichiers CAB ou MSU."
                         Case "PTB", "PTG"
                             Label4.Text = "Especifique um diretório onde estão localizados os ficheiros CAB ou MSU."
+                        Case "ITA"
+                            Label4.Text = "Specificare una directory in cui si trovano i file CAB o MSU"
                     End Select
                 Case 1
                     Label4.Text = "Please specify a directory where CAB or MSU files are located."
@@ -410,6 +464,8 @@ Public Class AddPackageDlg
                     Label4.Text = "Veuillez indiquer un répertoire où se trouvent les fichiers CAB ou MSU."
                 Case 4
                     Label4.Text = "Especifique um diretório onde estão localizados os ficheiros CAB ou MSU."
+                Case 5
+                    Label4.Text = "Specificare una directory in cui si trovano i file CAB o MSU"
             End Select
         End If
         Language = MainForm.Language

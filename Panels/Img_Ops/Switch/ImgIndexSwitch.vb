@@ -85,6 +85,18 @@ Public Class ImgIndexSwitch
                         GroupBox1.Text = "Índices"
                         RadioButton1.Text = "Guardar alterações no índice"
                         RadioButton2.Text = "Desmontar descartando as alterações"
+                    Case "ITA"
+                        Text = "Cambia gli indici delle immagini"
+                        Label1.Text = Text
+                        Label2.Text = "Immagine:"
+                        Label3.Text = "Quando si smonta l'indice sorgente, cosa fare?"
+                        Label4.Text = "Indice di destinazione da montare:"
+                        Label6.Text = "Questo indice è già stato montato"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        GroupBox1.Text = "Indici"
+                        RadioButton1.Text = "Salva le modifiche all'indice"
+                        RadioButton2.Text = "Smonta scartando le modifiche"
                 End Select
             Case 1
                 Text = "Switch image indexes"
@@ -134,6 +146,18 @@ Public Class ImgIndexSwitch
                 GroupBox1.Text = "Índices"
                 RadioButton1.Text = "Guardar alterações no índice"
                 RadioButton2.Text = "Desmontar descartando as alterações"
+            Case 5
+                Text = "Cambia gli indici delle immagini"
+                Label1.Text = Text
+                Label2.Text = "Immagine:"
+                Label3.Text = "Quando si smonta l'indice sorgente, cosa fare?"
+                Label4.Text = "Indice di destinazione da montare:"
+                Label6.Text = "Questo indice è già stato montato"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                GroupBox1.Text = "Indici"
+                RadioButton1.Text = "Salva le modifiche all'indice"
+                RadioButton2.Text = "Smonta scartando le modifiche"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)

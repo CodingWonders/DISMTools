@@ -27,6 +27,8 @@ Public Class RemPackage
                                 MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à supprimer et réessayer.", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "PTB", "PTG"
                                 MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a remover e tente novamente.", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ITA"
+                                MessageBox.Show(MainForm, "Selezionare i pacchetti da rimuovere e riprovare", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End Select
                     Case 1
                         MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -36,6 +38,8 @@ Public Class RemPackage
                         MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à supprimer et réessayer.", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Case 4
                         MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a remover e tente novamente.", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 5
+                        MessageBox.Show(MainForm, "Selezionare i pacchetti da rimuovere e riprovare", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Select
                 Exit Sub
             Else
@@ -72,6 +76,8 @@ Public Class RemPackage
                                 MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à supprimer et réessayer.", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "PTB", "PTG"
                                 MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a remover e tente novamente.", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ITA"
+                                MessageBox.Show(MainForm, "Selezionare i pacchetti da rimuovere e riprovare", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End Select
                     Case 1
                         MessageBox.Show(MainForm, "Please select packages to remove, and try again.", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -81,6 +87,8 @@ Public Class RemPackage
                         MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à supprimer et réessayer.", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Case 4
                         MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a remover e tente novamente.", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 5
+                        MessageBox.Show(MainForm, "Selezionare i pacchetti da rimuovere e riprovare", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Select
                 Exit Sub
             Else
@@ -166,6 +174,18 @@ Public Class RemPackage
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         FolderBrowserDialog1.Description = "Especifique uma origem de pacote:"
+                    Case "ITA"
+                        Text = "Rimuovi pacchetti"
+                        Label1.Text = Text
+                        Label3.Text = "Origine del pacchetto:"
+                        Label4.Text = "NOTA: il programma può mostrare pacchetti che non sono stati aggiunti. Tuttavia, se un pacchetto non viene aggiunto, il programma lo salta."
+                        GroupBox1.Text = "Rimozione del pacchetto"
+                        RadioButton1.Text = "Specificare i nomi dei pacchetti:"
+                        RadioButton2.Text = "Specificare i file del pacchetto:"
+                        Button1.Text = "Sfoglia..."
+                        Cancel_Button.Text = "Annullare"
+                        OK_Button.Text = "OK"
+                        FolderBrowserDialog1.Description = "Specificare l'origine del pacchetto:"
                 End Select
             Case 1
                 Text = "Remove packages"
@@ -215,6 +235,18 @@ Public Class RemPackage
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 FolderBrowserDialog1.Description = "Especifique uma origem de pacote:"
+            Case 5
+                Text = "Rimuovi pacchetti"
+                Label1.Text = Text
+                Label3.Text = "Origine del pacchetto:"
+                Label4.Text = "NOTA: il programma può mostrare pacchetti che non sono stati aggiunti. Tuttavia, se un pacchetto non viene aggiunto, il programma lo salta."
+                GroupBox1.Text = "Rimozione del pacchetto"
+                RadioButton1.Text = "Specificare i nomi dei pacchetti:"
+                RadioButton2.Text = "Specificare i file del pacchetto:"
+                Button1.Text = "Sfoglia..."
+                Cancel_Button.Text = "Annullare"
+                OK_Button.Text = "OK"
+                FolderBrowserDialog1.Description = "Specificare l'origine del pacchetto:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -299,6 +331,8 @@ Public Class RemPackage
                             MsgBox("Nous n'avons pas pu analyser la source du paquet pour les fichiers CAB. Veuillez réessayer.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
                         Case "PTB", "PTG"
                             MsgBox("Não foi possível procurar ficheiros CAB na fonte do pacote. Por favor, tente novamente.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+                        Case "ITA"
+                            MsgBox("Non è stato possibile eseguire la scansione dell'origine del pacchetto per i file CAB. Riprovare.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
                     End Select
                 Case 1
                     MsgBox("We couldn't scan the package source for CAB files. Please try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
@@ -308,6 +342,8 @@ Public Class RemPackage
                     MsgBox("Nous n'avons pas pu analyser la source du paquet pour les fichiers CAB. Veuillez réessayer.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
                 Case 4
                     MsgBox("Não foi possível procurar ficheiros CAB na fonte do pacote. Por favor, tente novamente.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
+                Case 5
+                    MsgBox("Non è stato possibile eseguire la scansione dell'origine del pacchetto per i file CAB. Riprovare.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "DISMTools")
             End Select
         End If
     End Sub

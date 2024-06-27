@@ -21,6 +21,8 @@ Public Class PkgParentNameLookupDlg
                             MsgBox("Veuillez spécifier un nom de paquet et réessayer.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Noms des paquets installés")
                         Case "PTB", "PTG"
                             MsgBox("Especifique um nome de pacote e tente novamente.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomes dos pacotes instalados")
+                        Case "ITA"
+                            MsgBox("Specificare il nome di un pacchetto e riprovare", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomi dei pacchetti installati")
                     End Select
                 Case 1
                     MsgBox("Please specify a package name, and try again.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
@@ -30,6 +32,8 @@ Public Class PkgParentNameLookupDlg
                     MsgBox("Veuillez spécifier un nom de paquet et réessayer.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Noms des paquets installés")
                 Case 4
                     MsgBox("Especifique um nome de pacote e tente novamente.", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomes dos pacotes instalados")
+                Case 5
+                    MsgBox("Specificare il nome di un pacchetto e riprovare", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomi dei pacchetti installati")
             End Select
             Exit Sub
         ElseIf Not ListBox1.Items.Contains(TextBox1.Text) Then
@@ -44,6 +48,8 @@ Public Class PkgParentNameLookupDlg
                             MsgBox("Le nom du paquet spécifié ne semble pas figurer dans l'image. Veuillez spécifier une entrée disponible et réessayer", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Noms des paquets installés")
                         Case "PTB", "PTG"
                             MsgBox("O nome do pacote especificado não parece estar na imagem. Especifique uma entrada disponível e tente novamente", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomes dos pacotes instalados")
+                        Case "ITA"
+                            MsgBox("Il nome del pacchetto specificato non sembra essere presente nell'immagine. Si prega di specificare una voce disponibile e di riprovare", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomi di pacchetti installati")
                     End Select
                 Case 1
                     MsgBox("The specified package name does not seem to be in the image. Please specify an available entry, and try again", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Installed package names")
@@ -53,6 +59,8 @@ Public Class PkgParentNameLookupDlg
                     MsgBox("Le nom du paquet spécifié ne semble pas figurer dans l'image. Veuillez spécifier une entrée disponible et réessayer", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Noms des paquets installés")
                 Case 4
                     MsgBox("O nome do pacote especificado não parece estar na imagem. Especifique uma entrada disponível e tente novamente", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomes dos pacotes instalados")
+                Case 5
+                    MsgBox("Il nome del pacchetto specificato non sembra essere presente nell'immagine. Si prega di specificare una voce disponibile e di riprovare", MsgBoxStyle.OkOnly + MsgBoxStyle.Critical, "Nomi di pacchetti installati")
             End Select
             Exit Sub
         Else
@@ -103,6 +111,13 @@ Public Class PkgParentNameLookupDlg
                         Label3.Text = "A obter nomes de pacotes. Aguarde..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Text = "Nomi dei pacchetti installati"
+                        Label1.Text = "Nomi dei pacchetti installati nell'immagine montata:"
+                        Label2.Text = "Nome del pacchetto padre:"
+                        Label3.Text = "Ottenere i nomi dei pacchetti. Attendere prego..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Text = "Installed package names"
@@ -132,6 +147,13 @@ Public Class PkgParentNameLookupDlg
                 Label3.Text = "A obter nomes de pacotes. Aguarde..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Text = "Nomi dei pacchetti installati"
+                Label1.Text = "Nomi dei pacchetti installati nell'immagine montata:"
+                Label2.Text = "Nome del pacchetto padre:"
+                Label3.Text = "Ottenere i nomi dei pacchetti. Attendere prego..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

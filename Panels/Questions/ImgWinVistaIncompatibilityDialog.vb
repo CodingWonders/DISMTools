@@ -37,6 +37,11 @@ Public Class ImgWinVistaIncompatibilityDialog
                         Label2.Text = "Nem este programa nem o DISM suportam a manutenção de imagens do Windows Vista. O DISM destina-se a servir imagens do Windows 7 ou mais recentes. Pode continuar a montar imagens do Windows Vista, mas todas as opções serão desactivadas." & CrLf & CrLf & "Se ainda pretender reparar uma imagem do Windows Vista, consulte o tópico " & Quote & "Compatibilidade com versões anteriores do Windows" & Quote & " na documentação da Ajuda." & CrLf & CrLf & "Pretende continuar?"
                         OK_Button.Text = "Sim"
                         Cancel_Button.Text = "Não"
+                    Case "ITA"
+                        Label1.Text = "Il programma non è in grado di gestire le immagini di Windows Vista"
+                        Label2.Text = "Né questo programma né DISM supportano la manutenzione delle immagini di Windows Vista. DISM è destinato a gestire immagini di Windows 7 o più recenti. È ancora possibile montare le immagini di Windows Vista, ma tutte le opzioni saranno disabilitate." & CrLf & CrLf & "Se si desidera comunque eseguire la manutenzione di un'immagine di Windows Vista, consultare l'argomento " & Quote & "Compatibilità con le versioni precedenti di Windows" & Quote & " nella documentazione della Guida in linea." & CrLf & CrLf & "Si desidera continuare?"
+                        OK_Button.Text = "Sì"
+                        Cancel_Button.Text = "No"
                 End Select
             Case 1
                 Label1.Text = "The program can't service Windows Vista images"
@@ -58,6 +63,11 @@ Public Class ImgWinVistaIncompatibilityDialog
                 Label2.Text = "Nem este programa nem o DISM suportam a manutenção de imagens do Windows Vista. O DISM destina-se a servir imagens do Windows 7 ou mais recentes. Pode continuar a montar imagens do Windows Vista, mas todas as opções serão desactivadas." & CrLf & CrLf & "Se ainda pretender reparar uma imagem do Windows Vista, consulte o tópico " & Quote & "Compatibilidade com versões anteriores do Windows" & Quote & " na documentação da Ajuda." & CrLf & CrLf & "Pretende continuar?"
                 OK_Button.Text = "Sim"
                 Cancel_Button.Text = "Não"
+            Case 5
+                Label1.Text = "Il programma non è in grado di gestire le immagini di Windows Vista"
+                Label2.Text = "Né questo programma né DISM supportano la manutenzione delle immagini di Windows Vista. DISM è destinato a gestire immagini di Windows 7 o più recenti. È ancora possibile montare le immagini di Windows Vista, ma tutte le opzioni saranno disabilitate." & CrLf & CrLf & "Se si desidera comunque eseguire la manutenzione di un'immagine di Windows Vista, consultare l'argomento " & Quote & "Compatibilità con le versioni precedenti di Windows" & Quote & " nella documentazione della Guida in linea." & CrLf & CrLf & "Si desidera continuare?"
+                OK_Button.Text = "Sì"
+                Cancel_Button.Text = "No"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

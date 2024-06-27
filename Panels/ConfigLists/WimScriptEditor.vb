@@ -108,6 +108,30 @@ Public Class WimScriptEditor
                         ToolStripButton6.ToolTipText = "Ajuda"
                         ToolStripDropDownButton1.Text = "Ferramentas"
                         NoOneDriveToolStripMenuItem.Text = "Excluir pastas do OneDrive dos utilizadores..."
+                    Case "ITA"
+                        Text = "Editor dell'elenco di configurazione di DISM"
+                        Label1.Text = "L'Editor dell'elenco di configurazione consente di escludere file e/o cartelle durante le azioni che consentono di specificare tali file, come l'acquisizione di un'immagine. È possibile specificare le impostazioni dall'interfaccia grafica oppure creare manualmente il file di configurazione. Al termine, fare clic sull'icona Salva"
+                        GroupBox1.Text = "Elenco delle esclusioni"
+                        GroupBox2.Text = "Elenco eccezioni di esclusione"
+                        GroupBox3.Text = "Elenco di esclusione della compressione"
+                        Button1.Text = "Aggiungi..."
+                        Button2.Text = "Modifica..."
+                        Button3.Text = "Rimuovi"
+                        Button5.Text = "Aggiungi..."
+                        Button6.Text = "Modifica..."
+                        Button7.Text = "Rimuovi"
+                        Button9.Text = "Aggiungi..."
+                        Button10.Text = "Modifica..."
+                        Button11.Text = "Rimuovi"
+                        WimScriptOFD.Title = "Specificare l'elenco di configurazione da caricare"
+                        WimScriptSFD.Title = "Specificare il percorso in cui salvare l'elenco di configurazione"
+                        ToolStripButton2.ToolTipText = "Nuovo"
+                        ToolStripButton3.ToolTipText = "Aprire..."
+                        ToolStripButton4.ToolTipText = "Salva..."
+                        ToolStripButton5.ToolTipText = "Attiva l'avvolgimento delle parole"
+                        ToolStripButton6.ToolTipText = "Aiuto"
+                        ToolStripDropDownButton1.Text = "Strumenti"
+                        NoOneDriveToolStripMenuItem.Text = "Escludi cartelle OneDrive dell'utente..."
                 End Select
             Case 1
                 Text = "DISM Configuration List Editor"
@@ -205,6 +229,30 @@ Public Class WimScriptEditor
                 ToolStripButton6.ToolTipText = "Ajuda"
                 ToolStripDropDownButton1.Text = "Ferramentas"
                 NoOneDriveToolStripMenuItem.Text = "Excluir pastas do OneDrive dos utilizadores..."
+            Case 5
+                Text = "Editor dell'elenco di configurazione di DISM"
+                Label1.Text = "L'Editor dell'elenco di configurazione consente di escludere file e/o cartelle durante le azioni che consentono di specificare tali file, come l'acquisizione di un'immagine. È possibile specificare le impostazioni dall'interfaccia grafica oppure creare manualmente il file di configurazione. Al termine, fare clic sull'icona Salva"
+                GroupBox1.Text = "Elenco delle esclusioni"
+                GroupBox2.Text = "Elenco eccezioni di esclusione"
+                GroupBox3.Text = "Elenco di esclusione della compressione"
+                Button1.Text = "Aggiungi..."
+                Button2.Text = "Modifica..."
+                Button3.Text = "Rimuovi"
+                Button5.Text = "Aggiungi..."
+                Button6.Text = "Modifica..."
+                Button7.Text = "Rimuovi"
+                Button9.Text = "Aggiungi..."
+                Button10.Text = "Modifica..."
+                Button11.Text = "Rimuovi"
+                WimScriptOFD.Title = "Specificare l'elenco di configurazione da caricare"
+                WimScriptSFD.Title = "Specificare il percorso in cui salvare l'elenco di configurazione"
+                ToolStripButton2.ToolTipText = "Nuovo"
+                ToolStripButton3.ToolTipText = "Aprire..."
+                ToolStripButton4.ToolTipText = "Salva..."
+                ToolStripButton5.ToolTipText = "Attiva l'avvolgimento delle parole"
+                ToolStripButton6.ToolTipText = "Aiuto"
+                ToolStripDropDownButton1.Text = "Strumenti"
+                NoOneDriveToolStripMenuItem.Text = "Escludi cartelle OneDrive dell'utente..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -418,6 +466,8 @@ Public Class WimScriptEditor
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                             Case "PTB", "PTG"
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                            Case "ITA"
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                         End Select
                     Case 1
                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -427,6 +477,8 @@ Public Class WimScriptEditor
                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                     Case 4
                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                    Case 5
+                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Else
                 Select Case MainForm.Language
@@ -440,6 +492,8 @@ Public Class WimScriptEditor
                                 titleMsg = Path.GetFileName(ConfigListFile) & " (modifié) - Éditeur de liste de configuration DISM"
                             Case "PTB", "PTG"
                                 titleMsg = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de listas de configuração DISM"
+                            Case "ITA"
+                                titleMsg = Path.GetFileName(ConfigListFile) & " (modificato) - Editor dell'elenco di configurazione DISM"
                         End Select
                     Case 1
                         titleMsg = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
@@ -449,6 +503,8 @@ Public Class WimScriptEditor
                         titleMsg = Path.GetFileName(ConfigListFile) & " (modifié) - Éditeur de liste de configuration DISM"
                     Case 4
                         titleMsg = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de listas de configuração DISM"
+                    Case 5
+                        titleMsg = Path.GetFileName(ConfigListFile) & " (modificato) - Editor dell'elenco di configurazione DISM"
                 End Select
             End If
             Text = titleMsg
@@ -473,6 +529,9 @@ Public Class WimScriptEditor
                     Case "PTB", "PTG"
                         msg = "Deseja guardar este ficheiro de lista de configuração?"
                         titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor de listas de configuração DISM"
+                    Case "ITA"
+                        msg = "Vuoi salvare questo file dell'elenco di configurazione?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Case 1
                 msg = "Do you want to save this configuration list file?"
@@ -486,6 +545,9 @@ Public Class WimScriptEditor
             Case 4
                 msg = "Deseja guardar este ficheiro de lista de configuração?"
                 titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor de listas de configuração DISM"
+            Case 5
+                msg = "Vuoi salvare questo file dell'elenco di configurazione?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor dell'elenco di configurazione DISM"
         End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
             Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
@@ -504,6 +566,8 @@ Public Class WimScriptEditor
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                     Case "PTB", "PTG"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                    Case "ITA"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                 End Select
                             Case 1
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -513,6 +577,8 @@ Public Class WimScriptEditor
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                             Case 4
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                            Case 5
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                         End Select
                         Text = titleMsg
                     Else
@@ -530,6 +596,8 @@ Public Class WimScriptEditor
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                         Case "PTB", "PTG"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                        Case "ITA"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                     End Select
                                 Case 1
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -539,6 +607,8 @@ Public Class WimScriptEditor
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                 Case 4
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                Case 5
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                             End Select
                             Text = titleMsg
                         Else
@@ -569,6 +639,8 @@ Public Class WimScriptEditor
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                             Case "PTB", "PTG"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                            Case "ITA"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                         End Select
                                     Case 1
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -578,6 +650,8 @@ Public Class WimScriptEditor
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                     Case 4
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                    Case 5
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                 End Select
                                 Text = titleMsg
                             Else
@@ -595,6 +669,8 @@ Public Class WimScriptEditor
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                                 Case "PTB", "PTG"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                                Case "ITA"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                             End Select
                                         Case 1
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -604,6 +680,8 @@ Public Class WimScriptEditor
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                         Case 4
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                        Case 5
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                     End Select
                                     Text = titleMsg
                                 Else
@@ -632,6 +710,8 @@ Public Class WimScriptEditor
                         Text = "Nouvelle liste de configuration - Éditeur de liste de configuration DISM"
                     Case "PTB", "PTG"
                         Text = "Nova lista de configuração - Editor de listas de configuração DISM"
+                    Case "ITA"
+                        Text = "Nuovo elenco di configurazione - Editor elenco di configurazione DISM"
                 End Select
             Case 1
                 Text = "New configuration list - DISM Configuration List Editor"
@@ -641,6 +721,8 @@ Public Class WimScriptEditor
                 Text = "Nouvelle liste de configuration - Éditeur de liste de configuration DISM"
             Case 4
                 Text = "Nova lista de configuração - Editor de listas de configuração DISM"
+            Case 5
+                Text = "Nuovo elenco di configurazione - Editor elenco di configurazione DISM"
         End Select
 
         ' Generate a default configuration list, as shown in the DISM configuration list documentation.
@@ -687,6 +769,9 @@ Public Class WimScriptEditor
                     Case "PTB", "PTG"
                         msg = "Deseja guardar este ficheiro de lista de configuração?"
                         titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                    Case "ITA"
+                        msg = "Vuoi salvare questo file dell'elenco di configurazione?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Case 1
                 msg = "Do you want to save this configuration list file?"
@@ -700,6 +785,9 @@ Public Class WimScriptEditor
             Case 4
                 msg = "Deseja guardar este ficheiro de lista de configuração?"
                 titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+            Case 5
+                msg = "Vuoi salvare questo file dell'elenco di configurazione?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
         End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
             Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
@@ -719,6 +807,8 @@ Public Class WimScriptEditor
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                     Case "PTB", "PTG"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                    Case "ITA"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                 End Select
                             Case 1
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -728,6 +818,8 @@ Public Class WimScriptEditor
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                             Case 4
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                            Case 5
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                         End Select
                         Text = titleMsg
                     Else
@@ -745,6 +837,8 @@ Public Class WimScriptEditor
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                         Case "PTB", "PTG"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                        Case "ITA"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                     End Select
                                 Case 1
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -754,6 +848,8 @@ Public Class WimScriptEditor
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                 Case 4
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                Case 5
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                             End Select
                             Text = titleMsg
                         Else
@@ -784,6 +880,8 @@ Public Class WimScriptEditor
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                             Case "PTB", "PTG"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                            Case "ITA"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                         End Select
                                     Case 1
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -793,6 +891,8 @@ Public Class WimScriptEditor
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                     Case 4
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                    Case 5
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                 End Select
                                 Text = titleMsg
                             Else
@@ -810,6 +910,8 @@ Public Class WimScriptEditor
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                                 Case "PTB", "PTG"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                                Case "ITA"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                             End Select
                                         Case 1
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -819,6 +921,8 @@ Public Class WimScriptEditor
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                         Case 4
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                        Case 5
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                     End Select
                                     Text = titleMsg
                                 Else
@@ -858,6 +962,8 @@ Public Class WimScriptEditor
                         Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                     Case "PTB", "PTG"
                         Text = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                    Case "ITA"
+                        Text = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Case 1
                 Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -867,6 +973,8 @@ Public Class WimScriptEditor
                 Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
             Case 4
                 Text = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+            Case 5
+                Text = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
         End Select
     End Sub
 
@@ -884,6 +992,8 @@ Public Class WimScriptEditor
                         Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                     Case "PTB", "PTG"
                         Text = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                    Case "ITA"
+                        Text = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Case 1
                 Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -893,6 +1003,8 @@ Public Class WimScriptEditor
                 Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
             Case 4
                 Text = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+            Case 5
+                Text = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
         End Select
     End Sub
 
@@ -989,6 +1101,8 @@ Public Class WimScriptEditor
                                 Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                             Case "PTB", "PTG"
                                 Text = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                            Case "ITA"
+                                Text = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                         End Select
                     Case 1
                         Text = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -998,6 +1112,8 @@ Public Class WimScriptEditor
                         Text = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                     Case 4
                         Text = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                    Case 5
+                        Text = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Else
                 Select Case MainForm.Language
@@ -1011,6 +1127,8 @@ Public Class WimScriptEditor
                                 Text = Path.GetFileName(ConfigListFile) & " (modifié) - Éditeur de liste de configuration DISM"
                             Case "PTB", "PTG"
                                 Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de listas de configuração DISM"
+                            Case "ITA"
+                                Text = Path.GetFileName(ConfigListFile) & " (modificato) - Editor dell'elenco di configurazione DISM"
                         End Select
                     Case 1
                         Text = Path.GetFileName(ConfigListFile) & " (modified) - DISM Configuration List Editor"
@@ -1020,6 +1138,8 @@ Public Class WimScriptEditor
                         Text = Path.GetFileName(ConfigListFile) & " (modifié) - Éditeur de liste de configuration DISM"
                     Case 4
                         Text = Path.GetFileName(ConfigListFile) & " (modificado) - Editor de listas de configuração DISM"
+                    Case 5
+                        Text = Path.GetFileName(ConfigListFile) & " (modificato) - Editor dell'elenco di configurazione DISM"
                 End Select
             End If
         End If
@@ -1041,6 +1161,8 @@ Public Class WimScriptEditor
                         AddListEntryDlg.Text = "Ajouter une entrée à la " & GroupBox1.Text.ToLower()
                     Case "PTB", "PTG"
                         AddListEntryDlg.Text = "Adicionar entrada de " & GroupBox1.Text.ToLower()
+                    Case "ITA"
+                        AddListEntryDlg.Text = "Aggiungere una entrata di " & GroupBox1.Text.ToLower()
                 End Select
             Case 1
                 AddListEntryDlg.Text = "Add " & GroupBox1.Text.ToLower() & " entry"
@@ -1050,6 +1172,8 @@ Public Class WimScriptEditor
                 AddListEntryDlg.Text = "Ajouter une entrée à la " & GroupBox1.Text.ToLower()
             Case 4
                 AddListEntryDlg.Text = "Adicionar entrada de " & GroupBox1.Text.ToLower()
+            Case 5
+                AddListEntryDlg.Text = "Aggiungere una entrata di " & GroupBox1.Text.ToLower()
         End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox1.Top + 8
@@ -1073,6 +1197,8 @@ Public Class WimScriptEditor
                         AddListEntryDlg.Text = "Ajouter une entrée à la " & GroupBox2.Text.ToLower()
                     Case "PTB", "PTG"
                         AddListEntryDlg.Text = "Adicionar entrada de " & GroupBox2.Text.ToLower()
+                    Case "ITA"
+                        AddListEntryDlg.Text = "Aggiungere una entrata di " & GroupBox2.Text.ToLower()
                 End Select
             Case 1
                 AddListEntryDlg.Text = "Add " & GroupBox2.Text.ToLower() & " entry"
@@ -1082,6 +1208,8 @@ Public Class WimScriptEditor
                 AddListEntryDlg.Text = "Ajouter une entrée à la " & GroupBox2.Text.ToLower()
             Case 4
                 AddListEntryDlg.Text = "Adicionar entrada de " & GroupBox2.Text.ToLower()
+            Case 5
+                AddListEntryDlg.Text = "Aggiungere una entrata di " & GroupBox2.Text.ToLower()
         End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox2.Top + 8
@@ -1105,6 +1233,8 @@ Public Class WimScriptEditor
                         AddListEntryDlg.Text = "Ajouter une entrée à la " & GroupBox3.Text.ToLower()
                     Case "PTB", "PTG"
                         AddListEntryDlg.Text = "Adicionar entrada de " & GroupBox3.Text.ToLower()
+                    Case "ITA"
+                        AddListEntryDlg.Text = "Aggiungere una entrata di " & GroupBox3.Text.ToLower()
                 End Select
             Case 1
                 AddListEntryDlg.Text = "Add " & GroupBox3.Text.ToLower() & " entry"
@@ -1114,6 +1244,8 @@ Public Class WimScriptEditor
                 AddListEntryDlg.Text = "Ajouter une entrée à la " & GroupBox3.Text.ToLower()
             Case 4
                 AddListEntryDlg.Text = "Adicionar entrada de " & GroupBox3.Text.ToLower()
+            Case 5
+                AddListEntryDlg.Text = "Aggiungere una entrata di " & GroupBox3.Text.ToLower()
         End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox3.Top + 8
@@ -1210,6 +1342,9 @@ Public Class WimScriptEditor
                     Case "PTB", "PTG"
                         msg = "Deseja guardar este ficheiro de lista de configuração?"
                         titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                    Case "ITA"
+                        msg = "Vuoi salvare questo file dell'elenco di configurazione?"
+                        titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Case 1
                 msg = "Do you want to save this configuration list file?"
@@ -1223,6 +1358,9 @@ Public Class WimScriptEditor
             Case 4
                 msg = "Deseja guardar este ficheiro de lista de configuração?"
                 titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+            Case 5
+                msg = "Vuoi salvare questo file dell'elenco di configurazione?"
+                titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
         End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
             Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
@@ -1242,6 +1380,8 @@ Public Class WimScriptEditor
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                     Case "PTB", "PTG"
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                    Case "ITA"
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                 End Select
                             Case 1
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -1251,6 +1391,8 @@ Public Class WimScriptEditor
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                             Case 4
                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                            Case 5
+                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                         End Select
                         Text = titleMsg
                     Else
@@ -1268,6 +1410,8 @@ Public Class WimScriptEditor
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                         Case "PTB", "PTG"
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                        Case "ITA"
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                     End Select
                                 Case 1
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -1277,6 +1421,8 @@ Public Class WimScriptEditor
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                 Case 4
                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                Case 5
+                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                             End Select
                             Text = titleMsg
                         Else
@@ -1307,6 +1453,8 @@ Public Class WimScriptEditor
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                             Case "PTB", "PTG"
                                                 titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                            Case "ITA"
+                                                titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                         End Select
                                     Case 1
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -1316,6 +1464,8 @@ Public Class WimScriptEditor
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                     Case 4
                                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                    Case 5
+                                        titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                 End Select
                                 Text = titleMsg
                             Else
@@ -1333,6 +1483,8 @@ Public Class WimScriptEditor
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                                 Case "PTB", "PTG"
                                                     titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                                Case "ITA"
+                                                    titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                             End Select
                                         Case 1
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - DISM Configuration List Editor"
@@ -1342,6 +1494,8 @@ Public Class WimScriptEditor
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Éditeur de liste de configuration DISM"
                                         Case 4
                                             titleMsg = Path.GetFileName(ConfigListFile) & " - Editor de listas de configuração DISM"
+                                        Case 5
+                                            titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                                     End Select
                                     Text = titleMsg
                                 Else

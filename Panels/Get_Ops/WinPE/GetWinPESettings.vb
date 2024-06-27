@@ -25,6 +25,8 @@ Public Class GetWinPESettings
                                 Label5.Text = "Impossible d'obtenir la valeur"
                             Case "PTB", "PTG"
                                 Label5.Text = "Não foi possível obter o valor"
+                            Case "ITA"
+                                Label5.Text = "Impossibile ottenere il valore"
                         End Select
                     Case 1
                         Label5.Text = "Could not get value"
@@ -34,6 +36,8 @@ Public Class GetWinPESettings
                         Label5.Text = "Impossible d'obtenir la valeur"
                     Case 4
                         Label5.Text = "Não foi possível obter o valor"
+                    Case 5
+                        Label5.Text = "Impossibile ottenere il valore"
                 End Select
                 Button1.Visible = False
             End If
@@ -52,6 +56,8 @@ Public Class GetWinPESettings
                                 Label6.Text = "Impossible d'obtenir la valeur"
                             Case "PTB", "PTG"
                                 Label6.Text = "Não foi possível obter o valor"
+                            Case "ITA"
+                                Label6.Text = "Impossibile ottenere il valore"
                         End Select
                     Case 1
                         Label6.Text = "Could not get value"
@@ -61,6 +67,8 @@ Public Class GetWinPESettings
                         Label6.Text = "Impossible d'obtenir la valeur"
                     Case 4
                         Label6.Text = "Não foi possível obter o valor"
+                    Case 5
+                        Label6.Text = "Impossibile ottenere il valore"
                 End Select
                 Button2.Visible = False
             End If
@@ -77,6 +85,8 @@ Public Class GetWinPESettings
                                 msg = "Impossible d'obtenir la valeur"
                             Case "PTB", "PTG"
                                 msg = "Não foi possível obter o valor"
+                            Case "ITA"
+                                msg = "Impossibile ottenere il valore"
                         End Select
                     Case 1
                         msg = "Could not get value"
@@ -86,6 +96,8 @@ Public Class GetWinPESettings
                         msg = "Impossible d'obtenir la valeur"
                     Case 4
                         msg = "Não foi possível obter o valor"
+                    Case 5
+                        msg = "Impossibile ottenere il valore"
                 End Select
                 ' Get target path first
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
@@ -157,6 +169,16 @@ Public Class GetWinPESettings
                         Button2.Text = "Alterar..."
                         Button4.Text = "Guardar..."
                         OK_Button.Text = "OK"
+                    Case "ITA"
+                        Text = "Ottieni le impostazioni di Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "Queste sono le impostazioni di Windows PE per questa immagine:"
+                        Label3.Text = "Percorso di destinazione:"
+                        Label4.Text = "Spazio temporaneo:"
+                        Button1.Text = "Cambia..."
+                        Button2.Text = "Cambia..."
+                        Button4.Text = "Salva..."
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "Get Windows PE settings"
@@ -197,6 +219,16 @@ Public Class GetWinPESettings
                 Button1.Text = "Alterar..."
                 Button2.Text = "Alterar..."
                 Button4.Text = "Guardar..."
+                OK_Button.Text = "OK"
+            Case 5
+                Text = "Ottieni le impostazioni di Windows PE"
+                Label1.Text = Text
+                Label2.Text = "Queste sono le impostazioni di Windows PE per questa immagine:"
+                Label3.Text = "Percorso di destinazione:"
+                Label4.Text = "Spazio temporaneo:"
+                Button1.Text = "Cambia..."
+                Button2.Text = "Cambia..."
+                Button4.Text = "Salva..."
                 OK_Button.Text = "OK"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then

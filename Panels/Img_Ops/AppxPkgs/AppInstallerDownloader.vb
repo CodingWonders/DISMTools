@@ -64,6 +64,14 @@ Public Class AppInstallerDownloader
                         Label2.Text = "URL de transferência:"
                         downSpdLbl.Text = "Velocidade de transferência: desconhecida"
                         downETALbl.Text = "Tempo estimado restante: desconhecido"
+                    Case "ITA"
+                        Text = " Scaricamento del pacchetto dell'applicazione..."
+                        Label1.Text = "Attendere che DISMTools scarichi il pacchetto applicativo per aggiungerlo a questa immagine. Questa operazione può richiedere del tempo, a seconda della velocità della connessione di rete."
+                        StatusLbl.Text = "Attendere..."
+                        GroupBox1.Text = "Dettagli del trasferimento"
+                        Label2.Text = "URL di scaricamento:"
+                        downSpdLbl.Text = "Velocità di scaricamento: sconosciuta"
+                        downETALbl.Text = "Tempo stimato rimanente: sconosciuto"
                 End Select
             Case 1
                 Text = "Downloading application package..."
@@ -97,6 +105,14 @@ Public Class AppInstallerDownloader
                 Label2.Text = "URL de transferência:"
                 downSpdLbl.Text = "Velocidade de transferência: desconhecida"
                 downETALbl.Text = "Tempo estimado restante: desconhecido"
+            Case 5
+                Text = " Scaricamento del pacchetto dell'applicazione..."
+                Label1.Text = "Attendere che DISMTools scarichi il pacchetto applicativo per aggiungerlo a questa immagine. Questa operazione può richiedere del tempo, a seconda della velocità della connessione di rete."
+                StatusLbl.Text = "Attendere..."
+                GroupBox1.Text = "Dettagli del trasferimento"
+                Label2.Text = "URL di scaricamento:"
+                downSpdLbl.Text = "Velocità di scaricamento: sconosciuta"
+                downETALbl.Text = "Tempo stimato rimanente: sconosciuto"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -180,6 +196,8 @@ Public Class AppInstallerDownloader
                         progress = "Téléchargement de l'application principale en cours... (" & BytesToReadableSize(e.BytesReceived, True) & " of " & BytesToReadableSize(e.TotalBytesToReceive, True) & " téléchargés)"
                     Case "PTB", "PTG"
                         progress = "Descarregar o pacote da aplicação principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descarregados)"
+                    Case "ITA"
+                        progress = "Scaricamento del pacchetto dell'applicazione principale... (" & BytesToReadableSize(e.BytesReceived) & " di " & BytesToReadableSize(e.TotalBytesToReceive) & " scaricato)"
                 End Select
             Case 1
                 progress = "Downloading main application package... (" & BytesToReadableSize(e.BytesReceived) & " of " & BytesToReadableSize(e.TotalBytesToReceive) & " downloaded)"
@@ -189,6 +207,8 @@ Public Class AppInstallerDownloader
                 progress = "Téléchargement de l'application principale en cours... (" & BytesToReadableSize(e.BytesReceived, True) & " of " & BytesToReadableSize(e.TotalBytesToReceive, True) & " téléchargés)"
             Case 4
                 progress = "Descarregar o pacote da aplicação principal... (" & BytesToReadableSize(e.BytesReceived) & " de " & BytesToReadableSize(e.TotalBytesToReceive) & " descarregados)"
+            Case 5
+                progress = "Scaricamento del pacchetto dell'applicazione principale... (" & BytesToReadableSize(e.BytesReceived) & " di " & BytesToReadableSize(e.TotalBytesToReceive) & " scaricato)"
         End Select
         downSpd = CLng(Math.Round(e.BytesReceived / sw.Elapsed.TotalSeconds, 2))
         If e.TotalBytesToReceive > 0 Then
@@ -210,6 +230,8 @@ Public Class AppInstallerDownloader
                             msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
                         Case "PTB", "PTG"
                             msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
+                        Case "ITA"
+                            msg = "Si è verificato un errore durante il scaricamento del file: " & e.Error.Message
                     End Select
                 Case 1
                     msg = "An error occurred while downloading the file: " & e.Error.Message
@@ -219,6 +241,8 @@ Public Class AppInstallerDownloader
                     msg = "Une erreur s'est produite lors du téléchargement du fichier : " & e.Error.Message
                 Case 4
                     msg = "Ocorreu um erro ao baixar o arquivo: " & e.Error.Message
+                Case 5
+                    msg = "Si è verificato un errore durante il scaricamento del file: " & e.Error.Message
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
@@ -248,6 +272,9 @@ Public Class AppInstallerDownloader
                     Case "PTB", "PTG"
                         downSpdLbl.Text = "Velocidade de transferência: " & BytesToReadableSize(downSpd) & "/s"
                         downETALbl.Text = "Tempo restante estimado: " & time.ToString("m\:ss") & " segundos"
+                    Case "ITA"
+                        downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s""."
+                        downETALbl.Text = "Tempo stimato rimanente: " & time.ToString("m\:ss") & " secondi"
                 End Select
             Case 1
                 downSpdLbl.Text = "Download speed: " & BytesToReadableSize(downSpd) & "/s"
@@ -261,6 +288,9 @@ Public Class AppInstallerDownloader
             Case 4
                 downSpdLbl.Text = "Velocidade de transferência: " & BytesToReadableSize(downSpd) & "/s"
                 downETALbl.Text = "Tempo restante estimado: " & time.ToString("m\:ss") & " segundos"
+            Case 5
+                downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s""."
+                downETALbl.Text = "Tempo stimato rimanente: " & time.ToString("m\:ss") & " secondi"
         End Select
     End Sub
 
