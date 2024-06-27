@@ -1086,6 +1086,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
+    <None Include="Tools\DT_WinADK.reg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
