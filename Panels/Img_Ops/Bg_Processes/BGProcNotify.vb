@@ -21,6 +21,9 @@ Public Class BGProcNotify
                     Case "PTB", "PTG"
                         Label1.Text = "Este projeto foi carregado com sucesso"
                         Label2.Text = "O programa está agora a recolher informações sobre a imagem em segundo plano. Isto pode demorar algum tempo"
+                    Case "ITA"
+                        Label1.Text = "Il progetto è stato caricato con successo"
+                        Label2.Text = "Il programma sta raccogliendo informazioni sull'immagine in background. Questa operazione potrebbe richiedere del tempo"
                 End Select
             Case 1
                 Label1.Text = "This project has been loaded successfully"
@@ -34,6 +37,9 @@ Public Class BGProcNotify
             Case 4
                 Label1.Text = "Este projeto foi carregado com sucesso"
                 Label2.Text = "O programa está agora a recolher informações sobre a imagem em segundo plano. Isto pode demorar algum tempo"
+            Case 5
+                Label1.Text = "Il progetto è stato caricato con successo"
+                Label2.Text = "Il programma sta raccogliendo informazioni sull'immagine in background. Questa operazione potrebbe richiedere del tempo"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
             Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - (7 + MainForm.StatusStrip.Height))

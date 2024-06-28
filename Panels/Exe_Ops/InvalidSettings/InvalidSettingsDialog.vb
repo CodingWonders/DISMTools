@@ -32,6 +32,11 @@ Public Class InvalidSettingsDialog
                         Label1.Text = "O programa detectou definições inválidas"
                         Label2.Text = "As definições inválidas foram repostas para os valores predefinidos. Verifique os campos abaixo para obter mais informações:"
                         Button1.Text = "OK"
+                    Case "ITA"
+                        Text = "Sono state rilevate impostazioni non valide"
+                        Label1.Text = "Il programma ha rilevato impostazioni non valide"
+                        Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Controllare i campi sottostanti per ulteriori informazioni:"
+                        Button1.Text = "OK"
                 End Select
             Case 1
                 Text = "Invalid settings have been detected"
@@ -52,6 +57,11 @@ Public Class InvalidSettingsDialog
                 Text = "Foram detectadas definições inválidas"
                 Label1.Text = "O programa detectou definições inválidas"
                 Label2.Text = "As definições inválidas foram repostas para os valores predefinidos. Verifique os campos abaixo para obter mais informações:"
+                Button1.Text = "OK"
+            Case 5
+                Text = "Sono state rilevate impostazioni non valide"
+                Label1.Text = "Il programma ha rilevato impostazioni non valide"
+                Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Controllare i campi sottostanti per ulteriori informazioni:"
                 Button1.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -75,6 +85,8 @@ Public Class InvalidSettingsDialog
                             Label3.Text = "L'exécutable DISM spécifié n'existe pas : " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
                         Case "PTB", "PTG"
                             Label3.Text = "O executável DISM especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
+                        Case "ITA"
+                            Label3.Text = "L'eseguibile DISM specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
                     End Select
                 Case 1
                     Label3.Text = "The specified DISM executable does not exist: " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
@@ -84,6 +96,8 @@ Public Class InvalidSettingsDialog
                     Label3.Text = "L'exécutable DISM spécifié n'existe pas : " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
                 Case 4
                     Label3.Text = "O executável DISM especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
+                Case 5
+                    Label3.Text = "L'eseguibile DISM specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(0) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -97,6 +111,8 @@ Public Class InvalidSettingsDialog
                             Label3.Text = "Le paramétrage de l'exécutable DISM semble être en ordre"
                         Case "PTB", "PTG"
                             Label3.Text = "A configuração do executável DISM parece estar em ordem"
+                        Case "ITA"
+                            Label3.Text = "L'impostazione dell'eseguibile DISM sembra essere in ordine"
                     End Select
                 Case 1
                     Label3.Text = "The DISM executable setting seems to be in order"
@@ -106,6 +122,8 @@ Public Class InvalidSettingsDialog
                     Label3.Text = "Le paramétrage de l'exécutable DISM semble être en ordre"
                 Case 4
                     Label3.Text = "A configuração do executável DISM parece estar em ordem"
+                Case 5
+                    Label3.Text = "L'impostazione dell'eseguibile DISM sembra essere in ordine"
             End Select
         End If
         If MainForm.isLogFontProblematic Then
@@ -120,6 +138,8 @@ Public Class InvalidSettingsDialog
                             Label4.Text = "La fonte spécifiée n'existe pas dans ce système : " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                         Case "PTB", "PTG"
                             Label4.Text = "A fonte de registo especificada não existe neste sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
+                        Case "ITA"
+                            Label4.Text = "Il font di registro specificato non esiste in questo sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                     End Select
                 Case 1
                     Label4.Text = "The specified log font does not exist in this system: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
@@ -129,6 +149,8 @@ Public Class InvalidSettingsDialog
                     Label4.Text = "La fonte spécifiée n'existe pas dans ce système : " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                 Case 4
                     Label4.Text = "A fonte de registo especificada não existe neste sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
+                Case 5
+                    Label4.Text = "Il font di registro specificato non esiste in questo sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -142,6 +164,8 @@ Public Class InvalidSettingsDialog
                             Label4.Text = "Le paramètre de la fonte du journal semble être dans l'ordre"
                         Case "PTB", "PTG"
                             Label4.Text = "A configuração da fonte de registo parece estar em ordem"
+                        Case "ITA"
+                            Label4.Text = "L'impostazione dei font del registro sembra essere corretta"
                     End Select
                 Case 1
                     Label4.Text = "The log font setting seems to be in order"
@@ -151,6 +175,8 @@ Public Class InvalidSettingsDialog
                     Label4.Text = "Le paramètre de la fonte du journal semble être dans l'ordre"
                 Case 4
                     Label4.Text = "A configuração da fonte de registo parece estar em ordem"
+                Case 5
+                    Label4.Text = "L'impostazione dei font del registro sembra essere corretta"
             End Select
         End If
         If MainForm.isLogFileProblematic Then
@@ -165,6 +191,8 @@ Public Class InvalidSettingsDialog
                             Label5.Text = "Le fichier journal spécifié n'existe pas : " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                         Case "PTB", "PTG"
                             Label5.Text = "O ficheiro de registo especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
+                        Case "ITA"
+                            Label5.Text = "Il file di registro specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                     End Select
                 Case 1
                     Label5.Text = "The specified log file does not exist: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
@@ -174,6 +202,8 @@ Public Class InvalidSettingsDialog
                     Label5.Text = "Le fichier journal spécifié n'existe pas : " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                 Case 4
                     Label5.Text = "O ficheiro de registo especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
+                Case 5
+                    Label5.Text = "Il file di registro specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -187,6 +217,8 @@ Public Class InvalidSettingsDialog
                             Label5.Text = "Le paramètre du fichier journal semble être dans l'ordre"
                         Case "PTB", "PTG"
                             Label5.Text = "A configuração do ficheiro de registo parece estar em ordem"
+                        Case "ITA"
+                            Label5.Text = "L'impostazione del file di log sembra essere in ordine"
                     End Select
                 Case 1
                     Label5.Text = "The log file setting seems to be in order"
@@ -196,6 +228,8 @@ Public Class InvalidSettingsDialog
                     Label5.Text = "Le paramètre du fichier journal semble être dans l'ordre"
                 Case 4
                     Label5.Text = "A configuração do ficheiro de registo parece estar em ordem"
+                Case 5
+                    Label5.Text = "L'impostazione del file di log sembra essere in ordine"
             End Select
         End If
         If MainForm.isScratchDirProblematic Then
@@ -210,6 +244,8 @@ Public Class InvalidSettingsDialog
                             Label6.Text = "Le répertoire temporaire spécifié n'existe pas : " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
                         Case "PTB", "PTG"
                             Label6.Text = "O diretório temporário especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
+                        Case "ITA"
+                            Label6.Text = "La cartelle temporanea specificata non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
                     End Select
                 Case 1
                     Label6.Text = "The specified scratch directory does not exist: " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
@@ -219,6 +255,8 @@ Public Class InvalidSettingsDialog
                     Label6.Text = "Le répertoire temporaire spécifié n'existe pas : " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
                 Case 4
                     Label6.Text = "O diretório temporário especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
+                Case 5
+                    Label6.Text = "La cartelle temporanea specificata non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(3) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -232,6 +270,8 @@ Public Class InvalidSettingsDialog
                             Label6.Text = "Le paramètre du répertoire temporaire semble être dans l'ordre"
                         Case "PTB", "PTG"
                             Label6.Text = "A configuração do diretório temporário parece estar em ordem"
+                        Case "ITA"
+                            Label6.Text = "L'impostazione della cartelle temporanea sembra essere corretta"
                     End Select
                 Case 1
                     Label6.Text = "The scratch directory setting seems to be in order"
@@ -241,6 +281,8 @@ Public Class InvalidSettingsDialog
                     Label6.Text = "Le paramètre du répertoire temporaire semble être dans l'ordre"
                 Case 4
                     Label6.Text = "A configuração do diretório temporário parece estar em ordem"
+                Case 5
+                    Label6.Text = "L'impostazione della cartelle temporanea sembra essere corretta"
             End Select
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)

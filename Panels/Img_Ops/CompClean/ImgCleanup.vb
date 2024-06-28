@@ -32,6 +32,8 @@ Public Class ImgCleanup
                                     MsgBox("Aucune source valide n'a été fournie pour la réparation du stock de composants." & CrLf & CrLf & If(RichTextBox1.Text = "", "Veuillez indiquer une source et réessayer.", "Assurez-vous que la source spécifiée existe dans le système de fichiers et réessayez."), vbOKOnly + vbCritical, "Nettoyage de l'image")
                                 Case "PTB", "PTG"
                                     MsgBox("Não foi fornecida nenhuma fonte válida para a reparação do armazenamento de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Forneça uma fonte e tente novamente.", "Certifique-se de que a fonte especificada existe no sistema de ficheiros e tente novamente."), vbOKOnly + vbCritical, "Limpeza da imagem")
+                                Case "ITA"
+                                    MsgBox("Non è stata fornita un'origine valida per la riparazione dell'archivio componenti." & CrLf & CrLf & If(RichTextBox1.Text = "", "Fornire un'origine e riprovare.", "Assicurarsi che l'origine specificata esista nel file system e riprovare."), vbOKOnly + vbCritical, "Pulizia immagine")
                             End Select
                         Case 1
                             MsgBox("No valid source has been provided for component store repair." & CrLf & CrLf & If(RichTextBox1.Text = "", "Please provide a source and try again.", "Please make sure the specified source exists in the file system and try again."), vbOKOnly + vbCritical, "Image cleanup")
@@ -41,6 +43,8 @@ Public Class ImgCleanup
                             MsgBox("Aucune source valide n'a été fournie pour la réparation du stock de composants." & CrLf & CrLf & If(RichTextBox1.Text = "", "Veuillez indiquer une source et réessayer.", "Assurez-vous que la source spécifiée existe dans le système de fichiers et réessayez."), vbOKOnly + vbCritical, "Nettoyage de l'image")
                         Case 4
                             MsgBox("Não foi fornecida nenhuma fonte válida para a reparação do armazenamento de componentes." & CrLf & CrLf & If(RichTextBox1.Text = "", "Forneça uma fonte e tente novamente.", "Certifique-se de que a fonte especificada existe no sistema de ficheiros e tente novamente."), vbOKOnly + vbCritical, "Limpeza da imagem")
+                        Case 5
+                            MsgBox("Non è stata fornita un'origine valida per la riparazione dell'archivio componenti." & CrLf & CrLf & If(RichTextBox1.Text = "", "Fornire un'origine e riprovare.", "Assicurarsi che l'origine specificata esista nel file system e riprovare."), vbOKOnly + vbCritical, "Pulizia immagine")
                     End Select
                     Exit Sub
                 End If
@@ -192,6 +196,38 @@ Public Class ImgCleanup
                         CheckBox3.Text = "Adiar operações de limpeza de longa duração"
                         CheckBox4.Text = "Utilizar outra fonte para reparação de componentes"
                         CheckBox5.Text = "Limitar o acesso ao Windows Update"
+                    Case "ITA"
+                        Text = "Pulizia immagine"
+                        Label1.Text = Text
+                        Label2.Text = "Scegliere un'attività:"
+                        If ComboBox1.SelectedItem = "" Then Label3.Text = "Scegliere un'attività per vederne la descrizione"
+                        Label4.Text = "Non ci sono opzioni configurabili per questa attività. Tuttavia, si dovrebbe eseguire questa attività solo per tentare di ripristinare un'immagine di Windows che non riesce ad avviarsi"
+                        Label5.Text = "Il ripristino della base dei componenti sostituiti è stato eseguito l'ultima volta in data:"
+                        Label7.Text = "Selezionare questa opzione solo se il ripristino della base richiede più di 30 minuti per essere completato"
+                        Label8.Text = "Non ci sono opzioni configurabili per questa attività"
+                        Label9.Text = "Non ci sono opzioni configurabili per questa attività"
+                        Label10.Text = "Non ci sono opzioni configurabili per questa attività"
+                        Label11.Text = "Fonte:"
+                        Label12.Text = "Selezionare un'attività elencata sopra per configurarne le opzioni"
+                        GroupBox1.Text = "Opzioni dell'attività"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        Tasks(0) = "Annullamento delle azioni in sospeso"
+                        Tasks(1) = "Pulisci i file di backup del Service Pack"
+                        Tasks(2) = "Ripulire l'archivio dei componenti"
+                        Tasks(3) = "Analizzare l'archivio dei componenti"
+                        Tasks(4) = "Controllare l'archivio dei componenti"
+                        Tasks(5) = "Scansiona l'archivio dei componenti per individuare eventuali corruzioni"
+                        Tasks(6) = "Ripara l'archivio dei componenti"
+                        ComboBox1.Items.AddRange(Tasks)
+                        HealthRestoreSourceOFD.Title = "Specificare l'origine da cui ripristinare lo stato di salute dell'archivio componenti"
+                        Button1.Text = "Sfogliare..."
+                        Button2.Text = "Rileva dai criteri di gruppo"
+                        CheckBox1.Text = "Nascondi il service pack dall'elenco degli aggiornamenti installati"
+                        CheckBox2.Text = "Ripristina la base dei componenti sostituiti"
+                        CheckBox3.Text = "Rimanda le operazioni di pulizia di lunga durata"
+                        CheckBox4.Text = "Usa un'altra fonte per la riparazione dei componenti"
+                        CheckBox5.Text = "Limita l'accesso a Windows Update"
                 End Select
             Case 1
                 Text = "Image cleanup"
@@ -321,6 +357,38 @@ Public Class ImgCleanup
                 CheckBox3.Text = "Adiar operações de limpeza de longa duração"
                 CheckBox4.Text = "Utilizar outra fonte para reparação de componentes"
                 CheckBox5.Text = "Limitar o acesso ao Windows Update"
+            Case 5
+                Text = "Pulizia immagine"
+                Label1.Text = Text
+                Label2.Text = "Scegliere un'attività:"
+                If ComboBox1.SelectedItem = "" Then Label3.Text = "Scegliere un'attività per vederne la descrizione"
+                Label4.Text = "Non ci sono opzioni configurabili per questa attività. Tuttavia, si dovrebbe eseguire questa attività solo per tentare di ripristinare un'immagine di Windows che non riesce ad avviarsi"
+                Label5.Text = "Il ripristino della base dei componenti sostituiti è stato eseguito l'ultima volta in data:"
+                Label7.Text = "Selezionare questa opzione solo se il ripristino della base richiede più di 30 minuti per essere completato"
+                Label8.Text = "Non ci sono opzioni configurabili per questa attività"
+                Label9.Text = "Non ci sono opzioni configurabili per questa attività"
+                Label10.Text = "Non ci sono opzioni configurabili per questa attività"
+                Label11.Text = "Fonte:"
+                Label12.Text = "Selezionare un'attività elencata sopra per configurarne le opzioni"
+                GroupBox1.Text = "Opzioni dell'attività"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                Tasks(0) = "Annullamento delle azioni in sospeso"
+                Tasks(1) = "Pulisci i file di backup del Service Pack"
+                Tasks(2) = "Ripulire l'archivio dei componenti"
+                Tasks(3) = "Analizzare l'archivio dei componenti"
+                Tasks(4) = "Controllare l'archivio dei componenti"
+                Tasks(5) = "Scansiona l'archivio dei componenti per individuare eventuali corruzioni"
+                Tasks(6) = "Ripara l'archivio dei componenti"
+                ComboBox1.Items.AddRange(Tasks)
+                HealthRestoreSourceOFD.Title = "Specificare l'origine da cui ripristinare lo stato di salute dell'archivio componenti"
+                Button1.Text = "Sfogliare..."
+                Button2.Text = "Rileva dai criteri di gruppo"
+                CheckBox1.Text = "Nascondi il service pack dall'elenco degli aggiornamenti installati"
+                CheckBox2.Text = "Ripristina la base dei componenti sostituiti"
+                CheckBox3.Text = "Rimanda le operazioni di pulizia di lunga durata"
+                CheckBox4.Text = "Usa un'altra fonte per la riparazione dei componenti"
+                CheckBox5.Text = "Limita l'accesso a Windows Update"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -358,6 +426,8 @@ Public Class ImgCleanup
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossible d'obtenir la date de la dernière remise à zéro de la base. Il est possible qu'aucune réinitialisation de la base n'ait été effectuée.").ToString()
                         Case "PTB", "PTG"
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Não foi possível obter a data da última reposição de base. É possível que não tenham sido efectuadas reinicializações de base").ToString()
+                        Case "ITA"
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossibile ottenere la data dell'ultimo ripristino della base. È possibile che non sia stato effettuato alcun azzeramento della base").ToString()
                     End Select
                 Case 1
                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
@@ -367,6 +437,8 @@ Public Class ImgCleanup
                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossible d'obtenir la date de la dernière remise à zéro de la base. Il est possible qu'aucune réinitialisation de la base n'ait été effectuée.").ToString()
                 Case 4
                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Não foi possível obter a data da última reposição de base. É possível que não tenham sido efectuadas reinicializações de base").ToString()
+                Case 5
+                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossibile ottenere la data dell'ultimo ripristino della base. È possibile che non sia stato effettuato alcun azzeramento della base").ToString()
             End Select
             regKey.Close()
             Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
@@ -395,6 +467,8 @@ Public Class ImgCleanup
                                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossible d'obtenir la date de la dernière remise à zéro de la base. Il est possible qu'aucune réinitialisation de la base n'ait été effectuée.").ToString()
                                 Case "PTB", "PTG"
                                     LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Não foi possível obter a data da última reposição de base. É possível que não tenham sido efectuadas reinicializações de base").ToString()
+                                Case "ITA"
+                                    LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossibile ottenere la data dell'ultimo ripristino della base. È possibile che non sia stato effettuato alcun azzeramento della base").ToString()
                             End Select
                         Case 1
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Could not get last base reset date. It is possible that no base resets were made").ToString()
@@ -404,6 +478,8 @@ Public Class ImgCleanup
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossible d'obtenir la date de la dernière remise à zéro de la base. Il est possible qu'aucune réinitialisation de la base n'ait été effectuée.").ToString()
                         Case 4
                             LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Não foi possível obter a data da última reposição de base. É possível que não tenham sido efectuadas reinicializações de base").ToString()
+                        Case 5
+                            LastResetBase_UTC = regKey.GetValue("LastResetBase_UTC", "Impossibile ottenere la data dell'ultimo ripristino della base. È possibile che non sia stato effettuato alcun azzeramento della base").ToString()
                     End Select
                     regKey.Close()
                     Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
@@ -425,6 +501,8 @@ Public Class ImgCleanup
                                     Label6.Text = "Impossible d'obtenir la date de la dernière réinitialisation de la base"
                                 Case "PTB", "PTG"
                                     Label6.Text = "Não foi possível obter a data da última reposição de base."
+                                Case "ITA"
+                                    Label6.Text = "Impossibile ottenere la data dell'ultimo ripristino della base."
                             End Select
                         Case 1
                             Label6.Text = "Could not get last base reset date"
@@ -434,6 +512,8 @@ Public Class ImgCleanup
                             Label6.Text = "Impossible d'obtenir la date de la dernière réinitialisation de la base"
                         Case 4
                             Label6.Text = "Não foi possível obter a data da última reposição de base."
+                        Case 5
+                            Label6.Text = "Impossibile ottenere la data dell'ultimo ripristino della base."
                     End Select
                 End If
             End Using
@@ -462,6 +542,8 @@ Public Class ImgCleanup
                             Label3.Text = "Choisissez une tâche pour voir sa description"
                         Case "PTB", "PTG"
                             Label3.Text = "Escolha uma tarefa para ver a sua descrição"
+                        Case "ITA"
+                            Label3.Text = "Scegliere un'attività per vederne la descrizione"
                     End Select
                 Case 1
                     Label3.Text = "Choose a task to see its description"
@@ -471,6 +553,8 @@ Public Class ImgCleanup
                     Label3.Text = "Choisissez une tâche pour voir sa description"
                 Case 4
                     Label3.Text = "Escolha uma tarefa para ver a sua descrição"
+                Case 5
+                    Label3.Text = "Scegliere un'attività per vederne la descrizione"
             End Select
             Panel2.Visible = False
             Panel3.Visible = False
@@ -493,6 +577,8 @@ Public Class ImgCleanup
                                     Label3.Text = "En cas d'échec du démarrage, cette option permet d'essayer de récupérer le système en annulant toutes les actions en cours des opérations de maintenance précédentes."
                                 Case "PTB", "PTG"
                                     Label3.Text = "Se ocorrer uma falha de arranque, esta opção pode tentar recuperar o sistema revertendo todas as acções pendentes de operações de manutenção anteriores"
+                                Case "ITA"
+                                    Label3.Text = "Se si verifica un errore di avvio, questa opzione può tentare di ripristinare il sistema annullando tutte le azioni in sospeso dalle precedenti operazioni di assistenza."
                             End Select
                         Case 1
                             Label3.Text = "If you experience a boot failure, this option can try to recover the system by reverting all pending actions from previous servicing operations"
@@ -502,6 +588,8 @@ Public Class ImgCleanup
                             Label3.Text = "En cas d'échec du démarrage, cette option permet d'essayer de récupérer le système en annulant toutes les actions en cours des opérations de maintenance précédentes."
                         Case 4
                             Label3.Text = "Se ocorrer uma falha de arranque, esta opção pode tentar recuperar o sistema revertendo todas as acções pendentes de operações de manutenção anteriores"
+                        Case 5
+                            Label3.Text = "Se si verifica un errore di avvio, questa opzione può tentare di ripristinare il sistema annullando tutte le azioni in sospeso dalle precedenti operazioni di assistenza."
                     End Select
                     Panel2.Visible = True
                     Panel3.Visible = False
@@ -522,6 +610,8 @@ Public Class ImgCleanup
                                     Label3.Text = "Supprime les fichiers de sauvegarde créés lors de l'installation d'un service pack"
                                 Case "PTB", "PTG"
                                     Label3.Text = "Remove os ficheiros de cópia de segurança criados durante a instalação de um service pack"
+                                Case "ITA"
+                                    Label3.Text = "Rimuove i file di backup creati durante l'installazione di un service pack"
                             End Select
                         Case 1
                             Label3.Text = "Removes backup files created during the installation of a service pack"
@@ -531,6 +621,8 @@ Public Class ImgCleanup
                             Label3.Text = "Supprime les fichiers de sauvegarde créés lors de l'installation d'un service pack"
                         Case 4
                             Label3.Text = "Remove os ficheiros de cópia de segurança criados durante a instalação de um service pack"
+                        Case 5
+                            Label3.Text = "Rimuove i file di backup creati durante l'installazione di un service pack"
                     End Select
                     Panel2.Visible = False
                     Panel3.Visible = True
@@ -551,6 +643,8 @@ Public Class ImgCleanup
                                     Label3.Text = "Nettoie les composants remplacés et réduit la taille du stock de composants."
                                 Case "PTB", "PTG"
                                     Label3.Text = "Limpa os componentes substituídos e reduz o tamanho do armazenamento de componentes"
+                                Case "ITA"
+                                    Label3.Text = "Pulisce i componenti sostituiti e riduce le dimensioni dell'archivio dei componenti"
                             End Select
                         Case 1
                             Label3.Text = "Cleans up the superseded components and reduces the size of the component store"
@@ -560,6 +654,8 @@ Public Class ImgCleanup
                             Label3.Text = "Nettoie les composants remplacés et réduit la taille du stock de composants."
                         Case 4
                             Label3.Text = "Limpa os componentes substituídos e reduz o tamanho do armazenamento de componentes"
+                        Case 5
+                            Label3.Text = "Pulisce i componenti sostituiti e riduce le dimensioni dell'archivio dei componenti"
                     End Select
                     Panel2.Visible = False
                     Panel3.Visible = False
@@ -580,6 +676,8 @@ Public Class ImgCleanup
                                     Label3.Text = "Crée un rapport sur le stock de composants, y compris sa taille."
                                 Case "PTB", "PTG"
                                     Label3.Text = "Cria um relatório do armazenamento de componentes, incluindo o seu tamanho"
+                                Case "ITA"
+                                    Label3.Text = "Crea un rapporto sul magazzino dei componenti, comprese le dimensioni"
                             End Select
                         Case 1
                             Label3.Text = "Creates a report of the component store, including its size"
@@ -589,6 +687,8 @@ Public Class ImgCleanup
                             Label3.Text = "Crée un rapport sur le stock de composants, y compris sa taille."
                         Case 4
                             Label3.Text = "Cria um relatório do armazenamento de componentes, incluindo o seu tamanho"
+                        Case 5
+                            Label3.Text = "Crea un rapporto sul magazzino dei componenti, comprese le dimensioni"
                     End Select
                     Panel2.Visible = False
                     Panel3.Visible = False
@@ -609,6 +709,8 @@ Public Class ImgCleanup
                                     Label3.Text = "Vérifie si l'image a été signalée comme corrompue par un processus ayant échoué et si la corruption peut être réparée."
                                 Case "PTB", "PTG"
                                     Label3.Text = "Verifica se a imagem foi assinalada como corrompida por um processo falhado e se a corrupção pode ser reparada"
+                                Case "ITA"
+                                    Label3.Text = "Controlla se l'immagine è stata contrassegnata come corrotta da un processo non riuscito e se la corruzione può essere riparata"
                             End Select
                         Case 1
                             Label3.Text = "Checks whether the image has been flagged as corrupted by a failed process and whether the corruption can be repaired"
@@ -618,6 +720,8 @@ Public Class ImgCleanup
                             Label3.Text = "Vérifie si l'image a été signalée comme corrompue par un processus ayant échoué et si la corruption peut être réparée."
                         Case 4
                             Label3.Text = "Verifica se a imagem foi assinalada como corrompida por um processo falhado e se a corrupção pode ser reparada"
+                        Case 5
+                            Label3.Text = "Controlla se l'immagine è stata contrassegnata come corrotta da un processo non riuscito e se la corruzione può essere riparata"
                     End Select
                     Panel2.Visible = False
                     Panel3.Visible = False
@@ -638,6 +742,8 @@ Public Class ImgCleanup
                                     Label3.Text = "Analyse l'image pour détecter une corruption du stock de composants, mais n'exécute pas automatiquement les options de réparation."
                                 Case "PTB", "PTG"
                                     Label3.Text = "Analisa a imagem em busca de corrupção no armazenamento de componentes, mas não executa as opções de reparação automaticamente"
+                                Case "ITA"
+                                    Label3.Text = "Esegue la scansione dell'immagine per individuare eventuali danni all'archivio componenti, ma non esegue automaticamente le opzioni di riparazione"
                             End Select
                         Case 1
                             Label3.Text = "Scans the image for component store corruption, but does not perform repair options automatically"
@@ -647,6 +753,8 @@ Public Class ImgCleanup
                             Label3.Text = "Analyse l'image pour détecter une corruption du stock de composants, mais n'exécute pas automatiquement les options de réparation."
                         Case 4
                             Label3.Text = "Analisa a imagem em busca de corrupção no armazenamento de componentes, mas não executa as opções de reparação automaticamente"
+                        Case 5
+                            Label3.Text = "Esegue la scansione dell'immagine per individuare eventuali danni all'archivio componenti, ma non esegue automaticamente le opzioni di riparazione"
                     End Select
                     Panel2.Visible = False
                     Panel3.Visible = False
@@ -667,6 +775,8 @@ Public Class ImgCleanup
                                     Label3.Text = "Analyse l'image pour détecter une corruption du stock de composants et effectue les opérations de réparation automatiquement."
                                 Case "PTB", "PTG"
                                     Label3.Text = "Analisa a imagem em busca de corrupção no armazenamento de componentes e efectua operações de reparação automaticamente"
+                                Case "ITA"
+                                    Label3.Text = "Esegue la scansione dell'immagine per individuare eventuali danni all'archivio componenti ed esegue automaticamente le operazioni di riparazione"
                             End Select
                         Case 1
                             Label3.Text = "Scans the image for component store corruption and performs repair operations automatically"
@@ -676,6 +786,8 @@ Public Class ImgCleanup
                             Label3.Text = "Analyse l'image pour détecter une corruption du stock de composants et effectue les opérations de réparation automatiquement."
                         Case 4
                             Label3.Text = "Analisa a imagem em busca de corrupção no armazenamento de componentes e efectua operações de reparação automaticamente"
+                        Case 5
+                            Label3.Text = "Esegue la scansione dell'immagine per individuare eventuali danni all'archivio componenti ed esegue automaticamente le operazioni di riparazione"
                     End Select
                     Panel2.Visible = False
                     Panel3.Visible = False

@@ -37,6 +37,11 @@ Public Class ReloadProjectQuestionDialog
                         Label2.Text = "A imagem que foi carregada neste projeto já não está disponível. Isto pode acontecer se tiver sido desmontada por um programa externo. Por este motivo, o projeto tem de ser recarregado. Clique em " & Quote & "OK" & Quote & " para recarregar este projeto." & CrLf & CrLf & "NOTA: se clicar em " & Quote & "Cancelar" & Quote & ", o projeto será descarregado"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Label1.Text = "Questa immagine non è più disponibile"
+                        Label2.Text = "L'immagine caricata in questo progetto non è più disponibile. Questo può accadere se è stata smontata da un programma esterno. Per questo motivo, il progetto deve essere ricaricato. Fare clic su " & Quote & "OK" & Quote & " per ricaricare il progetto." & CrLf & CrLf & "NOTA: se si fa clic su " & Quote & "Annulla" & Quote & ", il progetto verrà scaricato"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Label1.Text = "This image is no longer available"
@@ -58,6 +63,11 @@ Public Class ReloadProjectQuestionDialog
                 Label2.Text = "A imagem que foi carregada neste projeto já não está disponível. Isto pode acontecer se tiver sido desmontada por um programa externo. Por este motivo, o projeto tem de ser recarregado. Clique em " & Quote & "OK" & Quote & " para recarregar este projeto." & CrLf & CrLf & "NOTA: se clicar em " & Quote & "Cancelar" & Quote & ", o projeto será descarregado"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Label1.Text = "Questa immagine non è più disponibile"
+                Label2.Text = "L'immagine caricata in questo progetto non è più disponibile. Questo può accadere se è stata smontata da un programma esterno. Per questo motivo, il progetto deve essere ricaricato. Fare clic su " & Quote & "OK" & Quote & " per ricaricare il progetto." & CrLf & CrLf & "NOTA: se si fa clic su " & Quote & "Annulla" & Quote & ", il progetto verrà scaricato"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

@@ -29,6 +29,8 @@ Public Class BGProcsAdvSettings
                             msg = "Le programme va maintenant détecter les pilotes de l'image en fonction des options que vous avez spécifiées. Cela peut prendre un certain temps."
                         Case "PTB", "PTG"
                             msg = "O programa irá agora detetar os controladores da imagem de acordo com as opções que especificou. Isto pode demorar algum tempo."
+                        Case "ITA"
+                            msg = "Il programma ora rileverà i driver dell'immagine in base alle opzioni specificate. Questa operazione potrebbe richiedere un po' di tempo"
                     End Select
                 Case 1
                     msg = "The program will now detect the drivers of the image according to the options you've specified. This may take some time."
@@ -38,6 +40,8 @@ Public Class BGProcsAdvSettings
                     msg = "Le programme va maintenant détecter les pilotes de l'image en fonction des options que vous avez spécifiées. Cela peut prendre un certain temps."
                 Case 4
                     msg = "O programa irá agora detetar os controladores da imagem de acordo com as opções que especificou. Isto pode demorar algum tempo."
+                Case 5
+                    msg = "Il programma ora rileverà i driver dell'immagine in base alle opzioni specificate. Questa operazione potrebbe richiedere un po' di tempo"
             End Select
             MsgBox(msg, vbOKOnly + vbInformation, Text)
             MainForm.bwGetImageInfo = False
@@ -98,6 +102,16 @@ Public Class BGProcsAdvSettings
                         CheckBox5.Text = "Executar todos os processos em segundo plano depois de executar uma tarefa"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Text = "Impostazioni avanzate dei processi in background"
+                        Label1.Text = "Configura impostazioni aggiuntive per i processi in secondo piano:"
+                        CheckBox1.Text = "Migliora il rilevamento di tutti i pacchetti AppX di un'installazione attiva con gli helper di PowerShell"
+                        CheckBox2.Text = "Salta i pacchetti con criteri non rimovibili impostati"
+                        CheckBox3.Text = "Rileva tutti i driver dell'immagine"
+                        CheckBox4.Text = "Salta i pacchetti framework e rimuovili dagli elenchi se sono stati rilevati"
+                        CheckBox5.Text = "Esegui tutti i processi in background dopo aver eseguito un'attività"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Text = "Advanced background process settings"
@@ -139,6 +153,16 @@ Public Class BGProcsAdvSettings
                 CheckBox5.Text = "Executar todos os processos em segundo plano depois de executar uma tarefa"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Text = "Impostazioni avanzate dei processi in background"
+                Label1.Text = "Configura impostazioni aggiuntive per i processi in secondo piano:"
+                CheckBox1.Text = "Migliora il rilevamento di tutti i pacchetti AppX di un'installazione attiva con gli helper di PowerShell"
+                CheckBox2.Text = "Salta i pacchetti con criteri non rimovibili impostati"
+                CheckBox3.Text = "Rileva tutti i driver dell'immagine"
+                CheckBox4.Text = "Salta i pacchetti framework e rimuovili dagli elenchi se sono stati rilevati"
+                CheckBox5.Text = "Esegui tutti i processi in background dopo aver eseguito un'attività"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

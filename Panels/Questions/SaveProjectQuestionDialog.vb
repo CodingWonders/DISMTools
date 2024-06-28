@@ -49,6 +49,13 @@ Public Class SaveProjectQuestionDialog
                         Yes_Button.Text = "Sim"
                         No_Button.Text = "Não"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Label1.Text = "Volete salvare le modifiche di questo progetto?"
+                        Label2.Text = "Se si spegne o si riavvia il sistema senza smontare le immagini, sarà necessario ricaricare la sessione di assistenza"
+                        CheckBox1.Text = "Salva le modifiche e smonta l'immagine"
+                        Yes_Button.Text = "Sì"
+                        No_Button.Text = "No"
+                        Cancel_Button.Text = "Annulla"
                 End Select
             Case 1
                 Label1.Text = "Do you want to save the changes of this project?"
@@ -78,6 +85,13 @@ Public Class SaveProjectQuestionDialog
                 Yes_Button.Text = "Sim"
                 No_Button.Text = "Não"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Label1.Text = "Volete salvare le modifiche di questo progetto?"
+                Label2.Text = "Se si spegne o si riavvia il sistema senza smontare le immagini, sarà necessario ricaricare la sessione di assistenza"
+                CheckBox1.Text = "Salva le modifiche e smonta l'immagine"
+                Yes_Button.Text = "Sì"
+                No_Button.Text = "No"
+                Cancel_Button.Text = "Annulla"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

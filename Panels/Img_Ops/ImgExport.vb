@@ -30,6 +30,8 @@ Public Class ImgExport
                             msg = "Veuillez indiquer un fichier d'image source à exporter et réessayez."
                         Case "PTB", "PTG"
                             msg = "Especifique um ficheiro de imagem de origem para exportar e tente novamente"
+                        Case "ITA"
+                            msg = "Specificare un file immagine di origine da esportare e riprovare."
                     End Select
                 Case 1
                     msg = "Please specify a source image file to export and try again"
@@ -39,6 +41,8 @@ Public Class ImgExport
                     msg = "Veuillez indiquer un fichier d'image source à exporter et réessayez."
                 Case 4
                     msg = "Especifique um ficheiro de imagem de origem para exportar e tente novamente"
+                Case 5
+                    msg = "Specificare un file immagine di origine da esportare e riprovare."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -58,6 +62,8 @@ Public Class ImgExport
                             msg = "Veuillez spécifier un fichier d'image de destination et réessayer"
                         Case "PTB", "PTG"
                             msg = "Especifique um ficheiro de imagem de destino e tente novamente"
+                        Case "ITA"
+                            msg = "Specificare un file immagine di destinazione e riprovare"
                     End Select
                 Case 1
                     msg = "Please specify a destination image file and try again"
@@ -67,6 +73,8 @@ Public Class ImgExport
                     msg = "Veuillez spécifier un fichier d'image de destination et réessayer"
                 Case 4
                     msg = "Especifique um ficheiro de imagem de destino e tente novamente"
+                Case 5
+                    msg = "Specificare un file immagine di destinazione e riprovare"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -229,6 +237,36 @@ Public Class ImgExport
                         CompressionTypeStrings(1) = "Será aplicada uma compressão rápida. Esta é a opção predefinida."
                         CompressionTypeStrings(2) = "Será aplicada a compressão máxima. Esta opção demora mais tempo, mas resulta numa imagem mais pequena."
                         CompressionTypeStrings(3) = "Será aplicado o nível de compressão para imagens reiniciadas por botão de pressão. Para tal, é necessário exportar a imagem como um ficheiro ESD."
+                    Case "ITA"
+                        Text = "Esportazione di un'immagine"
+                        Label1.Text = Text
+                        Label2.Text = "File immagine di destinazione:"
+                        Label3.Text = "File immagine di origine:"
+                        Label4.Text = "Modello di denominazione:"
+                        Label5.Text = "Tipo di compressione dell'immagine di destinazione:"
+                        Label7.Text = "Indice immagine sorgente:"
+                        CheckBox1.Text = "File SWM di riferimento"
+                        CheckBox2.Text = "Specificare un nome personalizzato per l'immagine di destinazione"
+                        CheckBox3.Text = "Rendi l'immagine avviabile (solo Windows PE)"
+                        CheckBox4.Text = "Aggiungi all'immagine la configurazione WIMBoot"
+                        CheckBox5.Text = "Controlla l'integrità prima di esportare l'immagine"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        Button1.Text = "Sfoglia..."
+                        Button2.Text = "Sfoglia..."
+                        Button4.Text = "Usa il nome dell'immagine"
+                        Button5.Text = "Scansiona modello"
+                        GroupBox1.Text = "Sorgenti e destinazioni"
+                        GroupBox2.Text = "Opzioni"
+                        OpenFileDialog1.Title = "Specificare un file immagine di origine da esportare"
+                        ListView1.Columns(0).Text = "Indice"
+                        ListView1.Columns(1).Text = "Nome dell'immagine"
+                        ListView1.Columns(2).Text = "Descrizione dell'immagine"
+                        ListView1.Columns(3).Text = "Versione immagine"
+                        CompressionTypeStrings(0) = "All'immagine di destinazione non verrà applicata alcuna compressione"
+                        CompressionTypeStrings(1) = "Verrà applicata la compressione veloce. È l'opzione predefinita"
+                        CompressionTypeStrings(2) = "Verrà applicata la compressione massima. Questa opzione richiede più tempo, ma produce un'immagine più piccola"
+                        CompressionTypeStrings(3) = "Verrà applicato il livello di compressione per le immagini con reset a pulsante. Ciò richiede l'esportazione dell'immagine come file ESD"
                 End Select
             Case 1
                 Text = "Export an image"
@@ -350,6 +388,36 @@ Public Class ImgExport
                 CompressionTypeStrings(1) = "Será aplicada uma compressão rápida. Esta é a opção predefinida."
                 CompressionTypeStrings(2) = "Será aplicada a compressão máxima. Esta opção demora mais tempo, mas resulta numa imagem mais pequena."
                 CompressionTypeStrings(3) = "Será aplicado o nível de compressão para imagens reiniciadas por botão de pressão. Para tal, é necessário exportar a imagem como um ficheiro ESD."
+            Case 5
+                Text = "Esportazione di un'immagine"
+                Label1.Text = Text
+                Label2.Text = "File immagine di destinazione:"
+                Label3.Text = "File immagine di origine:"
+                Label4.Text = "Modello di denominazione:"
+                Label5.Text = "Tipo di compressione dell'immagine di destinazione:"
+                Label7.Text = "Indice immagine sorgente:"
+                CheckBox1.Text = "File SWM di riferimento"
+                CheckBox2.Text = "Specificare un nome personalizzato per l'immagine di destinazione"
+                CheckBox3.Text = "Rendi l'immagine avviabile (solo Windows PE)"
+                CheckBox4.Text = "Aggiungi all'immagine la configurazione WIMBoot"
+                CheckBox5.Text = "Controlla l'integrità prima di esportare l'immagine"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                Button1.Text = "Sfoglia..."
+                Button2.Text = "Sfoglia..."
+                Button4.Text = "Usa il nome dell'immagine"
+                Button5.Text = "Scansiona modello"
+                GroupBox1.Text = "Sorgenti e destinazioni"
+                GroupBox2.Text = "Opzioni"
+                OpenFileDialog1.Title = "Specificare un file immagine di origine da esportare"
+                ListView1.Columns(0).Text = "Indice"
+                ListView1.Columns(1).Text = "Nome dell'immagine"
+                ListView1.Columns(2).Text = "Descrizione dell'immagine"
+                ListView1.Columns(3).Text = "Versione immagine"
+                CompressionTypeStrings(0) = "All'immagine di destinazione non verrà applicata alcuna compressione"
+                CompressionTypeStrings(1) = "Verrà applicata la compressione veloce. È l'opzione predefinita"
+                CompressionTypeStrings(2) = "Verrà applicata la compressione massima. Questa opzione richiede più tempo, ma produce un'immagine più piccola"
+                CompressionTypeStrings(3) = "Verrà applicato il livello di compressione per le immagini con reset a pulsante. Ciò richiede l'esportazione dell'immagine come file ESD"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -405,6 +473,8 @@ Public Class ImgExport
                         ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
                     Case "PTB", "PTG"
                         ToolStripStatusLabel1.Text = "Especifique o padrão de nomenclatura dos ficheiros SWM"
+                    Case "ITA"
+                        ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SWM"
                 End Select
             Case 1
                 ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
@@ -414,6 +484,8 @@ Public Class ImgExport
                 ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
             Case 4
                 ToolStripStatusLabel1.Text = "Especifique o padrão de nomenclatura dos ficheiros SWM"
+            Case 5
+                ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SWM"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
@@ -509,30 +581,36 @@ Public Class ImgExport
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
+                            MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, Label1.Text)
                             ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
                         Case "ESN"
-                            MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
+                            MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, Label1.Text)
                             ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
                         Case "FRA"
-                            MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, "Appliquer une image")
+                            MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, Label1.Text)
                             ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                         Case "PTB", "PTG"
-                            MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, "Aplicar uma imagem")
+                            MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, Label1.Text)
                             ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+                        Case "ITA"
+                            MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, Label1.Text)
+                            ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
                     End Select
                 Case 1
-                    MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
+                    MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, Label1.Text)
                     ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
                 Case 2
-                    MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, "Aplicar una imagen")
+                    MsgBox("Especifique el arhivo WIM de origen. Esto le permitirá usar los archivos SWM para la aplicación posterior de la imagen", vbOKOnly + vbCritical, Label1.Text)
                     ToolStripStatusLabel1.Text = "Esta nomenclatura de patrón devuelve " & ListBox1.Items.Count & " archivos SWM"
                 Case 3
-                    MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, "Appliquer une image")
+                    MsgBox("Veuillez indiquer un fichier WIM original. Cela vous permettra d'utiliser les fichiers SWM pour une application d'image ultérieure.", vbOKOnly + vbCritical, Label1.Text)
                     ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                 Case 4
-                    MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, "Aplicar uma imagem")
+                    MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, Label1.Text)
                     ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+                Case 5
+                    MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, Label1.Text)
+                    ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
             End Select
             Beep()
             Exit Sub
@@ -553,6 +631,8 @@ Public Class ImgExport
                         ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                     Case "PTB", "PTG"
                         ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+                    Case "ITA"
+                        ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
                 End Select
             Case 1
                 ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
@@ -562,6 +642,8 @@ Public Class ImgExport
                 ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
             Case 4
                 ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+            Case 5
+                ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
         End Select
         If ListBox1.Items.Count <= 0 Then Beep()
     End Sub

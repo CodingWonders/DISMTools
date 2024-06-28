@@ -37,6 +37,11 @@ Public Class OrphanedMountedImgDialog
                         Label2.Text = "O projeto que foi carregado contém uma imagem órfã (uma imagem que precisa de ser montada novamente)" & CrLf & "A imagem será montada novamente quando clicar em " & Quote & "OK" & Quote & ". Isto não deve afetar as suas modificações na imagem e também não deve demorar muito tempo." & CrLf & CrLf & "NOTA: se clicar em " & Quote & "Cancel" & Quote & ", o projeto será descarregado"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Label1.Text = "Questa immagine necessita di una sessione di assistenza per essere ricaricata"
+                        Label2.Text = "Il progetto che è stato caricato contiene un'immagine orfana (un'immagine che deve essere rimontata)" & CrLf & "L'immagine verrà rimontata quando si fa clic su " & Quote & "OK" & Quote & ". Questa operazione non dovrebbe influire sulle modifiche apportate all'immagine e non dovrebbe richiedere molto tempo." & CrLf & CrLf & "NOTA: se si fa clic su " & Quote & "Cancel" & Quote & ", il progetto verrà scaricato"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Label1.Text = "This image needs a servicing session reload"
@@ -58,6 +63,11 @@ Public Class OrphanedMountedImgDialog
                 Label2.Text = "O projeto que foi carregado contém uma imagem órfã (uma imagem que precisa de ser montada novamente)" & CrLf & "A imagem será montada novamente quando clicar em " & Quote & "OK" & Quote & ". Isto não deve afetar as suas modificações na imagem e também não deve demorar muito tempo." & CrLf & CrLf & "NOTA: se clicar em " & Quote & "Cancel" & Quote & ", o projeto será descarregado"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Label1.Text = "Questa immagine necessita di una sessione di assistenza per essere ricaricata"
+                Label2.Text = "Il progetto che è stato caricato contiene un'immagine orfana (un'immagine che deve essere rimontata)" & CrLf & "L'immagine verrà rimontata quando si fa clic su " & Quote & "OK" & Quote & ". Questa operazione non dovrebbe influire sulle modifiche apportate all'immagine e non dovrebbe richiedere molto tempo." & CrLf & CrLf & "NOTA: se si fa clic su " & Quote & "Cancel" & Quote & ", il progetto verrà scaricato"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

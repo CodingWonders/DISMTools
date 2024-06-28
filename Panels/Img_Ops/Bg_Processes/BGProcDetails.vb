@@ -129,6 +129,9 @@
                         Case "PTB", "PTG"
                             Label1.Text = "A recolher informação sobre a imagem..."
                             Label3.Text = "Estes processos podem demorar algum tempo a concluir"
+                        Case "ITA"
+                            Label1.Text = "Raccolta informazioni sull'immagine..."
+                            Label3.Text = "Il completamento di questi processi può richiedere del tempo"
                     End Select
                 Case 1
                     Label1.Text = "Gathering image information..."
@@ -142,6 +145,9 @@
                 Case 4
                     Label1.Text = "A recolher informação sobre a imagem..."
                     Label3.Text = "Estes processos podem demorar algum tempo a concluir"
+                Case 5
+                    Label1.Text = "Raccolta informazioni sull'immagine..."
+                    Label3.Text = "Il completamento di questi processi può richiedere del tempo"
             End Select
             If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
                 BackColor = Color.FromArgb(37, 37, 38)
