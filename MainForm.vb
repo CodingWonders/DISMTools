@@ -7568,7 +7568,7 @@ Public Class MainForm
                         MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visita il sito Web di Microsoft Store Generation Project"
                         AppxDownloadHelpToolStripMenuItem.Text = "Come si ottengono le applicazioni?"
                         ' New design
-                        GreetingLabel.Text = "Benvenuti a questa sessione di assistenza"
+                        GreetingLabel.Text = "Ti diamo il benvenuto a questa sessione di assistenza"
                         LinkLabel12.Text = "PROGETTO"
                         LinkLabel13.Text = "IMMAGINE"
                         Label54.Text = "Nome:"
@@ -7635,7 +7635,7 @@ Public Class MainForm
                         Button57.Text = "Imposta percorso di destinazione..."
                         Button58.Text = "Imposta spazio temporaneo..."
                         ' New home panel design
-                        LinkLabel22.Text = "BENVENUTI"
+                        LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
                         LinkLabel23.Text = "ULTIME NOTIZIE"
                         LinkLabel24.Text = "VIDEO TUTORIAL"
                         ' - Welcome panel
@@ -9436,7 +9436,7 @@ Public Class MainForm
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visita il sito Web di Microsoft Store Generation Project"
                 AppxDownloadHelpToolStripMenuItem.Text = "Come si ottengono le applicazioni?"
                 ' New design
-                GreetingLabel.Text = "Benvenuti a questa sessione di assistenza"
+                GreetingLabel.Text = "Ti diamo il benvenuto a questa sessione di assistenza"
                 LinkLabel12.Text = "PROGETTO"
                 LinkLabel13.Text = "IMMAGINE"
                 Label54.Text = "Nome:"
@@ -9503,7 +9503,7 @@ Public Class MainForm
                 Button57.Text = "Imposta percorso di destinazione..."
                 Button58.Text = "Imposta spazio temporaneo..."
                 ' New home panel design
-                LinkLabel22.Text = "BENVENUTI"
+                LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
                 LinkLabel23.Text = "ULTIME NOTIZIE"
                 LinkLabel24.Text = "VIDEO TUTORIAL"
                 ' - Welcome panel

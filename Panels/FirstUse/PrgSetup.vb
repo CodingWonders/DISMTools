@@ -604,7 +604,7 @@ Public Class PrgSetup
             Case "ITA"
                 Text = "Impostare DISMTools"
                 Label1.Text = Text
-                Label2.Text = "Benvenuti a DISMTools"
+                Label2.Text = "Ti diamo il benvenuto a DISMTools"
                 Label3.Text = "DISMTools è un'interfaccia grafica gratuita e open-source, basata su progetti, per le operazioni DISM. Per iniziare a configurare le operazioni, fare clic su Avanti"
                 Label5.Text = "Rendilo tuo. Personalizzate questo programma a vostro piacimento e fate clic su Avanti. Queste impostazioni possono essere configurate in qualsiasi momento nella sezione " & Quote & "Personalizzazione" & Quote & " della finestra Opzioni"
                 Label6.Text = "Personalizzazione di questo programma"
