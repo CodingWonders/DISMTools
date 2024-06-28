@@ -18,6 +18,8 @@ Public Class ImgAppend
                             msg = "Veuillez indiquer un répertoire d'images source et réessayer."
                         Case "PTB", "PTG"
                             msg = "Especifique um diretório de imagens de origem e tente novamente."
+                        Case "ITA"
+                            msg = "Specificare una directory di origine dell'immagine e riprovare."
                     End Select
                 Case 1
                     msg = "Please specify a source image directory and try again."
@@ -27,6 +29,8 @@ Public Class ImgAppend
                     msg = "Veuillez indiquer un répertoire d'images source et réessayer."
                 Case 4
                     msg = "Especifique um diretório de imagens de origem e tente novamente."
+                Case 5
+                    msg = "Specificare una directory di origine dell'immagine e riprovare."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -45,6 +49,8 @@ Public Class ImgAppend
                             msg = "Veuillez indiquer un fichier image de destination et réessayer."
                         Case "PTB", "PTG"
                             msg = "Especifique um ficheiro de imagem de destino e tente novamente."
+                        Case "ITA"
+                            msg = "Specificare un file immagine di destinazione e riprovare."
                     End Select
                 Case 1
                     msg = "Please specify a destination image file and try again."
@@ -54,6 +60,8 @@ Public Class ImgAppend
                     msg = "Veuillez indiquer un fichier image de destination et réessayer."
                 Case 4
                     msg = "Especifique um ficheiro de imagem de destino e tente novamente."
+                Case 5
+                    msg = "Specificare un file immagine di destinazione e riprovare."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -72,6 +80,8 @@ Public Class ImgAppend
                             msg = "Veuillez indiquer un nom pour le fichier image de destination et réessayer."
                         Case "PTB", "PTG"
                             msg = "Especifique um nome para o ficheiro de imagem de destino e tente novamente."
+                        Case "ITA"
+                            msg = "Specificare un nome per il file immagine di destinazione e riprovare."
                     End Select
                 Case 1
                     msg = "Please specify a name for the destination image file and try again."
@@ -81,6 +91,8 @@ Public Class ImgAppend
                     msg = "Veuillez indiquer un nom pour le fichier image de destination et réessayer."
                 Case 4
                     msg = "Especifique um nome para o ficheiro de imagem de destino e tente novamente."
+                Case 5
+                    msg = "Specificare un nome per il file immagine di destinazione e riprovare."
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -103,6 +115,8 @@ Public Class ImgAppend
                                 msg = "Soit aucun fichier de liste de configuration n'a été spécifié, soit le fichier de liste de configuration n'a pas pu être détecté dans votre système de fichiers. Souhaitez-vous continuer sans fichier de liste de configuration ?"
                             Case "PTB", "PTG"
                                 msg = "Ou não foi especificado nenhum ficheiro de lista de configuração ou o ficheiro de lista de configuração não foi detectado no seu sistema de ficheiros. Deseja continuar sem qualquer ficheiro de lista de configuração?"
+                            Case "ITA"
+                                msg = "Non è stato specificato alcun file dell'elenco di configurazione oppure non è stato possibile rilevare il file dell'elenco di configurazione nel file system. Si desidera continuare senza alcun file dell'elenco di configurazione?"
                         End Select
                     Case 1
                         msg = "Either no configuration list file has been specified or the configuration list file could not be detected in your file system. Would you like to continue without any configuration list file?"
@@ -112,6 +126,8 @@ Public Class ImgAppend
                         msg = "Soit aucun fichier de liste de configuration n'a été spécifié, soit le fichier de liste de configuration n'a pas pu être détecté dans votre système de fichiers. Souhaitez-vous continuer sans fichier de liste de configuration ?"
                     Case 4
                         msg = "Ou não foi especificado nenhum ficheiro de lista de configuração ou o ficheiro de lista de configuração não foi detectado no seu sistema de ficheiros. Deseja continuar sem qualquer ficheiro de lista de configuração?"
+                    Case 5
+                        msg = "Non è stato specificato alcun file dell'elenco di configurazione oppure non è stato possibile rilevare il file dell'elenco di configurazione nel file system. Si desidera continuare senza alcun file dell'elenco di configurazione?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
                     ProgressPanel.AppendixWimScriptConfig = ""
@@ -236,6 +252,29 @@ Public Class ImgAppend
                         CheckBox7.Text = "Capturar atributos alargados"
                         GroupBox1.Text = "Origens e destinos"
                         GroupBox2.Text = "Opções"
+                    Case "ITA"
+                        Text = "Aggiungi a un'immagine"
+                        Label1.Text = Text
+                        Label2.Text = "Percorso del file di configurazione:"
+                        Label3.Text = " Cartella dell'immagine di origine:"
+                        Label5.Text = "Descrizione immagine di destinazione:"
+                        Label6.Text = "File immagine di destinazione:"
+                        Label7.Text = "Nome immagine di destinazione:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        Button1.Text = "Sfoglia..."
+                        Button2.Text = "Sfoglia..."
+                        Button3.Text = "Sfogliare..."
+                        Button5.Text = "Crea..."
+                        CheckBox1.Text = "Escludi determinati file e cartelle per l'immagine di destinazione"
+                        CheckBox2.Text = "Aggiungi con la configurazione WIMBoot"
+                        CheckBox3.Text = "Rendi l'immagine avviabile (solo Windows PE)"
+                        CheckBox4.Text = "Verifica l'integrità dell'immagine"
+                        CheckBox5.Text = "Controlla gli errori dei file"
+                        CheckBox6.Text = "Utilizza la correzione del tag del punto di reparse"
+                        CheckBox7.Text = "Cattura attributi estesi"
+                        GroupBox1.Text = "Sorgenti e destinazioni"
+                        GroupBox2.Text = "Opzioni"
                 End Select
             Case 1
                 Text = "Append to an image"
@@ -329,6 +368,29 @@ Public Class ImgAppend
                 CheckBox7.Text = "Capturar atributos alargados"
                 GroupBox1.Text = "Origens e destinos"
                 GroupBox2.Text = "Opções"
+            Case 5
+                Text = "Aggiungi a un'immagine"
+                Label1.Text = Text
+                Label2.Text = "Percorso del file di configurazione:"
+                Label3.Text = " Cartella dell'immagine di origine:"
+                Label5.Text = "Descrizione immagine di destinazione:"
+                Label6.Text = "File immagine di destinazione:"
+                Label7.Text = "Nome immagine di destinazione:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                Button1.Text = "Sfoglia..."
+                Button2.Text = "Sfoglia..."
+                Button3.Text = "Sfogliare..."
+                Button5.Text = "Crea..."
+                CheckBox1.Text = "Escludi determinati file e cartelle per l'immagine di destinazione"
+                CheckBox2.Text = "Aggiungi con la configurazione WIMBoot"
+                CheckBox3.Text = "Rendi l'immagine avviabile (solo Windows PE)"
+                CheckBox4.Text = "Verifica l'integrità dell'immagine"
+                CheckBox5.Text = "Controlla gli errori dei file"
+                CheckBox6.Text = "Utilizza la correzione del tag del punto di reparse"
+                CheckBox7.Text = "Cattura attributi estesi"
+                GroupBox1.Text = "Sorgenti e destinazioni"
+                GroupBox2.Text = "Opzioni"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)

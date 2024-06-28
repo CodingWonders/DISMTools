@@ -29,6 +29,8 @@ Public Class ImgIndexDelete
                             MsgBox("Veuillez sélectionner les images de volume à supprimer de cette image et réessayer.", vbOKOnly + vbCritical, "Supprimer une image de volume")
                         Case "PTB", "PTG"
                             MsgBox("Seleccione as imagens de volume a remover desta imagem e tente novamente.", vbOKOnly + vbCritical, "Remover uma imagem de volume")
+                        Case "ITA"
+                            MsgBox("Selezionare le immagini del volume da rimuovere da questa immagine e riprovare", vbOKOnly + vbCritical, "Rimuovere un'immagine del volume")
                     End Select
                 Case 1
                     MsgBox("Please select volume images to remove from this image, and try again.", vbOKOnly + vbCritical, "Remove a volume image")
@@ -38,6 +40,8 @@ Public Class ImgIndexDelete
                     MsgBox("Veuillez sélectionner les images de volume à supprimer de cette image et réessayer.", vbOKOnly + vbCritical, "Supprimer une image de volume")
                 Case 4
                     MsgBox("Seleccione as imagens de volume a remover desta imagem e tente novamente.", vbOKOnly + vbCritical, "Remover uma imagem de volume")
+                Case 5
+                    MsgBox("Selezionare le immagini del volume da rimuovere da questa immagine e riprovare", vbOKOnly + vbCritical, "Rimuovere un'immagine del volume")
             End Select
             Exit Sub
         End If
@@ -57,6 +61,8 @@ Public Class ImgIndexDelete
                             msg = "Le programme a détecté que cette image est montée. Pour supprimer les images de volume d'un fichier, celui-ci doit être démonté. Vous pourrez la remonter plus tard, si vous le souhaitez." & CrLf & CrLf & "Notez que cette opération démontera l'image sans enregistrer les modifications. Assurez-vous que toutes vos modifications ont été enregistrées avant de continuer." & CrLf & CrLf & "Voulez-vous démonter cette image ?"
                         Case "PTB", "PTG"
                             msg = "O programa detectou que esta imagem está montada. Para remover imagens de volume de um ficheiro, este tem de ser desmontado. Pode voltar a montá-la mais tarde, se quiser." & CrLf & CrLf & "Tenha em atenção que isto irá desmontar a imagem sem guardar as alterações. Certifique-se de que todas as suas alterações foram guardadas antes de continuar." & CrLf & CrLf & "Deseja desmontar esta imagem?"
+                        Case "ITA"
+                            msg = "Il programma ha rilevato che questa immagine è montata. Per rimuovere le immagini di volume da un file, è necessario smontarlo. È possibile rimontarla in seguito, se si desidera." & CrLf & CrLf & "Si noti che questa operazione smonterà l'immagine senza salvare le modifiche. Assicurarsi che tutte le modifiche siano state salvate prima di procedere." & CrLf & CrLf & "Si desidera smontare questa immagine?"
                     End Select
                 Case 1
                     msg = "The program has detected that this image is mounted. In order to remove volume images from a file, it needs to be unmounted. You can remount it later, if you want." & CrLf & CrLf & "Do note that this will unmount the image without saving changes. Make sure all your changes have been saved before proceeding." & CrLf & CrLf & "Do you want to unmount this image?"
@@ -66,6 +72,8 @@ Public Class ImgIndexDelete
                     msg = "Le programme a détecté que cette image est montée. Pour supprimer les images de volume d'un fichier, celui-ci doit être démonté. Vous pourrez la remonter plus tard, si vous le souhaitez." & CrLf & CrLf & "Notez que cette opération démontera l'image sans enregistrer les modifications. Assurez-vous que toutes vos modifications ont été enregistrées avant de continuer." & CrLf & CrLf & "Voulez-vous démonter cette image ?"
                 Case 4
                     msg = "O programa detectou que esta imagem está montada. Para remover imagens de volume de um ficheiro, este tem de ser desmontado. Pode voltar a montá-la mais tarde, se quiser." & CrLf & CrLf & "Tenha em atenção que isto irá desmontar a imagem sem guardar as alterações. Certifique-se de que todas as suas alterações foram guardadas antes de continuar." & CrLf & CrLf & "Deseja desmontar esta imagem?"
+                Case 5
+                    msg = "Il programma ha rilevato che questa immagine è montata. Per rimuovere le immagini di volume da un file, è necessario smontarlo. È possibile rimontarla in seguito, se si desidera." & CrLf & CrLf & "Si noti che questa operazione smonterà l'immagine senza salvare le modifiche. Assicurarsi che tutte le modifiche siano state salvate prima di procedere." & CrLf & CrLf & "Si desidera smontare questa immagine?"
             End Select
             If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
                 Try
@@ -180,6 +188,22 @@ Public Class ImgIndexDelete
                         ListView2.Columns(0).Text = "Índice"
                         ListView2.Columns(1).Text = "Nome da imagem"
                         GroupBox1.Text = "Imagens de volume"
+                    Case "ITA"
+                        Text = "Rimuovere l'immagine di un volume"
+                        Label1.Text = Text
+                        Label2.Text = "Immagine sorgente:"
+                        Label3.Text = "Contrassegnare le immagini del volume da eliminare a sinistra. L'immagine avrà poi gli indici mostrati a destra"
+                        Label4.Text = "Ottenere gli indici dall'immagine. Attendere..."
+                        Button1.Text = "Sfogliare..."
+                        Button2.Text = "Utilizza l'immagine montata"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        CheckBox1.Text = "Verifica l'integrità dell'immagine"
+                        ListView1.Columns(0).Text = "Indice"
+                        ListView1.Columns(1).Text = "Nome dell'immagine"
+                        ListView2.Columns(0).Text = "Indice"
+                        ListView2.Columns(1).Text = "Nome dell'immagine"
+                        GroupBox1.Text = "Immagini volume"
                 End Select
             Case 1
                 Text = "Remove a volume image"
@@ -245,6 +269,22 @@ Public Class ImgIndexDelete
                 ListView2.Columns(0).Text = "Índice"
                 ListView2.Columns(1).Text = "Nome da imagem"
                 GroupBox1.Text = "Imagens de volume"
+            Case 5
+                Text = "Rimuovere l'immagine di un volume"
+                Label1.Text = Text
+                Label2.Text = "Immagine sorgente:"
+                Label3.Text = "Contrassegnare le immagini del volume da eliminare a sinistra. L'immagine avrà poi gli indici mostrati a destra"
+                Label4.Text = "Ottenere gli indici dall'immagine. Attendere..."
+                Button1.Text = "Sfogliare..."
+                Button2.Text = "Utilizza l'immagine montata"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                CheckBox1.Text = "Verifica l'integrità dell'immagine"
+                ListView1.Columns(0).Text = "Indice"
+                ListView1.Columns(1).Text = "Nome dell'immagine"
+                ListView2.Columns(0).Text = "Indice"
+                ListView2.Columns(1).Text = "Nome dell'immagine"
+                GroupBox1.Text = "Immagini volume"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -318,6 +358,8 @@ Public Class ImgIndexDelete
                             MsgBox("Cette image ne contient qu'un seul index. Vous ne pouvez pas supprimer les images de volume de ce fichier.", vbOKOnly + vbExclamation, "Supprimer une image de volume")
                         Case "PTB", "PTG"
                             MsgBox("Esta imagem contém apenas 1 índice. Não é possível remover imagens de volume deste ficheiro", vbOKOnly + vbExclamation, "Remover uma imagem de volume")
+                        Case "ITA"
+                            MsgBox("Questa immagine contiene solo 1 indice. Non è possibile rimuovere le immagini del volume da questo file", vbOKOnly + vbExclamation, "Rimuovere un'immagine del volume")
                     End Select
                 Case 1
                     MsgBox("This image only contains 1 index. You can't remove volume images from this file", vbOKOnly + vbExclamation, "Remove a volume image")
@@ -327,6 +369,8 @@ Public Class ImgIndexDelete
                     MsgBox("Cette image ne contient qu'un seul index. Vous ne pouvez pas supprimer les images de volume de ce fichier.", vbOKOnly + vbExclamation, "Supprimer une image de volume")
                 Case 4
                     MsgBox("Esta imagem contém apenas 1 índice. Não é possível remover imagens de volume deste ficheiro", vbOKOnly + vbExclamation, "Remover uma imagem de volume")
+                Case 5
+                    MsgBox("Questa immagine contiene solo 1 indice. Non è possibile rimuovere le immagini del volume da questo file", vbOKOnly + vbExclamation, "Rimuovere un'immagine del volume")
             End Select
             Label4.Visible = False
             OK_Button.Enabled = False

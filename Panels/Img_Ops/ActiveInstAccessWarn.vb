@@ -53,6 +53,15 @@ Public Class ActiveInstAccessWarn
                             "Se compreender este aviso e pretender continuar, clique em OK. Caso contrário, clique em OK e, em seguida, clique em " & Quote & "Descarregar projeto" & Quote & ". Isto irá terminar a gestão da instalação online."
                         Label2.Text = "O projeto atual será descarregado."
                         OK_Button.Text = "OK"
+                    Case "ITA"
+                        Text = "Informazioni sulla gestione dell'installazione attiva"
+                        Label1.Text = "Si sta per accedere alla modalità di gestione dell'installazione attiva, che consente di apportare modifiche all'installazione attiva di Windows." & CrLf & CrLf & _
+                            "Poiché questa modalità consente di modificare l'installazione, è necessario prestare la massima attenzione quando si eseguono operazioni con questo programma." & CrLf & CrLf & _
+                            "Se si esegue incautamente un'operazione su un'immagine online, la si può rompere, fino a rendere l'installazione non avviabile." & CrLf & CrLf & _
+                            "NON SIAMO RESPONSABILI di eventuali danni arrecati all'installazione attiva. Se il sistema risulta non avviabile, è necessario reinstallare Windows (eseguendo prima un backup dei file, se possibile)" & CrLf & CrLf & _
+                            "Se avete compreso questo avviso e desiderate procedere, fate clic su OK. In caso contrario, fare clic su OK, quindi su " & Quote & "Scarica il progetto..." & Quote & ". In questo modo si conclude la gestione dell'installazione online."
+                        Label2.Text = "Il progetto corrente verrà scaricato"
+                        OK_Button.Text = "OK"
                 End Select
             Case 1
                 Text = "About active installation management"
@@ -89,6 +98,15 @@ Public Class ActiveInstAccessWarn
                     "NÃO NOS RESPONSABILIZAMOS por qualquer dano causado à sua instalação ativa. Se ficar com um sistema não arrancável, deve reinstalar o Windows (fazendo primeiro uma cópia de segurança dos seus ficheiros, se possível)" & CrLf & CrLf & _
                     "Se compreender este aviso e pretender continuar, clique em OK. Caso contrário, clique em OK e, em seguida, clique em " & Quote & "Descarregar projeto" & Quote & ". Isto irá terminar a gestão da instalação online."
                 Label2.Text = "O projeto atual será descarregado."
+                OK_Button.Text = "OK"
+            Case 5
+                Text = "Informazioni sulla gestione dell'installazione attiva"
+                Label1.Text = "Si sta per accedere alla modalità di gestione dell'installazione attiva, che consente di apportare modifiche all'installazione attiva di Windows." & CrLf & CrLf & _
+                    "Poiché questa modalità consente di modificare l'installazione, è necessario prestare la massima attenzione quando si eseguono operazioni con questo programma." & CrLf & CrLf & _
+                    "Se si esegue incautamente un'operazione su un'immagine online, la si può rompere, fino a rendere l'installazione non avviabile." & CrLf & CrLf & _
+                    "NON SIAMO RESPONSABILI di eventuali danni arrecati all'installazione attiva. Se il sistema risulta non avviabile, è necessario reinstallare Windows (eseguendo prima un backup dei file, se possibile)" & CrLf & CrLf & _
+                    "Se avete compreso questo avviso e desiderate procedere, fate clic su OK. In caso contrario, fare clic su OK, quindi su " & Quote & "Scarica il progetto..." & Quote & ". In questo modo si conclude la gestione dell'installazione online."
+                Label2.Text = "Il progetto corrente verrà scaricato"
                 OK_Button.Text = "OK"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
