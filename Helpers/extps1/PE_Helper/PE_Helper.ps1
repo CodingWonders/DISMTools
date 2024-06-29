@@ -440,10 +440,11 @@ function Start-PECustomization
                 }
                 Write-Host "Creating folders..."
                 New-Item -Path "$imagePath\Windows\system32\config\systemprofile\Desktop" -ItemType Directory -Force
+                Write-Host "The target system is now ready for graphical applications"
             }
             catch
             {
-                Write-Host "Could not modify terminal settings"
+                Write-Host "Could not prepare the system for graphical applications"
             }
         }
         try
@@ -696,8 +697,18 @@ function Start-OSApplication
         $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
         foreach ($driver in $drivers)
         {
-            Write-Host "Adding driver `"$driver`"..."
-            Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false | Out-Null
+			if (Test-Path -Path "$driver" -PathType Leaf)
+			{
+				Write-Host "Adding driver `"$driver`"...        " -NoNewline
+				if ((Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false) -eq $true)
+				{
+					Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+				}
+				else
+				{
+					Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+				}
+			}
         }
         # Perform serviceability tests one more time
         if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
@@ -767,7 +778,7 @@ function Get-Disks
     }
 
     # Show additional tools
-    Write-Host "If you cannnot see your disks, you may need to add drivers. Type `"DIM`" and press ENTER to launch the Driver Installation Module."
+    Write-Host "- To load drivers, type `"DIM`" and press ENTER`n"
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"    
     $destDrive = -1
@@ -792,7 +803,7 @@ function Get-Disks
                     if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
                         Clear-Host
-                        Write-Host "Starting the Driver Installation Module..."
+                        Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
                 }
