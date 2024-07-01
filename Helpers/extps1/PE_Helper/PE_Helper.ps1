@@ -420,7 +420,7 @@ function Start-PECustomization
                             Start-Sleep -Milliseconds 500
                             reg unload "HKLM\WINPESOFT"
                         } until ($?)
-                        Write-Host "Registry closed successfully after $attempts attempt(s)"
+                        Write-Host "Registry closed successfully after $($attempts + 1) attempt(s)"
                     }
                 }
                 else
