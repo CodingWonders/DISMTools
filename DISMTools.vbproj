@@ -1050,6 +1050,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
