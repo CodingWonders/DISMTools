@@ -5793,6 +5793,17 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+
+        Dim peItems = WindowsPreinstallationEnvironmentsToolStripMenuItem.DropDownItems
+        Dim WinPEItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(peItems)
+        Try
+            For Each dropDownItem As ToolStripDropDownItem In WinPEItems
+                dropDownItem.BackColor = WindowsPreinstallationEnvironmentsToolStripMenuItem.BackColor
+                dropDownItem.ForeColor = WindowsPreinstallationEnvironmentsToolStripMenuItem.ForeColor
+            Next
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -5948,6 +5959,7 @@ Public Class MainForm
                         ReportManagerToolStripMenuItem.Text = "Report manager"
                         MountedImageManagerTSMI.Text = "Mounted image manager"
                         CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
+                        CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
                         WimScriptEditorCommand.Text = "Configuration list editor"
                         ActionEditorToolStripMenuItem.Text = "Action editor"
                         OptionsToolStripMenuItem.Text = "Options"
@@ -6321,6 +6333,7 @@ Public Class MainForm
                         ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                         MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
+                        CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
                         WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
                         ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                         OptionsToolStripMenuItem.Text = "Opciones"
@@ -6694,6 +6707,7 @@ Public Class MainForm
                         ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                         MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                         CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
+                        CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
                         WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
                         ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                         OptionsToolStripMenuItem.Text = "Paramètres"
@@ -7067,6 +7081,7 @@ Public Class MainForm
                         ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                         MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
+                        CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
                         WimScriptEditorCommand.Text = "Editor de listas de configuração"
                         ActionEditorToolStripMenuItem.Text = "Editor de acções"
                         OptionsToolStripMenuItem.Text = "Opções"
@@ -7439,6 +7454,7 @@ Public Class MainForm
                         ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                         MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                         CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
+                        CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
                         WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
                         ActionEditorToolStripMenuItem.Text = "Editor di azioni"
                         OptionsToolStripMenuItem.Text = "Opzioni"
@@ -7817,6 +7833,7 @@ Public Class MainForm
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
                 CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
+                CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
                 WimScriptEditorCommand.Text = "Configuration list editor"
                 ActionEditorToolStripMenuItem.Text = "Action editor"
                 OptionsToolStripMenuItem.Text = "Options"
@@ -8190,6 +8207,7 @@ Public Class MainForm
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
+                CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
                 WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
                 ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                 OptionsToolStripMenuItem.Text = "Opciones"
@@ -8562,6 +8580,7 @@ Public Class MainForm
                 ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                 MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                 CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
+                CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
                 WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
                 ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                 OptionsToolStripMenuItem.Text = "Paramètres"
@@ -8935,6 +8954,7 @@ Public Class MainForm
                 ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                 MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
+                CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
                 WimScriptEditorCommand.Text = "Editor de listas de configuração"
                 ActionEditorToolStripMenuItem.Text = "Editor de acções"
                 OptionsToolStripMenuItem.Text = "Opções"
@@ -9307,6 +9327,7 @@ Public Class MainForm
                 ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                 MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                 CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
+                CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
                 WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
                 ActionEditorToolStripMenuItem.Text = "Editor di azioni"
                 OptionsToolStripMenuItem.Text = "Opzioni"
@@ -19536,5 +19557,9 @@ Public Class MainForm
         Else
             ISOCreator.Show()
         End If
+    End Sub
+
+    Private Sub CreateTestingEnvironmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateTestingEnvironmentToolStripMenuItem.Click
+        NewTestingEnv.Show()
     End Sub
 End Class
