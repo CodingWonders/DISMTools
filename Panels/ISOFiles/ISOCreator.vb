@@ -581,4 +581,8 @@ Public Class ISOCreator
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         TextBox1.Text = MainForm.SourceImg
     End Sub
+
+    Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
+        Close()
+    End Sub
 End Class
