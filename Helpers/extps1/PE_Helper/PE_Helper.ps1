@@ -423,7 +423,7 @@ function Start-PECustomization
                     New-Item -Path "$clsidKey\InprocServer32" -Force | Out-Null
                     New-ItemProperty -Path "$clsidKey\InprocServer32" -Name "(Default)" -Value "%SystemRoot%\system32\explorerframe.dll" -PropertyType ExpandString
                     Set-ItemProperty -Path "$clsidKey\InprocServer32" -Name "ThreadingModel" -Value "Apartment"
-                    Write-Host "Waiting for 5 seconds to allow image registry to be unlocked..."
+                    Write-Host "Waiting for 5 seconds to allow image registry to be unlocked. Expect access denied errors for a long time..."
                     Start-Sleep -Seconds 5
                     Write-Host "Closing registry..."
                     reg unload "HKLM\WINPESOFT"
@@ -1510,8 +1510,30 @@ function Start-ProjectDevelopment {
 					Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
 					# Delete local DIM src directory - not needed
 					if (Test-Path "$targetPath\ISORoot\media\Tools\DIM\src") { Remove-Item -Path "$targetPath\ISORoot\media\Tools\DIM\src" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null }
-					Write-Host "The project has been successfully created"				
+					Write-Host "The project has been successfully created"
+					try
+					{
+						Write-Host "Mounting Windows PE image..."
+						Mount-WindowsImage -ImagePath "$targetPath\ISORoot\media\sources\boot.wim" -Index 1 -Path "$targetPath\mount"
+						Write-Host "Updating the project configuration..."
+						$dtProjConfig = Get-Content -Path "$targetPath\settings\project.ini"
+						# Only update image file, index, and mount point configs. Let DISMTools configure the rest.
+						$dtProjConfig[6] = "ImageFile=`"$targetPath\ISORoot\media\sources\boot.wim`""
+						$dtprojConfig[7] = "ImageIndex=1"
+						$dtProjConfig[8] = "ImageMountPoint=`"$targetPath\mount`""
+						Set-Content -Path "$targetPath\settings\project.ini" -Value $dtprojConfig -Force
+						Write-Host "`nThe generation process is complete! You can start testing your applications on Windows PEs."
+					}
+					catch
+					{
+						Write-Host "Could not mount the target Windows PE image. You will have to do this manually."
+					}
 				}
+				else
+				{
+					Write-Host "Could not finish preparing the project."	
+				}
+				Start-Sleep -Seconds 5
 				exit 0
 			}
 			else
