@@ -331,4 +331,11 @@ Public Class NewTestingEnv
         IdlePanel.Visible = True
         ISOProgressPanel.Visible = False
     End Sub
+
+    Private Sub NewTestingEnv_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If BackgroundWorker1.IsBusy Then
+            e.Cancel = True
+            Beep()
+        End If
+    End Sub
 End Class

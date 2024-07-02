@@ -220,7 +220,7 @@ function Start-PEGeneration
 	}
 	catch
 	{
-		Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+		Write-Host "This process is unsuccessful as the following error occurred: $_"
 		Write-Host "`nPress ENTER to exit"
 		Read-Host | Out-Null
 		exit 1		
@@ -441,7 +441,7 @@ function Start-PECustomization
                 }
                 else
                 {
-                    Write-Host "Could not modify terminal settings"
+                    Write-Host "Could not prepare the system for graphical applications"
                 }
                 Write-Host "Copying DLL files..."
                 switch ($arch)
@@ -1388,11 +1388,12 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $architecture = [PE_Arch]::($testArch)
     $version = "0.5.1"
+	$ESVer = "0.5.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
-    Write-Host "Starting project creation..."
+    Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
     # Detect if the Windows ADK is present
 	try
 	{
@@ -1554,7 +1555,7 @@ function Start-ProjectDevelopment {
 	}
 	catch
 	{
-		Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+		Write-Host "This process is unsuccessful as the following error occurred: $_"
 		Write-Host "`nPress ENTER to exit"
 		Read-Host | Out-Null
 		exit 1
@@ -1580,7 +1581,7 @@ elseif ($cmd -eq "Help")
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------`n"
 
-    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [Help]`n"
+    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
@@ -1591,15 +1592,20 @@ elseif ($cmd -eq "Help")
     Write-Host "        https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
     Write-Host "    StartApply: starts the Windows image application process from the Preinstallation Environment (PE). Parameters: none"
     Write-Host "      This can only be run on Windows PE. Starting this action on other environments will fail."
+	Write-Host "    StartDevelopment: starts the PE project creation phase. Parameters:"
+	Write-Host "      -testArch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
+    Write-Host "                 x86, amd64, arm, arm64"
+	Write-Host "      -targetPath: (Mandatory) Specifies the target path for the PE project"
     Write-Host "    Help: shows this help documentation`n"
 
     Write-Host "Examples:`n"
     Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`""
     Write-Host "    PE_Helper.ps1 [-cmd] StartApply"
+	Write-Host "    PE_Helper.ps1 [-cmd] StartDevelopment -testArch amd64 -targetPath `"C:\FooBar`""
     Write-Host "    PE_Helper.ps1 [-cmd] Help"
 }
 else
 {
-    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), Help"
+    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), StartDevelopment, Help"
     exit 1
 }
