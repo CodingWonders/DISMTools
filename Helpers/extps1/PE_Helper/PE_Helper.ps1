@@ -417,14 +417,12 @@ function Start-PECustomization
                 if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)
                 {
                     Write-Host "Setting CLSID keys..."
-                    $clsidKey = "HKLM:\WINPESOFT\Classes\CLSID\{AE054212-3535-4430-83ED-D501AA6680E6}"
-                    New-Item -Path "$clsidKey" -Force | Out-Null
-                    Set-ItemProperty -Path "$clsidKey" -Name "(Default)" -Value "Shell Name Space ListView"
-                    New-Item -Path "$clsidKey\InprocServer32" -Force | Out-Null
-                    New-ItemProperty -Path "$clsidKey\InprocServer32" -Name "(Default)" -Value "%SystemRoot%\system32\explorerframe.dll" -PropertyType ExpandString
-                    Set-ItemProperty -Path "$clsidKey\InprocServer32" -Name "ThreadingModel" -Value "Apartment"
-                    Write-Host "Waiting for 5 seconds to allow image registry to be unlocked. Expect access denied errors for a long time..."
-                    Start-Sleep -Seconds 5
+                    $clsidKey = "HKLM\WINPESOFT\Classes\CLSID\{AE054212-3535-4430-83ED-D501AA6680E6}"
+                    reg add "$clsidKey" /f
+					reg add "$clsidKey" /f /ve /t REG_SZ /d "Shell Name Space ListView"
+					reg add "$clsidKey\InprocServer32" /f
+					reg add "$clsidKey\InprocServer32" /f /ve /t REG_EXPAND_SZ /d "%SystemRoot%\system32\explorerframe.dll"
+					reg add "$clsidKey\InprocServer32" /f /v "ThreadingModel" /t REG_SZ /d "Apartment"
                     Write-Host "Closing registry..."
                     reg unload "HKLM\WINPESOFT"
                     if (-not $?)
