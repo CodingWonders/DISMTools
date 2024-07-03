@@ -5793,17 +5793,6 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
-
-        Dim peItems = WindowsPreinstallationEnvironmentsToolStripMenuItem.DropDownItems
-        Dim WinPEItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(peItems)
-        Try
-            For Each dropDownItem As ToolStripDropDownItem In WinPEItems
-                dropDownItem.BackColor = WindowsPreinstallationEnvironmentsToolStripMenuItem.BackColor
-                dropDownItem.ForeColor = WindowsPreinstallationEnvironmentsToolStripMenuItem.ForeColor
-            Next
-        Catch ex As Exception
-
-        End Try
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
