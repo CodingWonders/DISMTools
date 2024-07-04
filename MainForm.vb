@@ -499,6 +499,36 @@ Public Class MainForm
         End Try
         Return Nothing
     End Function
+
+    Function DetectPossibleADKs() As Integer
+        Dim DefinedADKInstallation As Boolean
+        Try
+            Dim AdkSwitchRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
+            Dim AdkSwitchVal As Integer = AdkSwitchRk.GetValue("AdkInstallation")
+            AdkSwitchRk.Close()
+            If AdkSwitchVal <> 1 Then
+                DefinedADKInstallation = False
+            Else
+                Return 2
+            End If
+        Catch ex As Exception
+            DefinedADKInstallation = False
+        End Try
+        If Not DefinedADKInstallation Then
+            Dim folderPath As String = ""
+            If Environment.Is64BitOperatingSystem Then
+                folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & "\Windows Kits\10\Assessment and Deployment Kit"
+            Else
+                folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\Windows Kits\10\Assessment and Deployment Kit"
+            End If
+            If Directory.Exists(folderPath) Then
+                Return 1
+            Else
+                Return 0
+            End If
+        End If
+        Return 0
+    End Function
     
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -762,6 +792,23 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+        If DetectPossibleADKs() = 1 Then
+            Dim msg As String = ""
+            msg = "DISMTools has found a possible Assessment and Deployment Kit installed on your system. However, it is not being detected. Do you want to fix it?"
+            If MsgBox(msg, vbYesNo + vbQuestion, "Possible ADK installed on your system") = MsgBoxResult.Yes Then
+                Try
+                    Dim AdkProc As New Process()
+                    AdkProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\regedit.exe"
+                    AdkProc.StartInfo.Arguments = "/s " & Quote & Application.StartupPath & "\DT_WinADK.reg"
+                    AdkProc.StartInfo.CreateNoWindow = True
+                    AdkProc.Start()
+                    AdkProc.WaitForExit()
+                    AdkProc.Dispose()
+                Catch ex As Exception
+
+                End Try
+            End If
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
