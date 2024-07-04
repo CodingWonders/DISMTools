@@ -162,6 +162,7 @@ Imports Microsoft.Dism
 Imports System.Text.RegularExpressions
 Imports DISMTools.Elements
 Imports DISMTools.Utilities
+Imports System.ComponentModel
 
 Public Class ProgressPanel
 
@@ -5959,8 +5960,13 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "The specified operation completed successfully, but requires a restart in order to be fully applied. Save your work and restart when ready")
                 End If
             Else
-                ' Errors that weren't added to the database
-                LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
+                Try
+                    Dim exitDesc As New Win32Exception(Int32.Parse(errCode, Globalization.NumberStyles.HexNumber))
+                    LogView.AppendText(CrLf & CrLf & exitDesc.Message)
+                Catch ex As Exception
+                    ' Errors that weren't added to the database
+                    LogView.AppendText(CrLf & "This error has not yet been added to the database, so a useful description can't be shown now. Try running the command manually and, if you see the same error, try looking it up on the Internet.")
+                End Try
             End If
             LogView.AppendText(CrLf & CrLf & "For detailed information, consider reading the DISM operation logs.")
             Select Case MainForm.Language
