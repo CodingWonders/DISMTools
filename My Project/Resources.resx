@@ -1117,80 +1117,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview:
+    <value>New features
 
-Bugfixes:
-
-- A case where the program would still show "(~)" when saving capability information has been fixed
-- Fixed an issue where AppX package addition would fail if you applied a license file
-- The Help Documentation browser no longer displays an empty website title in the title bar after clicking external links
-- AppX package and capability background processes are no longer run on Windows PE images if they remain
-- DISM and image version detections have been refined for the "/Region" parameter during the AppX package addition process
-
-New features:
-
-- Help Documentation contents have been updated to reflect this version
-- The API error dialog has received translations
-
-Overall changes:
-
-Bugfixes:
-
-- Fixed an issue where the splash screen would not become fully opaque
-- Fixed an issue where the SWM file pattern chooser would not look right when switching from dark mode to light mode
-- Fixed some improper progress panel disposal issues
-- Fixed an issue where the program would show update recommendations for older versions of DISMTools (nightly versions only)
-- Fixed some exceptions that were thrown by the AppX package information dialog
-- Fixed an issue where the image information saver would throw an exception when getting information about some AppX packages
-- Fixed an issue where the program would throw an exception in the driver import dialog
-- If a custom system theme is applied, a warning will be displayed
-- Fixed a CSS layout issue in the Help documentation contents
-- Fixed a couple of issues in the ISO creator
-- The program now detects unsupported languages in the Initial Setup wizard and reverts to English
-- Added a workaround for issue #114
-- Fixed some issues when setting the log path if the directory does not exist
-- Fixed an issue where the log view font size would not be 11 pt. on the Initial Setup wizard
-- Added some warnings to fix issues #119 and #121
-- Fixed some anchoring issues in the ISO creator
-- Fixed some splash screen issues if the program is run on Windows 7/Server 2008 R2 or if the program is run without administrative privileges
-- Fixed an issue in the CLI version of the mounted image manager that would throw an error at startup if no images were mounted
-- If the download or install sizes of capabilities are less than 1024 bytes, the program will no longer show "(~)"
-- Fixed a critical issue where all DISM commands would fail for offline installations if the mount directory were a drive
-
-New features:
-
-- Branding and color tints have been refreshed
-- You can now report Store logo asset preview issues from the AppX package information dialog
-- The OneDrive folder exclusion tool now supports excluding user SkyDrive folders
-- You can now export Windows images to new files
-- The program can now clean up mount points on closure (as an option) and on-demand
-- When opening a File Explorer window to select a file, the program will now do that instead of just opening the directory the file is in
-- Internal errors are no longer shown on a generic dialog. Instead, they are now displayed in a dedicated window
-- The App Installer downloader now shows the download URL, the download speed, and the estimated time remaining for the transfer
-- All information dialogs have received Search capabilities
-- Video playback support has been added for tutorial videos
-- Added initial feature update detection for builds in the Dilithium semester
-- You can access the background process details panel by pressing the Alt + B key combination now
-- You can now append directories to a new index in the Windows image
-- You can now access the 10 most recent projects from the File menu
-- You can now configure the program to show the expanded progress panel by default
-- You can now create custom ISO files that can be used to test your Windows image easily thanks to the Preinstallation Environment (PE) Helper
-- The pop-up version of the mounted image manager can now be closed by pressing the Esc key
-- Encrypted AppX packages can now be added when managing the active installation
-- New copies of DISMTools now use Consolas (11 pt.) as the default log view font
-- You will now get error information if the ADK Deployment Tools copier fails
-- The automatic orphaned image reload procedure has been improved, now featuring greater visual feedback thanks to a progress dialog
-- You can now get image file information, save complete image information of a mounted Windows image, and create an ISO file with the selected image from within the mounted image manager
-- You can now view basic driver signer information for installed drivers in the driver information dialog and when saving this information to a file
-- The offline drive lister now updates automatically every minute
-- The Scintilla.NET library has been updated to the latest version
-- Existing PowerShell tooling (excluding the PE Helper) has been refactored and cleaned up for increased code readability and quality
-- The way custom properties of packages and features are viewed has been improved, better showing the hierarchy of these properties
-- The program update system has had some improvements:
-  - A minimum version threshold has been added to update information files. The currently running version is compared with this threshold to determine if settings should be migrated
-- The 7-Zip component has been updated to version 24.06
-- The App Installer downloader now informs of download errors and saves target files using the extension in the URL
-- The program can now detect and inform about DISM API errors to you</value>
+- The Preinstallation Environment (PE) Helper has had several improvements, including the addition of the DIM and the creation of testing environments
+- Italian translations have been added
+- The 7-Zip component has been updated to version 24.07
+- If the Windows ADK is installed, but the necessary registry value is not present, the program can add it automatically
+- MSU package addition has been simplified</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
