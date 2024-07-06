@@ -285,6 +285,68 @@ Public Class GetPkgInfoDlg
                         PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
                         OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
                         SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
+                    Case "ITA"
+                        Text = "Ottieni informazioni sui pacchetti"
+                        Label1.Text = Text
+                        Label2.Text = "Su cosa vuoi ottenere informazioni?"
+                        Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
+                        Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
+                        Label5.Text = "Pronto"
+                        Label6.Text = "Aggiungere o selezionare un file di pacchetto per visualizzarne le informazioni"
+                        Label7.Text = "Informazioni sul pacchetto"
+                        Label8.Text = "Nome del pacchetto:"
+                        Label10.Text = "Il pacchetto è applicabile?"
+                        Label12.Text = "Copyright:"
+                        Label14.Text = "Versione del prodotto:"
+                        Label16.Text = "Tipo di rilascio:"
+                        Label18.Text = "Azienda:"
+                        Label20.Text = "Tempo di creazione:"
+                        Label22.Text = "Nome del pacchetto:"
+                        Label24.Text = "Il pacchetto è applicabile?"
+                        Label26.Text = "Copyright:"
+                        Label28.Text = "Tempo di installazione:"
+                        Label30.Text = "Ora ultimo aggiornamento:"
+                        Label31.Text = "Azienda:"
+                        Label33.Text = "Nome del pacchetto di installazione:"
+                        Label36.Text = "Informazioni sul pacchetto"
+                        Label37.Text = "Selezionare un pacchetto installato per visualizzarne le informazioni"
+                        Label39.Text = "Nome visualizzato:"
+                        Label41.Text = "Ora di creazione:"
+                        Label43.Text = "Descrizione:"
+                        Label45.Text = "Nome del prodotto:"
+                        Label47.Text = "Client di installazione:"
+                        Label48.Text = "È necessario un riavvio?"
+                        Label50.Text = "Informazioni di supporto:"
+                        Label52.Text = "Stato:"
+                        Label54.Text = "È richiesto un avvio per l'installazione completa?"
+                        Label58.Text = "Proprietà personalizzate:"
+                        Label60.Text = "Caratteristiche:"
+                        Label61.Text = "Identità della capacità:"
+                        Label63.Text = "Descrizione:"
+                        Label65.Text = "Installa client:"
+                        Label67.Text = "Nome pacchetto di installazione:"
+                        Label69.Text = "Tempo di installazione:"
+                        Label71.Text = "Ora ultimo aggiornamento:"
+                        Label73.Text = "Nome del display:"
+                        Label75.Text = "Nome prodotto:"
+                        Label77.Text = "Versione del prodotto:"
+                        Label79.Text = "Tipo di rilascio:"
+                        Label81.Text = "È necessario un riavvio?"
+                        Label83.Text = "Informazioni di supporto:"
+                        Label85.Text = "Stato:"
+                        Label87.Text = "È richiesto un avvio per l'installazione completa?"
+                        Label89.Text = "Identità di capacità:"
+                        Label91.Text = "Proprietà personalizzate:"
+                        Label93.Text = "Caratteristiche:"
+                        LinkLabel1.Text = "<- Indietro"
+                        Button1.Text = "Aggiungi pacchetto..."
+                        Button2.Text = "Rimuovi selezionati"
+                        Button3.Text = "Rimuovi tutti"
+                        Button4.Text = "Salva..."
+                        InstalledPackageLink.Text = "Voglio ottenere informazioni sui pacchetti installati nell'immagine"
+                        PackageFileLink.Text = "Voglio ottenere informazioni sui file dei pacchetti"
+                        OpenFileDialog1.Title = "Individuare i file dei pacchetti"
+                        SearchBox1.cueBanner = "Digitare qui per cercare un pacchetto..."
                 End Select
             Case 1
                 Text = "Get package information"
@@ -534,6 +596,68 @@ Public Class GetPkgInfoDlg
                 PackageFileLink.Text = "Pretendo obter informações sobre ficheiros de pacotes"
                 OpenFileDialog1.Title = "Localizar ficheiros de pacotes"
                 SearchBox1.cueBanner = "Digitar aqui para pesquisar um pacote..."
+            Case 5
+                Text = "Ottieni informazioni sui pacchetti"
+                Label1.Text = Text
+                Label2.Text = "Su cosa vuoi ottenere informazioni?"
+                Label3.Text = "Fare clic qui per ottenere informazioni sui pacchetti installati o forniti con l'immagine di Windows che si sta assistendo"
+                Label4.Text = "Fare clic qui per ottenere informazioni sui pacchetti che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei pacchetti"
+                Label5.Text = "Pronto"
+                Label6.Text = "Aggiungere o selezionare un file di pacchetto per visualizzarne le informazioni"
+                Label7.Text = "Informazioni sul pacchetto"
+                Label8.Text = "Nome del pacchetto:"
+                Label10.Text = "Il pacchetto è applicabile?"
+                Label12.Text = "Copyright:"
+                Label14.Text = "Versione del prodotto:"
+                Label16.Text = "Tipo di rilascio:"
+                Label18.Text = "Azienda:"
+                Label20.Text = "Tempo di creazione:"
+                Label22.Text = "Nome del pacchetto:"
+                Label24.Text = "Il pacchetto è applicabile?"
+                Label26.Text = "Copyright:"
+                Label28.Text = "Tempo di installazione:"
+                Label30.Text = "Ora ultimo aggiornamento:"
+                Label31.Text = "Azienda:"
+                Label33.Text = "Nome del pacchetto di installazione:"
+                Label36.Text = "Informazioni sul pacchetto"
+                Label37.Text = "Selezionare un pacchetto installato per visualizzarne le informazioni"
+                Label39.Text = "Nome visualizzato:"
+                Label41.Text = "Ora di creazione:"
+                Label43.Text = "Descrizione:"
+                Label45.Text = "Nome del prodotto:"
+                Label47.Text = "Client di installazione:"
+                Label48.Text = "È necessario un riavvio?"
+                Label50.Text = "Informazioni di supporto:"
+                Label52.Text = "Stato:"
+                Label54.Text = "È richiesto un avvio per l'installazione completa?"
+                Label58.Text = "Proprietà personalizzate:"
+                Label60.Text = "Caratteristiche:"
+                Label61.Text = "Identità della capacità:"
+                Label63.Text = "Descrizione:"
+                Label65.Text = "Installa client:"
+                Label67.Text = "Nome pacchetto di installazione:"
+                Label69.Text = "Tempo di installazione:"
+                Label71.Text = "Ora ultimo aggiornamento:"
+                Label73.Text = "Nome del display:"
+                Label75.Text = "Nome prodotto:"
+                Label77.Text = "Versione del prodotto:"
+                Label79.Text = "Tipo di rilascio:"
+                Label81.Text = "È necessario un riavvio?"
+                Label83.Text = "Informazioni di supporto:"
+                Label85.Text = "Stato:"
+                Label87.Text = "È richiesto un avvio per l'installazione completa?"
+                Label89.Text = "Identità di capacità:"
+                Label91.Text = "Proprietà personalizzate:"
+                Label93.Text = "Caratteristiche:"
+                LinkLabel1.Text = "<- Indietro"
+                Button1.Text = "Aggiungi pacchetto..."
+                Button2.Text = "Rimuovi selezionati"
+                Button3.Text = "Rimuovi tutti"
+                Button4.Text = "Salva..."
+                InstalledPackageLink.Text = "Voglio ottenere informazioni sui pacchetti installati nell'immagine"
+                PackageFileLink.Text = "Voglio ottenere informazioni sui file dei pacchetti"
+                OpenFileDialog1.Title = "Individuare i file dei pacchetti"
+                SearchBox1.cueBanner = "Digitare qui per cercare un pacchetto..."
         End Select
         ListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
@@ -595,6 +719,8 @@ Public Class GetPkgInfoDlg
                                     msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                                 Case "PTB", "PTG"
                                     msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
+                                Case "ITA"
+                                    msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                             End Select
                         Case 1
                             msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
@@ -604,6 +730,8 @@ Public Class GetPkgInfoDlg
                             msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                         Case 4
                             msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
+                        Case 5
+                            msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                     End Select
                     MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                     Select Case MainForm.Language
@@ -617,6 +745,8 @@ Public Class GetPkgInfoDlg
                                     Label5.Text = "Attente de la fin des processus en arrière plan..."
                                 Case "PTB", "PTG"
                                     Label5.Text = "À espera que os processos em segundo plano terminem..."
+                                Case "ITA"
+                                    Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                             End Select
                         Case 1
                             Label5.Text = "Waiting for background processes to finish..."
@@ -626,6 +756,8 @@ Public Class GetPkgInfoDlg
                             Label5.Text = "Attente de la fin des processus en arrière plan..."
                         Case 4
                             Label5.Text = "À espera que os processos em segundo plano terminem..."
+                        Case 5
+                            Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                     End Select
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
@@ -659,6 +791,8 @@ Public Class GetPkgInfoDlg
                                 Label5.Text = "Préparation de l'obtention des informations du paquet en cours..."
                             Case "PTB", "PTG"
                                 Label5.Text = "Preparar-se para obter informações sobre o pacote..."
+                            Case "ITA"
+                                Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
                         End Select
                     Case 1
                         Label5.Text = "Preparing to get package information..."
@@ -668,6 +802,8 @@ Public Class GetPkgInfoDlg
                         Label5.Text = "Préparation de l'obtention des informations du paquet en cours..."
                     Case 4
                         Label5.Text = "Preparar-se para obter informações sobre o pacote..."
+                    Case 5
+                        Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
                 End Select
                 Application.DoEvents()
                 Try
@@ -684,6 +820,8 @@ Public Class GetPkgInfoDlg
                                         Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
                                     Case "PTB", "PTG"
                                         Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
+                                    Case "ITA"
+                                        Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
                                 End Select
                             Case 1
                                 Label5.Text = "Getting information from " & Quote & ListBox2.SelectedItem & Quote & "..."
@@ -693,6 +831,8 @@ Public Class GetPkgInfoDlg
                                 Label5.Text = "Obtention des informations de " & Quote & ListBox2.SelectedItem & Quote & " en cours..."
                             Case 4
                                 Label5.Text = "Obter informações de " & Quote & ListBox2.SelectedItem & Quote & "..."
+                            Case 5
+                                Label5.Text = "Ottenere informazioni da " & Quote & ListBox2.SelectedItem & Quote & "..."
                         End Select
                         Dim PkgInfoEx As DismPackageInfoEx = Nothing
                         Dim PkgInfo As DismPackageInfo = Nothing
@@ -743,6 +883,8 @@ Public Class GetPkgInfoDlg
                                             cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
                                         Case "PTB", "PTG"
                                             cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
+                                        Case "ITA"
+                                            cPropValue.Text = "Selezionare o espandere un elemento."
                                     End Select
                                 Case 1
                                     cPropValue.Text = "Please select or expand an entry."
@@ -752,6 +894,8 @@ Public Class GetPkgInfoDlg
                                     cPropValue.Text = "Veuillez sélectionner ou étendre une entrée."
                                 Case 4
                                     cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
+                                Case 5
+                                    cPropValue.Text = "Selezionare o espandere un elemento."
                             End Select
                         Else
                             Select Case MainForm.Language
@@ -765,6 +909,8 @@ Public Class GetPkgInfoDlg
                                             Label57.Text = "Aucune"
                                         Case "PTB", "PTG"
                                             Label57.Text = "Nenhum"
+                                        Case "ITA"
+                                            Label57.Text = "Nessuno"
                                     End Select
                                 Case 1
                                     Label57.Text = "None"
@@ -774,6 +920,8 @@ Public Class GetPkgInfoDlg
                                     Label57.Text = "Aucune"
                                 Case 4
                                     Label57.Text = "Nenhum"
+                                Case 5
+                                    Label57.Text = "Nessuno"
                             End Select
                             Label57.Visible = True
                             CPropViewer.Visible = False
@@ -797,6 +945,8 @@ Public Class GetPkgInfoDlg
                                             Label59.Text = "Aucune"
                                         Case "PTB", "PTG"
                                             Label59.Text = "Nenhum"
+                                        Case "ITA"
+                                            Label59.Text = "Nessuno"
                                     End Select
                                 Case 1
                                     Label59.Text = "None"
@@ -806,6 +956,8 @@ Public Class GetPkgInfoDlg
                                     Label59.Text = "Aucune"
                                 Case 4
                                     Label59.Text = "Nenhum"
+                                Case 5
+                                    Label59.Text = "Nessuno"
                             End Select
                         End If
                     End Using
@@ -822,6 +974,8 @@ Public Class GetPkgInfoDlg
                                     Label5.Text = "Prêt"
                                 Case "PTB", "PTG"
                                     Label5.Text = "Pronto"
+                                Case "ITA"
+                                    Label5.Text = "Pronto"
                             End Select
                         Case 1
                             Label5.Text = "Ready"
@@ -830,6 +984,8 @@ Public Class GetPkgInfoDlg
                         Case 3
                             Label5.Text = "Prêt"
                         Case 4
+                            Label5.Text = "Pronto"
+                        Case 5
                             Label5.Text = "Pronto"
                     End Select
                 Finally
@@ -900,6 +1056,8 @@ Public Class GetPkgInfoDlg
                             cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
                         Case "PTB", "PTG"
                             cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
+                        Case "ITA"
+                            cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sottovoci, espandetelo."
                     End Select
                 Case 1
                     cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
@@ -909,6 +1067,8 @@ Public Class GetPkgInfoDlg
                     cPropValue.Text = "Aucune valeur n'a été définie. Si l'élément sélectionné a des sous-éléments, développez-le."
                 Case 4
                     cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
+                Case 5
+                    cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sottovoci, espandetelo."
             End Select
         End If
     End Sub
@@ -931,6 +1091,8 @@ Public Class GetPkgInfoDlg
                                 msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                             Case "PTB", "PTG"
                                 msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
+                            Case "ITA"
+                                msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                         End Select
                     Case 1
                         msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
@@ -940,6 +1102,8 @@ Public Class GetPkgInfoDlg
                         msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                     Case 4
                         msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
+                    Case 5
+                        msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                 End Select
                 MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                 Select Case MainForm.Language
@@ -953,6 +1117,8 @@ Public Class GetPkgInfoDlg
                                 Label5.Text = "Attente de la fin des processus en arrière plan..."
                             Case "PTB", "PTG"
                                 Label5.Text = "À espera que os processos em segundo plano terminem..."
+                            Case "ITA"
+                                Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                         End Select
                     Case 1
                         Label5.Text = "Waiting for background processes to finish..."
@@ -962,6 +1128,8 @@ Public Class GetPkgInfoDlg
                         Label5.Text = "Attente de la fin des processus en arrière plan..."
                     Case 4
                         Label5.Text = "À espera que os processos em segundo plano terminem..."
+                    Case 5
+                        Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                 End Select
                 While MainForm.ImgBW.IsBusy
                     Application.DoEvents()
@@ -992,6 +1160,8 @@ Public Class GetPkgInfoDlg
                             Label5.Text = "Préparation des processus d'information des paquets en cours..."
                         Case "PTB", "PTG"
                             Label5.Text = "Preparar os processos de informação dos pacotes..."
+                        Case "ITA"
+                            Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
                     End Select
                 Case 1
                     Label5.Text = "Preparing package information processes..."
@@ -1001,6 +1171,8 @@ Public Class GetPkgInfoDlg
                     Label5.Text = "Préparation des processus d'information des paquets en cours..."
                 Case 4
                     Label5.Text = "Preparar os processos de informação dos pacotes..."
+                Case 5
+                    Label5.Text = "Preparazione per ottenere le informazioni sul pacchetto..."
             End Select
             Application.DoEvents()
             Try
@@ -1019,6 +1191,8 @@ Public Class GetPkgInfoDlg
                                             Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
                                         Case "PTB", "PTG"
                                             Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                        Case "ITA"
+                                            Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
                                     End Select
                                 Case 1
                                     Label5.Text = "Getting information from package file " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
@@ -1028,6 +1202,8 @@ Public Class GetPkgInfoDlg
                                     Label5.Text = "Obtention des informations du fichier paquet " & Quote & Path.GetFileName(pkgFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
                                 Case 4
                                     Label5.Text = "Obter informações do ficheiro do pacote " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                Case 5
+                                    Label5.Text = "Ottenere informazioni dal file del pacchetto " & Quote & Path.GetFileName(pkgFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
                             End Select
                             Application.DoEvents()
                             Dim pkgInfoEx As DismPackageInfoEx = Nothing
@@ -1061,6 +1237,8 @@ Public Class GetPkgInfoDlg
                         Label5.Text = "Prêt"
                     Case "PTB", "PTG"
                         Label5.Text = "Pronto"
+                    Case "ITA"
+                        Label5.Text = "Pronto"
                 End Select
             Case 1
                 Label5.Text = "Ready"
@@ -1069,6 +1247,8 @@ Public Class GetPkgInfoDlg
             Case 3
                 Label5.Text = "Prêt"
             Case 4
+                Label5.Text = "Pronto"
+            Case 5
                 Label5.Text = "Pronto"
         End Select
     End Sub
@@ -1111,6 +1291,8 @@ Public Class GetPkgInfoDlg
                             Label92.Text = "Aucune"
                         Case "PTB", "PTG"
                             Label92.Text = "Nenhum"
+                        Case "ITA"
+                            Label92.Text = "Nessuno"
                     End Select
                 Case 1
                     Label92.Text = "None"
@@ -1120,6 +1302,8 @@ Public Class GetPkgInfoDlg
                     Label92.Text = "Aucune"
                 Case 4
                     Label92.Text = "Nenhum"
+                Case 5
+                    Label92.Text = "Nessuno"
             End Select
         End If
         Label94.Text = ""
@@ -1141,6 +1325,8 @@ Public Class GetPkgInfoDlg
                             Label94.Text = "Aucune"
                         Case "PTB", "PTG"
                             Label94.Text = "Nenhum"
+                        Case "ITA"
+                            Label94.Text = "Nessuno"
                     End Select
                 Case 1
                     Label94.Text = "None"
@@ -1150,6 +1336,8 @@ Public Class GetPkgInfoDlg
                     Label94.Text = "Aucune"
                 Case 4
                     Label94.Text = "Nenhum"
+                Case 5
+                    Label94.Text = "Nessuno"
             End Select
         End If
     End Sub

@@ -59,6 +59,14 @@ Public Class SetOSUninstWindow
                         Label3.Text = "Quantidade de dias que tem para reverter para a versão antiga do Windows:"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Text = "Impostare la finestra di disinstallazione del sistema operativo"
+                        Label1.Text = Text
+                        Label2.Text = "Per impostazione predefinita e dopo un aggiornamento del sistema operativo, si hanno 10 giorni per tornare alla versione precedente di Windows. Tuttavia, è possibile modificare questa impostazione se si desidera tornare alla vecchia versione del sistema operativo in un secondo momento." & CrLf & CrLf & _
+                                      "Utilizzare il cursore numerico per aumentare o diminuire il numero di giorni a disposizione per tornare alla vecchia versione di Windows. Deve essere compreso tra 2 e 60."
+                        Label3.Text = "Numero di giorni necessari per tornare alla vecchia versione di Windows:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Text = "Set operating system uninstall window"
@@ -92,6 +100,14 @@ Public Class SetOSUninstWindow
                 Label3.Text = "Quantidade de dias que tem para reverter para a versão antiga do Windows:"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Text = "Impostare la finestra di disinstallazione del sistema operativo"
+                Label1.Text = Text
+                Label2.Text = "Per impostazione predefinita e dopo un aggiornamento del sistema operativo, si hanno 10 giorni per tornare alla versione precedente di Windows. Tuttavia, è possibile modificare questa impostazione se si desidera tornare alla vecchia versione del sistema operativo in un secondo momento." & CrLf & CrLf & _
+                              "Utilizzare il cursore numerico per aumentare o diminuire il numero di giorni a disposizione per tornare alla vecchia versione di Windows. Deve essere compreso tra 2 e 60."
+                Label3.Text = "Numero di giorni necessari per tornare alla vecchia versione di Windows:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         ' Get the uninstall window from the registry first
         Try

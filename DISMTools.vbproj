@@ -576,6 +576,12 @@
     <Compile Include="Panels\ISOFiles\ISOCreator.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\ISOFiles\NewTestingEnv.Designer.vb">
+      <DependentUpon>NewTestingEnv.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\NewTestingEnv.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\MSEdge\AddEdgeBrowser.Designer.vb">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
     </Compile>
@@ -940,6 +946,9 @@
     <EmbeddedResource Include="Panels\ISOFiles\ISOCreator.resx">
       <DependentUpon>ISOCreator.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\NewTestingEnv.resx">
+      <DependentUpon>NewTestingEnv.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeBrowser.resx">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
     </EmbeddedResource>
@@ -1050,6 +1059,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1086,6 +1098,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
+    <None Include="Tools\DT_WinADK.reg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1247,6 +1260,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_x86.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\DIM\amd64\DT-DIM.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Installer\dt.iss" />
@@ -1658,6 +1677,9 @@ IF NOT EXIST scratch (
 )
 :: Copy the Internet Explorer browser emulation registry file to the program directory
 copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
+
+:: Copy registry file for ADK installations
+copy /y "$(SolutionDir)Tools\DT_WinADK.reg" "DT_WinADK.reg"
 
 IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	md "Tools\UnpEax"

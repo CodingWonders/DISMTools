@@ -10,7 +10,7 @@ Public Class Options
     Dim CanExit As Boolean
     Dim SaveLocations() As String = New String(1) {"Settings file", "Registry"}
     Dim ColorModes() As String = New String(2) {"Use system setting", "Light mode", "Dark mode"}
-    Dim Languages() As String = New String(4) {"Use system language", "English", "Spanish", "French", "Portuguese"}
+    Dim Languages() As String = New String(5) {"Use system language", "English", "Spanish", "French", "Portuguese", "Italian"}
     Dim LogViews() As String = New String(1) {"list", "table"}
     Dim NotFreqs() As String = New String(1) {"Every time a project has been loaded successfully", "Once"}
 
@@ -278,6 +278,9 @@ Public Class Options
                     Case "PTB", "PTG"
                         Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
                         Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
+                    Case "ITA"
+                        Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                        Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
                 End Select
             Case 1
                 Label42.Text = If(DetectFileAssociations(), "associations set", "associations not set")
@@ -291,6 +294,9 @@ Public Class Options
             Case 4
                 Label42.Text = If(DetectFileAssociations(), "associações estabelecidas", "associações não estabelecidas")
                 Button9.Text = If(DetectFileAssociations(), "Remover associações de ficheiros", "Estabelecer associações de ficheiros")
+            Case 5
+                Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
         End Select
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
     End Sub
@@ -726,6 +732,107 @@ Public Class Options
                         RadioButton5.Text = "Moderna"
                         RadioButton6.Text = "Clássico"
                         ScratchFBD.Description = "Especificar o diretório de rascunho que o programa deve utilizar:"
+                    Case "ITA"
+                        Text = "Opzioni"
+                        Label1.Text = Text
+                        Label49.Text = "Programma"
+                        Label50.Text = "Personalizzazione"
+                        Label51.Text = "Registri"
+                        Label52.Text = "Operazioni di immagine"
+                        Label53.Text = "Cartella temporanea"
+                        Label54.Text = "Output del programma"
+                        Label55.Text = "Processi in secondo piano"
+                        Label56.Text = "Rilevamento immagini"
+                        Label57.Text = "Associazioni di file"
+                        Label58.Text = "Opzioni di avvio"
+                        Label34.Text = "Opzioni di spegnimento"
+                        Label2.Text = "Percorso eseguibile DISM:"
+                        Label3.Text = "Versione:"
+                        Label5.Text = "Salva impostazioni su:"
+                        Label6.Text = "In modalità volatile, le impostazioni verranno ripristinate alla chiusura del programma"
+                        Label7.Text = "Modalità colore:"
+                        Label8.Text = "Lingua:"
+                        Label9.Text = "Specificare le impostazioni per la finestra di log:"
+                        Label10.Text = "Carattere della finestra di registro:"
+                        Label11.Text = "Anteprima:"
+                        Label12.Text = "File registro operazioni:"
+                        Label13.Text = "Quando si eseguono operazioni di immagine nella riga di comando, specificare l'argomento " & Quote & "/LogPath" & Quote & " per salvare il registro delle operazioni di immagine nel file di registro di destinazione"
+                        Label14.Text = "Livello del file di registro:"
+                        Label17.Text = "Schema di colore della barra di stato e dei pannelli:"
+                        Label18.Text = "Quando si eseguono tranquillamente le operazioni, il programma nasconde le informazioni e l'output di avanzamento. I messaggi di errore verranno comunque visualizzati." & CrLf & "Questa opzione non verrà utilizzata quando si ottengono informazioni, ad esempio, sui pacchetti o sulle funzioni." & CrLf & "Inoltre, quando si esegue la manutenzione delle immagini, il computer potrebbe riavviarsi automaticamente."
+                        Label19.Text = "Quando questa opzione è selezionata, il computer non si riavvia automaticamente, anche quando si eseguono tranquillamente delle operazioni"
+                        Label20.Text = "Specificare la cartella temporanea da utilizzare per le operazioni DISM:"
+                        Label21.Text = "Cartella temporanea:"
+                        Label22.Text = "Spazio rimanente nella cartella temporanea selezionata:"
+                        Label25.Text = "Visualizzazione del registro:"
+                        Label26.Text = "Esempio di rapporto:"
+                        Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
+                        Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
+                        Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
+                        Label30.Text = "Anteprime:"
+                        Label31.Text = "Inattivo"
+                        Label32.Text = "Esecuzione di operazioni"
+                        Label33.Text = "Pannello di avanzamento:"
+                        Label35.Text = "Modificare queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato utilizzo della CPU"
+                        Label36.Text = "Esaminare lo stato di questo processo in background:"
+                        Label37.Text = "Stato:"
+                        Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
+                        Label41.Text = "Stato dell'associazione:"
+                        Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                        Label43.Text = "Impostare le opzioni che si desidera eseguire all'avvio del programma:"
+                        Label44.Text = "Il programma utilizzerà la cartella temporanea fornita dal progetto, se ne è stata caricata una. Se ci si trova nelle modalità di gestione dell'installazione online o offline, il programma utilizzerà la sua directory scratch"
+                        Label45.Text = "Stile del pannello di avanzamento secondario:"
+                        Label46.Text = "Queste impostazioni non sono applicabili alle installazioni non portatili"
+                        Label47.Text = "Questo carattere potrebbe non essere leggibile sulle finestre di registro. Anche se è possibile utilizzarlo, si consiglia di utilizzare caratteri monospaziati per una maggiore leggibilità."
+                        Label48.Text = "Scegliere le impostazioni che il programma deve considerare quando salva le informazioni sull'immagine:"
+                        Button1.Text = "Sfoglia..."
+                        Button2.Text = "Visualizza le versioni dei componenti DISM"
+                        Button3.Text = "Sfoglia..."
+                        Button4.Text = "Sfoglia..."
+                        Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                        Button10.Text = "Impostazioni avanzate"
+                        If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arresto" Else Button8.Text = "Avvio"
+                        Cancel_Button.Text = "Annullare"
+                        OK_Button.Text = "OK"
+                        PrefReset.Text = "Reimpostare le preferenze"
+                        CheckBox1.Text = "Modalità volatile"
+                        CheckBox2.Text = "Esegui silenziosamente le operazioni sull'immagine"
+                        CheckBox3.Text = "Salta il riavvio del sistema"
+                        CheckBox4.Text = "Utilizza una directory scratch"
+                        CheckBox5.Text = "Mostra l'output del comando in inglese"
+                        CheckBox6.Text = "Notifica l'avvio di processi in background"
+                        CheckBox7.Text = "Mostra la visualizzazione del registro nel pannello di avanzamento per impostazione predefinita"
+                        CheckBox8.Text = "Rileva sempre le immagini montate"
+                        CheckBox9.Text = "Utilizza i menu in maiuscolo"
+                        CheckBox10.Text = "Crea automaticamente i registri per ogni operazione eseguita"
+                        CheckBox11.Text = "Imposta icone di file personalizzate per i progetti DISMTools"
+                        CheckBox12.Text = "Rimonta le immagini montate che necessitano di un ricaricamento della sessione di assistenza"
+                        CheckBox13.Text = "Controlla gli aggiornamenti"
+                        CheckBox14.Text = "Salva sempre le informazioni complete per i seguenti elementi:"
+                        CheckBox15.Text = "Pacchetti installati"
+                        CheckBox16.Text = "Caratteristiche"
+                        CheckBox17.Text = "Pacchetti AppX installati"
+                        CheckBox18.Text = "Capacità"
+                        CheckBox19.Text = "Driver installati"
+                        CheckBox20.Text = "Usa il nuovo design di visualizzazione del progetto"
+                        CheckBox22.Text = "Pulisci automaticamente i punti di montaggio (lancia un processo separato)"
+                        DismOFD.Title = "Specificare l'eseguibile DISM da utilizzare"
+                        Label59.Text = "Personalizzazione dei registri"
+                        Label60.Text = "Impostare le opzioni che si desidera eseguire alla chiusura del programma:"
+                        Label61.Text = "Anteprima:"
+                        GroupBox5.Text = "Associazioni"
+                        Label9.Text = "Salvataggio delle informazioni sull'immagine"
+                        LinkLabel1.Text = "Il programma abilita o disabilita alcune funzioni in base alla versione di DISM supportata. Come influirà sull'uso di questo programma e quali funzioni saranno disabilitate di conseguenza?"
+                        LinkLabel1.LinkArea = New LinkArea(92, 100)
+                        LinkLabel2.Text = "Ulteriori informazioni sui processi in background"
+                        LogSFD.Title = "Specificare la posizione del file di log"
+                        RadioButton1.Text = "Schema di colore DISMTools 0.5 (verde)"
+                        RadioButton2.Text = "Schema di colori DISMTools 0.1.1-0.4.2 (blu)"
+                        RadioButton3.Text = "Utilizza la cartella temporanea del progetto o del programma"
+                        RadioButton4.Text = "Utilizza la cartella temporanea specificata"
+                        RadioButton5.Text = "Moderno"
+                        RadioButton6.Text = "Classic"
+                        ScratchFBD.Description = "Specifica la directory di scratch che il programma deve utilizzare:"
                 End Select
             Case 1
                 Text = "Options"
@@ -1131,6 +1238,107 @@ Public Class Options
                 RadioButton5.Text = "Moderna"
                 RadioButton6.Text = "Clássico"
                 ScratchFBD.Description = "Especificar o diretório de rascunho que o programa deve utilizar:"
+            Case 5
+                Text = "Opzioni"
+                Label1.Text = Text
+                Label49.Text = "Programma"
+                Label50.Text = "Personalizzazione"
+                Label51.Text = "Registri"
+                Label52.Text = "Operazioni di immagine"
+                Label53.Text = "Cartella temporanea"
+                Label54.Text = "Output del programma"
+                Label55.Text = "Processi in secondo piano"
+                Label56.Text = "Rilevamento immagini"
+                Label57.Text = "Associazioni di file"
+                Label58.Text = "Opzioni di avvio"
+                Label34.Text = "Opzioni di spegnimento"
+                Label2.Text = "Percorso eseguibile DISM:"
+                Label3.Text = "Versione:"
+                Label5.Text = "Salva impostazioni su:"
+                Label6.Text = "In modalità volatile, le impostazioni verranno ripristinate alla chiusura del programma"
+                Label7.Text = "Modalità colore:"
+                Label8.Text = "Lingua:"
+                Label9.Text = "Specificare le impostazioni per la finestra di log:"
+                Label10.Text = "Carattere della finestra di registro:"
+                Label11.Text = "Anteprima:"
+                Label12.Text = "File registro operazioni:"
+                Label13.Text = "Quando si eseguono operazioni di immagine nella riga di comando, specificare l'argomento " & Quote & "/LogPath" & Quote & " per salvare il registro delle operazioni di immagine nel file di registro di destinazione"
+                Label14.Text = "Livello del file di registro:"
+                Label17.Text = "Schema di colore della barra di stato e dei pannelli:"
+                Label18.Text = "Quando si eseguono tranquillamente le operazioni, il programma nasconde le informazioni e l'output di avanzamento. I messaggi di errore verranno comunque visualizzati." & CrLf & "Questa opzione non verrà utilizzata quando si ottengono informazioni, ad esempio, sui pacchetti o sulle funzioni." & CrLf & "Inoltre, quando si esegue la manutenzione delle immagini, il computer potrebbe riavviarsi automaticamente."
+                Label19.Text = "Quando questa opzione è selezionata, il computer non si riavvia automaticamente, anche quando si eseguono tranquillamente delle operazioni"
+                Label20.Text = "Specificare la cartella temporanea da utilizzare per le operazioni DISM:"
+                Label21.Text = "Cartella temporanea:"
+                Label22.Text = "Spazio rimanente nella cartella temporanea selezionata:"
+                Label25.Text = "Visualizzazione del registro:"
+                Label26.Text = "Esempio di rapporto:"
+                Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
+                Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
+                Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
+                Label30.Text = "Anteprime:"
+                Label31.Text = "Inattivo"
+                Label32.Text = "Esecuzione di operazioni"
+                Label33.Text = "Pannello di avanzamento:"
+                Label35.Text = "Modificare queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato utilizzo della CPU"
+                Label36.Text = "Esaminare lo stato di questo processo in background:"
+                Label37.Text = "Stato:"
+                Label40.Text = "Le associazioni di file consentono di accedere direttamente ai file del progetto, senza dover prima caricare il programma"
+                Label41.Text = "Stato dell'associazione:"
+                Label42.Text = If(DetectFileAssociations(), "associazioni impostate", "associazioni non impostate")
+                Label43.Text = "Impostare le opzioni che si desidera eseguire all'avvio del programma:"
+                Label44.Text = "Il programma utilizzerà la cartella temporanea fornita dal progetto, se ne è stata caricata una. Se ci si trova nelle modalità di gestione dell'installazione online o offline, il programma utilizzerà la sua directory scratch"
+                Label45.Text = "Stile del pannello di avanzamento secondario:"
+                Label46.Text = "Queste impostazioni non sono applicabili alle installazioni non portatili"
+                Label47.Text = "Questo carattere potrebbe non essere leggibile sulle finestre di registro. Anche se è possibile utilizzarlo, si consiglia di utilizzare caratteri monospaziati per una maggiore leggibilità."
+                Label48.Text = "Scegliere le impostazioni che il programma deve considerare quando salva le informazioni sull'immagine:"
+                Button1.Text = "Sfoglia..."
+                Button2.Text = "Visualizza le versioni dei componenti DISM"
+                Button3.Text = "Sfoglia..."
+                Button4.Text = "Sfoglia..."
+                Button9.Text = If(DetectFileAssociations(), "Rimuovi associazioni file", "Imposta associazioni file")
+                Button10.Text = "Impostazioni avanzate"
+                If MainForm.MountedImageDetectorBW.IsBusy Then Button8.Text = "Arresto" Else Button8.Text = "Avvio"
+                Cancel_Button.Text = "Annullare"
+                OK_Button.Text = "OK"
+                PrefReset.Text = "Reimpostare le preferenze"
+                CheckBox1.Text = "Modalità volatile"
+                CheckBox2.Text = "Esegui silenziosamente le operazioni sull'immagine"
+                CheckBox3.Text = "Salta il riavvio del sistema"
+                CheckBox4.Text = "Utilizza una directory scratch"
+                CheckBox5.Text = "Mostra l'output del comando in inglese"
+                CheckBox6.Text = "Notifica l'avvio di processi in background"
+                CheckBox7.Text = "Mostra la visualizzazione del registro nel pannello di avanzamento per impostazione predefinita"
+                CheckBox8.Text = "Rileva sempre le immagini montate"
+                CheckBox9.Text = "Utilizza i menu in maiuscolo"
+                CheckBox10.Text = "Crea automaticamente i registri per ogni operazione eseguita"
+                CheckBox11.Text = "Imposta icone di file personalizzate per i progetti DISMTools"
+                CheckBox12.Text = "Rimonta le immagini montate che necessitano di un ricaricamento della sessione di assistenza"
+                CheckBox13.Text = "Controlla gli aggiornamenti"
+                CheckBox14.Text = "Salva sempre le informazioni complete per i seguenti elementi:"
+                CheckBox15.Text = "Pacchetti installati"
+                CheckBox16.Text = "Caratteristiche"
+                CheckBox17.Text = "Pacchetti AppX installati"
+                CheckBox18.Text = "Capacità"
+                CheckBox19.Text = "Driver installati"
+                CheckBox20.Text = "Usa il nuovo design di visualizzazione del progetto"
+                CheckBox22.Text = "Pulisci automaticamente i punti di montaggio (lancia un processo separato)"
+                DismOFD.Title = "Specificare l'eseguibile DISM da utilizzare"
+                Label59.Text = "Personalizzazione dei registri"
+                Label60.Text = "Impostare le opzioni che si desidera eseguire alla chiusura del programma:"
+                Label61.Text = "Anteprima:"
+                GroupBox5.Text = "Associazioni"
+                Label9.Text = "Salvataggio delle informazioni sull'immagine"
+                LinkLabel1.Text = "Il programma abilita o disabilita alcune funzioni in base alla versione di DISM supportata. Come influirà sull'uso di questo programma e quali funzioni saranno disabilitate di conseguenza?"
+                LinkLabel1.LinkArea = New LinkArea(92, 100)
+                LinkLabel2.Text = "Ulteriori informazioni sui processi in background"
+                LogSFD.Title = "Specificare la posizione del file di log"
+                RadioButton1.Text = "Schema di colore DISMTools 0.5 (verde)"
+                RadioButton2.Text = "Schema di colori DISMTools 0.1.1-0.4.2 (blu)"
+                RadioButton3.Text = "Utilizza la cartella temporanea del progetto o del programma"
+                RadioButton4.Text = "Utilizza la cartella temporanea specificata"
+                RadioButton5.Text = "Moderno"
+                RadioButton6.Text = "Classic"
+                ScratchFBD.Description = "Specifica la directory di scratch che il programma deve utilizzare:"
         End Select
         Select Case MainForm.Language
             Case 0
@@ -1146,6 +1354,7 @@ Public Class Options
                         Languages(2) = "Spanish"
                         Languages(3) = "French"
                         Languages(4) = "Portuguese"
+                        Languages(5) = "Italian"
                         LogViews(0) = "list"
                         LogViews(1) = "table"
                         NotFreqs(0) = "Every time a project has been loaded successfully"
@@ -1161,6 +1370,7 @@ Public Class Options
                         Languages(2) = "Español"
                         Languages(3) = "Francés"
                         Languages(4) = "Portugués"
+                        Languages(5) = "Italiano"
                         LogViews(0) = "lista"
                         LogViews(1) = "tabla"
                         NotFreqs(0) = "Cada vez que un proyecto ha sido cargado satisfactoriamente"
@@ -1176,6 +1386,7 @@ Public Class Options
                         Languages(2) = "Espagnol"
                         Languages(3) = "Français"
                         Languages(4) = "Portugais"
+                        Languages(5) = "Italien"
                         LogViews(0) = "liste"
                         LogViews(1) = "tableau"
                         NotFreqs(0) = "Chaque fois qu'un projet a été chargé avec succès"
@@ -1191,10 +1402,27 @@ Public Class Options
                         Languages(2) = "Espanhol"
                         Languages(3) = "Francês"
                         Languages(4) = "Português"
+                        Languages(5) = "Italiano"
                         LogViews(0) = "lista"
                         LogViews(1) = "tabela"
                         NotFreqs(0) = "Sempre que um projeto tenha sido carregado com êxito"
                         NotFreqs(1) = "Uma vez"
+                    Case "ITA"
+                        SaveLocations(0) = "File delle impostazioni"
+                        SaveLocations(1) = "Registro di sistema"
+                        ColorModes(0) = "Usa le impostazioni di sistema"
+                        ColorModes(1) = "Modalità chiara"
+                        ColorModes(2) = "Modalità scura"
+                        Languages(0) = "Utilizza la lingua di sistema"
+                        Languages(1) = "Inglese"
+                        Languages(2) = "Spagnolo"
+                        Languages(3) = "Francese"
+                        Languages(4) = "Portoghese"
+                        Languages(5) = "Italiano"
+                        LogViews(0) = "lista"
+                        LogViews(1) = "tabella"
+                        NotFreqs(0) = "Ogni volta che un progetto è stato caricato con successo"
+                        NotFreqs(1) = "Una volta"
                 End Select
             Case 1
                 SaveLocations(0) = "Settings file"
@@ -1207,6 +1435,7 @@ Public Class Options
                 Languages(2) = "Spanish"
                 Languages(3) = "French"
                 Languages(4) = "Portuguese"
+                Languages(5) = "Italian"
                 LogViews(0) = "list"
                 LogViews(1) = "table"
                 NotFreqs(0) = "Every time a project has been loaded successfully"
@@ -1222,6 +1451,7 @@ Public Class Options
                 Languages(2) = "Español"
                 Languages(3) = "Francés"
                 Languages(4) = "Portugués"
+                Languages(5) = "Italiano"
                 LogViews(0) = "lista"
                 LogViews(1) = "tabla"
                 NotFreqs(0) = "Cada vez que un proyecto ha sido cargado satisfactoriamente"
@@ -1237,6 +1467,7 @@ Public Class Options
                 Languages(2) = "Espagnol"
                 Languages(3) = "Français"
                 Languages(4) = "Portugais"
+                Languages(5) = "Italien"
                 LogViews(0) = "liste"
                 LogViews(1) = "tableau"
                 NotFreqs(0) = "Chaque fois qu'un projet a été chargé avec succès"
@@ -1252,10 +1483,27 @@ Public Class Options
                 Languages(2) = "Espanhol"
                 Languages(3) = "Francês"
                 Languages(4) = "Português"
+                Languages(5) = "Italiano"
                 LogViews(0) = "lista"
                 LogViews(1) = "tabela"
                 NotFreqs(0) = "Sempre que um projeto tenha sido carregado com êxito"
                 NotFreqs(1) = "Uma vez"
+            Case 5
+                SaveLocations(0) = "File delle impostazioni"
+                SaveLocations(1) = "Registro di sistema"
+                ColorModes(0) = "Usa le impostazioni di sistema"
+                ColorModes(1) = "Modalità chiara"
+                ColorModes(2) = "Modalità scura"
+                Languages(0) = "Utilizza la lingua di sistema"
+                Languages(1) = "Inglese"
+                Languages(2) = "Spagnolo"
+                Languages(3) = "Francese"
+                Languages(4) = "Portoghese"
+                Languages(5) = "Italiano"
+                LogViews(0) = "lista"
+                LogViews(1) = "tabella"
+                NotFreqs(0) = "Ogni volta che un progetto è stato caricato con successo"
+                NotFreqs(1) = "Una volta"
         End Select
         ComboBox1.Items.AddRange(SaveLocations)
         ComboBox2.Items.AddRange(ColorModes)
@@ -1362,6 +1610,9 @@ Public Class Options
                     Case "PTB", "PTG"
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
+                    Case "ITA"
+                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
+                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
                 End Select
             Case 1
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "running", "stopped")
@@ -1375,6 +1626,9 @@ Public Class Options
             Case 4
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
+            Case 5
+                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
+                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
         End Select
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
@@ -1590,6 +1844,8 @@ Public Class Options
                             msg = "Le répertoire des composants DISM n'a pas été trouvé. Si vous avez tous les composants dans le même dossier de l'exécutable DISM, veuillez créer un dossier " & Quote & "dism" & Quote & " et réessayer."
                         Case "PTB", "PTG"
                             msg = "Não foi possível encontrar o diretório de componentes do DISM. Se tiver todos os componentes na mesma pasta do executável DISM, crie uma pasta " & Quote & "dism" & Quote & " e tente novamente."
+                        Case "ITA"
+                            msg = "Non è stato possibile trovare la cartella dei componenti DISM. Se tutti i componenti si trovano nella stessa cartella dell'eseguibile DISM, creare una cartella " & Quote & "dism" & Quote & " e riprovare."
                     End Select
                 Case 1
                     msg = "The DISM components directory could not be found. If you have all components in the same folder of the DISM executable, please create a " & Quote & "dism" & Quote & " folder and try again."
@@ -1599,6 +1855,8 @@ Public Class Options
                     msg = "Le répertoire des composants DISM n'a pas été trouvé. Si vous avez tous les composants dans le même dossier de l'exécutable DISM, veuillez créer un dossier " & Quote & "dism" & Quote & " et réessayer."
                 Case 4
                     msg = "Não foi possível encontrar o diretório de componentes do DISM. Se tiver todos os componentes na mesma pasta do executável DISM, crie uma pasta " & Quote & "dism" & Quote & " e tente novamente."
+                Case 5
+                    msg = "Non è stato possibile trovare la cartella dei componenti DISM. Se tutti i componenti si trovano nella stessa cartella dell'eseguibile DISM, creare una cartella " & Quote & "dism" & Quote & " e riprovare."
             End Select
             MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
             Exit Sub
@@ -1701,6 +1959,21 @@ Public Class Options
                                 Label15.Text = "Erros, avisos, informações e mensagens de depuração (nível de registo 4)"
                                 Label16.Text = "O ficheiro de registo deve apresentar erros, avisos, informações e mensagens de depuração após a realização de uma operação de imagem."
                         End Select
+                    Case "ITA"
+                        Select Case TrackBar1.Value
+                            Case 0
+                                Label15.Text = "Errori (livello di log 1)"
+                                Label16.Text = "Il file di registro dovrebbe visualizzare gli errori solo dopo l'esecuzione di un'operazione di immagine"
+                            Case 1
+                                Label15.Text = "Errori e avvisi (livello di registro 2)"
+                                Label16.Text = "Il file di log deve visualizzare errori e avvisi dopo l'esecuzione di un'operazione di immagine"
+                            Case 2
+                                Label15.Text = "Errori, avvisi e messaggi informativi (livello di registro 3)"
+                                Label16.Text = "Il file di log deve visualizzare errori, avvisi e messaggi informativi dopo l'esecuzione di un'operazione di immagine."
+                            Case 3
+                                Label15.Text = "Errori, avvisi, informazioni e messaggi di debug (livello di registro 4)"
+                                Label16.Text = "Il file di log deve visualizzare errori, avvisi, informazioni e messaggi di debug dopo l'esecuzione di un'operazione di immagine."
+                        End Select
                 End Select
             Case 1
                 Select Case TrackBar1.Value
@@ -1761,6 +2034,21 @@ Public Class Options
                     Case 3
                         Label15.Text = "Erros, avisos, informações e mensagens de depuração (nível de registo 4)"
                         Label16.Text = "O ficheiro de registo deve apresentar erros, avisos, informações e mensagens de depuração após a realização de uma operação de imagem."
+                End Select
+            Case 5
+                Select Case TrackBar1.Value
+                    Case 0
+                        Label15.Text = "Errori (livello di log 1)"
+                        Label16.Text = "Il file di registro dovrebbe visualizzare gli errori solo dopo l'esecuzione di un'operazione di immagine"
+                    Case 1
+                        Label15.Text = "Errori e avvisi (livello di registro 2)"
+                        Label16.Text = "Il file di log deve visualizzare errori e avvisi dopo l'esecuzione di un'operazione di immagine"
+                    Case 2
+                        Label15.Text = "Errori, avvisi e messaggi informativi (livello di registro 3)"
+                        Label16.Text = "Il file di log deve visualizzare errori, avvisi e messaggi informativi dopo l'esecuzione di un'operazione di immagine."
+                    Case 3
+                        Label15.Text = "Errori, avvisi, informazioni e messaggi di debug (livello di registro 4)"
+                        Label16.Text = "Il file di log deve visualizzare errori, avvisi, informazioni e messaggi di debug dopo l'esecuzione di un'operazione di immagine."
                 End Select
         End Select
     End Sub
@@ -1954,6 +2242,44 @@ Public Class Options
                                 Exit Sub
                             End Try
                         End If
+                    Case "ITA"
+                        If SourceDir = "" Then
+                            Label23.Text = "Specificare una cartella temporanea"
+                            Label24.Visible = False
+                            PictureBox5.Visible = False
+                            PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                            Label24.Text = "Lo spazio disponibile nella cartella temporanea selezionata è sufficiente"
+                        Else
+                            Try
+                                Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                                Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                                Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                                Select Case Math.Round(FreeSpace, 0)
+                                    Case Is < 5
+                                        Label24.Visible = True
+                                        PictureBox5.Visible = True
+                                        PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                                        Label24.Text = "Nella cartella temporanea selezionata non c'è abbastanza spazio per eseguire operazioni sulle immagini. Provare a liberare spazio nell'unità"
+                                    Case 5 To 19.989999999999998
+                                        Label24.Visible = True
+                                        PictureBox5.Visible = True
+                                        PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                                        Label24.Text = "È possibile che la cartella temporanea selezionata non disponga di spazio sufficiente per alcune operazioni"
+                                    Case Is >= 20
+                                        Label24.Visible = False
+                                        PictureBox5.Visible = False
+                                        PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                        Label24.Text = "Lo spazio disponibile nella cartella temporanea selezionata è sufficiente"
+                                End Select
+                            Catch ex As Exception
+                                Label23.Text = "Impossibile ottenere spazio libero disponibile. Continuare a proprio rischio"
+                                Label24.Visible = False
+                                PictureBox5.Visible = False
+                                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                Label24.Text = "Lo spazio disponibile nella directory temporanea selezionata è sufficiente"
+                                Exit Sub
+                            End Try
+                        End If
                 End Select
             Case 1
                 If SourceDir = "" Then
@@ -2107,6 +2433,44 @@ Public Class Options
                         Exit Sub
                     End Try
                 End If
+            Case 5
+                If SourceDir = "" Then
+                    Label23.Text = "Specificare una cartella temporanea"
+                    Label24.Visible = False
+                    PictureBox5.Visible = False
+                    PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                    Label24.Text = "Lo spazio disponibile nella cartella temporanea selezionata è sufficiente"
+                Else
+                    Try
+                        Dim drInfo As New DriveInfo(Path.GetPathRoot(SourceDir))
+                        Dim FreeSpace As Double = drInfo.AvailableFreeSpace / (1024 ^ 3)
+                        Label23.Text = Math.Round(FreeSpace, 2) & " GB"
+                        Select Case Math.Round(FreeSpace, 0)
+                            Case Is < 5
+                                Label24.Visible = True
+                                PictureBox5.Visible = True
+                                PictureBox5.Image = New Bitmap(My.Resources.error_16px)
+                                Label24.Text = "Nella cartella temporanea selezionata non c'è abbastanza spazio per eseguire operazioni sulle immagini. Provare a liberare spazio nell'unità"
+                            Case 5 To 19.989999999999998
+                                Label24.Visible = True
+                                PictureBox5.Visible = True
+                                PictureBox5.Image = New Bitmap(My.Resources.warning_16px)
+                                Label24.Text = "È possibile che la cartella temporanea selezionata non disponga di spazio sufficiente per alcune operazioni"
+                            Case Is >= 20
+                                Label24.Visible = False
+                                PictureBox5.Visible = False
+                                PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                                Label24.Text = "Lo spazio disponibile nella cartella temporanea selezionata è sufficiente"
+                        End Select
+                    Catch ex As Exception
+                        Label23.Text = "Impossibile ottenere spazio libero disponibile. Continuare a proprio rischio"
+                        Label24.Visible = False
+                        PictureBox5.Visible = False
+                        PictureBox5.Image = New Bitmap(My.Resources.info_16px)
+                        Label24.Text = "Lo spazio disponibile nella directory temporanea selezionata è sufficiente"
+                        Exit Sub
+                    End Try
+                End If
         End Select
     End Sub
 
@@ -2162,6 +2526,14 @@ Public Class Options
                         End If
                         Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                         Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
+                    Case "ITA"
+                        If Button8.Text = "Arresto" Then
+                            MainForm.MountedImageDetectorBW.CancelAsync()
+                        ElseIf Button8.Text = "Avvio" Then
+                            Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                        End If
+                        Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
+                        Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
                 End Select
             Case 1
                 If Button8.Text = "Stop" Then
@@ -2195,6 +2567,14 @@ Public Class Options
                 End If
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "funcionando", "parado")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Parar", "Iniciar")
+            Case 5
+                If Button8.Text = "Arresto" Then
+                    MainForm.MountedImageDetectorBW.CancelAsync()
+                ElseIf Button8.Text = "Avvio" Then
+                    Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                End If
+                Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
+                Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
         End Select
     End Sub
 

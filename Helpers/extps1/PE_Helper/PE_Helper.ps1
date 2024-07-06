@@ -29,10 +29,12 @@ using namespace System.Collections.Generic
 
 [CmdletBinding(DefaultParameterSetName='Default')]
 param (
-    [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'Help')] [string] $cmd,
+    [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'StartDevelopment', 'Help')] [string] $cmd,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string] $arch,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string] $imgFile,
-    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath
+    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath,
+	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string] $testArch,
+	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string] $targetPath
 )
 
 enum PE_Arch {
@@ -73,144 +75,157 @@ function Start-PEGeneration
     # Start PE generation
     Write-Host "Starting PE generation..."
     # Detect if the Windows ADK is present
-    if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
-    {
-        # An ADK may be installed, but it may not be Windows 10 ADK
-        $progFiles = ""
-        $peToolsPath = ""
-        if ([Environment]::Is64BitOperatingSystem)
-        {
-            $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
-        }
-        else
-        {
-            $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"            
-        }
-        if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
-        {
-            $peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
-            Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
-            if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
-            {
-                Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
-                Write-Host "`nPress ENTER to exit"
-                Read-Host | Out-Null
-                exit 1
-            }
-            Write-Host "Mounting Windows image. Please wait..."
-            if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$((Get-Location).Path)\ISOTEMP\mount") -eq $false)
-            {
-                Write-Host "Preinstallation Environment creation has failed in the PE image mount phase."
-                Write-Host "`nPress ENTER to exit"
-                Read-Host | Out-Null
-                exit 1
-            }
-            Write-Host "Copying Windows PE optional components. Please wait..."
-            if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
-            {
-                Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
-                Write-Host "`nPress ENTER to exit"
-                Read-Host | Out-Null
-                exit 1
-            }
-            Write-Host "Adding OS packages..."
-            $pkgs = [List[string]]::new()
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
-            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
-            foreach ($pkg in $pkgs)
-            {
-                if (Test-Path $pkg -PathType Leaf)
-                {
-                    Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
-                    Start-DismCommand -Verb Add-Package -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -PackagePath $pkg | Out-Null
-                }
-            }
-            Write-Host "Saving changes..."
-            Start-DismCommand -Verb Commit -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" | Out-Null
-            # Perform customization tasks later
-            Write-Host "Beginning customizations..."
-            if ((Start-PECustomization -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -arch $architecture) -eq $false)
-            {
-                Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
-                Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $false | Out-Null
-                Write-Host "`nPress ENTER to exit"
-                Read-Host | Out-Null
-                exit 1
-            }
-            Write-Host "Unmounting image..."
-            Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $true | Out-Null
-            Write-Host "PE generated successfully"
-            # Continue ISO customization
-            Write-Host "Copying image file. This can take some time..."
-            $totalTime = 0
-            if (Test-Path "$imgFile" -PathType Leaf)
-            {
-                $totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$((Get-Location).Path)\ISOTEMP\media\sources\install.wim" -Verbose -Force -Recurse -Container }
-            }
-            if ($?)
-            {
-                Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
-            }
-            else
-            {
-                Write-Host "The image file has not been copied successfully."
-                Write-Host "`nPress ENTER to exit"
-                Read-Host | Out-Null
-                exit 1
-            }
-            Write-Host "Copying setup tools..."
-            Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
-            New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -ItemType Directory | Out-Null
-            Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
-            Write-Host "Deleting temporary files..."
-            Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
-            if ($?)
-            {
-                Write-Host "Temporary files have been deleted successfully"
-            }
-            else
-            {
-                Write-Host "Temporary files haven't been deleted successfully"
-            }
-            Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
-            Start-Sleep -Seconds 5
-            Write-Host "Creating ISO file..."
-            if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath) -eq $false)
-            {
-                Write-Host "The ISO file has not been created successfully."
-                Write-Host "Deleting temporary files..."
-                Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
-                Write-Host "`nPress ENTER to exit"
-                Read-Host | Out-Null
-                exit 1
-            }
-            Write-Host "Deleting temporary files..."
-            Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
-            Write-Host "The ISO file has been successfully created on the location you specified"
-            Start-Sleep -Seconds 5
-            exit 0
-        }
-        else
-        {
-            Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
-            Write-Host "`nPress ENTER to exit"
-            Read-Host | Out-Null
-            exit 1
-        }
-    }
-    else
-    {
-        Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
-        Write-Host "`nPress ENTER to exit"
-        Read-Host | Out-Null
-        exit 1
-    }
+	try
+	{
+		if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+		{
+			# An ADK may be installed, but it may not be Windows 10 ADK
+			$progFiles = ""
+			$peToolsPath = ""
+			if ([Environment]::Is64BitOperatingSystem)
+			{
+				$progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+			}
+			else
+			{
+				$progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"            
+			}
+			if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
+			{
+				$peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+				Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
+				if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Mounting Windows image. Please wait..."
+				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$((Get-Location).Path)\ISOTEMP\mount") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE image mount phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Copying Windows PE optional components. Please wait..."
+				if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Adding OS packages..."
+				$pkgs = [List[string]]::new()
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
+				foreach ($pkg in $pkgs)
+				{
+					if (Test-Path $pkg -PathType Leaf)
+					{
+						Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
+						Start-DismCommand -Verb Add-Package -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -PackagePath $pkg | Out-Null
+					}
+				}
+				Write-Host "Saving changes..."
+				Start-DismCommand -Verb Commit -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" | Out-Null
+				# Perform customization tasks later
+				Write-Host "Beginning customizations..."
+				if ((Start-PECustomization -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -arch $architecture -testStartNet $false) -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
+					Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $false | Out-Null
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Unmounting image..."
+				Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $true | Out-Null
+				Write-Host "PE generated successfully"
+				# Continue ISO customization
+				Write-Host "Copying image file. This can take some time..."
+				$totalTime = 0
+				if (Test-Path "$imgFile" -PathType Leaf)
+				{
+					$totalTime = Measure-Command { Copy-Item -Path "$imgFile" -Destination "$((Get-Location).Path)\ISOTEMP\media\sources\install.wim" -Verbose -Force -Recurse -Container }
+				}
+				if ($?)
+				{
+					Write-Host "The image file has been copied successfully. Time taken: $($totalTime.Minutes) minutes, $($totalTime.Seconds) seconds"
+				}
+				else
+				{
+					Write-Host "The image file has not been copied successfully."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Copying setup tools..."
+				Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -ItemType Directory | Out-Null
+				Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
+				Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				Write-Host "Deleting temporary files..."
+				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
+				if ($?)
+				{
+					Write-Host "Temporary files have been deleted successfully"
+				}
+				else
+				{
+					Write-Host "Temporary files haven't been deleted successfully"
+				}
+				Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
+				Start-Sleep -Seconds 5
+				Write-Host "Creating ISO file..."
+				if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath) -eq $false)
+				{
+					Write-Host "The ISO file has not been created successfully."
+					Write-Host "Deleting temporary files..."
+					Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Deleting temporary files..."
+				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
+				Write-Host "The ISO file has been successfully created on the location you specified"
+				Start-Sleep -Seconds 5
+				exit 0
+			}
+			else
+			{
+				Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+				Write-Host "`nPress ENTER to exit"
+				Read-Host | Out-Null
+				exit 1
+			}
+		}
+		else
+		{
+			Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+			Write-Host "`nPress ENTER to exit"
+			Read-Host | Out-Null
+			exit 1
+		}
+	}
+	catch
+	{
+		Write-Host "This process is unsuccessful as the following error occurred: $_"
+		Write-Host "`nPress ENTER to exit"
+		Read-Host | Out-Null
+		exit 1		
+	}
+
 }
 
 function Copy-PEFiles
@@ -325,12 +340,15 @@ function Start-PECustomization
             The path of the mounted Windows PE image
         .PARAMETER arch
             The architecture of the target Windows PE image, which is used to customize the wallpaper
+		.PARAMETE testStartNet
+			Customizes the "startnet.cmd" file for WinPE testing
         .EXAMPLE
-            Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64"
+            Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $imagePath,
-        [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $arch
+        [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $arch,
+		[Parameter(Mandatory = $true, Position = 2)] [bool] $testStartNet
     )
     try
     {
@@ -370,24 +388,90 @@ function Start-PECustomization
                 Write-Host "Could not change wallpaper..."
             }
         }
-        Write-Host "CUSTOMIZATION STEP - Change Terminal Settings" -BackgroundColor DarkGreen
-        Write-Host "Opening registry..."
-        if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $true)
+        try
         {
-            Write-Host "Setting window position..."
-            Set-ItemProperty -Path "HKLM:\PE_DefUser\Console" -Name "WindowPosition" -Value 6291480
-            Write-Host "Closing registry..."
-            Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $false
+            Write-Host "CUSTOMIZATION STEP - Change Terminal Settings" -BackgroundColor DarkGreen
+            Write-Host "Opening registry..."
+            if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $true)
+            {
+                Write-Host "Setting window position..."
+                Set-ItemProperty -Path "HKLM:\PE_DefUser\Console" -Name "WindowPosition" -Value 6291480
+                Write-Host "Closing registry..."
+                Open-PERegistry -regFile "$imagePath\Windows\system32\config\DEFAULT" -regName "PE_DefUser" -regLoad $false
+            }
+            else
+            {
+                Write-Host "Could not modify terminal settings"
+            }
         }
-        else
+        catch
         {
-            Write-Host "Could not modify terminal settings"
+            Write-Host "Could not modify terminal settings"            
+        }
+        if (($arch.ToString() -eq "x86") -or ($arch.ToString() -eq "amd64"))
+        {
+            try
+            {
+                Write-Host "CUSTOMIZATION STEP - Prepare System for Graphical Applications" -BackgroundColor DarkGreen
+                Write-Host "Opening registry..."
+                if (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)
+                {
+                    Write-Host "Setting CLSID keys..."
+                    $clsidKey = "HKLM\WINPESOFT\Classes\CLSID\{AE054212-3535-4430-83ED-D501AA6680E6}"
+                    reg add "$clsidKey" /f
+					reg add "$clsidKey" /f /ve /t REG_SZ /d "Shell Name Space ListView"
+					reg add "$clsidKey\InprocServer32" /f
+					reg add "$clsidKey\InprocServer32" /f /ve /t REG_EXPAND_SZ /d "%SystemRoot%\system32\explorerframe.dll"
+					reg add "$clsidKey\InprocServer32" /f /v "ThreadingModel" /t REG_SZ /d "Apartment"
+                    Write-Host "Closing registry..."
+                    reg unload "HKLM\WINPESOFT"
+                    if (-not $?)
+                    {
+                        $attempts = 0
+                        do
+                        {
+                            $attempts += 1
+                            Start-Sleep -Milliseconds 500
+                            reg unload "HKLM\WINPESOFT"
+                        } until ($?)
+                        Write-Host "Registry closed successfully after $($attempts + 1) attempt(s)"
+                    }
+                }
+                else
+                {
+                    Write-Host "Could not prepare the system for graphical applications"
+                }
+                Write-Host "Copying DLL files..."
+                switch ($arch)
+                {
+                    x86 {
+                        Copy-Item -Path "\Windows\system32\ExplorerFrame.dll" -Destination "$imagePath\Windows\system32" -Force -Verbose
+                    }
+                    amd64 {
+                        Copy-Item -Path "\Windows\system32\ExplorerFrame.dll" -Destination "$imagePath\Windows\system32" -Force -Verbose
+                        Copy-Item -Path "\Windows\SysWOW64\ExplorerFrame.dll" -Destination "$imagePath\Windows\SysWOW64" -Force -Verbose
+                    }
+                }
+                Write-Host "Creating folders..."
+                New-Item -Path "$imagePath\Windows\system32\config\systemprofile\Desktop" -ItemType Directory -Force
+                Write-Host "The target system is now ready for graphical applications"
+            }
+            catch
+            {
+                Write-Host "Could not prepare the system for graphical applications"
+            }
         }
         try
         {
             Write-Host "CUSTOMIZATION STEP - Change Startup Commands" -BackgroundColor DarkGreen
             Write-Host "Changing startup commands..."
             Copy-Item -Path "$((Get-Location).Path)\files\startup\startnet.cmd" -Destination "$imagePath\Windows\system32\startnet.cmd" -Force
+			if ($testStartNet)
+			{
+				$contents = Get-Content -Path "$imagePath\Windows\system32\startnet.cmd"
+				$contents[5] = "set debug=2"
+				Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
+			}
             Write-Host "Startup commands changed"
         }
         catch
@@ -625,11 +709,75 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
+    $driverPath = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))DT_InstDrvs.txt"
+    if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
+    {
+        Write-Host "Adding drivers to the target image..."
+        # Add drivers that were previously added to the Windows PE using the DIM
+        $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        foreach ($driver in $drivers)
+        {
+			if (Test-Path -Path "$driver" -PathType Leaf)
+			{
+				Write-Host "Adding driver `"$driver`"...        " -NoNewline
+				if ((Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false) -eq $true)
+				{
+					Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+				}
+				else
+				{
+					Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+				}
+			}
+        }
+        # Perform serviceability tests one more time
+        if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
+    }
+    if (Test-Path "$($driveLetter):\`$DISMTOOLS.~LS")
+    {
+        Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+    }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     # Show message before rebooting system
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically.`n`nIf there are any bootable devices, remove those.`n`nWhen your computer restarts, Setup will continue.`n"
     Show-Timeout -Seconds 10
     wpeutil reboot
+}
+
+function Get-SystemArchitecture
+{
+    # Detect CPU architecture and compare with list
+    switch (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture).ToString())
+    {
+        "0"{
+            return "i386"
+        }
+        "1"{
+            return "mips"
+        }
+        "2"{
+            return "alpha"
+        }
+        "3"{
+            return "powerpc"
+        }
+        "5"{
+            return "arm"
+        }
+        "6"{
+            return "ia64"
+        }
+        "9"{
+            return "amd64"
+        }
+        "12" {
+            return "arm64"
+        }
+        default {
+            return ""
+        }
+    }
+    return ""
 }
 
 function Get-Disks
@@ -648,6 +796,10 @@ function Get-Disks
         Write-Host "DISKPART scripts not found."
         return "ERROR"
     }
+
+    # Show additional tools
+    Write-Host "- To load drivers, type `"DIM`" and press ENTER`n"
+
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"    
     $destDrive = -1
     try
@@ -657,8 +809,31 @@ function Get-Disks
     }
     catch 
     {
-        Write-Host "Please specify a number and try again.`n"
-        Get-Disks
+        switch ($destDisk)
+        {
+            "DIM" {
+                # Get CPU architecture and launch Driver Installation Module
+                $supportedArchitectures = [List[string]]::new()
+                $supportedArchitectures.Add("i386")
+                $supportedArchitectures.Add("amd64")
+                $systemArchitecture = Get-SystemArchitecture
+
+                if ($supportedArchitectures.Contains($systemArchitecture))
+                {
+                    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe")
+                    {
+                        Clear-Host
+                        Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
+                        Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
+                    }
+                }
+                Get-Disks
+            }
+            default {
+                Write-Host "Please specify a number and try again.`n"
+                Get-Disks
+            }
+        }
     }
 }
 
@@ -997,13 +1172,35 @@ function Start-DismCommand
                 Remove-WindowsCapability -Path "$ImagePath" -Name $CapabilityRemovalName -NoRestart | Out-Null
             }
             "Add-Driver" {
+                $scratchDir = ""
+                if ((Test-Path -Path "$($ImagePath)`$DISMTOOLS.~LS") -and ((Get-ChildItem "$($ImagePath)`$DISMTOOLS.~LS\PackageTemp" -Directory).Count -eq 1))
+                {
+                    foreach ($dir in (Get-ChildItem "$($ImagePath)`$DISMTOOLS.~LS\PackageTemp" -Directory))
+                    {
+                        $scratchDir = $dir.FullName
+                    }
+                }
                 if ($DriverAdditionRecurse)
                 {
-                    Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -Recurse -NoRestart | Out-Null
+                    if ($scratchDir -ne "")
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -ScratchDirectory "$scratchDir" -Recurse | Out-Null
+                    }
+                    else
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -Recurse | Out-Null
+                    }
                 }
                 else
                 {
-                    Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -NoRestart | Out-Null
+                    if ($scratchDir -ne "")
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" -ScratchDirectory "$scratchDir" | Out-Null
+                    }
+                    else
+                    {
+                        Add-WindowsDriver -Path "$ImagePath" -Driver "$DriverAdditionFile" | Out-Null
+                    }
                 }
             }
             default {
@@ -1066,13 +1263,13 @@ function Set-Serviceability
     }
     else
     {
-        Write-Host "Serviceability tests have failed. The image is not valid."        
-    }
-    if (($scratchDir -ne "") -and (Test-Path -Path "$scratchDir"))
-    {
-        Write-Host "Removing temporary directory..."
-        Remove-Item -Path "$scratchDir" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
-        Remove-Item -Path "$driveLetter\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        Write-Host "Serviceability tests have failed. The image is not valid."
+        if (($scratchDir -ne "") -and (Test-Path -Path "$scratchDir"))
+        {
+            Write-Host "Removing temporary directory..."
+            Remove-Item -Path "$scratchDir" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+            Remove-Item -Path "$driveLetter\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+        }
     }
 }
 
@@ -1186,6 +1383,183 @@ function Show-Timeout {
     Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
 }
 
+function Start-ProjectDevelopment {
+    $architecture = [PE_Arch]::($testArch)
+    $version = "0.5.1"
+	$ESVer = "0.5.1"
+    Write-Host "DISMTools $version - Preinstallation Environment Helper"
+    Write-Host "(c) 2024. CodingWonders Software"
+    Write-Host "-----------------------------------------------------------"
+    # Start PE generation
+    Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
+    # Detect if the Windows ADK is present
+	try
+	{
+		if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+		{
+			# An ADK may be installed, but it may not be Windows 10 ADK
+			$progFiles = ""
+			$peToolsPath = ""
+			if ([Environment]::Is64BitOperatingSystem)
+			{
+				$progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+			}
+			else
+			{
+				$progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"            
+			}
+			if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
+			{
+				$peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+				if (-not (Test-Path "$targetPath"))
+				{
+					New-Item -Path "$targetPath" -ItemType Directory | Out-Null					
+				}
+				Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
+				if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Mounting Windows image. Please wait..."
+				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$((Get-Location).Path)\ISOTEMP\mount") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE image mount phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Copying Windows PE optional components. Please wait..."
+				if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Adding OS packages..."
+				$pkgs = [List[string]]::new()
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
+				foreach ($pkg in $pkgs)
+				{
+					if (Test-Path $pkg -PathType Leaf)
+					{
+						Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
+						Start-DismCommand -Verb Add-Package -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -PackagePath $pkg | Out-Null
+					}
+				}
+				Write-Host "Saving changes..."
+				Start-DismCommand -Verb Commit -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" | Out-Null
+				# Perform customization tasks later
+				Write-Host "Beginning customizations..."
+				if ((Start-PECustomization -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -arch $architecture -testStartNet $true) -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
+					Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $false | Out-Null
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Unmounting image..."
+				Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $true | Out-Null
+				Write-Host "PE generated successfully"
+				Write-Host "Copying project files..."
+				# Copy project files
+				Expand-Archive -Path "$((Get-Location).Path)\files\DISMTools-PE.zip" -Destination "$targetPath" -Force
+				Write-Host "Project files have been copied."
+				if ([Environment]::Is64BitOperatingSystem)
+				{
+					Copy-Item -Path "$peToolsPath\..\Deployment Tools\amd64\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
+				}
+				else
+				{
+					Copy-Item -Path "$peToolsPath\..\Deployment Tools\x86\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
+				}
+				Write-Host "Copying setup tools..."
+				Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -ItemType Directory | Out-Null
+				Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
+				Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				Write-Host "Deleting temporary files..."
+				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
+				if ($?)
+				{
+					Write-Host "Temporary files have been deleted successfully"
+				}
+				else
+				{
+					Write-Host "Temporary files haven't been deleted successfully"
+				}
+				Write-Host "The ISO file structure has been successfully created. DISMTools will finish preparing the project after 5 seconds."
+				Start-Sleep -Seconds 5
+				Copy-Item -Path "$((Get-Location).Path)\ISOTEMP\*" -Destination "$targetPath\ISORoot" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+				if ($?)
+				{
+					Write-Host "Deleting temporary files..."
+					Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
+					# Delete local DIM src directory - not needed
+					if (Test-Path "$targetPath\ISORoot\media\Tools\DIM\src") { Remove-Item -Path "$targetPath\ISORoot\media\Tools\DIM\src" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null }
+					Write-Host "The project has been successfully created"
+					try
+					{
+						Write-Host "Mounting Windows PE image..."
+						Mount-WindowsImage -ImagePath "$targetPath\ISORoot\media\sources\boot.wim" -Index 1 -Path "$targetPath\mount"
+						Write-Host "Updating the project configuration..."
+						$dtProjConfig = Get-Content -Path "$targetPath\settings\project.ini"
+						# Only update image file, index, and mount point configs. Let DISMTools configure the rest.
+						$dtProjConfig[6] = "ImageFile=`"$targetPath\ISORoot\media\sources\boot.wim`""
+						$dtprojConfig[7] = "ImageIndex=1"
+						$dtProjConfig[8] = "ImageMountPoint=`"$targetPath\mount`""
+						Set-Content -Path "$targetPath\settings\project.ini" -Value $dtprojConfig -Force
+						Write-Host "`nThe generation process is complete! You can start testing your applications on Windows PEs."
+					}
+					catch
+					{
+						Write-Host "Could not mount the target Windows PE image. You will have to do this manually."
+					}
+				}
+				else
+				{
+					Write-Host "Could not finish preparing the project."	
+				}
+				Start-Sleep -Seconds 5
+				exit 0
+			}
+			else
+			{
+				Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+				Write-Host "`nPress ENTER to exit"
+				Read-Host | Out-Null
+				exit 1
+			}
+		}
+		else
+		{
+			Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+			Write-Host "`nPress ENTER to exit"
+			Read-Host | Out-Null
+			exit 1
+		}		
+	}
+	catch
+	{
+		Write-Host "This process is unsuccessful as the following error occurred: $_"
+		Write-Host "`nPress ENTER to exit"
+		Read-Host | Out-Null
+		exit 1
+	}
+}
+
 if ($cmd -eq "StartApply")
 {
     Start-OSApplication
@@ -1194,6 +1568,10 @@ elseif ($cmd -eq "StartPEGen")
 {
     Start-PEGeneration
 }
+elseif ($cmd -eq "StartDevelopment")
+{
+	Start-ProjectDevelopment
+}
 elseif ($cmd -eq "Help")
 {
     # Show help documentation
@@ -1201,7 +1579,7 @@ elseif ($cmd -eq "Help")
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------`n"
 
-    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [Help]`n"
+    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
@@ -1212,15 +1590,20 @@ elseif ($cmd -eq "Help")
     Write-Host "        https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
     Write-Host "    StartApply: starts the Windows image application process from the Preinstallation Environment (PE). Parameters: none"
     Write-Host "      This can only be run on Windows PE. Starting this action on other environments will fail."
+	Write-Host "    StartDevelopment: starts the PE project creation phase. Parameters:"
+	Write-Host "      -testArch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
+    Write-Host "                 x86, amd64, arm, arm64"
+	Write-Host "      -targetPath: (Mandatory) Specifies the target path for the PE project"
     Write-Host "    Help: shows this help documentation`n"
 
     Write-Host "Examples:`n"
     Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`""
     Write-Host "    PE_Helper.ps1 [-cmd] StartApply"
+	Write-Host "    PE_Helper.ps1 [-cmd] StartDevelopment -testArch amd64 -targetPath `"C:\FooBar`""
     Write-Host "    PE_Helper.ps1 [-cmd] Help"
 }
 else
 {
-    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), Help"
+    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), StartDevelopment, Help"
     exit 1
 }

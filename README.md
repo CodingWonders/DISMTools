@@ -176,10 +176,14 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: May 25, 2024 (Roberto Zamfir)</i></p>
+	<p align="center"><i>Last updated: July 4, 2024 (Andrei Verdeanu)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
+
+## Support this project
+
+If you find this project useful, consider giving it a star to encourage further development.
 
 ## Building
 
@@ -193,8 +197,7 @@ If you want to grab a copy straight from the source code, follow these instructi
 1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
-4. Scroll down on the Solution Explorer until you find `UnpEax`, right-click it and select Build
-5. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 ### Additional startup flags
 

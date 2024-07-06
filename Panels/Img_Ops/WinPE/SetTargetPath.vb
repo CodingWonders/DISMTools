@@ -47,6 +47,8 @@ Public Class SetPETargetPath
                             msg = "Le chemin cible doit être composé d'au moins 3 caractères et d'au plus 32 caractères."
                         Case "PTB", "PTG"
                             msg = "O local de destino tem de ter pelo menos 3 caracteres e não mais de 32 caracteres"
+                        Case "ITA"
+                            msg = "Il percorso di destinazione deve essere di almeno 3 caratteri e non più lungo di 32 caratteri"
                     End Select
                 Case 1
                     msg = "The target path must be at least 3 characters and no longer than 32 characters"
@@ -56,6 +58,8 @@ Public Class SetPETargetPath
                     msg = "Le chemin cible doit être composé d'au moins 3 caractères et d'au plus 32 caractères."
                 Case 4
                     msg = "O local de destino tem de ter pelo menos 3 caracteres e não mais de 32 caracteres"
+                Case 5
+                    msg = "Il percorso di destinazione deve essere di almeno 3 caratteri e non più lungo di 32 caratteri"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -72,6 +76,8 @@ Public Class SetPETargetPath
                             msg = "Le chemin cible doit commencer par une lettre autre que A ou B."
                         Case "PTB", "PTG"
                             msg = "O local de destino deve começar com uma letra diferente de A ou B"
+                        Case "ITA"
+                            msg = "Il percorso di destinazione deve iniziare con una lettera diversa da A o B"
                     End Select
                 Case 1
                     msg = "The target path must start with any letter other than A or B"
@@ -81,6 +87,8 @@ Public Class SetPETargetPath
                     msg = "Le chemin cible doit commencer par une lettre autre que A ou B."
                 Case 4
                     msg = "O local de destino deve começar com uma letra diferente de A ou B"
+                Case 5
+                    msg = "Il percorso di destinazione deve iniziare con una lettera diversa da A o B"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -97,6 +105,8 @@ Public Class SetPETargetPath
                             msg = "Une lettre de disque doit être suivie de :"
                         Case "PTB", "PTG"
                             msg = "Uma letra de unidade deve ser seguida de :"
+                        Case "ITA"
+                            msg = "Una lettera di unità deve essere seguita da :"
                     End Select
                 Case 1
                     msg = "A drive letter must be followed by :"
@@ -106,6 +116,8 @@ Public Class SetPETargetPath
                     msg = "Une lettre de disque doit être suivie de :"
                 Case 4
                     msg = "Uma letra de unidade deve ser seguida de :"
+                Case 5
+                    msg = "Una lettera di unità deve essere seguita da :"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -122,6 +134,8 @@ Public Class SetPETargetPath
                             msg = "Le chemin cible doit être absolu et ne doit pas contenir d'éléments relatifs."
                         Case "PTB", "PTG"
                             msg = "A localização de destino tem de ser absoluta e não pode conter elementos relativos"
+                        Case "ITA"
+                            msg = "Il percorso di destinazione deve essere assoluto e non deve contenere elementi relativi"
                     End Select
                 Case 1
                     msg = "The target path must be absolute, and must not contain relative elements"
@@ -131,6 +145,8 @@ Public Class SetPETargetPath
                     msg = "Le chemin cible doit être absolu et ne doit pas contenir d'éléments relatifs."
                 Case 4
                     msg = "A localização de destino tem de ser absoluta e não pode conter elementos relativos"
+                Case 5
+                    msg = "Il percorso di destinazione deve essere assoluto e non deve contenere elementi relativi"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -147,6 +163,8 @@ Public Class SetPETargetPath
                             msg = "Le chemin cible ne doit pas contenir d'espaces ou de guillemets."
                         Case "PTB", "PTG"
                             msg = "A localização de destino não pode conter espaços ou aspas"
+                        Case "ITA"
+                            msg = "Il percorso di destinazione non deve contenere spazi o virgolette"
                     End Select
                 Case 1
                     msg = "The target path must not contain spaces or quotation marks"
@@ -156,6 +174,8 @@ Public Class SetPETargetPath
                     msg = "Le chemin cible ne doit pas contenir d'espaces ou de guillemets."
                 Case 4
                     msg = "A localização de destino não pode conter espaços ou aspas"
+                Case 5
+                    msg = "Il percorso di destinazione non deve contenere spazi o virgolette"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
@@ -205,6 +225,13 @@ Public Class SetPETargetPath
                         Label3.Text = "Localização de destino:"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Text = "Imposta il percorso di destinazione di Windows PE"
+                        Label1.Text = Text
+                        Label2.Text = "Il percorso di destinazione è una directory in cui verranno copiati i file di Windows PE per l'avvio dell'ambiente. Specificare un percorso di destinazione e fare clic su OK"
+                        Label3.Text = "Percorso di destinazione:"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Text = "Set Windows PE target path"
@@ -234,6 +261,13 @@ Public Class SetPETargetPath
                 Label3.Text = "Localização de destino:"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Text = "Imposta il percorso di destinazione di Windows PE"
+                Label1.Text = Text
+                Label2.Text = "Il percorso di destinazione è una directory in cui verranno copiati i file di Windows PE per l'avvio dell'ambiente. Specificare un percorso di destinazione e fare clic su OK"
+                Label3.Text = "Percorso di destinazione:"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

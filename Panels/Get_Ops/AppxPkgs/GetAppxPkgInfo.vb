@@ -91,6 +91,25 @@ Public Class GetAppxPkgInfoDlg
                         LinkLabel1.Text = "Este recurso não é o que estou à procura"
                         Button2.Text = "Guardar..."
                         SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
+                    Case "ITA"
+                        Text = "Ottieni informazioni sul pacchetto AppX"
+                        Label1.Text = Text
+                        Label36.Text = "Informazioni sui pacchetti AppX"
+                        Label37.Text = "Selezionare un pacchetto AppX installato a sinistra per visualizzarne le informazioni qui"
+                        Label22.Text = "Nome del pacchetto:"
+                        Label24.Text = "Nome visualizzato dell'applicazione:"
+                        Label26.Text = "Architettura:"
+                        Label31.Text = "ID risorsa:"
+                        Label41.Text = "Versione:"
+                        Label43.Text = "È registrato a qualche utente?"
+                        Label4.Text = "Directory di installazione:"
+                        Label6.Text = "Ubicazione del manifesto del pacchetto:"
+                        Label8.Text = "Directory delle risorse del logo del negozio:"
+                        Label9.Text = "Asset principale del logo del negozio:"
+                        Label10.Text = "Questa risorsa è stata indovinata da DISMTools in base alle sue dimensioni, il che può portare a un risultato errato. Se ciò accade, si prega di segnalare un problema sul repository GitHub"
+                        LinkLabel1.Text = "Questa risorsa non è quella che sto cercando"
+                        Button2.Text = "Salva..."
+                        SearchBox1.cueBanner = "Digitare qui per cercare un'applicazione..."
                 End Select
             Case 1
                 Text = "Get AppX package information"
@@ -168,6 +187,25 @@ Public Class GetAppxPkgInfoDlg
                 LinkLabel1.Text = "Este recurso não é o que estou à procura"
                 Button2.Text = "Guardar..."
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma aplicação..."
+            Case 5
+                Text = "Ottieni informazioni sul pacchetto AppX"
+                Label1.Text = Text
+                Label36.Text = "Informazioni sui pacchetti AppX"
+                Label37.Text = "Selezionare un pacchetto AppX installato a sinistra per visualizzarne le informazioni qui"
+                Label22.Text = "Nome del pacchetto:"
+                Label24.Text = "Nome visualizzato dell'applicazione:"
+                Label26.Text = "Architettura:"
+                Label31.Text = "ID risorsa:"
+                Label41.Text = "Versione:"
+                Label43.Text = "È registrato a qualche utente?"
+                Label4.Text = "Directory di installazione:"
+                Label6.Text = "Ubicazione del manifesto del pacchetto:"
+                Label8.Text = "Directory delle risorse del logo del negozio:"
+                Label9.Text = "Asset principale del logo del negozio:"
+                Label10.Text = "Questa risorsa è stata indovinata da DISMTools in base alle sue dimensioni, il che può portare a un risultato errato. Se ciò accade, si prega di segnalare un problema sul repository GitHub"
+                LinkLabel1.Text = "Questa risorsa non è quella che sto cercando"
+                Button2.Text = "Salva..."
+                SearchBox1.cueBanner = "Digitare qui per cercare un'applicazione..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -317,6 +355,8 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "Non"
                                 Case "PTB", "PTG"
                                     Label42.Text = "Não"
+                                Case "ITA"
+                                    Label42.Text = "No"
                             End Select
                         Case 1
                             Label42.Text = "No"
@@ -326,6 +366,8 @@ Public Class GetAppxPkgInfoDlg
                             Label42.Text = "Non"
                         Case 4
                             Label42.Text = "Não"
+                        Case 5
+                            Label42.Text = "No"
                     End Select
                 Else
                     Select Case MainForm.Language
@@ -339,6 +381,8 @@ Public Class GetAppxPkgInfoDlg
                                     Label42.Text = "Oui"
                                 Case "PTB", "PTG"
                                     Label42.Text = "Sim"
+                                Case "ITA"
+                                    Label42.Text = "Sì"
                             End Select
                         Case 1
                             Label42.Text = "Yes"
@@ -348,6 +392,8 @@ Public Class GetAppxPkgInfoDlg
                             Label42.Text = "Oui"
                         Case 4
                             Label42.Text = "Sim"
+                        Case 5
+                            Label42.Text = "Sì"
                     End Select
                 End If
             Else
@@ -362,6 +408,8 @@ Public Class GetAppxPkgInfoDlg
                                 Label42.Text = "Non"
                             Case "PTB", "PTG"
                                 Label42.Text = "Não"
+                            Case "ITA"
+                                Label42.Text = "No"
                         End Select
                     Case 1
                         Label42.Text = "No"
@@ -371,6 +419,8 @@ Public Class GetAppxPkgInfoDlg
                         Label42.Text = "Non"
                     Case 4
                         Label42.Text = "Não"
+                    Case 5
+                        Label42.Text = "No"
                 End Select
             End If
             mainAsset = MainForm.GetStoreAppMainLogo(Label23.Text)

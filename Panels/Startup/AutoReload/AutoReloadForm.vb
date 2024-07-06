@@ -48,6 +48,8 @@ Public Class AutoReloadForm
                             message = "Rechargement de l'image montée en cours... (avec succès : " & SuccessfulReloads & ", échoué : " & FailedReloads & ", ignoré : " & SkippedReloads & ")"
                         Case "PTB", "PTG"
                             message = "Recarregando imagem montada... (bem-sucedido: " & SuccessfulReloads & ", falhou: " & FailedReloads & ", ignorado: " & SkippedReloads & ")"
+                        Case "ITA"
+                            message = "Ricarica dell'immagine montata... (riuscita: " & SuccessfulReloads & ", failed: " & FailedReloads & ", saltato: " & SkippedReloads & ")"
                     End Select
                     BackgroundWorker1.ReportProgress((x / ImgCount) * 100)
                     Try
@@ -76,6 +78,8 @@ Public Class AutoReloadForm
                 message = "Ce processus s'est achevé"
             Case "PTB", "PTG"
                 message = "Este processo foi concluído"
+            Case "ITA"
+                message = "Questo processo è stato completato"
         End Select
         BackgroundWorker1.ReportProgress(100)
     End Sub
@@ -92,6 +96,8 @@ Public Class AutoReloadForm
                         Label2.Text = "Préparation du rechargement des images en cours..."
                     Case "PTB", "PTG"
                         Label2.Text = "A preparar o recarregamento de imagens..."
+                    Case "ITA"
+                        Label2.Text = "Preparazione per ricaricare le immagini..."
                 End Select
             Case Else
                 Label2.Text = message
@@ -146,6 +152,11 @@ Public Class AutoReloadForm
                 Label3.Text = "Ficheiro de imagem:"
                 Label4.Text = "Ponto de montagem da imagem:"
                 GroupBox1.Text = "Informações sobre a imagem"
+            Case "ITA"
+                Label1.Text = "Attendere mentre DISMTools ricarica la sessione di assistenza delle immagini orfane. Questa operazione può richiedere del tempo. Una volta completata, questa finestra di dialogo si chiuderà."
+                Label3.Text = "File immagine:"
+                Label4.Text = "Punto di montaggio dell'immagine:"
+                GroupBox1.Text = "Informazioni sull'immagine"
         End Select
         Thread.Sleep(2000)
         BackgroundWorker1.RunWorkerAsync()

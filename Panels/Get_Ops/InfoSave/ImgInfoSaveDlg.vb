@@ -97,6 +97,8 @@ Public Class ImgInfoSaveDlg
                                 msg = "Obtention des informations sur l'image en cours... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
                             Case "PTB", "PTG"
                                 msg = "Obter informações sobre a imagem... (imagem " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                            Case "ITA"
+                                msg = "Ottenere informazioni sull'immagine... (immagine " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " di " & ImageInfoCollection.Count & ")"
                         End Select
                     Case 1
                         msg = "Getting image information... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & ")"
@@ -106,6 +108,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Obtention des informations sur l'image en cours... (image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
                     Case 4
                         msg = "Obter informações sobre a imagem... (imagem " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " de " & ImageInfoCollection.Count & ")"
+                    Case 5
+                        msg = "Ottenere informazioni sull'immagine... (immagine " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " di " & ImageInfoCollection.Count & ")"
                 End Select
                 ReportChanges(msg, (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count) * 100)
                 Contents &= "  Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & ":" & CrLf & _
@@ -171,6 +175,12 @@ Public Class ImgInfoSaveDlg
                           "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf & _
                           "Deseja obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informações do pacote"
+                    Case "ITA"
+                        msg(0) = "Preparazione dei processi di informazione sui pacchetti..."
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sui pacchetti installati in questa immagine. È anche possibile ottenere informazioni complete su tali pacchetti e salvarle nel rapporto." & CrLf & CrLf & _
+                          "Si noti che questa operazione richiederà più tempo a seconda del numero di pacchetti installati." & CrLf & CrLf & _
+                          "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                        msg(2) = "Informazioni sul pacchetto"
                 End Select
             Case 1
                 msg(0) = "Preparing package information processes..."
@@ -196,6 +206,12 @@ Public Class ImgInfoSaveDlg
                   "Tem em atenção que isto pode demorar mais tempo, dependendo do número de pacotes instalados." & CrLf & CrLf & _
                   "Deseja obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informações do pacote"
+            Case 5
+                msg(0) = "Preparazione dei processi di informazione sui pacchetti..."
+                msg(1) = "Il programma ha ottenuto informazioni elementari sui pacchetti installati in questa immagine. È anche possibile ottenere informazioni complete su tali pacchetti e salvarle nel rapporto." & CrLf & CrLf & _
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di pacchetti installati." & CrLf & CrLf & _
+                  "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                msg(2) = "Informazioni sul pacchetto"
         End Select
         Contents &= "----> Package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -221,6 +237,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Des paquets ont été obtenus"
                             Case "PTB", "PTG"
                                 msg(0) = "Os pacotes foram obtidos"
+                            Case "ITA"
+                                msg(0) = "I pacchetti sono stati acquisiti"
                         End Select
                     Case 1
                         msg(0) = "Packages have been obtained"
@@ -230,6 +248,8 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Des paquets ont été obtenus"
                     Case 4
                         msg(0) = "Os pacotes foram obtidos"
+                    Case 5
+                        msg(0) = "I pacchetti sono stati acquisiti"
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(0) Then
@@ -246,6 +266,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sui pacchetti... (pacchetto " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " di " & InstalledPkgInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
@@ -255,6 +277,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sui pacchetti... (pacchetto " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " di " & InstalledPkgInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                         Dim pkgInfoEx As DismPackageInfoEx = Nothing
@@ -355,6 +379,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sui pacchetti... (pacchetto " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " di " & InstalledPkgInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of packages... (package " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " of " & InstalledPkgInfo.Count & ")"
@@ -364,6 +390,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les paquets en cours... (paquet " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre os pacotes... (pacote " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " de " & InstalledPkgInfo.Count & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sui pacchetti... (pacchetto " & InstalledPkgInfo.IndexOf(installedPackage) + 1 & " di " & InstalledPkgInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledPkgInfo.IndexOf(installedPackage) / InstalledPkgInfo.Count) * 100)
                         Dim pkgInfoEx As DismPackageInfoEx = Nothing
@@ -462,6 +490,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Sauvegarde des paquets installés en cours..."
                                 Case "PTB", "PTG"
                                     msg(0) = "Guardar os pacotes instalados..."
+                                Case "ITA"
+                                    msg(0) = "Salvataggio dei pacchetti installati..."
                             End Select
                         Case 1
                             msg(0) = "Saving installed packages..."
@@ -471,6 +501,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Sauvegarde des paquets installés en cours..."
                         Case 4
                             msg(0) = "Guardar os pacotes instalados..."
+                        Case 5
+                            msg(0) = "Salvataggio dei pacchetti installati..."
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= "  - Complete package information has not been gathered" & CrLf & CrLf & _
@@ -507,6 +539,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Préparation des processus d'information des paquets en cours..."
                     Case "PTB", "PTG"
                         msg = "A preparar processos de informação sobre pacotes..."
+                    Case "ITA"
+                        msg = "Preparazione dei processi di informazione sui pacchetti..."
                 End Select
             Case 1
                 msg = "Preparing package information processes..."
@@ -516,6 +550,8 @@ Public Class ImgInfoSaveDlg
                 msg = "Préparation des processus d'information des paquets en cours..."
             Case 4
                 msg = "A preparar processos de informação sobre pacotes..."
+            Case 5
+                msg = "Preparazione dei processi di informazione sui pacchetti..."
         End Select
         Contents &= "----> Package file information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -539,6 +575,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
                                 Case "PTB", "PTG"
                                     msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                                Case "ITA"
+                                    msg = "Ottenere informazioni dai file di pacchetto... (file di pacchetto " & PackageFiles.IndexOf(pkgFile) + 1 & " di " & PackageFiles.Count & ")"
                             End Select
                         Case 1
                             msg = "Getting information from package files... (package file " & PackageFiles.IndexOf(pkgFile) + 1 & " of " & PackageFiles.Count & ")"
@@ -548,6 +586,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obtention des informations des fichiers paquets en cours... (fichier paquet " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
                         Case 4
                             msg = "Obter informações dos ficheiros do pacote... (ficheiro do pacote " & PackageFiles.IndexOf(pkgFile) + 1 & " de " & PackageFiles.Count & ")"
+                        Case 5
+                            msg = "Ottenere informazioni dai file di pacchetto... (file di pacchetto " & PackageFiles.IndexOf(pkgFile) + 1 & " di " & PackageFiles.Count & ")"
                     End Select
                     ReportChanges(msg, (PackageFiles.IndexOf(pkgFile) / PackageFiles.Count) * 100)
                     If File.Exists(pkgFile) Then
@@ -678,6 +718,12 @@ Public Class ImgInfoSaveDlg
                           "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf & _
                           "Pretende obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informação sobre as características"
+                    Case "ITA"
+                        msg(0) = "Preparazione dei processi di informazione sulle caratteristiche..."
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sulle caratteristiche installate su questa immagine. È inoltre possibile ottenere informazioni complete su tali funzioni e salvarle nel rapporto." & CrLf & CrLf & _
+                          "Tenere presente che questa operazione richiederà più tempo a seconda del numero di funzioni installate." & CrLf & CrLf & _
+                          "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                        msg(2) = "Informazioni sulle caratteristiche"
                 End Select
             Case 1
                 msg(0) = "Preparing feature information processes..."
@@ -703,6 +749,12 @@ Public Class ImgInfoSaveDlg
                   "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de características instaladas." & CrLf & CrLf & _
                   "Pretende obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informação sobre as características"
+            Case 5
+                msg(0) = "Preparazione dei processi di informazione sulle caratteristiche..."
+                msg(1) = "Il programma ha ottenuto informazioni elementari sulle caratteristiche installate su questa immagine. È inoltre possibile ottenere informazioni complete su tali funzioni e salvarle nel rapporto." & CrLf & CrLf & _
+                  "Tenere presente che questa operazione richiederà più tempo a seconda del numero di funzioni installate." & CrLf & CrLf & _
+                  "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                msg(2) = "Informazioni sulle caratteristiche"
         End Select
         Contents &= "----> Feature information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -728,6 +780,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Des caractéristiques ont été obtenues"
                             Case "PTB", "PTG"
                                 msg(0) = "As características foram obtidas"
+                            Case "ITA"
+                                msg(0) = "Le caratteristiche sono state ottenute"
                         End Select
                     Case 1
                         msg(0) = "Features have been obtained"
@@ -737,6 +791,8 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Des caractéristiques ont été obtenues"
                     Case 4
                         msg(0) = "As características foram obtidas"
+                    Case 5
+                        msg(0) = "Le caratteristiche sono state ottenute"
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(1) Then
@@ -753,6 +809,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sulle caratteristiche... (caratteristica " & InstalledFeatInfo.IndexOf(feature) + 1 & " di " & InstalledFeatInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
@@ -762,6 +820,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sulle caratteristiche... (caratteristica " & InstalledFeatInfo.IndexOf(feature) + 1 & " di " & InstalledFeatInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
@@ -795,6 +855,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sulle caratteristiche... (caratteristica " & InstalledFeatInfo.IndexOf(feature) + 1 & " di " & InstalledFeatInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of features... (feature " & InstalledFeatInfo.IndexOf(feature) + 1 & " of " & InstalledFeatInfo.Count & ")"
@@ -804,6 +866,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les caractéristiques en cours... (caractéristique " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre as características... (caraterística " & InstalledFeatInfo.IndexOf(feature) + 1 & " de " & InstalledFeatInfo.Count & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sulle caratteristiche... (caratteristica " & InstalledFeatInfo.IndexOf(feature) + 1 & " di " & InstalledFeatInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledFeatInfo.IndexOf(feature) / InstalledFeatInfo.Count) * 100)
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, feature.FeatureName)
@@ -835,6 +899,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Sauvegarde des caractéristiques installés en cours..."
                                 Case "PTB", "PTG"
                                     msg(0) = "Guardar as características instaladas..."
+                                Case "ITA"
+                                    msg(0) = "Salvataggio delle caratteristiche installate..."
                             End Select
                         Case 1
                             msg(0) = "Saving installed features..."
@@ -844,6 +910,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Sauvegarde des caractéristiques installés en cours..."
                         Case 4
                             msg(0) = "Guardar as características instaladas..."
+                        Case 5
+                            msg(0) = "Salvataggio delle caratteristiche installate..."
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= "  - Complete feature information has not been gathered" & CrLf & CrLf & _
@@ -895,6 +963,12 @@ Public Class ImgInfoSaveDlg
                           "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf & _
                           "Deseja obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informação dos pacotes AppX"
+                    Case "ITA"
+                        msg(0) = "Preparazione dei processi di informazione sui pacchetti AppX..."
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sui pacchetti AppX installati in questa immagine. È inoltre possibile ottenere informazioni complete su tali pacchetti AppX e salvarle nel rapporto." & CrLf & CrLf & _
+                          "Si noti che questa operazione richiederà più tempo a seconda del numero di pacchetti AppX installati." & CrLf & CrLf & _
+                          "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                        msg(2) = "Informazioni sui pacchetti AppX"
                 End Select
             Case 1
                 msg(0) = "Preparing AppX package information processes..."
@@ -920,6 +994,12 @@ Public Class ImgInfoSaveDlg
                   "Tem em atenção que isto demorará mais tempo, dependendo do número de pacotes AppX instalados." & CrLf & CrLf & _
                   "Deseja obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informação dos pacotes AppX"
+            Case 5
+                msg(0) = "Preparazione dei processi di informazione sui pacchetti AppX..."
+                msg(1) = "Il programma ha ottenuto informazioni elementari sui pacchetti AppX installati in questa immagine. È inoltre possibile ottenere informazioni complete su tali pacchetti AppX e salvarle nel rapporto." & CrLf & CrLf & _
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di pacchetti AppX installati." & CrLf & CrLf & _
+                  "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                msg(2) = "Informazioni sui pacchetti AppX"
         End Select
         Contents &= "----> AppX package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -950,6 +1030,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
@@ -959,6 +1041,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                         End Select
                         ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                         Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
@@ -1077,6 +1161,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Des paquets AppX ont été obtenus"
                                     Case "PTB", "PTG"
                                         msg(0) = "Os pacotes AppX foram obtidos"
+                                    Case "ITA"
+                                        msg(0) = "I pacchetti AppX sono stati ottenuti"
                                 End Select
                             Case 1
                                 msg(0) = "AppX packages have been obtained"
@@ -1086,6 +1172,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Des paquets AppX ont été obtenus"
                             Case 4
                                 msg(0) = "Os pacotes AppX foram obtidos"
+                            Case 5
+                                msg(0) = "I pacchetti AppX sono stati ottenuti"
                         End Select
                         ReportChanges(msg(0), 10)
                         If SkipQuestions And AutoCompleteInfo(2) Then
@@ -1104,8 +1192,8 @@ Public Class ImgInfoSaveDlg
                                                     msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                                 Case "PTB", "PTG"
                                                     msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                                Case "PTB", "PTG"
-
+                                                Case "ITA"
+                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                             End Select
                                         Case 1
                                             msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
@@ -1115,229 +1203,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                         Case 4
                                             msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                    End Select
-                                    ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
-                                    Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
-                                                "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
-                                                "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
-                                                "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
-                                                "    - Resource ID: " & MainForm.imgAppxResourceIds(x) & CrLf & _
-                                                "    - Version: " & MainForm.imgAppxVersions(x) & CrLf
-                                    ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
-                                                           ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x))) Then
-                                        ' Get the number of pckgdep files
-                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
-                                                                              ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
-                                            Contents &= "    - Is registered to any user? Yes" & CrLf
-                                        Else
-                                            Contents &= "    - Is registered to any user? No" & CrLf
-                                        End If
-                                    Else
-                                        Contents &= "    - Is registered to any user? No" & CrLf
-                                    End If
-                                    Contents &= "    - Installation location: " & Quote & (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x)).Replace("\\", "\").Trim() & Quote & CrLf
-                                    Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", MainForm.imgAppxPackageNames(x) & "*", SearchOption.TopDirectoryOnly)
-                                    Dim instDir As String = ""
-                                    For Each folder In pkgDirs
-                                        If Not folder.Contains("neutral") Then
-                                            instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
-                                        End If
-                                    Next
-                                    Try
-                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
-                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
-                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
-                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
-                                            Else
-                                                instDir = "Unknown"
-                                            End If
-                                        End If
-                                    Catch ex As Exception
-                                        instDir = "Unknown"
-                                    End Try
-                                    Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
-                                    ' Get store logo asset directory
-                                    Dim assetDir As String = ""
-                                    Try
-                                        assetDir = MainForm.GetSuitablePackageFolder(MainForm.imgAppxDisplayNames(x))
-                                    Catch ex As Exception
-                                        ' Continue
-                                    End Try
-                                    If assetDir <> "" Then
-                                        If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
-                                                If line.Contains("<Logo>") Then
-                                                    Dim SplitPaths As New List(Of String)
-                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
-                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
-                                                    Dim newPath As String = String.Join("\", SplitPaths)
-                                                    Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
-                                                    Exit For
-                                                End If
-                                            Next
-                                        End If
-                                    Else
-                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
-                                                If line.Contains("<Logo>") Then
-                                                    Dim SplitPaths As New List(Of String)
-                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
-                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
-                                                    Dim newPath As String = String.Join("\", SplitPaths)
-                                                    Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
-                                                    Exit For
-                                                End If
-                                            Next
-                                        End If
-                                    End If
-                                    ' Since store logo assets can't be saved on plain text files, output their locations
-                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(MainForm.imgAppxPackageNames(x))
-                                    If mainAsset <> "" And File.Exists(mainAsset) Then
-                                        Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
-                                                    "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
-                                                    " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
-                                    Else
-                                        Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
-                                    End If
-                                Next
-                            Else
-                                For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
-                                    Select Case MainForm.Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
-                                                Case "ESN"
-                                                    msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
-                                                Case "FRA"
-                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
-                                            End Select
-                                        Case 1
-                                            msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
-                                        Case 2
-                                            msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
-                                        Case 3
-                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
-                                    End Select
-                                    ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
-                                    Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
-                                                "    - Package name: " & appxPkg.PackageName & CrLf & _
-                                                "    - Application display name: " & appxPkg.DisplayName & CrLf & _
-                                                "    - Architecture: " & Casters.CastDismArchitecture(appxPkg.Architecture) & CrLf & _
-                                                "    - Resource ID: " & appxPkg.ResourceId & CrLf & _
-                                                "    - Version: " & appxPkg.Version.ToString() & CrLf
-                                    ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
-                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
-                                                           ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName)) Then
-                                        ' Get the number of pckgdep files
-                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
-                                                                              ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
-                                            Contents &= "    - Is registered to any user? Yes" & CrLf
-                                        Else
-                                            Contents &= "    - Is registered to any user? No" & CrLf
-                                        End If
-                                    Else
-                                        Contents &= "    - Is registered to any user? No" & CrLf
-                                    End If
-                                    ' Use the InstallLocation property of the AppxPackage class.
-                                    ' TODO: if this works, implement InstallLocation on all other cases
-                                    Contents &= "    - Installation location: " & Quote & appxPkg.InstallLocation.Replace("%SYSTEMDRIVE%", Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim()).Trim() & Quote & CrLf
-                                    ' Detect if the source is an appx or appxbundle package by the manifest file
-                                    If File.Exists(appxPkg.InstallLocation & "\AppxManifest.xml") Then
-                                        ' APPX/MSIX file
-                                        Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxManifest.xml" & Quote & CrLf
-                                    ElseIf File.Exists(appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml") Then
-                                        ' APPXBUNDLE/MSIXBUNDLE file
-                                        Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml" & Quote & CrLf
-                                    Else
-                                        ' Unrecognized type of file
-                                        Contents &= "    - Package manifest location: unknown" & CrLf
-                                    End If
-                                    ' Get store logo asset directory
-                                    Dim assetDir As String = ""
-                                    Try
-                                        assetDir = MainForm.GetSuitablePackageFolder(appxPkg.DisplayName)
-                                    Catch ex As Exception
-                                        ' Continue
-                                    End Try
-                                    If assetDir <> "" Then
-                                        If File.Exists(assetDir & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
-                                                If line.Contains("<Logo>") Then
-                                                    Dim SplitPaths As New List(Of String)
-                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
-                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
-                                                    Dim newPath As String = String.Join("\", SplitPaths)
-                                                    Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
-                                                    Exit For
-                                                End If
-                                            Next
-                                        End If
-                                    Else
-                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
-                                            Dim ManFile As New RichTextBox() With {
-                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
-                                            }
-                                            For Each line In ManFile.Lines
-                                                If line.Contains("<Logo>") Then
-                                                    Dim SplitPaths As New List(Of String)
-                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
-                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
-                                                    Dim newPath As String = String.Join("\", SplitPaths)
-                                                    Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
-                                                    Exit For
-                                                End If
-                                            Next
-                                        End If
-                                    End If
-                                    ' Since store logo assets can't be saved on plain text files, output their locations
-                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(appxPkg.PackageName)
-                                    If mainAsset <> "" And File.Exists(mainAsset) Then
-                                        Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
-                                                    "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
-                                                    " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
-                                    Else
-                                        Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
-                                    End If
-                                Next
-                            End If
-                            Contents &= "  - Complete AppX package information has been gathered" & CrLf & CrLf
-                        ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(2)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
-                            Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                            If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
-                                For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                                    If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
-                                    Select Case MainForm.Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                                Case "ESN"
-                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                                Case "FRA"
-                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                                Case "PTB", "PTG"
-                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                            End Select
-                                        Case 1
-                                            msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                        Case 2
-                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                        Case 3
-                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
-                                        Case 4
-                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 5
+                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     End Select
                                     ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
                                     Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
@@ -1444,6 +1311,8 @@ Public Class ImgInfoSaveDlg
                                                     msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
                                                 Case "PTB", "PTG"
                                                     msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "ITA"
+                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " di " & InstalledAppxPackageInfo.Count & ")"
                                             End Select
                                         Case 1
                                             msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
@@ -1453,6 +1322,243 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
                                         Case 4
                                             msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 5
+                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " di " & InstalledAppxPackageInfo.Count & ")"
+                                    End Select
+                                    ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
+                                    Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
+                                                "    - Package name: " & appxPkg.PackageName & CrLf & _
+                                                "    - Application display name: " & appxPkg.DisplayName & CrLf & _
+                                                "    - Architecture: " & Casters.CastDismArchitecture(appxPkg.Architecture) & CrLf & _
+                                                "    - Resource ID: " & appxPkg.ResourceId & CrLf & _
+                                                "    - Version: " & appxPkg.Version.ToString() & CrLf
+                                    ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                                           ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName)) Then
+                                        ' Get the number of pckgdep files
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
+                                                                              ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                            Contents &= "    - Is registered to any user? Yes" & CrLf
+                                        Else
+                                            Contents &= "    - Is registered to any user? No" & CrLf
+                                        End If
+                                    Else
+                                        Contents &= "    - Is registered to any user? No" & CrLf
+                                    End If
+                                    ' Use the InstallLocation property of the AppxPackage class.
+                                    ' TODO: if this works, implement InstallLocation on all other cases
+                                    Contents &= "    - Installation location: " & Quote & appxPkg.InstallLocation.Replace("%SYSTEMDRIVE%", Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim()).Trim() & Quote & CrLf
+                                    ' Detect if the source is an appx or appxbundle package by the manifest file
+                                    If File.Exists(appxPkg.InstallLocation & "\AppxManifest.xml") Then
+                                        ' APPX/MSIX file
+                                        Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxManifest.xml" & Quote & CrLf
+                                    ElseIf File.Exists(appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                        ' APPXBUNDLE/MSIXBUNDLE file
+                                        Contents &= "    - Package manifest location: " & Quote & appxPkg.InstallLocation & "\AppxMetadata\AppxBundleManifest.xml" & Quote & CrLf
+                                    Else
+                                        ' Unrecognized type of file
+                                        Contents &= "    - Package manifest location: unknown" & CrLf
+                                    End If
+                                    ' Get store logo asset directory
+                                    Dim assetDir As String = ""
+                                    Try
+                                        assetDir = MainForm.GetSuitablePackageFolder(appxPkg.DisplayName)
+                                    Catch ex As Exception
+                                        ' Continue
+                                    End Try
+                                    If assetDir <> "" Then
+                                        If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    Else
+                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & appxPkg.PackageName & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+                                    ' Since store logo assets can't be saved on plain text files, output their locations
+                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(appxPkg.PackageName)
+                                    If mainAsset <> "" And File.Exists(mainAsset) Then
+                                        Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                                    "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                                    " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                    Else
+                                        Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                                    End If
+                                Next
+                            End If
+                            Contents &= "  - Complete AppX package information has been gathered" & CrLf & CrLf
+                        ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(2)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
+                            Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
+                            If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
+                                For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
+                                    If x = MainForm.imgAppxPackageNames.Count - 1 Then Continue For
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENU", "ENG"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "ESN"
+                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "FRA"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "PTB", "PTG"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                                Case "ITA"
+                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                            End Select
+                                        Case 1
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 2
+                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 3
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 4
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & x + 1 & " de " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                        Case 5
+                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
+                                    End Select
+                                    ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
+                                    Contents &= "  AppX package " & x + 1 & " of " & MainForm.imgAppxPackageNames.Count - 1 & ":" & CrLf & _
+                                                "    - Package name: " & MainForm.imgAppxPackageNames(x) & CrLf & _
+                                                "    - Application display name: " & MainForm.imgAppxDisplayNames(x) & CrLf & _
+                                                "    - Architecture: " & MainForm.imgAppxArchitectures(x) & CrLf & _
+                                                "    - Resource ID: " & MainForm.imgAppxResourceIds(x) & CrLf & _
+                                                "    - Version: " & MainForm.imgAppxVersions(x) & CrLf
+                                    ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
+                                    If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                           ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x))) Then
+                                        ' Get the number of pckgdep files
+                                        If My.Computer.FileSystem.GetFiles(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
+                                                                              ImgMountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count > 0 Then
+                                            Contents &= "    - Is registered to any user? Yes" & CrLf
+                                        Else
+                                            Contents &= "    - Is registered to any user? No" & CrLf
+                                        End If
+                                    Else
+                                        Contents &= "    - Is registered to any user? No" & CrLf
+                                    End If
+                                    Contents &= "    - Installation location: " & Quote & (If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x)).Replace("\\", "\").Trim() & Quote & CrLf
+                                    Dim pkgDirs() As String = Directory.GetDirectories(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps", MainForm.imgAppxPackageNames(x) & "*", SearchOption.TopDirectoryOnly)
+                                    Dim instDir As String = ""
+                                    For Each folder In pkgDirs
+                                        If Not folder.Contains("neutral") Then
+                                            instDir = (folder & "\AppxManifest.xml").Replace("\\", "\").Trim()
+                                        End If
+                                    Next
+                                    Try
+                                        If pkgDirs.Count <= 1 And Not instDir.Contains(MainForm.imgAppxPackageNames(x)) Then
+                                            If File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxMetadata\AppxBundleManifest.xml"
+                                            ElseIf File.Exists(pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml") Then
+                                                instDir = pkgDirs(0).Replace("\\", "\").Trim() & "\AppxManifest.xml"
+                                            Else
+                                                instDir = "Unknown"
+                                            End If
+                                        End If
+                                    Catch ex As Exception
+                                        instDir = "Unknown"
+                                    End Try
+                                    Contents &= "    - Package manifest location: " & Quote & instDir & Quote & CrLf
+                                    ' Get store logo asset directory
+                                    Dim assetDir As String = ""
+                                    Try
+                                        assetDir = MainForm.GetSuitablePackageFolder(MainForm.imgAppxDisplayNames(x))
+                                    Catch ex As Exception
+                                        ' Continue
+                                    End Try
+                                    If assetDir <> "" Then
+                                        If File.Exists(assetDir & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(assetDir & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (assetDir & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    Else
+                                        If File.Exists(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml") Then
+                                            Dim ManFile As New RichTextBox() With {
+                                                .Text = File.ReadAllText(If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\AppxManifest.xml")
+                                            }
+                                            For Each line In ManFile.Lines
+                                                If line.Contains("<Logo>") Then
+                                                    Dim SplitPaths As New List(Of String)
+                                                    SplitPaths = line.Replace(" ", "").Trim().Replace("/", "").Trim().Replace("<Logo>", "").Trim().Split("\").ToList()
+                                                    SplitPaths.RemoveAt(SplitPaths.Count - 1)
+                                                    Dim newPath As String = String.Join("\", SplitPaths)
+                                                    Contents &= "    - Store logo asset directory: " & Quote & (If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & MainForm.imgAppxPackageNames(x) & "\" & newPath).Replace("\\", "\").Trim() & Quote & CrLf
+                                                    Exit For
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+                                    ' Since store logo assets can't be saved on plain text files, output their locations
+                                    Dim mainAsset As String = MainForm.GetStoreAppMainLogo(MainForm.imgAppxPackageNames(x))
+                                    If mainAsset <> "" And File.Exists(mainAsset) Then
+                                        Contents &= "    - Main store logo asset: " & Quote & mainAsset.Replace("\\", "\").Trim() & Quote & CrLf & _
+                                                    "                             Do note that this is a guess, and may not be the asset you're looking for. If that happens, report an issue on the GitHub repo" & _
+                                                    " using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                    Else
+                                        Contents &= "    - Main store logo asset: unknown" & CrLf & CrLf
+                                    End If
+                                Next
+                            Else
+                                For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
+                                    Select Case MainForm.Language
+                                        Case 0
+                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                                Case "ENU", "ENG"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "ESN"
+                                                    msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "FRA"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "PTB", "PTG"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                                Case "ITA"
+                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " di " & InstalledAppxPackageInfo.Count & ")"
+                                            End Select
+                                        Case 1
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 2
+                                            msg(0) = "Obteniendo información de paquetes AppX ... (paquete AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 3
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 4
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " de " & InstalledAppxPackageInfo.Count & ")"
+                                        Case 5
+                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " di " & InstalledAppxPackageInfo.Count & ")"
                                     End Select
                                     ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
                                     Contents &= "  AppX package " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " of " & InstalledAppxPackageInfo.Count & ":" & CrLf & _
@@ -1552,6 +1658,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Sauvegarde des paquets AppX installés en cours..."
                                         Case "PTB", "PTG"
                                             msg(0) = "Guardar os pacotes AppX instalados..."
+                                        Case "ITA"
+                                            msg(0) = "Salvataggio dei pacchetti AppX installati..."
                                     End Select
                                 Case 1
                                     msg(0) = "Saving installed AppX packages..."
@@ -1561,6 +1669,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Sauvegarde des paquets AppX installés en cours..."
                                 Case 4
                                     msg(0) = "Guardar os pacotes AppX instalados..."
+                                Case 5
+                                    msg(0) = "Salvataggio dei pacchetti AppX installati..."
                             End Select
                             ReportChanges(msg(0), 50)
                             Contents &= "  - Complete AppX package information has not been gathered" & CrLf & CrLf & _
@@ -1617,6 +1727,12 @@ Public Class ImgInfoSaveDlg
                           "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf & _
                           "Deseja obter esta informação e guardá-la no relatório?"
                         msg(2) = "Informações sobre as capacidades"
+                    Case "ITA"
+                        msg(0) = "Preparazione dei processi di informazione sulle capacità..."
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sulle capacità installate di questa immagine. È inoltre possibile ottenere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf & _
+                          "Si noti che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf & _
+                          "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                        msg(2) = "Informazioni sulle capacità"
                 End Select
             Case 1
                 msg(0) = "Preparing capability information processes..."
@@ -1642,6 +1758,12 @@ Public Class ImgInfoSaveDlg
                   "Tenha em atenção que isto pode demorar mais tempo, dependendo do número de capacidades instaladas." & CrLf & CrLf & _
                   "Deseja obter esta informação e guardá-la no relatório?"
                 msg(2) = "Informações sobre as capacidades"
+            Case 5
+                msg(0) = "Preparazione dei processi di informazione sulle capacità..."
+                msg(1) = "Il programma ha ottenuto informazioni elementari sulle capacità installate di questa immagine. È inoltre possibile ottenere informazioni complete su tali funzionalità e salvarle nel rapporto." & CrLf & CrLf & _
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di funzionalità installate." & CrLf & CrLf & _
+                  "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                msg(2) = "Informazioni sulle capacità"
         End Select
         Contents &= "----> Capability information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -1673,6 +1795,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Des capacités ont été obtenues"
                                 Case "PTB", "PTG"
                                     msg(0) = "As capacidades foram obtidas"
+                                Case "ITA"
+                                    msg(0) = "Le capacità sono state ottenute"
                             End Select
                         Case 1
                             msg(0) = "Capabilities have been obtained"
@@ -1682,6 +1806,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Des capacités ont été obtenues"
                         Case 4
                             msg(0) = "As capacidades foram obtidas"
+                        Case 5
+                            msg(0) = "Le capacità sono state ottenute"
                     End Select
                     ReportChanges(msg(0), 10)
                     If SkipQuestions And AutoCompleteInfo(3) Then
@@ -1698,6 +1824,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                         Case "PTB", "PTG"
                                             msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                        Case "ITA"
+                                            msg(0) = "Ottenere informazioni sulle capacità... (capacità " & InstalledCapInfo.IndexOf(capability) + 1 & " di " & InstalledCapInfo.Count & ")"
                                     End Select
                                 Case 1
                                     msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
@@ -1707,6 +1835,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                 Case 4
                                     msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                Case 5
+                                    msg(0) = "Ottenere informazioni sulle capacità... (capacità " & InstalledCapInfo.IndexOf(capability) + 1 & " di " & InstalledCapInfo.Count & ")"
                             End Select
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
@@ -1735,6 +1865,8 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                         Case "PTB", "PTG"
                                             msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                        Case "ITA"
+                                            msg(0) = "Ottenere informazioni sulle capacità... (capacità " & InstalledCapInfo.IndexOf(capability) + 1 & " di " & InstalledCapInfo.Count & ")"
                                     End Select
                                 Case 1
                                     msg(0) = "Getting information of capabilities... (capability " & InstalledCapInfo.IndexOf(capability) + 1 & " of " & InstalledCapInfo.Count & ")"
@@ -1744,6 +1876,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Obtention des informations sur les capacités en cours... (capacité " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
                                 Case 4
                                     msg(0) = "Obter informações sobre as capacidades... (capacidade " & InstalledCapInfo.IndexOf(capability) + 1 & " de " & InstalledCapInfo.Count & ")"
+                                Case 5
+                                    msg(0) = "Ottenere informazioni sulle capacità... (capacità " & InstalledCapInfo.IndexOf(capability) + 1 & " di " & InstalledCapInfo.Count & ")"
                             End Select
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
@@ -1770,6 +1904,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Sauvegarde des caractéristiques installées en cours..."
                                     Case "PTB", "PTG"
                                         msg(0) = "Guardar as capacidades instaladas..."
+                                    Case "ITA"
+                                        msg(0) = "Salvataggio delle capacità installate..."
                                 End Select
                             Case 1
                                 msg(0) = "Saving installed capabilities..."
@@ -1779,6 +1915,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Sauvegarde des caractéristiques installées en cours..."
                             Case 4
                                 msg(0) = "Guardar as capacidades instaladas..."
+                            Case 5
+                                msg(0) = "Salvataggio delle capacità installate..."
                         End Select
                         ReportChanges(msg(0), 50)
                         Contents &= "  - Complete capability information has not been gathered" & CrLf & CrLf
@@ -1842,6 +1980,15 @@ Public Class ImgInfoSaveDlg
                         msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf & _
                       "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf & _
                       "Pretende obter as informações de todos os controladores, incluindo os controladores que fazem parte da distribuição do Windows?"
+                    Case "ITA"
+                        msg(0) = "Preparazione dei processi di informazione sui driver..."
+                        msg(1) = "Il programma ha ottenuto informazioni elementari sui driver installati su questa immagine. È inoltre possibile ottenere informazioni complete su tali driver e salvarle nel rapporto." & CrLf & CrLf & _
+                          "Si noti che questa operazione richiederà più tempo a seconda del numero di driver installati." & CrLf & CrLf & _
+                          "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                        msg(2) = "Informazioni sul driver"
+                        msg(3) = "Avete configurato i processi in background in modo che non rilevino tutti i driver, compresi quelli che fanno parte della distribuzione di Windows, quindi potreste non vedere il driver che vi interessa." & CrLf & CrLf & _
+                      "Questa impostazione viene applicata anche a questa attività, ma ora è possibile ottenere le informazioni su tutti i driver. Tenere presente che questa operazione può richiedere molto tempo, a seconda della quantità di driver di prima parte." & CrLf & CrLf & _
+                      "Volete ottenere le informazioni su tutti i driver, compresi quelli che fanno parte della distribuzione di Windows?"
                 End Select
             Case 1
                 msg(0) = "Preparing driver information processes..."
@@ -1879,6 +2026,15 @@ Public Class ImgInfoSaveDlg
                 msg(3) = "Configurou os processos em segundo plano para não detectarem todos os controladores, o que inclui controladores que fazem parte da distribuição do Windows, pelo que poderá não ver o controlador em que está interessado." & CrLf & CrLf & _
               "Esta configuração também é aplicada a esta tarefa, mas pode obter as informações de todos os controladores agora. Tenha em atenção que isto pode demorar muito tempo, dependendo da quantidade de controladores originais." & CrLf & CrLf & _
               "Pretende obter as informações de todos os controladores, incluindo os controladores que fazem parte da distribuição do Windows?"
+            Case 5
+                msg(0) = "Preparazione dei processi di informazione sui driver..."
+                msg(1) = "Il programma ha ottenuto informazioni elementari sui driver installati su questa immagine. È inoltre possibile ottenere informazioni complete su tali driver e salvarle nel rapporto." & CrLf & CrLf & _
+                  "Si noti che questa operazione richiederà più tempo a seconda del numero di driver installati." & CrLf & CrLf & _
+                  "Volete ottenere queste informazioni e salvarle nel rapporto?"
+                msg(2) = "Informazioni sul driver"
+                msg(3) = "Avete configurato i processi in background in modo che non rilevino tutti i driver, compresi quelli che fanno parte della distribuzione di Windows, quindi potreste non vedere il driver che vi interessa." & CrLf & CrLf & _
+              "Questa impostazione viene applicata anche a questa attività, ma ora è possibile ottenere le informazioni su tutti i driver. Tenere presente che questa operazione può richiedere molto tempo, a seconda della quantità di driver di prima parte." & CrLf & CrLf & _
+              "Volete ottenere le informazioni su tutti i driver, compresi quelli che fanno parte della distribuzione di Windows?"
         End Select
         If SaveTask = 7 And Not AllDrivers Then
             If MsgBox(msg(3), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
@@ -1909,6 +2065,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Des pilotes ont été obtenus"
                             Case "PTB", "PTG"
                                 msg(0) = "Os controladores foram obtidos"
+                            Case "ITA"
+                                msg(0) = "I driver del dispositivo sono stati ottenuti"
                         End Select
                     Case 1
                         msg(0) = "Drivers have been obtained"
@@ -1918,6 +2076,8 @@ Public Class ImgInfoSaveDlg
                         msg(0) = "Des pilotes ont été obtenus"
                     Case 4
                         msg(0) = "Os controladores foram obtidos"
+                    Case 5
+                        msg(0) = "I driver del dispositivo sono stati ottenuti"
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(4) Then
@@ -1934,6 +2094,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sui driver... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " di " & InstalledDrvInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
@@ -1943,6 +2105,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sui driver... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " di " & InstalledDrvInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Dim signer As String = DriverSignerViewer.GetSignerInfo(driver.OriginalFileName)
@@ -1975,6 +2139,8 @@ Public Class ImgInfoSaveDlg
                                         msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                                     Case "PTB", "PTG"
                                         msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                                    Case "ITA"
+                                        msg(0) = "Ottenere informazioni sui driver... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " di " & InstalledDrvInfo.Count & ")"
                                 End Select
                             Case 1
                                 msg(0) = "Getting information of drivers... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ")"
@@ -1984,6 +2150,8 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Obtention des informations sur les pilotes en cours... (pilote " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
                             Case 4
                                 msg(0) = "Obter informações sobre os controladores... (controlador " & InstalledDrvInfo.IndexOf(driver) + 1 & " de " & InstalledDrvInfo.Count & ")"
+                            Case 5
+                                msg(0) = "Ottenere informazioni sui driver... (driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " di " & InstalledDrvInfo.Count & ")"
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Contents &= "  Driver " & InstalledDrvInfo.IndexOf(driver) + 1 & " of " & InstalledDrvInfo.Count & ":" & CrLf & _
@@ -2013,6 +2181,8 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Sauvegarde des pilotes installés en cours..."
                                 Case "PTB", "PTG"
                                     msg(0) = "Guardar os controladores instalados..."
+                                Case "ITA"
+                                    msg(0) = "Salvataggio dei driver installati..."
                             End Select
                         Case 1
                             msg(0) = "Saving installed drivers..."
@@ -2022,6 +2192,8 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Sauvegarde des pilotes installés en cours..."
                         Case 4
                             msg(0) = "Guardar os controladores instalados..."
+                        Case 5
+                            msg(0) = "Salvataggio dei driver installati..."
                     End Select
                     ReportChanges(msg(0), 50)
                     Contents &= "  - Complete driver information has not been gathered" & CrLf & CrLf
@@ -2060,6 +2232,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Préparation des processus d'information des pilotes en cours..."
                     Case "PTB", "PTG"
                         msg = "Preparar os processos de informação dos controladores..."
+                    Case "ITA"
+                        msg = "Preparazione dei processi di informazione del driver..."
                 End Select
             Case 1
                 msg = "Preparing driver information processes..."
@@ -2069,6 +2243,8 @@ Public Class ImgInfoSaveDlg
                 msg = "Préparation des processus d'information des pilotes en cours..."
             Case 4
                 msg = "Preparar os processos de informação dos controladores..."
+            Case 5
+                msg = "Preparazione dei processi di informazione del driver..."
         End Select
         Contents &= "----> Driver package information" & CrLf & CrLf & _
                     " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
@@ -2092,6 +2268,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obtention des informations des fichiers pilotes en cours... (fichier pilote " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
                                 Case "PTB", "PTG"
                                     msg = "Obter informações dos ficheiros de controladores... (ficheiro de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                                Case "ITA"
+                                    msg = "Ottenere informazioni dai file dei driver... (file dei driver " & DriverPkgs.IndexOf(drvPkg) + 1 & " di " & DriverPkgs.Count & ")"
                             End Select
                         Case 1
                             msg = "Getting information from driver files... (driver file " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & ")"
@@ -2101,6 +2279,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obtention des informations des fichiers pilotes en cours... (fichier pilote " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
                         Case 4
                             msg = "Obter informações dos ficheiros de controladores... (ficheiro de controlador " & DriverPkgs.IndexOf(drvPkg) + 1 & " de " & DriverPkgs.Count & ")"
+                        Case 5
+                            msg = "Ottenere informazioni dai file dei driver... (file dei driver " & DriverPkgs.IndexOf(drvPkg) + 1 & " di " & DriverPkgs.Count & ")"
                     End Select
                     ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
                     If File.Exists(drvPkg) Then
@@ -2121,6 +2301,8 @@ Public Class ImgInfoSaveDlg
                                                 msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                             Case "PTB", "PTG"
                                                 msg = "Obtendo informações de alvos de hardware... (alvo " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                            Case "ITA"
+                                                msg = "Ottenere informazioni dai target hardware... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
                                         End Select
                                     Case 1
                                         msg = "Getting information from hardware targets... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
@@ -2130,6 +2312,8 @@ Public Class ImgInfoSaveDlg
                                         msg = "Obtention des informations des matériels cibles en cours... (cible " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
                                     Case 4
                                         msg = "Obtendo informações de alvos de hardware... (alvo " & drvInfoCollection.IndexOf(hwTarget) + 1 & " de " & drvInfoCollection.Count & ")"
+                                    Case 5
+                                        msg = "Ottenere informazioni dai target hardware... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
                                 End Select
                                 ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
                                 Contents &= "      - Hardware description: " & hwTarget.HardwareDescription & CrLf & _
@@ -2170,6 +2354,8 @@ Public Class ImgInfoSaveDlg
                         msg = "Préparation de l'obtention de la configuration de Windows PE en cours..."
                     Case "PTB", "PTG"
                         msg = "A preparar para obter a configuração do Windows PE..."
+                    Case "ITA"
+                        msg = "Preparazione per ottenere la configurazione di Windows PE..."
                 End Select
             Case 1
                 msg = "Preparing to get Windows PE configuration..."
@@ -2179,6 +2365,8 @@ Public Class ImgInfoSaveDlg
                 msg = "Préparation de l'obtention de la configuration de Windows PE en cours..."
             Case 4
                 msg = "A preparar para obter a configuração do Windows PE..."
+            Case 5
+                msg = "Preparazione per ottenere la configurazione di Windows PE..."
         End Select
         Contents &= "----> Windows PE configuration" & CrLf & CrLf
         If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
@@ -2218,6 +2406,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
                                 Case "PTB", "PTG"
                                     msg = "Obter a localização do objetivo do Windows PE..."
+                                Case "ITA"
+                                    msg = "Ottenere il percorso di destinazione di Windows PE..."
                             End Select
                         Case 1
                             msg = "Getting Windows PE target path..."
@@ -2227,6 +2417,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
                         Case 4
                             msg = "Obter a localização do objetivo do Windows PE..."
+                        Case 5
+                            msg = "Ottenere il percorso di destinazione di Windows PE..."
                     End Select
                     ReportChanges(msg, 50)
                     ' Get target path first
@@ -2244,6 +2436,8 @@ Public Class ImgInfoSaveDlg
                                     msg = "Obtention de l'espace temporaire de Windows PE en cours..."
                                 Case "PTB", "PTG"
                                     msg = "A obter espaço temporário do Windows PE..."
+                                Case "ITA"
+                                    msg = "Ottenere lo spazio temporaneo di Windows PE..."
                             End Select
                         Case 1
                             msg = "Getting Windows PE scratch space..."
@@ -2253,6 +2447,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Obtention de l'espace temporaire de Windows PE en cours..."
                         Case 4
                             msg = "A obter espaço temporário do Windows PE..."
+                        Case 5
+                            msg = "Ottenere lo spazio temporaneo di Windows PE..."
                     End Select
                     ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
@@ -2307,6 +2503,10 @@ Public Class ImgInfoSaveDlg
                         Text = "Salvando informações da imagem..."
                         Label1.Text = "Aguarde enquanto o DISMTools salva as informações da imagem em um arquivo. Isso pode levar algum tempo, dependendo das tarefas que estão sendo executadas."
                         Label2.Text = "Aguarde..."
+                    Case "ITA"
+                        Text = "Salvataggio delle informazioni sull'immagine..."
+                        Label1.Text = "Attendere che DISMTools salvi le informazioni sull'immagine in un file. Questa operazione può richiedere un certo tempo, a seconda delle attività eseguite."
+                        Label2.Text = "Attendere..."
                 End Select
             Case 1
                 Text = "Saving image information..."
@@ -2324,6 +2524,10 @@ Public Class ImgInfoSaveDlg
                 Text = "Salvando informações da imagem..."
                 Label1.Text = "Aguarde enquanto o DISMTools salva as informações da imagem em um arquivo. Isso pode levar algum tempo, dependendo das tarefas que estão sendo executadas."
                 Label2.Text = "Aguarde..."
+            Case 5
+                Text = "Salvataggio delle informazioni sull'immagine..."
+                Label1.Text = "Attendere che DISMTools salvi le informazioni sull'immagine in un file. Questa operazione può richiedere un certo tempo, a seconda delle attività eseguite."
+                Label2.Text = "Attendere..."
         End Select
         If MainForm.ImgBW.IsBusy Then
             Dim msg As String = ""
@@ -2338,6 +2542,8 @@ Public Class ImgInfoSaveDlg
                             msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
                         Case "PTB", "PTG"
                             msg = "Os processos em segundo plano têm de estar concluídos antes de obter informações. Vamos esperar até que estejam concluídos"
+                        Case "ITA"
+                            msg = "I processi in background devono essere completati prima di ottenere informazioni. Aspetteremo che siano completati"
                     End Select
                 Case 1
                     msg = "Background processes need to have completed before getting information. We'll wait until they have completed"
@@ -2347,6 +2553,8 @@ Public Class ImgInfoSaveDlg
                     msg = "Les processus en plan doivent être terminés avant d'afficher l'information. Nous attendrons qu'ils soient terminés"
                 Case 4
                     msg = "Os processos em segundo plano têm de estar concluídos antes de obter informações. Vamos esperar até que estejam concluídos"
+                Case 5
+                    msg = "I processi in background devono essere completati prima di ottenere informazioni. Aspetteremo che siano completati"
             End Select
             MsgBox(msg, vbOKOnly + vbInformation, Text)
             Select Case MainForm.Language
@@ -2360,6 +2568,8 @@ Public Class ImgInfoSaveDlg
                             Label2.Text = "Attente de la fin des processus en arrière plan..."
                         Case "PTB", "PTG"
                             Label2.Text = "A aguardar que os processos em segundo plano terminem..."
+                        Case "ITA"
+                            Label2.Text = "In attesa che i processi in background finiscano..."
                     End Select
                 Case 1
                     Label2.Text = "Waiting for background processes to finish..."
@@ -2369,6 +2579,8 @@ Public Class ImgInfoSaveDlg
                     Label2.Text = "Attente de la fin des processus en arrière plan..."
                 Case 4
                     Label2.Text = "A aguardar que os processos em segundo plano terminem..."
+                Case 5
+                    Label2.Text = "In attesa che i processi in background finiscano..."
             End Select
             While MainForm.ImgBW.IsBusy
                 Application.DoEvents()
@@ -2412,6 +2624,9 @@ Public Class ImgInfoSaveDlg
                             Case "PTB", "PTG"
                                 msg(0) = "Não foi possível criar o destino de gravação. Motivo: "
                                 msg(1) = "A operação falhou"
+                            Case "ITA"
+                                msg(0) = "Impossibile creare la destinazione di salvataggio. Motivo: "
+                                msg(1) = "L'operazione non è riuscita"
                         End Select
                     Case 1
                         msg(0) = "Could not create the save target. Reason: "
@@ -2425,6 +2640,9 @@ Public Class ImgInfoSaveDlg
                     Case 4
                         msg(0) = "Não foi possível criar o destino de gravação. Motivo: "
                         msg(1) = "A operação falhou"
+                    Case 5
+                        msg(0) = "Impossibile creare la destinazione di salvataggio. Motivo: "
+                        msg(1) = "L'operazione non è riuscita"
                 End Select
                 MsgBox(msg(0) & ex.ToString() & ": " & ex.Message, vbOKOnly + vbCritical, msg(1))
                 Exit Sub
@@ -2505,6 +2723,8 @@ Public Class ImgInfoSaveDlg
                         saveMsg = "Sauvegarde des contenus en cours..."
                     Case "PTB", "PTG"
                         saveMsg = "A guardar o conteúdo..."
+                    Case "ITA"
+                        saveMsg = "Salvataggio dei contenuti..."
                 End Select
             Case 1
                 saveMsg = "Saving contents..."
@@ -2514,6 +2734,8 @@ Public Class ImgInfoSaveDlg
                 saveMsg = "Sauvegarde des contenus en cours..."
             Case 4
                 saveMsg = "A guardar o conteúdo..."
+            Case 5
+                saveMsg = "Salvataggio dei contenuti..."
         End Select
         ReportChanges(saveMsg, ProgressBar1.Maximum)
 

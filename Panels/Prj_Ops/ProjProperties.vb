@@ -114,6 +114,21 @@ Public Class ProjProperties
                                             RecoverButton.Visible = True
                                             RemountImgBtn.Visible = False
                                     End Select
+                                Case "ITA"
+                                    Select Case MainForm.MountedImageImgStatuses(x)
+                                        Case 0
+                                            imgMountedStatus.Text = "OK"
+                                            RecoverButton.Visible = False
+                                            RemountImgBtn.Visible = False
+                                        Case 1
+                                            imgMountedStatus.Text = "Necessità di rimontaggio"
+                                            RecoverButton.Visible = False
+                                            RemountImgBtn.Visible = True
+                                        Case 2
+                                            imgMountedStatus.Text = "Non valido"
+                                            RecoverButton.Visible = True
+                                            RemountImgBtn.Visible = False
+                                    End Select
                             End Select
                         Case 1
                             Select Case MainForm.MountedImageImgStatuses(x)
@@ -175,6 +190,21 @@ Public Class ProjProperties
                                     RecoverButton.Visible = True
                                     RemountImgBtn.Visible = False
                             End Select
+                        Case 5
+                            Select Case MainForm.MountedImageImgStatuses(x)
+                                Case 0
+                                    imgMountedStatus.Text = "OK"
+                                    RecoverButton.Visible = False
+                                    RemountImgBtn.Visible = False
+                                Case 1
+                                    imgMountedStatus.Text = "Necessità di rimontaggio"
+                                    RecoverButton.Visible = False
+                                    RemountImgBtn.Visible = True
+                                Case 2
+                                    imgMountedStatus.Text = "Non valido"
+                                    RecoverButton.Visible = True
+                                    RemountImgBtn.Visible = False
+                            End Select
                     End Select
 
                     Dim infoCollection As DismImageInfoCollection = DismApi.GetImageInfo(MainForm.MountedImageImgFiles(x))
@@ -195,6 +225,8 @@ Public Class ProjProperties
                                             imgSize.Text = info.ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(info.ImageSize, True) & ")"
                                         Case "PTB", "PTG"
                                             imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(info.ImageSize) & ")"
+                                        Case "ITA"
+                                            imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(info.ImageSize) & ")"
                                     End Select
                                 Case 1
                                     imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(info.ImageSize) & ")"
@@ -203,6 +235,8 @@ Public Class ProjProperties
                                 Case 3
                                     imgSize.Text = info.ImageSize.ToString("N0") & " octets (~" & Converters.BytesToReadableSize(info.ImageSize, True) & ")"
                                 Case 4
+                                    imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(info.ImageSize) & ")"
+                                Case 5
                                     imgSize.Text = info.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(info.ImageSize) & ")"
                             End Select
 
@@ -234,6 +268,8 @@ Public Class ProjProperties
                                             imgHal.Text = If(Not info.Hal = "", info.Hal, "Non défini par l'image")
                                         Case "PTB", "PTG"
                                             imgHal.Text = If(Not info.Hal = "", info.Hal, "Não definido pela imagem")
+                                        Case "ITA"
+                                            imgHal.Text = If(Not info.Hal = "", info.Hal, "Non definito dall'immagine")
                                     End Select
                                 Case 1
                                     imgHal.Text = If(Not info.Hal = "", info.Hal, "Undefined by the image")
@@ -243,6 +279,8 @@ Public Class ProjProperties
                                     imgHal.Text = If(Not info.Hal = "", info.Hal, "Non défini par l'image")
                                 Case 4
                                     imgHal.Text = If(Not info.Hal = "", info.Hal, "Não definido pela imagem")
+                                Case 5
+                                    imgHal.Text = If(Not info.Hal = "", info.Hal, "Non definito dall'immagine")
                             End Select
                             imgSPBuild.Text = info.ProductVersion.Revision
                             imgSPLvl.Text = info.SpLevel
@@ -265,6 +303,8 @@ Public Class ProjProperties
                                                     imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", "
                                                 Case "PTB", "PTG"
                                                     imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", "
+                                                Case "ITA"
+                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", "
                                             End Select
                                         Case 1
                                             imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
@@ -274,6 +314,8 @@ Public Class ProjProperties
                                             imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", "
                                         Case 4
                                             imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", "
+                                        Case 5
+                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", "
                                     End Select
                                 Else
                                     Select Case MainForm.Language
@@ -287,6 +329,8 @@ Public Class ProjProperties
                                                     imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", ")
                                                 Case "PTB", "PTG"
                                                     imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", ")
+                                                Case "ITA"
+                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", ")
                                             End Select
                                         Case 1
                                             imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
@@ -296,6 +340,8 @@ Public Class ProjProperties
                                             imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", ")
                                         Case 4
                                             imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", ")
+                                        Case 5
+                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", ")
                                     End Select
                                 End If
 
@@ -311,6 +357,8 @@ Public Class ProjProperties
                                                 LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", défaut", "") & ")")
                                             Case "PTB", "PTG"
                                                 LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
+                                            Case "ITA"
+                                                LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
                                         End Select
                                     Case 1
                                         LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", default", "") & ")")
@@ -320,6 +368,8 @@ Public Class ProjProperties
                                         LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", défaut", "") & ")")
                                     Case 4
                                         LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predefinido", "") & ")")
+                                    Case 5
+                                        LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
                                 End Select
                             Next
                             Dim langarr() As Char = imgLangText.Text.ToCharArray()
@@ -336,6 +386,8 @@ Public Class ProjProperties
                                             imgFormat.Text = "Fichier " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
                                         Case "PTB", "PTG"
                                             imgFormat.Text = "Ficheiro " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                                        Case "ITA"
+                                            imgFormat.Text = "File " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
                                     End Select
                                 Case 1
                                     imgFormat.Text = Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper() & " file"
@@ -345,6 +397,8 @@ Public Class ProjProperties
                                     imgFormat.Text = "Fichier " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
                                 Case 4
                                     imgFormat.Text = "Ficheiro " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
+                                Case 5
+                                    imgFormat.Text = "File " & Path.GetExtension(MainForm.MountedImageImgFiles(x)).Replace(".", "").Trim().ToUpper()
                             End Select
                             Select Case MainForm.Language
                                 Case 0
@@ -357,6 +411,8 @@ Public Class ProjProperties
                                             imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non")
                                         Case "PTB", "PTG"
                                             imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não")
+                                        Case "ITA"
+                                            imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No")
                                     End Select
                                 Case 1
                                     imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No")
@@ -366,6 +422,8 @@ Public Class ProjProperties
                                     imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non")
                                 Case 4
                                     imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não")
+                                Case 5
+                                    imgRW.Text = If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No")
                             End Select
                             If MainForm.MountedImageMountedReWr(x) = 0 Then
                                 RWRemountBtn.Visible = False
@@ -598,6 +656,46 @@ Public Class ProjProperties
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                         LinkLabel2.Text = "Muitas propriedades não podem ser vistas porque a imagem ainda não foi montada. Depois de a montar, serão mostradas aqui informações detalhadas. Clique aqui para montar uma imagem"
+                    Case "ITA"
+                        Label2.Text = "Visualizza le proprietà del progetto, come il nome o l'ubicazione"
+                        Label3.Text = "Visualizza le proprietà dell'immagine montata, come il nome, la descrizione o l'indice"
+                        Label4.Text = "Ottenere informazioni sul progetto e sull'immagine. Attendere..."
+                        Label5.Text = "Nome:"
+                        Label6.Text = " Ubicazione:"
+                        Label7.Text = "Data di creazione:"
+                        Label8.Text = "GUID del progetto:"
+                        Label13.Text = "Directory di montaggio:"
+                        Label14.Text = "Indice immagine:"
+                        Label15.Text = "File immagine:"
+                        Label20.Text = "Immagine presente nel progetto?"
+                        Label22.Text = "Stato immagine:"
+                        Label25.Text = "Versione:"
+                        Label27.Text = "Nome:"
+                        Label29.Text = "Descrizione:"
+                        Label31.Text = "Dimensione:"
+                        Label33.Text = "Supporta WIMBoot?"
+                        Label35.Text = "Architettura:"
+                        Label39.Text = "Service Pack build:"
+                        Label41.Text = "Livello del Service Pack:"
+                        Label43.Text = "Edizione:"
+                        Label45.Text = "Tipo di prodotto:"
+                        Label47.Text = "Suite di prodotti:"
+                        Label49.Text = " Cartella principale del sistema:"
+                        Label51.Text = "Numero di cartelle:"
+                        Label53.Text = "Numero di file:"
+                        Label55.Text = "Data di creazione:"
+                        Label57.Text = "Data di modifica:"
+                        Label58.Text = "Lingue installate:"
+                        Label60.Text = "Formato file:"
+                        Label62.Text = "Autorizzazioni R/W immagine:"
+                        TabPage1.Text = "Progetto"
+                        TabPage2.Text = "Immagine"
+                        RecoverButton.Text = "Recupera"
+                        RemountImgBtn.Text = "Ricaricare"
+                        RWRemountBtn.Text = "Rimonta con i permessi di scrittura"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        LinkLabel2.Text = "Molte proprietà non possono essere visualizzate perché l'immagine non è ancora stata montata. Una volta montata, le informazioni dettagliate saranno mostrate qui. Fare clic qui per montare un'immagine"
                 End Select
             Case 1
                 Label2.Text = "View project properties, such as name or location"
@@ -759,6 +857,46 @@ Public Class ProjProperties
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
                 LinkLabel2.Text = "Muitas propriedades não podem ser vistas porque a imagem ainda não foi montada. Depois de a montar, serão mostradas aqui informações detalhadas. Clique aqui para montar uma imagem"
+            Case 5
+                Label2.Text = "Visualizza le proprietà del progetto, come il nome o l'ubicazione"
+                Label3.Text = "Visualizza le proprietà dell'immagine montata, come il nome, la descrizione o l'indice"
+                Label4.Text = "Ottenere informazioni sul progetto e sull'immagine. Attendere..."
+                Label5.Text = "Nome:"
+                Label6.Text = " Ubicazione:"
+                Label7.Text = "Data di creazione:"
+                Label8.Text = "GUID del progetto:"
+                Label13.Text = "Directory di montaggio:"
+                Label14.Text = "Indice immagine:"
+                Label15.Text = "File immagine:"
+                Label20.Text = "Immagine presente nel progetto?"
+                Label22.Text = "Stato immagine:"
+                Label25.Text = "Versione:"
+                Label27.Text = "Nome:"
+                Label29.Text = "Descrizione:"
+                Label31.Text = "Dimensione:"
+                Label33.Text = "Supporta WIMBoot?"
+                Label35.Text = "Architettura:"
+                Label39.Text = "Service Pack build:"
+                Label41.Text = "Livello del Service Pack:"
+                Label43.Text = "Edizione:"
+                Label45.Text = "Tipo di prodotto:"
+                Label47.Text = "Suite di prodotti:"
+                Label49.Text = " Cartella principale del sistema:"
+                Label51.Text = "Numero di cartelle:"
+                Label53.Text = "Numero di file:"
+                Label55.Text = "Data di creazione:"
+                Label57.Text = "Data di modifica:"
+                Label58.Text = "Lingue installate:"
+                Label60.Text = "Formato file:"
+                Label62.Text = "Autorizzazioni R/W immagine:"
+                TabPage1.Text = "Progetto"
+                TabPage2.Text = "Immagine"
+                RecoverButton.Text = "Recupera"
+                RemountImgBtn.Text = "Ricaricare"
+                RWRemountBtn.Text = "Rimonta con i permessi di scrittura"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                LinkLabel2.Text = "Molte proprietà non possono essere visualizzate perché l'immagine non è ancora stata montata. Una volta montata, le informazioni dettagliate saranno mostrate qui. Fare clic qui per montare un'immagine"
         End Select
         Select Case MainForm.Language
             Case 0
@@ -771,6 +909,8 @@ Public Class ProjProperties
                         Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
                     Case "PTB", "PTG"
                         Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                    Case "ITA"
+                        Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
                 End Select
             Case 1
                 Label1.Text = TabControl1.SelectedTab.Text & " properties"
@@ -780,6 +920,8 @@ Public Class ProjProperties
                 Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
             Case 4
                 Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+            Case 5
+                Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
         End Select
         ' Set program colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -856,6 +998,8 @@ Public Class ProjProperties
                             Label19.Text = "Oui"
                         Case "PTB", "PTG"
                             Label19.Text = "Sim"
+                        Case "ITA"
+                            Label19.Text = "Sì"
                     End Select
                 Case 1
                     Label19.Text = "Yes"
@@ -865,6 +1009,8 @@ Public Class ProjProperties
                     Label19.Text = "Oui"
                 Case 4
                     Label19.Text = "Sim"
+                Case 5
+                    Label19.Text = "Sì"
             End Select
             Try
                 If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
@@ -957,6 +1103,8 @@ Public Class ProjProperties
                             Label19.Text = "Non"
                         Case "PTB", "PTG"
                             Label19.Text = "Não"
+                        Case "ITA"
+                            Label19.Text = "No"
                     End Select
                 Case 1
                     Label19.Text = "No"
@@ -966,6 +1114,8 @@ Public Class ProjProperties
                     Label19.Text = "Non"
                 Case 4
                     Label19.Text = "Não"
+                Case 5
+                    Label19.Text = "No"
             End Select
             Select Case MainForm.Language
                 Case 0
@@ -1066,6 +1216,30 @@ Public Class ProjProperties
                             imgModification.Text = "Não disponível"
                             imgFormat.Text = "Não disponível"
                             imgRW.Text = "Não disponível"
+                        Case "ITA"
+                            imgMountDir.Text = "Non disponibile"
+                            imgIndex.Text = "Non disponibile"
+                            imgName.Text = "Non disponibile"
+                            imgMountedStatus.Text = "Non disponibile"
+                            imgVersion.Text = "Non disponibile"
+                            imgMountedName.Text = "Non disponibile"
+                            imgMountedDesc.Text = "Non disponibile"
+                            imgSize.Text = "Non disponibile"
+                            imgWimBootStatus.Text = "Non disponibile"
+                            imgArch.Text = "Non disponibile"
+                            imgHal.Text = "Non disponibile"
+                            imgSPBuild.Text = "Non disponibile"
+                            imgSPLvl.Text = "Non disponibile"
+                            imgEdition.Text = "Non disponibile"
+                            imgPType.Text = "Non disponibile"
+                            imgPSuite.Text = "Non disponibile"
+                            imgSysRoot.Text = "Non disponibile"
+                            imgDirs.Text = "Non disponibile"
+                            imgFiles.Text = "Non disponibile"
+                            imgCreation.Text = "Non disponibile"
+                            imgModification.Text = "Non disponibile"
+                            imgFormat.Text = "Non disponibile"
+                            imgRW.Text = "Non disponibile"
                     End Select
                 Case 1
                     imgMountDir.Text = "Not available"
@@ -1163,6 +1337,30 @@ Public Class ProjProperties
                     imgModification.Text = "Não disponível"
                     imgFormat.Text = "Não disponível"
                     imgRW.Text = "Não disponível"
+                Case 5
+                    imgMountDir.Text = "Non disponibile"
+                    imgIndex.Text = "Non disponibile"
+                    imgName.Text = "Non disponibile"
+                    imgMountedStatus.Text = "Non disponibile"
+                    imgVersion.Text = "Non disponibile"
+                    imgMountedName.Text = "Non disponibile"
+                    imgMountedDesc.Text = "Non disponibile"
+                    imgSize.Text = "Non disponibile"
+                    imgWimBootStatus.Text = "Non disponibile"
+                    imgArch.Text = "Non disponibile"
+                    imgHal.Text = "Non disponibile"
+                    imgSPBuild.Text = "Non disponibile"
+                    imgSPLvl.Text = "Non disponibile"
+                    imgEdition.Text = "Non disponibile"
+                    imgPType.Text = "Non disponibile"
+                    imgPSuite.Text = "Non disponibile"
+                    imgSysRoot.Text = "Non disponibile"
+                    imgDirs.Text = "Non disponibile"
+                    imgFiles.Text = "Non disponibile"
+                    imgCreation.Text = "Non disponibile"
+                    imgModification.Text = "Non disponibile"
+                    imgFormat.Text = "Non disponibile"
+                    imgRW.Text = "Non disponibile"
             End Select
             Panel3.Visible = True
             Label4.Visible = False
@@ -1181,6 +1379,8 @@ Public Class ProjProperties
                         Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
                     Case "PTB", "PTG"
                         Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                    Case "ITA"
+                        Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
                 End Select
             Case 1
                 Label1.Text = TabControl1.SelectedTab.Text & " properties"
@@ -1190,6 +1390,8 @@ Public Class ProjProperties
                 Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
             Case 4
                 Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+            Case 5
+                Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -1321,6 +1523,8 @@ Public Class ProjProperties
                         imgVersion.Text &= CrLf & "(m-à-j des caractéristiques: " & FeatUpd & ")"
                     Case "PTB", "PTG"
                         imgVersion.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
+                    Case "ITA"
+                        imgVersion.Text &= " (aggiornamento della caratteristica: " & FeatUpd & ")"
                 End Select
             Case 1
                 imgVersion.Text &= CrLf & "(feature update: " & FeatUpd & ")"
@@ -1330,6 +1534,8 @@ Public Class ProjProperties
                 imgVersion.Text &= CrLf & "(m-à-j des caractéristiques: " & FeatUpd & ")"
             Case 4
                 imgVersion.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
+            Case 5
+                imgVersion.Text &= " (aggiornamento della caratteristica: " & FeatUpd & ")"
         End Select
     End Sub
 
@@ -1350,6 +1556,8 @@ Public Class ProjProperties
                         HalHelper.SetToolTip(sender, "Couche d'abstraction du matériel")
                     Case "PTB", "PTG"
                         HalHelper.SetToolTip(sender, "Camada de abstração de hardware")
+                    Case "ITA"
+                        HalHelper.SetToolTip(sender, "Livello di astrazione hardware")
                 End Select
             Case 1
                 HalHelper.SetToolTip(sender, "Hardware Abstraction Layer")
@@ -1359,6 +1567,8 @@ Public Class ProjProperties
                 HalHelper.SetToolTip(sender, "Couche d'abstraction du matériel")
             Case 4
                 HalHelper.SetToolTip(sender, "Camada de abstração de hardware")
+            Case 5
+                HalHelper.SetToolTip(sender, "Livello di astrazione hardware")
         End Select
     End Sub
 End Class

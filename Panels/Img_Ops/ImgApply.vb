@@ -21,6 +21,8 @@ Public Class ImgApply
                             MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
                         Case "PTB", "PTG"
                             MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                        Case "ITA"
+                            MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, Label1.Text)
                     End Select
                 Case 1
                     MsgBox("The specified image file is not valid. Please specify a valid image and try again.", vbOKOnly + vbCritical, Label1.Text)
@@ -30,6 +32,8 @@ Public Class ImgApply
                     MsgBox("Le fichier image spécifié n'est pas valide. Veuillez spécifier une image valide et réessayer.", vbOKOnly + vbCritical, Label1.Text)
                 Case 4
                     MsgBox("O ficheiro de imagem especificado não é válido. Especifique uma imagem válida e tente novamente.", vbOKOnly + vbCritical, Label1.Text)
+                Case 5
+                    MsgBox("Il file immagine specificato non è valido. Specificare un'immagine valida e riprovare.", vbOKOnly + vbCritical, Label1.Text)
             End Select
             Exit Sub
         End If
@@ -226,6 +230,34 @@ Public Class ImgApply
                         GroupBox2.Text = "Opções"
                         GroupBox3.Text = "Destino"
                         GroupBox4.Text = "Padrão de ficheiro SWM"
+                    Case "ITA"
+                        Text = "Applica un'immagine"
+                        Label1.Text = Text
+                        Label2.Text = "File immagine di origine:"
+                        Label3.Text = "Indice immagine:"
+                        Label4.Text = "Modello di denominazione:"
+                        CheckBox1.Text = "Verifica l'integrità dell'immagine"
+                        CheckBox2.Text = "Verifica"
+                        CheckBox3.Text = "Utilizza il tag fix del punto di reparse"
+                        CheckBox4.Text = "File SWM di riferimento"
+                        CheckBox5.Text = "Convalida l'immagine per Trusted Desktop"
+                        CheckBox6.Text = "Aggiungi all'immagine la configurazione WIMBoot"
+                        CheckBox7.Text = "Applica l'immagine in modalità compatta"
+                        CheckBox8.Text = "Applica gli attributi estesi"
+                        Button1.Text = "Sfoglia..."
+                        Button2.Text = "Sfoglia..."
+                        Button3.Text = "Specificare..."
+                        Button4.Text = "Usa il nome dell'immagine"
+                        Button5.Text = "Modello di scansione"
+                        UseMountedImgBtn.Text = "Usa immagine montata"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annulla"
+                        RadioButton1.Text = "Directory di destinazione:"
+                        RadioButton2.Text = "Unità di destinazione:"
+                        GroupBox1.Text = "Origine"
+                        GroupBox2.Text = "Opzioni"
+                        GroupBox3.Text = "Destinazione"
+                        GroupBox4.Text = "Schema di file SWM"
                 End Select
             Case 1
                 Text = "Apply an image"
@@ -339,6 +371,34 @@ Public Class ImgApply
                 GroupBox2.Text = "Opções"
                 GroupBox3.Text = "Destino"
                 GroupBox4.Text = "Padrão de ficheiro SWM"
+            Case 5
+                Text = "Applica un'immagine"
+                Label1.Text = Text
+                Label2.Text = "File immagine di origine:"
+                Label3.Text = "Indice immagine:"
+                Label4.Text = "Modello di denominazione:"
+                CheckBox1.Text = "Verifica l'integrità dell'immagine"
+                CheckBox2.Text = "Verifica"
+                CheckBox3.Text = "Utilizza il tag fix del punto di reparse"
+                CheckBox4.Text = "File SWM di riferimento"
+                CheckBox5.Text = "Convalida l'immagine per Trusted Desktop"
+                CheckBox6.Text = "Aggiungi all'immagine la configurazione WIMBoot"
+                CheckBox7.Text = "Applica l'immagine in modalità compatta"
+                CheckBox8.Text = "Applica gli attributi estesi"
+                Button1.Text = "Sfoglia..."
+                Button2.Text = "Sfoglia..."
+                Button3.Text = "Specificare..."
+                Button4.Text = "Usa il nome dell'immagine"
+                Button5.Text = "Modello di scansione"
+                UseMountedImgBtn.Text = "Usa immagine montata"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annulla"
+                RadioButton1.Text = "Directory di destinazione:"
+                RadioButton2.Text = "Unità di destinazione:"
+                GroupBox1.Text = "Origine"
+                GroupBox2.Text = "Opzioni"
+                GroupBox3.Text = "Destinazione"
+                GroupBox4.Text = "Schema di file SWM"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -392,6 +452,8 @@ Public Class ImgApply
                         ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
                     Case "PTB", "PTG"
                         ToolStripStatusLabel1.Text = "Especifique o padrão de nomenclatura dos ficheiros SWM"
+                    Case "ITA"
+                        ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SWM"
                 End Select
             Case 1
                 ToolStripStatusLabel1.Text = "Please specify the naming pattern of the SWM files"
@@ -401,6 +463,8 @@ Public Class ImgApply
                 ToolStripStatusLabel1.Text = "Veuillez spécifier le modèle de dénomination des fichiers SWM"
             Case 4
                 ToolStripStatusLabel1.Text = "Especifique o padrão de nomenclatura dos ficheiros SWM"
+            Case 5
+                ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SWM"
         End Select
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
             UseMountedImgBtn.Enabled = False
@@ -460,6 +524,8 @@ Public Class ImgApply
                             msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case "PTB", "PTG"
                             msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "ITA"
+                            msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                 Case 1
                     msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -469,6 +535,8 @@ Public Class ImgApply
                     msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                 Case 4
                     msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 5
+                    msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
@@ -518,6 +586,9 @@ Public Class ImgApply
                         Case "PTB", "PTG"
                             MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, "Aplicar uma imagem")
                             ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+                        Case "ITA"
+                            MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, "Applica un'immagine")
+                            ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
                     End Select
                 Case 1
                     MsgBox("Please specify a source WIM file. This will let you use the SWM files for later image application", vbOKOnly + vbCritical, "Apply an image")
@@ -531,6 +602,9 @@ Public Class ImgApply
                 Case 4
                     MsgBox("Especifique um ficheiro WIM de origem. Isto permitir-lhe-á utilizar os ficheiros SWM para uma aplicação de imagem posterior", vbOKOnly + vbCritical, "Aplicar uma imagem")
                     ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+                Case 5
+                    MsgBox("Specificare un file WIM di origine. In questo modo sarà possibile utilizzare i file SWM per una successiva applicazione di immagini", vbOKOnly + vbCritical, "Applica un'immagine")
+                    ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
             End Select
             Beep()
             Exit Sub
@@ -551,6 +625,8 @@ Public Class ImgApply
                         ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
                     Case "PTB", "PTG"
                         ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+                    Case "ITA"
+                        ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
                 End Select
             Case 1
                 ToolStripStatusLabel1.Text = "This naming pattern returns " & ListBox1.Items.Count & " SWM files"
@@ -560,6 +636,8 @@ Public Class ImgApply
                 ToolStripStatusLabel1.Text = "Ce modèle de dénomination renvoie " & ListBox1.Items.Count & " fichiers SWM"
             Case 4
                 ToolStripStatusLabel1.Text = "Este padrão de nomenclatura devolve " & ListBox1.Items.Count & " ficheiros SWM"
+            Case 5
+                ToolStripStatusLabel1.Text = "Questo modello di denominazione restituisce " & ListBox1.Items.Count & " file SWM"
         End Select
         If ListBox1.Items.Count <= 0 Then Beep()
     End Sub

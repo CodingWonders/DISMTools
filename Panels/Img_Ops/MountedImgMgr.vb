@@ -78,6 +78,23 @@ Public Class MountedImgMgr
                         Button6.Text = "Carregar no projeto"
                         LinkLabel1.Text = "Esta vista está a ser actualizada em tempo real, o que pode causar uma maior utilização da CPU. Alterar as configurações de deteção de imagem..."
                         LinkLabel1.LinkArea = New LinkArea(96, 48)
+                    Case "ITA"
+                        Text = "Gestione di immagini montate"
+                        Label1.Text = "Questa è una panoramica delle immagini che sono state montate su questo sistema. È possibile cercare informazioni su di esse ed eseguire alcune operazioni elementari. Per eseguire completamente le azioni sulle immagini con questo programma, tuttavia, è necessario caricare la directory di montaggio in un progetto:"
+                        ListView1.Columns(0).Text = "File immagine"
+                        ListView1.Columns(1).Text = "Indice"
+                        ListView1.Columns(2).Text = "Directory di montaggio"
+                        ListView1.Columns(3).Text = "Stato"
+                        ListView1.Columns(4).Text = "Permessi di lettura/scrittura?"
+                        ListView1.Columns(5).Text = "Versione"
+                        Button1.Text = "Smontare l'immagine"
+                        Button2.Text = "Ricaricare l'assistenza"
+                        Button3.Text = "Abilitare i permessi di scrittura"
+                        Button4.Text = "Aprire la directory di montaggio"
+                        Button5.Text = "Rimuovere le immagini del volume..."
+                        Button6.Text = "Carica nel progetto"
+                        LinkLabel1.Text = "Questa vista viene aggiornata in tempo reale, il che può causare un maggiore utilizzo della CPU. Modificare le impostazioni di rilevamento delle immagini..."
+                        LinkLabel1.LinkArea = New LinkArea(97, 59)
                 End Select
             Case 1
                 Text = "Mounted image manager"
@@ -147,6 +164,23 @@ Public Class MountedImgMgr
                 Button6.Text = "Carregar no projeto"
                 LinkLabel1.Text = "Esta vista está a ser actualizada em tempo real, o que pode causar uma maior utilização da CPU. Alterar as configurações de deteção de imagem..."
                 LinkLabel1.LinkArea = New LinkArea(96, 48)
+            Case 5
+                Text = "Gestione di immagini montate"
+                Label1.Text = "Questa è una panoramica delle immagini che sono state montate su questo sistema. È possibile cercare informazioni su di esse ed eseguire alcune operazioni elementari. Per eseguire completamente le azioni sulle immagini con questo programma, tuttavia, è necessario caricare la directory di montaggio in un progetto:"
+                ListView1.Columns(0).Text = "File immagine"
+                ListView1.Columns(1).Text = "Indice"
+                ListView1.Columns(2).Text = "Directory di montaggio"
+                ListView1.Columns(3).Text = "Stato"
+                ListView1.Columns(4).Text = "Permessi di lettura/scrittura?"
+                ListView1.Columns(5).Text = "Versione"
+                Button1.Text = "Smontare l'immagine"
+                Button2.Text = "Ricaricare l'assistenza"
+                Button3.Text = "Abilitare i permessi di scrittura"
+                Button4.Text = "Aprire la directory di montaggio"
+                Button5.Text = "Rimuovere le immagini del volume..."
+                Button6.Text = "Carica nel progetto"
+                LinkLabel1.Text = "Questa vista viene aggiornata in tempo reale, il che può causare un maggiore utilizzo della CPU. Modificare le impostazioni di rilevamento delle immagini..."
+                LinkLabel1.LinkArea = New LinkArea(97, 59)
         End Select
         Control.CheckForIllegalCrossThreadCalls = False
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -190,6 +224,8 @@ Public Class MountedImgMgr
                                         Button2.Text = "Recharger le service"
                                     Case "PTB", "PTG"
                                         Button2.Text = "Recarregar o serviço"
+                                    Case "ITA"
+                                        Button2.Text = "Ricarica servizio"
                                 End Select
                             Case 1
                                 Button2.Text = "Reload servicing"
@@ -199,6 +235,8 @@ Public Class MountedImgMgr
                                 Button2.Text = "Recharger le service"
                             Case 4
                                 Button2.Text = "Recarregar o serviço"
+                            Case 5
+                                Button2.Text = "Ricarica servizio"
                         End Select
                     Case 2
                         Select Case MainForm.Language
@@ -212,6 +250,8 @@ Public Class MountedImgMgr
                                         Button2.Text = "Réparer le stock de composants"
                                     Case "PTB", "PTG"
                                         Button2.Text = "Reparação do armazém de componentes"
+                                    Case "ITA"
+                                        Button2.Text = "Ripara il magazzino dei componenti"
                                 End Select
                             Case 1
                                 Button2.Text = "Repair component store"
@@ -221,6 +261,8 @@ Public Class MountedImgMgr
                                 Button2.Text = "Réparer le stock de composants"
                             Case 4
                                 Button2.Text = "Reparação do armazém de componentes"
+                            Case 5
+                                Button2.Text = "Ripara il magazzino dei componenti"
                         End Select
                 End Select
             Else
@@ -361,6 +403,9 @@ Public Class MountedImgMgr
                                         Case "PTB", "PTG"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                                             PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
+                                        Case "ITA"
+                                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
+                                            PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                                     End Select
                                 Case 1
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
@@ -374,6 +419,9 @@ Public Class MountedImgMgr
                                 Case 4
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                                     PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
+                                Case 5
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
+                                    PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                             End Select
                         End If
                     Next
@@ -393,6 +441,9 @@ Public Class MountedImgMgr
                             Case "PTB", "PTG"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                                 If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
+                            Case "ITA"
+                                If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
+                                If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                         End Select
                     Case 1
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
@@ -406,6 +457,9 @@ Public Class MountedImgMgr
                     Case 4
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                         If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
+                    Case 5
+                        If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
+                        If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                 End Select
             Next
             ignoreRepeats = True

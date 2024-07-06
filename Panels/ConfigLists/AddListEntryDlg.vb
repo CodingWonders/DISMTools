@@ -53,6 +53,11 @@ Public Class AddListEntryDlg
                         Button1.Text = "Navegar..."
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Label1.Text = "Entrata:"
+                        Button1.Text = "Sfoglia..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Label1.Text = "Entry:"
@@ -74,6 +79,11 @@ Public Class AddListEntryDlg
                 Button1.Text = "Navegar..."
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Label1.Text = "Entrata:"
+                Button1.Text = "Sfoglia..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

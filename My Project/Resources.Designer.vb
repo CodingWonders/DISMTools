@@ -2176,15 +2176,13 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a New features
         '''
-        '''Bugfixes:
-        '''
-        '''- A case where the program would still show &quot;(~)&quot; when saving capability information has been fixed
-        '''- Fixed an issue where AppX package addition would fail if you applied a license file
-        '''- The Help Documentation browser no longer displays an empty website title in the title bar after clicking external links
-        '''- AppX package and capability background processes are no longer run on Windows PE images if they remain
-        '''- DISM and image version detections have been  [resto de la cadena truncado]&quot;;.
+        '''- The Preinstallation Environment (PE) Helper has had several improvements, including the addition of the DIM and the creation of testing environments
+        '''- Italian translations have been added
+        '''- The 7-Zip component has been updated to version 24.07
+        '''- If the Windows ADK is installed, but the necessary registry value is not present, the program can add it automatically
+        '''- MSU package addition has been simplified.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
