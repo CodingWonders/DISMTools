@@ -3828,12 +3828,23 @@ Public Class ProgressPanel
                         LogView.AppendText(CrLf & _
                                            "Warning: the custom data file does not exist. Continuing without one...")
                     End If
-                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
+                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And
+                        (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
                         If appxAdditionPackageList(x).PackageRegions = "" Then
                             CommandArgs &= " /region:all"
                         Else
                             CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
                         End If
+                    End If
+                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart >= 10 And ImgVersion.Major >= 10) And appxAdditionPackageList(x).SupportsStub Then
+                        Select Case appxAdditionPackageList(x).StubPackageOption
+                            Case StubPreference.NoPreference
+                                ' Don't add stub package option flag
+                            Case StubPreference.StubOnly
+                                CommandArgs &= " /stubpackageoption:installstub"
+                            Case StubPreference.FullPackage
+                                CommandArgs &= " /stubpackageoption:installfull"
+                        End Select
                     End If
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()

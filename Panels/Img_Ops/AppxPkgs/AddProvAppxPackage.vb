@@ -595,6 +595,7 @@ Public Class AddProvAppxPackage
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
             TextBox3.BackColor = Color.FromArgb(31, 31, 31)
+            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
             BackColor = Color.FromArgb(238, 238, 242)
@@ -606,12 +607,14 @@ Public Class AddProvAppxPackage
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
             TextBox3.BackColor = Color.FromArgb(238, 238, 242)
+            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         ListView1.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
+        ComboBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -625,6 +628,11 @@ Public Class AddProvAppxPackage
             GroupBox3.Enabled = True
         Else
             GroupBox3.Enabled = False
+        End If
+        If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
+            Panel2.Enabled = True
+        Else
+            Panel2.Enabled = False
         End If
     End Sub
 
@@ -727,7 +735,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.5
+    ''' DISMTools AppX header scanner component: version 0.5.1
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
@@ -857,6 +865,7 @@ Public Class AddProvAppxPackage
                     extPackage.PackagePublisher = EcurrentAppxPublisher
                     extPackage.PackageVersion = EcurrentAppxVersion
                     extPackage.PackageArchitecture = EcurrentAppxArchitecture
+                    extPackage.StubPackageOption = StubPreference.NoPreference
                     If Not Packages.Contains(extPackage) Then Packages.Add(extPackage)
                     Button3.Enabled = True
                     GetApplicationStoreLogoAssets("", False, False, Package, EcurrentAppxName)
@@ -935,6 +944,7 @@ Public Class AddProvAppxPackage
             encPackage.PackagePublisher = "<Encrypted>"
             encPackage.PackageVersion = "<Encrypted>"
             encPackage.PackageArchitecture = "<Encrypted>"
+            encPackage.StubPackageOption = StubPreference.NoPreference
             If Not Packages.Contains(encPackage) Then Packages.Add(encPackage)
             Button3.Enabled = True
             Exit Sub
@@ -977,10 +987,12 @@ Public Class AddProvAppxPackage
         Dim currentAppxArchitecture As String = ""
         Dim pkgName As String = ""
         Dim IdScanner As String
+        Dim StubSupported As Boolean = False
         If IsFolder Then
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
                 ' AppXBundle file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxMetadata\AppxBundleManifest.xml")
+                StubSupported = ScannerRTB.Text.Contains("IsStub=" & Quote & "true" & Quote)
                 IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                 Dim CharIndex As Integer = 0
                 Dim CharNext As Integer
@@ -1110,6 +1122,7 @@ Public Class AddProvAppxPackage
             If AppxScanner.ExitCode = 0 Then
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
+                    StubSupported = ScannerRTB.Text.Contains("IsStub=" & Quote & "true" & Quote)
                     IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
                     Dim CharNext As Integer
@@ -1454,6 +1467,8 @@ Public Class AddProvAppxPackage
         currentPackage.PackagePublisher = currentAppxPublisher
         currentPackage.PackageVersion = currentAppxVersion
         currentPackage.PackageArchitecture = currentAppxArchitecture
+        currentPackage.SupportsStub = StubSupported
+        currentPackage.StubPackageOption = StubPreference.NoPreference
         If Not Packages.Contains(currentPackage) Then Packages.Add(currentPackage)
         Button3.Enabled = True
         If Directory.Exists(Application.StartupPath & "\appxscan") Then
@@ -1756,6 +1771,21 @@ Public Class AddProvAppxPackage
                     CheckBox4.Checked = True
                 Else
                     CheckBox4.Checked = False
+                End If
+                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10) And
+                    Packages(ListView1.FocusedItem.Index).SupportsStub Then
+                    Panel2.Enabled = True
+                    Select Case Packages(ListView1.FocusedItem.Index).StubPackageOption
+                        Case StubPreference.NoPreference
+                            ComboBox1.SelectedIndex = 0
+                        Case StubPreference.StubOnly
+                            ComboBox1.SelectedIndex = 1
+                        Case StubPreference.FullPackage
+                            ComboBox1.SelectedIndex = 2
+                    End Select
+                Else
+                    Panel2.Enabled = False
+                    ComboBox1.SelectedIndex = 0
                 End If
             End If
         Catch ex As Exception
@@ -2226,5 +2256,15 @@ Public Class AddProvAppxPackage
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
         MainForm.AppxRelatedLinksCMS.Show(sender, New Point(8, 8))
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        If ComboBox1.SelectedIndex = 0 Then
+            If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).StubPackageOption = StubPreference.NoPreference
+        ElseIf ComboBox1.SelectedIndex = 1 Then
+            If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).StubPackageOption = StubPreference.StubOnly
+        ElseIf ComboBox1.SelectedIndex = 2 Then
+            If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).StubPackageOption = StubPreference.FullPackage
+        End If
     End Sub
 End Class
