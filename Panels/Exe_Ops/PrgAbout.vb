@@ -53,6 +53,7 @@ Public Class PrgAbout
                         LinkLabel12.Text = "Visit website"
                         LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
+                        AnniversaryLabel.Text = "Thank you so much for these 2 years! Without you, this program wouldn't have been possible"
                     Case "ESN"
                         Text = "Acerca de este programa"
                         Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -91,6 +92,7 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
+                        AnniversaryLabel.Text = "¡Muchas gracias por estos 2 años! Sin usted, este programa no podría haber sido posible"
                     Case "FRA"
                         Text = "À propos de ce programme"
                         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -129,6 +131,7 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
+                        AnniversaryLabel.Text = "Merci beaucoup pour ces deux années ! Sans vous, ce programme n'aurait pas été possible."
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
                         Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -167,6 +170,7 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Sítio Web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Verificar actualizações"
+                        AnniversaryLabel.Text = "Muito obrigado por estes dois anos! Sem vós, este programa não teria sido possível"
                 End Select
             Case 1
                 Text = "About this program"
@@ -206,6 +210,7 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Check for updates"
+                AnniversaryLabel.Text = "Thank you so much for these 2 years! Without you, this program wouldn't have been possible"
             Case 2
                 Text = "Acerca de este programa"
                 Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -244,6 +249,7 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
+                AnniversaryLabel.Text = "¡Muchas gracias por estos 2 años! Sin usted, este programa no podría haber sido posible"
             Case 3
                 Text = "À propos de ce programme"
                 Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -282,6 +288,7 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
+                AnniversaryLabel.Text = "Merci beaucoup pour ces deux années ! Sans vous, ce programme n'aurait pas été possible."
             Case 4
                 Text = "Acerca deste programa"
                 Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -320,6 +327,7 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Sítio Web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Verificar actualizações"
+                AnniversaryLabel.Text = "Muito obrigado por estes dois anos! Sem vós, este programa não teria sido possível"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew

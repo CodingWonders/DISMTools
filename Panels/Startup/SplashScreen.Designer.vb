@@ -35,9 +35,9 @@ Partial Class SplashScreen
         Me.LogoPic.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.LogoPic.BackColor = System.Drawing.Color.Transparent
         Me.LogoPic.Image = Global.DISMTools.My.Resources.Resources.dt_branding
-        Me.LogoPic.Location = New System.Drawing.Point(144, 75)
+        Me.LogoPic.Location = New System.Drawing.Point(155, 64)
         Me.LogoPic.Name = "LogoPic"
-        Me.LogoPic.Size = New System.Drawing.Size(512, 51)
+        Me.LogoPic.Size = New System.Drawing.Size(512, 113)
         Me.LogoPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.LogoPic.TabIndex = 0
         Me.LogoPic.TabStop = False
@@ -65,8 +65,8 @@ Partial Class SplashScreen
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.startup_bg
         Me.ClientSize = New System.Drawing.Size(800, 200)
         Me.ControlBox = False
-        Me.Controls.Add(Me.PreviewFlag)
         Me.Controls.Add(Me.LogoPic)
+        Me.Controls.Add(Me.PreviewFlag)
         Me.DoubleBuffered = True
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
