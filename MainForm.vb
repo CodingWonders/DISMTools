@@ -4383,7 +4383,7 @@ Public Class MainForm
             imgAppxArchitectureList = imgAppxArchitectures.ToList()
             imgAppxResourceIdList = imgAppxResourceIds.ToList()
             PSExtAppxGetter()
-            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") AndAlso My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
                 Dim appxPkgNameRTB As New RichTextBox()
                 Dim appxPkgFullNameRTB As New RichTextBox()
                 Dim appxArchRTB As New RichTextBox()
@@ -19600,6 +19600,12 @@ Public Class MainForm
     End Sub
 
     Private Sub ListImage_Click(sender As Object, e As EventArgs) Handles ListImage.Click
+        If Not WIEDownloaderBW.IsBusy Then
+            WIEDownloaderBW.RunWorkerAsync()
+        End If
+    End Sub
+
+    Private Sub WIEDownloaderBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WIEDownloaderBW.DoWork
         Try
             ' Download the WIM Explorer and run it while passing the image as an argument
             If Not Directory.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer") Then
@@ -19638,7 +19644,9 @@ Public Class MainForm
                 Dim WimExplorer As New Process()
                 WimExplorer.StartInfo.FileName = Application.StartupPath & "\bin\utils\WIM-Explorer\WIMExplorer.exe"
                 WimExplorer.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\utils\WIM-Explorer"
-                WimExplorer.StartInfo.Arguments = "/image=" & Quote & SourceImg & Quote
+                If (Not OnlineManagement) And (Not OfflineManagement) Then
+                    WimExplorer.StartInfo.Arguments = "/image=" & Quote & SourceImg & Quote
+                End If
                 WimExplorer.Start()
             End If
         Catch ex As Exception
