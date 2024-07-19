@@ -1,15 +1,15 @@
 name: Create Nightly Installer
 
 on:
-  schedule:
-    - cron: '0 19 * * *'
-  workflow_dispatch:
+  push:
+    branches:
+      - dt_pre*
+      - dt_rel*
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
   build-runspace:
-    if: "!startsWith(github.ref, 'refs/heads/stable')"
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
