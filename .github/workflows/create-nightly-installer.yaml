@@ -2,7 +2,7 @@ name: Create Nightly Installer
 
 on:
   schedule:
-    - cron: '0 21 * * *'
+    - cron: '0 19 * * *'
   workflow_dispatch:
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
