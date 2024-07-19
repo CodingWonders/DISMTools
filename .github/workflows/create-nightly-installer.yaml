@@ -8,6 +8,7 @@ env:
 
 jobs:
   build-runspace:
+    if: "!startsWith(github.ref, 'refs/heads/exclude/stable')"
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
