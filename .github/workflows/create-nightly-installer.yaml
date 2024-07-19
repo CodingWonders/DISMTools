@@ -1,10 +1,8 @@
 name: Create Nightly Installer
 
 on:
-  push:
-    branches:
-      - dt_pre*
-      - dt_rel*
+  schedule:
+    - cron: '0 21 * * *'
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
