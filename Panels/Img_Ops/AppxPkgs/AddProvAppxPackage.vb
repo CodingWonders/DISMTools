@@ -29,6 +29,8 @@ Public Class AddProvAppxPackage
 
     Dim Packages As New List(Of AppxPackage)
 
+    Dim StubPreferences() As String = New String(2) {"Do not configure stub preference", "Install application as a stub package", "Install application as a full package"}
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         AppxAdditionCount = ListView1.Items.Count
@@ -239,6 +241,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AddProvAppxPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ComboBox1.Items.Clear()
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -247,6 +250,7 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                         Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
+                        Label4.Text = "Stub preference:"
                         Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
                         Label6.Text = "Select an entry in the list view to show the details of an app and to configure addition settings"
                         Button1.Text = "Add file"
@@ -281,6 +285,7 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                         Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
+                        Label4.Text = "Preferencia de talón:"
                         Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
                         Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación y para configurar opciones de adición"
                         Button1.Text = "Añadir archivo"
@@ -315,6 +320,7 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Veuillez ajouter des paquets AppX emballés ou non emballés en utilisant les boutons ci-dessous, ou en les déposant dans la liste ci-dessous :"
                         Label3.Text = "Un paquet AppX peut avoir besoin de certaines dépendances pour être installé correctement. Si c'est le cas, vous pouvez spécifier une liste de dépendances maintenant :"
+                        Label4.Text = "Préférence pour le paquet de stub :"
                         Label5.Text = "Pour spécifier plusieurs régions d'application, séparez-les par un point-virgule ( ;)"
                         Label6.Text = "Sélectionnez une entrée dans la liste pour afficher les détails d'une application et pour configurer les paramètres d'ajout."
                         Button1.Text = "Ajouter un fichier"
@@ -349,6 +355,7 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Adicione pacotes AppX embalados ou descompactados utilizando os botões abaixo, ou largando-os na vista de lista abaixo:"
                         Label3.Text = "Um pacote AppX pode precisar de algumas dependências para ser instalado corretamente. Se assim for, pode especificar uma lista de dependências agora:"
+                        Label4.Text = "Preferência de pacote de stub:"
                         Label5.Text = "Para especificar várias regiões de aplicação, separe-as com um ponto e vírgula (;)"
                         Label6.Text = "Seleccione uma entrada na vista de lista para mostrar os detalhes de uma aplicação e para configurar definições adicionais"
                         Button1.Text = "Adicionar ficheiro"
@@ -383,6 +390,7 @@ Public Class AddProvAppxPackage
                         Label1.Text = Text
                         Label2.Text = "Aggiungere pacchetti AppX imballati o non imballati utilizzando i pulsanti sottostanti o rilasciandoli nella vista elenco sottostante:"
                         Label3.Text = "Un pacchetto AppX può richiedere alcune dipendenze per essere installato correttamente. In tal caso, è possibile specificare un elenco di dipendenze:"
+                        Label4.Text = "Preferenza pacchetto stub:"
                         Label5.Text = "Per specificare più regioni di app, separarle con un punto e virgola (;)"
                         Label6.Text = "Selezionate un elemento nella vista elenco per visualizzare i dettagli di un'applicazione e per configurare le impostazioni aggiuntive"
                         Button1.Text = "Aggiungi file"
@@ -418,6 +426,7 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Please add packed or unpacked AppX packages by using the buttons below, or by dropping them to the list view below:"
                 Label3.Text = "An AppX package may need some dependencies for it to be installed correctly. If so, you can specify a list of dependencies now:"
+                Label4.Text = "Stub preference:"
                 Label5.Text = "To specify multiple app regions, separate them with a semicolon (;)"
                 Label6.Text = "Select an entry in the list view to show the details of an app and to configure addition settings"
                 Button1.Text = "Add file"
@@ -452,6 +461,7 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Añada archivos AppX empaquetados o desempaquetados usando los botones de abajo, o soltándolos en la lista de abajo:"
                 Label3.Text = "Un paquete AppX podría necesitar algunas dependencias para que sea instalado correctamente. Si es así, puede especificarlas ahora:"
+                Label4.Text = "Preferencia de talón:"
                 Label5.Text = "Para especificar regiones de aplicación múltiples, sepáralos con un punto y coma (;)"
                 Label6.Text = "Seleccione una entrada en la lista para mostrar los detalles de una aplicación y para configurar opciones de adición"
                 Button1.Text = "Añadir archivo"
@@ -486,6 +496,7 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Veuillez ajouter des paquets AppX emballés ou non emballés en utilisant les boutons ci-dessous, ou en les déposant dans la liste ci-dessous :"
                 Label3.Text = "Un paquet AppX peut avoir besoin de certaines dépendances pour être installé correctement. Si c'est le cas, vous pouvez spécifier une liste de dépendances maintenant :"
+                Label4.Text = "Préférence pour le paquet de stub :"
                 Label5.Text = "Pour spécifier plusieurs régions d'application, séparez-les par un point-virgule ( ;)"
                 Label6.Text = "Sélectionnez une entrée dans la liste pour afficher les détails d'une application et pour configurer les paramètres d'ajout."
                 Button1.Text = "Ajouter un fichier"
@@ -520,6 +531,7 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Adicione pacotes AppX embalados ou descompactados utilizando os botões abaixo, ou largando-os na vista de lista abaixo:"
                 Label3.Text = "Um pacote AppX pode precisar de algumas dependências para ser instalado corretamente. Se assim for, pode especificar uma lista de dependências agora:"
+                Label4.Text = "Preferência de pacote de stub:"
                 Label5.Text = "Para especificar várias regiões de aplicação, separe-as com um ponto e vírgula (;)"
                 Label6.Text = "Seleccione uma entrada na vista de lista para mostrar os detalhes de uma aplicação e para configurar definições adicionais"
                 Button1.Text = "Adicionar ficheiro"
@@ -554,6 +566,7 @@ Public Class AddProvAppxPackage
                 Label1.Text = Text
                 Label2.Text = "Aggiungere pacchetti AppX imballati o non imballati utilizzando i pulsanti sottostanti o rilasciandoli nella vista elenco sottostante:"
                 Label3.Text = "Un pacchetto AppX può richiedere alcune dipendenze per essere installato correttamente. In tal caso, è possibile specificare un elenco di dipendenze:"
+                Label4.Text = "Preferenza pacchetto stub:"
                 Label5.Text = "Per specificare più regioni di app, separarle con un punto e virgola (;)"
                 Label6.Text = "Selezionate un elemento nella vista elenco per visualizzare i dettagli di un'applicazione e per configurare le impostazioni aggiuntive"
                 Button1.Text = "Aggiungi file"
@@ -584,6 +597,52 @@ Public Class AddProvAppxPackage
                 CheckBox4.Text = "Rendi l'applicazione disponibile per tutte le regioni"
                 UnpackedAppxFolderFBD.Description = "Specificare una cartella contenente i file AppX scompattati:"
         End Select
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        StubPreferences(0) = "Do not configure stub preference"
+                        StubPreferences(1) = "Install application as a stub package"
+                        StubPreferences(2) = "Install application as a full package"
+                    Case "ESN"
+                        StubPreferences(0) = "No configurar preferencia de talón"
+                        StubPreferences(1) = "Instalar aplicación como un paquete talón"
+                        StubPreferences(2) = "Instalar aplicación como un paquete completo"
+                    Case "FRA"
+                        StubPreferences(0) = "Ne pas configurer la préférence de stub"
+                        StubPreferences(1) = "Installer l'application en tant que paquet partiel"
+                        StubPreferences(2) = "Installer l'application en tant que paquet complet"
+                    Case "PTB", "PTG"
+                        StubPreferences(0) = "Não configurar preferência de stub"
+                        StubPreferences(1) = "Instalar a aplicação como um pacote de stub"
+                        StubPreferences(2) = "Instalar a aplicação como um pacote completo"
+                    Case "ITA"
+                        StubPreferences(0) = "Non configurare le preferenze di stub"
+                        StubPreferences(1) = "Installa l'applicazione come pacchetto stub"
+                        StubPreferences(2) = "Installa l'applicazione come pacchetto completo"
+                End Select
+            Case 1
+                StubPreferences(0) = "Do not configure stub preference"
+                StubPreferences(1) = "Install application as a stub package"
+                StubPreferences(2) = "Install application as a full package"
+            Case 2
+                StubPreferences(0) = "No configurar preferencia de talón"
+                StubPreferences(1) = "Instalar aplicación como un paquete talón"
+                StubPreferences(2) = "Instalar aplicación como un paquete completo"
+            Case 3
+                StubPreferences(0) = "Ne pas configurer la préférence de stub"
+                StubPreferences(1) = "Installer l'application en tant que paquet partiel"
+                StubPreferences(2) = "Installer l'application en tant que paquet complet"
+            Case 4
+                StubPreferences(0) = "Não configurar preferência de stub"
+                StubPreferences(1) = "Instalar a aplicação como um pacote de stub"
+                StubPreferences(2) = "Instalar a aplicação como um pacote completo"
+            Case 5
+                StubPreferences(0) = "Non configurare le preferenze di stub"
+                StubPreferences(1) = "Installa l'applicazione come pacchetto stub"
+                StubPreferences(2) = "Installa l'applicazione come pacchetto completo"
+        End Select
+        ComboBox1.Items.AddRange(StubPreferences)
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
