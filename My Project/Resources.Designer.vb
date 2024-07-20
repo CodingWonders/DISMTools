@@ -2176,13 +2176,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The Preinstallation Environment (PE) Helper has had several improvements, including the addition of the DIM and the creation of testing environments
-        '''- Italian translations have been added
-        '''- The 7-Zip component has been updated to version 24.07
-        '''- If the Windows ADK is installed, but the necessary registry value is not present, the program can add it automatically
-        '''- MSU package addition has been simplified.
+        '''- The reliability of AppX background processes has been improved
+        '''
+        '''New features:
+        '''
+        '''- Stub package options can now be set for AppX packages that are added
+        '''- You can now add packages by specifying Microsoft Update Manifest (MUM) files (thanks @AnubyteCode for suggesting this)
+        '''- The PE Helper Extensibility Suite has had some improvements:
+        '''  - An application folder is now included to which you can copy your third-party apps
+        '''  - The ISO generation script now copies your apps to the ISO content [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
