@@ -2306,6 +2306,8 @@ Public Class ProgressPanel
                 End Try
             ElseIf pkgAdditionOp = 1 Then
                 LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
+            ElseIf pkgAdditionOp = 2 Then
+                LogView.AppendText(CrLf & "Total number of packages: 1")
             End If
             Thread.Sleep(2000)      ' Sleep to prevent thrashing
 
@@ -2490,6 +2492,61 @@ Public Class ProgressPanel
                 For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
                     LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
                 Next
+            ElseIf pkgAdditionOp = 2 Then
+                CurrentPB.Maximum = pkgCount
+                CommandArgs = BckArgs
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                currentTask.Text = "Adding package 1 of " & pkgCount & "..."
+                            Case "ESN"
+                                currentTask.Text = "Añadiendo paquete 1 de " & pkgCount & "..."
+                            Case "FRA"
+                                currentTask.Text = "Ajout du paquet 1 de " & pkgCount & " en cours..."
+                            Case "PTB", "PTG"
+                                currentTask.Text = "A adicionar o pacote 1 de " & pkgCount & "..."
+                            Case "ITA"
+                                currentTask.Text = "Aggiunta del pacchetto 1 di " & pkgCount & "..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Adding package 1 of " & pkgCount & "..."
+                    Case 2
+                        currentTask.Text = "Añadiendo paquete 1 de " & pkgCount & "..."
+                    Case 3
+                        currentTask.Text = "Ajout du paquet 1 de " & pkgCount & " en cours..."
+                    Case 4
+                        currentTask.Text = "A adicionar o pacote 1 de " & pkgCount & "..."
+                    Case 5
+                        currentTask.Text = "Aggiunta del pacchetto 1 di " & pkgCount & "..."
+                End Select
+                CurrentPB.Value = 1
+                LogView.AppendText(CrLf & "The package about to be added is a Microsoft Update Manifest (MUM) file.")
+                LogView.AppendText(CrLf & "Processing package...")
+                DISMProc.StartInfo.FileName = DismProgram
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(0) & Quote
+                If pkgIgnoreApplicabilityChecks Then
+                    CommandArgs &= " /ignorecheck"
+                End If
+                If pkgPreventIfPendingOnline Then
+                    CommandArgs &= " /preventpending"
+                End If
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                LogView.AppendText(CrLf & "Getting error level...")
+                GetPkgErrorLevel()
+                LogView.AppendText(" Error level: " & errCode)
+                If PkgErrorText.RichTextBox1.Text = "" Then
+                    PkgErrorText.RichTextBox1.AppendText(errCode)
+                Else
+                    PkgErrorText.RichTextBox1.AppendText(CrLf & errCode)
+                End If
+                CurrentPB.Value = CurrentPB.Maximum
+                LogView.AppendText(CrLf & "Gathering error level for selected packages..." & CrLf)
+                For x = 0 To PkgErrorText.RichTextBox1.Lines.Count - 1
+                    LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
+                Next
             End If
             Thread.Sleep(2000)
             If imgCommitAfterOps Then
@@ -2526,9 +2583,9 @@ Public Class ProgressPanel
             End If
             If pkgAdditionOp = 0 Then
                 GetErrorCode(False)
-            ElseIf pkgAdditionOp = 1 And pkgSuccessfulAdditions > 0 Then
+            ElseIf (pkgAdditionOp = 1 Or pkgAdditionOp = 2) And pkgSuccessfulAdditions > 0 Then
                 GetErrorCode(True)
-            ElseIf pkgAdditionOp = 1 And pkgSuccessfulAdditions <= 0 Then
+            ElseIf (pkgAdditionOp = 1 Or pkgAdditionOp = 2) And pkgSuccessfulAdditions <= 0 Then
                 GetErrorCode(False)
             End If
             If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
@@ -3828,12 +3885,23 @@ Public Class ProgressPanel
                         LogView.AppendText(CrLf & _
                                            "Warning: the custom data file does not exist. Continuing without one...")
                     End If
-                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
+                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And
+                        (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
                         If appxAdditionPackageList(x).PackageRegions = "" Then
                             CommandArgs &= " /region:all"
                         Else
                             CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
                         End If
+                    End If
+                    If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart >= 10 And ImgVersion.Major >= 10) And appxAdditionPackageList(x).SupportsStub Then
+                        Select Case appxAdditionPackageList(x).StubPackageOption
+                            Case StubPreference.NoPreference
+                                ' Don't add stub package option flag
+                            Case StubPreference.StubOnly
+                                CommandArgs &= " /stubpackageoption:installstub"
+                            Case StubPreference.FullPackage
+                                CommandArgs &= " /stubpackageoption:installfull"
+                        End Select
                     End If
                     DISMProc.StartInfo.Arguments = CommandArgs
                     DISMProc.Start()

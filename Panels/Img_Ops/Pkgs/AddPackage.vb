@@ -9,16 +9,23 @@ Public Class AddPackageDlg
 
     Public Language As Integer
 
+    Dim Addition_MUMFile As String
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgSource = TextBox1.Text
         pkgCount = CheckedListBox1.CheckedItems.Count
-        If RadioButton1.Checked Then
+        If RadioButton1.Checked AndAlso (Addition_MUMFile Is Nothing OrElse Addition_MUMFile = "") Then
             ProgressPanel.pkgAdditionOp = 0
         Else
-            ProgressPanel.pkgAdditionOp = 1
-            ProgressPanel.pkgCount = pkgCount
+            If Addition_MUMFile <> "" Then
+                ProgressPanel.pkgAdditionOp = 2
+                ProgressPanel.pkgCount = 1
+            Else
+                ProgressPanel.pkgAdditionOp = 1
+                ProgressPanel.pkgCount = pkgCount
+            End If
         End If
         If CheckBox1.Checked Then
             ProgressPanel.pkgIgnoreApplicabilityChecks = True
@@ -87,6 +94,14 @@ Public Class AddPackageDlg
                 Me.Close()
             End If
         ElseIf ProgressPanel.pkgAdditionOp = 0 Then
+            ProgressPanel.OperationNum = 26
+            Visible = False
+            ProgressPanel.ShowDialog(MainForm)
+            Me.DialogResult = System.Windows.Forms.DialogResult.OK
+            Me.Close()
+        ElseIf ProgressPanel.pkgAdditionOp = 2 Then
+            pkgs(0) = Addition_MUMFile
+            ProgressPanel.pkgs(0) = pkgs(0)
             ProgressPanel.OperationNum = 26
             Visible = False
             ProgressPanel.ShowDialog(MainForm)
@@ -243,6 +258,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Browse..."
                         Button2.Text = "Select all"
                         Button3.Text = "Select none"
+                        Button4.Text = "Add update manifest..."
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Scan folder recursively for packages"
@@ -261,6 +277,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Examinar..."
                         Button2.Text = "Todos los paquetes"
                         Button3.Text = "Ningún paquete"
+                        Button4.Text = "Añadir manifiesto de actualización..."
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         RadioButton1.Text = "Escanear carpeta de forma recursiva por paquetes"
@@ -279,6 +296,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Sélectionner tout"
                         Button3.Text = "Sélectionner aucun"
+                        Button4.Text = "Ajouter un manifeste de mise à jour..."
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Analyse récursive du dossier à la recherche des paquets à ajouter"
@@ -294,9 +312,10 @@ Public Class AddPackageDlg
                         Label1.Text = Text
                         Label2.Text = "Origem do pacote:"
                         Label3.Text = "Operação do pacote:"
-                        Button1.Text = " Navegar..."
+                        Button1.Text = "Navegar..."
                         Button2.Text = "Selecionar tudo"
                         Button3.Text = "Não selecionar nenhum"
+                        Button4.Text = "Adicionar manifesto de atualização..."
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Procurar pacotes na pasta de forma recursiva"
@@ -315,6 +334,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Sfoglia..."
                         Button2.Text = "Seleziona tutto"
                         Button3.Text = "Seleziona nessuno"
+                        Button4.Text = "Aggiungere il manifesto di aggiornamento..."
                         Cancel_Button.Text = "Annullare"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Scansiona la cartella in modo ricorsivo per i pacchetti"
@@ -334,6 +354,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Browse..."
                 Button2.Text = "Select all"
                 Button3.Text = "Select none"
+                Button4.Text = "Add update manifest..."
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Scan folder recursively for packages"
@@ -352,6 +373,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Examinar..."
                 Button2.Text = "Todos los paquetes"
                 Button3.Text = "Ningún paquete"
+                Button4.Text = "Añadir manifiesto de actualización..."
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 RadioButton1.Text = "Escanear carpeta de forma recursiva por paquetes"
@@ -370,6 +392,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Sélectionner tout"
                 Button3.Text = "Sélectionner aucun"
+                Button4.Text = "Ajouter un manifeste de mise à jour..."
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Analyse récursive du dossier à la recherche des paquets à ajouter"
@@ -385,9 +408,10 @@ Public Class AddPackageDlg
                 Label1.Text = Text
                 Label2.Text = "Origem do pacote:"
                 Label3.Text = "Operação do pacote:"
-                Button1.Text = " Navegar..."
+                Button1.Text = "Navegar..."
                 Button2.Text = "Selecionar tudo"
                 Button3.Text = "Não selecionar nenhum"
+                Button4.Text = "Adicionar manifesto de atualização..."
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Procurar pacotes na pasta de forma recursiva"
@@ -406,6 +430,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Sfoglia..."
                 Button2.Text = "Seleziona tutto"
                 Button3.Text = "Seleziona nessuno"
+                Button4.Text = "Aggiungere il manifesto di aggiornamento..."
                 Cancel_Button.Text = "Annullare"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Scansiona la cartella in modo ricorsivo per i pacchetti"
@@ -472,6 +497,7 @@ Public Class AddPackageDlg
         CheckBox3.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        Addition_MUMFile = ""
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -512,5 +538,14 @@ Public Class AddPackageDlg
 
     Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck
         CheckedCount = CheckedListBox1.CheckedItems.Count
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If MUMAdditionDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            Addition_MUMFile = MUMAdditionDialog.MUMFile
+            If File.Exists(Addition_MUMFile) Then
+                OK_Button.PerformClick()
+            End If
+        End If
     End Sub
 End Class

@@ -46,6 +46,7 @@ Partial Class AddPackageDlg
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ScanBW = New System.ComponentModel.BackgroundWorker()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -313,6 +314,16 @@ Partial Class AddPackageDlg
         'ScanBW
         '
         '
+        'Button4
+        '
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(12, 523)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(223, 23)
+        Me.Button4.TabIndex = 5
+        Me.Button4.Text = "Add update manifest..."
+        Me.Button4.UseVisualStyleBackColor = True
+        '
         'AddPackageDlg
         '
         Me.AcceptButton = Me.OK_Button
@@ -324,6 +335,7 @@ Partial Class AddPackageDlg
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.Controls.Add(Me.Button4)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -368,5 +380,6 @@ Partial Class AddPackageDlg
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents ScanBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
+    Friend WithEvents Button4 As System.Windows.Forms.Button
 
 End Class

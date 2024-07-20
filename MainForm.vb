@@ -4383,7 +4383,7 @@ Public Class MainForm
             imgAppxArchitectureList = imgAppxArchitectures.ToList()
             imgAppxResourceIdList = imgAppxResourceIds.ToList()
             PSExtAppxGetter()
-            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") AndAlso My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
                 Dim appxPkgNameRTB As New RichTextBox()
                 Dim appxPkgFullNameRTB As New RichTextBox()
                 Dim appxArchRTB As New RichTextBox()
@@ -19597,5 +19597,61 @@ Public Class MainForm
 
     Private Sub CreateTestingEnvironmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateTestingEnvironmentToolStripMenuItem.Click
         NewTestingEnv.Show()
+    End Sub
+
+    Private Sub ListImage_Click(sender As Object, e As EventArgs) Handles ListImage.Click
+        If Not WIEDownloaderBW.IsBusy Then
+            WIEDownloaderBW.RunWorkerAsync()
+        End If
+    End Sub
+
+    Private Sub WIEDownloaderBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WIEDownloaderBW.DoWork
+        Try
+            ' Download the WIM Explorer and run it while passing the image as an argument
+            If Not Directory.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer") Then
+                Directory.CreateDirectory(Application.StartupPath & "\bin\utils\WIM-Explorer")
+            End If
+            Using WIMExpClient As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Dim contents As String = ""
+                Try
+                    contents = WIMExpClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/WIM-Explorer/main/DISMTools-Install.ps1")
+                Catch ex As WebException
+                    MessageBox.Show("We couldn't download WIM Explorer Setup. Reason:" & CrLf & ex.Status.ToString())
+                    Exit Sub
+                End Try
+                If contents <> "" Then
+                    File.WriteAllText(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1", contents, UTF8)
+                End If
+            End Using
+            If File.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1") Then
+                ' Run installer
+                Dim WEProc As New Process()
+                WEProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                WEProc.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\utils\WIM-Explorer"
+                WEProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1" & Quote
+                If Not Debugger.IsAttached Then
+                    WEProc.StartInfo.CreateNoWindow = True
+                    WEProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                End If
+                WEProc.Start()
+                WEProc.WaitForExit()
+            End If
+            If File.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer\WIMExplorer.exe") Then
+                ' Delete temporary files
+                Directory.Delete(Application.StartupPath & "\bin\utils\WIM-Explorer\temp", True)
+                File.Delete(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1")
+                Dim WimExplorer As New Process()
+                WimExplorer.StartInfo.FileName = Application.StartupPath & "\bin\utils\WIM-Explorer\WIMExplorer.exe"
+                WimExplorer.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\utils\WIM-Explorer"
+                If (Not OnlineManagement) And (Not OfflineManagement) Then
+                    WimExplorer.StartInfo.Arguments = "/image=" & Quote & SourceImg & Quote
+                End If
+                WimExplorer.Start()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("We couldn't prepare WIM Explorer Setup. Reason:" & CrLf & ex.Message)
+            Exit Sub
+        End Try
     End Sub
 End Class

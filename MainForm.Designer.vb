@@ -178,6 +178,8 @@ Partial Class MainForm
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CreateDiscImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateTestingEnvironmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator38 = New System.Windows.Forms.ToolStripSeparator()
         Me.WimScriptEditorCommand = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
@@ -531,8 +533,7 @@ Partial Class MainForm
         Me.SaveCompleteImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator40 = New System.Windows.Forms.ToolStripSeparator()
         Me.CreateDiscImageWithThisFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateDiscImageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CreateTestingEnvironmentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1575,6 +1576,18 @@ Partial Class MainForm
         '
         Me.ToolStripSeparator28.Name = "ToolStripSeparator28"
         Me.ToolStripSeparator28.Size = New System.Drawing.Size(277, 6)
+        '
+        'CreateDiscImageToolStripMenuItem
+        '
+        Me.CreateDiscImageToolStripMenuItem.Name = "CreateDiscImageToolStripMenuItem"
+        Me.CreateDiscImageToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
+        '
+        'CreateTestingEnvironmentToolStripMenuItem
+        '
+        Me.CreateTestingEnvironmentToolStripMenuItem.Name = "CreateTestingEnvironmentToolStripMenuItem"
+        Me.CreateTestingEnvironmentToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.CreateTestingEnvironmentToolStripMenuItem.Text = "Create testing environment..."
         '
         'ToolStripSeparator38
         '
@@ -3966,7 +3979,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.4200897!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.5799103!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 132.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 134.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -4015,7 +4028,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(54, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(102, 23)
+        Me.Panel8.Size = New System.Drawing.Size(100, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -4024,7 +4037,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(102, 23)
+        Me.projName.Size = New System.Drawing.Size(100, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4034,7 +4047,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(102, 21)
+        Me.projNameText.Size = New System.Drawing.Size(100, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -5210,17 +5223,8 @@ Partial Class MainForm
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
         '
-        'CreateDiscImageToolStripMenuItem
+        'WIEDownloaderBW
         '
-        Me.CreateDiscImageToolStripMenuItem.Name = "CreateDiscImageToolStripMenuItem"
-        Me.CreateDiscImageToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
-        Me.CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
-        '
-        'CreateTestingEnvironmentToolStripMenuItem
-        '
-        Me.CreateTestingEnvironmentToolStripMenuItem.Name = "CreateTestingEnvironmentToolStripMenuItem"
-        Me.CreateTestingEnvironmentToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
-        Me.CreateTestingEnvironmentToolStripMenuItem.Text = "Create testing environment..."
         '
         'MainForm
         '
@@ -5868,4 +5872,5 @@ Partial Class MainForm
     Friend WithEvents CreateDiscImageWithThisFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CreateDiscImageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents CreateTestingEnvironmentToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents WIEDownloaderBW As System.ComponentModel.BackgroundWorker
 End Class
