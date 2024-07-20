@@ -3,7 +3,7 @@ name: Create Nightly Installer
 on:
   push:
     branches:
-      - dt_pre*
+      - dt_pre_*
       - dt_rel*
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
