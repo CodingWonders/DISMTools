@@ -19654,4 +19654,8 @@ Public Class MainForm
             Exit Sub
         End Try
     End Sub
+
+    Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
+        SetLayeredDriverDialog.Showdialog()
+    End Sub
 End Class

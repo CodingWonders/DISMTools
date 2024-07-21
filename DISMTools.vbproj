@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
       <SubType>Component</SubType>
@@ -490,6 +491,12 @@
       <DependentUpon>ImgMount.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgMount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Langs\SetLayeredDriver.Designer.vb">
+      <DependentUpon>SetLayeredDriver.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Langs\SetLayeredDriver.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Merger\ImgSwmToWim.Designer.vb">
@@ -909,6 +916,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ImgMount.resx">
       <DependentUpon>ImgMount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Langs\SetLayeredDriver.resx">
+      <DependentUpon>SetLayeredDriver.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Merger\ImgSwmToWim.resx">
       <DependentUpon>ImgSwmToWim.vb</DependentUpon>
@@ -1349,6 +1359,7 @@
     <None Include="Resources\progresspanel_logview_hidden.png" />
     <None Include="Resources\progresspanel_logview_shown.png" />
     <None Include="Resources\create_iso.png" />
+    <None Include="Resources\set_layeredkeyboarddriver.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
