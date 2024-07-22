@@ -16,7 +16,7 @@ jobs:
       with:
         ref: ${{ github.head_ref }}
     - name: Set up MSBuild
-      uses: warrenbuckley/Setup-MSBuild@v1
+      uses: microsoft/Setup-MSBuild@v2
     - name: Prepare NuGet packages
       run: .\nugetpkgprep.bat
       continue-on-error: false
