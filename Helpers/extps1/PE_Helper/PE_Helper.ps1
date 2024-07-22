@@ -472,11 +472,12 @@ function Start-PECustomization
 				$contents[5] = "set debug=2"
 				Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
 			}
+			Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
             Write-Host "Startup commands changed"
         }
         catch
         {
-            Write-Host "Could not change startup commands"            
+            Write-Host "Could not change startup commands"
         }
         Write-Host "CUSTOMIZATION STEP - Set Scratch Size" -BackgroundColor DarkGreen
         Write-Host "Setting scratch size..."

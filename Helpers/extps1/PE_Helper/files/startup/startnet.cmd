@@ -39,5 +39,8 @@ if %debug% lss 2 (
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
+	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a driver containing a Windows image
+	echo.
+	doskey StartInstall=powershell -file "\StartInstall.ps1"
 	exit /b
 )

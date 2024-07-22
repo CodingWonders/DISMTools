@@ -1081,6 +1081,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
