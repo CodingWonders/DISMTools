@@ -12487,7 +12487,8 @@ Public Class MainForm
     End Sub
 
     Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
-        UnattendMgr.Show()
+        ' Major reconstruction ahead
+        NewUnattendWiz.Show()
     End Sub
 
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
