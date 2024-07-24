@@ -4,6 +4,7 @@ Imports System.Text.Encoding
 Imports System.Threading
 Imports ScintillaNET
 Imports DISMTools.Elements
+Imports Microsoft.Dism
 
 Public Class NewUnattendWiz
 
@@ -11,11 +12,31 @@ Public Class NewUnattendWiz
     Dim IsInExpress As Boolean = True
     Dim CurrentWizardPage As New UnattendedWizardPage()
 
+    ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
     Dim TimeOffsets As New List(Of TimeOffset)
     Dim UserLocales As New List(Of UserLocale)
     Dim KeyboardIdentifiers As New List(Of KeyboardIdentifier)
     Dim GeoIds As New List(Of GeoId)
+    Dim RegionalInteractive As Boolean
+    Dim SelectedLanguage As New ImageLanguage()
+    Dim SelectedLocale As New UserLocale()
+    Dim SelectedKeybIdentifier As New KeyboardIdentifier()
+    Dim SelectedGeoId As New GeoId()
+
+    ' System Configuration Page
+    Dim SelectedArchitecture As New DismProcessorArchitecture()
+    Dim Win11Config As New SVSettings()
+    Dim PCName As New ComputerName()
+
+    ' Space for more pages
+
+    ' Default Settings
+    Dim DefaultLanguage As New ImageLanguage()
+    Dim DefaultLocale As New UserLocale()
+    Dim DefaultKeybIdentifier As New KeyboardIdentifier()
+    Dim DefaultGeoId As New GeoId()
+
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -142,6 +163,28 @@ Public Class NewUnattendWiz
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
     End Sub
 
+    Sub SetDefaultSettings()
+        DefaultLanguage.Id = "en-US"
+        DefaultLanguage.DisplayName = "English"
+        DefaultLocale.Id = "en-US"
+        DefaultLocale.DisplayName = "English (United States"
+        DefaultLocale.LCID = "0409"
+        DefaultLocale.KeybId = "00000409"
+        DefaultLocale.GeoLoc = "244"
+        DefaultKeybIdentifier.Id = "00000409"
+        DefaultKeybIdentifier.DisplayName = "US"
+        DefaultKeybIdentifier.Type = "Keyboard"
+        DefaultGeoId.Id = "244"
+        DefaultGeoId.DisplayName = "United States"
+
+        SelectedLanguage = DefaultLanguage
+        SelectedLocale = DefaultLocale
+        SelectedKeybIdentifier = DefaultKeybIdentifier
+        SelectedGeoId = DefaultGeoId
+
+
+    End Sub
+
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -211,7 +254,9 @@ Public Class NewUnattendWiz
                     Next
                 End If
             End If
+            ListBox1.SelectedIndex = 1
             ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
+            SetDefaultSettings()
         End If
     End Sub
 
@@ -220,9 +265,15 @@ Public Class NewUnattendWiz
             Case UnattendedWizardPage.Page.DisclaimerPage
                 DisclaimerPanel.Visible = True
                 RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
             Case UnattendedWizardPage.Page.RegionalPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = True
+                SysConfigPanel.Visible = False
+            Case UnattendedWizardPage.Page.SysConfigPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = True
         End Select
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
@@ -357,5 +408,62 @@ Public Class NewUnattendWiz
             node.ForeColor = ForeColor
             SetNodeColors(node.Nodes, BackColor, ForeColor)
         Next
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        RegionalInteractive = Not RadioButton1.Checked
+        RegionalSettings.Enabled = RadioButton1.Checked
+        Label10.Enabled = Not RadioButton1.Checked
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        SelectedLanguage = ImageLanguages(ComboBox1.SelectedIndex)
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+        SelectedLocale = UserLocales(ComboBox2.SelectedIndex)
+    End Sub
+
+    Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
+        SelectedKeybIdentifier = KeyboardIdentifiers(ComboBox3.SelectedIndex)
+    End Sub
+
+    Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
+        SelectedGeoId = GeoIds(ComboBox4.SelectedIndex)
+    End Sub
+
+    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
+        Select Case ListBox1.SelectedIndex
+            Case 0
+                SelectedArchitecture = DismProcessorArchitecture.Intel
+            Case 1
+                SelectedArchitecture = DismProcessorArchitecture.AMD64
+            Case 2
+                SelectedArchitecture = DismProcessorArchitecture.ARM64
+        End Select
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        PCName.DefaultName = CheckBox3.Checked
+        ComputerNamePanel.Enabled = Not CheckBox3.Checked
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        Win11Config.LabConfig_BypassRequirements = CheckBox1.Checked
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
+        Win11Config.OOBE_BypassNRO = CheckBox2.Checked
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        ' Hold default value for now
+        Dim defVal As Boolean = False
+        defVal = PCName.DefaultName
+        PCName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
+        PCName.DefaultName = defVal
+        If Not PCName.Valid AndAlso PCName.ErrorMessage <> "" Then
+            MessageBox.Show(PCName.ErrorMessage, "Computer name error")
+        End If
     End Sub
 End Class

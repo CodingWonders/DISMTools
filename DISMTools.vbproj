@@ -147,6 +147,8 @@
     <Compile Include="Elements\AutoUnattend\Localization\KeyboardIdentifier.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\TimeOffset.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\UserLocale.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
