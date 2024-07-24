@@ -3,54 +3,19 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports System.Threading
 Imports ScintillaNET
+Imports DISMTools.Elements
 
 Public Class NewUnattendWiz
 
     ' Declare initial vars
     Dim IsInExpress As Boolean = True
-    Dim ExpressPage As Integer = 1
-    Dim OSWiki As String
-    Dim ColoredMode As Integer = 0      ' 0: Windows 8; 1: Windows 8.1
-    Dim IsWindows8 As Boolean
-    Dim KeyString As String
-    Dim CanGatherImgVersion As Boolean
-    Dim WinVersion As String
-    Dim SkipEula As Boolean
-    Dim ComputerName As String
-    Dim OrgName As String
-    Dim SetupLang As Integer
-    Dim WipeDisk As Boolean
-    Dim TargetDiskNum As Integer
-    Dim UseNtfs As Boolean
-    Dim MakeActive As Boolean
-    Dim TargetDrLetter As String
-    Dim TargetDrLabel As String
-    Dim UseMbr As Boolean
-    Dim PartOrder As Integer
-    Dim InputMethod As Integer
-    Dim Currency As Integer
-    Dim TZData As Integer
-    Dim UILang As Integer
-    Dim HideEula As Boolean
-    Dim SkipMachineOobe As Boolean
-    Dim SkipUserOobe As Boolean
-    Dim NetLocation As Integer
-    Dim HideWirelessChooser As Boolean
-    Dim ProtectionLevel As Integer
-    Dim WULevel As Integer
-    Dim IsInCategoryView As Boolean
-    Dim IconSize As Integer
-    Dim UserName As String
-    Dim UserDesc As String
-    Dim ColorMode As Integer
-    Dim UserPass As String
-    Dim UserGroup As String
-    Dim ShowHiddenGroups As Boolean
-    Dim EnableUAC As Boolean
-    Dim EnableFirewall As Boolean
-    Dim Autologin As Boolean
-    Dim PasswordExpiry As Boolean
-    Dim JoinCeip As Boolean
+    Dim CurrentWizardPage As New UnattendedWizardPage()
+
+    Dim ImageLanguages As New List(Of ImageLanguage)
+    Dim TimeOffsets As New List(Of TimeOffset)
+    Dim UserLocales As New List(Of UserLocale)
+    Dim KeyboardIdentifiers As New List(Of KeyboardIdentifier)
+    Dim GeoIds As New List(Of GeoId)
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -204,11 +169,64 @@ Public Class NewUnattendWiz
         FontFamilyTSCB.SelectedItem = "Consolas"
         SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
+        StepsContainer.Visible = MainForm.EnableExperiments
         ' Go to schneegans generator for now
-        Process.Start("https://schneegans.de/windows/unattend-generator/")
         If Not MainForm.EnableExperiments Then
+            Process.Start("https://schneegans.de/windows/unattend-generator/")
             MessageBox.Show("The unattended answer file tasks are undergoing a major reconstruction." & If(MainForm.dtBranch.Contains("stable"), CrLf & CrLf & "The reconstruction is only happening in the preview releases.", ""))
+        Else
+            ' System language
+            If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
+                ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
+                If ImageLanguages IsNot Nothing Then
+                    For Each imgLang As ImageLanguage In ImageLanguages
+                        ComboBox1.Items.Add(imgLang.DisplayName)
+                    Next
+                End If
+            End If
+            ' System locale
+            If File.Exists(Application.StartupPath & "\AutoUnattend\UserLocale.xml") Then
+                UserLocales = UserLocale.LoadItems(Application.StartupPath & "\AutoUnattend\UserLocale.xml")
+                If UserLocales IsNot Nothing Then
+                    For Each userLoc As UserLocale In UserLocales
+                        ComboBox2.Items.Add(userLoc.DisplayName)
+                    Next
+                End If
+            End If
+            ' Keyboard layout/IME
+            If File.Exists(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml") Then
+                KeyboardIdentifiers = KeyboardIdentifier.LoadItems(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml")
+                If KeyboardIdentifiers IsNot Nothing Then
+                    For Each keyb As KeyboardIdentifier In KeyboardIdentifiers
+                        ComboBox3.Items.Add(keyb.DisplayName & If(keyb.Type = "IME", " (IME)", ""))
+                    Next
+                End If
+            End If
+            ' Home location
+            If File.Exists(Application.StartupPath & "\AutoUnattend\GeoId.xml") Then
+                GeoIds = GeoId.LoadItems(Application.StartupPath & "\AutoUnattend\GeoId.xml")
+                If GeoIds IsNot Nothing Then
+                    For Each Geo As GeoId In GeoIds
+                        ComboBox4.Items.Add(Geo.DisplayName)
+                    Next
+                End If
+            End If
+            ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
         End If
+    End Sub
+
+    Sub ChangePage(NewPage As UnattendedWizardPage.Page)
+        Select Case NewPage
+            Case UnattendedWizardPage.Page.DisclaimerPage
+                DisclaimerPanel.Visible = True
+                RegionalSettingsPanel.Visible = False
+            Case UnattendedWizardPage.Page.RegionalPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = True
+        End Select
+        CurrentWizardPage.WizardPage = NewPage
+        Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
+        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
     End Sub
 
     Private Sub ExpressPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.MouseEnter
@@ -308,11 +326,11 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
-
+        ChangePage(CurrentWizardPage.WizardPage - 1)
     End Sub
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
-
+        ChangePage(CurrentWizardPage.WizardPage + 1)
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click

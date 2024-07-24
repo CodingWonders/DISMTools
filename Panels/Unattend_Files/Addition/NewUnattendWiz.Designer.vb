@@ -22,6 +22,19 @@ Partial Class NewUnattendWiz
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -33,6 +46,27 @@ Partial Class NewUnattendWiz
         Me.Label1 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
+        Me.ExperimentalPanel = New System.Windows.Forms.Panel()
+        Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.RegionalSettingsPanel = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.RegionalSettingsHeader = New System.Windows.Forms.Label()
+        Me.DisclaimerPanel = New System.Windows.Forms.Panel()
+        Me.UnderConstructionDesc = New System.Windows.Forms.Label()
+        Me.UnderConstructionHeader = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.EditorPanelContainer = New System.Windows.Forms.Panel()
         Me.Scintilla1 = New ScintillaNET.Scintilla()
         Me.DarkToolStrip1 = New DarkUI.Controls.DarkToolStrip()
@@ -58,8 +92,6 @@ Partial Class NewUnattendWiz
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.EditorPanelFooter = New System.Windows.Forms.Panel()
-        Me.ExperimentalPanel = New System.Windows.Forms.Panel()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -67,6 +99,11 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelTrigger.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ExpressPanelContainer.SuspendLayout()
+        Me.ExperimentalPanel.SuspendLayout()
+        Me.StepsContainer.SuspendLayout()
+        Me.RegionalSettingsPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.DisclaimerPanel.SuspendLayout()
         Me.EditorPanelContainer.SuspendLayout()
         Me.DarkToolStrip1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
@@ -74,7 +111,6 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.ExperimentalPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -96,6 +132,7 @@ Partial Class NewUnattendWiz
         Me.ExpressModeSteps.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExpressModeSteps.Location = New System.Drawing.Point(0, 40)
         Me.ExpressModeSteps.Name = "ExpressModeSteps"
+        Me.ExpressModeSteps.Padding = New System.Windows.Forms.Padding(6)
         Me.ExpressModeSteps.Size = New System.Drawing.Size(256, 481)
         Me.ExpressModeSteps.TabIndex = 2
         '
@@ -105,12 +142,39 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.StepsTreeView.HideSelection = False
         Me.StepsTreeView.ItemHeight = 24
-        Me.StepsTreeView.Location = New System.Drawing.Point(0, 0)
+        Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
+        TreeNode1.Name = "Nodo0"
+        TreeNode1.Text = "DISCLAIMER - NOT COMPLETE"
+        TreeNode2.Name = "Nodo1"
+        TreeNode2.Text = "Regional Configuration"
+        TreeNode3.Name = "Nodo2"
+        TreeNode3.Text = "Basic System Configuration"
+        TreeNode4.Name = "Nodo3"
+        TreeNode4.Text = "Time Zone"
+        TreeNode5.Name = "Nodo4"
+        TreeNode5.Text = "Disk Configuration"
+        TreeNode6.Name = "Nodo5"
+        TreeNode6.Text = "Product Key"
+        TreeNode7.Name = "Nodo6"
+        TreeNode7.Text = "Users and Passwords"
+        TreeNode8.Name = "Nodo9"
+        TreeNode8.Text = "Virtual Machine Support"
+        TreeNode9.Name = "Nodo10"
+        TreeNode9.Text = "Wireless Networking"
+        TreeNode10.Name = "Nodo11"
+        TreeNode10.Text = "System Telemetry"
+        TreeNode11.Name = "Nodo12"
+        TreeNode11.Text = "Post-Installation Scripts"
+        TreeNode12.Name = "Nodo13"
+        TreeNode12.Text = "Component Settings"
+        TreeNode13.Name = "Nodo14"
+        TreeNode13.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
-        Me.StepsTreeView.Size = New System.Drawing.Size(256, 481)
+        Me.StepsTreeView.Size = New System.Drawing.Size(244, 469)
         Me.StepsTreeView.TabIndex = 0
         '
         'EditorPanelTrigger
@@ -183,6 +247,229 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.Name = "ExpressPanelContainer"
         Me.ExpressPanelContainer.Size = New System.Drawing.Size(752, 449)
         Me.ExpressPanelContainer.TabIndex = 1
+        '
+        'ExperimentalPanel
+        '
+        Me.ExperimentalPanel.Controls.Add(Me.StepsContainer)
+        Me.ExperimentalPanel.Controls.Add(Me.Label5)
+        Me.ExperimentalPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ExperimentalPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ExperimentalPanel.Name = "ExperimentalPanel"
+        Me.ExperimentalPanel.Size = New System.Drawing.Size(752, 449)
+        Me.ExperimentalPanel.TabIndex = 2
+        '
+        'StepsContainer
+        '
+        Me.StepsContainer.Controls.Add(Me.RegionalSettingsPanel)
+        Me.StepsContainer.Controls.Add(Me.DisclaimerPanel)
+        Me.StepsContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.StepsContainer.Location = New System.Drawing.Point(0, 0)
+        Me.StepsContainer.Name = "StepsContainer"
+        Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
+        Me.StepsContainer.TabIndex = 1
+        '
+        'RegionalSettingsPanel
+        '
+        Me.RegionalSettingsPanel.Controls.Add(Me.Label10)
+        Me.RegionalSettingsPanel.Controls.Add(Me.Panel1)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RadioButton2)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RadioButton1)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RegionalSettingsHeader)
+        Me.RegionalSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RegionalSettingsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.RegionalSettingsPanel.Name = "RegionalSettingsPanel"
+        Me.RegionalSettingsPanel.Size = New System.Drawing.Size(752, 449)
+        Me.RegionalSettingsPanel.TabIndex = 1
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Enabled = False
+        Me.Label10.Location = New System.Drawing.Point(84, 289)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(636, 68)
+        Me.Label10.TabIndex = 4
+        Me.Label10.Text = "You will need to configure these settings during the setup process"
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Button1)
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.Label7)
+        Me.Panel1.Controls.Add(Me.Label6)
+        Me.Panel1.Controls.Add(Me.ComboBox4)
+        Me.Panel1.Controls.Add(Me.ComboBox3)
+        Me.Panel1.Controls.Add(Me.ComboBox2)
+        Me.Panel1.Controls.Add(Me.ComboBox1)
+        Me.Panel1.Location = New System.Drawing.Point(85, 100)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(635, 159)
+        Me.Panel1.TabIndex = 3
+        '
+        'Button1
+        '
+        Me.Button1.Enabled = False
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(485, 124)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(137, 23)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "Additional layouts"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Location = New System.Drawing.Point(19, 99)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(253, 13)
+        Me.Label9.TabIndex = 1
+        Me.Label9.Text = "Home location:"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label8
+        '
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Location = New System.Drawing.Point(19, 73)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(253, 13)
+        Me.Label8.TabIndex = 1
+        Me.Label8.Text = "Keyboard layout/IME:"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label7
+        '
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Location = New System.Drawing.Point(19, 45)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(253, 13)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "System locale:"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Location = New System.Drawing.Point(19, 18)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(253, 13)
+        Me.Label6.TabIndex = 1
+        Me.Label6.Text = "System language:"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Location = New System.Drawing.Point(278, 96)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(345, 21)
+        Me.ComboBox4.TabIndex = 0
+        Me.ComboBox4.Text = "United States"
+        '
+        'ComboBox3
+        '
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Location = New System.Drawing.Point(278, 69)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(345, 21)
+        Me.ComboBox3.TabIndex = 0
+        Me.ComboBox3.Text = "US"
+        '
+        'ComboBox2
+        '
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Location = New System.Drawing.Point(278, 42)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(345, 21)
+        Me.ComboBox2.TabIndex = 0
+        Me.ComboBox2.Text = "English (United States)"
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(278, 15)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(345, 21)
+        Me.ComboBox1.TabIndex = 0
+        Me.ComboBox1.Text = "English"
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(65, 265)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(168, 17)
+        Me.RadioButton2.TabIndex = 2
+        Me.RadioButton2.Text = "Configure these settings later"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(65, 71)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(170, 17)
+        Me.RadioButton1.TabIndex = 2
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Configure these settings now:"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'RegionalSettingsHeader
+        '
+        Me.RegionalSettingsHeader.AutoEllipsis = True
+        Me.RegionalSettingsHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RegionalSettingsHeader.Location = New System.Drawing.Point(16, 17)
+        Me.RegionalSettingsHeader.Name = "RegionalSettingsHeader"
+        Me.RegionalSettingsHeader.Size = New System.Drawing.Size(708, 51)
+        Me.RegionalSettingsHeader.TabIndex = 1
+        Me.RegionalSettingsHeader.Text = "Configure your language, keyboard layout, and other regional settings"
+        '
+        'DisclaimerPanel
+        '
+        Me.DisclaimerPanel.Controls.Add(Me.UnderConstructionDesc)
+        Me.DisclaimerPanel.Controls.Add(Me.UnderConstructionHeader)
+        Me.DisclaimerPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DisclaimerPanel.Location = New System.Drawing.Point(0, 0)
+        Me.DisclaimerPanel.Name = "DisclaimerPanel"
+        Me.DisclaimerPanel.Size = New System.Drawing.Size(752, 449)
+        Me.DisclaimerPanel.TabIndex = 0
+        '
+        'UnderConstructionDesc
+        '
+        Me.UnderConstructionDesc.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.UnderConstructionDesc.AutoEllipsis = True
+        Me.UnderConstructionDesc.Font = New System.Drawing.Font("Arial", 12.0!)
+        Me.UnderConstructionDesc.Location = New System.Drawing.Point(78, 169)
+        Me.UnderConstructionDesc.Name = "UnderConstructionDesc"
+        Me.UnderConstructionDesc.Size = New System.Drawing.Size(596, 188)
+        Me.UnderConstructionDesc.TabIndex = 0
+        Me.UnderConstructionDesc.Text = resources.GetString("UnderConstructionDesc.Text")
+        '
+        'UnderConstructionHeader
+        '
+        Me.UnderConstructionHeader.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.UnderConstructionHeader.AutoEllipsis = True
+        Me.UnderConstructionHeader.Font = New System.Drawing.Font("Arial", 20.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UnderConstructionHeader.Location = New System.Drawing.Point(78, 91)
+        Me.UnderConstructionHeader.Name = "UnderConstructionHeader"
+        Me.UnderConstructionHeader.Size = New System.Drawing.Size(596, 58)
+        Me.UnderConstructionHeader.TabIndex = 0
+        Me.UnderConstructionHeader.Text = "This wizard is under construction"
+        Me.UnderConstructionHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label5
+        '
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.Font = New System.Drawing.Font("Tahoma", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(141, 167)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(471, 115)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = "Not available for now!"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label5.Visible = False
         '
         'EditorPanelContainer
         '
@@ -454,26 +741,6 @@ Partial Class NewUnattendWiz
         Me.EditorPanelFooter.Size = New System.Drawing.Size(752, 40)
         Me.EditorPanelFooter.TabIndex = 0
         '
-        'ExperimentalPanel
-        '
-        Me.ExperimentalPanel.Controls.Add(Me.Label5)
-        Me.ExperimentalPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ExperimentalPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ExperimentalPanel.Name = "ExperimentalPanel"
-        Me.ExperimentalPanel.Size = New System.Drawing.Size(752, 449)
-        Me.ExperimentalPanel.TabIndex = 2
-        '
-        'Label5
-        '
-        Me.Label5.AutoEllipsis = True
-        Me.Label5.Font = New System.Drawing.Font("Tahoma", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(141, 167)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(471, 115)
-        Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Not available for now!"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -492,7 +759,7 @@ Partial Class NewUnattendWiz
         Me.Name = "NewUnattendWiz"
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Unattended file creation wizard"
+        Me.Text = "Unattended answer file creation wizard"
         Me.SidePanel.ResumeLayout(False)
         Me.ExpressModeSteps.ResumeLayout(False)
         Me.EditorPanelTrigger.ResumeLayout(False)
@@ -502,6 +769,12 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelTrigger.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ExpressPanelContainer.ResumeLayout(False)
+        Me.ExperimentalPanel.ResumeLayout(False)
+        Me.StepsContainer.ResumeLayout(False)
+        Me.RegionalSettingsPanel.ResumeLayout(False)
+        Me.RegionalSettingsPanel.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.DisclaimerPanel.ResumeLayout(False)
         Me.EditorPanelContainer.ResumeLayout(False)
         Me.DarkToolStrip1.ResumeLayout(False)
         Me.DarkToolStrip1.PerformLayout()
@@ -511,7 +784,6 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.ExperimentalPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -552,4 +824,23 @@ Partial Class NewUnattendWiz
     Friend WithEvents ToolStripButton6 As System.Windows.Forms.ToolStripButton
     Friend WithEvents ExperimentalPanel As System.Windows.Forms.Panel
     Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents StepsContainer As System.Windows.Forms.Panel
+    Friend WithEvents RegionalSettingsPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Label9 As System.Windows.Forms.Label
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents ComboBox4 As System.Windows.Forms.ComboBox
+    Friend WithEvents ComboBox3 As System.Windows.Forms.ComboBox
+    Friend WithEvents ComboBox2 As System.Windows.Forms.ComboBox
+    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
+    Friend WithEvents RegionalSettingsHeader As System.Windows.Forms.Label
+    Friend WithEvents DisclaimerPanel As System.Windows.Forms.Panel
+    Friend WithEvents UnderConstructionDesc As System.Windows.Forms.Label
+    Friend WithEvents UnderConstructionHeader As System.Windows.Forms.Label
 End Class
