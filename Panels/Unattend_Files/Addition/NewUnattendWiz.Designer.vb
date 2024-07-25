@@ -22,6 +22,7 @@ Partial Class NewUnattendWiz
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
         Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
         Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
@@ -48,6 +49,21 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.SysConfigPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.ComputerNamePanel = New System.Windows.Forms.Panel()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.WinSVSettingsPanel = New System.Windows.Forms.Panel()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.SysConfigHeader = New System.Windows.Forms.Label()
         Me.RegionalSettingsPanel = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.RegionalSettings = New System.Windows.Forms.Panel()
@@ -92,21 +108,18 @@ Partial Class NewUnattendWiz
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.EditorPanelFooter = New System.Windows.Forms.Panel()
-        Me.SysConfigPanel = New System.Windows.Forms.Panel()
-        Me.SysConfigHeader = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.WinSVSettingsPanel = New System.Windows.Forms.Panel()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.ComputerNamePanel = New System.Windows.Forms.Panel()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label15 = New System.Windows.Forms.Label()
+        Me.TimeZonePanel = New System.Windows.Forms.Panel()
+        Me.TimeZoneHeader = New System.Windows.Forms.Label()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.TimeZoneSettings = New System.Windows.Forms.Panel()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.ComboBox5 = New System.Windows.Forms.ComboBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.CurrentTimeUTC = New System.Windows.Forms.Label()
+        Me.CurrentTimeSelTZ = New System.Windows.Forms.Label()
+        Me.TimeZonePageTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -116,6 +129,9 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.SysConfigPanel.SuspendLayout()
+        Me.ComputerNamePanel.SuspendLayout()
+        Me.WinSVSettingsPanel.SuspendLayout()
         Me.RegionalSettingsPanel.SuspendLayout()
         Me.RegionalSettings.SuspendLayout()
         Me.DisclaimerPanel.SuspendLayout()
@@ -126,9 +142,8 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.SysConfigPanel.SuspendLayout()
-        Me.WinSVSettingsPanel.SuspendLayout()
-        Me.ComputerNamePanel.SuspendLayout()
+        Me.TimeZonePanel.SuspendLayout()
+        Me.TimeZoneSettings.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -278,6 +293,7 @@ Partial Class NewUnattendWiz
         '
         'StepsContainer
         '
+        Me.StepsContainer.Controls.Add(Me.TimeZonePanel)
         Me.StepsContainer.Controls.Add(Me.SysConfigPanel)
         Me.StepsContainer.Controls.Add(Me.RegionalSettingsPanel)
         Me.StepsContainer.Controls.Add(Me.DisclaimerPanel)
@@ -286,6 +302,158 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'SysConfigPanel
+        '
+        Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
+        Me.SysConfigPanel.Controls.Add(Me.Label15)
+        Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
+        Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
+        Me.SysConfigPanel.Controls.Add(Me.Label13)
+        Me.SysConfigPanel.Controls.Add(Me.Label12)
+        Me.SysConfigPanel.Controls.Add(Me.ListBox1)
+        Me.SysConfigPanel.Controls.Add(Me.Label11)
+        Me.SysConfigPanel.Controls.Add(Me.SysConfigHeader)
+        Me.SysConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SysConfigPanel.Location = New System.Drawing.Point(0, 0)
+        Me.SysConfigPanel.Name = "SysConfigPanel"
+        Me.SysConfigPanel.Size = New System.Drawing.Size(752, 449)
+        Me.SysConfigPanel.TabIndex = 2
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Checked = True
+        Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox3.Location = New System.Drawing.Point(55, 339)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(230, 17)
+        Me.CheckBox3.TabIndex = 8
+        Me.CheckBox3.Text = "Let Windows set a random computer name"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'Label15
+        '
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Location = New System.Drawing.Point(71, 410)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(616, 33)
+        Me.Label15.TabIndex = 1
+        Me.Label15.Text = "You can set a different computer name at any time in the system settings"
+        '
+        'ComputerNamePanel
+        '
+        Me.ComputerNamePanel.Controls.Add(Me.TextBox1)
+        Me.ComputerNamePanel.Controls.Add(Me.Label16)
+        Me.ComputerNamePanel.Enabled = False
+        Me.ComputerNamePanel.Location = New System.Drawing.Point(61, 362)
+        Me.ComputerNamePanel.Name = "ComputerNamePanel"
+        Me.ComputerNamePanel.Size = New System.Drawing.Size(626, 39)
+        Me.ComputerNamePanel.TabIndex = 7
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(124, 9)
+        Me.TextBox1.MaxLength = 15
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(489, 21)
+        Me.TextBox1.TabIndex = 2
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(10, 12)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(87, 13)
+        Me.Label16.TabIndex = 1
+        Me.Label16.Text = "Computer name:"
+        '
+        'WinSVSettingsPanel
+        '
+        Me.WinSVSettingsPanel.Controls.Add(Me.Label14)
+        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox2)
+        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox1)
+        Me.WinSVSettingsPanel.Location = New System.Drawing.Point(182, 196)
+        Me.WinSVSettingsPanel.Name = "WinSVSettingsPanel"
+        Me.WinSVSettingsPanel.Size = New System.Drawing.Size(505, 131)
+        Me.WinSVSettingsPanel.TabIndex = 7
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(28, 54)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(464, 70)
+        Me.Label14.TabIndex = 1
+        Me.Label14.Text = "Check this option only if the target system does not have any network capabilitie" & _
+    "s. You can configure local users in the Users and Passwords section"
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(12, 34)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(215, 17)
+        Me.CheckBox2.TabIndex = 0
+        Me.CheckBox2.Text = "Bypass Mandatory Network Connection"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(12, 11)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(167, 17)
+        Me.CheckBox1.TabIndex = 0
+        Me.CheckBox1.Text = "Bypass System Requirements"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(52, 208)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(110, 13)
+        Me.Label13.TabIndex = 6
+        Me.Label13.Text = "Windows 11 settings:"
+        '
+        'Label12
+        '
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Location = New System.Drawing.Point(182, 158)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(505, 32)
+        Me.Label12.TabIndex = 5
+        Me.Label12.Text = "Please select the system architecture that is supported by the target Windows ima" & _
+    "ge to apply"
+        '
+        'ListBox1
+        '
+        Me.ListBox1.FormattingEnabled = True
+        Me.ListBox1.Items.AddRange(New Object() {"x86 (Desktop 32-Bit)", "x64 (Desktop 64-Bit)", "ARM64 (Windows on ARM)"})
+        Me.ListBox1.Location = New System.Drawing.Point(182, 82)
+        Me.ListBox1.Name = "ListBox1"
+        Me.ListBox1.Size = New System.Drawing.Size(505, 69)
+        Me.ListBox1.TabIndex = 4
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(52, 84)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(119, 13)
+        Me.Label11.TabIndex = 3
+        Me.Label11.Text = "Processor architecture:"
+        '
+        'SysConfigHeader
+        '
+        Me.SysConfigHeader.AutoEllipsis = True
+        Me.SysConfigHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SysConfigHeader.Location = New System.Drawing.Point(16, 17)
+        Me.SysConfigHeader.Name = "SysConfigHeader"
+        Me.SysConfigHeader.Size = New System.Drawing.Size(708, 51)
+        Me.SysConfigHeader.TabIndex = 2
+        Me.SysConfigHeader.Text = "Configure basic system settings"
         '
         'RegionalSettingsPanel
         '
@@ -760,157 +928,119 @@ Partial Class NewUnattendWiz
         Me.EditorPanelFooter.Size = New System.Drawing.Size(752, 40)
         Me.EditorPanelFooter.TabIndex = 0
         '
-        'SysConfigPanel
+        'TimeZonePanel
         '
-        Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
-        Me.SysConfigPanel.Controls.Add(Me.Label15)
-        Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
-        Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
-        Me.SysConfigPanel.Controls.Add(Me.Label13)
-        Me.SysConfigPanel.Controls.Add(Me.Label12)
-        Me.SysConfigPanel.Controls.Add(Me.ListBox1)
-        Me.SysConfigPanel.Controls.Add(Me.Label11)
-        Me.SysConfigPanel.Controls.Add(Me.SysConfigHeader)
-        Me.SysConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SysConfigPanel.Location = New System.Drawing.Point(0, 0)
-        Me.SysConfigPanel.Name = "SysConfigPanel"
-        Me.SysConfigPanel.Size = New System.Drawing.Size(752, 449)
-        Me.SysConfigPanel.TabIndex = 2
+        Me.TimeZonePanel.Controls.Add(Me.TimeZoneSettings)
+        Me.TimeZonePanel.Controls.Add(Me.RadioButton4)
+        Me.TimeZonePanel.Controls.Add(Me.RadioButton3)
+        Me.TimeZonePanel.Controls.Add(Me.TimeZoneHeader)
+        Me.TimeZonePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TimeZonePanel.Location = New System.Drawing.Point(0, 0)
+        Me.TimeZonePanel.Name = "TimeZonePanel"
+        Me.TimeZonePanel.Size = New System.Drawing.Size(752, 449)
+        Me.TimeZonePanel.TabIndex = 3
         '
-        'SysConfigHeader
+        'TimeZoneHeader
         '
-        Me.SysConfigHeader.AutoEllipsis = True
-        Me.SysConfigHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SysConfigHeader.Location = New System.Drawing.Point(16, 17)
-        Me.SysConfigHeader.Name = "SysConfigHeader"
-        Me.SysConfigHeader.Size = New System.Drawing.Size(708, 51)
-        Me.SysConfigHeader.TabIndex = 2
-        Me.SysConfigHeader.Text = "Configure basic system settings"
+        Me.TimeZoneHeader.AutoEllipsis = True
+        Me.TimeZoneHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TimeZoneHeader.Location = New System.Drawing.Point(16, 17)
+        Me.TimeZoneHeader.Name = "TimeZoneHeader"
+        Me.TimeZoneHeader.Size = New System.Drawing.Size(708, 51)
+        Me.TimeZoneHeader.TabIndex = 3
+        Me.TimeZoneHeader.Text = "Configure time zone settings"
         '
-        'Label11
+        'RadioButton3
         '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(52, 84)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(119, 13)
-        Me.Label11.TabIndex = 3
-        Me.Label11.Text = "Processor architecture:"
+        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Checked = True
+        Me.RadioButton3.Location = New System.Drawing.Point(65, 71)
+        Me.RadioButton3.Name = "RadioButton3"
+        Me.RadioButton3.Size = New System.Drawing.Size(422, 17)
+        Me.RadioButton3.TabIndex = 4
+        Me.RadioButton3.Text = "Let Windows decide my time zone based on the regional configurations I set earlie" & _
+    "r"
+        Me.RadioButton3.UseVisualStyleBackColor = True
         '
-        'ListBox1
+        'RadioButton4
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Items.AddRange(New Object() {"x86 (Desktop 32-Bit)", "x64 (Desktop 64-Bit)", "ARM64 (Windows on ARM)"})
-        Me.ListBox1.Location = New System.Drawing.Point(182, 82)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(505, 69)
-        Me.ListBox1.TabIndex = 4
+        Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Location = New System.Drawing.Point(65, 94)
+        Me.RadioButton4.Name = "RadioButton4"
+        Me.RadioButton4.Size = New System.Drawing.Size(148, 17)
+        Me.RadioButton4.TabIndex = 4
+        Me.RadioButton4.Text = "Set a time zone manually:"
+        Me.RadioButton4.UseVisualStyleBackColor = True
         '
-        'Label12
+        'TimeZoneSettings
         '
-        Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(182, 158)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(505, 32)
-        Me.Label12.TabIndex = 5
-        Me.Label12.Text = "Please select the system architecture that is supported by the target Windows ima" & _
-    "ge to apply"
+        Me.TimeZoneSettings.Controls.Add(Me.CurrentTimeSelTZ)
+        Me.TimeZoneSettings.Controls.Add(Me.CurrentTimeUTC)
+        Me.TimeZoneSettings.Controls.Add(Me.Label19)
+        Me.TimeZoneSettings.Controls.Add(Me.Label18)
+        Me.TimeZoneSettings.Controls.Add(Me.ComboBox5)
+        Me.TimeZoneSettings.Controls.Add(Me.Label17)
+        Me.TimeZoneSettings.Enabled = False
+        Me.TimeZoneSettings.Location = New System.Drawing.Point(86, 123)
+        Me.TimeZoneSettings.Name = "TimeZoneSettings"
+        Me.TimeZoneSettings.Size = New System.Drawing.Size(621, 136)
+        Me.TimeZoneSettings.TabIndex = 5
         '
-        'Label13
+        'Label17
         '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(52, 208)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(110, 13)
-        Me.Label13.TabIndex = 6
-        Me.Label13.Text = "Windows 11 settings:"
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(21, 19)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(59, 13)
+        Me.Label17.TabIndex = 0
+        Me.Label17.Text = "Time zone:"
         '
-        'WinSVSettingsPanel
+        'ComboBox5
         '
-        Me.WinSVSettingsPanel.Controls.Add(Me.Label14)
-        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox2)
-        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox1)
-        Me.WinSVSettingsPanel.Location = New System.Drawing.Point(182, 196)
-        Me.WinSVSettingsPanel.Name = "WinSVSettingsPanel"
-        Me.WinSVSettingsPanel.Size = New System.Drawing.Size(505, 131)
-        Me.WinSVSettingsPanel.TabIndex = 7
+        Me.ComboBox5.FormattingEnabled = True
+        Me.ComboBox5.Location = New System.Drawing.Point(99, 16)
+        Me.ComboBox5.Name = "ComboBox5"
+        Me.ComboBox5.Size = New System.Drawing.Size(502, 21)
+        Me.ComboBox5.TabIndex = 1
         '
-        'CheckBox1
+        'Label18
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(12, 11)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(167, 17)
-        Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Bypass System Requirements"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.Label18.AutoSize = True
+        Me.Label18.Location = New System.Drawing.Point(46, 57)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(102, 13)
+        Me.Label18.TabIndex = 2
+        Me.Label18.Text = "Current time (UTC):"
         '
-        'CheckBox2
+        'Label19
         '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(12, 34)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(215, 17)
-        Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = "Bypass Mandatory Network Connection"
-        Me.CheckBox2.UseVisualStyleBackColor = True
+        Me.Label19.AutoSize = True
+        Me.Label19.Location = New System.Drawing.Point(46, 78)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(171, 13)
+        Me.Label19.TabIndex = 2
+        Me.Label19.Text = "Current time (selected time zone):"
         '
-        'Label14
+        'CurrentTimeUTC
         '
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(28, 54)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(464, 70)
-        Me.Label14.TabIndex = 1
-        Me.Label14.Text = "Check this option only if the target system does not have any network capabilitie" & _
-    "s. You can configure local users in the Users and Passwords section"
+        Me.CurrentTimeUTC.AutoSize = True
+        Me.CurrentTimeUTC.Location = New System.Drawing.Point(231, 57)
+        Me.CurrentTimeUTC.Name = "CurrentTimeUTC"
+        Me.CurrentTimeUTC.Size = New System.Drawing.Size(29, 13)
+        Me.CurrentTimeUTC.TabIndex = 3
+        Me.CurrentTimeUTC.Text = "Time"
         '
-        'CheckBox3
+        'CurrentTimeSelTZ
         '
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Checked = True
-        Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox3.Location = New System.Drawing.Point(55, 339)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(230, 17)
-        Me.CheckBox3.TabIndex = 8
-        Me.CheckBox3.Text = "Let Windows set a random computer name"
-        Me.CheckBox3.UseVisualStyleBackColor = True
+        Me.CurrentTimeSelTZ.AutoSize = True
+        Me.CurrentTimeSelTZ.Location = New System.Drawing.Point(231, 78)
+        Me.CurrentTimeSelTZ.Name = "CurrentTimeSelTZ"
+        Me.CurrentTimeSelTZ.Size = New System.Drawing.Size(29, 13)
+        Me.CurrentTimeSelTZ.TabIndex = 3
+        Me.CurrentTimeSelTZ.Text = "Time"
         '
-        'ComputerNamePanel
+        'TimeZonePageTimer
         '
-        Me.ComputerNamePanel.Controls.Add(Me.TextBox1)
-        Me.ComputerNamePanel.Controls.Add(Me.Label16)
-        Me.ComputerNamePanel.Enabled = False
-        Me.ComputerNamePanel.Location = New System.Drawing.Point(61, 362)
-        Me.ComputerNamePanel.Name = "ComputerNamePanel"
-        Me.ComputerNamePanel.Size = New System.Drawing.Size(626, 39)
-        Me.ComputerNamePanel.TabIndex = 7
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(10, 12)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(87, 13)
-        Me.Label16.TabIndex = 1
-        Me.Label16.Text = "Computer name:"
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(124, 9)
-        Me.TextBox1.MaxLength = 15
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(489, 21)
-        Me.TextBox1.TabIndex = 2
-        '
-        'Label15
-        '
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Location = New System.Drawing.Point(71, 410)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(616, 33)
-        Me.Label15.TabIndex = 1
-        Me.Label15.Text = "You can set a different computer name at any time in the system settings"
         '
         'NewUnattendWiz
         '
@@ -942,6 +1072,12 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.SysConfigPanel.ResumeLayout(False)
+        Me.SysConfigPanel.PerformLayout()
+        Me.ComputerNamePanel.ResumeLayout(False)
+        Me.ComputerNamePanel.PerformLayout()
+        Me.WinSVSettingsPanel.ResumeLayout(False)
+        Me.WinSVSettingsPanel.PerformLayout()
         Me.RegionalSettingsPanel.ResumeLayout(False)
         Me.RegionalSettingsPanel.PerformLayout()
         Me.RegionalSettings.ResumeLayout(False)
@@ -955,12 +1091,10 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.SysConfigPanel.ResumeLayout(False)
-        Me.SysConfigPanel.PerformLayout()
-        Me.WinSVSettingsPanel.ResumeLayout(False)
-        Me.WinSVSettingsPanel.PerformLayout()
-        Me.ComputerNamePanel.ResumeLayout(False)
-        Me.ComputerNamePanel.PerformLayout()
+        Me.TimeZonePanel.ResumeLayout(False)
+        Me.TimeZonePanel.PerformLayout()
+        Me.TimeZoneSettings.ResumeLayout(False)
+        Me.TimeZoneSettings.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1035,4 +1169,16 @@ Partial Class NewUnattendWiz
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents SysConfigHeader As System.Windows.Forms.Label
+    Friend WithEvents TimeZonePanel As System.Windows.Forms.Panel
+    Friend WithEvents TimeZoneSettings As System.Windows.Forms.Panel
+    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
+    Friend WithEvents TimeZoneHeader As System.Windows.Forms.Label
+    Friend WithEvents CurrentTimeSelTZ As System.Windows.Forms.Label
+    Friend WithEvents CurrentTimeUTC As System.Windows.Forms.Label
+    Friend WithEvents Label19 As System.Windows.Forms.Label
+    Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents ComboBox5 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents TimeZonePageTimer As System.Windows.Forms.Timer
 End Class

@@ -11,10 +11,10 @@ Public Class NewUnattendWiz
     ' Declare initial vars
     Dim IsInExpress As Boolean = True
     Dim CurrentWizardPage As New UnattendedWizardPage()
+    Dim VerifyInPages As New List(Of UnattendedWizardPage.Page)
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
-    Dim TimeOffsets As New List(Of TimeOffset)
     Dim UserLocales As New List(Of UserLocale)
     Dim KeyboardIdentifiers As New List(Of KeyboardIdentifier)
     Dim GeoIds As New List(Of GeoId)
@@ -29,6 +29,11 @@ Public Class NewUnattendWiz
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
 
+    ' Time Zone Panel
+    Dim TimeOffsets As New List(Of TimeOffset)
+    Dim TimeOffsetInteractive As Boolean
+    Dim SelectedOffset As New TimeOffset()
+
     ' Space for more pages
 
     ' Default Settings
@@ -36,6 +41,7 @@ Public Class NewUnattendWiz
     Dim DefaultLocale As New UserLocale()
     Dim DefaultKeybIdentifier As New KeyboardIdentifier()
     Dim DefaultGeoId As New GeoId()
+    Dim DefaultOffset As New TimeOffset()
 
 
     ''' <summary>
@@ -176,12 +182,14 @@ Public Class NewUnattendWiz
         DefaultKeybIdentifier.Type = "Keyboard"
         DefaultGeoId.Id = "244"
         DefaultGeoId.DisplayName = "United States"
+        DefaultOffset.Id = "UTC"
+        DefaultOffset.DisplayName = "(UTC) Coordinated Universal Time"
 
         SelectedLanguage = DefaultLanguage
         SelectedLocale = DefaultLocale
         SelectedKeybIdentifier = DefaultKeybIdentifier
         SelectedGeoId = DefaultGeoId
-
+        SelectedOffset = DefaultOffset
 
     End Sub
 
@@ -218,6 +226,7 @@ Public Class NewUnattendWiz
             Process.Start("https://schneegans.de/windows/unattend-generator/")
             MessageBox.Show("The unattended answer file tasks are undergoing a major reconstruction." & If(MainForm.dtBranch.Contains("stable"), CrLf & CrLf & "The reconstruction is only happening in the preview releases.", ""))
         Else
+            SetDefaultSettings()
             ' System language
             If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
                 ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
@@ -225,6 +234,7 @@ Public Class NewUnattendWiz
                     For Each imgLang As ImageLanguage In ImageLanguages
                         ComboBox1.Items.Add(imgLang.DisplayName)
                     Next
+                    If ComboBox1.SelectedItem = Nothing Then ComboBox1.SelectedItem = DefaultLanguage.DisplayName
                 End If
             End If
             ' System locale
@@ -234,6 +244,7 @@ Public Class NewUnattendWiz
                     For Each userLoc As UserLocale In UserLocales
                         ComboBox2.Items.Add(userLoc.DisplayName)
                     Next
+                    If ComboBox2.SelectedItem = Nothing Then ComboBox2.SelectedItem = DefaultLocale.DisplayName
                 End If
             End If
             ' Keyboard layout/IME
@@ -241,8 +252,9 @@ Public Class NewUnattendWiz
                 KeyboardIdentifiers = KeyboardIdentifier.LoadItems(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml")
                 If KeyboardIdentifiers IsNot Nothing Then
                     For Each keyb As KeyboardIdentifier In KeyboardIdentifiers
-                        ComboBox3.Items.Add(keyb.DisplayName & If(keyb.Type = "IME", " (IME)", ""))
+                        ComboBox3.Items.Add(keyb.DisplayName)
                     Next
+                    If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
                 End If
             End If
             ' Home location
@@ -252,33 +264,74 @@ Public Class NewUnattendWiz
                     For Each Geo As GeoId In GeoIds
                         ComboBox4.Items.Add(Geo.DisplayName)
                     Next
+                    If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = DefaultGeoId.DisplayName
+                End If
+            End If
+            ' Time offsets
+            If File.Exists(Application.StartupPath & "\AutoUnattend\TimeOffset.xml") Then
+                TimeOffsets = TimeOffset.LoadItems(Application.StartupPath & "\AutoUnattend\TimeOffset.xml")
+                If TimeOffsets IsNot Nothing Then
+                    For Each Offset As TimeOffset In TimeOffsets
+                        ComboBox5.Items.Add(Offset.DisplayName)
+                    Next
+                    If ComboBox5.SelectedItem = Nothing Then ComboBox5.SelectedItem = DefaultOffset.DisplayName
                 End If
             End If
             ListBox1.SelectedIndex = 1
             ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
-            SetDefaultSettings()
+            VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage})
+            TimeZonePageTimer.Enabled = True
         End If
     End Sub
 
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
+        If VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
+            If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
+        End If
         Select Case NewPage
             Case UnattendedWizardPage.Page.DisclaimerPage
                 DisclaimerPanel.Visible = True
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
             Case UnattendedWizardPage.Page.RegionalPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = True
                 SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
             Case UnattendedWizardPage.Page.SysConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = True
+                TimeZonePanel.Visible = False
+            Case UnattendedWizardPage.Page.TimeZonePage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = True
         End Select
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
         Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
     End Sub
+
+    Function VerifyOptionsInPage(WizardPage As UnattendedWizardPage.Page) As Boolean
+        Select Case WizardPage
+            Case UnattendedWizardPage.Page.SysConfigPage
+                If ListBox1.SelectedItems.Count = 0 Then
+                    MessageBox.Show("Please select an architecture and try again", "Validation error")
+                    Return False
+                End If
+                If Not PCName.DefaultName Then
+                    Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
+                    If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
+                        MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                        Return False
+                    End If
+                End If
+        End Select
+        Return True
+    End Function
 
     Private Sub ExpressPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.MouseEnter
         If ExpressPanelContainer.Visible Then
@@ -465,5 +518,24 @@ Public Class NewUnattendWiz
         If Not PCName.Valid AndAlso PCName.ErrorMessage <> "" Then
             MessageBox.Show(PCName.ErrorMessage, "Computer name error")
         End If
+    End Sub
+
+    Private Sub TimeZonePageTimer_Tick(sender As Object, e As EventArgs) Handles TimeZonePageTimer.Tick
+        Dim UTC As Date = Date.UtcNow
+        Dim SelTZ As Date = Date.UtcNow
+        Dim tz As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(TimeOffsets(ComboBox5.SelectedIndex).Id)
+        SelTZ = TimeZoneInfo.ConvertTimeFromUtc(SelTZ, tz)
+        CurrentTimeUTC.Text = UTC.ToString("D") & " - " & UTC.ToString("HH:mm")
+        CurrentTimeSelTZ.Text = SelTZ.ToString("D") & " - " & SelTZ.ToString("HH:mm")
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        TimeOffsetInteractive = RadioButton3.Checked
+        TimeZoneSettings.Enabled = Not RadioButton3.Checked
+    End Sub
+
+    Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
+        SelectedOffset = TimeOffsets(ComboBox5.SelectedIndex)
+        Debug.WriteLine("Selected time offset: " & SelectedOffset.DisplayName)
     End Sub
 End Class

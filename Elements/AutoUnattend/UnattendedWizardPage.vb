@@ -6,11 +6,12 @@
             DisclaimerPage = 0
             RegionalPage = 1
             SysConfigPage = 2
+            TimeZonePage = 3
         End Enum
 
         Public Property WizardPage As Page
 
-        Public Const PageCount As Integer = 3
+        Public Const PageCount As Integer = 4
     End Class
 
 End Namespace
