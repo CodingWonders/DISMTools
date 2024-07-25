@@ -117,6 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Scintilla2.Text" xml:space="preserve">
+    <value>REM EXAMPLE SCRIPT. PLEASE MODIFY
+REM -----------------------------------------
+SELECT DISK=0
+CLEAN
+CONVERT GPT
+CREATE PARTITION EFI SIZE=300
+FORMAT QUICK FS=FAT32 LABEL="System"
+CREATE PARTITION MSR SIZE=16
+CREATE PARTITION PRIMARY
+SHRINK MINIMUM=1000
+FORMAT QUICK FS=NTFS LABEL="Windows"
+CREATE PARTITION PRIMARY
+FORMAT QUICK FS=NTFS LABEL="Recovery"
+SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
+GPT ATTRIBUTES=0x8000000000000001</value>
+  </data>
   <data name="UnderConstructionDesc.Text" xml:space="preserve">
     <value>The unattended answer file creation wizard is undergoing a major reconstruction. This means that, currently, this wizard is not complete and some things may be changed in the final version.
 

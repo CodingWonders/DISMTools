@@ -53,26 +53,38 @@ Public Class NewUnattendWiz
     Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
         Scintilla1.StyleResetDefault()
+        Scintilla2.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
+            Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
+            Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
+        Scintilla2.Styles(Style.Default).Font = fntName
+        Scintilla2.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla1.Styles(Style.Default).ForeColor = Color.White
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla2.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla2.Styles(Style.Default).ForeColor = Color.White
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.White
             Scintilla1.Styles(Style.Default).ForeColor = Color.Black
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
+            Scintilla2.Styles(Style.Default).BackColor = Color.White
+            Scintilla2.Styles(Style.Default).ForeColor = Color.Black
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
         End If
         Scintilla1.StyleClearAll()
+        Scintilla2.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -112,11 +124,19 @@ Public Class NewUnattendWiz
         ' Set line number margin properties
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
         End If
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
+        Margin.Width = 30
+        Margin.Type = MarginType.Number
+        Margin.Sensitive = True
+        Margin.Mask = 0
+        Margin = Scintilla2.Margins(1)
         Margin.Width = 30
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
@@ -127,6 +147,10 @@ Public Class NewUnattendWiz
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
         Scintilla1.SetProperty("fold.compact", "1")
+        Scintilla2.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla2.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla2.SetProperty("fold", "1")
+        Scintilla2.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
         Dim Bookmarks = Scintilla1.Margins(2)
@@ -139,9 +163,20 @@ Public Class NewUnattendWiz
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
+        Bookmarks = Scintilla2.Margins(2)
+        Bookmarks.Width = 20
+        Bookmarks.Sensitive = True
+        Bookmarks.Type = MarginType.Symbol
+        Bookmarks.Mask = (1 << 2)
+        Marker = Scintilla2.Markers(2)
+        Marker.Symbol = MarkerSymbol.Circle
+        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
+        Marker.SetForeColor(Color.Black)
+        Marker.SetAlpha(100)
 
         ' Set editor caret settings
         Scintilla1.CaretForeColor = ForeColor
+        Scintilla2.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
@@ -149,11 +184,17 @@ Public Class NewUnattendWiz
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
         Scintilla1.Margins(3).Width = 1
+        Scintilla2.Margins(3).Type = MarginType.Symbol
+        Scintilla2.Margins(3).Mask = Marker.MaskFolders
+        Scintilla2.Margins(3).Sensitive = True
+        Scintilla2.Margins(3).Width = 1
 
         ' Set colors for all folding markers
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
+            Scintilla2.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
+            Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
         Next
 
         ' Folding marker configuration
@@ -164,9 +205,17 @@ Public Class NewUnattendWiz
         Scintilla1.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla1.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla1.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
+        Scintilla2.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
+        Scintilla2.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
+        Scintilla2.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
+        Scintilla2.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
+        Scintilla2.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
+        Scintilla2.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
+        Scintilla2.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+        Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
     End Sub
 
     Sub SetDefaultSettings()
@@ -294,21 +343,31 @@ Public Class NewUnattendWiz
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
             Case UnattendedWizardPage.Page.RegionalPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = True
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
             Case UnattendedWizardPage.Page.SysConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = True
                 TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
             Case UnattendedWizardPage.Page.TimeZonePage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = True
+                DiskConfigurationPanel.Visible = False
+            Case UnattendedWizardPage.Page.DiskConfigPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = True
         End Select
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
@@ -536,6 +595,36 @@ Public Class NewUnattendWiz
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
         SelectedOffset = TimeOffsets(ComboBox5.SelectedIndex)
-        Debug.WriteLine("Selected time offset: " & SelectedOffset.DisplayName)
+    End Sub
+
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        ManualPartPanel.Enabled = Not CheckBox4.Checked
+        ' Configure more settings
+    End Sub
+
+    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
+        AutoDiskConfigPanel.Enabled = RadioButton5.Checked
+        DiskPartPanel.Enabled = Not RadioButton5.Checked
+        ' Configure more settings
+    End Sub
+
+    Private Sub RadioButton7_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton7.CheckedChanged
+        ESPPanel.Enabled = RadioButton7.Checked
+        ' Configure more settings
+    End Sub
+
+    Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox5.CheckedChanged
+        WindowsREPanel.Enabled = CheckBox5.Checked
+        ' Configure more settings
+    End Sub
+
+    Private Sub RadioButton9_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton9.CheckedChanged
+        RESizePanel.Enabled = RadioButton9.Checked
+        ' Configure more settings
+    End Sub
+
+    Private Sub RadioButton11_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton11.CheckedChanged
+        ManualInstallPanel.Enabled = Not RadioButton11.Checked
+        ' Configure more settings
     End Sub
 End Class
