@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\GeoId.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\ImageLanguage.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\KeyboardIdentifier.vb" />

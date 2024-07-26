@@ -34,6 +34,10 @@ Public Class NewUnattendWiz
     Dim TimeOffsetInteractive As Boolean
     Dim SelectedOffset As New TimeOffset()
 
+    ' Disk Configuration Panel
+    Dim DiskConfigurationInteractive As Boolean
+    Dim SelectedDiskConfiguration As New DiskConfiguration()
+
     ' Space for more pages
 
     ' Default Settings
@@ -42,6 +46,7 @@ Public Class NewUnattendWiz
     Dim DefaultKeybIdentifier As New KeyboardIdentifier()
     Dim DefaultGeoId As New GeoId()
     Dim DefaultOffset As New TimeOffset()
+    Dim DefaultDiskConfiguration As New DiskConfiguration()
 
 
     ''' <summary>
@@ -233,12 +238,23 @@ Public Class NewUnattendWiz
         DefaultGeoId.DisplayName = "United States"
         DefaultOffset.Id = "UTC"
         DefaultOffset.DisplayName = "(UTC) Coordinated Universal Time"
+        DefaultDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0
+        DefaultDiskConfiguration.PartStyle = PartitionStyle.GPT
+        DefaultDiskConfiguration.ESPSize = 300
+        DefaultDiskConfiguration.InstallRecEnv = True
+        DefaultDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition
+        DefaultDiskConfiguration.RecEnvSize = 1000
+        DefaultDiskConfiguration.DiskPartScriptConfig.ScriptContents = ""
+        DefaultDiskConfiguration.DiskPartScriptConfig.AutomaticInstall = True
+        DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = 0
+        DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = 3
 
         SelectedLanguage = DefaultLanguage
         SelectedLocale = DefaultLocale
         SelectedKeybIdentifier = DefaultKeybIdentifier
         SelectedGeoId = DefaultGeoId
         SelectedOffset = DefaultOffset
+        SelectedDiskConfiguration = DefaultDiskConfiguration
 
     End Sub
 
@@ -330,6 +346,8 @@ Public Class NewUnattendWiz
             ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
             VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage})
             TimeZonePageTimer.Enabled = True
+            ' Modify script contents of disk config for sample DP Script
+            SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
         End If
     End Sub
 
@@ -599,32 +617,60 @@ Public Class NewUnattendWiz
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
         ManualPartPanel.Enabled = Not CheckBox4.Checked
-        ' Configure more settings
+        DiskConfigurationInteractive = CheckBox4.Checked
     End Sub
 
     Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
         AutoDiskConfigPanel.Enabled = RadioButton5.Checked
         DiskPartPanel.Enabled = Not RadioButton5.Checked
-        ' Configure more settings
+        SelectedDiskConfiguration.DiskConfigMode = If(RadioButton5.Checked, DiskConfigurationMode.AutoDisk0, DiskConfigurationMode.DiskPart)
     End Sub
 
     Private Sub RadioButton7_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton7.CheckedChanged
         ESPPanel.Enabled = RadioButton7.Checked
-        ' Configure more settings
+        SelectedDiskConfiguration.PartStyle = If(RadioButton7.Checked, PartitionStyle.GPT, PartitionStyle.MBR)
     End Sub
 
     Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox5.CheckedChanged
         WindowsREPanel.Enabled = CheckBox5.Checked
-        ' Configure more settings
+        SelectedDiskConfiguration.InstallRecEnv = CheckBox5.Checked
     End Sub
 
     Private Sub RadioButton9_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton9.CheckedChanged
         RESizePanel.Enabled = RadioButton9.Checked
-        ' Configure more settings
+        SelectedDiskConfiguration.RecEnvPartition = If(RadioButton9.Checked, RecoveryEnvironmentLocation.WinREPartition, RecoveryEnvironmentLocation.WindowsPartition)
     End Sub
 
     Private Sub RadioButton11_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton11.CheckedChanged
         ManualInstallPanel.Enabled = Not RadioButton11.Checked
-        ' Configure more settings
+        SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall = RadioButton11.Checked
+    End Sub
+
+    Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
+        SelectedDiskConfiguration.ESPSize = NumericUpDown1.Value
+    End Sub
+
+    Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
+        SelectedDiskConfiguration.RecEnvSize = NumericUpDown2.Value
+    End Sub
+
+    Private Sub NumericUpDown3_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown3.ValueChanged
+        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = NumericUpDown3.Value
+    End Sub
+
+    Private Sub NumericUpDown4_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown4.ValueChanged
+        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = NumericUpDown4.Value
+    End Sub
+
+    Private Sub Scintilla2_TextChanged(sender As Object, e As EventArgs) Handles Scintilla2.TextChanged
+        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        OpenFileDialog1.ShowDialog()
+    End Sub
+
+    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        Scintilla2.Text = File.ReadAllText(OpenFileDialog1.FileName)
     End Sub
 End Class
