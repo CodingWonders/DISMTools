@@ -38,6 +38,11 @@ Public Class NewUnattendWiz
     Dim DiskConfigurationInteractive As Boolean
     Dim SelectedDiskConfiguration As New DiskConfiguration()
 
+    ' Product Key Panel
+    Dim GenericChosen As Boolean
+    Dim GenericKeys As New List(Of ProductKey)
+    Dim SelectedKey As New ProductKey()
+
     ' Space for more pages
 
     ' Default Settings
@@ -223,6 +228,13 @@ Public Class NewUnattendWiz
         Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
     End Sub
 
+    Function NewKeyVar(key As String) As ProductKey
+        Dim pKey As New ProductKey()
+        pKey.Valid = True
+        pKey.Key = key
+        Return pKey
+    End Function
+
     Sub SetDefaultSettings()
         DefaultLanguage.Id = "en-US"
         DefaultLanguage.DisplayName = "English"
@@ -249,12 +261,26 @@ Public Class NewUnattendWiz
         DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = 0
         DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = 3
 
+        GenericKeys.Add(NewKeyVar("YNMGQ-8RYV3-4PGQ3-C8XTP-7CFBY"))     ' Education
+        GenericKeys.Add(NewKeyVar("84NGF-MHBT6-FXBX8-QWJK7-DRR8H"))     ' Education N
+        GenericKeys.Add(NewKeyVar("YTMG3-N6DKC-DKB77-7M9GH-8HVX7"))     ' Home
+        GenericKeys.Add(NewKeyVar("4CPRK-NM3K3-X6XXQ-RXX86-WXCHW"))     ' Home N
+        GenericKeys.Add(NewKeyVar("BT79Q-G7N6G-PGBYW-4YWX6-6F4BT"))     ' Home Simple Language
+        GenericKeys.Add(NewKeyVar("VK7JG-NPHTM-C97JM-9MPGT-3V66T"))     ' Pro
+        GenericKeys.Add(NewKeyVar("8PTT6-RNW4C-6V7J2-C2D3X-MHBPB"))     ' Pro Education
+        GenericKeys.Add(NewKeyVar("GJTYN-HDMQY-FRR76-HVGC7-QPF8P"))     ' Pro Education N
+        GenericKeys.Add(NewKeyVar("DXG7C-N36C4-C4HTG-X4T3X-2YV77"))     ' Pro for Workstations
+        GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
+        GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
+
+
         SelectedLanguage = DefaultLanguage
         SelectedLocale = DefaultLocale
         SelectedKeybIdentifier = DefaultKeybIdentifier
         SelectedGeoId = DefaultGeoId
         SelectedOffset = DefaultOffset
         SelectedDiskConfiguration = DefaultDiskConfiguration
+        SelectedKey = GenericKeys(5)
 
     End Sub
 
@@ -344,15 +370,17 @@ Public Class NewUnattendWiz
             End If
             ListBox1.SelectedIndex = 1
             ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
-            VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage})
+            VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage})
             TimeZonePageTimer.Enabled = True
             ' Modify script contents of disk config for sample DP Script
             SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
+            ' Set PRO edition
+            ComboBox6.SelectedItem = "Pro"
         End If
     End Sub
 
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
-        If VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
+        If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
             If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
         End If
         Select Case NewPage
@@ -362,30 +390,56 @@ Public Class NewUnattendWiz
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = False
                 DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
             Case UnattendedWizardPage.Page.RegionalPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = True
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = False
                 DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
             Case UnattendedWizardPage.Page.SysConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = True
                 TimeZonePanel.Visible = False
                 DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
             Case UnattendedWizardPage.Page.TimeZonePage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = True
                 DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
             Case UnattendedWizardPage.Page.DiskConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
                 SysConfigPanel.Visible = False
                 TimeZonePanel.Visible = False
                 DiskConfigurationPanel.Visible = True
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
+            Case UnattendedWizardPage.Page.ProductKeyPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = True
+                UserAccountPanel.Visible = False
+            Case UnattendedWizardPage.Page.UserAccountsPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = True
         End Select
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
@@ -404,6 +458,27 @@ Public Class NewUnattendWiz
                     If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
                         MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
                         Return False
+                    End If
+                End If
+            Case UnattendedWizardPage.Page.DiskConfigPage
+                If Not DiskConfigurationInteractive AndAlso SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart AndAlso Scintilla2.Text = "" Then
+                    MessageBox.Show("Please enter the contents of the DiskPart script and try again. You can also use a script file", "DiskPart Script error")
+                    Return False
+                End If
+            Case UnattendedWizardPage.Page.ProductKeyPage
+                If Not GenericChosen Then
+                    If TextBox3.Text = "" Then
+                        MessageBox.Show("Please type a product key and try again", "Product Key error")
+                        Return False
+                    ElseIf TextBox3.Text <> "" And TextBox3.Text.Length <> 29 Then
+                        MessageBox.Show("Please type all of the product key and try again", "Product Key error")
+                        Return False
+                    ElseIf TextBox3.Text <> "" And TextBox3.Text.Length = 29 Then
+                        Dim pKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox3.Text)
+                        If Not pKey.Valid Then
+                            MessageBox.Show("The product key entered:" & CrLf & CrLf & TextBox3.Text & CrLf & CrLf & "is ill-formed. Please type it again", "Product Key error")
+                            Return False
+                        End If
                     End If
                 End If
         End Select
@@ -672,5 +747,22 @@ Public Class NewUnattendWiz
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         Scintilla2.Text = File.ReadAllText(OpenFileDialog1.FileName)
+    End Sub
+
+    Private Sub RadioButton13_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton13.CheckedChanged
+        GenericKeyPanel.Enabled = RadioButton13.Checked
+        ManualKeyPanel.Enabled = Not RadioButton13.Checked
+        GenericChosen = RadioButton13.Checked
+    End Sub
+
+    Private Sub ComboBox6_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox6.SelectedIndexChanged
+        If GenericKeys IsNot Nothing AndAlso GenericKeys.Count > 0 Then
+            SelectedKey = GenericKeys(ComboBox6.SelectedIndex)
+            TextBox2.Text = SelectedKey.Key
+        End If
+    End Sub
+
+    Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
+        SelectedKey.Key = TextBox3.Text
     End Sub
 End Class
