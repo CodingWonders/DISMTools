@@ -2,7 +2,7 @@
 
     Public Class ComputerName
 
-        Public Property DefaultName As Boolean
+        Public Property DefaultName As Boolean = True
 
         Public Property Name As String
 

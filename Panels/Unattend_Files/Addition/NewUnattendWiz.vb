@@ -31,17 +31,23 @@ Public Class NewUnattendWiz
 
     ' Time Zone Panel
     Dim TimeOffsets As New List(Of TimeOffset)
-    Dim TimeOffsetInteractive As Boolean
+    Dim TimeOffsetInteractive As Boolean = True
     Dim SelectedOffset As New TimeOffset()
 
     ' Disk Configuration Panel
-    Dim DiskConfigurationInteractive As Boolean
+    Dim DiskConfigurationInteractive As Boolean = True
     Dim SelectedDiskConfiguration As New DiskConfiguration()
 
     ' Product Key Panel
-    Dim GenericChosen As Boolean
+    Dim GenericChosen As Boolean = True
     Dim GenericKeys As New List(Of ProductKey)
     Dim SelectedKey As New ProductKey()
+
+    ' User Accounts Panel
+    Dim UserAccountsInteractive As Boolean = True
+    Dim UserAccountsList As New List(Of User)
+    Dim AutoLogon As New AutoLogonSettings()
+    Dim PasswordObfuscate As Boolean
 
     ' Space for more pages
 
@@ -272,6 +278,27 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("DXG7C-N36C4-C4HTG-X4T3X-2YV77"))     ' Pro for Workstations
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
+
+        Dim defaultAdmin As New User With
+            {
+                .Enabled = True,
+                .Name = "Admin",
+                .Password = "",
+                .Group = UserGroup.Administrators
+            }
+        UserAccountsList.Add(defaultAdmin)
+        Dim defaultUser As New User With
+            {
+                .Enabled = False,
+                .Name = "",
+                .Password = "",
+                .Group = UserGroup.Users
+            }
+        ' Add default user 4 more times
+        UserAccountsList.Add(defaultUser)
+        UserAccountsList.Add(defaultUser)
+        UserAccountsList.Add(defaultUser)
+        UserAccountsList.Add(defaultUser)
 
 
         SelectedLanguage = DefaultLanguage
@@ -764,5 +791,138 @@ Public Class NewUnattendWiz
 
     Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
         SelectedKey.Key = TextBox3.Text
+    End Sub
+
+    Private Sub CheckBox6_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox6.CheckedChanged
+        UserAccountsInteractive = CheckBox6.Checked
+        ManualAccountPanel.Enabled = Not CheckBox6.Checked
+    End Sub
+
+#Region "User Account settings"
+
+    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, password As String, group As UserGroup)
+        If UserAccountsList Is Nothing OrElse UserAccountsList.Count = 0 Then Exit Sub
+        UserAccountsList(index).Enabled = enabled
+        UserAccountsList(index).Name = name
+        UserAccountsList(index).Password = password
+        UserAccountsList(index).Group = group
+    End Sub
+
+    Function GroupFromSelectedItem(index As Integer) As UserGroup
+        Select Case index
+            Case 0
+                Return UserGroup.Administrators
+            Case 1
+                Return UserGroup.Users
+        End Select
+        Return Nothing
+    End Function
+
+    Private Sub CheckBox8_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox8.CheckedChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        TextBox8.Enabled = CheckBox8.Checked
+        TextBox9.Enabled = CheckBox8.Checked
+        ComboBox9.Enabled = CheckBox8.Checked
+    End Sub
+
+    Private Sub CheckBox9_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox9.CheckedChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        TextBox11.Enabled = CheckBox9.Checked
+        TextBox12.Enabled = CheckBox9.Checked
+        ComboBox10.Enabled = CheckBox9.Checked
+    End Sub
+
+    Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        TextBox14.Enabled = CheckBox10.Checked
+        TextBox15.Enabled = CheckBox10.Checked
+        ComboBox11.Enabled = CheckBox10.Checked
+    End Sub
+
+    Private Sub CheckBox11_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox11.CheckedChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        TextBox17.Enabled = CheckBox11.Checked
+        TextBox18.Enabled = CheckBox11.Checked
+        ComboBox12.Enabled = CheckBox11.Checked
+    End Sub
+
+    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
+        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox6_TextChanged(sender As Object, e As EventArgs) Handles TextBox6.TextChanged
+        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox8_TextChanged(sender As Object, e As EventArgs) Handles TextBox8.TextChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox9_TextChanged(sender As Object, e As EventArgs) Handles TextBox9.TextChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox11_TextChanged(sender As Object, e As EventArgs) Handles TextBox11.TextChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox12_TextChanged(sender As Object, e As EventArgs) Handles TextBox12.TextChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox14_TextChanged(sender As Object, e As EventArgs) Handles TextBox14.TextChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox15_TextChanged(sender As Object, e As EventArgs) Handles TextBox15.TextChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox17_TextChanged(sender As Object, e As EventArgs) Handles TextBox17.TextChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox18_TextChanged(sender As Object, e As EventArgs) Handles TextBox18.TextChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
+        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox9_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox9.SelectedIndexChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox10_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox10.SelectedIndexChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox11_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox11.SelectedIndexChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox12_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox12.SelectedIndexChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+#End Region
+
+    Private Sub CheckBox12_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox12.CheckedChanged
+        AutoLogon.EnableAutoLogon = CheckBox12.Checked
+        AutoLogonSettingsPanel.Enabled = CheckBox12.Checked
+    End Sub
+
+    Private Sub RadioButton15_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton15.CheckedChanged
+        AutoLogon.LogonMode = If(RadioButton15.Checked, AutoLogonMode.FirstAdmin, AutoLogonMode.WindowsAdmin)
+        TextBox5.Enabled = Not RadioButton15.Checked
+    End Sub
+
+    Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
+        AutoLogon.LogonPassword = TextBox5.Text
+    End Sub
+
+    Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
+        PasswordObfuscate = CheckBox7.Checked
     End Sub
 End Class
