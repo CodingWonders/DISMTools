@@ -532,6 +532,7 @@ Partial Class MainForm
         Me.SaveCompleteImageInformationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator40 = New System.Windows.Forms.ToolStripSeparator()
         Me.CreateDiscImageWithThisFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -5215,6 +5216,9 @@ Partial Class MainForm
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
         Me.CreateDiscImageWithThisFileToolStripMenuItem.Text = "Create disc image with this file..."
         '
+        'WIEDownloaderBW
+        '
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -5860,4 +5864,5 @@ Partial Class MainForm
     Friend WithEvents SaveCompleteImageInformationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator40 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents CreateDiscImageWithThisFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents WIEDownloaderBW As System.ComponentModel.BackgroundWorker
 End Class

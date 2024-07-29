@@ -1169,4 +1169,7 @@
   <metadata name="ImgSpecialToolsCMS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>678, 95</value>
   </metadata>
+  <metadata name="WIEDownloaderBW.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>844, 95</value>
+  </metadata>
 </root>
