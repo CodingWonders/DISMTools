@@ -2176,15 +2176,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''Bugfixes:
-        '''
-        '''- A case where the program would still show &quot;(~)&quot; when saving capability information has been fixed
-        '''- Fixed an issue where AppX package addition would fail if you applied a license file
-        '''- The Help Documentation browser no longer displays an empty website title in the title bar after clicking external links
-        '''- AppX package and capability background processes are no longer run on Windows PE images if they remain
-        '''- DISM and image version detections have been  [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.5_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
