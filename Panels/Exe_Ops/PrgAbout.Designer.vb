@@ -70,6 +70,8 @@ Partial Class PrgAbout
         Me.UpdCheckBtn = New System.Windows.Forms.Button()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+        Me.AnniversaryLabel = New System.Windows.Forms.Label()
+        Me.SignatureLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
@@ -583,9 +585,9 @@ Partial Class PrgAbout
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
         Me.TableLayoutPanel3.Controls.Add(Me.LinkLabel3, 2, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.LinkLabel2, 1, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.LinkLabel1, 0, 0)
@@ -700,6 +702,31 @@ Partial Class PrgAbout
         Me.PictureBox5.TabIndex = 9
         Me.PictureBox5.TabStop = False
         '
+        'AnniversaryLabel
+        '
+        Me.AnniversaryLabel.BackColor = System.Drawing.Color.Transparent
+        Me.AnniversaryLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.AnniversaryLabel.ForeColor = System.Drawing.Color.Black
+        Me.AnniversaryLabel.Location = New System.Drawing.Point(23, 199)
+        Me.AnniversaryLabel.Name = "AnniversaryLabel"
+        Me.AnniversaryLabel.Size = New System.Drawing.Size(377, 123)
+        Me.AnniversaryLabel.TabIndex = 4
+        Me.AnniversaryLabel.Text = "Thank you so much for these 2 years! Without you, this program wouldn't have been" & _
+    " possible"
+        Me.AnniversaryLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'SignatureLabel
+        '
+        Me.SignatureLabel.BackColor = System.Drawing.Color.Transparent
+        Me.SignatureLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SignatureLabel.ForeColor = System.Drawing.Color.Black
+        Me.SignatureLabel.Location = New System.Drawing.Point(23, 303)
+        Me.SignatureLabel.Name = "SignatureLabel"
+        Me.SignatureLabel.Size = New System.Drawing.Size(377, 35)
+        Me.SignatureLabel.TabIndex = 4
+        Me.SignatureLabel.Text = "- CodingWonders"
+        Me.SignatureLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -713,6 +740,8 @@ Partial Class PrgAbout
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
+        Me.Controls.Add(Me.SignatureLabel)
+        Me.Controls.Add(Me.AnniversaryLabel)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label15)
         Me.Controls.Add(Me.Label1)
@@ -792,5 +821,7 @@ Partial Class PrgAbout
     Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
     Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
+    Friend WithEvents AnniversaryLabel As System.Windows.Forms.Label
+    Friend WithEvents SignatureLabel As System.Windows.Forms.Label
 
 End Class

@@ -4240,6 +4240,18 @@
             </summary>
             <param name="sciCommand">The command to perform.</param>
         </member>
+        <member name="M:ScintillaNET.Scintilla.FindText(ScintillaNET.SearchFlags,System.String,System.Int32,System.Int32)">
+            <summary>
+            Search text in document without changing the current selection.
+            The <paramref name="searchFlags"/> argument controls the search type, which includes regular expression searches.
+            You can search backwards to find the previous occurrence of a search string by setting the end of the search range before the start.
+            </summary>
+            <param name="searchFlags">Specifies the how patterns are matched when performing the search.</param>
+            <param name="text">String to search for.</param>
+            <param name="start">Beginning of </param>
+            <param name="end"></param>
+            <returns>The position of the found text if it succeeds or <c>-1</c> if the search fails.</returns>
+        </member>
         <member name="M:ScintillaNET.Scintilla.FoldAll(ScintillaNET.FoldAction)">
             <summary>
             Performs the specified fold action on the entire document.
@@ -6614,7 +6626,7 @@
         </member>
         <member name="F:ScintillaNET.SearchFlags.None">
             <summary>
-            Matches every instance of the search string.
+            Case-insensitive literal match.
             </summary>
         </member>
         <member name="F:ScintillaNET.SearchFlags.MatchCase">
@@ -6624,23 +6636,25 @@
         </member>
         <member name="F:ScintillaNET.SearchFlags.WholeWord">
             <summary>
-            A match only occurs if the characters before and after are not word characters.
+            A match only occurs if the characters before and after are not word characters as defined by <see cref="P:ScintillaNET.Scintilla.WordChars"/>.
             </summary>
         </member>
         <member name="F:ScintillaNET.SearchFlags.WordStart">
             <summary>
-            A match only occurs if the character before is not a word character.
+            A match only occurs if the character before is not a word character as defined by <see cref="P:ScintillaNET.Scintilla.WordChars"/>.
             </summary>
         </member>
         <member name="F:ScintillaNET.SearchFlags.Regex">
             <summary>
             The search string should be interpreted as a regular expression.
+            Uses Scintilla's base implementation unless combined with <see cref="F:ScintillaNET.SearchFlags.Cxx11Regex"/>.
             Regular expressions will only match ranges within a single line, never matching over multiple lines.
             </summary>
         </member>
         <member name="F:ScintillaNET.SearchFlags.Posix">
             <summary>
             Treat regular expression in a more POSIX compatible manner by interpreting bare '(' and ')' for tagged sections rather than "\(" and "\)".
+            Has no effect when <see cref="F:ScintillaNET.SearchFlags.Cxx11Regex"/> is set.
             </summary>
         </member>
         <member name="F:ScintillaNET.SearchFlags.Cxx11Regex">
@@ -6649,6 +6663,7 @@
             The <see cref="P:ScintillaNET.Scintilla.Status" /> property can queried to determine if the regular expression is invalid.
             The ECMAScript flag is set on the regex object and documents will exhibit Unicode-compliant behaviour.
             Regular expressions will only match ranges within a single line, never matching over multiple lines.
+            Must also have <see cref="F:ScintillaNET.SearchFlags.Regex"/> set.
             </summary>
         </member>
         <member name="T:ScintillaNET.Selection">

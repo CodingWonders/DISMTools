@@ -81,6 +81,7 @@ Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recurse
 Source: ".\files\runtimes\*"; DestDir: "{#pfDir}\runtimes"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\tools\*"; DestDir: "{#pfDir}\tools"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\videos\*"; DestDir: "{#pfDir}\videos"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\files\DT_WinADK.reg"; DestDir: "{#pfDir}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]

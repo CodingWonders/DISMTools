@@ -495,6 +495,36 @@ Public Class MainForm
         End Try
         Return Nothing
     End Function
+
+    Function DetectPossibleADKs() As Integer
+        Dim DefinedADKInstallation As Boolean
+        Try
+            Dim AdkSwitchRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
+            Dim AdkSwitchVal As Integer = AdkSwitchRk.GetValue("AdkInstallation")
+            AdkSwitchRk.Close()
+            If AdkSwitchVal <> 1 Then
+                DefinedADKInstallation = False
+            Else
+                Return 2
+            End If
+        Catch ex As Exception
+            DefinedADKInstallation = False
+        End Try
+        If Not DefinedADKInstallation Then
+            Dim folderPath As String = ""
+            If Environment.Is64BitOperatingSystem Then
+                folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & "\Windows Kits\10\Assessment and Deployment Kit"
+            Else
+                folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) & "\Windows Kits\10\Assessment and Deployment Kit"
+            End If
+            If Directory.Exists(folderPath) Then
+                Return 1
+            Else
+                Return 0
+            End If
+        End If
+        Return 0
+    End Function
     
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -752,6 +782,23 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+        If DetectPossibleADKs() = 1 Then
+            Dim msg As String = ""
+            msg = "DISMTools has found a possible Assessment and Deployment Kit installed on your system. However, it is not being detected. Do you want to fix it?"
+            If MsgBox(msg, vbYesNo + vbQuestion, "Possible ADK installed on your system") = MsgBoxResult.Yes Then
+                Try
+                    Dim AdkProc As New Process()
+                    AdkProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\regedit.exe"
+                    AdkProc.StartInfo.Arguments = "/s " & Quote & Application.StartupPath & "\DT_WinADK.reg"
+                    AdkProc.StartInfo.CreateNoWindow = True
+                    AdkProc.Start()
+                    AdkProc.WaitForExit()
+                    AdkProc.Dispose()
+                Catch ex As Exception
+
+                End Try
+            End If
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -4218,7 +4265,7 @@ Public Class MainForm
             imgAppxArchitectureList = imgAppxArchitectures.ToList()
             imgAppxResourceIdList = imgAppxResourceIds.ToList()
             PSExtAppxGetter()
-            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
+            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") AndAlso My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
                 Dim appxPkgNameRTB As New RichTextBox()
                 Dim appxPkgFullNameRTB As New RichTextBox()
                 Dim appxArchRTB As New RichTextBox()
@@ -12440,7 +12487,8 @@ Public Class MainForm
     End Sub
 
     Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
-        UnattendMgr.Show()
+        ' Major reconstruction ahead
+        NewUnattendWiz.Show()
     End Sub
 
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
@@ -18034,5 +18082,61 @@ Public Class MainForm
         Else
             ISOCreator.Show()
         End If
+    End Sub
+
+    Private Sub ListImage_Click(sender As Object, e As EventArgs) Handles ListImage.Click
+        If Not WIEDownloaderBW.IsBusy Then
+            WIEDownloaderBW.RunWorkerAsync()
+        End If
+    End Sub
+
+    Private Sub WIEDownloaderBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WIEDownloaderBW.DoWork
+        Try
+            ' Download the WIM Explorer and run it while passing the image as an argument
+            If Not Directory.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer") Then
+                Directory.CreateDirectory(Application.StartupPath & "\bin\utils\WIM-Explorer")
+            End If
+            Using WIMExpClient As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Dim contents As String = ""
+                Try
+                    contents = WIMExpClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/WIM-Explorer/main/DISMTools-Install.ps1")
+                Catch ex As WebException
+                    MessageBox.Show("We couldn't download WIM Explorer Setup. Reason:" & CrLf & ex.Status.ToString())
+                    Exit Sub
+                End Try
+                If contents <> "" Then
+                    File.WriteAllText(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1", contents, UTF8)
+                End If
+            End Using
+            If File.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1") Then
+                ' Run installer
+                Dim WEProc As New Process()
+                WEProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                WEProc.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\utils\WIM-Explorer"
+                WEProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1" & Quote
+                If Not Debugger.IsAttached Then
+                    WEProc.StartInfo.CreateNoWindow = True
+                    WEProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                End If
+                WEProc.Start()
+                WEProc.WaitForExit()
+            End If
+            If File.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer\WIMExplorer.exe") Then
+                ' Delete temporary files
+                Directory.Delete(Application.StartupPath & "\bin\utils\WIM-Explorer\temp", True)
+                File.Delete(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1")
+                Dim WimExplorer As New Process()
+                WimExplorer.StartInfo.FileName = Application.StartupPath & "\bin\utils\WIM-Explorer\WIMExplorer.exe"
+                WimExplorer.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\utils\WIM-Explorer"
+                If (Not OnlineManagement) And (Not OfflineManagement) Then
+                    WimExplorer.StartInfo.Arguments = "/image=" & Quote & SourceImg & Quote
+                End If
+                WimExplorer.Start()
+            End If
+        Catch ex As Exception
+            MessageBox.Show("We couldn't prepare WIM Explorer Setup. Reason:" & CrLf & ex.Message)
+            Exit Sub
+        End Try
     End Sub
 End Class

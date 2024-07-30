@@ -179,6 +179,8 @@
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#the-preinstallation-environment-pe-helper">The Preinstallation Environment (PE) Helper</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#driver-installation-module">Driver Installation Module</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
@@ -281,6 +283,60 @@
 <h4 id="serviceability-tests">Serviceability tests</h4>
 <p>Serviceability tests are performed during OS installation to make sure that the image that has been applied is valid. They are only run if the architectures of the PE and the image are the same, and must pass in order to successfully complete the installation of the operating system.</p>
 <p>If these tests fail, you may need to repair the component store of your Windows image.</p>
+<h3 id="driver-installation-module">Driver Installation Module</h3>
+<p>The <strong>Driver Installation Module</strong> (DIM) is a quick and easy way of adding device drivers to booted Windows Preinstallation Environments:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dim/DIM_MainScreen.png" />
+</p>
+
+<p>While full functionality is achieved with the DISMTools Preinstallation Environment, you can still use the DIM in every Preinstallation Environment. Do note, however, that this is only compatible with the 32-bit and 64-bit desktop architectures (x86 and amd64).</p>
+<h4 id="usage_1">Usage</h4>
+<ol>
+<li>
+<p>Click the "Add" button and choose between a single driver file or an entire folder</p>
+<ul>
+<li>If you choose a folder, the Driver Installation Module will perform a recursive scan for INF files. This may pick up invalid INF files you may have</li>
+</ul>
+</li>
+<li>
+<p>Perform any changes with the "Edit" and "Remove" buttons</p>
+</li>
+<li>Click the "Install" button and let the program add the drivers</li>
+</ol>
+<p>After driver installation, you will see an installation summary:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dim/DIM_Summary.png" />
+</p>
+
+<p>Later, after applying your Windows image, the Preinstallation Environment Helper will add those drivers to the target image.</p>
+<h4 id="practical-use-computers-with-third-party-disk-controllers">Practical use: computers with third-party disk controllers</h4>
+<p>A practical use of the Driver Installation Module is to add compatibility for disk controllers that are not shipped with Windows PEs by default. This is the case if the test system is relatively new.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dim/practical_use/disk_before.jpg" />
+</p>
+
+<p>Here's how you can proceed:</p>
+<ol>
+<li>
+<p>Boot to a live Linux environment and use the partition manager that may come with it to grab the model of the desired drive. If you don't have a Linux ISO available, we recommend <a href="https://gparted.org/livecd.php">GParted Live</a> for its simplicity and its small size</p>
+<p><img alt="GParted" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/diskinfo.jpg" /></p>
+</li>
+<li>
+<p>Additionally, you may want to get information about the model of the computer. In most Linux systems, you can run <code>sudo lshw</code> in the terminal</p>
+<p><img alt="Computer info" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/compinfo.jpg" /></p>
+<p>After getting the model of the computer, go to the computer manufacturer's website to download compatible drivers. <strong>Make sure that you extract them and that you DON'T install them to your system by accident</strong>. After that, copy the drivers to wherever you want</p>
+</li>
+<li>
+<p>Open the Driver Installation Module, add the folder containing the drivers and click Install</p>
+<p><img alt="DIM Installation" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/dim_install.jpg" /></p>
+</li>
+<li>
+<p>Check disks once again</p>
+<p><img alt="Disk Listing" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/disk_after.jpg" /></p>
+</li>
+</ol>
+<!-- And, yes, I know how to make screenshots -->
+
 <h2 id="remarks">Remarks</h2>
 <ul>
 <li><strong>Please make sure to commit your unsaved changes to your image before creating the ISO file</strong></li>
