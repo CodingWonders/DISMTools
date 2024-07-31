@@ -51,6 +51,10 @@ Public Class NewUnattendWiz
     Dim SelectedExpirationSettings As New PasswordExpirationSettings()
     Dim SelectedLockdownSettings As New AccountLockdownSettings()
 
+    ' Virtual Machine Panel
+    Dim VirtualMachineSupported As Boolean
+    Dim SelectedVMSettings As New VirtualMachineSettings()
+
     ' Space for more pages
 
     ' Default Settings
@@ -62,6 +66,7 @@ Public Class NewUnattendWiz
     Dim DefaultDiskConfiguration As New DiskConfiguration()
     Dim DefaultExpirationSettings As New PasswordExpirationSettings()
     Dim DefaultLockdownSettings As New AccountLockdownSettings()
+    Dim DefaultVMSettings As New VirtualMachineSettings()
 
 
     ''' <summary>
@@ -295,6 +300,7 @@ Public Class NewUnattendWiz
         DefaultLockdownSettings.TimedLockdownSettings.FailedAttempts = 10
         DefaultLockdownSettings.TimedLockdownSettings.Timeframe = 10
         DefaultLockdownSettings.TimedLockdownSettings.AutoUnlockTime = 10
+        DefaultVMSettings.Provider = VMProvider.VirtIO_Guest_Tools
 
 
         SelectedLanguage = DefaultLanguage
@@ -306,6 +312,7 @@ Public Class NewUnattendWiz
         SelectedKey = GenericKeys(5)
         SelectedExpirationSettings = DefaultExpirationSettings
         SelectedLockdownSettings = DefaultLockdownSettings
+        SelectedVMSettings = DefaultVMSettings
 
     End Sub
 
@@ -419,6 +426,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.RegionalPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = True
@@ -429,6 +437,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.SysConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -439,6 +448,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.TimeZonePage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -449,6 +459,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.DiskConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -459,6 +470,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.ProductKeyPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -469,6 +481,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.UserAccountsPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -479,6 +492,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = True
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.PWExpirationPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -489,6 +503,7 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = True
                 AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = False
             Case UnattendedWizardPage.Page.AccountLockdownPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -499,6 +514,18 @@ Public Class NewUnattendWiz
                 UserAccountPanel.Visible = False
                 PWExpirationPanel.Visible = False
                 AccountLockdownPanel.Visible = True
+                VirtualMachinePanel.Visible = False
+            Case UnattendedWizardPage.Page.VirtualMachinePage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
+                VirtualMachinePanel.Visible = True
         End Select
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
@@ -997,5 +1024,14 @@ Public Class NewUnattendWiz
 
     Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
         SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
+    End Sub
+
+    Private Sub RadioButton23_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton23.CheckedChanged
+        VirtualMachineSupported = RadioButton23.Checked
+        VMProviderPanel.Enabled = RadioButton23.Checked
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
+        SelectedVMSettings.Provider = ComboBox8.SelectedIndex
     End Sub
 End Class

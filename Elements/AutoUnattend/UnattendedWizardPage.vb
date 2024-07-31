@@ -12,11 +12,12 @@
             UserAccountsPage = 6
             PWExpirationPage = 7
             AccountLockdownPage = 8
+            VirtualMachinePage = 9
         End Enum
 
         Public Property WizardPage As Page
 
-        Public Const PageCount As Integer = 9
+        Public Const PageCount As Integer = 10
     End Class
 
 End Namespace

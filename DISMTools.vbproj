@@ -156,6 +156,7 @@
     <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
+    <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
