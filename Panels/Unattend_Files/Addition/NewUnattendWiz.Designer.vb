@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode79 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
+        Dim TreeNode80 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode81 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode82 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode83 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode84 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode85 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
+        Dim TreeNode86 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode87 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode88 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode89 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode90 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode91 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,6 +49,14 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.VirtualMachinePanel = New System.Windows.Forms.Panel()
+        Me.VMProviderPanel = New System.Windows.Forms.Panel()
+        Me.Label46 = New System.Windows.Forms.Label()
+        Me.ComboBox8 = New System.Windows.Forms.ComboBox()
+        Me.Label45 = New System.Windows.Forms.Label()
+        Me.RadioButton24 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton23 = New System.Windows.Forms.RadioButton()
+        Me.VirtualMachineHeader = New System.Windows.Forms.Label()
         Me.AccountLockdownPanel = New System.Windows.Forms.Panel()
         Me.Label44 = New System.Windows.Forms.Label()
         Me.EnabledAccountLockdownPanel = New System.Windows.Forms.Panel()
@@ -237,14 +245,22 @@ Partial Class NewUnattendWiz
         Me.EditorPanelFooter = New System.Windows.Forms.Panel()
         Me.TimeZonePageTimer = New System.Windows.Forms.Timer(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.VirtualMachinePanel = New System.Windows.Forms.Panel()
-        Me.Label45 = New System.Windows.Forms.Label()
-        Me.RadioButton23 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton24 = New System.Windows.Forms.RadioButton()
-        Me.VMProviderPanel = New System.Windows.Forms.Panel()
-        Me.Label46 = New System.Windows.Forms.Label()
-        Me.ComboBox8 = New System.Windows.Forms.ComboBox()
+        Me.NetworkConnectionPanel = New System.Windows.Forms.Panel()
+        Me.NetworkConnectionHeader = New System.Windows.Forms.Label()
+        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+        Me.ManualNetworkConfigPanel = New System.Windows.Forms.FlowLayoutPanel()
+        Me.RadioButton25 = New System.Windows.Forms.RadioButton()
+        Me.WirelessNetworkSettingsPanel = New System.Windows.Forms.Panel()
+        Me.Label53 = New System.Windows.Forms.Label()
+        Me.RadioButton30 = New System.Windows.Forms.RadioButton()
         Me.Label47 = New System.Windows.Forms.Label()
+        Me.Label48 = New System.Windows.Forms.Label()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.Label49 = New System.Windows.Forms.Label()
+        Me.TextBox7 = New System.Windows.Forms.TextBox()
+        Me.TextBox10 = New System.Windows.Forms.TextBox()
+        Me.ComboBox13 = New System.Windows.Forms.ComboBox()
+        Me.Label50 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -254,6 +270,8 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.VirtualMachinePanel.SuspendLayout()
+        Me.VMProviderPanel.SuspendLayout()
         Me.AccountLockdownPanel.SuspendLayout()
         Me.EnabledAccountLockdownPanel.SuspendLayout()
         Me.AccountLockdownParametersPanel.SuspendLayout()
@@ -307,8 +325,9 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.VirtualMachinePanel.SuspendLayout()
-        Me.VMProviderPanel.SuspendLayout()
+        Me.NetworkConnectionPanel.SuspendLayout()
+        Me.ManualNetworkConfigPanel.SuspendLayout()
+        Me.WirelessNetworkSettingsPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -342,33 +361,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode14.Name = "Nodo0"
-        TreeNode14.Text = "DISCLAIMER - NOT COMPLETE"
-        TreeNode15.Name = "Nodo1"
-        TreeNode15.Text = "Regional Configuration"
-        TreeNode16.Name = "Nodo2"
-        TreeNode16.Text = "Basic System Configuration"
-        TreeNode17.Name = "Nodo3"
-        TreeNode17.Text = "Time Zone"
-        TreeNode18.Name = "Nodo4"
-        TreeNode18.Text = "Disk Configuration"
-        TreeNode19.Name = "Nodo5"
-        TreeNode19.Text = "Product Key"
-        TreeNode20.Name = "Nodo6"
-        TreeNode20.Text = "Users and Passwords"
-        TreeNode21.Name = "Nodo9"
-        TreeNode21.Text = "Virtual Machine Support"
-        TreeNode22.Name = "Nodo10"
-        TreeNode22.Text = "Wireless Networking"
-        TreeNode23.Name = "Nodo11"
-        TreeNode23.Text = "System Telemetry"
-        TreeNode24.Name = "Nodo12"
-        TreeNode24.Text = "Post-Installation Scripts"
-        TreeNode25.Name = "Nodo13"
-        TreeNode25.Text = "Component Settings"
-        TreeNode26.Name = "Nodo14"
-        TreeNode26.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
+        TreeNode79.Name = "Nodo0"
+        TreeNode79.Text = "DISCLAIMER - NOT COMPLETE"
+        TreeNode80.Name = "Nodo1"
+        TreeNode80.Text = "Regional Configuration"
+        TreeNode81.Name = "Nodo2"
+        TreeNode81.Text = "Basic System Configuration"
+        TreeNode82.Name = "Nodo3"
+        TreeNode82.Text = "Time Zone"
+        TreeNode83.Name = "Nodo4"
+        TreeNode83.Text = "Disk Configuration"
+        TreeNode84.Name = "Nodo5"
+        TreeNode84.Text = "Product Key"
+        TreeNode85.Name = "Nodo6"
+        TreeNode85.Text = "Users and Passwords"
+        TreeNode86.Name = "Nodo9"
+        TreeNode86.Text = "Virtual Machine Support"
+        TreeNode87.Name = "Nodo10"
+        TreeNode87.Text = "Wireless Networking"
+        TreeNode88.Name = "Nodo11"
+        TreeNode88.Text = "System Telemetry"
+        TreeNode89.Name = "Nodo12"
+        TreeNode89.Text = "Post-Installation Scripts"
+        TreeNode90.Name = "Nodo13"
+        TreeNode90.Text = "Component Settings"
+        TreeNode91.Name = "Nodo14"
+        TreeNode91.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode79, TreeNode80, TreeNode81, TreeNode82, TreeNode83, TreeNode84, TreeNode85, TreeNode86, TreeNode87, TreeNode88, TreeNode89, TreeNode90, TreeNode91})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -458,6 +477,7 @@ Partial Class NewUnattendWiz
         '
         'StepsContainer
         '
+        Me.StepsContainer.Controls.Add(Me.NetworkConnectionPanel)
         Me.StepsContainer.Controls.Add(Me.VirtualMachinePanel)
         Me.StepsContainer.Controls.Add(Me.AccountLockdownPanel)
         Me.StepsContainer.Controls.Add(Me.PWExpirationPanel)
@@ -473,6 +493,90 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'VirtualMachinePanel
+        '
+        Me.VirtualMachinePanel.Controls.Add(Me.VMProviderPanel)
+        Me.VirtualMachinePanel.Controls.Add(Me.RadioButton24)
+        Me.VirtualMachinePanel.Controls.Add(Me.RadioButton23)
+        Me.VirtualMachinePanel.Controls.Add(Me.VirtualMachineHeader)
+        Me.VirtualMachinePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.VirtualMachinePanel.Location = New System.Drawing.Point(0, 0)
+        Me.VirtualMachinePanel.Name = "VirtualMachinePanel"
+        Me.VirtualMachinePanel.Size = New System.Drawing.Size(752, 449)
+        Me.VirtualMachinePanel.TabIndex = 9
+        '
+        'VMProviderPanel
+        '
+        Me.VMProviderPanel.Controls.Add(Me.Label46)
+        Me.VMProviderPanel.Controls.Add(Me.ComboBox8)
+        Me.VMProviderPanel.Controls.Add(Me.Label45)
+        Me.VMProviderPanel.Enabled = False
+        Me.VMProviderPanel.Location = New System.Drawing.Point(82, 93)
+        Me.VMProviderPanel.Name = "VMProviderPanel"
+        Me.VMProviderPanel.Size = New System.Drawing.Size(624, 114)
+        Me.VMProviderPanel.TabIndex = 11
+        '
+        'Label46
+        '
+        Me.Label46.AutoSize = True
+        Me.Label46.Location = New System.Drawing.Point(159, 52)
+        Me.Label46.Name = "Label46"
+        Me.Label46.Size = New System.Drawing.Size(269, 39)
+        Me.Label46.TabIndex = 2
+        Me.Label46.Text = "- Use Guest Additions with Oracle VM VirtualBox" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "- Use VMware Tools with VMware h" & _
+    "ypervisors" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "- Use VirtIO Guest Tools with QEMU-based hypervisors"
+        '
+        'ComboBox8
+        '
+        Me.ComboBox8.FormattingEnabled = True
+        Me.ComboBox8.Items.AddRange(New Object() {"VirtualBox Guest Additions", "VMware Tools", "VirtIO Guest Tools"})
+        Me.ComboBox8.Location = New System.Drawing.Point(162, 19)
+        Me.ComboBox8.Name = "ComboBox8"
+        Me.ComboBox8.Size = New System.Drawing.Size(439, 21)
+        Me.ComboBox8.TabIndex = 1
+        Me.ComboBox8.Text = "VirtIO Guest Tools"
+        '
+        'Label45
+        '
+        Me.Label45.AutoSize = True
+        Me.Label45.Location = New System.Drawing.Point(21, 22)
+        Me.Label45.Name = "Label45"
+        Me.Label45.Size = New System.Drawing.Size(124, 13)
+        Me.Label45.TabIndex = 0
+        Me.Label45.Text = "Virtual Machine Support:"
+        '
+        'RadioButton24
+        '
+        Me.RadioButton24.AutoSize = True
+        Me.RadioButton24.Checked = True
+        Me.RadioButton24.Location = New System.Drawing.Point(65, 217)
+        Me.RadioButton24.Name = "RadioButton24"
+        Me.RadioButton24.Size = New System.Drawing.Size(303, 17)
+        Me.RadioButton24.TabIndex = 10
+        Me.RadioButton24.TabStop = True
+        Me.RadioButton24.Text = "No, I plan on using the target installation on a real system"
+        Me.RadioButton24.UseVisualStyleBackColor = True
+        '
+        'RadioButton23
+        '
+        Me.RadioButton23.AutoSize = True
+        Me.RadioButton23.Location = New System.Drawing.Point(65, 71)
+        Me.RadioButton23.Name = "RadioButton23"
+        Me.RadioButton23.Size = New System.Drawing.Size(318, 17)
+        Me.RadioButton23.TabIndex = 10
+        Me.RadioButton23.Text = "Yes, I want to use the target installation on a virtual machine"
+        Me.RadioButton23.UseVisualStyleBackColor = True
+        '
+        'VirtualMachineHeader
+        '
+        Me.VirtualMachineHeader.AutoEllipsis = True
+        Me.VirtualMachineHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.VirtualMachineHeader.Location = New System.Drawing.Point(16, 17)
+        Me.VirtualMachineHeader.Name = "VirtualMachineHeader"
+        Me.VirtualMachineHeader.Size = New System.Drawing.Size(708, 51)
+        Me.VirtualMachineHeader.TabIndex = 9
+        Me.VirtualMachineHeader.Text = "Do you want to add enhanced support from your virtual machine solution?"
         '
         'AccountLockdownPanel
         '
@@ -2465,89 +2569,172 @@ Partial Class NewUnattendWiz
         '
         Me.OpenFileDialog1.Filter = "All Files|*.*"
         '
-        'VirtualMachinePanel
+        'NetworkConnectionPanel
         '
-        Me.VirtualMachinePanel.Controls.Add(Me.VMProviderPanel)
-        Me.VirtualMachinePanel.Controls.Add(Me.RadioButton24)
-        Me.VirtualMachinePanel.Controls.Add(Me.RadioButton23)
-        Me.VirtualMachinePanel.Controls.Add(Me.Label45)
-        Me.VirtualMachinePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.VirtualMachinePanel.Location = New System.Drawing.Point(0, 0)
-        Me.VirtualMachinePanel.Name = "VirtualMachinePanel"
-        Me.VirtualMachinePanel.Size = New System.Drawing.Size(752, 449)
-        Me.VirtualMachinePanel.TabIndex = 9
+        Me.NetworkConnectionPanel.Controls.Add(Me.ManualNetworkConfigPanel)
+        Me.NetworkConnectionPanel.Controls.Add(Me.CheckBox14)
+        Me.NetworkConnectionPanel.Controls.Add(Me.NetworkConnectionHeader)
+        Me.NetworkConnectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NetworkConnectionPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NetworkConnectionPanel.Name = "NetworkConnectionPanel"
+        Me.NetworkConnectionPanel.Size = New System.Drawing.Size(752, 449)
+        Me.NetworkConnectionPanel.TabIndex = 10
         '
-        'Label45
+        'NetworkConnectionHeader
         '
-        Me.Label45.AutoEllipsis = True
-        Me.Label45.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label45.Location = New System.Drawing.Point(16, 17)
-        Me.Label45.Name = "Label45"
-        Me.Label45.Size = New System.Drawing.Size(708, 51)
-        Me.Label45.TabIndex = 9
-        Me.Label45.Text = "Do you want to add enhanced support from your virtual machine solution?"
+        Me.NetworkConnectionHeader.AutoEllipsis = True
+        Me.NetworkConnectionHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NetworkConnectionHeader.Location = New System.Drawing.Point(16, 17)
+        Me.NetworkConnectionHeader.Name = "NetworkConnectionHeader"
+        Me.NetworkConnectionHeader.Size = New System.Drawing.Size(708, 51)
+        Me.NetworkConnectionHeader.TabIndex = 9
+        Me.NetworkConnectionHeader.Text = "Configure wireless network settings and get connected online"
         '
-        'RadioButton23
+        'CheckBox14
         '
-        Me.RadioButton23.AutoSize = True
-        Me.RadioButton23.Location = New System.Drawing.Point(65, 71)
-        Me.RadioButton23.Name = "RadioButton23"
-        Me.RadioButton23.Size = New System.Drawing.Size(318, 17)
-        Me.RadioButton23.TabIndex = 10
-        Me.RadioButton23.Text = "Yes, I want to use the target installation on a virtual machine"
-        Me.RadioButton23.UseVisualStyleBackColor = True
+        Me.CheckBox14.AutoSize = True
+        Me.CheckBox14.Checked = True
+        Me.CheckBox14.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox14.Location = New System.Drawing.Point(65, 392)
+        Me.CheckBox14.Name = "CheckBox14"
+        Me.CheckBox14.Size = New System.Drawing.Size(276, 17)
+        Me.CheckBox14.TabIndex = 11
+        Me.CheckBox14.Text = "I want to configure these settings during installation"
+        Me.CheckBox14.UseVisualStyleBackColor = True
         '
-        'RadioButton24
+        'ManualNetworkConfigPanel
         '
-        Me.RadioButton24.AutoSize = True
-        Me.RadioButton24.Checked = True
-        Me.RadioButton24.Location = New System.Drawing.Point(65, 217)
-        Me.RadioButton24.Name = "RadioButton24"
-        Me.RadioButton24.Size = New System.Drawing.Size(303, 17)
-        Me.RadioButton24.TabIndex = 10
-        Me.RadioButton24.TabStop = True
-        Me.RadioButton24.Text = "No, I plan on using the target installation on a real system"
-        Me.RadioButton24.UseVisualStyleBackColor = True
+        Me.ManualNetworkConfigPanel.AutoScroll = True
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.RadioButton25)
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.WirelessNetworkSettingsPanel)
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.RadioButton30)
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.Label53)
+        Me.ManualNetworkConfigPanel.Enabled = False
+        Me.ManualNetworkConfigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.ManualNetworkConfigPanel.Location = New System.Drawing.Point(65, 74)
+        Me.ManualNetworkConfigPanel.Name = "ManualNetworkConfigPanel"
+        Me.ManualNetworkConfigPanel.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
+        Me.ManualNetworkConfigPanel.Size = New System.Drawing.Size(622, 300)
+        Me.ManualNetworkConfigPanel.TabIndex = 12
+        Me.ManualNetworkConfigPanel.WrapContents = False
         '
-        'VMProviderPanel
+        'RadioButton25
         '
-        Me.VMProviderPanel.Controls.Add(Me.Label47)
-        Me.VMProviderPanel.Controls.Add(Me.ComboBox8)
-        Me.VMProviderPanel.Controls.Add(Me.Label46)
-        Me.VMProviderPanel.Enabled = False
-        Me.VMProviderPanel.Location = New System.Drawing.Point(82, 93)
-        Me.VMProviderPanel.Name = "VMProviderPanel"
-        Me.VMProviderPanel.Size = New System.Drawing.Size(624, 114)
-        Me.VMProviderPanel.TabIndex = 11
+        Me.RadioButton25.AutoSize = True
+        Me.RadioButton25.Checked = True
+        Me.RadioButton25.Location = New System.Drawing.Point(7, 9)
+        Me.RadioButton25.Name = "RadioButton25"
+        Me.RadioButton25.Size = New System.Drawing.Size(259, 17)
+        Me.RadioButton25.TabIndex = 4
+        Me.RadioButton25.Text = "Configure settings for the wireless network now:"
+        Me.RadioButton25.UseVisualStyleBackColor = True
         '
-        'Label46
+        'WirelessNetworkSettingsPanel
         '
-        Me.Label46.AutoSize = True
-        Me.Label46.Location = New System.Drawing.Point(21, 22)
-        Me.Label46.Name = "Label46"
-        Me.Label46.Size = New System.Drawing.Size(124, 13)
-        Me.Label46.TabIndex = 0
-        Me.Label46.Text = "Virtual Machine Support:"
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.ComboBox13)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox10)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox7)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.CheckBox15)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label49)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label48)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label50)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label47)
+        Me.WirelessNetworkSettingsPanel.Location = New System.Drawing.Point(24, 32)
+        Me.WirelessNetworkSettingsPanel.Margin = New System.Windows.Forms.Padding(20, 3, 3, 3)
+        Me.WirelessNetworkSettingsPanel.Name = "WirelessNetworkSettingsPanel"
+        Me.WirelessNetworkSettingsPanel.Size = New System.Drawing.Size(576, 188)
+        Me.WirelessNetworkSettingsPanel.TabIndex = 5
         '
-        'ComboBox8
+        'Label53
         '
-        Me.ComboBox8.FormattingEnabled = True
-        Me.ComboBox8.Items.AddRange(New Object() {"VirtualBox Guest Additions", "VMware Tools", "VirtIO Guest Tools"})
-        Me.ComboBox8.Location = New System.Drawing.Point(162, 19)
-        Me.ComboBox8.Name = "ComboBox8"
-        Me.ComboBox8.Size = New System.Drawing.Size(439, 21)
-        Me.ComboBox8.TabIndex = 1
-        Me.ComboBox8.Text = "VirtIO Guest Tools"
+        Me.Label53.AutoEllipsis = True
+        Me.Label53.Location = New System.Drawing.Point(7, 246)
+        Me.Label53.Name = "Label53"
+        Me.Label53.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label53.Size = New System.Drawing.Size(405, 6)
+        Me.Label53.TabIndex = 1
+        Me.Label53.UseMnemonic = False
+        '
+        'RadioButton30
+        '
+        Me.RadioButton30.AutoSize = True
+        Me.RadioButton30.Location = New System.Drawing.Point(7, 226)
+        Me.RadioButton30.Name = "RadioButton30"
+        Me.RadioButton30.Size = New System.Drawing.Size(110, 17)
+        Me.RadioButton30.TabIndex = 4
+        Me.RadioButton30.Text = "Skip configuration"
+        Me.RadioButton30.UseVisualStyleBackColor = True
         '
         'Label47
         '
-        Me.Label47.AutoSize = True
-        Me.Label47.Location = New System.Drawing.Point(159, 52)
+        Me.Label47.AutoEllipsis = True
+        Me.Label47.Location = New System.Drawing.Point(78, 18)
         Me.Label47.Name = "Label47"
-        Me.Label47.Size = New System.Drawing.Size(269, 39)
-        Me.Label47.TabIndex = 2
-        Me.Label47.Text = "- Use Guest Additions with Oracle VM VirtualBox" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "- Use VMware Tools with VMware h" & _
-    "ypervisors" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "- Use VirtIO Guest Tools with QEMU-based hypervisors"
+        Me.Label47.Size = New System.Drawing.Size(193, 13)
+        Me.Label47.TabIndex = 0
+        Me.Label47.Text = "SSID (Network Name):"
+        '
+        'Label48
+        '
+        Me.Label48.AutoEllipsis = True
+        Me.Label48.Location = New System.Drawing.Point(78, 69)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(193, 13)
+        Me.Label48.TabIndex = 0
+        Me.Label48.Text = "Authentication technology:"
+        '
+        'CheckBox15
+        '
+        Me.CheckBox15.AutoEllipsis = True
+        Me.CheckBox15.Location = New System.Drawing.Point(81, 42)
+        Me.CheckBox15.Name = "CheckBox15"
+        Me.CheckBox15.Size = New System.Drawing.Size(417, 17)
+        Me.CheckBox15.TabIndex = 1
+        Me.CheckBox15.Text = "Connect even if not broadcasting"
+        Me.CheckBox15.UseVisualStyleBackColor = True
+        '
+        'Label49
+        '
+        Me.Label49.AutoEllipsis = True
+        Me.Label49.Location = New System.Drawing.Point(78, 158)
+        Me.Label49.Name = "Label49"
+        Me.Label49.Size = New System.Drawing.Size(193, 13)
+        Me.Label49.TabIndex = 0
+        Me.Label49.Text = "Password:"
+        '
+        'TextBox7
+        '
+        Me.TextBox7.Location = New System.Drawing.Point(277, 15)
+        Me.TextBox7.Name = "TextBox7"
+        Me.TextBox7.Size = New System.Drawing.Size(221, 21)
+        Me.TextBox7.TabIndex = 2
+        '
+        'TextBox10
+        '
+        Me.TextBox10.Location = New System.Drawing.Point(277, 155)
+        Me.TextBox10.Name = "TextBox10"
+        Me.TextBox10.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox10.Size = New System.Drawing.Size(221, 21)
+        Me.TextBox10.TabIndex = 2
+        '
+        'ComboBox13
+        '
+        Me.ComboBox13.FormattingEnabled = True
+        Me.ComboBox13.Items.AddRange(New Object() {"Open (least secure)", "WPA2-PSK", "WPA3-PSK"})
+        Me.ComboBox13.Location = New System.Drawing.Point(277, 66)
+        Me.ComboBox13.Name = "ComboBox13"
+        Me.ComboBox13.Size = New System.Drawing.Size(221, 21)
+        Me.ComboBox13.TabIndex = 3
+        '
+        'Label50
+        '
+        Me.Label50.AutoEllipsis = True
+        Me.Label50.Location = New System.Drawing.Point(277, 93)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Size = New System.Drawing.Size(221, 57)
+        Me.Label50.TabIndex = 0
+        Me.Label50.Text = "Please choose the technology that both the wireless router and your network adapt" & _
+    "er support."
         '
         'NewUnattendWiz
         '
@@ -2579,6 +2766,10 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.VirtualMachinePanel.ResumeLayout(False)
+        Me.VirtualMachinePanel.PerformLayout()
+        Me.VMProviderPanel.ResumeLayout(False)
+        Me.VMProviderPanel.PerformLayout()
         Me.AccountLockdownPanel.ResumeLayout(False)
         Me.AccountLockdownPanel.PerformLayout()
         Me.EnabledAccountLockdownPanel.ResumeLayout(False)
@@ -2662,10 +2853,12 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.VirtualMachinePanel.ResumeLayout(False)
-        Me.VirtualMachinePanel.PerformLayout()
-        Me.VMProviderPanel.ResumeLayout(False)
-        Me.VMProviderPanel.PerformLayout()
+        Me.NetworkConnectionPanel.ResumeLayout(False)
+        Me.NetworkConnectionPanel.PerformLayout()
+        Me.ManualNetworkConfigPanel.ResumeLayout(False)
+        Me.ManualNetworkConfigPanel.PerformLayout()
+        Me.WirelessNetworkSettingsPanel.ResumeLayout(False)
+        Me.WirelessNetworkSettingsPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -2872,9 +3065,25 @@ Partial Class NewUnattendWiz
     Friend WithEvents VirtualMachinePanel As System.Windows.Forms.Panel
     Friend WithEvents VMProviderPanel As System.Windows.Forms.Panel
     Friend WithEvents ComboBox8 As System.Windows.Forms.ComboBox
-    Friend WithEvents Label46 As System.Windows.Forms.Label
+    Friend WithEvents Label45 As System.Windows.Forms.Label
     Friend WithEvents RadioButton24 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton23 As System.Windows.Forms.RadioButton
-    Friend WithEvents Label45 As System.Windows.Forms.Label
+    Friend WithEvents VirtualMachineHeader As System.Windows.Forms.Label
+    Friend WithEvents Label46 As System.Windows.Forms.Label
+    Friend WithEvents NetworkConnectionPanel As System.Windows.Forms.Panel
+    Friend WithEvents NetworkConnectionHeader As System.Windows.Forms.Label
+    Friend WithEvents CheckBox14 As System.Windows.Forms.CheckBox
+    Friend WithEvents ManualNetworkConfigPanel As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents RadioButton25 As System.Windows.Forms.RadioButton
+    Friend WithEvents WirelessNetworkSettingsPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox13 As System.Windows.Forms.ComboBox
+    Friend WithEvents TextBox10 As System.Windows.Forms.TextBox
+    Friend WithEvents TextBox7 As System.Windows.Forms.TextBox
+    Friend WithEvents CheckBox15 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label49 As System.Windows.Forms.Label
+    Friend WithEvents Label48 As System.Windows.Forms.Label
+    Friend WithEvents Label50 As System.Windows.Forms.Label
     Friend WithEvents Label47 As System.Windows.Forms.Label
+    Friend WithEvents RadioButton30 As System.Windows.Forms.RadioButton
+    Friend WithEvents Label53 As System.Windows.Forms.Label
 End Class

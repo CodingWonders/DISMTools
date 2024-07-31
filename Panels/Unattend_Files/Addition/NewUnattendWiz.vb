@@ -55,6 +55,11 @@ Public Class NewUnattendWiz
     Dim VirtualMachineSupported As Boolean
     Dim SelectedVMSettings As New VirtualMachineSettings()
 
+    ' Wireless Networking Panel
+    Dim NetworkConfigInteractive As Boolean = True
+    Dim NetworkConfigManualSkip As Boolean = False
+    Dim SelectedNetworkConfiguration As New WirelessSettings()
+
     ' Space for more pages
 
     ' Default Settings
@@ -67,6 +72,7 @@ Public Class NewUnattendWiz
     Dim DefaultExpirationSettings As New PasswordExpirationSettings()
     Dim DefaultLockdownSettings As New AccountLockdownSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
+    Dim DefaultNetworkConfiguration As New WirelessSettings()
 
 
     ''' <summary>
@@ -301,6 +307,10 @@ Public Class NewUnattendWiz
         DefaultLockdownSettings.TimedLockdownSettings.Timeframe = 10
         DefaultLockdownSettings.TimedLockdownSettings.AutoUnlockTime = 10
         DefaultVMSettings.Provider = VMProvider.VirtIO_Guest_Tools
+        DefaultNetworkConfiguration.SSID = ""
+        DefaultNetworkConfiguration.ConnectWithoutBroadcast = False
+        DefaultNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK
+        DefaultNetworkConfiguration.Password = ""
 
 
         SelectedLanguage = DefaultLanguage
@@ -313,6 +323,7 @@ Public Class NewUnattendWiz
         SelectedExpirationSettings = DefaultExpirationSettings
         SelectedLockdownSettings = DefaultLockdownSettings
         SelectedVMSettings = DefaultVMSettings
+        SelectedNetworkConfiguration = DefaultNetworkConfiguration
 
     End Sub
 
@@ -407,7 +418,9 @@ Public Class NewUnattendWiz
             ' Modify script contents of disk config for sample DP Script
             SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
             ' Set PRO edition
-            ComboBox6.SelectedItem = "Pro"
+            If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
+            ' Set default auth tech to WPA2
+            If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
         End If
     End Sub
 
@@ -415,118 +428,17 @@ Public Class NewUnattendWiz
         If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
             If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
         End If
-        Select Case NewPage
-            Case UnattendedWizardPage.Page.DisclaimerPage
-                DisclaimerPanel.Visible = True
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.RegionalPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = True
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.SysConfigPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = True
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.TimeZonePage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = True
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.DiskConfigPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = True
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.ProductKeyPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = True
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.UserAccountsPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = True
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.PWExpirationPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = True
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.AccountLockdownPage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = True
-                VirtualMachinePanel.Visible = False
-            Case UnattendedWizardPage.Page.VirtualMachinePage
-                DisclaimerPanel.Visible = False
-                RegionalSettingsPanel.Visible = False
-                SysConfigPanel.Visible = False
-                TimeZonePanel.Visible = False
-                DiskConfigurationPanel.Visible = False
-                ProductKeyPanel.Visible = False
-                UserAccountPanel.Visible = False
-                PWExpirationPanel.Visible = False
-                AccountLockdownPanel.Visible = False
-                VirtualMachinePanel.Visible = True
-        End Select
+        DisclaimerPanel.Visible = (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+        RegionalSettingsPanel.Visible = (NewPage = UnattendedWizardPage.Page.RegionalPage)
+        SysConfigPanel.Visible = (NewPage = UnattendedWizardPage.Page.SysConfigPage)
+        TimeZonePanel.Visible = (NewPage = UnattendedWizardPage.Page.TimeZonePage)
+        DiskConfigurationPanel.Visible = (NewPage = UnattendedWizardPage.Page.DiskConfigPage)
+        ProductKeyPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProductKeyPage)
+        UserAccountPanel.Visible = (NewPage = UnattendedWizardPage.Page.UserAccountsPage)
+        PWExpirationPanel.Visible = (NewPage = UnattendedWizardPage.Page.PWExpirationPage)
+        AccountLockdownPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockdownPage)
+        VirtualMachinePanel.Visible = (NewPage = UnattendedWizardPage.Page.VirtualMachinePage)
+        NetworkConnectionPanel.Visible = (NewPage = UnattendedWizardPage.Page.NetworkConnectionsPage)
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
         Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
@@ -1033,5 +945,31 @@ Public Class NewUnattendWiz
 
     Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
         SelectedVMSettings.Provider = ComboBox8.SelectedIndex
+    End Sub
+
+    Private Sub CheckBox14_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox14.CheckedChanged
+        NetworkConfigInteractive = CheckBox14.Checked
+        ManualNetworkConfigPanel.Enabled = Not CheckBox14.Checked
+    End Sub
+
+    Private Sub RadioButton25_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton25.CheckedChanged
+        WirelessNetworkSettingsPanel.Enabled = RadioButton25.Checked
+        NetworkConfigManualSkip = Not RadioButton25.Checked
+    End Sub
+
+    Private Sub TextBox7_TextChanged(sender As Object, e As EventArgs) Handles TextBox7.TextChanged
+        SelectedNetworkConfiguration.SSID = TextBox7.Text
+    End Sub
+
+    Private Sub CheckBox15_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox15.CheckedChanged
+        SelectedNetworkConfiguration.ConnectWithoutBroadcast = CheckBox15.Checked
+    End Sub
+
+    Private Sub ComboBox13_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox13.SelectedIndexChanged
+        SelectedNetworkConfiguration.Authentication = ComboBox13.SelectedIndex
+    End Sub
+
+    Private Sub TextBox10_TextChanged(sender As Object, e As EventArgs) Handles TextBox10.TextChanged
+        SelectedNetworkConfiguration.Password = TextBox10.Text
     End Sub
 End Class
