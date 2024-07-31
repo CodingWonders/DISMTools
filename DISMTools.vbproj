@@ -152,7 +152,9 @@
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockdownSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />

@@ -10,11 +10,13 @@
             DiskConfigPage = 4
             ProductKeyPage = 5
             UserAccountsPage = 6
+            PWExpirationPage = 7
+            AccountLockdownPage = 8
         End Enum
 
         Public Property WizardPage As Page
 
-        Public Const PageCount As Integer = 7
+        Public Const PageCount As Integer = 9
     End Class
 
 End Namespace

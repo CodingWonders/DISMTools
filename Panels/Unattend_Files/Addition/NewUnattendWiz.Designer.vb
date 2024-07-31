@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode53 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
-        Dim TreeNode54 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode55 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode56 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode57 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode58 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode59 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
-        Dim TreeNode60 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode61 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode62 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode63 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode64 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode65 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,11 +49,36 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.AccountLockdownPanel = New System.Windows.Forms.Panel()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.EnabledAccountLockdownPanel = New System.Windows.Forms.Panel()
+        Me.AccountLockdownParametersPanel = New System.Windows.Forms.Panel()
+        Me.NumericUpDown8 = New System.Windows.Forms.NumericUpDown()
+        Me.NumericUpDown7 = New System.Windows.Forms.NumericUpDown()
+        Me.NumericUpDown6 = New System.Windows.Forms.NumericUpDown()
+        Me.Label43 = New System.Windows.Forms.Label()
+        Me.Label42 = New System.Windows.Forms.Label()
+        Me.Label41 = New System.Windows.Forms.Label()
+        Me.Label40 = New System.Windows.Forms.Label()
+        Me.RadioButton22 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton21 = New System.Windows.Forms.RadioButton()
+        Me.CheckBox13 = New System.Windows.Forms.CheckBox()
+        Me.AccountLockdownHeader = New System.Windows.Forms.Label()
+        Me.PWExpirationPanel = New System.Windows.Forms.Panel()
+        Me.AutoExpirationPanel = New System.Windows.Forms.Panel()
+        Me.TimedExpirationPanel = New System.Windows.Forms.Panel()
+        Me.Label39 = New System.Windows.Forms.Label()
+        Me.NumericUpDown5 = New System.Windows.Forms.NumericUpDown()
+        Me.RadioButton20 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton19 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton18 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton17 = New System.Windows.Forms.RadioButton()
+        Me.PWExpirationHeader = New System.Windows.Forms.Label()
         Me.UserAccountPanel = New System.Windows.Forms.Panel()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.CheckBox6 = New System.Windows.Forms.CheckBox()
         Me.ManualAccountPanel = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.UserAccountListing = New System.Windows.Forms.Panel()
         Me.AccountsPanel = New System.Windows.Forms.TableLayoutPanel()
         Me.ComboBox12 = New System.Windows.Forms.ComboBox()
         Me.ComboBox11 = New System.Windows.Forms.ComboBox()
@@ -221,9 +246,19 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.AccountLockdownPanel.SuspendLayout()
+        Me.EnabledAccountLockdownPanel.SuspendLayout()
+        Me.AccountLockdownParametersPanel.SuspendLayout()
+        CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PWExpirationPanel.SuspendLayout()
+        Me.AutoExpirationPanel.SuspendLayout()
+        Me.TimedExpirationPanel.SuspendLayout()
+        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.UserAccountPanel.SuspendLayout()
         Me.ManualAccountPanel.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.UserAccountListing.SuspendLayout()
         Me.AccountsPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.AutoLogonSettingsPanel.SuspendLayout()
@@ -297,33 +332,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode53.Name = "Nodo0"
-        TreeNode53.Text = "DISCLAIMER - NOT COMPLETE"
-        TreeNode54.Name = "Nodo1"
-        TreeNode54.Text = "Regional Configuration"
-        TreeNode55.Name = "Nodo2"
-        TreeNode55.Text = "Basic System Configuration"
-        TreeNode56.Name = "Nodo3"
-        TreeNode56.Text = "Time Zone"
-        TreeNode57.Name = "Nodo4"
-        TreeNode57.Text = "Disk Configuration"
-        TreeNode58.Name = "Nodo5"
-        TreeNode58.Text = "Product Key"
-        TreeNode59.Name = "Nodo6"
-        TreeNode59.Text = "Users and Passwords"
-        TreeNode60.Name = "Nodo9"
-        TreeNode60.Text = "Virtual Machine Support"
-        TreeNode61.Name = "Nodo10"
-        TreeNode61.Text = "Wireless Networking"
-        TreeNode62.Name = "Nodo11"
-        TreeNode62.Text = "System Telemetry"
-        TreeNode63.Name = "Nodo12"
-        TreeNode63.Text = "Post-Installation Scripts"
-        TreeNode64.Name = "Nodo13"
-        TreeNode64.Text = "Component Settings"
-        TreeNode65.Name = "Nodo14"
-        TreeNode65.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode53, TreeNode54, TreeNode55, TreeNode56, TreeNode57, TreeNode58, TreeNode59, TreeNode60, TreeNode61, TreeNode62, TreeNode63, TreeNode64, TreeNode65})
+        TreeNode1.Name = "Nodo0"
+        TreeNode1.Text = "DISCLAIMER - NOT COMPLETE"
+        TreeNode2.Name = "Nodo1"
+        TreeNode2.Text = "Regional Configuration"
+        TreeNode3.Name = "Nodo2"
+        TreeNode3.Text = "Basic System Configuration"
+        TreeNode4.Name = "Nodo3"
+        TreeNode4.Text = "Time Zone"
+        TreeNode5.Name = "Nodo4"
+        TreeNode5.Text = "Disk Configuration"
+        TreeNode6.Name = "Nodo5"
+        TreeNode6.Text = "Product Key"
+        TreeNode7.Name = "Nodo6"
+        TreeNode7.Text = "Users and Passwords"
+        TreeNode8.Name = "Nodo9"
+        TreeNode8.Text = "Virtual Machine Support"
+        TreeNode9.Name = "Nodo10"
+        TreeNode9.Text = "Wireless Networking"
+        TreeNode10.Name = "Nodo11"
+        TreeNode10.Text = "System Telemetry"
+        TreeNode11.Name = "Nodo12"
+        TreeNode11.Text = "Post-Installation Scripts"
+        TreeNode12.Name = "Nodo13"
+        TreeNode12.Text = "Component Settings"
+        TreeNode13.Name = "Nodo14"
+        TreeNode13.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -413,6 +448,8 @@ Partial Class NewUnattendWiz
         '
         'StepsContainer
         '
+        Me.StepsContainer.Controls.Add(Me.AccountLockdownPanel)
+        Me.StepsContainer.Controls.Add(Me.PWExpirationPanel)
         Me.StepsContainer.Controls.Add(Me.UserAccountPanel)
         Me.StepsContainer.Controls.Add(Me.ProductKeyPanel)
         Me.StepsContainer.Controls.Add(Me.DiskConfigurationPanel)
@@ -425,6 +462,267 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'AccountLockdownPanel
+        '
+        Me.AccountLockdownPanel.Controls.Add(Me.Label44)
+        Me.AccountLockdownPanel.Controls.Add(Me.EnabledAccountLockdownPanel)
+        Me.AccountLockdownPanel.Controls.Add(Me.CheckBox13)
+        Me.AccountLockdownPanel.Controls.Add(Me.AccountLockdownHeader)
+        Me.AccountLockdownPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AccountLockdownPanel.Location = New System.Drawing.Point(0, 0)
+        Me.AccountLockdownPanel.Name = "AccountLockdownPanel"
+        Me.AccountLockdownPanel.Size = New System.Drawing.Size(752, 449)
+        Me.AccountLockdownPanel.TabIndex = 8
+        '
+        'Label44
+        '
+        Me.Label44.AutoSize = True
+        Me.Label44.Location = New System.Drawing.Point(81, 392)
+        Me.Label44.Name = "Label44"
+        Me.Label44.Size = New System.Drawing.Size(443, 13)
+        Me.Label44.TabIndex = 13
+        Me.Label44.Text = "Checking this option will make the target installation more vulnerable to brute-f" & _
+    "orce attacks"
+        '
+        'EnabledAccountLockdownPanel
+        '
+        Me.EnabledAccountLockdownPanel.Controls.Add(Me.AccountLockdownParametersPanel)
+        Me.EnabledAccountLockdownPanel.Controls.Add(Me.RadioButton22)
+        Me.EnabledAccountLockdownPanel.Controls.Add(Me.RadioButton21)
+        Me.EnabledAccountLockdownPanel.Location = New System.Drawing.Point(57, 65)
+        Me.EnabledAccountLockdownPanel.Name = "EnabledAccountLockdownPanel"
+        Me.EnabledAccountLockdownPanel.Size = New System.Drawing.Size(650, 198)
+        Me.EnabledAccountLockdownPanel.TabIndex = 12
+        '
+        'AccountLockdownParametersPanel
+        '
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown8)
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown7)
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown6)
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label43)
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label42)
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label41)
+        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label40)
+        Me.AccountLockdownParametersPanel.Enabled = False
+        Me.AccountLockdownParametersPanel.Location = New System.Drawing.Point(27, 54)
+        Me.AccountLockdownParametersPanel.Name = "AccountLockdownParametersPanel"
+        Me.AccountLockdownParametersPanel.Size = New System.Drawing.Size(602, 139)
+        Me.AccountLockdownParametersPanel.TabIndex = 10
+        '
+        'NumericUpDown8
+        '
+        Me.NumericUpDown8.Location = New System.Drawing.Point(351, 91)
+        Me.NumericUpDown8.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown8.Name = "NumericUpDown8"
+        Me.NumericUpDown8.Size = New System.Drawing.Size(120, 21)
+        Me.NumericUpDown8.TabIndex = 1
+        Me.NumericUpDown8.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        '
+        'NumericUpDown7
+        '
+        Me.NumericUpDown7.Location = New System.Drawing.Point(351, 64)
+        Me.NumericUpDown7.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown7.Name = "NumericUpDown7"
+        Me.NumericUpDown7.Size = New System.Drawing.Size(120, 21)
+        Me.NumericUpDown7.TabIndex = 1
+        Me.NumericUpDown7.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        '
+        'NumericUpDown6
+        '
+        Me.NumericUpDown6.Location = New System.Drawing.Point(351, 37)
+        Me.NumericUpDown6.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown6.Name = "NumericUpDown6"
+        Me.NumericUpDown6.Size = New System.Drawing.Size(120, 21)
+        Me.NumericUpDown6.TabIndex = 1
+        Me.NumericUpDown6.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        '
+        'Label43
+        '
+        Me.Label43.AutoEllipsis = True
+        Me.Label43.Location = New System.Drawing.Point(30, 93)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(314, 35)
+        Me.Label43.TabIndex = 0
+        Me.Label43.Text = "After the following amount of minutes, unlock the account:"
+        Me.Label43.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label42
+        '
+        Me.Label42.AutoEllipsis = True
+        Me.Label42.Location = New System.Drawing.Point(30, 67)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Size = New System.Drawing.Size(314, 13)
+        Me.Label42.TabIndex = 0
+        Me.Label42.Text = "Within the following timeframe in minutes:"
+        Me.Label42.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label41
+        '
+        Me.Label41.AutoEllipsis = True
+        Me.Label41.Location = New System.Drawing.Point(30, 39)
+        Me.Label41.Name = "Label41"
+        Me.Label41.Size = New System.Drawing.Size(314, 13)
+        Me.Label41.TabIndex = 0
+        Me.Label41.Text = "After the following amount of failed attempts:"
+        Me.Label41.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label40
+        '
+        Me.Label40.AutoSize = True
+        Me.Label40.Location = New System.Drawing.Point(12, 14)
+        Me.Label40.Name = "Label40"
+        Me.Label40.Size = New System.Drawing.Size(115, 13)
+        Me.Label40.TabIndex = 0
+        Me.Label40.Text = "Lock out an account..."
+        '
+        'RadioButton22
+        '
+        Me.RadioButton22.AutoSize = True
+        Me.RadioButton22.Location = New System.Drawing.Point(8, 29)
+        Me.RadioButton22.Name = "RadioButton22"
+        Me.RadioButton22.Size = New System.Drawing.Size(257, 17)
+        Me.RadioButton22.TabIndex = 9
+        Me.RadioButton22.Text = "Continue with custom Account Lockdown policies"
+        Me.RadioButton22.UseVisualStyleBackColor = True
+        '
+        'RadioButton21
+        '
+        Me.RadioButton21.AutoSize = True
+        Me.RadioButton21.Checked = True
+        Me.RadioButton21.Location = New System.Drawing.Point(8, 6)
+        Me.RadioButton21.Name = "RadioButton21"
+        Me.RadioButton21.Size = New System.Drawing.Size(257, 17)
+        Me.RadioButton21.TabIndex = 9
+        Me.RadioButton21.TabStop = True
+        Me.RadioButton21.Text = "Continue with default Account Lockdown policies"
+        Me.RadioButton21.UseVisualStyleBackColor = True
+        '
+        'CheckBox13
+        '
+        Me.CheckBox13.AutoSize = True
+        Me.CheckBox13.Location = New System.Drawing.Point(65, 369)
+        Me.CheckBox13.Name = "CheckBox13"
+        Me.CheckBox13.Size = New System.Drawing.Size(90, 17)
+        Me.CheckBox13.TabIndex = 11
+        Me.CheckBox13.Text = "Disable policy"
+        Me.CheckBox13.UseVisualStyleBackColor = True
+        '
+        'AccountLockdownHeader
+        '
+        Me.AccountLockdownHeader.AutoEllipsis = True
+        Me.AccountLockdownHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.AccountLockdownHeader.Location = New System.Drawing.Point(16, 17)
+        Me.AccountLockdownHeader.Name = "AccountLockdownHeader"
+        Me.AccountLockdownHeader.Size = New System.Drawing.Size(708, 51)
+        Me.AccountLockdownHeader.TabIndex = 8
+        Me.AccountLockdownHeader.Text = "Configure Account Lockdown policies for the target system"
+        '
+        'PWExpirationPanel
+        '
+        Me.PWExpirationPanel.Controls.Add(Me.AutoExpirationPanel)
+        Me.PWExpirationPanel.Controls.Add(Me.RadioButton18)
+        Me.PWExpirationPanel.Controls.Add(Me.RadioButton17)
+        Me.PWExpirationPanel.Controls.Add(Me.PWExpirationHeader)
+        Me.PWExpirationPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PWExpirationPanel.Location = New System.Drawing.Point(0, 0)
+        Me.PWExpirationPanel.Name = "PWExpirationPanel"
+        Me.PWExpirationPanel.Size = New System.Drawing.Size(752, 449)
+        Me.PWExpirationPanel.TabIndex = 7
+        '
+        'AutoExpirationPanel
+        '
+        Me.AutoExpirationPanel.Controls.Add(Me.TimedExpirationPanel)
+        Me.AutoExpirationPanel.Controls.Add(Me.RadioButton20)
+        Me.AutoExpirationPanel.Controls.Add(Me.RadioButton19)
+        Me.AutoExpirationPanel.Enabled = False
+        Me.AutoExpirationPanel.Location = New System.Drawing.Point(80, 122)
+        Me.AutoExpirationPanel.Name = "AutoExpirationPanel"
+        Me.AutoExpirationPanel.Size = New System.Drawing.Size(606, 107)
+        Me.AutoExpirationPanel.TabIndex = 9
+        '
+        'TimedExpirationPanel
+        '
+        Me.TimedExpirationPanel.Controls.Add(Me.Label39)
+        Me.TimedExpirationPanel.Controls.Add(Me.NumericUpDown5)
+        Me.TimedExpirationPanel.Enabled = False
+        Me.TimedExpirationPanel.Location = New System.Drawing.Point(31, 59)
+        Me.TimedExpirationPanel.Name = "TimedExpirationPanel"
+        Me.TimedExpirationPanel.Size = New System.Drawing.Size(562, 35)
+        Me.TimedExpirationPanel.TabIndex = 1
+        '
+        'Label39
+        '
+        Me.Label39.AutoSize = True
+        Me.Label39.Location = New System.Drawing.Point(291, 11)
+        Me.Label39.Name = "Label39"
+        Me.Label39.Size = New System.Drawing.Size(30, 13)
+        Me.Label39.TabIndex = 1
+        Me.Label39.Text = "days"
+        '
+        'NumericUpDown5
+        '
+        Me.NumericUpDown5.Location = New System.Drawing.Point(241, 7)
+        Me.NumericUpDown5.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown5.Name = "NumericUpDown5"
+        Me.NumericUpDown5.Size = New System.Drawing.Size(44, 21)
+        Me.NumericUpDown5.TabIndex = 0
+        Me.NumericUpDown5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.NumericUpDown5.Value = New Decimal(New Integer() {10, 0, 0, 0})
+        '
+        'RadioButton20
+        '
+        Me.RadioButton20.AutoSize = True
+        Me.RadioButton20.Location = New System.Drawing.Point(13, 34)
+        Me.RadioButton20.Name = "RadioButton20"
+        Me.RadioButton20.Size = New System.Drawing.Size(316, 17)
+        Me.RadioButton20.TabIndex = 0
+        Me.RadioButton20.Text = "Passwords should expire after the following number of days:"
+        Me.RadioButton20.UseVisualStyleBackColor = True
+        '
+        'RadioButton19
+        '
+        Me.RadioButton19.AutoSize = True
+        Me.RadioButton19.Checked = True
+        Me.RadioButton19.Location = New System.Drawing.Point(13, 12)
+        Me.RadioButton19.Name = "RadioButton19"
+        Me.RadioButton19.Size = New System.Drawing.Size(211, 17)
+        Me.RadioButton19.TabIndex = 0
+        Me.RadioButton19.TabStop = True
+        Me.RadioButton19.Text = "Passwords should expire after 42 days"
+        Me.RadioButton19.UseVisualStyleBackColor = True
+        '
+        'RadioButton18
+        '
+        Me.RadioButton18.AutoSize = True
+        Me.RadioButton18.Location = New System.Drawing.Point(65, 94)
+        Me.RadioButton18.Name = "RadioButton18"
+        Me.RadioButton18.Size = New System.Drawing.Size(431, 17)
+        Me.RadioButton18.TabIndex = 8
+        Me.RadioButton18.Text = "Passwords should expire after a certain amount of days (not recommended by NIST)"
+        Me.RadioButton18.UseVisualStyleBackColor = True
+        '
+        'RadioButton17
+        '
+        Me.RadioButton17.AutoSize = True
+        Me.RadioButton17.Checked = True
+        Me.RadioButton17.Location = New System.Drawing.Point(65, 71)
+        Me.RadioButton17.Name = "RadioButton17"
+        Me.RadioButton17.Size = New System.Drawing.Size(174, 17)
+        Me.RadioButton17.TabIndex = 8
+        Me.RadioButton17.TabStop = True
+        Me.RadioButton17.Text = "Passwords should never expire"
+        Me.RadioButton17.UseVisualStyleBackColor = True
+        '
+        'PWExpirationHeader
+        '
+        Me.PWExpirationHeader.AutoEllipsis = True
+        Me.PWExpirationHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PWExpirationHeader.Location = New System.Drawing.Point(16, 17)
+        Me.PWExpirationHeader.Name = "PWExpirationHeader"
+        Me.PWExpirationHeader.Size = New System.Drawing.Size(708, 51)
+        Me.PWExpirationHeader.TabIndex = 7
+        Me.PWExpirationHeader.Text = "Should passwords expire?"
         '
         'UserAccountPanel
         '
@@ -441,7 +739,7 @@ Partial Class NewUnattendWiz
         'Label34
         '
         Me.Label34.AutoSize = True
-        Me.Label34.Location = New System.Drawing.Point(81, 399)
+        Me.Label34.Location = New System.Drawing.Point(81, 414)
         Me.Label34.Name = "Label34"
         Me.Label34.Size = New System.Drawing.Size(286, 13)
         Me.Label34.TabIndex = 11
@@ -452,7 +750,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox6.AutoSize = True
         Me.CheckBox6.Checked = True
         Me.CheckBox6.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox6.Location = New System.Drawing.Point(65, 377)
+        Me.CheckBox6.Location = New System.Drawing.Point(65, 392)
         Me.CheckBox6.Name = "CheckBox6"
         Me.CheckBox6.Size = New System.Drawing.Size(276, 17)
         Me.CheckBox6.TabIndex = 10
@@ -462,7 +760,7 @@ Partial Class NewUnattendWiz
         'ManualAccountPanel
         '
         Me.ManualAccountPanel.AutoScroll = True
-        Me.ManualAccountPanel.Controls.Add(Me.Panel1)
+        Me.ManualAccountPanel.Controls.Add(Me.UserAccountListing)
         Me.ManualAccountPanel.Controls.Add(Me.GroupBox1)
         Me.ManualAccountPanel.Controls.Add(Me.CheckBox7)
         Me.ManualAccountPanel.Controls.Add(Me.FillerLabel2)
@@ -471,17 +769,17 @@ Partial Class NewUnattendWiz
         Me.ManualAccountPanel.Location = New System.Drawing.Point(65, 71)
         Me.ManualAccountPanel.Name = "ManualAccountPanel"
         Me.ManualAccountPanel.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
-        Me.ManualAccountPanel.Size = New System.Drawing.Size(622, 300)
+        Me.ManualAccountPanel.Size = New System.Drawing.Size(622, 305)
         Me.ManualAccountPanel.TabIndex = 9
         Me.ManualAccountPanel.WrapContents = False
         '
-        'Panel1
+        'UserAccountListing
         '
-        Me.Panel1.Controls.Add(Me.AccountsPanel)
-        Me.Panel1.Location = New System.Drawing.Point(7, 9)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(593, 153)
-        Me.Panel1.TabIndex = 2
+        Me.UserAccountListing.Controls.Add(Me.AccountsPanel)
+        Me.UserAccountListing.Location = New System.Drawing.Point(7, 9)
+        Me.UserAccountListing.Name = "UserAccountListing"
+        Me.UserAccountListing.Size = New System.Drawing.Size(593, 153)
+        Me.UserAccountListing.TabIndex = 2
         '
         'AccountsPanel
         '
@@ -768,7 +1066,7 @@ Partial Class NewUnattendWiz
         Me.GroupBox1.Controls.Add(Me.CheckBox12)
         Me.GroupBox1.Location = New System.Drawing.Point(7, 168)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(593, 123)
+        Me.GroupBox1.Size = New System.Drawing.Size(593, 109)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "First log on"
@@ -781,7 +1079,7 @@ Partial Class NewUnattendWiz
         Me.AutoLogonSettingsPanel.Enabled = False
         Me.AutoLogonSettingsPanel.Location = New System.Drawing.Point(34, 43)
         Me.AutoLogonSettingsPanel.Name = "AutoLogonSettingsPanel"
-        Me.AutoLogonSettingsPanel.Size = New System.Drawing.Size(546, 68)
+        Me.AutoLogonSettingsPanel.Size = New System.Drawing.Size(546, 58)
         Me.AutoLogonSettingsPanel.TabIndex = 1
         '
         'TextBox5
@@ -828,7 +1126,7 @@ Partial Class NewUnattendWiz
         'CheckBox7
         '
         Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Location = New System.Drawing.Point(7, 297)
+        Me.CheckBox7.Location = New System.Drawing.Point(7, 283)
         Me.CheckBox7.Name = "CheckBox7"
         Me.CheckBox7.Size = New System.Drawing.Size(181, 17)
         Me.CheckBox7.TabIndex = 3
@@ -838,7 +1136,7 @@ Partial Class NewUnattendWiz
         'FillerLabel2
         '
         Me.FillerLabel2.AutoEllipsis = True
-        Me.FillerLabel2.Location = New System.Drawing.Point(7, 317)
+        Me.FillerLabel2.Location = New System.Drawing.Point(7, 303)
         Me.FillerLabel2.Name = "FillerLabel2"
         Me.FillerLabel2.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.FillerLabel2.Size = New System.Drawing.Size(405, 6)
@@ -2186,11 +2484,27 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.AccountLockdownPanel.ResumeLayout(False)
+        Me.AccountLockdownPanel.PerformLayout()
+        Me.EnabledAccountLockdownPanel.ResumeLayout(False)
+        Me.EnabledAccountLockdownPanel.PerformLayout()
+        Me.AccountLockdownParametersPanel.ResumeLayout(False)
+        Me.AccountLockdownParametersPanel.PerformLayout()
+        CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PWExpirationPanel.ResumeLayout(False)
+        Me.PWExpirationPanel.PerformLayout()
+        Me.AutoExpirationPanel.ResumeLayout(False)
+        Me.AutoExpirationPanel.PerformLayout()
+        Me.TimedExpirationPanel.ResumeLayout(False)
+        Me.TimedExpirationPanel.PerformLayout()
+        CType(Me.NumericUpDown5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.UserAccountPanel.ResumeLayout(False)
         Me.UserAccountPanel.PerformLayout()
         Me.ManualAccountPanel.ResumeLayout(False)
         Me.ManualAccountPanel.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
+        Me.UserAccountListing.ResumeLayout(False)
         Me.AccountsPanel.ResumeLayout(False)
         Me.AccountsPanel.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
@@ -2398,10 +2712,9 @@ Partial Class NewUnattendWiz
     Friend WithEvents Label34 As System.Windows.Forms.Label
     Friend WithEvents CheckBox6 As System.Windows.Forms.CheckBox
     Friend WithEvents ManualAccountPanel As System.Windows.Forms.FlowLayoutPanel
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents UserAccountListing As System.Windows.Forms.Panel
     Friend WithEvents AccountsPanel As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents CheckBox7 As System.Windows.Forms.CheckBox
-    Friend WithEvents FillerLabel2 As System.Windows.Forms.Label
     Friend WithEvents ComboBox12 As System.Windows.Forms.ComboBox
     Friend WithEvents ComboBox11 As System.Windows.Forms.ComboBox
     Friend WithEvents ComboBox10 As System.Windows.Forms.ComboBox
@@ -2431,4 +2744,30 @@ Partial Class NewUnattendWiz
     Friend WithEvents RadioButton16 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton15 As System.Windows.Forms.RadioButton
     Friend WithEvents CheckBox12 As System.Windows.Forms.CheckBox
+    Friend WithEvents PWExpirationPanel As System.Windows.Forms.Panel
+    Friend WithEvents FillerLabel2 As System.Windows.Forms.Label
+    Friend WithEvents AutoExpirationPanel As System.Windows.Forms.Panel
+    Friend WithEvents TimedExpirationPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label39 As System.Windows.Forms.Label
+    Friend WithEvents NumericUpDown5 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents RadioButton20 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton19 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton18 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton17 As System.Windows.Forms.RadioButton
+    Friend WithEvents PWExpirationHeader As System.Windows.Forms.Label
+    Friend WithEvents AccountLockdownPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label44 As System.Windows.Forms.Label
+    Friend WithEvents EnabledAccountLockdownPanel As System.Windows.Forms.Panel
+    Friend WithEvents AccountLockdownParametersPanel As System.Windows.Forms.Panel
+    Friend WithEvents NumericUpDown8 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents NumericUpDown7 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents NumericUpDown6 As System.Windows.Forms.NumericUpDown
+    Friend WithEvents Label43 As System.Windows.Forms.Label
+    Friend WithEvents Label42 As System.Windows.Forms.Label
+    Friend WithEvents Label41 As System.Windows.Forms.Label
+    Friend WithEvents Label40 As System.Windows.Forms.Label
+    Friend WithEvents RadioButton22 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton21 As System.Windows.Forms.RadioButton
+    Friend WithEvents CheckBox13 As System.Windows.Forms.CheckBox
+    Friend WithEvents AccountLockdownHeader As System.Windows.Forms.Label
 End Class

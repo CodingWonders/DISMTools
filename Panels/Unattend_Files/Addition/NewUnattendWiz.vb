@@ -48,6 +48,8 @@ Public Class NewUnattendWiz
     Dim UserAccountsList As New List(Of User)
     Dim AutoLogon As New AutoLogonSettings()
     Dim PasswordObfuscate As Boolean
+    Dim SelectedExpirationSettings As New PasswordExpirationSettings()
+    Dim SelectedLockdownSettings As New AccountLockdownSettings()
 
     ' Space for more pages
 
@@ -58,6 +60,8 @@ Public Class NewUnattendWiz
     Dim DefaultGeoId As New GeoId()
     Dim DefaultOffset As New TimeOffset()
     Dim DefaultDiskConfiguration As New DiskConfiguration()
+    Dim DefaultExpirationSettings As New PasswordExpirationSettings()
+    Dim DefaultLockdownSettings As New AccountLockdownSettings()
 
 
     ''' <summary>
@@ -279,26 +283,18 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
 
-        Dim defaultAdmin As New User With
-            {
-                .Enabled = True,
-                .Name = "Admin",
-                .Password = "",
-                .Group = UserGroup.Administrators
-            }
-        UserAccountsList.Add(defaultAdmin)
-        Dim defaultUser As New User With
-            {
-                .Enabled = False,
-                .Name = "",
-                .Password = "",
-                .Group = UserGroup.Users
-            }
-        ' Add default user 4 more times
-        UserAccountsList.Add(defaultUser)
-        UserAccountsList.Add(defaultUser)
-        UserAccountsList.Add(defaultUser)
-        UserAccountsList.Add(defaultUser)
+        UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
+        For i = 1 To 4
+            UserAccountsList.Add(New User(False, "", "", UserGroup.Users))
+        Next
+
+        DefaultExpirationSettings.Mode = PasswordExpirationMode.NIST_Unlimited
+        DefaultExpirationSettings.Days = 42
+        DefaultLockdownSettings.Enabled = True
+        DefaultLockdownSettings.DefaultPolicy = True
+        DefaultLockdownSettings.TimedLockdownSettings.FailedAttempts = 10
+        DefaultLockdownSettings.TimedLockdownSettings.Timeframe = 10
+        DefaultLockdownSettings.TimedLockdownSettings.AutoUnlockTime = 10
 
 
         SelectedLanguage = DefaultLanguage
@@ -308,6 +304,8 @@ Public Class NewUnattendWiz
         SelectedOffset = DefaultOffset
         SelectedDiskConfiguration = DefaultDiskConfiguration
         SelectedKey = GenericKeys(5)
+        SelectedExpirationSettings = DefaultExpirationSettings
+        SelectedLockdownSettings = DefaultLockdownSettings
 
     End Sub
 
@@ -397,7 +395,7 @@ Public Class NewUnattendWiz
             End If
             ListBox1.SelectedIndex = 1
             ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
-            VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage})
+            VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage})
             TimeZonePageTimer.Enabled = True
             ' Modify script contents of disk config for sample DP Script
             SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
@@ -419,6 +417,8 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = False
                 ProductKeyPanel.Visible = False
                 UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
             Case UnattendedWizardPage.Page.RegionalPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = True
@@ -427,6 +427,8 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = False
                 ProductKeyPanel.Visible = False
                 UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
             Case UnattendedWizardPage.Page.SysConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -435,6 +437,8 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = False
                 ProductKeyPanel.Visible = False
                 UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
             Case UnattendedWizardPage.Page.TimeZonePage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -443,6 +447,8 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = False
                 ProductKeyPanel.Visible = False
                 UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
             Case UnattendedWizardPage.Page.DiskConfigPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -451,6 +457,8 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = True
                 ProductKeyPanel.Visible = False
                 UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
             Case UnattendedWizardPage.Page.ProductKeyPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -459,6 +467,8 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = False
                 ProductKeyPanel.Visible = True
                 UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
             Case UnattendedWizardPage.Page.UserAccountsPage
                 DisclaimerPanel.Visible = False
                 RegionalSettingsPanel.Visible = False
@@ -467,6 +477,28 @@ Public Class NewUnattendWiz
                 DiskConfigurationPanel.Visible = False
                 ProductKeyPanel.Visible = False
                 UserAccountPanel.Visible = True
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = False
+            Case UnattendedWizardPage.Page.PWExpirationPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = True
+                AccountLockdownPanel.Visible = False
+            Case UnattendedWizardPage.Page.AccountLockdownPage
+                DisclaimerPanel.Visible = False
+                RegionalSettingsPanel.Visible = False
+                SysConfigPanel.Visible = False
+                TimeZonePanel.Visible = False
+                DiskConfigurationPanel.Visible = False
+                ProductKeyPanel.Visible = False
+                UserAccountPanel.Visible = False
+                PWExpirationPanel.Visible = False
+                AccountLockdownPanel.Visible = True
         End Select
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
@@ -507,6 +539,11 @@ Public Class NewUnattendWiz
                             Return False
                         End If
                     End If
+                End If
+            Case UnattendedWizardPage.Page.UserAccountsPage
+                If Not UserAccountsInteractive AndAlso Not UserValidator.ValidateUsers(UserAccountsList) Then
+                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses the Administrator name, and try again", "User Accounts error")
+                    Return False
                 End If
         End Select
         Return True
@@ -924,5 +961,41 @@ Public Class NewUnattendWiz
 
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
         PasswordObfuscate = CheckBox7.Checked
+    End Sub
+
+    Private Sub RadioButton17_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton17.CheckedChanged
+        SelectedExpirationSettings.Mode = If(RadioButton17.Checked, PasswordExpirationMode.NIST_Unlimited, PasswordExpirationMode.NIST_Limited)
+        AutoExpirationPanel.Enabled = Not RadioButton17.Checked
+    End Sub
+
+    Private Sub RadioButton19_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton19.CheckedChanged
+        SelectedExpirationSettings.WindowsDefault = RadioButton19.Checked
+        TimedExpirationPanel.Enabled = Not RadioButton19.Checked
+    End Sub
+
+    Private Sub NumericUpDown5_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown5.ValueChanged
+        SelectedExpirationSettings.Days = NumericUpDown5.Value
+    End Sub
+
+    Private Sub CheckBox13_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox13.CheckedChanged
+        SelectedLockdownSettings.Enabled = CheckBox13.Checked
+        EnabledAccountLockdownPanel.Enabled = Not CheckBox13.Checked
+    End Sub
+
+    Private Sub RadioButton21_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton21.CheckedChanged
+        SelectedLockdownSettings.DefaultPolicy = RadioButton21.Checked
+        AccountLockdownParametersPanel.Enabled = Not RadioButton21.Checked
+    End Sub
+
+    Private Sub NumericUpDown6_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown6.ValueChanged
+        SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts = NumericUpDown6.Value
+    End Sub
+
+    Private Sub NumericUpDown7_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown7.ValueChanged
+        SelectedLockdownSettings.TimedLockdownSettings.Timeframe = NumericUpDown7.Value
+    End Sub
+
+    Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
+        SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
     End Sub
 End Class
