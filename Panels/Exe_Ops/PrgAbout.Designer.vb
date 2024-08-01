@@ -251,6 +251,7 @@ Partial Class PrgAbout
     "nerator website"
         Me.LinkLabel8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.LinkLabel8.UseCompatibleTextRendering = True
+        Me.LinkLabel8.Visible = False
         '
         'Label9
         '
@@ -454,6 +455,7 @@ Partial Class PrgAbout
         Me.Label12.Size = New System.Drawing.Size(310, 21)
         Me.Label12.TabIndex = 1
         Me.Label12.Text = "Unattended answer file creation wizard"
+        Me.Label12.Visible = False
         '
         'Label17
         '
@@ -583,9 +585,9 @@ Partial Class PrgAbout
         'TableLayoutPanel3
         '
         Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
         Me.TableLayoutPanel3.Controls.Add(Me.LinkLabel3, 2, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.LinkLabel2, 1, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.LinkLabel1, 0, 0)

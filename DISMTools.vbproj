@@ -142,6 +142,23 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\GeoId.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\ImageLanguage.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\KeyboardIdentifier.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\TimeOffset.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\UserLocale.vb" />
+    <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
+    <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockdownSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
+    <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -1709,6 +1726,11 @@ IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
 )
 
+IF NOT EXIST AutoUnattend (
+	md AutoUnattend
+	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
+)
+
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
@@ -1757,6 +1779,10 @@ IF EXIST docs (
 
 IF EXIST videos (
 	rd videos /s /q
+)
+
+IF EXIST AutoUnattend (
+	rd AutoUnattend /s /q
 )
 
 IF EXIST videos.xml (del videos.xml)

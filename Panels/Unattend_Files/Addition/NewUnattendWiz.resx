@@ -117,8 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Scintilla2.Text" xml:space="preserve">
+    <value>REM EXAMPLE SCRIPT. PLEASE MODIFY
+REM -----------------------------------------
+SELECT DISK=0
+CLEAN
+CONVERT GPT
+CREATE PARTITION EFI SIZE=300
+FORMAT QUICK FS=FAT32 LABEL="System"
+CREATE PARTITION MSR SIZE=16
+CREATE PARTITION PRIMARY
+SHRINK MINIMUM=1000
+FORMAT QUICK FS=NTFS LABEL="Windows"
+CREATE PARTITION PRIMARY
+FORMAT QUICK FS=NTFS LABEL="Recovery"
+SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
+GPT ATTRIBUTES=0x8000000000000001</value>
+  </data>
+  <data name="UnderConstructionDesc.Text" xml:space="preserve">
+    <value>The unattended answer file creation wizard is undergoing a major reconstruction. This means that, currently, this wizard is not complete and some things may be changed in the final version.
+
+Please provide feedback about the design and functionality of this task. Your comments are important.
+
+
+Thanks,
+CodingWonders</value>
+  </data>
   <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>124, 17</value>
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="TimeZonePageTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>150, 17</value>
+  </metadata>
+  <metadata name="OpenFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>314, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

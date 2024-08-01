@@ -3,54 +3,81 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
 Imports System.Threading
 Imports ScintillaNET
+Imports DISMTools.Elements
+Imports Microsoft.Dism
 
 Public Class NewUnattendWiz
 
     ' Declare initial vars
     Dim IsInExpress As Boolean = True
-    Dim ExpressPage As Integer = 1
-    Dim OSWiki As String
-    Dim ColoredMode As Integer = 0      ' 0: Windows 8; 1: Windows 8.1
-    Dim IsWindows8 As Boolean
-    Dim KeyString As String
-    Dim CanGatherImgVersion As Boolean
-    Dim WinVersion As String
-    Dim SkipEula As Boolean
-    Dim ComputerName As String
-    Dim OrgName As String
-    Dim SetupLang As Integer
-    Dim WipeDisk As Boolean
-    Dim TargetDiskNum As Integer
-    Dim UseNtfs As Boolean
-    Dim MakeActive As Boolean
-    Dim TargetDrLetter As String
-    Dim TargetDrLabel As String
-    Dim UseMbr As Boolean
-    Dim PartOrder As Integer
-    Dim InputMethod As Integer
-    Dim Currency As Integer
-    Dim TZData As Integer
-    Dim UILang As Integer
-    Dim HideEula As Boolean
-    Dim SkipMachineOobe As Boolean
-    Dim SkipUserOobe As Boolean
-    Dim NetLocation As Integer
-    Dim HideWirelessChooser As Boolean
-    Dim ProtectionLevel As Integer
-    Dim WULevel As Integer
-    Dim IsInCategoryView As Boolean
-    Dim IconSize As Integer
-    Dim UserName As String
-    Dim UserDesc As String
-    Dim ColorMode As Integer
-    Dim UserPass As String
-    Dim UserGroup As String
-    Dim ShowHiddenGroups As Boolean
-    Dim EnableUAC As Boolean
-    Dim EnableFirewall As Boolean
-    Dim Autologin As Boolean
-    Dim PasswordExpiry As Boolean
-    Dim JoinCeip As Boolean
+    Dim CurrentWizardPage As New UnattendedWizardPage()
+    Dim VerifyInPages As New List(Of UnattendedWizardPage.Page)
+
+    ' Regional Settings Page
+    Dim ImageLanguages As New List(Of ImageLanguage)
+    Dim UserLocales As New List(Of UserLocale)
+    Dim KeyboardIdentifiers As New List(Of KeyboardIdentifier)
+    Dim GeoIds As New List(Of GeoId)
+    Dim RegionalInteractive As Boolean
+    Dim SelectedLanguage As New ImageLanguage()
+    Dim SelectedLocale As New UserLocale()
+    Dim SelectedKeybIdentifier As New KeyboardIdentifier()
+    Dim SelectedGeoId As New GeoId()
+
+    ' System Configuration Page
+    Dim SelectedArchitecture As New DismProcessorArchitecture()
+    Dim Win11Config As New SVSettings()
+    Dim PCName As New ComputerName()
+
+    ' Time Zone Panel
+    Dim TimeOffsets As New List(Of TimeOffset)
+    Dim TimeOffsetInteractive As Boolean = True
+    Dim SelectedOffset As New TimeOffset()
+
+    ' Disk Configuration Panel
+    Dim DiskConfigurationInteractive As Boolean = True
+    Dim SelectedDiskConfiguration As New DiskConfiguration()
+
+    ' Product Key Panel
+    Dim GenericChosen As Boolean = True
+    Dim GenericKeys As New List(Of ProductKey)
+    Dim SelectedKey As New ProductKey()
+
+    ' User Accounts Panel
+    Dim UserAccountsInteractive As Boolean = True
+    Dim UserAccountsList As New List(Of User)
+    Dim AutoLogon As New AutoLogonSettings()
+    Dim PasswordObfuscate As Boolean
+    Dim SelectedExpirationSettings As New PasswordExpirationSettings()
+    Dim SelectedLockdownSettings As New AccountLockdownSettings()
+
+    ' Virtual Machine Panel
+    Dim VirtualMachineSupported As Boolean
+    Dim SelectedVMSettings As New VirtualMachineSettings()
+
+    ' Wireless Networking Panel
+    Dim NetworkConfigInteractive As Boolean = True
+    Dim NetworkConfigManualSkip As Boolean = False
+    Dim SelectedNetworkConfiguration As New WirelessSettings()
+
+    ' System Telemetry Panel
+    Dim SystemTelemetryInteractive As Boolean
+    Dim SelectedTelemetrySettings As New SystemTelemetry()
+
+    ' Space for more pages
+
+    ' Default Settings
+    Dim DefaultLanguage As New ImageLanguage()
+    Dim DefaultLocale As New UserLocale()
+    Dim DefaultKeybIdentifier As New KeyboardIdentifier()
+    Dim DefaultGeoId As New GeoId()
+    Dim DefaultOffset As New TimeOffset()
+    Dim DefaultDiskConfiguration As New DiskConfiguration()
+    Dim DefaultExpirationSettings As New PasswordExpirationSettings()
+    Dim DefaultLockdownSettings As New AccountLockdownSettings()
+    Dim DefaultVMSettings As New VirtualMachineSettings()
+    Dim DefaultNetworkConfiguration As New WirelessSettings()
+
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -61,26 +88,38 @@ Public Class NewUnattendWiz
     Sub InitScintilla(fntName As String, fntSize As Integer)
         ' Initialize Scintilla editor
         Scintilla1.StyleResetDefault()
+        Scintilla2.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
+            Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
+            Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
+        Scintilla2.Styles(Style.Default).Font = fntName
+        Scintilla2.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla1.Styles(Style.Default).ForeColor = Color.White
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla2.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla2.Styles(Style.Default).ForeColor = Color.White
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.White
             Scintilla1.Styles(Style.Default).ForeColor = Color.Black
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
+            Scintilla2.Styles(Style.Default).BackColor = Color.White
+            Scintilla2.Styles(Style.Default).ForeColor = Color.Black
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
         End If
         Scintilla1.StyleClearAll()
+        Scintilla2.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -120,11 +159,19 @@ Public Class NewUnattendWiz
         ' Set line number margin properties
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
+            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
         End If
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
+        Margin.Width = 30
+        Margin.Type = MarginType.Number
+        Margin.Sensitive = True
+        Margin.Mask = 0
+        Margin = Scintilla2.Margins(1)
         Margin.Width = 30
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
@@ -135,6 +182,10 @@ Public Class NewUnattendWiz
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
         Scintilla1.SetProperty("fold.compact", "1")
+        Scintilla2.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla2.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla2.SetProperty("fold", "1")
+        Scintilla2.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
         Dim Bookmarks = Scintilla1.Margins(2)
@@ -147,9 +198,20 @@ Public Class NewUnattendWiz
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
+        Bookmarks = Scintilla2.Margins(2)
+        Bookmarks.Width = 20
+        Bookmarks.Sensitive = True
+        Bookmarks.Type = MarginType.Symbol
+        Bookmarks.Mask = (1 << 2)
+        Marker = Scintilla2.Markers(2)
+        Marker.Symbol = MarkerSymbol.Circle
+        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
+        Marker.SetForeColor(Color.Black)
+        Marker.SetAlpha(100)
 
         ' Set editor caret settings
         Scintilla1.CaretForeColor = ForeColor
+        Scintilla2.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
@@ -157,11 +219,17 @@ Public Class NewUnattendWiz
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
         Scintilla1.Margins(3).Width = 1
+        Scintilla2.Margins(3).Type = MarginType.Symbol
+        Scintilla2.Margins(3).Mask = Marker.MaskFolders
+        Scintilla2.Margins(3).Sensitive = True
+        Scintilla2.Margins(3).Width = 1
 
         ' Set colors for all folding markers
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
+            Scintilla2.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
+            Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
         Next
 
         ' Folding marker configuration
@@ -172,9 +240,95 @@ Public Class NewUnattendWiz
         Scintilla1.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla1.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla1.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
+        Scintilla2.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
+        Scintilla2.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
+        Scintilla2.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
+        Scintilla2.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
+        Scintilla2.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
+        Scintilla2.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
+        Scintilla2.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+        Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+    End Sub
+
+    Function NewKeyVar(key As String) As ProductKey
+        Dim pKey As New ProductKey()
+        pKey.Valid = True
+        pKey.Key = key
+        Return pKey
+    End Function
+
+    Sub SetDefaultSettings()
+        DefaultLanguage.Id = "en-US"
+        DefaultLanguage.DisplayName = "English"
+        DefaultLocale.Id = "en-US"
+        DefaultLocale.DisplayName = "English (United States)"
+        DefaultLocale.LCID = "0409"
+        DefaultLocale.KeybId = "00000409"
+        DefaultLocale.GeoLoc = "244"
+        DefaultKeybIdentifier.Id = "00000409"
+        DefaultKeybIdentifier.DisplayName = "US"
+        DefaultKeybIdentifier.Type = "Keyboard"
+        DefaultGeoId.Id = "244"
+        DefaultGeoId.DisplayName = "United States"
+        DefaultOffset.Id = "UTC"
+        DefaultOffset.DisplayName = "(UTC) Coordinated Universal Time"
+        DefaultDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0
+        DefaultDiskConfiguration.PartStyle = PartitionStyle.GPT
+        DefaultDiskConfiguration.ESPSize = 300
+        DefaultDiskConfiguration.InstallRecEnv = True
+        DefaultDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition
+        DefaultDiskConfiguration.RecEnvSize = 1000
+        DefaultDiskConfiguration.DiskPartScriptConfig.ScriptContents = ""
+        DefaultDiskConfiguration.DiskPartScriptConfig.AutomaticInstall = True
+        DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = 0
+        DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = 3
+
+        GenericKeys.Add(NewKeyVar("YNMGQ-8RYV3-4PGQ3-C8XTP-7CFBY"))     ' Education
+        GenericKeys.Add(NewKeyVar("84NGF-MHBT6-FXBX8-QWJK7-DRR8H"))     ' Education N
+        GenericKeys.Add(NewKeyVar("YTMG3-N6DKC-DKB77-7M9GH-8HVX7"))     ' Home
+        GenericKeys.Add(NewKeyVar("4CPRK-NM3K3-X6XXQ-RXX86-WXCHW"))     ' Home N
+        GenericKeys.Add(NewKeyVar("BT79Q-G7N6G-PGBYW-4YWX6-6F4BT"))     ' Home Simple Language
+        GenericKeys.Add(NewKeyVar("VK7JG-NPHTM-C97JM-9MPGT-3V66T"))     ' Pro
+        GenericKeys.Add(NewKeyVar("8PTT6-RNW4C-6V7J2-C2D3X-MHBPB"))     ' Pro Education
+        GenericKeys.Add(NewKeyVar("GJTYN-HDMQY-FRR76-HVGC7-QPF8P"))     ' Pro Education N
+        GenericKeys.Add(NewKeyVar("DXG7C-N36C4-C4HTG-X4T3X-2YV77"))     ' Pro for Workstations
+        GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
+        GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
+
+        UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
+        For i = 1 To 4
+            UserAccountsList.Add(New User(False, "", "", UserGroup.Users))
+        Next
+
+        DefaultExpirationSettings.Mode = PasswordExpirationMode.NIST_Unlimited
+        DefaultExpirationSettings.Days = 42
+        DefaultLockdownSettings.Enabled = True
+        DefaultLockdownSettings.DefaultPolicy = True
+        DefaultLockdownSettings.TimedLockdownSettings.FailedAttempts = 10
+        DefaultLockdownSettings.TimedLockdownSettings.Timeframe = 10
+        DefaultLockdownSettings.TimedLockdownSettings.AutoUnlockTime = 10
+        DefaultVMSettings.Provider = VMProvider.VirtIO_Guest_Tools
+        DefaultNetworkConfiguration.SSID = ""
+        DefaultNetworkConfiguration.ConnectWithoutBroadcast = False
+        DefaultNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK
+        DefaultNetworkConfiguration.Password = ""
+
+
+        SelectedLanguage = DefaultLanguage
+        SelectedLocale = DefaultLocale
+        SelectedKeybIdentifier = DefaultKeybIdentifier
+        SelectedGeoId = DefaultGeoId
+        SelectedOffset = DefaultOffset
+        SelectedDiskConfiguration = DefaultDiskConfiguration
+        SelectedKey = GenericKeys(5)
+        SelectedExpirationSettings = DefaultExpirationSettings
+        SelectedLockdownSettings = DefaultLockdownSettings
+        SelectedVMSettings = DefaultVMSettings
+        SelectedNetworkConfiguration = DefaultNetworkConfiguration
+
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -204,11 +358,266 @@ Public Class NewUnattendWiz
         FontFamilyTSCB.SelectedItem = "Consolas"
         SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
-        ' Go to schneegans generator for now
-        Process.Start("https://schneegans.de/windows/unattend-generator/")
-        If Not MainForm.EnableExperiments Then
-            MessageBox.Show("The unattended answer file tasks are undergoing a major reconstruction." & If(MainForm.dtBranch.Contains("stable"), CrLf & CrLf & "The reconstruction is only happening in the preview releases.", ""))
+        SetDefaultSettings()
+        ' System language
+        If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
+            ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
+            If ImageLanguages IsNot Nothing Then
+                For Each imgLang As ImageLanguage In ImageLanguages
+                    ComboBox1.Items.Add(imgLang.DisplayName)
+                Next
+                If ComboBox1.SelectedItem = Nothing Then ComboBox1.SelectedItem = DefaultLanguage.DisplayName
+            End If
         End If
+        ' System locale
+        If File.Exists(Application.StartupPath & "\AutoUnattend\UserLocale.xml") Then
+            UserLocales = UserLocale.LoadItems(Application.StartupPath & "\AutoUnattend\UserLocale.xml")
+            If UserLocales IsNot Nothing Then
+                For Each userLoc As UserLocale In UserLocales
+                    ComboBox2.Items.Add(userLoc.DisplayName)
+                Next
+                If ComboBox2.SelectedItem = Nothing Then ComboBox2.SelectedItem = DefaultLocale.DisplayName
+            End If
+        End If
+        ' Keyboard layout/IME
+        If File.Exists(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml") Then
+            KeyboardIdentifiers = KeyboardIdentifier.LoadItems(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml")
+            If KeyboardIdentifiers IsNot Nothing Then
+                For Each keyb As KeyboardIdentifier In KeyboardIdentifiers
+                    ComboBox3.Items.Add(keyb.DisplayName)
+                Next
+                If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
+            End If
+        End If
+        ' Home location
+        If File.Exists(Application.StartupPath & "\AutoUnattend\GeoId.xml") Then
+            GeoIds = GeoId.LoadItems(Application.StartupPath & "\AutoUnattend\GeoId.xml")
+            If GeoIds IsNot Nothing Then
+                For Each Geo As GeoId In GeoIds
+                    ComboBox4.Items.Add(Geo.DisplayName)
+                Next
+                If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = DefaultGeoId.DisplayName
+            End If
+        End If
+        ' Time offsets
+        If File.Exists(Application.StartupPath & "\AutoUnattend\TimeOffset.xml") Then
+            TimeOffsets = TimeOffset.LoadItems(Application.StartupPath & "\AutoUnattend\TimeOffset.xml")
+            If TimeOffsets IsNot Nothing Then
+                For Each Offset As TimeOffset In TimeOffsets
+                    ComboBox5.Items.Add(Offset.DisplayName)
+                Next
+                If ComboBox5.SelectedItem = Nothing Then ComboBox5.SelectedItem = DefaultOffset.DisplayName
+            End If
+        End If
+        ListBox1.SelectedIndex = 1
+        ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
+        VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
+        TimeZonePageTimer.Enabled = True
+        ' Modify script contents of disk config for sample DP Script
+        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
+        ' Set PRO edition
+        If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
+        ' Set default auth tech to WPA2
+        If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
+    End Sub
+
+    Sub ChangePage(NewPage As UnattendedWizardPage.Page)
+        If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
+            If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
+        ElseIf NewPage > CurrentWizardPage.WizardPage AndAlso NewPage = UnattendedWizardPage.Page.ReviewPage Then
+            ShowSettingOverview()
+        End If
+        DisclaimerPanel.Visible = (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+        RegionalSettingsPanel.Visible = (NewPage = UnattendedWizardPage.Page.RegionalPage)
+        SysConfigPanel.Visible = (NewPage = UnattendedWizardPage.Page.SysConfigPage)
+        TimeZonePanel.Visible = (NewPage = UnattendedWizardPage.Page.TimeZonePage)
+        DiskConfigurationPanel.Visible = (NewPage = UnattendedWizardPage.Page.DiskConfigPage)
+        ProductKeyPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProductKeyPage)
+        UserAccountPanel.Visible = (NewPage = UnattendedWizardPage.Page.UserAccountsPage)
+        PWExpirationPanel.Visible = (NewPage = UnattendedWizardPage.Page.PWExpirationPage)
+        AccountLockdownPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockdownPage)
+        VirtualMachinePanel.Visible = (NewPage = UnattendedWizardPage.Page.VirtualMachinePage)
+        NetworkConnectionPanel.Visible = (NewPage = UnattendedWizardPage.Page.NetworkConnectionsPage)
+        SystemTelemetryPanel.Visible = (NewPage = UnattendedWizardPage.Page.SystemTelemetryPage)
+        PostInstallPanel.Visible = (NewPage = UnattendedWizardPage.Page.PostInstallPage)
+        ComponentPanel.Visible = (NewPage = UnattendedWizardPage.Page.ComponentPage)
+        FinalReviewPanel.Visible = (NewPage = UnattendedWizardPage.Page.ReviewPage)
+        CurrentWizardPage.WizardPage = NewPage
+        Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
+        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+    End Sub
+
+    Function VerifyOptionsInPage(WizardPage As UnattendedWizardPage.Page) As Boolean
+        Select Case WizardPage
+            Case UnattendedWizardPage.Page.SysConfigPage
+                If ListBox1.SelectedItems.Count = 0 Then
+                    MessageBox.Show("Please select an architecture and try again", "Validation error")
+                    Return False
+                End If
+                If Not PCName.DefaultName Then
+                    Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
+                    If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
+                        MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                        Return False
+                    End If
+                End If
+            Case UnattendedWizardPage.Page.DiskConfigPage
+                If Not DiskConfigurationInteractive AndAlso SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart AndAlso Scintilla2.Text = "" Then
+                    MessageBox.Show("Please enter the contents of the DiskPart script and try again. You can also use a script file", "DiskPart Script error")
+                    Return False
+                End If
+            Case UnattendedWizardPage.Page.ProductKeyPage
+                If Not GenericChosen Then
+                    If TextBox3.Text = "" Then
+                        MessageBox.Show("Please type a product key and try again", "Product Key error")
+                        Return False
+                    ElseIf TextBox3.Text <> "" And TextBox3.Text.Length <> 29 Then
+                        MessageBox.Show("Please type all of the product key and try again", "Product Key error")
+                        Return False
+                    ElseIf TextBox3.Text <> "" And TextBox3.Text.Length = 29 Then
+                        Dim pKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox3.Text)
+                        If Not pKey.Valid Then
+                            MessageBox.Show("The product key entered:" & CrLf & CrLf & TextBox3.Text & CrLf & CrLf & "is ill-formed. Please type it again", "Product Key error")
+                            Return False
+                        End If
+                    End If
+                End If
+            Case UnattendedWizardPage.Page.UserAccountsPage
+                If Not UserAccountsInteractive AndAlso Not UserValidator.ValidateUsers(UserAccountsList) Then
+                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses the Administrator name, and try again", "User Accounts error")
+                    Return False
+                End If
+            Case UnattendedWizardPage.Page.NetworkConnectionsPage
+                If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
+                    MessageBox.Show("There is a problem with the specified wireless settings. Make sure that you have specified a network name and try again", "Wireless Networks error")
+                    Return False
+                End If
+        End Select
+        Return True
+    End Function
+
+    Sub ShowSettingOverview()
+        TextBox13.Clear()
+        ' Display settings in the following order:
+        TextBox13.Text = "Current configurations for the unattended answer file:" & CrLf
+        ' 1. -- REGIONAL CONFIGURATION
+        TextBox13.AppendText("Regional settings: " & If(RegionalInteractive, "configured during setup" & CrLf, CrLf))
+        If Not RegionalInteractive Then
+            TextBox13.AppendText("- System language: " & SelectedLanguage.DisplayName & CrLf &
+                                 "- System locale: " & SelectedLocale.DisplayName & CrLf &
+                                 "- Keyboard/IME: " & SelectedKeybIdentifier.DisplayName & CrLf &
+                                 "- Home location: " & SelectedGeoId.DisplayName & CrLf)
+        End If
+        ' 2. -- BASIC SYSTEM CONFIGURATION
+        TextBox13.AppendText("Basic system configuration: " & CrLf &
+                             "- Processor architecture: " & Utilities.Casters.CastDismArchitecture(SelectedArchitecture) & CrLf &
+                             "- Windows 11 Settings:" & CrLf &
+                             "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
+                             "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
+                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf)
+        ' 3. -- TIME ZONE
+        TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
+        If Not TimeOffsetInteractive Then
+            TextBox13.AppendText("- Time zone: " & SelectedOffset.DisplayName & CrLf)
+        End If
+        ' 4. -- DISK CONFIGURATION
+        TextBox13.AppendText("Disk configuration: " & If(DiskConfigurationInteractive, "configured during setup" & CrLf, CrLf))
+        If Not DiskConfigurationInteractive Then
+            TextBox13.AppendText("- Disk configuration mode: " & If(SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0, "automatically configure Disk 0", "configure disks with a DiskPart script") & CrLf)
+            Select Case SelectedDiskConfiguration.DiskConfigMode
+                Case DiskConfigurationMode.AutoDisk0
+                    TextBox13.AppendText("    - Partition table: " & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT (UEFI)", "MBR (BIOS/CSM)") & CrLf)
+                    If SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT Then
+                        TextBox13.AppendText("      - EFI System Partition Size: " & SelectedDiskConfiguration.ESPSize & " MB" & CrLf)
+                    End If
+                    TextBox13.AppendText("    - Install a Recovery Environment? " & If(SelectedDiskConfiguration.InstallRecEnv, "Yes", "No") & CrLf)
+                    If SelectedDiskConfiguration.InstallRecEnv Then
+                        TextBox13.AppendText("      - Location of the Recovery Environment: " & If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "Recovery partition", "Windows partition") & CrLf)
+                        If SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition Then
+                            TextBox13.AppendText("        - Recovery Partition Size: " & SelectedDiskConfiguration.RecEnvSize & " MB" & CrLf)
+                        End If
+                    End If
+                Case DiskConfigurationMode.DiskPart
+                    TextBox13.AppendText("    - Action to be performed after disk configuration: " & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "install to first available partition with enough space and no installations", "install to specific disk") & CrLf)
+                    If Not SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall Then
+                        TextBox13.AppendText("      - Target disk/partition: disk " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & ", partition " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & CrLf)
+                    End If
+            End Select
+        End If
+        ' 5. -- PRODUCT KEY
+        TextBox13.AppendText("Product key: " & If(GenericChosen, "generic" & CrLf, "custom" & CrLf) &
+                             "- Key: " & SelectedKey.Key & CrLf)
+        ' 6. -- USER ACCOUNTS
+        TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
+        If Not UserAccountsInteractive Then
+            For Each UserAccount As User In UserAccountsList
+                TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
+                If UserAccount.Enabled Then
+                    TextBox13.AppendText("    - Name: " & UserAccount.Name & CrLf &
+                                         "    - Password: " & UserAccount.Password & CrLf &
+                                         "    - Group: " & If(UserAccount.Group = UserGroup.Administrators, "Administrators", "Users") & CrLf)
+                End If
+            Next
+            ' First logon settings
+            TextBox13.AppendText("- Log on as an Administrator account? " & If(AutoLogon.EnableAutoLogon, "Yes", "No") & CrLf)
+            If AutoLogon.EnableAutoLogon Then
+                TextBox13.AppendText("    - Administrator account: " & If(AutoLogon.LogonMode = AutoLogonMode.FirstAdmin, "first admin account created", "built-in Administrator account") & CrLf)
+                If AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
+                    TextBox13.AppendText("      - Password for built-in administrator: " & AutoLogon.LogonPassword & CrLf)
+                End If
+            End If
+            TextBox13.AppendText("- Obscure passwords with Base64? " & If(PasswordObfuscate, "Yes", "No") & CrLf)
+        End If
+        TextBox13.AppendText("Password expiration policy: " & If(SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited, "enabled" & CrLf, "disabled" & CrLf))
+        If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
+            TextBox13.AppendText("- Expiration policy mode: " & If(SelectedExpirationSettings.WindowsDefault, "Windows default (42 days)", "custom") & CrLf)
+            If Not SelectedExpirationSettings.WindowsDefault Then
+                TextBox13.AppendText("    - Expiration period: " & SelectedExpirationSettings.Days & " days" & CrLf)
+            End If
+        End If
+        TextBox13.AppendText("Account Lockdown policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
+        If SelectedLockdownSettings.Enabled Then
+            TextBox13.AppendText("- Account Lockdown policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
+            If Not SelectedLockdownSettings.DefaultPolicy Then
+                TextBox13.AppendText("    - After " & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & " failed attempts within " & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & " minutes, unlock account after " & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & " minutes" & CrLf)
+            End If
+        End If
+        ' 7. -- VIRTUAL MACHINE SUPPORT
+        TextBox13.AppendText("Virtual Machine Support: " & If(VirtualMachineSupported, "enabled" & CrLf, "disabled" & CrLf))
+        If VirtualMachineSupported Then
+            Select Case SelectedVMSettings.Provider
+                Case VMProvider.VirtualBox_GAs
+                    TextBox13.AppendText("- Selected Hypervisor: Oracle VM VirtualBox (VirtualBox Guest Additions)" & CrLf)
+                Case VMProvider.VMware_Tools
+                    TextBox13.AppendText("- Selected Hypervisor: VMware (VMware Tools)" & CrLf)
+                Case VMProvider.VirtIO_Guest_Tools
+                    TextBox13.AppendText("- Selected Hypervisor: QEMU/Proxmox VE/etc. (VirtIO Guest Tools)" & CrLf)
+            End Select
+        End If
+        ' 8. -- WIRELESS NETWORKING
+        TextBox13.AppendText("Wireless networking settings: " & If(NetworkConfigInteractive, "configured during setup" & CrLf, CrLf))
+        If Not NetworkConfigInteractive Then
+            TextBox13.AppendText("- Skip configuration? " & If(NetworkConfigManualSkip, "Yes", "No") & CrLf)
+            If Not NetworkConfigManualSkip Then
+                TextBox13.AppendText("    - SSID: " & SelectedNetworkConfiguration.SSID & CrLf &
+                                     "    - Connect even if not broadcasting? " & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "Yes", "No") & CrLf)
+                Select Case SelectedNetworkConfiguration.Authentication
+                    Case WiFiAuthenticationMode.Open
+                        TextBox13.AppendText("    - Authentication mode: open" & CrLf)
+                    Case WiFiAuthenticationMode.WPA2_PSK
+                        TextBox13.AppendText("    - Authentication mode: WPA2-Personal" & CrLf)
+                    Case WiFiAuthenticationMode.WPA3_PSK
+                        TextBox13.AppendText("    - Authentication mode: WPA3-Personal" & CrLf)
+                End Select
+                TextBox13.AppendText("    - Password: " & SelectedNetworkConfiguration.Password & CrLf)
+            End If
+        End If
+        ' 9. -- SYSTEM TELEMETRY
+        TextBox13.AppendText("System telemetry settings: " & If(SystemTelemetryInteractive, "configured during setup" & CrLf, CrLf))
+        If Not SystemTelemetryInteractive Then
+            TextBox13.AppendText("- (Attempt to) disable telemetry? " & If(Not SelectedTelemetrySettings.Enabled, "Yes", "No") & CrLf)
+        End If
+        ' Post Install Scripts and Component Manager will be added in a future release
     End Sub
 
     Private Sub ExpressPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.MouseEnter
@@ -308,11 +717,11 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
-
+        ChangePage(CurrentWizardPage.WizardPage - 1)
     End Sub
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
-
+        ChangePage(CurrentWizardPage.WizardPage + 1)
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
@@ -339,5 +748,377 @@ Public Class NewUnattendWiz
             node.ForeColor = ForeColor
             SetNodeColors(node.Nodes, BackColor, ForeColor)
         Next
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        RegionalInteractive = Not RadioButton1.Checked
+        RegionalSettings.Enabled = RadioButton1.Checked
+        Label10.Enabled = Not RadioButton1.Checked
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        SelectedLanguage = ImageLanguages(ComboBox1.SelectedIndex)
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+        SelectedLocale = UserLocales(ComboBox2.SelectedIndex)
+    End Sub
+
+    Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
+        SelectedKeybIdentifier = KeyboardIdentifiers(ComboBox3.SelectedIndex)
+    End Sub
+
+    Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
+        SelectedGeoId = GeoIds(ComboBox4.SelectedIndex)
+    End Sub
+
+    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
+        Select Case ListBox1.SelectedIndex
+            Case 0
+                SelectedArchitecture = DismProcessorArchitecture.Intel
+            Case 1
+                SelectedArchitecture = DismProcessorArchitecture.AMD64
+            Case 2
+                SelectedArchitecture = DismProcessorArchitecture.ARM64
+        End Select
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        PCName.DefaultName = CheckBox3.Checked
+        ComputerNamePanel.Enabled = Not CheckBox3.Checked
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        Win11Config.LabConfig_BypassRequirements = CheckBox1.Checked
+    End Sub
+
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
+        Win11Config.OOBE_BypassNRO = CheckBox2.Checked
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        ' Hold default value for now
+        Dim defVal As Boolean = False
+        defVal = PCName.DefaultName
+        PCName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
+        PCName.DefaultName = defVal
+        If Not PCName.Valid AndAlso PCName.ErrorMessage <> "" Then
+            MessageBox.Show(PCName.ErrorMessage, "Computer name error")
+        End If
+    End Sub
+
+    Private Sub TimeZonePageTimer_Tick(sender As Object, e As EventArgs) Handles TimeZonePageTimer.Tick
+        Dim UTC As Date = Date.UtcNow
+        Dim SelTZ As Date = Date.UtcNow
+        Dim tz As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(TimeOffsets(ComboBox5.SelectedIndex).Id)
+        SelTZ = TimeZoneInfo.ConvertTimeFromUtc(SelTZ, tz)
+        CurrentTimeUTC.Text = UTC.ToString("D") & " - " & UTC.ToString("HH:mm")
+        CurrentTimeSelTZ.Text = SelTZ.ToString("D") & " - " & SelTZ.ToString("HH:mm")
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        TimeOffsetInteractive = RadioButton3.Checked
+        TimeZoneSettings.Enabled = Not RadioButton3.Checked
+    End Sub
+
+    Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
+        SelectedOffset = TimeOffsets(ComboBox5.SelectedIndex)
+    End Sub
+
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        ManualPartPanel.Enabled = Not CheckBox4.Checked
+        DiskConfigurationInteractive = CheckBox4.Checked
+    End Sub
+
+    Private Sub RadioButton5_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton5.CheckedChanged
+        AutoDiskConfigPanel.Enabled = RadioButton5.Checked
+        DiskPartPanel.Enabled = Not RadioButton5.Checked
+        SelectedDiskConfiguration.DiskConfigMode = If(RadioButton5.Checked, DiskConfigurationMode.AutoDisk0, DiskConfigurationMode.DiskPart)
+    End Sub
+
+    Private Sub RadioButton7_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton7.CheckedChanged
+        ESPPanel.Enabled = RadioButton7.Checked
+        SelectedDiskConfiguration.PartStyle = If(RadioButton7.Checked, PartitionStyle.GPT, PartitionStyle.MBR)
+    End Sub
+
+    Private Sub CheckBox5_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox5.CheckedChanged
+        WindowsREPanel.Enabled = CheckBox5.Checked
+        SelectedDiskConfiguration.InstallRecEnv = CheckBox5.Checked
+    End Sub
+
+    Private Sub RadioButton9_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton9.CheckedChanged
+        RESizePanel.Enabled = RadioButton9.Checked
+        SelectedDiskConfiguration.RecEnvPartition = If(RadioButton9.Checked, RecoveryEnvironmentLocation.WinREPartition, RecoveryEnvironmentLocation.WindowsPartition)
+    End Sub
+
+    Private Sub RadioButton11_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton11.CheckedChanged
+        ManualInstallPanel.Enabled = Not RadioButton11.Checked
+        SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall = RadioButton11.Checked
+    End Sub
+
+    Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
+        SelectedDiskConfiguration.ESPSize = NumericUpDown1.Value
+    End Sub
+
+    Private Sub NumericUpDown2_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown2.ValueChanged
+        SelectedDiskConfiguration.RecEnvSize = NumericUpDown2.Value
+    End Sub
+
+    Private Sub NumericUpDown3_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown3.ValueChanged
+        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = NumericUpDown3.Value
+    End Sub
+
+    Private Sub NumericUpDown4_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown4.ValueChanged
+        SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = NumericUpDown4.Value
+    End Sub
+
+    Private Sub Scintilla2_TextChanged(sender As Object, e As EventArgs) Handles Scintilla2.TextChanged
+        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        OpenFileDialog1.ShowDialog()
+    End Sub
+
+    Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        Scintilla2.Text = File.ReadAllText(OpenFileDialog1.FileName)
+    End Sub
+
+    Private Sub RadioButton13_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton13.CheckedChanged
+        GenericKeyPanel.Enabled = RadioButton13.Checked
+        ManualKeyPanel.Enabled = Not RadioButton13.Checked
+        GenericChosen = RadioButton13.Checked
+    End Sub
+
+    Private Sub ComboBox6_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox6.SelectedIndexChanged
+        If GenericKeys IsNot Nothing AndAlso GenericKeys.Count > 0 Then
+            SelectedKey = GenericKeys(ComboBox6.SelectedIndex)
+            TextBox2.Text = SelectedKey.Key
+        End If
+    End Sub
+
+    Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
+        SelectedKey.Key = TextBox3.Text
+    End Sub
+
+    Private Sub CheckBox6_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox6.CheckedChanged
+        UserAccountsInteractive = CheckBox6.Checked
+        ManualAccountPanel.Enabled = Not CheckBox6.Checked
+    End Sub
+
+#Region "User Account settings"
+
+    Sub ModifyUserDetails(index As Integer, enabled As Boolean, name As String, password As String, group As UserGroup)
+        If UserAccountsList Is Nothing OrElse UserAccountsList.Count = 0 Then Exit Sub
+        UserAccountsList(index).Enabled = enabled
+        UserAccountsList(index).Name = name
+        UserAccountsList(index).Password = password
+        UserAccountsList(index).Group = group
+    End Sub
+
+    Function GroupFromSelectedItem(index As Integer) As UserGroup
+        Select Case index
+            Case 0
+                Return UserGroup.Administrators
+            Case 1
+                Return UserGroup.Users
+        End Select
+        Return Nothing
+    End Function
+
+    Private Sub CheckBox8_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox8.CheckedChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+        TextBox8.Enabled = CheckBox8.Checked
+        TextBox9.Enabled = CheckBox8.Checked
+        ComboBox9.Enabled = CheckBox8.Checked
+    End Sub
+
+    Private Sub CheckBox9_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox9.CheckedChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+        TextBox11.Enabled = CheckBox9.Checked
+        TextBox12.Enabled = CheckBox9.Checked
+        ComboBox10.Enabled = CheckBox9.Checked
+    End Sub
+
+    Private Sub CheckBox10_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox10.CheckedChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+        TextBox14.Enabled = CheckBox10.Checked
+        TextBox15.Enabled = CheckBox10.Checked
+        ComboBox11.Enabled = CheckBox10.Checked
+    End Sub
+
+    Private Sub CheckBox11_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox11.CheckedChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+        TextBox17.Enabled = CheckBox11.Checked
+        TextBox18.Enabled = CheckBox11.Checked
+        ComboBox12.Enabled = CheckBox11.Checked
+    End Sub
+
+    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
+        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox6_TextChanged(sender As Object, e As EventArgs) Handles TextBox6.TextChanged
+        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox8_TextChanged(sender As Object, e As EventArgs) Handles TextBox8.TextChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox9_TextChanged(sender As Object, e As EventArgs) Handles TextBox9.TextChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox11_TextChanged(sender As Object, e As EventArgs) Handles TextBox11.TextChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox12_TextChanged(sender As Object, e As EventArgs) Handles TextBox12.TextChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox14_TextChanged(sender As Object, e As EventArgs) Handles TextBox14.TextChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox15_TextChanged(sender As Object, e As EventArgs) Handles TextBox15.TextChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox17_TextChanged(sender As Object, e As EventArgs) Handles TextBox17.TextChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub TextBox18_TextChanged(sender As Object, e As EventArgs) Handles TextBox18.TextChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
+        ModifyUserDetails(0, True, TextBox4.Text, TextBox6.Text, GroupFromSelectedItem(ComboBox7.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox9_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox9.SelectedIndexChanged
+        ModifyUserDetails(1, CheckBox8.Checked, TextBox8.Text, TextBox9.Text, GroupFromSelectedItem(ComboBox9.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox10_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox10.SelectedIndexChanged
+        ModifyUserDetails(2, CheckBox9.Checked, TextBox11.Text, TextBox12.Text, GroupFromSelectedItem(ComboBox10.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox11_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox11.SelectedIndexChanged
+        ModifyUserDetails(3, CheckBox10.Checked, TextBox14.Text, TextBox15.Text, GroupFromSelectedItem(ComboBox11.SelectedIndex))
+    End Sub
+
+    Private Sub ComboBox12_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox12.SelectedIndexChanged
+        ModifyUserDetails(4, CheckBox11.Checked, TextBox17.Text, TextBox18.Text, GroupFromSelectedItem(ComboBox12.SelectedIndex))
+    End Sub
+
+#End Region
+
+    Private Sub CheckBox12_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox12.CheckedChanged
+        AutoLogon.EnableAutoLogon = CheckBox12.Checked
+        AutoLogonSettingsPanel.Enabled = CheckBox12.Checked
+    End Sub
+
+    Private Sub RadioButton15_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton15.CheckedChanged
+        AutoLogon.LogonMode = If(RadioButton15.Checked, AutoLogonMode.FirstAdmin, AutoLogonMode.WindowsAdmin)
+        TextBox5.Enabled = Not RadioButton15.Checked
+    End Sub
+
+    Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
+        AutoLogon.LogonPassword = TextBox5.Text
+    End Sub
+
+    Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
+        PasswordObfuscate = CheckBox7.Checked
+    End Sub
+
+    Private Sub RadioButton17_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton17.CheckedChanged
+        SelectedExpirationSettings.Mode = If(RadioButton17.Checked, PasswordExpirationMode.NIST_Unlimited, PasswordExpirationMode.NIST_Limited)
+        AutoExpirationPanel.Enabled = Not RadioButton17.Checked
+    End Sub
+
+    Private Sub RadioButton19_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton19.CheckedChanged
+        SelectedExpirationSettings.WindowsDefault = RadioButton19.Checked
+        TimedExpirationPanel.Enabled = Not RadioButton19.Checked
+    End Sub
+
+    Private Sub NumericUpDown5_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown5.ValueChanged
+        SelectedExpirationSettings.Days = NumericUpDown5.Value
+    End Sub
+
+    Private Sub CheckBox13_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox13.CheckedChanged
+        SelectedLockdownSettings.Enabled = CheckBox13.Checked
+        EnabledAccountLockdownPanel.Enabled = Not CheckBox13.Checked
+    End Sub
+
+    Private Sub RadioButton21_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton21.CheckedChanged
+        SelectedLockdownSettings.DefaultPolicy = RadioButton21.Checked
+        AccountLockdownParametersPanel.Enabled = Not RadioButton21.Checked
+    End Sub
+
+    Private Sub NumericUpDown6_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown6.ValueChanged
+        SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts = NumericUpDown6.Value
+    End Sub
+
+    Private Sub NumericUpDown7_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown7.ValueChanged
+        SelectedLockdownSettings.TimedLockdownSettings.Timeframe = NumericUpDown7.Value
+    End Sub
+
+    Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
+        SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
+    End Sub
+
+    Private Sub RadioButton23_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton23.CheckedChanged
+        VirtualMachineSupported = RadioButton23.Checked
+        VMProviderPanel.Enabled = RadioButton23.Checked
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
+        SelectedVMSettings.Provider = ComboBox8.SelectedIndex
+    End Sub
+
+    Private Sub CheckBox14_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox14.CheckedChanged
+        NetworkConfigInteractive = CheckBox14.Checked
+        ManualNetworkConfigPanel.Enabled = Not CheckBox14.Checked
+    End Sub
+
+    Private Sub RadioButton25_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton25.CheckedChanged
+        WirelessNetworkSettingsPanel.Enabled = RadioButton25.Checked
+        NetworkConfigManualSkip = Not RadioButton25.Checked
+    End Sub
+
+    Private Sub TextBox7_TextChanged(sender As Object, e As EventArgs) Handles TextBox7.TextChanged
+        SelectedNetworkConfiguration.SSID = TextBox7.Text
+    End Sub
+
+    Private Sub CheckBox15_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox15.CheckedChanged
+        SelectedNetworkConfiguration.ConnectWithoutBroadcast = CheckBox15.Checked
+    End Sub
+
+    Private Sub ComboBox13_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox13.SelectedIndexChanged
+        SelectedNetworkConfiguration.Authentication = ComboBox13.SelectedIndex
+    End Sub
+
+    Private Sub TextBox10_TextChanged(sender As Object, e As EventArgs) Handles TextBox10.TextChanged
+        SelectedNetworkConfiguration.Password = TextBox10.Text
+    End Sub
+
+    Private Sub CheckBox16_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox16.CheckedChanged
+        SystemTelemetryInteractive = CheckBox16.Checked
+        TelemetryOptionsPanel.Enabled = Not CheckBox16.Checked
+    End Sub
+
+    Private Sub RadioButton26_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton26.CheckedChanged
+        SelectedTelemetrySettings.Enabled = Not RadioButton26.Checked
+    End Sub
+
+    Private Sub CheckBox17_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox17.CheckedChanged
+        TextBox13.WordWrap = CheckBox17.Checked
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Process.Start("https://schneegans.de/windows/unattend-generator/")
     End Sub
 End Class
