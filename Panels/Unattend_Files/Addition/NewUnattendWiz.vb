@@ -264,7 +264,7 @@ Public Class NewUnattendWiz
         DefaultLanguage.Id = "en-US"
         DefaultLanguage.DisplayName = "English"
         DefaultLocale.Id = "en-US"
-        DefaultLocale.DisplayName = "English (United States"
+        DefaultLocale.DisplayName = "English (United States)"
         DefaultLocale.LCID = "0409"
         DefaultLocale.KeybId = "00000409"
         DefaultLocale.GeoLoc = "244"
@@ -358,79 +358,74 @@ Public Class NewUnattendWiz
         FontFamilyTSCB.SelectedItem = "Consolas"
         SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
-        StepsContainer.Visible = MainForm.EnableExperiments
-        ' Go to schneegans generator for now
-        If Not MainForm.EnableExperiments Then
-            Process.Start("https://schneegans.de/windows/unattend-generator/")
-            MessageBox.Show("The unattended answer file tasks are undergoing a major reconstruction." & If(MainForm.dtBranch.Contains("stable"), CrLf & CrLf & "The reconstruction is only happening in the preview releases.", ""))
-        Else
-            SetDefaultSettings()
-            ' System language
-            If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
-                ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
-                If ImageLanguages IsNot Nothing Then
-                    For Each imgLang As ImageLanguage In ImageLanguages
-                        ComboBox1.Items.Add(imgLang.DisplayName)
-                    Next
-                    If ComboBox1.SelectedItem = Nothing Then ComboBox1.SelectedItem = DefaultLanguage.DisplayName
-                End If
+        SetDefaultSettings()
+        ' System language
+        If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
+            ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
+            If ImageLanguages IsNot Nothing Then
+                For Each imgLang As ImageLanguage In ImageLanguages
+                    ComboBox1.Items.Add(imgLang.DisplayName)
+                Next
+                If ComboBox1.SelectedItem = Nothing Then ComboBox1.SelectedItem = DefaultLanguage.DisplayName
             End If
-            ' System locale
-            If File.Exists(Application.StartupPath & "\AutoUnattend\UserLocale.xml") Then
-                UserLocales = UserLocale.LoadItems(Application.StartupPath & "\AutoUnattend\UserLocale.xml")
-                If UserLocales IsNot Nothing Then
-                    For Each userLoc As UserLocale In UserLocales
-                        ComboBox2.Items.Add(userLoc.DisplayName)
-                    Next
-                    If ComboBox2.SelectedItem = Nothing Then ComboBox2.SelectedItem = DefaultLocale.DisplayName
-                End If
-            End If
-            ' Keyboard layout/IME
-            If File.Exists(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml") Then
-                KeyboardIdentifiers = KeyboardIdentifier.LoadItems(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml")
-                If KeyboardIdentifiers IsNot Nothing Then
-                    For Each keyb As KeyboardIdentifier In KeyboardIdentifiers
-                        ComboBox3.Items.Add(keyb.DisplayName)
-                    Next
-                    If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
-                End If
-            End If
-            ' Home location
-            If File.Exists(Application.StartupPath & "\AutoUnattend\GeoId.xml") Then
-                GeoIds = GeoId.LoadItems(Application.StartupPath & "\AutoUnattend\GeoId.xml")
-                If GeoIds IsNot Nothing Then
-                    For Each Geo As GeoId In GeoIds
-                        ComboBox4.Items.Add(Geo.DisplayName)
-                    Next
-                    If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = DefaultGeoId.DisplayName
-                End If
-            End If
-            ' Time offsets
-            If File.Exists(Application.StartupPath & "\AutoUnattend\TimeOffset.xml") Then
-                TimeOffsets = TimeOffset.LoadItems(Application.StartupPath & "\AutoUnattend\TimeOffset.xml")
-                If TimeOffsets IsNot Nothing Then
-                    For Each Offset As TimeOffset In TimeOffsets
-                        ComboBox5.Items.Add(Offset.DisplayName)
-                    Next
-                    If ComboBox5.SelectedItem = Nothing Then ComboBox5.SelectedItem = DefaultOffset.DisplayName
-                End If
-            End If
-            ListBox1.SelectedIndex = 1
-            ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
-            VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage})
-            TimeZonePageTimer.Enabled = True
-            ' Modify script contents of disk config for sample DP Script
-            SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
-            ' Set PRO edition
-            If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
-            ' Set default auth tech to WPA2
-            If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
         End If
+        ' System locale
+        If File.Exists(Application.StartupPath & "\AutoUnattend\UserLocale.xml") Then
+            UserLocales = UserLocale.LoadItems(Application.StartupPath & "\AutoUnattend\UserLocale.xml")
+            If UserLocales IsNot Nothing Then
+                For Each userLoc As UserLocale In UserLocales
+                    ComboBox2.Items.Add(userLoc.DisplayName)
+                Next
+                If ComboBox2.SelectedItem = Nothing Then ComboBox2.SelectedItem = DefaultLocale.DisplayName
+            End If
+        End If
+        ' Keyboard layout/IME
+        If File.Exists(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml") Then
+            KeyboardIdentifiers = KeyboardIdentifier.LoadItems(Application.StartupPath & "\AutoUnattend\KeyboardIdentifier.xml")
+            If KeyboardIdentifiers IsNot Nothing Then
+                For Each keyb As KeyboardIdentifier In KeyboardIdentifiers
+                    ComboBox3.Items.Add(keyb.DisplayName)
+                Next
+                If ComboBox3.SelectedItem = Nothing Then ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
+            End If
+        End If
+        ' Home location
+        If File.Exists(Application.StartupPath & "\AutoUnattend\GeoId.xml") Then
+            GeoIds = GeoId.LoadItems(Application.StartupPath & "\AutoUnattend\GeoId.xml")
+            If GeoIds IsNot Nothing Then
+                For Each Geo As GeoId In GeoIds
+                    ComboBox4.Items.Add(Geo.DisplayName)
+                Next
+                If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = DefaultGeoId.DisplayName
+            End If
+        End If
+        ' Time offsets
+        If File.Exists(Application.StartupPath & "\AutoUnattend\TimeOffset.xml") Then
+            TimeOffsets = TimeOffset.LoadItems(Application.StartupPath & "\AutoUnattend\TimeOffset.xml")
+            If TimeOffsets IsNot Nothing Then
+                For Each Offset As TimeOffset In TimeOffsets
+                    ComboBox5.Items.Add(Offset.DisplayName)
+                Next
+                If ComboBox5.SelectedItem = Nothing Then ComboBox5.SelectedItem = DefaultOffset.DisplayName
+            End If
+        End If
+        ListBox1.SelectedIndex = 1
+        ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
+        VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
+        TimeZonePageTimer.Enabled = True
+        ' Modify script contents of disk config for sample DP Script
+        SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents = Scintilla2.Text
+        ' Set PRO edition
+        If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
+        ' Set default auth tech to WPA2
+        If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
     End Sub
 
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
         If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
             If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
+        ElseIf NewPage > CurrentWizardPage.WizardPage AndAlso NewPage = UnattendedWizardPage.Page.ReviewPage Then
+            ShowSettingOverview()
         End If
         DisclaimerPanel.Visible = (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
         RegionalSettingsPanel.Visible = (NewPage = UnattendedWizardPage.Page.RegionalPage)
@@ -444,6 +439,9 @@ Public Class NewUnattendWiz
         VirtualMachinePanel.Visible = (NewPage = UnattendedWizardPage.Page.VirtualMachinePage)
         NetworkConnectionPanel.Visible = (NewPage = UnattendedWizardPage.Page.NetworkConnectionsPage)
         SystemTelemetryPanel.Visible = (NewPage = UnattendedWizardPage.Page.SystemTelemetryPage)
+        PostInstallPanel.Visible = (NewPage = UnattendedWizardPage.Page.PostInstallPage)
+        ComponentPanel.Visible = (NewPage = UnattendedWizardPage.Page.ComponentPage)
+        FinalReviewPanel.Visible = (NewPage = UnattendedWizardPage.Page.ReviewPage)
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
         Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
@@ -489,9 +487,138 @@ Public Class NewUnattendWiz
                     MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses the Administrator name, and try again", "User Accounts error")
                     Return False
                 End If
+            Case UnattendedWizardPage.Page.NetworkConnectionsPage
+                If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
+                    MessageBox.Show("There is a problem with the specified wireless settings. Make sure that you have specified a network name and try again", "Wireless Networks error")
+                    Return False
+                End If
         End Select
         Return True
     End Function
+
+    Sub ShowSettingOverview()
+        TextBox13.Clear()
+        ' Display settings in the following order:
+        TextBox13.Text = "Current configurations for the unattended answer file:" & CrLf
+        ' 1. -- REGIONAL CONFIGURATION
+        TextBox13.AppendText("Regional settings: " & If(RegionalInteractive, "configured during setup" & CrLf, CrLf))
+        If Not RegionalInteractive Then
+            TextBox13.AppendText("- System language: " & SelectedLanguage.DisplayName & CrLf &
+                                 "- System locale: " & SelectedLocale.DisplayName & CrLf &
+                                 "- Keyboard/IME: " & SelectedKeybIdentifier.DisplayName & CrLf &
+                                 "- Home location: " & SelectedGeoId.DisplayName & CrLf)
+        End If
+        ' 2. -- BASIC SYSTEM CONFIGURATION
+        TextBox13.AppendText("Basic system configuration: " & CrLf &
+                             "- Processor architecture: " & Utilities.Casters.CastDismArchitecture(SelectedArchitecture) & CrLf &
+                             "- Windows 11 Settings:" & CrLf &
+                             "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
+                             "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
+                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf)
+        ' 3. -- TIME ZONE
+        TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
+        If Not TimeOffsetInteractive Then
+            TextBox13.AppendText("- Time zone: " & SelectedOffset.DisplayName & CrLf)
+        End If
+        ' 4. -- DISK CONFIGURATION
+        TextBox13.AppendText("Disk configuration: " & If(DiskConfigurationInteractive, "configured during setup" & CrLf, CrLf))
+        If Not DiskConfigurationInteractive Then
+            TextBox13.AppendText("- Disk configuration mode: " & If(SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0, "automatically configure Disk 0", "configure disks with a DiskPart script") & CrLf)
+            Select Case SelectedDiskConfiguration.DiskConfigMode
+                Case DiskConfigurationMode.AutoDisk0
+                    TextBox13.AppendText("    - Partition table: " & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT (UEFI)", "MBR (BIOS/CSM)") & CrLf)
+                    If SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT Then
+                        TextBox13.AppendText("      - EFI System Partition Size: " & SelectedDiskConfiguration.ESPSize & " MB" & CrLf)
+                    End If
+                    TextBox13.AppendText("    - Install a Recovery Environment? " & If(SelectedDiskConfiguration.InstallRecEnv, "Yes", "No") & CrLf)
+                    If SelectedDiskConfiguration.InstallRecEnv Then
+                        TextBox13.AppendText("      - Location of the Recovery Environment: " & If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "Recovery partition", "Windows partition") & CrLf)
+                        If SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition Then
+                            TextBox13.AppendText("        - Recovery Partition Size: " & SelectedDiskConfiguration.RecEnvSize & " MB" & CrLf)
+                        End If
+                    End If
+                Case DiskConfigurationMode.DiskPart
+                    TextBox13.AppendText("    - Action to be performed after disk configuration: " & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "install to first available partition with enough space and no installations", "install to specific disk") & CrLf)
+                    If Not SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall Then
+                        TextBox13.AppendText("      - Target disk/partition: disk " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & ", partition " & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & CrLf)
+                    End If
+            End Select
+        End If
+        ' 5. -- PRODUCT KEY
+        TextBox13.AppendText("Product key: " & If(GenericChosen, "generic" & CrLf, "custom" & CrLf) &
+                             "- Key: " & SelectedKey.Key & CrLf)
+        ' 6. -- USER ACCOUNTS
+        TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
+        If Not UserAccountsInteractive Then
+            For Each UserAccount As User In UserAccountsList
+                TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
+                If UserAccount.Enabled Then
+                    TextBox13.AppendText("    - Name: " & UserAccount.Name & CrLf &
+                                         "    - Password: " & UserAccount.Password & CrLf &
+                                         "    - Group: " & If(UserAccount.Group = UserGroup.Administrators, "Administrators", "Users") & CrLf)
+                End If
+            Next
+            ' First logon settings
+            TextBox13.AppendText("- Log on as an Administrator account? " & If(AutoLogon.EnableAutoLogon, "Yes", "No") & CrLf)
+            If AutoLogon.EnableAutoLogon Then
+                TextBox13.AppendText("    - Administrator account: " & If(AutoLogon.LogonMode = AutoLogonMode.FirstAdmin, "first admin account created", "built-in Administrator account") & CrLf)
+                If AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
+                    TextBox13.AppendText("      - Password for built-in administrator: " & AutoLogon.LogonPassword & CrLf)
+                End If
+            End If
+            TextBox13.AppendText("- Obscure passwords with Base64? " & If(PasswordObfuscate, "Yes", "No") & CrLf)
+        End If
+        TextBox13.AppendText("Password expiration policy: " & If(SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited, "enabled" & CrLf, "disabled" & CrLf))
+        If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
+            TextBox13.AppendText("- Expiration policy mode: " & If(SelectedExpirationSettings.WindowsDefault, "Windows default (42 days)", "custom") & CrLf)
+            If Not SelectedExpirationSettings.WindowsDefault Then
+                TextBox13.AppendText("    - Expiration period: " & SelectedExpirationSettings.Days & " days" & CrLf)
+            End If
+        End If
+        TextBox13.AppendText("Account Lockdown policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
+        If SelectedLockdownSettings.Enabled Then
+            TextBox13.AppendText("- Account Lockdown policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
+            If Not SelectedLockdownSettings.DefaultPolicy Then
+                TextBox13.AppendText("    - After " & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & " failed attempts within " & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & " minutes, unlock account after " & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & " minutes" & CrLf)
+            End If
+        End If
+        ' 7. -- VIRTUAL MACHINE SUPPORT
+        TextBox13.AppendText("Virtual Machine Support: " & If(VirtualMachineSupported, "enabled" & CrLf, "disabled" & CrLf))
+        If VirtualMachineSupported Then
+            Select Case SelectedVMSettings.Provider
+                Case VMProvider.VirtualBox_GAs
+                    TextBox13.AppendText("- Selected Hypervisor: Oracle VM VirtualBox (VirtualBox Guest Additions)" & CrLf)
+                Case VMProvider.VMware_Tools
+                    TextBox13.AppendText("- Selected Hypervisor: VMware (VMware Tools)" & CrLf)
+                Case VMProvider.VirtIO_Guest_Tools
+                    TextBox13.AppendText("- Selected Hypervisor: QEMU/Proxmox VE/etc. (VirtIO Guest Tools)" & CrLf)
+            End Select
+        End If
+        ' 8. -- WIRELESS NETWORKING
+        TextBox13.AppendText("Wireless networking settings: " & If(NetworkConfigInteractive, "configured during setup" & CrLf, CrLf))
+        If Not NetworkConfigInteractive Then
+            TextBox13.AppendText("- Skip configuration? " & If(NetworkConfigManualSkip, "Yes", "No") & CrLf)
+            If Not NetworkConfigManualSkip Then
+                TextBox13.AppendText("    - SSID: " & SelectedNetworkConfiguration.SSID & CrLf &
+                                     "    - Connect even if not broadcasting? " & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "Yes", "No") & CrLf)
+                Select Case SelectedNetworkConfiguration.Authentication
+                    Case WiFiAuthenticationMode.Open
+                        TextBox13.AppendText("    - Authentication mode: open" & CrLf)
+                    Case WiFiAuthenticationMode.WPA2_PSK
+                        TextBox13.AppendText("    - Authentication mode: WPA2-Personal" & CrLf)
+                    Case WiFiAuthenticationMode.WPA3_PSK
+                        TextBox13.AppendText("    - Authentication mode: WPA3-Personal" & CrLf)
+                End Select
+                TextBox13.AppendText("    - Password: " & SelectedNetworkConfiguration.Password & CrLf)
+            End If
+        End If
+        ' 9. -- SYSTEM TELEMETRY
+        TextBox13.AppendText("System telemetry settings: " & If(SystemTelemetryInteractive, "configured during setup" & CrLf, CrLf))
+        If Not SystemTelemetryInteractive Then
+            TextBox13.AppendText("- (Attempt to) disable telemetry? " & If(Not SelectedTelemetrySettings.Enabled, "Yes", "No") & CrLf)
+        End If
+        ' Post Install Scripts and Component Manager will be added in a future release
+    End Sub
 
     Private Sub ExpressPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.MouseEnter
         If ExpressPanelContainer.Visible Then
@@ -985,5 +1112,13 @@ Public Class NewUnattendWiz
 
     Private Sub RadioButton26_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton26.CheckedChanged
         SelectedTelemetrySettings.Enabled = Not RadioButton26.Checked
+    End Sub
+
+    Private Sub CheckBox17_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox17.CheckedChanged
+        TextBox13.WordWrap = CheckBox17.Checked
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Process.Start("https://schneegans.de/windows/unattend-generator/")
     End Sub
 End Class

@@ -18,4 +18,16 @@
         WPA3_PSK = 2
     End Enum
 
+    Public Class WirelessValidator
+
+        Public Shared Function ValidateWiFi(connection As WirelessSettings) As Boolean
+            Dim valid As Boolean = True
+            If connection.SSID = "" OrElse String.IsNullOrWhiteSpace(connection.SSID) Then
+                valid = False
+            End If
+            Return valid
+        End Function
+
+    End Class
+
 End Namespace

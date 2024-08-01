@@ -15,11 +15,16 @@
             VirtualMachinePage = 9
             NetworkConnectionsPage = 10
             SystemTelemetryPage = 11
+            PostInstallPage = 12
+            ComponentPage = 13
+            ReviewPage = 14
+            ProgressPage = 15
+            FinishPage = 16
         End Enum
 
         Public Property WizardPage As Page
 
-        Public Const PageCount As Integer = 12
+        Public Const PageCount As Integer = 15
     End Class
 
 End Namespace
