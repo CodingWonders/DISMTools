@@ -60,6 +60,10 @@ Public Class NewUnattendWiz
     Dim NetworkConfigManualSkip As Boolean = False
     Dim SelectedNetworkConfiguration As New WirelessSettings()
 
+    ' System Telemetry Panel
+    Dim SystemTelemetryInteractive As Boolean
+    Dim SelectedTelemetrySettings As New SystemTelemetry()
+
     ' Space for more pages
 
     ' Default Settings
@@ -439,6 +443,7 @@ Public Class NewUnattendWiz
         AccountLockdownPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockdownPage)
         VirtualMachinePanel.Visible = (NewPage = UnattendedWizardPage.Page.VirtualMachinePage)
         NetworkConnectionPanel.Visible = (NewPage = UnattendedWizardPage.Page.NetworkConnectionsPage)
+        SystemTelemetryPanel.Visible = (NewPage = UnattendedWizardPage.Page.SystemTelemetryPage)
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
         Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
@@ -971,5 +976,14 @@ Public Class NewUnattendWiz
 
     Private Sub TextBox10_TextChanged(sender As Object, e As EventArgs) Handles TextBox10.TextChanged
         SelectedNetworkConfiguration.Password = TextBox10.Text
+    End Sub
+
+    Private Sub CheckBox16_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox16.CheckedChanged
+        SystemTelemetryInteractive = CheckBox16.Checked
+        TelemetryOptionsPanel.Enabled = Not CheckBox16.Checked
+    End Sub
+
+    Private Sub RadioButton26_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton26.CheckedChanged
+        SelectedTelemetrySettings.Enabled = Not RadioButton26.Checked
     End Sub
 End Class

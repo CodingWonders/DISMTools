@@ -14,11 +14,12 @@
             AccountLockdownPage = 8
             VirtualMachinePage = 9
             NetworkConnectionsPage = 10
+            SystemTelemetryPage = 11
         End Enum
 
         Public Property WizardPage As Page
 
-        Public Const PageCount As Integer = 11
+        Public Const PageCount As Integer = 12
     End Class
 
 End Namespace

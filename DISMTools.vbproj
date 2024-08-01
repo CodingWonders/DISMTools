@@ -152,6 +152,7 @@
     <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
     <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockdownSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />

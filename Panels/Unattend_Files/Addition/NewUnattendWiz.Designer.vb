@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode79 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
-        Dim TreeNode80 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode81 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode82 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode83 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode84 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode85 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
-        Dim TreeNode86 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode87 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode88 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode89 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode90 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode91 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode27 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
+        Dim TreeNode28 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode29 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode30 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode31 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode32 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode33 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Users and Passwords")
+        Dim TreeNode34 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode35 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode36 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode37 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode38 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode39 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,6 +49,24 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.SystemTelemetryPanel = New System.Windows.Forms.Panel()
+        Me.SystemTelemetryHeader = New System.Windows.Forms.Label()
+        Me.NetworkConnectionPanel = New System.Windows.Forms.Panel()
+        Me.ManualNetworkConfigPanel = New System.Windows.Forms.FlowLayoutPanel()
+        Me.RadioButton25 = New System.Windows.Forms.RadioButton()
+        Me.WirelessNetworkSettingsPanel = New System.Windows.Forms.Panel()
+        Me.ComboBox13 = New System.Windows.Forms.ComboBox()
+        Me.TextBox10 = New System.Windows.Forms.TextBox()
+        Me.TextBox7 = New System.Windows.Forms.TextBox()
+        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
+        Me.Label49 = New System.Windows.Forms.Label()
+        Me.Label48 = New System.Windows.Forms.Label()
+        Me.Label50 = New System.Windows.Forms.Label()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.RadioButton30 = New System.Windows.Forms.RadioButton()
+        Me.Label53 = New System.Windows.Forms.Label()
+        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
+        Me.NetworkConnectionHeader = New System.Windows.Forms.Label()
         Me.VirtualMachinePanel = New System.Windows.Forms.Panel()
         Me.VMProviderPanel = New System.Windows.Forms.Panel()
         Me.Label46 = New System.Windows.Forms.Label()
@@ -245,22 +263,10 @@ Partial Class NewUnattendWiz
         Me.EditorPanelFooter = New System.Windows.Forms.Panel()
         Me.TimeZonePageTimer = New System.Windows.Forms.Timer(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.NetworkConnectionPanel = New System.Windows.Forms.Panel()
-        Me.NetworkConnectionHeader = New System.Windows.Forms.Label()
-        Me.CheckBox14 = New System.Windows.Forms.CheckBox()
-        Me.ManualNetworkConfigPanel = New System.Windows.Forms.FlowLayoutPanel()
-        Me.RadioButton25 = New System.Windows.Forms.RadioButton()
-        Me.WirelessNetworkSettingsPanel = New System.Windows.Forms.Panel()
-        Me.Label53 = New System.Windows.Forms.Label()
-        Me.RadioButton30 = New System.Windows.Forms.RadioButton()
-        Me.Label47 = New System.Windows.Forms.Label()
-        Me.Label48 = New System.Windows.Forms.Label()
-        Me.CheckBox15 = New System.Windows.Forms.CheckBox()
-        Me.Label49 = New System.Windows.Forms.Label()
-        Me.TextBox7 = New System.Windows.Forms.TextBox()
-        Me.TextBox10 = New System.Windows.Forms.TextBox()
-        Me.ComboBox13 = New System.Windows.Forms.ComboBox()
-        Me.Label50 = New System.Windows.Forms.Label()
+        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
+        Me.TelemetryOptionsPanel = New System.Windows.Forms.Panel()
+        Me.RadioButton26 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton27 = New System.Windows.Forms.RadioButton()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -270,6 +276,10 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.SystemTelemetryPanel.SuspendLayout()
+        Me.NetworkConnectionPanel.SuspendLayout()
+        Me.ManualNetworkConfigPanel.SuspendLayout()
+        Me.WirelessNetworkSettingsPanel.SuspendLayout()
         Me.VirtualMachinePanel.SuspendLayout()
         Me.VMProviderPanel.SuspendLayout()
         Me.AccountLockdownPanel.SuspendLayout()
@@ -325,9 +335,7 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.NetworkConnectionPanel.SuspendLayout()
-        Me.ManualNetworkConfigPanel.SuspendLayout()
-        Me.WirelessNetworkSettingsPanel.SuspendLayout()
+        Me.TelemetryOptionsPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -361,33 +369,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode79.Name = "Nodo0"
-        TreeNode79.Text = "DISCLAIMER - NOT COMPLETE"
-        TreeNode80.Name = "Nodo1"
-        TreeNode80.Text = "Regional Configuration"
-        TreeNode81.Name = "Nodo2"
-        TreeNode81.Text = "Basic System Configuration"
-        TreeNode82.Name = "Nodo3"
-        TreeNode82.Text = "Time Zone"
-        TreeNode83.Name = "Nodo4"
-        TreeNode83.Text = "Disk Configuration"
-        TreeNode84.Name = "Nodo5"
-        TreeNode84.Text = "Product Key"
-        TreeNode85.Name = "Nodo6"
-        TreeNode85.Text = "Users and Passwords"
-        TreeNode86.Name = "Nodo9"
-        TreeNode86.Text = "Virtual Machine Support"
-        TreeNode87.Name = "Nodo10"
-        TreeNode87.Text = "Wireless Networking"
-        TreeNode88.Name = "Nodo11"
-        TreeNode88.Text = "System Telemetry"
-        TreeNode89.Name = "Nodo12"
-        TreeNode89.Text = "Post-Installation Scripts"
-        TreeNode90.Name = "Nodo13"
-        TreeNode90.Text = "Component Settings"
-        TreeNode91.Name = "Nodo14"
-        TreeNode91.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode79, TreeNode80, TreeNode81, TreeNode82, TreeNode83, TreeNode84, TreeNode85, TreeNode86, TreeNode87, TreeNode88, TreeNode89, TreeNode90, TreeNode91})
+        TreeNode27.Name = "Nodo0"
+        TreeNode27.Text = "DISCLAIMER - NOT COMPLETE"
+        TreeNode28.Name = "Nodo1"
+        TreeNode28.Text = "Regional Configuration"
+        TreeNode29.Name = "Nodo2"
+        TreeNode29.Text = "Basic System Configuration"
+        TreeNode30.Name = "Nodo3"
+        TreeNode30.Text = "Time Zone"
+        TreeNode31.Name = "Nodo4"
+        TreeNode31.Text = "Disk Configuration"
+        TreeNode32.Name = "Nodo5"
+        TreeNode32.Text = "Product Key"
+        TreeNode33.Name = "Nodo6"
+        TreeNode33.Text = "Users and Passwords"
+        TreeNode34.Name = "Nodo9"
+        TreeNode34.Text = "Virtual Machine Support"
+        TreeNode35.Name = "Nodo10"
+        TreeNode35.Text = "Wireless Networking"
+        TreeNode36.Name = "Nodo11"
+        TreeNode36.Text = "System Telemetry"
+        TreeNode37.Name = "Nodo12"
+        TreeNode37.Text = "Post-Installation Scripts"
+        TreeNode38.Name = "Nodo13"
+        TreeNode38.Text = "Component Settings"
+        TreeNode39.Name = "Nodo14"
+        TreeNode39.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode27, TreeNode28, TreeNode29, TreeNode30, TreeNode31, TreeNode32, TreeNode33, TreeNode34, TreeNode35, TreeNode36, TreeNode37, TreeNode38, TreeNode39})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -477,6 +485,7 @@ Partial Class NewUnattendWiz
         '
         'StepsContainer
         '
+        Me.StepsContainer.Controls.Add(Me.SystemTelemetryPanel)
         Me.StepsContainer.Controls.Add(Me.NetworkConnectionPanel)
         Me.StepsContainer.Controls.Add(Me.VirtualMachinePanel)
         Me.StepsContainer.Controls.Add(Me.AccountLockdownPanel)
@@ -493,6 +502,195 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'SystemTelemetryPanel
+        '
+        Me.SystemTelemetryPanel.Controls.Add(Me.TelemetryOptionsPanel)
+        Me.SystemTelemetryPanel.Controls.Add(Me.CheckBox16)
+        Me.SystemTelemetryPanel.Controls.Add(Me.SystemTelemetryHeader)
+        Me.SystemTelemetryPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SystemTelemetryPanel.Location = New System.Drawing.Point(0, 0)
+        Me.SystemTelemetryPanel.Name = "SystemTelemetryPanel"
+        Me.SystemTelemetryPanel.Size = New System.Drawing.Size(752, 449)
+        Me.SystemTelemetryPanel.TabIndex = 11
+        '
+        'SystemTelemetryHeader
+        '
+        Me.SystemTelemetryHeader.AutoEllipsis = True
+        Me.SystemTelemetryHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SystemTelemetryHeader.Location = New System.Drawing.Point(16, 17)
+        Me.SystemTelemetryHeader.Name = "SystemTelemetryHeader"
+        Me.SystemTelemetryHeader.Size = New System.Drawing.Size(708, 51)
+        Me.SystemTelemetryHeader.TabIndex = 10
+        Me.SystemTelemetryHeader.Text = "Control and limit how much information is sent to Microsoft and third-parties"
+        '
+        'NetworkConnectionPanel
+        '
+        Me.NetworkConnectionPanel.Controls.Add(Me.ManualNetworkConfigPanel)
+        Me.NetworkConnectionPanel.Controls.Add(Me.CheckBox14)
+        Me.NetworkConnectionPanel.Controls.Add(Me.NetworkConnectionHeader)
+        Me.NetworkConnectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NetworkConnectionPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NetworkConnectionPanel.Name = "NetworkConnectionPanel"
+        Me.NetworkConnectionPanel.Size = New System.Drawing.Size(752, 449)
+        Me.NetworkConnectionPanel.TabIndex = 10
+        '
+        'ManualNetworkConfigPanel
+        '
+        Me.ManualNetworkConfigPanel.AutoScroll = True
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.RadioButton25)
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.WirelessNetworkSettingsPanel)
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.RadioButton30)
+        Me.ManualNetworkConfigPanel.Controls.Add(Me.Label53)
+        Me.ManualNetworkConfigPanel.Enabled = False
+        Me.ManualNetworkConfigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.ManualNetworkConfigPanel.Location = New System.Drawing.Point(65, 74)
+        Me.ManualNetworkConfigPanel.Name = "ManualNetworkConfigPanel"
+        Me.ManualNetworkConfigPanel.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
+        Me.ManualNetworkConfigPanel.Size = New System.Drawing.Size(622, 300)
+        Me.ManualNetworkConfigPanel.TabIndex = 12
+        Me.ManualNetworkConfigPanel.WrapContents = False
+        '
+        'RadioButton25
+        '
+        Me.RadioButton25.AutoSize = True
+        Me.RadioButton25.Checked = True
+        Me.RadioButton25.Location = New System.Drawing.Point(7, 9)
+        Me.RadioButton25.Name = "RadioButton25"
+        Me.RadioButton25.Size = New System.Drawing.Size(259, 17)
+        Me.RadioButton25.TabIndex = 4
+        Me.RadioButton25.TabStop = True
+        Me.RadioButton25.Text = "Configure settings for the wireless network now:"
+        Me.RadioButton25.UseVisualStyleBackColor = True
+        '
+        'WirelessNetworkSettingsPanel
+        '
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.ComboBox13)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox10)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox7)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.CheckBox15)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label49)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label48)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label50)
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label47)
+        Me.WirelessNetworkSettingsPanel.Location = New System.Drawing.Point(24, 32)
+        Me.WirelessNetworkSettingsPanel.Margin = New System.Windows.Forms.Padding(20, 3, 3, 3)
+        Me.WirelessNetworkSettingsPanel.Name = "WirelessNetworkSettingsPanel"
+        Me.WirelessNetworkSettingsPanel.Size = New System.Drawing.Size(576, 188)
+        Me.WirelessNetworkSettingsPanel.TabIndex = 5
+        '
+        'ComboBox13
+        '
+        Me.ComboBox13.FormattingEnabled = True
+        Me.ComboBox13.Items.AddRange(New Object() {"Open (least secure)", "WPA2-PSK", "WPA3-PSK"})
+        Me.ComboBox13.Location = New System.Drawing.Point(277, 66)
+        Me.ComboBox13.Name = "ComboBox13"
+        Me.ComboBox13.Size = New System.Drawing.Size(221, 21)
+        Me.ComboBox13.TabIndex = 3
+        '
+        'TextBox10
+        '
+        Me.TextBox10.Location = New System.Drawing.Point(277, 155)
+        Me.TextBox10.Name = "TextBox10"
+        Me.TextBox10.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox10.Size = New System.Drawing.Size(221, 21)
+        Me.TextBox10.TabIndex = 2
+        '
+        'TextBox7
+        '
+        Me.TextBox7.Location = New System.Drawing.Point(277, 15)
+        Me.TextBox7.Name = "TextBox7"
+        Me.TextBox7.Size = New System.Drawing.Size(221, 21)
+        Me.TextBox7.TabIndex = 2
+        '
+        'CheckBox15
+        '
+        Me.CheckBox15.AutoEllipsis = True
+        Me.CheckBox15.Location = New System.Drawing.Point(81, 42)
+        Me.CheckBox15.Name = "CheckBox15"
+        Me.CheckBox15.Size = New System.Drawing.Size(417, 17)
+        Me.CheckBox15.TabIndex = 1
+        Me.CheckBox15.Text = "Connect even if not broadcasting"
+        Me.CheckBox15.UseVisualStyleBackColor = True
+        '
+        'Label49
+        '
+        Me.Label49.AutoEllipsis = True
+        Me.Label49.Location = New System.Drawing.Point(78, 158)
+        Me.Label49.Name = "Label49"
+        Me.Label49.Size = New System.Drawing.Size(193, 13)
+        Me.Label49.TabIndex = 0
+        Me.Label49.Text = "Password:"
+        '
+        'Label48
+        '
+        Me.Label48.AutoEllipsis = True
+        Me.Label48.Location = New System.Drawing.Point(78, 69)
+        Me.Label48.Name = "Label48"
+        Me.Label48.Size = New System.Drawing.Size(193, 13)
+        Me.Label48.TabIndex = 0
+        Me.Label48.Text = "Authentication technology:"
+        '
+        'Label50
+        '
+        Me.Label50.AutoEllipsis = True
+        Me.Label50.Location = New System.Drawing.Point(277, 93)
+        Me.Label50.Name = "Label50"
+        Me.Label50.Size = New System.Drawing.Size(221, 57)
+        Me.Label50.TabIndex = 0
+        Me.Label50.Text = "Please choose the technology that both the wireless router and your network adapt" & _
+    "er support."
+        '
+        'Label47
+        '
+        Me.Label47.AutoEllipsis = True
+        Me.Label47.Location = New System.Drawing.Point(78, 18)
+        Me.Label47.Name = "Label47"
+        Me.Label47.Size = New System.Drawing.Size(193, 13)
+        Me.Label47.TabIndex = 0
+        Me.Label47.Text = "SSID (Network Name):"
+        '
+        'RadioButton30
+        '
+        Me.RadioButton30.AutoSize = True
+        Me.RadioButton30.Location = New System.Drawing.Point(7, 226)
+        Me.RadioButton30.Name = "RadioButton30"
+        Me.RadioButton30.Size = New System.Drawing.Size(110, 17)
+        Me.RadioButton30.TabIndex = 4
+        Me.RadioButton30.Text = "Skip configuration"
+        Me.RadioButton30.UseVisualStyleBackColor = True
+        '
+        'Label53
+        '
+        Me.Label53.AutoEllipsis = True
+        Me.Label53.Location = New System.Drawing.Point(7, 246)
+        Me.Label53.Name = "Label53"
+        Me.Label53.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label53.Size = New System.Drawing.Size(405, 6)
+        Me.Label53.TabIndex = 1
+        Me.Label53.UseMnemonic = False
+        '
+        'CheckBox14
+        '
+        Me.CheckBox14.AutoSize = True
+        Me.CheckBox14.Checked = True
+        Me.CheckBox14.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox14.Location = New System.Drawing.Point(65, 392)
+        Me.CheckBox14.Name = "CheckBox14"
+        Me.CheckBox14.Size = New System.Drawing.Size(276, 17)
+        Me.CheckBox14.TabIndex = 11
+        Me.CheckBox14.Text = "I want to configure these settings during installation"
+        Me.CheckBox14.UseVisualStyleBackColor = True
+        '
+        'NetworkConnectionHeader
+        '
+        Me.NetworkConnectionHeader.AutoEllipsis = True
+        Me.NetworkConnectionHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NetworkConnectionHeader.Location = New System.Drawing.Point(16, 17)
+        Me.NetworkConnectionHeader.Name = "NetworkConnectionHeader"
+        Me.NetworkConnectionHeader.Size = New System.Drawing.Size(708, 51)
+        Me.NetworkConnectionHeader.TabIndex = 9
+        Me.NetworkConnectionHeader.Text = "Configure wireless network settings and get connected online"
         '
         'VirtualMachinePanel
         '
@@ -2569,172 +2767,46 @@ Partial Class NewUnattendWiz
         '
         Me.OpenFileDialog1.Filter = "All Files|*.*"
         '
-        'NetworkConnectionPanel
+        'CheckBox16
         '
-        Me.NetworkConnectionPanel.Controls.Add(Me.ManualNetworkConfigPanel)
-        Me.NetworkConnectionPanel.Controls.Add(Me.CheckBox14)
-        Me.NetworkConnectionPanel.Controls.Add(Me.NetworkConnectionHeader)
-        Me.NetworkConnectionPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NetworkConnectionPanel.Location = New System.Drawing.Point(0, 0)
-        Me.NetworkConnectionPanel.Name = "NetworkConnectionPanel"
-        Me.NetworkConnectionPanel.Size = New System.Drawing.Size(752, 449)
-        Me.NetworkConnectionPanel.TabIndex = 10
+        Me.CheckBox16.AutoSize = True
+        Me.CheckBox16.Location = New System.Drawing.Point(65, 392)
+        Me.CheckBox16.Name = "CheckBox16"
+        Me.CheckBox16.Size = New System.Drawing.Size(276, 17)
+        Me.CheckBox16.TabIndex = 12
+        Me.CheckBox16.Text = "I want to configure these settings during installation"
+        Me.CheckBox16.UseVisualStyleBackColor = True
         '
-        'NetworkConnectionHeader
+        'TelemetryOptionsPanel
         '
-        Me.NetworkConnectionHeader.AutoEllipsis = True
-        Me.NetworkConnectionHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.NetworkConnectionHeader.Location = New System.Drawing.Point(16, 17)
-        Me.NetworkConnectionHeader.Name = "NetworkConnectionHeader"
-        Me.NetworkConnectionHeader.Size = New System.Drawing.Size(708, 51)
-        Me.NetworkConnectionHeader.TabIndex = 9
-        Me.NetworkConnectionHeader.Text = "Configure wireless network settings and get connected online"
+        Me.TelemetryOptionsPanel.Controls.Add(Me.RadioButton27)
+        Me.TelemetryOptionsPanel.Controls.Add(Me.RadioButton26)
+        Me.TelemetryOptionsPanel.Location = New System.Drawing.Point(59, 80)
+        Me.TelemetryOptionsPanel.Name = "TelemetryOptionsPanel"
+        Me.TelemetryOptionsPanel.Size = New System.Drawing.Size(635, 93)
+        Me.TelemetryOptionsPanel.TabIndex = 13
         '
-        'CheckBox14
+        'RadioButton26
         '
-        Me.CheckBox14.AutoSize = True
-        Me.CheckBox14.Checked = True
-        Me.CheckBox14.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox14.Location = New System.Drawing.Point(65, 392)
-        Me.CheckBox14.Name = "CheckBox14"
-        Me.CheckBox14.Size = New System.Drawing.Size(276, 17)
-        Me.CheckBox14.TabIndex = 11
-        Me.CheckBox14.Text = "I want to configure these settings during installation"
-        Me.CheckBox14.UseVisualStyleBackColor = True
+        Me.RadioButton26.AutoSize = True
+        Me.RadioButton26.Checked = True
+        Me.RadioButton26.Location = New System.Drawing.Point(29, 22)
+        Me.RadioButton26.Name = "RadioButton26"
+        Me.RadioButton26.Size = New System.Drawing.Size(108, 17)
+        Me.RadioButton26.TabIndex = 0
+        Me.RadioButton26.TabStop = True
+        Me.RadioButton26.Text = "Disable telemetry"
+        Me.RadioButton26.UseVisualStyleBackColor = True
         '
-        'ManualNetworkConfigPanel
+        'RadioButton27
         '
-        Me.ManualNetworkConfigPanel.AutoScroll = True
-        Me.ManualNetworkConfigPanel.Controls.Add(Me.RadioButton25)
-        Me.ManualNetworkConfigPanel.Controls.Add(Me.WirelessNetworkSettingsPanel)
-        Me.ManualNetworkConfigPanel.Controls.Add(Me.RadioButton30)
-        Me.ManualNetworkConfigPanel.Controls.Add(Me.Label53)
-        Me.ManualNetworkConfigPanel.Enabled = False
-        Me.ManualNetworkConfigPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.ManualNetworkConfigPanel.Location = New System.Drawing.Point(65, 74)
-        Me.ManualNetworkConfigPanel.Name = "ManualNetworkConfigPanel"
-        Me.ManualNetworkConfigPanel.Padding = New System.Windows.Forms.Padding(4, 6, 0, 0)
-        Me.ManualNetworkConfigPanel.Size = New System.Drawing.Size(622, 300)
-        Me.ManualNetworkConfigPanel.TabIndex = 12
-        Me.ManualNetworkConfigPanel.WrapContents = False
-        '
-        'RadioButton25
-        '
-        Me.RadioButton25.AutoSize = True
-        Me.RadioButton25.Checked = True
-        Me.RadioButton25.Location = New System.Drawing.Point(7, 9)
-        Me.RadioButton25.Name = "RadioButton25"
-        Me.RadioButton25.Size = New System.Drawing.Size(259, 17)
-        Me.RadioButton25.TabIndex = 4
-        Me.RadioButton25.Text = "Configure settings for the wireless network now:"
-        Me.RadioButton25.UseVisualStyleBackColor = True
-        '
-        'WirelessNetworkSettingsPanel
-        '
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.ComboBox13)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox10)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox7)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.CheckBox15)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label49)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label48)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label50)
-        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.Label47)
-        Me.WirelessNetworkSettingsPanel.Location = New System.Drawing.Point(24, 32)
-        Me.WirelessNetworkSettingsPanel.Margin = New System.Windows.Forms.Padding(20, 3, 3, 3)
-        Me.WirelessNetworkSettingsPanel.Name = "WirelessNetworkSettingsPanel"
-        Me.WirelessNetworkSettingsPanel.Size = New System.Drawing.Size(576, 188)
-        Me.WirelessNetworkSettingsPanel.TabIndex = 5
-        '
-        'Label53
-        '
-        Me.Label53.AutoEllipsis = True
-        Me.Label53.Location = New System.Drawing.Point(7, 246)
-        Me.Label53.Name = "Label53"
-        Me.Label53.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label53.Size = New System.Drawing.Size(405, 6)
-        Me.Label53.TabIndex = 1
-        Me.Label53.UseMnemonic = False
-        '
-        'RadioButton30
-        '
-        Me.RadioButton30.AutoSize = True
-        Me.RadioButton30.Location = New System.Drawing.Point(7, 226)
-        Me.RadioButton30.Name = "RadioButton30"
-        Me.RadioButton30.Size = New System.Drawing.Size(110, 17)
-        Me.RadioButton30.TabIndex = 4
-        Me.RadioButton30.Text = "Skip configuration"
-        Me.RadioButton30.UseVisualStyleBackColor = True
-        '
-        'Label47
-        '
-        Me.Label47.AutoEllipsis = True
-        Me.Label47.Location = New System.Drawing.Point(78, 18)
-        Me.Label47.Name = "Label47"
-        Me.Label47.Size = New System.Drawing.Size(193, 13)
-        Me.Label47.TabIndex = 0
-        Me.Label47.Text = "SSID (Network Name):"
-        '
-        'Label48
-        '
-        Me.Label48.AutoEllipsis = True
-        Me.Label48.Location = New System.Drawing.Point(78, 69)
-        Me.Label48.Name = "Label48"
-        Me.Label48.Size = New System.Drawing.Size(193, 13)
-        Me.Label48.TabIndex = 0
-        Me.Label48.Text = "Authentication technology:"
-        '
-        'CheckBox15
-        '
-        Me.CheckBox15.AutoEllipsis = True
-        Me.CheckBox15.Location = New System.Drawing.Point(81, 42)
-        Me.CheckBox15.Name = "CheckBox15"
-        Me.CheckBox15.Size = New System.Drawing.Size(417, 17)
-        Me.CheckBox15.TabIndex = 1
-        Me.CheckBox15.Text = "Connect even if not broadcasting"
-        Me.CheckBox15.UseVisualStyleBackColor = True
-        '
-        'Label49
-        '
-        Me.Label49.AutoEllipsis = True
-        Me.Label49.Location = New System.Drawing.Point(78, 158)
-        Me.Label49.Name = "Label49"
-        Me.Label49.Size = New System.Drawing.Size(193, 13)
-        Me.Label49.TabIndex = 0
-        Me.Label49.Text = "Password:"
-        '
-        'TextBox7
-        '
-        Me.TextBox7.Location = New System.Drawing.Point(277, 15)
-        Me.TextBox7.Name = "TextBox7"
-        Me.TextBox7.Size = New System.Drawing.Size(221, 21)
-        Me.TextBox7.TabIndex = 2
-        '
-        'TextBox10
-        '
-        Me.TextBox10.Location = New System.Drawing.Point(277, 155)
-        Me.TextBox10.Name = "TextBox10"
-        Me.TextBox10.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
-        Me.TextBox10.Size = New System.Drawing.Size(221, 21)
-        Me.TextBox10.TabIndex = 2
-        '
-        'ComboBox13
-        '
-        Me.ComboBox13.FormattingEnabled = True
-        Me.ComboBox13.Items.AddRange(New Object() {"Open (least secure)", "WPA2-PSK", "WPA3-PSK"})
-        Me.ComboBox13.Location = New System.Drawing.Point(277, 66)
-        Me.ComboBox13.Name = "ComboBox13"
-        Me.ComboBox13.Size = New System.Drawing.Size(221, 21)
-        Me.ComboBox13.TabIndex = 3
-        '
-        'Label50
-        '
-        Me.Label50.AutoEllipsis = True
-        Me.Label50.Location = New System.Drawing.Point(277, 93)
-        Me.Label50.Name = "Label50"
-        Me.Label50.Size = New System.Drawing.Size(221, 57)
-        Me.Label50.TabIndex = 0
-        Me.Label50.Text = "Please choose the technology that both the wireless router and your network adapt" & _
-    "er support."
+        Me.RadioButton27.AutoSize = True
+        Me.RadioButton27.Location = New System.Drawing.Point(29, 45)
+        Me.RadioButton27.Name = "RadioButton27"
+        Me.RadioButton27.Size = New System.Drawing.Size(106, 17)
+        Me.RadioButton27.TabIndex = 0
+        Me.RadioButton27.Text = "Enable telemetry"
+        Me.RadioButton27.UseVisualStyleBackColor = True
         '
         'NewUnattendWiz
         '
@@ -2766,6 +2838,14 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.SystemTelemetryPanel.ResumeLayout(False)
+        Me.SystemTelemetryPanel.PerformLayout()
+        Me.NetworkConnectionPanel.ResumeLayout(False)
+        Me.NetworkConnectionPanel.PerformLayout()
+        Me.ManualNetworkConfigPanel.ResumeLayout(False)
+        Me.ManualNetworkConfigPanel.PerformLayout()
+        Me.WirelessNetworkSettingsPanel.ResumeLayout(False)
+        Me.WirelessNetworkSettingsPanel.PerformLayout()
         Me.VirtualMachinePanel.ResumeLayout(False)
         Me.VirtualMachinePanel.PerformLayout()
         Me.VMProviderPanel.ResumeLayout(False)
@@ -2853,12 +2933,8 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.NetworkConnectionPanel.ResumeLayout(False)
-        Me.NetworkConnectionPanel.PerformLayout()
-        Me.ManualNetworkConfigPanel.ResumeLayout(False)
-        Me.ManualNetworkConfigPanel.PerformLayout()
-        Me.WirelessNetworkSettingsPanel.ResumeLayout(False)
-        Me.WirelessNetworkSettingsPanel.PerformLayout()
+        Me.TelemetryOptionsPanel.ResumeLayout(False)
+        Me.TelemetryOptionsPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3086,4 +3162,10 @@ Partial Class NewUnattendWiz
     Friend WithEvents Label47 As System.Windows.Forms.Label
     Friend WithEvents RadioButton30 As System.Windows.Forms.RadioButton
     Friend WithEvents Label53 As System.Windows.Forms.Label
+    Friend WithEvents SystemTelemetryPanel As System.Windows.Forms.Panel
+    Friend WithEvents SystemTelemetryHeader As System.Windows.Forms.Label
+    Friend WithEvents TelemetryOptionsPanel As System.Windows.Forms.Panel
+    Friend WithEvents CheckBox16 As System.Windows.Forms.CheckBox
+    Friend WithEvents RadioButton27 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton26 As System.Windows.Forms.RadioButton
 End Class
