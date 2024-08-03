@@ -80,8 +80,8 @@
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.3.1.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.5.6.0\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=5.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.5.6.1\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -142,6 +142,24 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\GeoId.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\ImageLanguage.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\KeyboardIdentifier.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\TimeOffset.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\UserLocale.vb" />
+    <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
+    <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockdownSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
+    <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
       <SubType>Component</SubType>
@@ -490,6 +508,12 @@
       <DependentUpon>ImgMount.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\ImgMount.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Langs\SetLayeredDriver.Designer.vb">
+      <DependentUpon>SetLayeredDriver.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Langs\SetLayeredDriver.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Merger\ImgSwmToWim.Designer.vb">
@@ -910,6 +934,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\ImgMount.resx">
       <DependentUpon>ImgMount.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Langs\SetLayeredDriver.resx">
+      <DependentUpon>SetLayeredDriver.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Merger\ImgSwmToWim.resx">
       <DependentUpon>ImgSwmToWim.vb</DependentUpon>
     </EmbeddedResource>
@@ -1069,6 +1096,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
@@ -1349,6 +1379,7 @@
     <None Include="Resources\progresspanel_logview_hidden.png" />
     <None Include="Resources\progresspanel_logview_shown.png" />
     <None Include="Resources\create_iso.png" />
+    <None Include="Resources\set_layeredkeyboarddriver.png" />
     <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
     <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
     <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
@@ -1695,6 +1726,11 @@ IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
 )
 
+IF NOT EXIST AutoUnattend (
+	md AutoUnattend
+	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
+)
+
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
@@ -1745,6 +1781,10 @@ IF EXIST videos (
 	rd videos /s /q
 )
 
+IF EXIST AutoUnattend (
+	rd AutoUnattend /s /q
+)
+
 IF EXIST videos.xml (del videos.xml)
 IF EXIST videos.xml.old (del videos.xml.old)
 
@@ -1752,12 +1792,12 @@ IF EXIST tools (
 	rd tools /s /q
 )</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets')" />
+  <Import Project="packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets'))" />
+    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -421,6 +421,12 @@ Public Class ProgressPanel
     Dim appxSuccessfulRemovals As Integer                   ' Successful AppX package removal count
     Dim appxFailedRemovals As Integer                       ' Failed AppX package addition count
 
+    ' OperationNum: 60
+    Dim currentLay As KeyboardDrivers.LayeredKeyboardDriver ' Current keyboard layered driver
+    Dim newKeybLay As KeyboardDrivers.LayeredKeyboardDriver ' New keyboard layered driver
+    Public currentKeybLayeredDriverType As Integer          ' Integer that defines the current keyboard layered driver
+    Public KeyboardLayeredDriverType As Integer             ' Integer that defines the keyboard layered driver to set
+
     ' OperationNum: 64
     Public capAdditionIds(65535) As String                  ' Array used to store IDs of capabilities to add
     Public capAdditionLastId As String                      ' Last capability ID selected
@@ -633,6 +639,8 @@ Public Class ProgressPanel
                 taskCount = 1
             End If
         ElseIf opNum = 38 Then
+            taskCount = 1
+        ElseIf opNum = 60 Then
             taskCount = 1
         ElseIf opNum = 64 Then
             If capAdditionCommit Then
@@ -4148,6 +4156,98 @@ Public Class ProgressPanel
             ElseIf appxSuccessfulRemovals <= 0 Then
                 GetErrorCode(False)
             End If
+        ElseIf opNum = 60 Then
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Setting layered driver..."
+                            currentTask.Text = "Setting keyboard layered driver..."
+                        Case "ESN"
+                            allTasks.Text = "Estableciendo controlador superpuesto..."
+                            currentTask.Text = "Estableciendo controlador de teclado superpuesto..."
+                        Case "FRA"
+                            allTasks.Text = "Configuration du pilote en couches en cours..."
+                            currentTask.Text = "Configuration du pilote en couches pour le clavier en cours..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Configuração do controlador em camadas..."
+                            currentTask.Text = "Configuração do controlador de teclado em camadas..."
+                        Case "ITA"
+                            allTasks.Text = "Impostazione del driver stratificato..."
+                            currentTask.Text = "Impostazione del driver a strati per la tastiera..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Setting layered driver..."
+                    currentTask.Text = "Setting keyboard layered driver..."
+                Case 2
+                    allTasks.Text = "Estableciendo controlador superpuesto..."
+                    currentTask.Text = "Estableciendo controlador de teclado superpuesto..."
+                Case 3
+                    allTasks.Text = "Configuration du pilote en couches en cours..."
+                    currentTask.Text = "Configuration du pilote en couches pour le clavier en cours..."
+                Case 4
+                    allTasks.Text = "Configuração do controlador em camadas..."
+                    currentTask.Text = "Configuração do controlador de teclado em camadas..."
+                Case 5
+                    allTasks.Text = "Impostazione del driver stratificato..."
+                    currentTask.Text = "Impostazione del driver a strati per la tastiera..."
+            End Select
+            currentLay = New KeyboardDrivers(currentKeybLayeredDriverType).LayeredDriver
+            newKeybLay = New KeyboardDrivers(KeyboardLayeredDriverType).LayeredDriver
+            Dim currentLayout As String = ""
+            Dim newLayout As String = ""
+            Select Case currentLay
+                Case KeyboardDrivers.LayeredKeyboardDriver.Unknown
+                    currentLayout = "Unknown/Not installed"
+                Case KeyboardDrivers.LayeredKeyboardDriver.PCATKey
+                    currentLayout = "PC/AT Enhanced Keyboard (101/102-Key)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_PCATKeyT1
+                    currentLayout = "Korean PC/AT 101-Key Compatible Keyboard/MS Natural Keyboard (Type 1)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_PCATKeyT2
+                    currentLayout = "Korean PC/AT 101-Key Compatible Keyboard/MS Natural Keyboard (Type 2)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_PCATKeyT3
+                    currentLayout = "Korean PC/AT 101-Key Compatible Keyboard/MS Natural Keyboard (Type 3)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_103106Key
+                    currentLayout = "Korean Keyboard (103/106 Key)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.J_106109Key
+                    currentLayout = "Japanese Keyboard (106/109 Key)"
+            End Select
+            Select Case newKeybLay
+                Case KeyboardDrivers.LayeredKeyboardDriver.Unknown
+                    newLayout = "Unknown/Not installed"
+                Case KeyboardDrivers.LayeredKeyboardDriver.PCATKey
+                    newLayout = "PC/AT Enhanced Keyboard (101/102-Key)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_PCATKeyT1
+                    newLayout = "Korean PC/AT 101-Key Compatible Keyboard/MS Natural Keyboard (Type 1)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_PCATKeyT2
+                    newLayout = "Korean PC/AT 101-Key Compatible Keyboard/MS Natural Keyboard (Type 2)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_PCATKeyT3
+                    newLayout = "Korean PC/AT 101-Key Compatible Keyboard/MS Natural Keyboard (Type 3)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.K_103106Key
+                    newLayout = "Korean Keyboard (103/106 Key)"
+                Case KeyboardDrivers.LayeredKeyboardDriver.J_106109Key
+                    newLayout = "Japanese Keyboard (106/109 Key)"
+            End Select
+            LogView.AppendText(CrLf & "Setting the keyboard layered driver..." & CrLf & _
+                               "- Current keyboard layered driver: " & currentLayout & CrLf & _
+                               "- New keyboard layered driver: " & newLayout & CrLf)
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-layereddriver:" & KeyboardLayeredDriverType
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            LogView.AppendText(CrLf & "Getting error level...")
+            If Hex(DISMProc.ExitCode).Length < 8 Then
+                errCode = DISMProc.ExitCode
+            Else
+                errCode = Hex(DISMProc.ExitCode)
+            End If
+            If errCode.Length >= 8 Then
+                LogView.AppendText(" Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(" Error level : " & errCode)
+            End If
+            GetErrorCode(False)
         ElseIf opNum = 64 Then
             Select Case Language
                 Case 0

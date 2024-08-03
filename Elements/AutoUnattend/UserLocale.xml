@@ -1,0 +1,689 @@
+<?xml version="1.0" ?>
+<root>
+    <UserLocale Id="aa" DisplayName="Afar" LCID="1000"/>
+    <UserLocale Id="aa-DJ" DisplayName="Afar (Djibouti)" LCID="1000" KeyboardLayout="00000409" GeoLocation="62"/>
+    <UserLocale Id="aa-ER" DisplayName="Afar (Eritrea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="71"/>
+    <UserLocale Id="aa-ET" DisplayName="Afar (Ethiopia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="73"/>
+    <UserLocale Id="af-NA" DisplayName="Afrikaans (Namibia)" LCID="1000" GeoLocation="254"/>
+    <UserLocale Id="af-ZA" DisplayName="Afrikaans (South Africa)" LCID="0436" GeoLocation="209"/>
+    <UserLocale Id="agq" DisplayName="Aghem" LCID="1000"/>
+    <UserLocale Id="agq-CM" DisplayName="Aghem (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="ak" DisplayName="Akan" LCID="1000"/>
+    <UserLocale Id="ak-GH" DisplayName="Akan (Ghana)" LCID="1000" KeyboardLayout="00000409" GeoLocation="89"/>
+    <UserLocale Id="am-ET" DisplayName="Amharic (Ethiopia)" LCID="045e" GeoLocation="73"/>
+    <UserLocale Id="ar-001" DisplayName="Arabic (World)" LCID="1000" KeyboardLayout="00000401"/>
+    <UserLocale Id="ar-AE" DisplayName="Arabic (United Arab Emirates)" LCID="3801" KeyboardLayout="00000401" GeoLocation="224"/>
+    <UserLocale Id="ar-BH" DisplayName="Arabic (Bahrain)" LCID="3c01" KeyboardLayout="00000401" GeoLocation="17"/>
+    <UserLocale Id="ar-DJ" DisplayName="Arabic (Djibouti)" LCID="1000" KeyboardLayout="00000401" GeoLocation="62"/>
+    <UserLocale Id="ar-DZ" DisplayName="Arabic (Algeria)" LCID="1401" KeyboardLayout="00000401" GeoLocation="4"/>
+    <UserLocale Id="ar-EG" DisplayName="Arabic (Egypt)" LCID="0c01" KeyboardLayout="00000401" GeoLocation="67"/>
+    <UserLocale Id="ar-ER" DisplayName="Arabic (Eritrea)" LCID="1000" KeyboardLayout="00000401" GeoLocation="71"/>
+    <UserLocale Id="ar-IL" DisplayName="Arabic (Israel)" LCID="1000" KeyboardLayout="00000401" GeoLocation="117"/>
+    <UserLocale Id="ar-IQ" DisplayName="Arabic (Iraq)" LCID="0801" KeyboardLayout="00000401" GeoLocation="121"/>
+    <UserLocale Id="ar-JO" DisplayName="Arabic (Jordan)" LCID="2c01" KeyboardLayout="00000401" GeoLocation="126"/>
+    <UserLocale Id="ar-KM" DisplayName="Arabic (Comoros)" LCID="1000" KeyboardLayout="00000401" GeoLocation="50"/>
+    <UserLocale Id="ar-KW" DisplayName="Arabic (Kuwait)" LCID="3401" KeyboardLayout="00000401" GeoLocation="136"/>
+    <UserLocale Id="ar-LB" DisplayName="Arabic (Lebanon)" LCID="3001" KeyboardLayout="00000401" GeoLocation="139"/>
+    <UserLocale Id="ar-LY" DisplayName="Arabic (Libya)" LCID="1001" KeyboardLayout="00000401" GeoLocation="148"/>
+    <UserLocale Id="ar-MA" DisplayName="Arabic (Morocco)" LCID="1801" KeyboardLayout="00000401" GeoLocation="159"/>
+    <UserLocale Id="ar-MR" DisplayName="Arabic (Mauritania)" LCID="1000" KeyboardLayout="00000401" GeoLocation="162"/>
+    <UserLocale Id="ar-OM" DisplayName="Arabic (Oman)" LCID="2001" KeyboardLayout="00000401" GeoLocation="164"/>
+    <UserLocale Id="ar-PS" DisplayName="Arabic (Palestinian Authority)" LCID="1000" KeyboardLayout="00000401" GeoLocation="184"/>
+    <UserLocale Id="ar-QA" DisplayName="Arabic (Qatar)" LCID="4001" KeyboardLayout="00000401" GeoLocation="197"/>
+    <UserLocale Id="ar-SA" DisplayName="Arabic (Saudi Arabia)" LCID="0401" KeyboardLayout="00000401" GeoLocation="205"/>
+    <UserLocale Id="ar-SD" DisplayName="Arabic (Sudan)" LCID="1000" KeyboardLayout="00000401" GeoLocation="219"/>
+    <UserLocale Id="ar-SO" DisplayName="Arabic (Somalia)" LCID="1000" KeyboardLayout="00000401" GeoLocation="216"/>
+    <UserLocale Id="ar-SS" DisplayName="Arabic (South Sudan)" LCID="1000" KeyboardLayout="00000401" GeoLocation="276"/>
+    <UserLocale Id="ar-SY" DisplayName="Arabic (Syria)" LCID="2801" KeyboardLayout="00000401" GeoLocation="222"/>
+    <UserLocale Id="ar-TD" DisplayName="Arabic (Chad)" LCID="1000" KeyboardLayout="00000401" GeoLocation="41"/>
+    <UserLocale Id="ar-TN" DisplayName="Arabic (Tunisia)" LCID="1c01" KeyboardLayout="00000401" GeoLocation="234"/>
+    <UserLocale Id="ar-YE" DisplayName="Arabic (Yemen)" LCID="2401" KeyboardLayout="00000401" GeoLocation="261"/>
+    <UserLocale Id="arn-CL" DisplayName="Mapuche (Chile)" LCID="047a" GeoLocation="46"/>
+    <UserLocale Id="as-IN" DisplayName="Assamese (India)" LCID="044d" KeyboardLayout="0000044d" GeoLocation="113"/>
+    <UserLocale Id="asa" DisplayName="Asu" LCID="1000"/>
+    <UserLocale Id="asa-TZ" DisplayName="Asu (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="ast" DisplayName="Asturian" LCID="1000"/>
+    <UserLocale Id="ast-ES" DisplayName="Asturian (Spain)" LCID="1000" KeyboardLayout="00000409" GeoLocation="217"/>
+    <UserLocale Id="az-Cyrl" DisplayName="Azerbaijani (Cyrillic)" LCID="742c" KeyboardLayout="0000042c"/>
+    <UserLocale Id="az-Cyrl-AZ" DisplayName="Azerbaijani (Cyrillic, Azerbaijan)" LCID="082c" KeyboardLayout="0000082c" GeoLocation="5"/>
+    <UserLocale Id="az-Latn" DisplayName="Azerbaijani (Latin)" LCID="782c" KeyboardLayout="0000042c"/>
+    <UserLocale Id="az-Latn-AZ" DisplayName="Azerbaijani (Latin, Azerbaijan)" LCID="042c" KeyboardLayout="0000042c" GeoLocation="5"/>
+    <UserLocale Id="ba-RU" DisplayName="Bashkir (Russia)" LCID="046d" KeyboardLayout="0000046d" GeoLocation="203"/>
+    <UserLocale Id="bas" DisplayName="Basaa" LCID="1000"/>
+    <UserLocale Id="bas-CM" DisplayName="Basaa (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="be-BY" DisplayName="Belarusian (Belarus)" LCID="0423" KeyboardLayout="00000423" GeoLocation="29"/>
+    <UserLocale Id="bem" DisplayName="Bemba" LCID="1000"/>
+    <UserLocale Id="bem-ZM" DisplayName="Bemba (Zambia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="263"/>
+    <UserLocale Id="bez" DisplayName="Bena" LCID="1000"/>
+    <UserLocale Id="bez-TZ" DisplayName="Bena (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="bg-BG" DisplayName="Bulgarian (Bulgaria)" LCID="0402" KeyboardLayout="00000402" GeoLocation="35"/>
+    <UserLocale Id="bm" DisplayName="Bamanankan" LCID="1000"/>
+    <UserLocale Id="bm-ML" DisplayName="Bamanankan (Mali)" LCID="1000" KeyboardLayout="00000409" GeoLocation="157"/>
+    <UserLocale Id="bn-BD" DisplayName="Bangla (Bangladesh)" LCID="0845" KeyboardLayout="00000445" GeoLocation="23"/>
+    <UserLocale Id="bn-IN" DisplayName="Bangla (India)" LCID="0445" KeyboardLayout="00000445" GeoLocation="113"/>
+    <UserLocale Id="bo-CN" DisplayName="Tibetan (China)" LCID="0451" KeyboardLayout="00000451" GeoLocation="45"/>
+    <UserLocale Id="bo-IN" DisplayName="Tibetan (India)" LCID="1000" KeyboardLayout="00000451" GeoLocation="113"/>
+    <UserLocale Id="br-FR" DisplayName="Breton (France)" LCID="047e" GeoLocation="84"/>
+    <UserLocale Id="brx" DisplayName="Bodo" LCID="1000"/>
+    <UserLocale Id="brx-IN" DisplayName="Bodo (India)" LCID="1000" KeyboardLayout="00000409" GeoLocation="113"/>
+    <UserLocale Id="bs" DisplayName="Bosnian" LCID="781a"/>
+    <UserLocale Id="bs-Cyrl" DisplayName="Bosnian (Cyrillic)" LCID="641a"/>
+    <UserLocale Id="bs-Cyrl-BA" DisplayName="Bosnian (Cyrillic, Bosnia &amp;Herzegovina)" LCID="201a" KeyboardLayout="0000201a" GeoLocation="25"/>
+    <UserLocale Id="bs-Latn" DisplayName="Bosnian (Latin)" LCID="681a"/>
+    <UserLocale Id="bs-Latn-BA" DisplayName="Bosnian (Latin, Bosnia &amp;Herzegovina)" LCID="141a" GeoLocation="25"/>
+    <UserLocale Id="byn" DisplayName="Blin" LCID="1000"/>
+    <UserLocale Id="byn-ER" DisplayName="Blin (Eritrea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="71"/>
+    <UserLocale Id="ca-AD" DisplayName="Catalan (Andorra)" LCID="1000" GeoLocation="8"/>
+    <UserLocale Id="ca-ES" DisplayName="Catalan (Spain)" LCID="0403" GeoLocation="217"/>
+    <UserLocale Id="ca-ES-VALENCIA" DisplayName="Catalan (Spain, Valencian)" LCID="0803"/>
+    <UserLocale Id="ca-FR" DisplayName="Catalan (France)" LCID="1000" GeoLocation="84"/>
+    <UserLocale Id="ca-IT" DisplayName="Catalan (Italy)" LCID="1000" GeoLocation="118"/>
+    <UserLocale Id="ccp" DisplayName="Chakma" LCID="1000"/>
+    <UserLocale Id="ccp-BD" DisplayName="Chakma (Bangladesh)" LCID="1000" KeyboardLayout="00000409" GeoLocation="23"/>
+    <UserLocale Id="ccp-IN" DisplayName="Chakma (India)" LCID="1000" KeyboardLayout="00000409" GeoLocation="113"/>
+    <UserLocale Id="ce" DisplayName="Chechen" LCID="1000"/>
+    <UserLocale Id="ce-RU" DisplayName="Chechen (Russia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="203"/>
+    <UserLocale Id="ceb" DisplayName="Cebuano" LCID="1000"/>
+    <UserLocale Id="ceb-PH" DisplayName="Cebuano (Philippines)" LCID="1000" KeyboardLayout="00000409" GeoLocation="201"/>
+    <UserLocale Id="cgg" DisplayName="Chiga" LCID="1000"/>
+    <UserLocale Id="cgg-UG" DisplayName="Chiga (Uganda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="240"/>
+    <UserLocale Id="chr-US" DisplayName="Cherokee (United States)" LCID="1000" KeyboardLayout="0000045c" GeoLocation="244"/>
+    <UserLocale Id="ckb" DisplayName="Central Kurdish" LCID="1000"/>
+    <UserLocale Id="ckb-IQ" DisplayName="Central Kurdish (Iraq)" LCID="1000" KeyboardLayout="00000409" GeoLocation="121"/>
+    <UserLocale Id="ckb-IR" DisplayName="Central Kurdish (Iran)" LCID="1000" KeyboardLayout="00000409" GeoLocation="116"/>
+    <UserLocale Id="co-FR" DisplayName="Corsican (France)" LCID="0483" GeoLocation="84"/>
+    <UserLocale Id="cs-CZ" DisplayName="Czech (Czechia)" LCID="0405" KeyboardLayout="00000405" GeoLocation="75"/>
+    <UserLocale Id="cu" DisplayName="Church Slavic" LCID="1000"/>
+    <UserLocale Id="cu-RU" DisplayName="Church Slavic (Russia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="203"/>
+    <UserLocale Id="cy-GB" DisplayName="Welsh (United Kingdom)" LCID="0452" KeyboardLayout="00000452" GeoLocation="242"/>
+    <UserLocale Id="da-DK" DisplayName="Danish (Denmark)" LCID="0406" KeyboardLayout="00000406" GeoLocation="61"/>
+    <UserLocale Id="da-GL" DisplayName="Danish (Greenland)" LCID="1000" KeyboardLayout="00000406" GeoLocation="93"/>
+    <UserLocale Id="dav" DisplayName="Taita" LCID="1000"/>
+    <UserLocale Id="dav-KE" DisplayName="Taita (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="de-AT" DisplayName="German (Austria)" LCID="0c07" KeyboardLayout="00000407" GeoLocation="14"/>
+    <UserLocale Id="de-BE" DisplayName="German (Belgium)" LCID="1000" KeyboardLayout="00000407" GeoLocation="21"/>
+    <UserLocale Id="de-CH" DisplayName="German (Switzerland)" LCID="0807" KeyboardLayout="00000807" GeoLocation="223"/>
+    <UserLocale Id="de-DE" DisplayName="German (Germany)" LCID="0407" KeyboardLayout="00000407" GeoLocation="94"/>
+    <UserLocale Id="de-IT" DisplayName="German (Italy)" LCID="1000" KeyboardLayout="00000407" GeoLocation="118"/>
+    <UserLocale Id="de-LI" DisplayName="German (Liechtenstein)" LCID="1407" KeyboardLayout="00000407" GeoLocation="145"/>
+    <UserLocale Id="de-LU" DisplayName="German (Luxembourg)" LCID="1007" KeyboardLayout="00000407" GeoLocation="147"/>
+    <UserLocale Id="dje" DisplayName="Zarma" LCID="1000"/>
+    <UserLocale Id="dje-NE" DisplayName="Zarma (Niger)" LCID="1000" KeyboardLayout="00000409" GeoLocation="173"/>
+    <UserLocale Id="dsb" DisplayName="Lower Sorbian" LCID="7c2e"/>
+    <UserLocale Id="dsb-DE" DisplayName="Lower Sorbian (Germany)" LCID="082e" GeoLocation="94"/>
+    <UserLocale Id="dua" DisplayName="Duala" LCID="1000"/>
+    <UserLocale Id="dua-CM" DisplayName="Duala (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="dv-MV" DisplayName="Divehi (Maldives)" LCID="0465" KeyboardLayout="00000465" GeoLocation="165"/>
+    <UserLocale Id="dyo" DisplayName="Jola-Fonyi" LCID="1000"/>
+    <UserLocale Id="dyo-SN" DisplayName="Jola-Fonyi (Senegal)" LCID="1000" KeyboardLayout="00000409" GeoLocation="210"/>
+    <UserLocale Id="dz" DisplayName="Dzongkha" LCID="1000"/>
+    <UserLocale Id="dz-BT" DisplayName="Dzongkha (Bhutan)" LCID="0c51" KeyboardLayout="00000c51" GeoLocation="34"/>
+    <UserLocale Id="ebu" DisplayName="Embu" LCID="1000"/>
+    <UserLocale Id="ebu-KE" DisplayName="Embu (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="ee" DisplayName="Ewe" LCID="1000"/>
+    <UserLocale Id="ee-GH" DisplayName="Ewe (Ghana)" LCID="1000" KeyboardLayout="00000409" GeoLocation="89"/>
+    <UserLocale Id="ee-TG" DisplayName="Ewe (Togo)" LCID="1000" KeyboardLayout="00000409" GeoLocation="232"/>
+    <UserLocale Id="el-CY" DisplayName="Greek (Cyprus)" LCID="1000" KeyboardLayout="00000408" GeoLocation="59"/>
+    <UserLocale Id="el-GR" DisplayName="Greek (Greece)" LCID="0408" KeyboardLayout="00000408" GeoLocation="98"/>
+    <UserLocale Id="en-001" DisplayName="English (World)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="en-150" DisplayName="English (Europe)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="en-AE" DisplayName="English (United Arab Emirates)" LCID="1000" KeyboardLayout="00000409" GeoLocation="224"/>
+    <UserLocale Id="en-AG" DisplayName="English (Antigua &amp;Barbuda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="2"/>
+    <UserLocale Id="en-AI" DisplayName="English (Anguilla)" LCID="1000" KeyboardLayout="00000409" GeoLocation="300"/>
+    <UserLocale Id="en-AS" DisplayName="English (American Samoa)" LCID="1000" KeyboardLayout="00000409" GeoLocation="10"/>
+    <UserLocale Id="en-AT" DisplayName="English (Austria)" LCID="1000" KeyboardLayout="00000409" GeoLocation="14"/>
+    <UserLocale Id="en-AU" DisplayName="English (Australia)" LCID="0c09" KeyboardLayout="00000409" GeoLocation="12"/>
+    <UserLocale Id="en-BB" DisplayName="English (Barbados)" LCID="1000" KeyboardLayout="00000409" GeoLocation="18"/>
+    <UserLocale Id="en-BE" DisplayName="English (Belgium)" LCID="1000" KeyboardLayout="00000409" GeoLocation="21"/>
+    <UserLocale Id="en-BI" DisplayName="English (Burundi)" LCID="1000" KeyboardLayout="00000409" GeoLocation="38"/>
+    <UserLocale Id="en-BM" DisplayName="English (Bermuda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="20"/>
+    <UserLocale Id="en-BS" DisplayName="English (Bahamas)" LCID="1000" KeyboardLayout="00000409" GeoLocation="22"/>
+    <UserLocale Id="en-BW" DisplayName="English (Botswana)" LCID="1000" KeyboardLayout="00000409" GeoLocation="19"/>
+    <UserLocale Id="en-BZ" DisplayName="English (Belize)" LCID="2809" KeyboardLayout="00000409" GeoLocation="24"/>
+    <UserLocale Id="en-CA" DisplayName="English (Canada)" LCID="1009" KeyboardLayout="00001009" GeoLocation="39"/>
+    <UserLocale Id="en-CC" DisplayName="English (Cocos [Keeling] Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="311"/>
+    <UserLocale Id="en-CH" DisplayName="English (Switzerland)" LCID="1000" KeyboardLayout="00000409" GeoLocation="223"/>
+    <UserLocale Id="en-CK" DisplayName="English (Cook Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="312"/>
+    <UserLocale Id="en-CM" DisplayName="English (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="en-CX" DisplayName="English (Christmas Island)" LCID="1000" KeyboardLayout="00000409" GeoLocation="309"/>
+    <UserLocale Id="en-CY" DisplayName="English (Cyprus)" LCID="1000" KeyboardLayout="00000409" GeoLocation="59"/>
+    <UserLocale Id="en-DE" DisplayName="English (Germany)" LCID="1000" KeyboardLayout="00000409" GeoLocation="94"/>
+    <UserLocale Id="en-DK" DisplayName="English (Denmark)" LCID="1000" KeyboardLayout="00000409" GeoLocation="61"/>
+    <UserLocale Id="en-DM" DisplayName="English (Dominica)" LCID="1000" KeyboardLayout="00000409" GeoLocation="63"/>
+    <UserLocale Id="en-ER" DisplayName="English (Eritrea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="71"/>
+    <UserLocale Id="en-FI" DisplayName="English (Finland)" LCID="1000" KeyboardLayout="00000409" GeoLocation="77"/>
+    <UserLocale Id="en-FJ" DisplayName="English (Fiji)" LCID="1000" KeyboardLayout="00000409" GeoLocation="78"/>
+    <UserLocale Id="en-FK" DisplayName="English (Falkland Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="315"/>
+    <UserLocale Id="en-FM" DisplayName="English (Micronesia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="80"/>
+    <UserLocale Id="en-GB" DisplayName="English (United Kingdom)" LCID="0809" KeyboardLayout="00000809" GeoLocation="242"/>
+    <UserLocale Id="en-GD" DisplayName="English (Grenada)" LCID="1000" KeyboardLayout="00000409" GeoLocation="91"/>
+    <UserLocale Id="en-GG" DisplayName="English (Guernsey)" LCID="1000" KeyboardLayout="00000409" GeoLocation="324"/>
+    <UserLocale Id="en-GH" DisplayName="English (Ghana)" LCID="1000" KeyboardLayout="00000409" GeoLocation="89"/>
+    <UserLocale Id="en-GI" DisplayName="English (Gibraltar)" LCID="1000" KeyboardLayout="00000409" GeoLocation="90"/>
+    <UserLocale Id="en-GM" DisplayName="English (Gambia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="86"/>
+    <UserLocale Id="en-GU" DisplayName="English (Guam)" LCID="1000" KeyboardLayout="00000409" GeoLocation="322"/>
+    <UserLocale Id="en-GY" DisplayName="English (Guyana)" LCID="1000" KeyboardLayout="00000409" GeoLocation="101"/>
+    <UserLocale Id="en-HK" DisplayName="English (Hong Kong SAR)" LCID="3c09" KeyboardLayout="00000409" GeoLocation="104"/>
+    <UserLocale Id="en-IE" DisplayName="English (Ireland)" LCID="1809" KeyboardLayout="00001809" GeoLocation="68"/>
+    <UserLocale Id="en-IL" DisplayName="English (Israel)" LCID="1000" KeyboardLayout="00000409" GeoLocation="117"/>
+    <UserLocale Id="en-IM" DisplayName="English (Isle of Man)" LCID="1000" KeyboardLayout="00000409" GeoLocation="15126"/>
+    <UserLocale Id="en-IN" DisplayName="English (India)" LCID="4009" KeyboardLayout="00004009" GeoLocation="113"/>
+    <UserLocale Id="en-IO" DisplayName="English (British Indian Ocean Territory)" LCID="1000" KeyboardLayout="00000409" GeoLocation="114"/>
+    <UserLocale Id="en-JE" DisplayName="English (Jersey)" LCID="1000" KeyboardLayout="00000409" GeoLocation="328"/>
+    <UserLocale Id="en-JM" DisplayName="English (Jamaica)" LCID="2009" KeyboardLayout="00000409" GeoLocation="124"/>
+    <UserLocale Id="en-KE" DisplayName="English (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="en-KI" DisplayName="English (Kiribati)" LCID="1000" KeyboardLayout="00000409" GeoLocation="133"/>
+    <UserLocale Id="en-KN" DisplayName="English (St. Kitts &amp;Nevis)" LCID="1000" KeyboardLayout="00000409" GeoLocation="207"/>
+    <UserLocale Id="en-KY" DisplayName="English (Cayman Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="307"/>
+    <UserLocale Id="en-LC" DisplayName="English (St. Lucia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="218"/>
+    <UserLocale Id="en-LR" DisplayName="English (Liberia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="142"/>
+    <UserLocale Id="en-LS" DisplayName="English (Lesotho)" LCID="1000" KeyboardLayout="00000409" GeoLocation="146"/>
+    <UserLocale Id="en-MG" DisplayName="English (Madagascar)" LCID="1000" KeyboardLayout="00000409" GeoLocation="149"/>
+    <UserLocale Id="en-MH" DisplayName="English (Marshall Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="199"/>
+    <UserLocale Id="en-MO" DisplayName="English (Macao SAR)" LCID="1000" KeyboardLayout="00000409" GeoLocation="151"/>
+    <UserLocale Id="en-MP" DisplayName="English (Northern Mariana Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="337"/>
+    <UserLocale Id="en-MS" DisplayName="English (Montserrat)" LCID="1000" KeyboardLayout="00000409" GeoLocation="332"/>
+    <UserLocale Id="en-MT" DisplayName="English (Malta)" LCID="1000" KeyboardLayout="00000409" GeoLocation="163"/>
+    <UserLocale Id="en-MU" DisplayName="English (Mauritius)" LCID="1000" KeyboardLayout="00000409" GeoLocation="160"/>
+    <UserLocale Id="en-MW" DisplayName="English (Malawi)" LCID="1000" KeyboardLayout="00000409" GeoLocation="156"/>
+    <UserLocale Id="en-MY" DisplayName="English (Malaysia)" LCID="4409" KeyboardLayout="00000409" GeoLocation="167"/>
+    <UserLocale Id="en-NA" DisplayName="English (Namibia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="254"/>
+    <UserLocale Id="en-NF" DisplayName="English (Norfolk Island)" LCID="1000" KeyboardLayout="00000409" GeoLocation="336"/>
+    <UserLocale Id="en-NG" DisplayName="English (Nigeria)" LCID="1000" KeyboardLayout="00000409" GeoLocation="175"/>
+    <UserLocale Id="en-NL" DisplayName="English (Netherlands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="176"/>
+    <UserLocale Id="en-NR" DisplayName="English (Nauru)" LCID="1000" KeyboardLayout="00000409" GeoLocation="180"/>
+    <UserLocale Id="en-NU" DisplayName="English (Niue)" LCID="1000" KeyboardLayout="00000409" GeoLocation="335"/>
+    <UserLocale Id="en-NZ" DisplayName="English (New Zealand)" LCID="1409" KeyboardLayout="00001409" GeoLocation="183"/>
+    <UserLocale Id="en-PG" DisplayName="English (Papua New Guinea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="194"/>
+    <UserLocale Id="en-PH" DisplayName="English (Philippines)" LCID="3409" KeyboardLayout="00000409" GeoLocation="201"/>
+    <UserLocale Id="en-PK" DisplayName="English (Pakistan)" LCID="1000" KeyboardLayout="00000409" GeoLocation="190"/>
+    <UserLocale Id="en-PN" DisplayName="English (Pitcairn Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="339"/>
+    <UserLocale Id="en-PR" DisplayName="English (Puerto Rico)" LCID="1000" KeyboardLayout="00000409" GeoLocation="202"/>
+    <UserLocale Id="en-PW" DisplayName="English (Palau)" LCID="1000" KeyboardLayout="00000409" GeoLocation="195"/>
+    <UserLocale Id="en-RW" DisplayName="English (Rwanda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="204"/>
+    <UserLocale Id="en-SB" DisplayName="English (Solomon Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="30"/>
+    <UserLocale Id="en-SC" DisplayName="English (Seychelles)" LCID="1000" KeyboardLayout="00000409" GeoLocation="208"/>
+    <UserLocale Id="en-SD" DisplayName="English (Sudan)" LCID="1000" KeyboardLayout="00000409" GeoLocation="219"/>
+    <UserLocale Id="en-SE" DisplayName="English (Sweden)" LCID="1000" KeyboardLayout="00000409" GeoLocation="221"/>
+    <UserLocale Id="en-SG" DisplayName="English (Singapore)" LCID="4809" KeyboardLayout="00000409" GeoLocation="215"/>
+    <UserLocale Id="en-SH" DisplayName="English (St Helena, Ascension, Tristan da Cunha)" LCID="1000" KeyboardLayout="00000409" GeoLocation="343"/>
+    <UserLocale Id="en-SI" DisplayName="English (Slovenia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="212"/>
+    <UserLocale Id="en-SL" DisplayName="English (Sierra Leone)" LCID="1000" KeyboardLayout="00000409" GeoLocation="213"/>
+    <UserLocale Id="en-SS" DisplayName="English (South Sudan)" LCID="1000" KeyboardLayout="00000409" GeoLocation="276"/>
+    <UserLocale Id="en-SX" DisplayName="English (Sint Maarten)" LCID="1000" KeyboardLayout="00000409" GeoLocation="30967"/>
+    <UserLocale Id="en-SZ" DisplayName="English (Eswatini)" LCID="1000" KeyboardLayout="00000409" GeoLocation="260"/>
+    <UserLocale Id="en-TC" DisplayName="English (Turks &amp;Caicos Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="349"/>
+    <UserLocale Id="en-TK" DisplayName="English (Tokelau)" LCID="1000" KeyboardLayout="00000409" GeoLocation="347"/>
+    <UserLocale Id="en-TO" DisplayName="English (Tonga)" LCID="1000" KeyboardLayout="00000409" GeoLocation="231"/>
+    <UserLocale Id="en-TT" DisplayName="English (Trinidad &amp;Tobago)" LCID="2c09" KeyboardLayout="00000409" GeoLocation="225"/>
+    <UserLocale Id="en-TV" DisplayName="English (Tuvalu)" LCID="1000" KeyboardLayout="00000409" GeoLocation="236"/>
+    <UserLocale Id="en-TZ" DisplayName="English (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="en-UG" DisplayName="English (Uganda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="240"/>
+    <UserLocale Id="en-UM" DisplayName="English (U.S. Outlying Islands)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="en-US" DisplayName="English (United States)" LCID="0409" KeyboardLayout="00000409" GeoLocation="244"/>
+    <UserLocale Id="en-US-POSIX" DisplayName="English (United States, Computer)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="en-VC" DisplayName="English (St. Vincent &amp;Grenadines)" LCID="1000" KeyboardLayout="00000409" GeoLocation="248"/>
+    <UserLocale Id="en-VG" DisplayName="English (British Virgin Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="351"/>
+    <UserLocale Id="en-VI" DisplayName="English (U.S. Virgin Islands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="252"/>
+    <UserLocale Id="en-VU" DisplayName="English (Vanuatu)" LCID="1000" KeyboardLayout="00000409" GeoLocation="174"/>
+    <UserLocale Id="en-WS" DisplayName="English (Samoa)" LCID="1000" KeyboardLayout="00000409" GeoLocation="259"/>
+    <UserLocale Id="en-ZA" DisplayName="English (South Africa)" LCID="1c09" KeyboardLayout="00000409" GeoLocation="209"/>
+    <UserLocale Id="en-ZM" DisplayName="English (Zambia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="263"/>
+    <UserLocale Id="en-ZW" DisplayName="English (Zimbabwe)" LCID="3009" KeyboardLayout="00000409" GeoLocation="264"/>
+    <UserLocale Id="eo" DisplayName="Esperanto" LCID="1000"/>
+    <UserLocale Id="eo-001" DisplayName="Esperanto (World)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="es-419" DisplayName="Spanish (Latin America)" LCID="580a" KeyboardLayout="0000040a"/>
+    <UserLocale Id="es-AR" DisplayName="Spanish (Argentina)" LCID="2c0a" KeyboardLayout="0000040a" GeoLocation="11"/>
+    <UserLocale Id="es-BO" DisplayName="Spanish (Bolivia)" LCID="400a" KeyboardLayout="0000040a" GeoLocation="26"/>
+    <UserLocale Id="es-BR" DisplayName="Spanish (Brazil)" LCID="1000" KeyboardLayout="0000040a" GeoLocation="32"/>
+    <UserLocale Id="es-BZ" DisplayName="Spanish (Belize)" LCID="1000" KeyboardLayout="0000040a" GeoLocation="24"/>
+    <UserLocale Id="es-CL" DisplayName="Spanish (Chile)" LCID="340a" KeyboardLayout="0000040a" GeoLocation="46"/>
+    <UserLocale Id="es-CO" DisplayName="Spanish (Colombia)" LCID="240a" KeyboardLayout="0000040a" GeoLocation="51"/>
+    <UserLocale Id="es-CR" DisplayName="Spanish (Costa Rica)" LCID="140a" KeyboardLayout="0000040a" GeoLocation="54"/>
+    <UserLocale Id="es-CU" DisplayName="Spanish (Cuba)" LCID="5c0a" KeyboardLayout="0000040a" GeoLocation="56"/>
+    <UserLocale Id="es-DO" DisplayName="Spanish (Dominican Republic)" LCID="1c0a" KeyboardLayout="0000040a" GeoLocation="65"/>
+    <UserLocale Id="es-EC" DisplayName="Spanish (Ecuador)" LCID="300a" KeyboardLayout="0000040a" GeoLocation="66"/>
+    <UserLocale Id="es-ES" DisplayName="Spanish (Spain)" LCID="0c0a" KeyboardLayout="0000040a" GeoLocation="217"/>
+    <UserLocale Id="es-GQ" DisplayName="Spanish (Equatorial Guinea)" LCID="1000" KeyboardLayout="0000040a" GeoLocation="69"/>
+    <UserLocale Id="es-GT" DisplayName="Spanish (Guatemala)" LCID="100a" KeyboardLayout="0000040a" GeoLocation="99"/>
+    <UserLocale Id="es-HN" DisplayName="Spanish (Honduras)" LCID="480a" KeyboardLayout="0000040a" GeoLocation="106"/>
+    <UserLocale Id="es-MX" DisplayName="Spanish (Mexico)" LCID="080a" KeyboardLayout="0000080a" GeoLocation="166"/>
+    <UserLocale Id="es-NI" DisplayName="Spanish (Nicaragua)" LCID="4c0a" KeyboardLayout="0000040a" GeoLocation="182"/>
+    <UserLocale Id="es-PA" DisplayName="Spanish (Panama)" LCID="180a" KeyboardLayout="0000040a" GeoLocation="192"/>
+    <UserLocale Id="es-PE" DisplayName="Spanish (Peru)" LCID="280a" KeyboardLayout="0000040a" GeoLocation="187"/>
+    <UserLocale Id="es-PH" DisplayName="Spanish (Philippines)" LCID="1000" KeyboardLayout="0000040a" GeoLocation="201"/>
+    <UserLocale Id="es-PR" DisplayName="Spanish (Puerto Rico)" LCID="500a" KeyboardLayout="0000040a" GeoLocation="202"/>
+    <UserLocale Id="es-PY" DisplayName="Spanish (Paraguay)" LCID="3c0a" KeyboardLayout="0000040a" GeoLocation="185"/>
+    <UserLocale Id="es-SV" DisplayName="Spanish (El Salvador)" LCID="440a" KeyboardLayout="0000040a" GeoLocation="72"/>
+    <UserLocale Id="es-US" DisplayName="Spanish (United States)" LCID="540a" KeyboardLayout="0000040a" GeoLocation="244"/>
+    <UserLocale Id="es-UY" DisplayName="Spanish (Uruguay)" LCID="380a" KeyboardLayout="0000040a" GeoLocation="246"/>
+    <UserLocale Id="es-VE" DisplayName="Spanish (Venezuela)" LCID="200a" KeyboardLayout="0000040a" GeoLocation="249"/>
+    <UserLocale Id="et-EE" DisplayName="Estonian (Estonia)" LCID="0425" KeyboardLayout="00000425" GeoLocation="70"/>
+    <UserLocale Id="eu-ES" DisplayName="Basque (Spain)" LCID="042d" GeoLocation="217"/>
+    <UserLocale Id="ewo" DisplayName="Ewondo" LCID="1000"/>
+    <UserLocale Id="ewo-CM" DisplayName="Ewondo (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="fa-AF" DisplayName="Persian (Afghanistan)" LCID="1000" KeyboardLayout="00000429" GeoLocation="3"/>
+    <UserLocale Id="fa-IR" DisplayName="Persian (Iran)" LCID="0429" KeyboardLayout="00000429" GeoLocation="116"/>
+    <UserLocale Id="ff-Latn" DisplayName="Fulah (Latin)" LCID="7c67"/>
+    <UserLocale Id="ff-Latn-BF" DisplayName="Fulah (Latin, Burkina Faso)" LCID="1000" GeoLocation="245"/>
+    <UserLocale Id="ff-Latn-CM" DisplayName="Fulah (Latin, Cameroon)" LCID="1000" GeoLocation="49"/>
+    <UserLocale Id="ff-Latn-GH" DisplayName="Fulah (Latin, Ghana)" LCID="1000" GeoLocation="89"/>
+    <UserLocale Id="ff-Latn-GM" DisplayName="Fulah (Latin, Gambia)" LCID="1000" GeoLocation="86"/>
+    <UserLocale Id="ff-Latn-GN" DisplayName="Fulah (Latin, Guinea)" LCID="1000" GeoLocation="100"/>
+    <UserLocale Id="ff-Latn-GW" DisplayName="Fulah (Latin, Guinea-Bissau)" LCID="1000" GeoLocation="196"/>
+    <UserLocale Id="ff-Latn-LR" DisplayName="Fulah (Latin, Liberia)" LCID="1000" GeoLocation="142"/>
+    <UserLocale Id="ff-Latn-MR" DisplayName="Fulah (Latin, Mauritania)" LCID="1000" GeoLocation="162"/>
+    <UserLocale Id="ff-Latn-NE" DisplayName="Fulah (Latin, Niger)" LCID="1000" GeoLocation="173"/>
+    <UserLocale Id="ff-Latn-NG" DisplayName="Fulah (Latin, Nigeria)" LCID="1000" GeoLocation="175"/>
+    <UserLocale Id="ff-Latn-SL" DisplayName="Fulah (Latin, Sierra Leone)" LCID="1000" GeoLocation="213"/>
+    <UserLocale Id="ff-Latn-SN" DisplayName="Fulah (Latin, Senegal)" LCID="0867" GeoLocation="210"/>
+    <UserLocale Id="fi-FI" DisplayName="Finnish (Finland)" LCID="040b" KeyboardLayout="0000040b" GeoLocation="77"/>
+    <UserLocale Id="fil-PH" DisplayName="Filipino (Philippines)" LCID="0464" GeoLocation="201"/>
+    <UserLocale Id="fo-DK" DisplayName="Faroese (Denmark)" LCID="1000" KeyboardLayout="00000438" GeoLocation="61"/>
+    <UserLocale Id="fo-FO" DisplayName="Faroese (Faroe Islands)" LCID="0438" KeyboardLayout="00000438" GeoLocation="81"/>
+    <UserLocale Id="fr-BE" DisplayName="French (Belgium)" LCID="080c" KeyboardLayout="0000080c" GeoLocation="21"/>
+    <UserLocale Id="fr-BF" DisplayName="French (Burkina Faso)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="245"/>
+    <UserLocale Id="fr-BI" DisplayName="French (Burundi)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="38"/>
+    <UserLocale Id="fr-BJ" DisplayName="French (Benin)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="28"/>
+    <UserLocale Id="fr-BL" DisplayName="French (St. Barthélemy)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="161832015"/>
+    <UserLocale Id="fr-CA" DisplayName="French (Canada)" LCID="0c0c" KeyboardLayout="00000c0c" GeoLocation="39"/>
+    <UserLocale Id="fr-CD" DisplayName="French (Congo [DRC])" LCID="240c" KeyboardLayout="0000040c" GeoLocation="44"/>
+    <UserLocale Id="fr-CF" DisplayName="French (Central African Republic)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="55"/>
+    <UserLocale Id="fr-CG" DisplayName="French (Congo)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="43"/>
+    <UserLocale Id="fr-CH" DisplayName="French (Switzerland)" LCID="100c" KeyboardLayout="0000100c" GeoLocation="223"/>
+    <UserLocale Id="fr-CI" DisplayName="French (Côte d’Ivoire)" LCID="300c" KeyboardLayout="0000040c" GeoLocation="119"/>
+    <UserLocale Id="fr-CM" DisplayName="French (Cameroon)" LCID="2c0c" KeyboardLayout="0000040c" GeoLocation="49"/>
+    <UserLocale Id="fr-DJ" DisplayName="French (Djibouti)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="62"/>
+    <UserLocale Id="fr-DZ" DisplayName="French (Algeria)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="4"/>
+    <UserLocale Id="fr-FR" DisplayName="French (France)" LCID="040c" KeyboardLayout="0000040c" GeoLocation="84"/>
+    <UserLocale Id="fr-GA" DisplayName="French (Gabon)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="87"/>
+    <UserLocale Id="fr-GF" DisplayName="French (French Guiana)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="317"/>
+    <UserLocale Id="fr-GN" DisplayName="French (Guinea)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="100"/>
+    <UserLocale Id="fr-GP" DisplayName="French (Guadeloupe)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="321"/>
+    <UserLocale Id="fr-GQ" DisplayName="French (Equatorial Guinea)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="69"/>
+    <UserLocale Id="fr-HT" DisplayName="French (Haiti)" LCID="3c0c" KeyboardLayout="0000040c" GeoLocation="103"/>
+    <UserLocale Id="fr-KM" DisplayName="French (Comoros)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="50"/>
+    <UserLocale Id="fr-LU" DisplayName="French (Luxembourg)" LCID="140c" KeyboardLayout="0000040c" GeoLocation="147"/>
+    <UserLocale Id="fr-MA" DisplayName="French (Morocco)" LCID="380c" KeyboardLayout="0000040c" GeoLocation="159"/>
+    <UserLocale Id="fr-MC" DisplayName="French (Monaco)" LCID="180c" KeyboardLayout="0000040c" GeoLocation="158"/>
+    <UserLocale Id="fr-MF" DisplayName="French (St. Martin)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="31706"/>
+    <UserLocale Id="fr-MG" DisplayName="French (Madagascar)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="149"/>
+    <UserLocale Id="fr-ML" DisplayName="French (Mali)" LCID="340c" KeyboardLayout="0000040c" GeoLocation="157"/>
+    <UserLocale Id="fr-MQ" DisplayName="French (Martinique)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="330"/>
+    <UserLocale Id="fr-MR" DisplayName="French (Mauritania)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="162"/>
+    <UserLocale Id="fr-MU" DisplayName="French (Mauritius)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="160"/>
+    <UserLocale Id="fr-NC" DisplayName="French (New Caledonia)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="334"/>
+    <UserLocale Id="fr-NE" DisplayName="French (Niger)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="173"/>
+    <UserLocale Id="fr-PF" DisplayName="French (French Polynesia)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="318"/>
+    <UserLocale Id="fr-PM" DisplayName="French (St. Pierre &amp;Miquelon)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="206"/>
+    <UserLocale Id="fr-RE" DisplayName="French (Réunion)" LCID="200c" KeyboardLayout="0000040c" GeoLocation="198"/>
+    <UserLocale Id="fr-RW" DisplayName="French (Rwanda)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="204"/>
+    <UserLocale Id="fr-SC" DisplayName="French (Seychelles)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="208"/>
+    <UserLocale Id="fr-SN" DisplayName="French (Senegal)" LCID="280c" KeyboardLayout="0000040c" GeoLocation="210"/>
+    <UserLocale Id="fr-SY" DisplayName="French (Syria)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="222"/>
+    <UserLocale Id="fr-TD" DisplayName="French (Chad)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="41"/>
+    <UserLocale Id="fr-TG" DisplayName="French (Togo)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="232"/>
+    <UserLocale Id="fr-TN" DisplayName="French (Tunisia)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="234"/>
+    <UserLocale Id="fr-VU" DisplayName="French (Vanuatu)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="174"/>
+    <UserLocale Id="fr-WF" DisplayName="French (Wallis &amp;Futuna)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="352"/>
+    <UserLocale Id="fr-YT" DisplayName="French (Mayotte)" LCID="1000" KeyboardLayout="0000040c" GeoLocation="331"/>
+    <UserLocale Id="fur" DisplayName="Friulian" LCID="1000"/>
+    <UserLocale Id="fur-IT" DisplayName="Friulian (Italy)" LCID="1000" KeyboardLayout="00000409" GeoLocation="118"/>
+    <UserLocale Id="fy-NL" DisplayName="Western Frisian (Netherlands)" LCID="0462" GeoLocation="176"/>
+    <UserLocale Id="ga-IE" DisplayName="Irish (Ireland)" LCID="083c" GeoLocation="68"/>
+    <UserLocale Id="gd-GB" DisplayName="Scottish Gaelic (United Kingdom)" LCID="0491" GeoLocation="242"/>
+    <UserLocale Id="gl-ES" DisplayName="Galician (Spain)" LCID="0456" GeoLocation="217"/>
+    <UserLocale Id="gn-PY" DisplayName="Guarani (Paraguay)" LCID="0474" KeyboardLayout="00000474" GeoLocation="185"/>
+    <UserLocale Id="gsw-CH" DisplayName="Swiss German (Switzerland)" LCID="1000" GeoLocation="223"/>
+    <UserLocale Id="gsw-FR" DisplayName="Swiss German (France)" LCID="0484" GeoLocation="84"/>
+    <UserLocale Id="gsw-LI" DisplayName="Swiss German (Liechtenstein)" LCID="1000" GeoLocation="145"/>
+    <UserLocale Id="gu-IN" DisplayName="Gujarati (India)" LCID="0447" KeyboardLayout="00000447" GeoLocation="113"/>
+    <UserLocale Id="guz" DisplayName="Gusii" LCID="1000"/>
+    <UserLocale Id="guz-KE" DisplayName="Gusii (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="gv" DisplayName="Manx" LCID="1000"/>
+    <UserLocale Id="gv-IM" DisplayName="Manx (Isle of Man)" LCID="1000" KeyboardLayout="00000409" GeoLocation="15126"/>
+    <UserLocale Id="ha-GH" DisplayName="Hausa (Ghana)" LCID="1000" KeyboardLayout="00000468" GeoLocation="89"/>
+    <UserLocale Id="ha-NE" DisplayName="Hausa (Niger)" LCID="1000" KeyboardLayout="00000468" GeoLocation="173"/>
+    <UserLocale Id="ha-NG" DisplayName="Hausa (Nigeria)" LCID="1000" KeyboardLayout="00000468" GeoLocation="175"/>
+    <UserLocale Id="haw-US" DisplayName="Hawaiian (United States)" LCID="0475" KeyboardLayout="00000475" GeoLocation="244"/>
+    <UserLocale Id="he-IL" DisplayName="Hebrew (Israel)" LCID="040d" KeyboardLayout="0000040d" GeoLocation="117"/>
+    <UserLocale Id="hi-IN" DisplayName="Hindi (India)" LCID="0439" KeyboardLayout="00000439" GeoLocation="113"/>
+    <UserLocale Id="hr-BA" DisplayName="Croatian (Bosnia &amp;Herzegovina)" LCID="101a" KeyboardLayout="0000041a" GeoLocation="25"/>
+    <UserLocale Id="hr-HR" DisplayName="Croatian (Croatia)" LCID="041a" KeyboardLayout="0000041a" GeoLocation="108"/>
+    <UserLocale Id="hsb-DE" DisplayName="Upper Sorbian (Germany)" LCID="042e" KeyboardLayout="0000042e" GeoLocation="94"/>
+    <UserLocale Id="hu-HU" DisplayName="Hungarian (Hungary)" LCID="040e" KeyboardLayout="0000040e" GeoLocation="109"/>
+    <UserLocale Id="hy-AM" DisplayName="Armenian (Armenia)" LCID="042b" KeyboardLayout="0000042b" GeoLocation="7"/>
+    <UserLocale Id="ia" DisplayName="Interlingua" LCID="1000"/>
+    <UserLocale Id="ia-001" DisplayName="Interlingua (World)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="id-ID" DisplayName="Indonesian (Indonesia)" LCID="0421" GeoLocation="111"/>
+    <UserLocale Id="ig-NG" DisplayName="Igbo (Nigeria)" LCID="0470" KeyboardLayout="00000470" GeoLocation="175"/>
+    <UserLocale Id="ii-CN" DisplayName="Yi (China)" LCID="0478" GeoLocation="45"/>
+    <UserLocale Id="is-IS" DisplayName="Icelandic (Iceland)" LCID="040f" KeyboardLayout="0000040f" GeoLocation="110"/>
+    <UserLocale Id="it-CH" DisplayName="Italian (Switzerland)" LCID="0810" KeyboardLayout="00000410" GeoLocation="223"/>
+    <UserLocale Id="it-IT" DisplayName="Italian (Italy)" LCID="0410" KeyboardLayout="00000410" GeoLocation="118"/>
+    <UserLocale Id="it-SM" DisplayName="Italian (San Marino)" LCID="1000" KeyboardLayout="00000410" GeoLocation="214"/>
+    <UserLocale Id="it-VA" DisplayName="Italian (Vatican City)" LCID="1000" KeyboardLayout="00000410" GeoLocation="253"/>
+    <UserLocale Id="iu-CA" DisplayName="Inuktitut (Canada)" LCID="1000" GeoLocation="39"/>
+    <UserLocale Id="iu-Latn" DisplayName="Inuktitut (Latin)" LCID="7c5d"/>
+    <UserLocale Id="iu-Latn-CA" DisplayName="Inuktitut (Latin, Canada)" LCID="085d" KeyboardLayout="0000085d" GeoLocation="39"/>
+    <UserLocale Id="ja-JP" DisplayName="Japanese (Japan)" LCID="0411" KeyboardLayout="00000411" GeoLocation="122"/>
+    <UserLocale Id="jgo" DisplayName="Ngomba" LCID="1000"/>
+    <UserLocale Id="jgo-CM" DisplayName="Ngomba (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="jmc" DisplayName="Machame" LCID="1000"/>
+    <UserLocale Id="jmc-TZ" DisplayName="Machame (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="jv" DisplayName="Javanese" LCID="1000"/>
+    <UserLocale Id="jv-ID" DisplayName="Javanese (Indonesia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="111"/>
+    <UserLocale Id="ka-GE" DisplayName="Georgian (Georgia)" LCID="0437" KeyboardLayout="00000437" GeoLocation="88"/>
+    <UserLocale Id="kab" DisplayName="Kabyle" LCID="1000"/>
+    <UserLocale Id="kab-DZ" DisplayName="Kabyle (Algeria)" LCID="1000" KeyboardLayout="00000409" GeoLocation="4"/>
+    <UserLocale Id="kam" DisplayName="Kamba" LCID="1000"/>
+    <UserLocale Id="kam-KE" DisplayName="Kamba (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="kde" DisplayName="Makonde" LCID="1000"/>
+    <UserLocale Id="kde-TZ" DisplayName="Makonde (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="kea" DisplayName="Kabuverdianu" LCID="1000"/>
+    <UserLocale Id="kea-CV" DisplayName="Kabuverdianu (Cabo Verde)" LCID="1000" KeyboardLayout="00000409" GeoLocation="57"/>
+    <UserLocale Id="khq" DisplayName="Koyra Chiini" LCID="1000"/>
+    <UserLocale Id="khq-ML" DisplayName="Koyra Chiini (Mali)" LCID="1000" KeyboardLayout="00000409" GeoLocation="157"/>
+    <UserLocale Id="ki" DisplayName="Kikuyu" LCID="1000"/>
+    <UserLocale Id="ki-KE" DisplayName="Kikuyu (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="kk-KZ" DisplayName="Kazakh (Kazakhstan)" LCID="043f" KeyboardLayout="0000043f" GeoLocation="137"/>
+    <UserLocale Id="kkj" DisplayName="Kako" LCID="1000"/>
+    <UserLocale Id="kkj-CM" DisplayName="Kako (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="kl-GL" DisplayName="Kalaallisut (Greenland)" LCID="046f" KeyboardLayout="0000046f" GeoLocation="93"/>
+    <UserLocale Id="kln" DisplayName="Kalenjin" LCID="1000"/>
+    <UserLocale Id="kln-KE" DisplayName="Kalenjin (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="km-KH" DisplayName="Khmer (Cambodia)" LCID="0453" KeyboardLayout="00000453" GeoLocation="40"/>
+    <UserLocale Id="kn-IN" DisplayName="Kannada (India)" LCID="044b" KeyboardLayout="0000044b" GeoLocation="113"/>
+    <UserLocale Id="ko-KP" DisplayName="Korean (North Korea)" LCID="1000" KeyboardLayout="00000412" GeoLocation="131"/>
+    <UserLocale Id="ko-KR" DisplayName="Korean (Korea)" LCID="0412" KeyboardLayout="00000412" GeoLocation="134"/>
+    <UserLocale Id="kok-IN" DisplayName="Konkani (India)" LCID="0457" GeoLocation="113"/>
+    <UserLocale Id="ks-IN" DisplayName="Kashmiri (India)" LCID="1000" GeoLocation="113"/>
+    <UserLocale Id="ksb" DisplayName="Shambala" LCID="1000"/>
+    <UserLocale Id="ksb-TZ" DisplayName="Shambala (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="ksf" DisplayName="Bafia" LCID="1000"/>
+    <UserLocale Id="ksf-CM" DisplayName="Bafia (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="ksh" DisplayName="Colognian" LCID="1000"/>
+    <UserLocale Id="ksh-DE" DisplayName="Colognian (Germany)" LCID="1000" KeyboardLayout="00000409" GeoLocation="94"/>
+    <UserLocale Id="kw" DisplayName="Cornish" LCID="1000"/>
+    <UserLocale Id="kw-GB" DisplayName="Cornish (United Kingdom)" LCID="1000" KeyboardLayout="00000409" GeoLocation="242"/>
+    <UserLocale Id="ky-KG" DisplayName="Kyrgyz (Kyrgyzstan)" LCID="0440" KeyboardLayout="00000440" GeoLocation="130"/>
+    <UserLocale Id="lag" DisplayName="Langi" LCID="1000"/>
+    <UserLocale Id="lag-TZ" DisplayName="Langi (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="lb-LU" DisplayName="Luxembourgish (Luxembourg)" LCID="046e" KeyboardLayout="0000046e" GeoLocation="147"/>
+    <UserLocale Id="lg" DisplayName="Ganda" LCID="1000"/>
+    <UserLocale Id="lg-UG" DisplayName="Ganda (Uganda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="240"/>
+    <UserLocale Id="lkt" DisplayName="Lakota" LCID="1000"/>
+    <UserLocale Id="lkt-US" DisplayName="Lakota (United States)" LCID="1000" KeyboardLayout="00000409" GeoLocation="244"/>
+    <UserLocale Id="ln" DisplayName="Lingala" LCID="1000"/>
+    <UserLocale Id="ln-AO" DisplayName="Lingala (Angola)" LCID="1000" KeyboardLayout="00000409" GeoLocation="9"/>
+    <UserLocale Id="ln-CD" DisplayName="Lingala (Congo [DRC])" LCID="1000" KeyboardLayout="00000409" GeoLocation="44"/>
+    <UserLocale Id="ln-CF" DisplayName="Lingala (Central African Republic)" LCID="1000" KeyboardLayout="00000409" GeoLocation="55"/>
+    <UserLocale Id="ln-CG" DisplayName="Lingala (Congo)" LCID="1000" KeyboardLayout="00000409" GeoLocation="43"/>
+    <UserLocale Id="lo-LA" DisplayName="Lao (Laos)" LCID="0454" KeyboardLayout="00000454" GeoLocation="138"/>
+    <UserLocale Id="lrc" DisplayName="Northern Luri" LCID="1000"/>
+    <UserLocale Id="lrc-IQ" DisplayName="Northern Luri (Iraq)" LCID="1000" KeyboardLayout="00000409" GeoLocation="121"/>
+    <UserLocale Id="lrc-IR" DisplayName="Northern Luri (Iran)" LCID="1000" KeyboardLayout="00000409" GeoLocation="116"/>
+    <UserLocale Id="lt-LT" DisplayName="Lithuanian (Lithuania)" LCID="0427" KeyboardLayout="00000427" GeoLocation="141"/>
+    <UserLocale Id="lu" DisplayName="Luba-Katanga" LCID="1000"/>
+    <UserLocale Id="lu-CD" DisplayName="Luba-Katanga (Congo [DRC])" LCID="1000" KeyboardLayout="00000409" GeoLocation="44"/>
+    <UserLocale Id="luo" DisplayName="Luo" LCID="1000"/>
+    <UserLocale Id="luo-KE" DisplayName="Luo (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="luy" DisplayName="Luyia" LCID="1000"/>
+    <UserLocale Id="luy-KE" DisplayName="Luyia (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="lv-LV" DisplayName="Latvian (Latvia)" LCID="0426" KeyboardLayout="00000426" GeoLocation="140"/>
+    <UserLocale Id="mas" DisplayName="Masai" LCID="1000"/>
+    <UserLocale Id="mas-KE" DisplayName="Masai (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="mas-TZ" DisplayName="Masai (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="mer" DisplayName="Meru" LCID="1000"/>
+    <UserLocale Id="mer-KE" DisplayName="Meru (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="mfe" DisplayName="Morisyen" LCID="1000"/>
+    <UserLocale Id="mfe-MU" DisplayName="Morisyen (Mauritius)" LCID="1000" KeyboardLayout="00000409" GeoLocation="160"/>
+    <UserLocale Id="mg" DisplayName="Malagasy" LCID="1000"/>
+    <UserLocale Id="mg-MG" DisplayName="Malagasy (Madagascar)" LCID="1000" KeyboardLayout="00000409" GeoLocation="149"/>
+    <UserLocale Id="mgh" DisplayName="Makhuwa-Meetto" LCID="1000"/>
+    <UserLocale Id="mgh-MZ" DisplayName="Makhuwa-Meetto (Mozambique)" LCID="1000" KeyboardLayout="00000409" GeoLocation="168"/>
+    <UserLocale Id="mgo" DisplayName="Metaʼ" LCID="1000"/>
+    <UserLocale Id="mgo-CM" DisplayName="Metaʼ (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="mi-NZ" DisplayName="Maori (New Zealand)" LCID="0481" KeyboardLayout="00000481" GeoLocation="183"/>
+    <UserLocale Id="mk-MK" DisplayName="Macedonian (North Macedonia)" LCID="042f" KeyboardLayout="0000042f" GeoLocation="19618"/>
+    <UserLocale Id="ml-IN" DisplayName="Malayalam (India)" LCID="044c" KeyboardLayout="0000044c" GeoLocation="113"/>
+    <UserLocale Id="mn-MN" DisplayName="Mongolian (Mongolia)" LCID="0450" KeyboardLayout="00000450" GeoLocation="154"/>
+    <UserLocale Id="mn-Mong" DisplayName="Mongolian (Mongolian)" LCID="7c50" KeyboardLayout="00000450"/>
+    <UserLocale Id="mn-Mong-CN" DisplayName="Mongolian (Mongolian, China)" LCID="0850" KeyboardLayout="00000850" GeoLocation="45"/>
+    <UserLocale Id="mn-Mong-MN" DisplayName="Mongolian (Mongolian, Mongolia)" LCID="0c50" GeoLocation="154"/>
+    <UserLocale Id="moh-CA" DisplayName="Mohawk (Canada)" LCID="047c" GeoLocation="39"/>
+    <UserLocale Id="mr-IN" DisplayName="Marathi (India)" LCID="044e" KeyboardLayout="0000044e" GeoLocation="113"/>
+    <UserLocale Id="ms-BN" DisplayName="Malay (Brunei)" LCID="083e" GeoLocation="37"/>
+    <UserLocale Id="ms-MY" DisplayName="Malay (Malaysia)" LCID="043e" GeoLocation="167"/>
+    <UserLocale Id="ms-SG" DisplayName="Malay (Singapore)" LCID="1000" GeoLocation="215"/>
+    <UserLocale Id="mt-MT" DisplayName="Maltese (Malta)" LCID="043a" KeyboardLayout="0000043a" GeoLocation="163"/>
+    <UserLocale Id="mua" DisplayName="Mundang" LCID="1000"/>
+    <UserLocale Id="mua-CM" DisplayName="Mundang (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="my-MM" DisplayName="Burmese (Myanmar)" LCID="0455" GeoLocation="27"/>
+    <UserLocale Id="mzn" DisplayName="Mazanderani" LCID="1000"/>
+    <UserLocale Id="mzn-IR" DisplayName="Mazanderani (Iran)" LCID="1000" KeyboardLayout="00000409" GeoLocation="116"/>
+    <UserLocale Id="naq" DisplayName="Nama" LCID="1000"/>
+    <UserLocale Id="naq-NA" DisplayName="Nama (Namibia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="254"/>
+    <UserLocale Id="nb" DisplayName="Norwegian Bokmål" LCID="7c14"/>
+    <UserLocale Id="nb-NO" DisplayName="Norwegian Bokmål (Norway)" LCID="0414" KeyboardLayout="00000414" GeoLocation="177"/>
+    <UserLocale Id="nb-SJ" DisplayName="Norwegian Bokmål (Svalbard &amp;Jan Mayen)" LCID="1000" GeoLocation="220"/>
+    <UserLocale Id="nd" DisplayName="North Ndebele" LCID="1000"/>
+    <UserLocale Id="nd-ZW" DisplayName="North Ndebele (Zimbabwe)" LCID="1000" KeyboardLayout="00000409" GeoLocation="264"/>
+    <UserLocale Id="nds" DisplayName="Low German" LCID="1000"/>
+    <UserLocale Id="nds-DE" DisplayName="Low German (Germany)" LCID="1000" KeyboardLayout="00000409" GeoLocation="94"/>
+    <UserLocale Id="nds-NL" DisplayName="Low German (Netherlands)" LCID="1000" KeyboardLayout="00000409" GeoLocation="176"/>
+    <UserLocale Id="ne-IN" DisplayName="Nepali (India)" LCID="0861" KeyboardLayout="00000461" GeoLocation="113"/>
+    <UserLocale Id="ne-NP" DisplayName="Nepali (Nepal)" LCID="0461" KeyboardLayout="00000461" GeoLocation="178"/>
+    <UserLocale Id="nl-AW" DisplayName="Dutch (Aruba)" LCID="1000" KeyboardLayout="00000413" GeoLocation="302"/>
+    <UserLocale Id="nl-BE" DisplayName="Dutch (Belgium)" LCID="0813" KeyboardLayout="00000813" GeoLocation="21"/>
+    <UserLocale Id="nl-BQ" DisplayName="Dutch (Bonaire, Sint Eustatius and Saba)" LCID="1000" KeyboardLayout="00000413" GeoLocation="161832258"/>
+    <UserLocale Id="nl-CW" DisplayName="Dutch (Curaçao)" LCID="1000" KeyboardLayout="00000413" GeoLocation="273"/>
+    <UserLocale Id="nl-NL" DisplayName="Dutch (Netherlands)" LCID="0413" KeyboardLayout="00000413" GeoLocation="176"/>
+    <UserLocale Id="nl-SR" DisplayName="Dutch (Suriname)" LCID="1000" KeyboardLayout="00000413" GeoLocation="181"/>
+    <UserLocale Id="nl-SX" DisplayName="Dutch (Sint Maarten)" LCID="1000" KeyboardLayout="00000413" GeoLocation="30967"/>
+    <UserLocale Id="nmg" DisplayName="Kwasio" LCID="1000"/>
+    <UserLocale Id="nmg-CM" DisplayName="Kwasio (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="nn" DisplayName="Norwegian Nynorsk" LCID="7814"/>
+    <UserLocale Id="nn-NO" DisplayName="Norwegian Nynorsk (Norway)" LCID="0814" GeoLocation="177"/>
+    <UserLocale Id="nnh" DisplayName="Ngiemboon" LCID="1000"/>
+    <UserLocale Id="nnh-CM" DisplayName="Ngiemboon (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="nqo" DisplayName="N’Ko" LCID="1000"/>
+    <UserLocale Id="nqo-GN" DisplayName="N’Ko (Guinea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="100"/>
+    <UserLocale Id="nr" DisplayName="South Ndebele" LCID="1000"/>
+    <UserLocale Id="nr-ZA" DisplayName="South Ndebele (South Africa)" LCID="1000" KeyboardLayout="00000409" GeoLocation="209"/>
+    <UserLocale Id="nso-ZA" DisplayName="Sesotho sa Leboa (South Africa)" LCID="046c" KeyboardLayout="0000046c" GeoLocation="209"/>
+    <UserLocale Id="nus" DisplayName="Nuer" LCID="1000"/>
+    <UserLocale Id="nus-SS" DisplayName="Nuer (South Sudan)" LCID="1000" KeyboardLayout="00000409" GeoLocation="276"/>
+    <UserLocale Id="nyn" DisplayName="Nyankole" LCID="1000"/>
+    <UserLocale Id="nyn-UG" DisplayName="Nyankole (Uganda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="240"/>
+    <UserLocale Id="oc-FR" DisplayName="Occitan (France)" LCID="0482" GeoLocation="84"/>
+    <UserLocale Id="om-ET" DisplayName="Oromo (Ethiopia)" LCID="0472" GeoLocation="73"/>
+    <UserLocale Id="om-KE" DisplayName="Oromo (Kenya)" LCID="1000" GeoLocation="129"/>
+    <UserLocale Id="or-IN" DisplayName="Odia (India)" LCID="0448" KeyboardLayout="00000448" GeoLocation="113"/>
+    <UserLocale Id="os" DisplayName="Ossetic" LCID="1000"/>
+    <UserLocale Id="os-GE" DisplayName="Ossetic (Georgia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="88"/>
+    <UserLocale Id="os-RU" DisplayName="Ossetic (Russia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="203"/>
+    <UserLocale Id="pa-Arab" DisplayName="Punjabi (Arabic)" LCID="7c46" KeyboardLayout="00000446"/>
+    <UserLocale Id="pa-Arab-PK" DisplayName="Punjabi (Arabic, Pakistan)" LCID="0846" GeoLocation="190"/>
+    <UserLocale Id="pa-Guru" DisplayName="Punjabi (Gurmukhi)" LCID="1000" KeyboardLayout="00000446"/>
+    <UserLocale Id="pa-Guru-IN" DisplayName="Punjabi (Gurmukhi, India)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="pl-PL" DisplayName="Polish (Poland)" LCID="0415" KeyboardLayout="00000415" GeoLocation="191"/>
+    <UserLocale Id="prg" DisplayName="Prussian" LCID="1000"/>
+    <UserLocale Id="prg-001" DisplayName="Prussian (World)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="ps-AF" DisplayName="Pashto (Afghanistan)" LCID="0463" KeyboardLayout="00000463" GeoLocation="3"/>
+    <UserLocale Id="ps-PK" DisplayName="Pashto (Pakistan)" LCID="1000" KeyboardLayout="00000463" GeoLocation="190"/>
+    <UserLocale Id="pt-AO" DisplayName="Portuguese (Angola)" LCID="1000" KeyboardLayout="00000416" GeoLocation="9"/>
+    <UserLocale Id="pt-BR" DisplayName="Portuguese (Brazil)" LCID="0416" KeyboardLayout="00000416" GeoLocation="32"/>
+    <UserLocale Id="pt-CH" DisplayName="Portuguese (Switzerland)" LCID="1000" KeyboardLayout="00000416" GeoLocation="223"/>
+    <UserLocale Id="pt-CV" DisplayName="Portuguese (Cabo Verde)" LCID="1000" KeyboardLayout="00000416" GeoLocation="57"/>
+    <UserLocale Id="pt-GQ" DisplayName="Portuguese (Equatorial Guinea)" LCID="1000" KeyboardLayout="00000416" GeoLocation="69"/>
+    <UserLocale Id="pt-GW" DisplayName="Portuguese (Guinea-Bissau)" LCID="1000" KeyboardLayout="00000416" GeoLocation="196"/>
+    <UserLocale Id="pt-LU" DisplayName="Portuguese (Luxembourg)" LCID="1000" KeyboardLayout="00000416" GeoLocation="147"/>
+    <UserLocale Id="pt-MO" DisplayName="Portuguese (Macao SAR)" LCID="1000" KeyboardLayout="00000416" GeoLocation="151"/>
+    <UserLocale Id="pt-MZ" DisplayName="Portuguese (Mozambique)" LCID="1000" KeyboardLayout="00000416" GeoLocation="168"/>
+    <UserLocale Id="pt-PT" DisplayName="Portuguese (Portugal)" LCID="0816" KeyboardLayout="00000816" GeoLocation="193"/>
+    <UserLocale Id="pt-ST" DisplayName="Portuguese (São Tomé &amp;Príncipe)" LCID="1000" KeyboardLayout="00000416" GeoLocation="233"/>
+    <UserLocale Id="pt-TL" DisplayName="Portuguese (Timor-Leste)" LCID="1000" KeyboardLayout="00000416" GeoLocation="7299303"/>
+    <UserLocale Id="qu" DisplayName="Quechua" LCID="1000"/>
+    <UserLocale Id="qu-BO" DisplayName="Quechua (Bolivia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="26"/>
+    <UserLocale Id="qu-EC" DisplayName="Quechua (Ecuador)" LCID="1000" KeyboardLayout="00000409" GeoLocation="66"/>
+    <UserLocale Id="qu-PE" DisplayName="Quechua (Peru)" LCID="1000" KeyboardLayout="00000409" GeoLocation="187"/>
+    <UserLocale Id="quc-GT" DisplayName="Kʼicheʼ (Guatemala)" LCID="1000" GeoLocation="99"/>
+    <UserLocale Id="rm-CH" DisplayName="Romansh (Switzerland)" LCID="0417" GeoLocation="223"/>
+    <UserLocale Id="rn" DisplayName="Rundi" LCID="1000"/>
+    <UserLocale Id="rn-BI" DisplayName="Rundi (Burundi)" LCID="1000" KeyboardLayout="00000409" GeoLocation="38"/>
+    <UserLocale Id="ro-MD" DisplayName="Romanian (Moldova)" LCID="0818" KeyboardLayout="00000418" GeoLocation="152"/>
+    <UserLocale Id="ro-RO" DisplayName="Romanian (Romania)" LCID="0418" KeyboardLayout="00000418" GeoLocation="200"/>
+    <UserLocale Id="rof" DisplayName="Rombo" LCID="1000"/>
+    <UserLocale Id="rof-TZ" DisplayName="Rombo (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="ru-BY" DisplayName="Russian (Belarus)" LCID="1000" KeyboardLayout="00000419" GeoLocation="29"/>
+    <UserLocale Id="ru-KG" DisplayName="Russian (Kyrgyzstan)" LCID="1000" KeyboardLayout="00000419" GeoLocation="130"/>
+    <UserLocale Id="ru-KZ" DisplayName="Russian (Kazakhstan)" LCID="1000" KeyboardLayout="00000419" GeoLocation="137"/>
+    <UserLocale Id="ru-MD" DisplayName="Russian (Moldova)" LCID="0819" KeyboardLayout="00000419" GeoLocation="152"/>
+    <UserLocale Id="ru-RU" DisplayName="Russian (Russia)" LCID="0419" KeyboardLayout="00000419" GeoLocation="203"/>
+    <UserLocale Id="ru-UA" DisplayName="Russian (Ukraine)" LCID="1000" KeyboardLayout="00000419" GeoLocation="241"/>
+    <UserLocale Id="rw-RW" DisplayName="Kinyarwanda (Rwanda)" LCID="0487" GeoLocation="204"/>
+    <UserLocale Id="rwk" DisplayName="Rwa" LCID="1000"/>
+    <UserLocale Id="rwk-TZ" DisplayName="Rwa (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="sa-IN" DisplayName="Sanskrit (India)" LCID="044f" GeoLocation="113"/>
+    <UserLocale Id="sah-RU" DisplayName="Sakha (Russia)" LCID="0485" KeyboardLayout="00000485" GeoLocation="203"/>
+    <UserLocale Id="saq" DisplayName="Samburu" LCID="1000"/>
+    <UserLocale Id="saq-KE" DisplayName="Samburu (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="sbp" DisplayName="Sangu" LCID="1000"/>
+    <UserLocale Id="sbp-TZ" DisplayName="Sangu (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="sd-PK" DisplayName="Sindhi (Pakistan)" LCID="1000" GeoLocation="190"/>
+    <UserLocale Id="se-FI" DisplayName="Northern Sami (Finland)" LCID="0c3b" KeyboardLayout="0000043b" GeoLocation="77"/>
+    <UserLocale Id="se-NO" DisplayName="Northern Sami (Norway)" LCID="043b" KeyboardLayout="0000043b" GeoLocation="177"/>
+    <UserLocale Id="se-SE" DisplayName="Northern Sami (Sweden)" LCID="083b" KeyboardLayout="0000083b" GeoLocation="221"/>
+    <UserLocale Id="seh" DisplayName="Sena" LCID="1000"/>
+    <UserLocale Id="seh-MZ" DisplayName="Sena (Mozambique)" LCID="1000" KeyboardLayout="00000409" GeoLocation="168"/>
+    <UserLocale Id="ses" DisplayName="Koyraboro Senni" LCID="1000"/>
+    <UserLocale Id="ses-ML" DisplayName="Koyraboro Senni (Mali)" LCID="1000" KeyboardLayout="00000409" GeoLocation="157"/>
+    <UserLocale Id="sg" DisplayName="Sango" LCID="1000"/>
+    <UserLocale Id="sg-CF" DisplayName="Sango (Central African Republic)" LCID="1000" KeyboardLayout="00000409" GeoLocation="55"/>
+    <UserLocale Id="shi" DisplayName="Tachelhit" LCID="1000"/>
+    <UserLocale Id="shi-Latn" DisplayName="Tachelhit (Latin)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="shi-Latn-MA" DisplayName="Tachelhit (Latin, Morocco)" LCID="1000" KeyboardLayout="00000409" GeoLocation="159"/>
+    <UserLocale Id="shi-Tfng" DisplayName="Tachelhit (Tifinagh)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="shi-Tfng-MA" DisplayName="Tachelhit (Tifinagh, Morocco)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="si-LK" DisplayName="Sinhala (Sri Lanka)" LCID="045b" KeyboardLayout="0000045b" GeoLocation="42"/>
+    <UserLocale Id="sk-SK" DisplayName="Slovak (Slovakia)" LCID="041b" KeyboardLayout="0000041b" GeoLocation="143"/>
+    <UserLocale Id="sl-SI" DisplayName="Slovenian (Slovenia)" LCID="0424" KeyboardLayout="00000424" GeoLocation="212"/>
+    <UserLocale Id="sma" DisplayName="Southern Sami" LCID="783b"/>
+    <UserLocale Id="sma-NO" DisplayName="Southern Sami (Norway)" LCID="183b" GeoLocation="177"/>
+    <UserLocale Id="sma-SE" DisplayName="Southern Sami (Sweden)" LCID="1c3b" GeoLocation="221"/>
+    <UserLocale Id="smj" DisplayName="Lule Sami" LCID="7c3b"/>
+    <UserLocale Id="smj-NO" DisplayName="Lule Sami (Norway)" LCID="103b" GeoLocation="177"/>
+    <UserLocale Id="smj-SE" DisplayName="Lule Sami (Sweden)" LCID="143b" GeoLocation="221"/>
+    <UserLocale Id="smn" DisplayName="Inari Sami" LCID="703b"/>
+    <UserLocale Id="smn-FI" DisplayName="Inari Sami (Finland)" LCID="243b" GeoLocation="77"/>
+    <UserLocale Id="sms" DisplayName="Skolt Sami" LCID="743b"/>
+    <UserLocale Id="sms-FI" DisplayName="Skolt Sami (Finland)" LCID="203b" GeoLocation="77"/>
+    <UserLocale Id="sn" DisplayName="Shona" LCID="1000"/>
+    <UserLocale Id="sn-ZW" DisplayName="Shona (Zimbabwe)" LCID="1000" KeyboardLayout="00000409" GeoLocation="264"/>
+    <UserLocale Id="so-DJ" DisplayName="Somali (Djibouti)" LCID="1000" GeoLocation="62"/>
+    <UserLocale Id="so-ET" DisplayName="Somali (Ethiopia)" LCID="1000" GeoLocation="73"/>
+    <UserLocale Id="so-KE" DisplayName="Somali (Kenya)" LCID="1000" GeoLocation="129"/>
+    <UserLocale Id="so-SO" DisplayName="Somali (Somalia)" LCID="0477" GeoLocation="216"/>
+    <UserLocale Id="sq-AL" DisplayName="Albanian (Albania)" LCID="041c" KeyboardLayout="0000041c" GeoLocation="6"/>
+    <UserLocale Id="sq-MK" DisplayName="Albanian (North Macedonia)" LCID="1000" KeyboardLayout="0000041c" GeoLocation="19618"/>
+    <UserLocale Id="sq-XK" DisplayName="Albanian (Kosovo)" LCID="1000" KeyboardLayout="0000041c" GeoLocation="9914689"/>
+    <UserLocale Id="sr" DisplayName="Serbian" LCID="7c1a"/>
+    <UserLocale Id="sr-Cyrl" DisplayName="Serbian (Cyrillic)" LCID="6c1a"/>
+    <UserLocale Id="sr-Cyrl-BA" DisplayName="Serbian (Cyrillic, Bosnia &amp;Herzegovina)" LCID="1c1a" GeoLocation="25"/>
+    <UserLocale Id="sr-Cyrl-ME" DisplayName="Serbian (Cyrillic, Montenegro)" LCID="301a" GeoLocation="270"/>
+    <UserLocale Id="sr-Cyrl-RS" DisplayName="Serbian (Cyrillic, Serbia)" LCID="281a" GeoLocation="271"/>
+    <UserLocale Id="sr-Cyrl-XK" DisplayName="Serbian (Cyrillic, Kosovo)" LCID="1000" GeoLocation="9914689"/>
+    <UserLocale Id="sr-Latn" DisplayName="Serbian (Latin)" LCID="701a"/>
+    <UserLocale Id="sr-Latn-BA" DisplayName="Serbian (Latin, Bosnia &amp;Herzegovina)" LCID="181a" GeoLocation="25"/>
+    <UserLocale Id="sr-Latn-ME" DisplayName="Serbian (Latin, Montenegro)" LCID="2c1a" GeoLocation="270"/>
+    <UserLocale Id="sr-Latn-RS" DisplayName="Serbian (Latin, Serbia)" LCID="241a" GeoLocation="271"/>
+    <UserLocale Id="sr-Latn-XK" DisplayName="Serbian (Latin, Kosovo)" LCID="1000" GeoLocation="9914689"/>
+    <UserLocale Id="ss" DisplayName="siSwati" LCID="1000"/>
+    <UserLocale Id="ss-SZ" DisplayName="siSwati (Eswatini)" LCID="1000" KeyboardLayout="00000409" GeoLocation="260"/>
+    <UserLocale Id="ss-ZA" DisplayName="siSwati (South Africa)" LCID="1000" KeyboardLayout="00000409" GeoLocation="209"/>
+    <UserLocale Id="ssy" DisplayName="Saho" LCID="1000"/>
+    <UserLocale Id="ssy-ER" DisplayName="Saho (Eritrea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="71"/>
+    <UserLocale Id="st-LS" DisplayName="Sesotho (Lesotho)" LCID="1000" GeoLocation="146"/>
+    <UserLocale Id="st-ZA" DisplayName="Sesotho (South Africa)" LCID="0430" GeoLocation="209"/>
+    <UserLocale Id="sv-AX" DisplayName="Swedish (Åland Islands)" LCID="1000" KeyboardLayout="0000041d" GeoLocation="10028789"/>
+    <UserLocale Id="sv-FI" DisplayName="Swedish (Finland)" LCID="081d" KeyboardLayout="0000041d" GeoLocation="77"/>
+    <UserLocale Id="sv-SE" DisplayName="Swedish (Sweden)" LCID="041d" KeyboardLayout="0000041d" GeoLocation="221"/>
+    <UserLocale Id="sw-CD" DisplayName="Kiswahili (Congo [DRC])" LCID="1000" GeoLocation="44"/>
+    <UserLocale Id="sw-KE" DisplayName="Kiswahili (Kenya)" LCID="0441" GeoLocation="129"/>
+    <UserLocale Id="sw-TZ" DisplayName="Kiswahili (Tanzania)" LCID="1000" GeoLocation="239"/>
+    <UserLocale Id="sw-UG" DisplayName="Kiswahili (Uganda)" LCID="1000" GeoLocation="240"/>
+    <UserLocale Id="syr-SY" DisplayName="Syriac (Syria)" LCID="045a" KeyboardLayout="0000045a" GeoLocation="222"/>
+    <UserLocale Id="ta-IN" DisplayName="Tamil (India)" LCID="0449" KeyboardLayout="00000449" GeoLocation="113"/>
+    <UserLocale Id="ta-LK" DisplayName="Tamil (Sri Lanka)" LCID="0849" KeyboardLayout="00000449" GeoLocation="42"/>
+    <UserLocale Id="ta-MY" DisplayName="Tamil (Malaysia)" LCID="1000" KeyboardLayout="00000449" GeoLocation="167"/>
+    <UserLocale Id="ta-SG" DisplayName="Tamil (Singapore)" LCID="1000" KeyboardLayout="00000449" GeoLocation="215"/>
+    <UserLocale Id="te-IN" DisplayName="Telugu (India)" LCID="044a" KeyboardLayout="0000044a" GeoLocation="113"/>
+    <UserLocale Id="teo" DisplayName="Teso" LCID="1000"/>
+    <UserLocale Id="teo-KE" DisplayName="Teso (Kenya)" LCID="1000" KeyboardLayout="00000409" GeoLocation="129"/>
+    <UserLocale Id="teo-UG" DisplayName="Teso (Uganda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="240"/>
+    <UserLocale Id="tg-TJ" DisplayName="Tajik (Tajikistan)" LCID="1000" KeyboardLayout="00000428" GeoLocation="228"/>
+    <UserLocale Id="th-TH" DisplayName="Thai (Thailand)" LCID="041e" KeyboardLayout="0000041e" GeoLocation="227"/>
+    <UserLocale Id="ti-ER" DisplayName="Tigrinya (Eritrea)" LCID="0873" GeoLocation="71"/>
+    <UserLocale Id="ti-ET" DisplayName="Tigrinya (Ethiopia)" LCID="0473" GeoLocation="73"/>
+    <UserLocale Id="tig" DisplayName="Tigre" LCID="1000"/>
+    <UserLocale Id="tig-ER" DisplayName="Tigre (Eritrea)" LCID="1000" KeyboardLayout="00000409" GeoLocation="71"/>
+    <UserLocale Id="tk-TM" DisplayName="Turkmen (Turkmenistan)" LCID="0442" KeyboardLayout="00000442" GeoLocation="238"/>
+    <UserLocale Id="tn-BW" DisplayName="Setswana (Botswana)" LCID="0832" KeyboardLayout="00000432" GeoLocation="19"/>
+    <UserLocale Id="tn-ZA" DisplayName="Setswana (South Africa)" LCID="0432" KeyboardLayout="00000432" GeoLocation="209"/>
+    <UserLocale Id="to" DisplayName="Tongan" LCID="1000"/>
+    <UserLocale Id="to-TO" DisplayName="Tongan (Tonga)" LCID="1000" KeyboardLayout="00000409" GeoLocation="231"/>
+    <UserLocale Id="tr-CY" DisplayName="Turkish (Cyprus)" LCID="1000" KeyboardLayout="0000041f" GeoLocation="59"/>
+    <UserLocale Id="tr-TR" DisplayName="Turkish (Turkey)" LCID="041f" KeyboardLayout="0000041f" GeoLocation="235"/>
+    <UserLocale Id="ts-ZA" DisplayName="Xitsonga (South Africa)" LCID="0431" GeoLocation="209"/>
+    <UserLocale Id="tt-RU" DisplayName="Tatar (Russia)" LCID="0444" KeyboardLayout="00000444" GeoLocation="203"/>
+    <UserLocale Id="twq" DisplayName="Tasawaq" LCID="1000"/>
+    <UserLocale Id="twq-NE" DisplayName="Tasawaq (Niger)" LCID="1000" KeyboardLayout="00000409" GeoLocation="173"/>
+    <UserLocale Id="tzm-MA" DisplayName="Central Atlas Tamazight (Morocco)" LCID="1000" GeoLocation="159"/>
+    <UserLocale Id="ug-CN" DisplayName="Uyghur (China)" LCID="0480" KeyboardLayout="00000480" GeoLocation="45"/>
+    <UserLocale Id="uk-UA" DisplayName="Ukrainian (Ukraine)" LCID="0422" KeyboardLayout="00000422" GeoLocation="241"/>
+    <UserLocale Id="ur-IN" DisplayName="Urdu (India)" LCID="0820" KeyboardLayout="00000420" GeoLocation="113"/>
+    <UserLocale Id="ur-PK" DisplayName="Urdu (Pakistan)" LCID="0420" KeyboardLayout="00000420" GeoLocation="190"/>
+    <UserLocale Id="uz-Arab" DisplayName="Uzbek (Arabic)" LCID="1000"/>
+    <UserLocale Id="uz-Arab-AF" DisplayName="Uzbek (Arabic, Afghanistan)" LCID="1000" KeyboardLayout="00000409" GeoLocation="3"/>
+    <UserLocale Id="uz-Cyrl" DisplayName="Uzbek (Cyrillic)" LCID="7843"/>
+    <UserLocale Id="uz-Cyrl-UZ" DisplayName="Uzbek (Cyrillic, Uzbekistan)" LCID="0843" KeyboardLayout="00000843" GeoLocation="247"/>
+    <UserLocale Id="uz-Latn" DisplayName="Uzbek (Latin)" LCID="7c43"/>
+    <UserLocale Id="uz-Latn-UZ" DisplayName="Uzbek (Latin, Uzbekistan)" LCID="0443" GeoLocation="247"/>
+    <UserLocale Id="vai" DisplayName="Vai" LCID="1000"/>
+    <UserLocale Id="vai-Latn" DisplayName="Vai (Latin)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="vai-Latn-LR" DisplayName="Vai (Latin, Liberia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="142"/>
+    <UserLocale Id="vai-Vaii" DisplayName="Vai (Vai)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="vai-Vaii-LR" DisplayName="Vai (Vai, Liberia)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="ve-ZA" DisplayName="Venda (South Africa)" LCID="0433" GeoLocation="209"/>
+    <UserLocale Id="vi-VN" DisplayName="Vietnamese (Vietnam)" LCID="042a" KeyboardLayout="0000042a" GeoLocation="251"/>
+    <UserLocale Id="vo" DisplayName="Volapük" LCID="1000"/>
+    <UserLocale Id="vo-001" DisplayName="Volapük (World)" LCID="1000" KeyboardLayout="00000409"/>
+    <UserLocale Id="vun" DisplayName="Vunjo" LCID="1000"/>
+    <UserLocale Id="vun-TZ" DisplayName="Vunjo (Tanzania)" LCID="1000" KeyboardLayout="00000409" GeoLocation="239"/>
+    <UserLocale Id="wae" DisplayName="Walser" LCID="1000"/>
+    <UserLocale Id="wae-CH" DisplayName="Walser (Switzerland)" LCID="1000" KeyboardLayout="00000409" GeoLocation="223"/>
+    <UserLocale Id="wal" DisplayName="Wolaytta" LCID="1000"/>
+    <UserLocale Id="wal-ET" DisplayName="Wolaytta (Ethiopia)" LCID="1000" KeyboardLayout="00000409" GeoLocation="73"/>
+    <UserLocale Id="wo-SN" DisplayName="Wolof (Senegal)" LCID="0488" KeyboardLayout="00000488" GeoLocation="210"/>
+    <UserLocale Id="xh-ZA" DisplayName="isiXhosa (South Africa)" LCID="0434" GeoLocation="209"/>
+    <UserLocale Id="xog" DisplayName="Soga" LCID="1000"/>
+    <UserLocale Id="xog-UG" DisplayName="Soga (Uganda)" LCID="1000" KeyboardLayout="00000409" GeoLocation="240"/>
+    <UserLocale Id="yav" DisplayName="Yangben" LCID="1000"/>
+    <UserLocale Id="yav-CM" DisplayName="Yangben (Cameroon)" LCID="1000" KeyboardLayout="00000409" GeoLocation="49"/>
+    <UserLocale Id="yi-001" DisplayName="Yiddish (World)" LCID="043d"/>
+    <UserLocale Id="yo-BJ" DisplayName="Yoruba (Benin)" LCID="1000" KeyboardLayout="0000046a" GeoLocation="28"/>
+    <UserLocale Id="yo-NG" DisplayName="Yoruba (Nigeria)" LCID="046a" KeyboardLayout="0000046a" GeoLocation="175"/>
+    <UserLocale Id="zgh" DisplayName="Standard Moroccan Tamazight" LCID="1000"/>
+    <UserLocale Id="zgh-MA" DisplayName="Standard Moroccan Tamazight (Morocco)" LCID="1000" KeyboardLayout="00000409" GeoLocation="159"/>
+    <UserLocale Id="zh" DisplayName="Chinese" LCID="7804"/>
+    <UserLocale Id="zh-Hans-CN" DisplayName="Chinese (Simplified, China)" LCID="1000" KeyboardLayout="00000404" GeoLocation="45"/>
+    <UserLocale Id="zh-Hans-HK" DisplayName="Chinese (Simplified, Hong Kong SAR)" LCID="1000" KeyboardLayout="00000404" GeoLocation="104"/>
+    <UserLocale Id="zh-Hans-MO" DisplayName="Chinese (Simplified, Macao SAR)" LCID="1000" KeyboardLayout="00000404" GeoLocation="151"/>
+    <UserLocale Id="zh-Hans-SG" DisplayName="Chinese (Simplified, Singapore)" LCID="1000" KeyboardLayout="00000404" GeoLocation="215"/>
+    <UserLocale Id="zh-Hant" DisplayName="Chinese (Traditional)" LCID="7c04"/>
+    <UserLocale Id="zh-Hant-HK" DisplayName="Chinese (Traditional, Hong Kong SAR)" LCID="1000" GeoLocation="104"/>
+    <UserLocale Id="zh-Hant-MO" DisplayName="Chinese (Traditional, Macao SAR)" LCID="1000" GeoLocation="151"/>
+    <UserLocale Id="zh-Hant-TW" DisplayName="Chinese (Traditional, Taiwan)" LCID="1000" GeoLocation="237"/>
+    <UserLocale Id="zu-ZA" DisplayName="isiZulu (South Africa)" LCID="0435" GeoLocation="209"/>
+</root>

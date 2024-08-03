@@ -472,11 +472,12 @@ function Start-PECustomization
 				$contents[5] = "set debug=2"
 				Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
 			}
+			Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
             Write-Host "Startup commands changed"
         }
         catch
         {
-            Write-Host "Could not change startup commands"            
+            Write-Host "Could not change startup commands"
         }
         Write-Host "CUSTOMIZATION STEP - Set Scratch Size" -BackgroundColor DarkGreen
         Write-Host "Setting scratch size..."
@@ -633,6 +634,11 @@ function Start-OSApplication
         Write-Host "This procedure must be run on Windows PE only."
         return
     }
+	if ((Get-ChildItem -Path "$((Get-Location).Path)sources\*.wim" -Exclude "boot.wim").Count -lt 1)
+	{
+		Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
+		exit 1
+	}
     New-Item -Path "X:\files\diskpart" -ItemType Directory -Force | Out-Null
     $drive = Get-Disks
     if ($drive -eq "ERROR")

@@ -937,7 +937,19 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-</value>
+- Unattended answer file generator
+
+The unattended answer file creation wizard is based on the technology of Christoph Schneegans' answer file generator website, with some modifications made to some files of its core library.
+
+MIT License
+
+Copyright (c) 2024 Christoph Schneegans
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</value>
   </data>
   <data name="help_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\help_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1119,17 +1131,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The reliability of AppX background processes has been improved
+- The Preinstallation Environment (PE) Helper now checks if there are Windows images present in your ISOs and will exit if none are detected
 
 New features:
 
-- Stub package options can now be set for AppX packages that are added
-- You can now add packages by specifying Microsoft Update Manifest (MUM) files (thanks @AnubyteCode for suggesting this)
-- The PE Helper Extensibility Suite has had some improvements:
-  - An application folder is now included to which you can copy your third-party apps
-  - The ISO generation script now copies your apps to the ISO content root before creating the disc image
-- The Scintilla.NET component has been updated to version 5.6.0
-- You can now list the contents of any Windows image with the new Windows Image Explorer</value>
+- You can now set keyboard layered drivers on your Windows image, which are useful for Japanese and Korean keyboards
+- The unattended answer file features have started undergoing a major reconstruction, using the Unattended Answer File Generator from Christoph Schneegans as their new base
+- The Scintilla.NET library has been updated to version 5.6.1</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1250,5 +1258,8 @@ New features:
   </data>
   <data name="create_iso" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\create_iso.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="set_layeredkeyboarddriver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\set_layeredkeyboarddriver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

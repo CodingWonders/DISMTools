@@ -480,6 +480,7 @@ Public Class MainForm
             CopiedFiles += 1
             Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
         Next
+        DirCopy(Application.StartupPath & "\AutoUnattend", Application.StartupPath & "\old\AutoUnattend", True, False)
         DirCopy(Application.StartupPath & "\Resources", Application.StartupPath & "\old\Resources", True, False)
         DirCopy(Application.StartupPath & "\bin", Application.StartupPath & "\old\bin", True, False)
         DirCopy(Application.StartupPath & "\docs", Application.StartupPath & "\old\docs", True, False)
@@ -554,6 +555,7 @@ Public Class MainForm
                 Label12.Text = "Installing the update (" & 30 + Math.Round(70 * (CopiedFiles / FileCount), 0) & "%)"
             End If
         Next
+        DirCopy(Application.StartupPath & "\new\AutoUnattend", Application.StartupPath & "\AutoUnattend", True, False)
         DirCopy(Application.StartupPath & "\new\Resources", Application.StartupPath & "\Resources", True, False)
         DirCopy(Application.StartupPath & "\new\bin", Application.StartupPath & "\bin", True, False)
         DirCopy(Application.StartupPath & "\new\docs", Application.StartupPath & "\docs", True, False)

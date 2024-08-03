@@ -1908,6 +1908,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property set_layeredkeyboarddriver() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("set_layeredkeyboarddriver", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property setting_error_glyph() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("setting_error_glyph", resourceCulture)
@@ -2178,15 +2188,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The reliability of AppX background processes has been improved
+        '''- The Preinstallation Environment (PE) Helper now checks if there are Windows images present in your ISOs and will exit if none are detected
         '''
         '''New features:
         '''
-        '''- Stub package options can now be set for AppX packages that are added
-        '''- You can now add packages by specifying Microsoft Update Manifest (MUM) files (thanks @AnubyteCode for suggesting this)
-        '''- The PE Helper Extensibility Suite has had some improvements:
-        '''  - An application folder is now included to which you can copy your third-party apps
-        '''  - The ISO generation script now copies your apps to the ISO content [resto de la cadena truncado]&quot;;.
+        '''- You can now set keyboard layered drivers on your Windows image, which are useful for Japanese and Korean keyboards
+        '''- The unattended answer file features have started undergoing a major reconstruction, using the Unattended Answer File Generator from Christoph Schneegans as their new base
+        '''- The Scintilla.NET library has been updated t [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -13587,7 +13587,8 @@ Public Class MainForm
     End Sub
 
     Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
-        UnattendMgr.Show()
+        ' Major reconstruction ahead
+        NewUnattendWiz.Show()
     End Sub
 
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
@@ -19653,5 +19654,9 @@ Public Class MainForm
             MessageBox.Show("We couldn't prepare WIM Explorer Setup. Reason:" & CrLf & ex.Message)
             Exit Sub
         End Try
+    End Sub
+
+    Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
+        SetLayeredDriverDialog.Showdialog()
     End Sub
 End Class
