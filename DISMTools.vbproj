@@ -110,10 +110,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>packages\DockPanelSuite.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2012, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
+      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1317,6 +1317,31 @@
     <Content Include="Installer\ISPPBuiltins.iss" />
     <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
+    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
+    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
@@ -1380,31 +1405,6 @@
     <None Include="Resources\progresspanel_logview_shown.png" />
     <None Include="Resources\create_iso.png" />
     <None Include="Resources\set_layeredkeyboarddriver.png" />
-    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
-    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
     <None Include="Resources\startup\version.png" />
     <None Include="Resources\startup\preview_flag.png" />
     <None Include="Resources\startup\startup_bg.png" />
