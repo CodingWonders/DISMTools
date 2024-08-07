@@ -24,7 +24,7 @@
 
         Public Property WizardPage As Page
 
-        Public Const PageCount As Integer = 15
+        Public Const PageCount As Integer = 17
     End Class
 
 End Namespace

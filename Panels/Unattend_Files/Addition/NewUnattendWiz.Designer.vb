@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode53 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
+        Dim TreeNode54 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode55 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode56 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode57 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode58 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode59 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode60 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode61 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode62 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode63 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode64 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode65 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,6 +49,10 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.UnattendProgressPanel = New System.Windows.Forms.Panel()
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
+        Me.Label56 = New System.Windows.Forms.Label()
+        Me.UnattendProgressHeader = New System.Windows.Forms.Label()
         Me.FinalReviewPanel = New System.Windows.Forms.Panel()
         Me.Label54 = New System.Windows.Forms.Label()
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
@@ -79,6 +83,7 @@ Partial Class NewUnattendWiz
         Me.Label50 = New System.Windows.Forms.Label()
         Me.Label47 = New System.Windows.Forms.Label()
         Me.RadioButton30 = New System.Windows.Forms.RadioButton()
+        Me.Label55 = New System.Windows.Forms.Label()
         Me.Label53 = New System.Windows.Forms.Label()
         Me.CheckBox14 = New System.Windows.Forms.CheckBox()
         Me.NetworkConnectionHeader = New System.Windows.Forms.Label()
@@ -279,7 +284,15 @@ Partial Class NewUnattendWiz
         Me.EditorPanelFooter = New System.Windows.Forms.Panel()
         Me.TimeZonePageTimer = New System.Windows.Forms.Timer(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Label55 = New System.Windows.Forms.Label()
+        Me.UnattendGeneratorBW = New System.ComponentModel.BackgroundWorker()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.Label57 = New System.Windows.Forms.Label()
+        Me.FinishPanel = New System.Windows.Forms.Panel()
+        Me.FinishHeader = New System.Windows.Forms.Label()
+        Me.Label58 = New System.Windows.Forms.Label()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -289,6 +302,7 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
         Me.ComponentPanel.SuspendLayout()
         Me.PostInstallPanel.SuspendLayout()
@@ -352,6 +366,7 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.FinishPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -385,33 +400,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode14.Name = "Nodo0"
-        TreeNode14.Text = "DISCLAIMER - NOT COMPLETE"
-        TreeNode15.Name = "Nodo1"
-        TreeNode15.Text = "Regional Configuration"
-        TreeNode16.Name = "Nodo2"
-        TreeNode16.Text = "Basic System Configuration"
-        TreeNode17.Name = "Nodo3"
-        TreeNode17.Text = "Time Zone"
-        TreeNode18.Name = "Nodo4"
-        TreeNode18.Text = "Disk Configuration"
-        TreeNode19.Name = "Nodo5"
-        TreeNode19.Text = "Product Key"
-        TreeNode20.Name = "Nodo6"
-        TreeNode20.Text = "User Accounts"
-        TreeNode21.Name = "Nodo9"
-        TreeNode21.Text = "Virtual Machine Support"
-        TreeNode22.Name = "Nodo10"
-        TreeNode22.Text = "Wireless Networking"
-        TreeNode23.Name = "Nodo11"
-        TreeNode23.Text = "System Telemetry"
-        TreeNode24.Name = "Nodo12"
-        TreeNode24.Text = "Post-Installation Scripts"
-        TreeNode25.Name = "Nodo13"
-        TreeNode25.Text = "Component Settings"
-        TreeNode26.Name = "Nodo14"
-        TreeNode26.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
+        TreeNode53.Name = "Nodo0"
+        TreeNode53.Text = "DISCLAIMER - NOT COMPLETE"
+        TreeNode54.Name = "Nodo1"
+        TreeNode54.Text = "Regional Configuration"
+        TreeNode55.Name = "Nodo2"
+        TreeNode55.Text = "Basic System Configuration"
+        TreeNode56.Name = "Nodo3"
+        TreeNode56.Text = "Time Zone"
+        TreeNode57.Name = "Nodo4"
+        TreeNode57.Text = "Disk Configuration"
+        TreeNode58.Name = "Nodo5"
+        TreeNode58.Text = "Product Key"
+        TreeNode59.Name = "Nodo6"
+        TreeNode59.Text = "User Accounts"
+        TreeNode60.Name = "Nodo9"
+        TreeNode60.Text = "Virtual Machine Support"
+        TreeNode61.Name = "Nodo10"
+        TreeNode61.Text = "Wireless Networking"
+        TreeNode62.Name = "Nodo11"
+        TreeNode62.Text = "System Telemetry"
+        TreeNode63.Name = "Nodo12"
+        TreeNode63.Text = "Post-Installation Scripts"
+        TreeNode64.Name = "Nodo13"
+        TreeNode64.Text = "Component Settings"
+        TreeNode65.Name = "Nodo14"
+        TreeNode65.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode53, TreeNode54, TreeNode55, TreeNode56, TreeNode57, TreeNode58, TreeNode59, TreeNode60, TreeNode61, TreeNode62, TreeNode63, TreeNode64, TreeNode65})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -501,6 +516,8 @@ Partial Class NewUnattendWiz
         '
         'StepsContainer
         '
+        Me.StepsContainer.Controls.Add(Me.FinishPanel)
+        Me.StepsContainer.Controls.Add(Me.UnattendProgressPanel)
         Me.StepsContainer.Controls.Add(Me.FinalReviewPanel)
         Me.StepsContainer.Controls.Add(Me.ComponentPanel)
         Me.StepsContainer.Controls.Add(Me.PostInstallPanel)
@@ -521,6 +538,44 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
         Me.StepsContainer.TabIndex = 1
+        '
+        'UnattendProgressPanel
+        '
+        Me.UnattendProgressPanel.Controls.Add(Me.ProgressBar1)
+        Me.UnattendProgressPanel.Controls.Add(Me.Label57)
+        Me.UnattendProgressPanel.Controls.Add(Me.Label56)
+        Me.UnattendProgressPanel.Controls.Add(Me.UnattendProgressHeader)
+        Me.UnattendProgressPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.UnattendProgressPanel.Location = New System.Drawing.Point(0, 0)
+        Me.UnattendProgressPanel.Name = "UnattendProgressPanel"
+        Me.UnattendProgressPanel.Size = New System.Drawing.Size(752, 449)
+        Me.UnattendProgressPanel.TabIndex = 15
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.Location = New System.Drawing.Point(96, 86)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(563, 23)
+        Me.ProgressBar1.TabIndex = 14
+        '
+        'Label56
+        '
+        Me.Label56.AutoSize = True
+        Me.Label56.Location = New System.Drawing.Point(93, 66)
+        Me.Label56.Name = "Label56"
+        Me.Label56.Size = New System.Drawing.Size(53, 13)
+        Me.Label56.TabIndex = 13
+        Me.Label56.Text = "Progress:"
+        '
+        'UnattendProgressHeader
+        '
+        Me.UnattendProgressHeader.AutoEllipsis = True
+        Me.UnattendProgressHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.UnattendProgressHeader.Location = New System.Drawing.Point(16, 17)
+        Me.UnattendProgressHeader.Name = "UnattendProgressHeader"
+        Me.UnattendProgressHeader.Size = New System.Drawing.Size(708, 51)
+        Me.UnattendProgressHeader.TabIndex = 12
+        Me.UnattendProgressHeader.Text = "Please wait while your unattended answer file is being created..."
         '
         'FinalReviewPanel
         '
@@ -837,6 +892,17 @@ Partial Class NewUnattendWiz
         Me.RadioButton30.TabIndex = 4
         Me.RadioButton30.Text = "Skip configuration"
         Me.RadioButton30.UseVisualStyleBackColor = True
+        '
+        'Label55
+        '
+        Me.Label55.AutoEllipsis = True
+        Me.Label55.Location = New System.Drawing.Point(24, 246)
+        Me.Label55.Margin = New System.Windows.Forms.Padding(20, 0, 3, 0)
+        Me.Label55.Name = "Label55"
+        Me.Label55.Size = New System.Drawing.Size(576, 36)
+        Me.Label55.TabIndex = 0
+        Me.Label55.Text = "Choose this option if you either don't have a network adapter or plan to use Ethe" & _
+    "rnet"
         '
         'Label53
         '
@@ -2870,6 +2936,7 @@ Partial Class NewUnattendWiz
         'LinkLabel1
         '
         Me.LinkLabel1.AutoEllipsis = True
+        Me.LinkLabel1.Enabled = False
         Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel1.Location = New System.Drawing.Point(10, 14)
@@ -2958,16 +3025,93 @@ Partial Class NewUnattendWiz
         '
         Me.OpenFileDialog1.Filter = "All Files|*.*"
         '
-        'Label55
+        'UnattendGeneratorBW
         '
-        Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(24, 246)
-        Me.Label55.Margin = New System.Windows.Forms.Padding(20, 0, 3, 0)
-        Me.Label55.Name = "Label55"
-        Me.Label55.Size = New System.Drawing.Size(576, 36)
-        Me.Label55.TabIndex = 0
-        Me.Label55.Text = "Choose this option if you either don't have a network adapter or plan to use Ethe" & _
-    "rnet"
+        Me.UnattendGeneratorBW.WorkerReportsProgress = True
+        Me.UnattendGeneratorBW.WorkerSupportsCancellation = True
+        '
+        'SaveFileDialog1
+        '
+        Me.SaveFileDialog1.Filter = "Answer files|*.xml"
+        '
+        'Label57
+        '
+        Me.Label57.AutoSize = True
+        Me.Label57.Location = New System.Drawing.Point(93, 118)
+        Me.Label57.Name = "Label57"
+        Me.Label57.Size = New System.Drawing.Size(183, 13)
+        Me.Label57.TabIndex = 13
+        Me.Label57.Text = "Please wait - this can take some time"
+        '
+        'FinishPanel
+        '
+        Me.FinishPanel.Controls.Add(Me.LinkLabel4)
+        Me.FinishPanel.Controls.Add(Me.LinkLabel3)
+        Me.FinishPanel.Controls.Add(Me.LinkLabel2)
+        Me.FinishPanel.Controls.Add(Me.Label58)
+        Me.FinishPanel.Controls.Add(Me.FinishHeader)
+        Me.FinishPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FinishPanel.Location = New System.Drawing.Point(0, 0)
+        Me.FinishPanel.Name = "FinishPanel"
+        Me.FinishPanel.Size = New System.Drawing.Size(752, 449)
+        Me.FinishPanel.TabIndex = 16
+        '
+        'FinishHeader
+        '
+        Me.FinishHeader.AutoEllipsis = True
+        Me.FinishHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FinishHeader.Location = New System.Drawing.Point(16, 17)
+        Me.FinishHeader.Name = "FinishHeader"
+        Me.FinishHeader.Size = New System.Drawing.Size(708, 51)
+        Me.FinishHeader.TabIndex = 13
+        Me.FinishHeader.Text = "Congratulations! You have finished"
+        '
+        'Label58
+        '
+        Me.Label58.AutoSize = True
+        Me.Label58.Location = New System.Drawing.Point(103, 84)
+        Me.Label58.Name = "Label58"
+        Me.Label58.Size = New System.Drawing.Size(516, 13)
+        Me.Label58.TabIndex = 14
+        Me.Label58.Text = "The unattended answer file has been created at the location you specified. What d" & _
+    "o you want to do now?"
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.AutoSize = True
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel2.Location = New System.Drawing.Point(157, 183)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(136, 13)
+        Me.LinkLabel2.TabIndex = 15
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "Create another answer file"
+        '
+        'LinkLabel3
+        '
+        Me.LinkLabel3.AutoSize = True
+        Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel3.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel3.Location = New System.Drawing.Point(157, 209)
+        Me.LinkLabel3.Name = "LinkLabel3"
+        Me.LinkLabel3.Size = New System.Drawing.Size(141, 13)
+        Me.LinkLabel3.TabIndex = 15
+        Me.LinkLabel3.TabStop = True
+        Me.LinkLabel3.Text = "Open the location of the file"
+        '
+        'LinkLabel4
+        '
+        Me.LinkLabel4.AutoSize = True
+        Me.LinkLabel4.Enabled = False
+        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel4.Location = New System.Drawing.Point(157, 236)
+        Me.LinkLabel4.Name = "LinkLabel4"
+        Me.LinkLabel4.Size = New System.Drawing.Size(160, 13)
+        Me.LinkLabel4.TabIndex = 15
+        Me.LinkLabel4.TabStop = True
+        Me.LinkLabel4.Text = "Apply unattended answer file..."
         '
         'NewUnattendWiz
         '
@@ -2999,6 +3143,8 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.UnattendProgressPanel.ResumeLayout(False)
+        Me.UnattendProgressPanel.PerformLayout()
         Me.FinalReviewPanel.ResumeLayout(False)
         Me.FinalReviewPanel.PerformLayout()
         Me.ComponentPanel.ResumeLayout(False)
@@ -3101,6 +3247,8 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.FinishPanel.ResumeLayout(False)
+        Me.FinishPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3347,4 +3495,17 @@ Partial Class NewUnattendWiz
     Friend WithEvents CheckBox17 As System.Windows.Forms.CheckBox
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label55 As System.Windows.Forms.Label
+    Friend WithEvents UnattendProgressPanel As System.Windows.Forms.Panel
+    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
+    Friend WithEvents Label56 As System.Windows.Forms.Label
+    Friend WithEvents UnattendProgressHeader As System.Windows.Forms.Label
+    Friend WithEvents UnattendGeneratorBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents Label57 As System.Windows.Forms.Label
+    Friend WithEvents FinishPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label58 As System.Windows.Forms.Label
+    Friend WithEvents FinishHeader As System.Windows.Forms.Label
+    Friend WithEvents LinkLabel4 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel3 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel
 End Class

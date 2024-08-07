@@ -78,6 +78,11 @@ Public Class NewUnattendWiz
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
 
+    ' Progress info
+    Dim ProgressMessage As String = ""
+
+    Dim SaveTarget As String = ""
+
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -442,9 +447,22 @@ Public Class NewUnattendWiz
         PostInstallPanel.Visible = (NewPage = UnattendedWizardPage.Page.PostInstallPage)
         ComponentPanel.Visible = (NewPage = UnattendedWizardPage.Page.ComponentPage)
         FinalReviewPanel.Visible = (NewPage = UnattendedWizardPage.Page.ReviewPage)
+        UnattendProgressPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProgressPage)
+        FinishPanel.Visible = (NewPage = UnattendedWizardPage.Page.FinishPage)
         CurrentWizardPage.WizardPage = NewPage
         Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
-        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+        Cancel_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage) And Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+
+        Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
+
+        ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
+        If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
+            SaveFileDialog1.ShowDialog()
+            UnattendGeneratorBW.RunWorkerAsync()
+        ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
+            SaveTarget = ""
+        End If
     End Sub
 
     Function VerifyOptionsInPage(WizardPage As UnattendedWizardPage.Page) As Boolean
@@ -609,7 +627,7 @@ Public Class NewUnattendWiz
                     Case WiFiAuthenticationMode.WPA3_SAE
                         TextBox13.AppendText("    - Authentication mode: WPA3 (Simultaneous Authentication of Equals)" & CrLf)
                 End Select
-                TextBox13.AppendText("    - Password: " & SelectedNetworkConfiguration.Password & CrLf)
+                TextBox13.AppendText("    - Password: " & New String("*", SelectedNetworkConfiguration.Password.Length) & " (hidden for your security)" & CrLf)
             End If
         End If
         ' 9. -- SYSTEM TELEMETRY
@@ -1120,5 +1138,257 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Process.Start("https://schneegans.de/windows/unattend-generator/")
+    End Sub
+
+    Function EditionIDFromDisplayName(displayName As String) As String
+        Select Case displayName
+            Case "Home"
+                Return "home"
+            Case "Home N"
+                Return "home_n"
+            Case "Home Single Language"
+                Return "home_single"
+            Case "Education"
+                Return "education"
+            Case "Education N"
+                Return "education_n"
+            Case "Pro"
+                Return "pro"
+            Case "Pro N"
+                Return "pro_n"
+            Case "Pro Education"
+                Return "pro_education"
+            Case "Pro Education N"
+                Return "pro_education_n"
+            Case "Pro for Workstations"
+                Return "pro_workstations"
+            Case "Pro N for Workstations"
+                Return "pro_workstations_n"
+        End Select
+        Return ""
+    End Function
+
+    Private Sub UnattendGeneratorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGeneratorBW.DoWork
+        ReportMessage("Preparing to generate file...", 0)
+        If SaveTarget = "" Then
+            e.Cancel = True
+            Exit Sub
+        End If
+        ReportMessage("Preparing to generate file...", 0)
+        Dim UnattendGen As New Process()
+        ' Get most appropriate binary of UnattendGen
+        If Environment.Is64BitOperatingSystem Then
+            UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64\unattendgen.exe")
+            UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64")
+        Else
+            UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86\unattendgen.exe")
+            UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
+        End If
+        UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
+        Try
+            ' Save settings to appropriate XML files
+            ReportMessage("Saving user settings...", 2)
+            Dim regSetContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                "<root>" & CrLf &
+                "   <ImageLanguage Id=" & Quote & SelectedLanguage.Id & Quote & " DisplayName=" & Quote & SelectedLanguage.DisplayName & Quote & "/>" & CrLf &
+                "   <UserLocale Id=" & Quote & SelectedLocale.Id & Quote & " DisplayName=" & Quote & SelectedLocale.DisplayName & Quote & " LCID=" & Quote & SelectedLocale.LCID & Quote & " KeyboardLayout=" & Quote & SelectedLocale.KeybId & Quote & " GeoLocation=" & Quote & SelectedLocale.GeoLoc & Quote & "/>" & CrLf &
+                "   <KeyboardIdentifier Id=" & Quote & SelectedKeybIdentifier.Id & Quote & " DisplayName=" & Quote & SelectedKeybIdentifier.DisplayName & Quote & " Type=" & Quote & SelectedKeybIdentifier.Type & Quote & "/>" & CrLf &
+                "   <GeoId Id=" & Quote & SelectedGeoId.Id & Quote & " DisplayName=" & Quote & SelectedGeoId.DisplayName & Quote & "/>" & CrLf &
+                "   <TimeOffset Id=" & Quote & SelectedOffset.Id & Quote & " DisplayName=" & Quote & SelectedOffset.DisplayName & Quote & "/>" & CrLf &
+                "</root>"
+            File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
+            UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
+            ReportMessage("Saving user settings...", 4)
+            Select Case SelectedArchitecture
+                Case DismProcessorArchitecture.Intel
+                    UnattendGen.StartInfo.Arguments &= " /architecture=x86"
+                Case DismProcessorArchitecture.AMD64
+                    UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
+                Case DismProcessorArchitecture.ARM64
+                    UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
+            End Select
+            ReportMessage("Saving user settings...", 6)
+            If Win11Config.LabConfig_BypassRequirements Then
+                UnattendGen.StartInfo.Arguments &= " /LabConfig"
+            End If
+            If Win11Config.OOBE_BypassNRO Then
+                UnattendGen.StartInfo.Arguments &= " /BypassNRO"
+            End If
+            ReportMessage("Saving user settings...", 8)
+            If Not PCName.DefaultName Then
+                UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+            End If
+            ReportMessage("Saving user settings...", 10)
+            If TimeOffsetInteractive Then
+                UnattendGen.StartInfo.Arguments &= " /tzImplicit"
+            End If
+            ReportMessage("Saving user settings...", 12)
+            If DiskConfigurationInteractive Then
+                UnattendGen.StartInfo.Arguments &= " /partmode=interactive"
+            Else
+                If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
+                    UnattendGen.StartInfo.Arguments &= " /partmode=unattended"
+                    Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
+                        "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
+                ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
+                    UnattendGen.StartInfo.Arguments &= " /partmode=custom"
+                    Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <DiskPart ScriptFile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp") & Quote & " AutoInst=" & Quote & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "1", "0") & Quote & " Disk=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & Quote & " Partition=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & Quote & " />" & CrLf &
+                        "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"), SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents, UTF8)
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskPartSettings.xml"), diskPartContents, UTF8)
+                End If
+            End If
+            ReportMessage("Saving user settings...", 14)
+            If GenericChosen Then
+                UnattendGen.StartInfo.Arguments &= " /generic"
+                Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf &
+                    "   <Edition Id=" & Quote & EditionIDFromDisplayName(ComboBox6.SelectedItem) & Quote & " DisplayName=" & Quote & ComboBox6.SelectedItem & Quote & " Key=" & Quote & SelectedKey.Key & Quote & " />" & CrLf &
+                    "</root>"
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
+            Else
+                UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
+            End If
+            If Not UserAccountsInteractive Then
+                ReportMessage("Saving user settings...", 16)
+                UnattendGen.StartInfo.Arguments &= " /customusers"
+                Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf
+                If UserAccountsList.Count > 0 Then
+                    For Each account As User In UserAccountsList
+                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & account.Name & Quote & " Password=" & Quote & account.Password & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
+                    Next
+                    customUserContents &= "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
+                    If AutoLogon.EnableAutoLogon Then
+                        If AutoLogon.LogonMode = AutoLogonMode.FirstAdmin Then
+                            UnattendGen.StartInfo.Arguments &= " /autologon=firstadmin"
+                        ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
+                            UnattendGen.StartInfo.Arguments &= " /autologon=builtinadmin"
+                            Dim builtinAdminContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                                "<root>" & CrLf &
+                                "   <BuiltInAdmin Password=" & Quote & AutoLogon.LogonPassword & Quote & " />" & CrLf &
+                                "</root>"
+                            File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "autoLogon.xml"), builtinAdminContents, UTF8)
+                        End If
+                    End If
+                    If PasswordObfuscate Then
+                        UnattendGen.StartInfo.Arguments &= " /b64obscure"
+                    End If
+                Else
+                    UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
+                End If
+            End If
+            If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
+                ReportMessage("Saving user settings...", 18)
+                UnattendGen.StartInfo.Arguments &= " /pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
+            End If
+            ReportMessage("Saving user settings...", 20)
+            If SelectedLockdownSettings.Enabled Then
+                UnattendGen.StartInfo.Arguments &= " /lockdown=yes"
+                Dim lockdownContents As String = ""
+                If SelectedLockdownSettings.DefaultPolicy Then
+                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <AccountLockdown FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
+                        "</root>"
+                Else
+                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <AccountLockdown FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
+                        "</root>"
+                End If
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockDown.xml"), lockdownContents, UTF8)
+            Else
+                UnattendGen.StartInfo.Arguments &= " /lockdown=no"
+            End If
+            If VirtualMachineSupported Then
+                ReportMessage("Saving user settings...", 22)
+                Select Case SelectedVMSettings.Provider
+                    Case VMProvider.VirtualBox_GAs
+                        UnattendGen.StartInfo.Arguments &= " /vm=vbox_gas"
+                    Case VMProvider.VMware_Tools
+                        UnattendGen.StartInfo.Arguments &= " /vm=vmware"
+                    Case VMProvider.VirtIO_Guest_Tools
+                        UnattendGen.StartInfo.Arguments &= " /vm=virtio"
+                End Select
+            End If
+            If Not NetworkConfigInteractive Then
+                ReportMessage("Saving user settings...", 24)
+                If NetworkConfigManualSkip Then
+                    UnattendGen.StartInfo.Arguments &= " /wifi=no"
+                Else
+                    UnattendGen.StartInfo.Arguments &= " /wifi=yes"
+                    Dim wirelessContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <WirelessNetwork Name=" & Quote & SelectedNetworkConfiguration.SSID & Quote & " Password=" & Quote & SelectedNetworkConfiguration.Password & Quote & " AuthMode=" & Quote & If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.Open, "Open", If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK, "WPA2", "WPA3")) & Quote & " NonBroadcast=" & Quote & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "1", "0") & Quote & " />" & CrLf &
+                        "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "wireless.xml"), wirelessContents, UTF8)
+                End If
+            End If
+            If Not SystemTelemetryInteractive Then
+                ReportMessage("Saving user settings...", 24.5)
+                If SelectedTelemetrySettings.Enabled Then
+                    UnattendGen.StartInfo.Arguments &= " /telem=yes"
+                Else
+                    UnattendGen.StartInfo.Arguments &= " /telem=no"
+                End If
+            End If
+            ReportMessage("Generating unattended answer file...", 25)
+            UnattendGen.Start()
+            UnattendGen.WaitForExit()
+            ReportMessage("Generating unattended answer file...", 50)
+            ReportMessage("Deleting temporary files...", 75)
+            If File.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp")) Then
+                File.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"))
+            End If
+            For Each xmlFile In My.Computer.FileSystem.GetFiles(UnattendGen.StartInfo.WorkingDirectory, FileIO.SearchOption.SearchTopLevelOnly, "*.xml")
+                If File.Exists(xmlFile) Then File.Delete(xmlFile)
+            Next
+            If UnattendGen.ExitCode <> 0 Then
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & UnattendGen.ExitCode)
+                e.Cancel = True
+            End If
+        Catch ex As Exception
+            If UnattendGen.ExitCode <> 0 Then
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error: " & ex.Message)
+                e.Cancel = True
+            End If
+        End Try
+    End Sub
+
+    Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        SaveTarget = SaveFileDialog1.FileName
+    End Sub
+
+    Sub ReportMessage(msg As String, percent As Integer)
+        ProgressMessage = msg
+        UnattendGeneratorBW.ReportProgress(percent)
+    End Sub
+
+    Private Sub UnattendGeneratorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles UnattendGeneratorBW.ProgressChanged
+        Label56.Text = ProgressMessage
+        ProgressBar1.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub UnattendGeneratorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UnattendGeneratorBW.RunWorkerCompleted
+        If e.Cancelled Then
+            ChangePage(CurrentWizardPage.WizardPage - 1)
+            Exit Sub
+        End If
+        ChangePage(CurrentWizardPage.WizardPage + 1)
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        ChangePage(UnattendedWizardPage.Page.RegionalPage)
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & SaveTarget & Quote)
     End Sub
 End Class

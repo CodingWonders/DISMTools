@@ -1138,6 +1138,18 @@
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
     <None Include="Tools\DT_WinADK.reg" />
+    <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-arm64\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-arm64\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x64\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x64\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x64\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x64\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1342,6 +1354,48 @@
     <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
     <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
     <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
+    <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-x64\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-x64\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-x86\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-x86\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.pdb" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
@@ -1724,6 +1778,12 @@ copy /y "$(SolutionDir)Tools\DT_WinADK.reg" "DT_WinADK.reg"
 IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	md "Tools\UnpEax"
 	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
+)
+
+:: Copy UnattendGen
+IF EXIST "$(SolutionDir)Tools\UnattendGen" (
+	md "Tools\UnattendGen"
+	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
 )
 
 IF NOT EXIST AutoUnattend (
