@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode66 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
-        Dim TreeNode67 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode68 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode69 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode70 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode71 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode72 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode73 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode74 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode75 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode76 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode77 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode78 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("DISCLAIMER - NOT COMPLETE")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,7 +49,22 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.FinalReviewPanel = New System.Windows.Forms.Panel()
+        Me.Label54 = New System.Windows.Forms.Label()
+        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
+        Me.TextBox13 = New System.Windows.Forms.TextBox()
+        Me.FinalReviewHeader = New System.Windows.Forms.Label()
+        Me.ComponentPanel = New System.Windows.Forms.Panel()
+        Me.Label52 = New System.Windows.Forms.Label()
+        Me.ComponentHeader = New System.Windows.Forms.Label()
+        Me.PostInstallPanel = New System.Windows.Forms.Panel()
+        Me.Label51 = New System.Windows.Forms.Label()
+        Me.PostInstallHeader = New System.Windows.Forms.Label()
         Me.SystemTelemetryPanel = New System.Windows.Forms.Panel()
+        Me.TelemetryOptionsPanel = New System.Windows.Forms.Panel()
+        Me.RadioButton27 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton26 = New System.Windows.Forms.RadioButton()
+        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
         Me.SystemTelemetryHeader = New System.Windows.Forms.Label()
         Me.NetworkConnectionPanel = New System.Windows.Forms.Panel()
         Me.ManualNetworkConfigPanel = New System.Windows.Forms.FlowLayoutPanel()
@@ -255,6 +270,7 @@ Partial Class NewUnattendWiz
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.FooterContainer = New System.Windows.Forms.Panel()
         Me.ExpressPanelFooter = New System.Windows.Forms.Panel()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Back_Button = New System.Windows.Forms.Button()
         Me.Next_Button = New System.Windows.Forms.Button()
@@ -263,22 +279,6 @@ Partial Class NewUnattendWiz
         Me.EditorPanelFooter = New System.Windows.Forms.Panel()
         Me.TimeZonePageTimer = New System.Windows.Forms.Timer(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.CheckBox16 = New System.Windows.Forms.CheckBox()
-        Me.TelemetryOptionsPanel = New System.Windows.Forms.Panel()
-        Me.RadioButton26 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton27 = New System.Windows.Forms.RadioButton()
-        Me.PostInstallPanel = New System.Windows.Forms.Panel()
-        Me.PostInstallHeader = New System.Windows.Forms.Label()
-        Me.Label51 = New System.Windows.Forms.Label()
-        Me.ComponentPanel = New System.Windows.Forms.Panel()
-        Me.ComponentHeader = New System.Windows.Forms.Label()
-        Me.Label52 = New System.Windows.Forms.Label()
-        Me.FinalReviewPanel = New System.Windows.Forms.Panel()
-        Me.FinalReviewHeader = New System.Windows.Forms.Label()
-        Me.TextBox13 = New System.Windows.Forms.TextBox()
-        Me.CheckBox17 = New System.Windows.Forms.CheckBox()
-        Me.Label54 = New System.Windows.Forms.Label()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -288,7 +288,11 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.FinalReviewPanel.SuspendLayout()
+        Me.ComponentPanel.SuspendLayout()
+        Me.PostInstallPanel.SuspendLayout()
         Me.SystemTelemetryPanel.SuspendLayout()
+        Me.TelemetryOptionsPanel.SuspendLayout()
         Me.NetworkConnectionPanel.SuspendLayout()
         Me.ManualNetworkConfigPanel.SuspendLayout()
         Me.WirelessNetworkSettingsPanel.SuspendLayout()
@@ -347,10 +351,6 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.TelemetryOptionsPanel.SuspendLayout()
-        Me.PostInstallPanel.SuspendLayout()
-        Me.ComponentPanel.SuspendLayout()
-        Me.FinalReviewPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -384,33 +384,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode66.Name = "Nodo0"
-        TreeNode66.Text = "DISCLAIMER - NOT COMPLETE"
-        TreeNode67.Name = "Nodo1"
-        TreeNode67.Text = "Regional Configuration"
-        TreeNode68.Name = "Nodo2"
-        TreeNode68.Text = "Basic System Configuration"
-        TreeNode69.Name = "Nodo3"
-        TreeNode69.Text = "Time Zone"
-        TreeNode70.Name = "Nodo4"
-        TreeNode70.Text = "Disk Configuration"
-        TreeNode71.Name = "Nodo5"
-        TreeNode71.Text = "Product Key"
-        TreeNode72.Name = "Nodo6"
-        TreeNode72.Text = "User Accounts"
-        TreeNode73.Name = "Nodo9"
-        TreeNode73.Text = "Virtual Machine Support"
-        TreeNode74.Name = "Nodo10"
-        TreeNode74.Text = "Wireless Networking"
-        TreeNode75.Name = "Nodo11"
-        TreeNode75.Text = "System Telemetry"
-        TreeNode76.Name = "Nodo12"
-        TreeNode76.Text = "Post-Installation Scripts"
-        TreeNode77.Name = "Nodo13"
-        TreeNode77.Text = "Component Settings"
-        TreeNode78.Name = "Nodo14"
-        TreeNode78.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode66, TreeNode67, TreeNode68, TreeNode69, TreeNode70, TreeNode71, TreeNode72, TreeNode73, TreeNode74, TreeNode75, TreeNode76, TreeNode77, TreeNode78})
+        TreeNode1.Name = "Nodo0"
+        TreeNode1.Text = "DISCLAIMER - NOT COMPLETE"
+        TreeNode2.Name = "Nodo1"
+        TreeNode2.Text = "Regional Configuration"
+        TreeNode3.Name = "Nodo2"
+        TreeNode3.Text = "Basic System Configuration"
+        TreeNode4.Name = "Nodo3"
+        TreeNode4.Text = "Time Zone"
+        TreeNode5.Name = "Nodo4"
+        TreeNode5.Text = "Disk Configuration"
+        TreeNode6.Name = "Nodo5"
+        TreeNode6.Text = "Product Key"
+        TreeNode7.Name = "Nodo6"
+        TreeNode7.Text = "User Accounts"
+        TreeNode8.Name = "Nodo9"
+        TreeNode8.Text = "Virtual Machine Support"
+        TreeNode9.Name = "Nodo10"
+        TreeNode9.Text = "Wireless Networking"
+        TreeNode10.Name = "Nodo11"
+        TreeNode10.Text = "System Telemetry"
+        TreeNode11.Name = "Nodo12"
+        TreeNode11.Text = "Post-Installation Scripts"
+        TreeNode12.Name = "Nodo13"
+        TreeNode12.Text = "Component Settings"
+        TreeNode13.Name = "Nodo14"
+        TreeNode13.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -521,6 +521,123 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Size = New System.Drawing.Size(752, 449)
         Me.StepsContainer.TabIndex = 1
         '
+        'FinalReviewPanel
+        '
+        Me.FinalReviewPanel.Controls.Add(Me.Label54)
+        Me.FinalReviewPanel.Controls.Add(Me.CheckBox17)
+        Me.FinalReviewPanel.Controls.Add(Me.TextBox13)
+        Me.FinalReviewPanel.Controls.Add(Me.FinalReviewHeader)
+        Me.FinalReviewPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FinalReviewPanel.Location = New System.Drawing.Point(0, 0)
+        Me.FinalReviewPanel.Name = "FinalReviewPanel"
+        Me.FinalReviewPanel.Size = New System.Drawing.Size(752, 449)
+        Me.FinalReviewPanel.TabIndex = 14
+        '
+        'Label54
+        '
+        Me.Label54.AutoEllipsis = True
+        Me.Label54.Location = New System.Drawing.Point(50, 398)
+        Me.Label54.Name = "Label54"
+        Me.Label54.Size = New System.Drawing.Size(648, 35)
+        Me.Label54.TabIndex = 15
+        Me.Label54.Text = "If something is not right, you will need to go back to that page in order to chan" & _
+    "ge the setting. Do not worry: other settings will be kept intact"
+        '
+        'CheckBox17
+        '
+        Me.CheckBox17.Appearance = System.Windows.Forms.Appearance.Button
+        Me.CheckBox17.AutoSize = True
+        Me.CheckBox17.Checked = True
+        Me.CheckBox17.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox17.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox17.Location = New System.Drawing.Point(628, 372)
+        Me.CheckBox17.Name = "CheckBox17"
+        Me.CheckBox17.Size = New System.Drawing.Size(70, 23)
+        Me.CheckBox17.TabIndex = 14
+        Me.CheckBox17.Text = "Word wrap"
+        Me.CheckBox17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.CheckBox17.UseVisualStyleBackColor = True
+        '
+        'TextBox13
+        '
+        Me.TextBox13.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox13.Location = New System.Drawing.Point(54, 80)
+        Me.TextBox13.Multiline = True
+        Me.TextBox13.Name = "TextBox13"
+        Me.TextBox13.ReadOnly = True
+        Me.TextBox13.ScrollBars = System.Windows.Forms.ScrollBars.Both
+        Me.TextBox13.Size = New System.Drawing.Size(644, 285)
+        Me.TextBox13.TabIndex = 13
+        '
+        'FinalReviewHeader
+        '
+        Me.FinalReviewHeader.AutoEllipsis = True
+        Me.FinalReviewHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FinalReviewHeader.Location = New System.Drawing.Point(16, 17)
+        Me.FinalReviewHeader.Name = "FinalReviewHeader"
+        Me.FinalReviewHeader.Size = New System.Drawing.Size(708, 51)
+        Me.FinalReviewHeader.TabIndex = 12
+        Me.FinalReviewHeader.Text = "Review your settings for the unattended answer file"
+        '
+        'ComponentPanel
+        '
+        Me.ComponentPanel.Controls.Add(Me.Label52)
+        Me.ComponentPanel.Controls.Add(Me.ComponentHeader)
+        Me.ComponentPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComponentPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ComponentPanel.Name = "ComponentPanel"
+        Me.ComponentPanel.Size = New System.Drawing.Size(752, 449)
+        Me.ComponentPanel.TabIndex = 13
+        '
+        'Label52
+        '
+        Me.Label52.AutoEllipsis = True
+        Me.Label52.Location = New System.Drawing.Point(107, 156)
+        Me.Label52.Name = "Label52"
+        Me.Label52.Size = New System.Drawing.Size(558, 66)
+        Me.Label52.TabIndex = 12
+        Me.Label52.Text = "This action will be added in the future. For now, you can use the editor mode to " & _
+    "add more components. You can continue."
+        '
+        'ComponentHeader
+        '
+        Me.ComponentHeader.AutoEllipsis = True
+        Me.ComponentHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComponentHeader.Location = New System.Drawing.Point(16, 17)
+        Me.ComponentHeader.Name = "ComponentHeader"
+        Me.ComponentHeader.Size = New System.Drawing.Size(708, 51)
+        Me.ComponentHeader.TabIndex = 11
+        Me.ComponentHeader.Text = "Configure additional components"
+        '
+        'PostInstallPanel
+        '
+        Me.PostInstallPanel.Controls.Add(Me.Label51)
+        Me.PostInstallPanel.Controls.Add(Me.PostInstallHeader)
+        Me.PostInstallPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PostInstallPanel.Location = New System.Drawing.Point(0, 0)
+        Me.PostInstallPanel.Name = "PostInstallPanel"
+        Me.PostInstallPanel.Size = New System.Drawing.Size(752, 449)
+        Me.PostInstallPanel.TabIndex = 12
+        '
+        'Label51
+        '
+        Me.Label51.AutoSize = True
+        Me.Label51.Location = New System.Drawing.Point(107, 156)
+        Me.Label51.Name = "Label51"
+        Me.Label51.Size = New System.Drawing.Size(279, 13)
+        Me.Label51.TabIndex = 11
+        Me.Label51.Text = "This action will be added in the future. You can continue."
+        '
+        'PostInstallHeader
+        '
+        Me.PostInstallHeader.AutoEllipsis = True
+        Me.PostInstallHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PostInstallHeader.Location = New System.Drawing.Point(16, 17)
+        Me.PostInstallHeader.Name = "PostInstallHeader"
+        Me.PostInstallHeader.Size = New System.Drawing.Size(708, 51)
+        Me.PostInstallHeader.TabIndex = 10
+        Me.PostInstallHeader.Text = "What will be run after installation?"
+        '
         'SystemTelemetryPanel
         '
         Me.SystemTelemetryPanel.Controls.Add(Me.TelemetryOptionsPanel)
@@ -531,6 +648,47 @@ Partial Class NewUnattendWiz
         Me.SystemTelemetryPanel.Name = "SystemTelemetryPanel"
         Me.SystemTelemetryPanel.Size = New System.Drawing.Size(752, 449)
         Me.SystemTelemetryPanel.TabIndex = 11
+        '
+        'TelemetryOptionsPanel
+        '
+        Me.TelemetryOptionsPanel.Controls.Add(Me.RadioButton27)
+        Me.TelemetryOptionsPanel.Controls.Add(Me.RadioButton26)
+        Me.TelemetryOptionsPanel.Location = New System.Drawing.Point(59, 80)
+        Me.TelemetryOptionsPanel.Name = "TelemetryOptionsPanel"
+        Me.TelemetryOptionsPanel.Size = New System.Drawing.Size(635, 93)
+        Me.TelemetryOptionsPanel.TabIndex = 13
+        '
+        'RadioButton27
+        '
+        Me.RadioButton27.AutoSize = True
+        Me.RadioButton27.Location = New System.Drawing.Point(29, 45)
+        Me.RadioButton27.Name = "RadioButton27"
+        Me.RadioButton27.Size = New System.Drawing.Size(106, 17)
+        Me.RadioButton27.TabIndex = 0
+        Me.RadioButton27.Text = "Enable telemetry"
+        Me.RadioButton27.UseVisualStyleBackColor = True
+        '
+        'RadioButton26
+        '
+        Me.RadioButton26.AutoSize = True
+        Me.RadioButton26.Checked = True
+        Me.RadioButton26.Location = New System.Drawing.Point(29, 22)
+        Me.RadioButton26.Name = "RadioButton26"
+        Me.RadioButton26.Size = New System.Drawing.Size(108, 17)
+        Me.RadioButton26.TabIndex = 0
+        Me.RadioButton26.TabStop = True
+        Me.RadioButton26.Text = "Disable telemetry"
+        Me.RadioButton26.UseVisualStyleBackColor = True
+        '
+        'CheckBox16
+        '
+        Me.CheckBox16.AutoSize = True
+        Me.CheckBox16.Location = New System.Drawing.Point(65, 392)
+        Me.CheckBox16.Name = "CheckBox16"
+        Me.CheckBox16.Size = New System.Drawing.Size(276, 17)
+        Me.CheckBox16.TabIndex = 12
+        Me.CheckBox16.Text = "I want to configure these settings during installation"
+        Me.CheckBox16.UseVisualStyleBackColor = True
         '
         'SystemTelemetryHeader
         '
@@ -600,7 +758,7 @@ Partial Class NewUnattendWiz
         'ComboBox13
         '
         Me.ComboBox13.FormattingEnabled = True
-        Me.ComboBox13.Items.AddRange(New Object() {"Open (least secure)", "WPA2-PSK", "WPA3-PSK"})
+        Me.ComboBox13.Items.AddRange(New Object() {"Open (least secure)", "WPA2-PSK", "WPA3-SAE"})
         Me.ComboBox13.Location = New System.Drawing.Point(277, 66)
         Me.ComboBox13.Name = "ComboBox13"
         Me.ComboBox13.Size = New System.Drawing.Size(221, 21)
@@ -2707,6 +2865,18 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelFooter.Size = New System.Drawing.Size(752, 40)
         Me.ExpressPanelFooter.TabIndex = 0
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoEllipsis = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(10, 14)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(436, 13)
+        Me.LinkLabel1.TabIndex = 2
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Go to Christoph Schneegans' Unattended Answer File Generator"
+        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -2786,176 +2956,6 @@ Partial Class NewUnattendWiz
         '
         Me.OpenFileDialog1.Filter = "All Files|*.*"
         '
-        'CheckBox16
-        '
-        Me.CheckBox16.AutoSize = True
-        Me.CheckBox16.Location = New System.Drawing.Point(65, 392)
-        Me.CheckBox16.Name = "CheckBox16"
-        Me.CheckBox16.Size = New System.Drawing.Size(276, 17)
-        Me.CheckBox16.TabIndex = 12
-        Me.CheckBox16.Text = "I want to configure these settings during installation"
-        Me.CheckBox16.UseVisualStyleBackColor = True
-        '
-        'TelemetryOptionsPanel
-        '
-        Me.TelemetryOptionsPanel.Controls.Add(Me.RadioButton27)
-        Me.TelemetryOptionsPanel.Controls.Add(Me.RadioButton26)
-        Me.TelemetryOptionsPanel.Location = New System.Drawing.Point(59, 80)
-        Me.TelemetryOptionsPanel.Name = "TelemetryOptionsPanel"
-        Me.TelemetryOptionsPanel.Size = New System.Drawing.Size(635, 93)
-        Me.TelemetryOptionsPanel.TabIndex = 13
-        '
-        'RadioButton26
-        '
-        Me.RadioButton26.AutoSize = True
-        Me.RadioButton26.Checked = True
-        Me.RadioButton26.Location = New System.Drawing.Point(29, 22)
-        Me.RadioButton26.Name = "RadioButton26"
-        Me.RadioButton26.Size = New System.Drawing.Size(108, 17)
-        Me.RadioButton26.TabIndex = 0
-        Me.RadioButton26.TabStop = True
-        Me.RadioButton26.Text = "Disable telemetry"
-        Me.RadioButton26.UseVisualStyleBackColor = True
-        '
-        'RadioButton27
-        '
-        Me.RadioButton27.AutoSize = True
-        Me.RadioButton27.Location = New System.Drawing.Point(29, 45)
-        Me.RadioButton27.Name = "RadioButton27"
-        Me.RadioButton27.Size = New System.Drawing.Size(106, 17)
-        Me.RadioButton27.TabIndex = 0
-        Me.RadioButton27.Text = "Enable telemetry"
-        Me.RadioButton27.UseVisualStyleBackColor = True
-        '
-        'PostInstallPanel
-        '
-        Me.PostInstallPanel.Controls.Add(Me.Label51)
-        Me.PostInstallPanel.Controls.Add(Me.PostInstallHeader)
-        Me.PostInstallPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PostInstallPanel.Location = New System.Drawing.Point(0, 0)
-        Me.PostInstallPanel.Name = "PostInstallPanel"
-        Me.PostInstallPanel.Size = New System.Drawing.Size(752, 449)
-        Me.PostInstallPanel.TabIndex = 12
-        '
-        'PostInstallHeader
-        '
-        Me.PostInstallHeader.AutoEllipsis = True
-        Me.PostInstallHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.PostInstallHeader.Location = New System.Drawing.Point(16, 17)
-        Me.PostInstallHeader.Name = "PostInstallHeader"
-        Me.PostInstallHeader.Size = New System.Drawing.Size(708, 51)
-        Me.PostInstallHeader.TabIndex = 10
-        Me.PostInstallHeader.Text = "What will be run after installation?"
-        '
-        'Label51
-        '
-        Me.Label51.AutoSize = True
-        Me.Label51.Location = New System.Drawing.Point(107, 156)
-        Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(279, 13)
-        Me.Label51.TabIndex = 11
-        Me.Label51.Text = "This action will be added in the future. You can continue."
-        '
-        'ComponentPanel
-        '
-        Me.ComponentPanel.Controls.Add(Me.Label52)
-        Me.ComponentPanel.Controls.Add(Me.ComponentHeader)
-        Me.ComponentPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComponentPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ComponentPanel.Name = "ComponentPanel"
-        Me.ComponentPanel.Size = New System.Drawing.Size(752, 449)
-        Me.ComponentPanel.TabIndex = 13
-        '
-        'ComponentHeader
-        '
-        Me.ComponentHeader.AutoEllipsis = True
-        Me.ComponentHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComponentHeader.Location = New System.Drawing.Point(16, 17)
-        Me.ComponentHeader.Name = "ComponentHeader"
-        Me.ComponentHeader.Size = New System.Drawing.Size(708, 51)
-        Me.ComponentHeader.TabIndex = 11
-        Me.ComponentHeader.Text = "Configure additional components"
-        '
-        'Label52
-        '
-        Me.Label52.AutoEllipsis = True
-        Me.Label52.Location = New System.Drawing.Point(107, 156)
-        Me.Label52.Name = "Label52"
-        Me.Label52.Size = New System.Drawing.Size(558, 66)
-        Me.Label52.TabIndex = 12
-        Me.Label52.Text = "This action will be added in the future. For now, you can use the editor mode to " & _
-    "add more components. You can continue."
-        '
-        'FinalReviewPanel
-        '
-        Me.FinalReviewPanel.Controls.Add(Me.Label54)
-        Me.FinalReviewPanel.Controls.Add(Me.CheckBox17)
-        Me.FinalReviewPanel.Controls.Add(Me.TextBox13)
-        Me.FinalReviewPanel.Controls.Add(Me.FinalReviewHeader)
-        Me.FinalReviewPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FinalReviewPanel.Location = New System.Drawing.Point(0, 0)
-        Me.FinalReviewPanel.Name = "FinalReviewPanel"
-        Me.FinalReviewPanel.Size = New System.Drawing.Size(752, 449)
-        Me.FinalReviewPanel.TabIndex = 14
-        '
-        'FinalReviewHeader
-        '
-        Me.FinalReviewHeader.AutoEllipsis = True
-        Me.FinalReviewHeader.Font = New System.Drawing.Font("Franklin Gothic Medium", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinalReviewHeader.Location = New System.Drawing.Point(16, 17)
-        Me.FinalReviewHeader.Name = "FinalReviewHeader"
-        Me.FinalReviewHeader.Size = New System.Drawing.Size(708, 51)
-        Me.FinalReviewHeader.TabIndex = 12
-        Me.FinalReviewHeader.Text = "Review your settings for the unattended answer file"
-        '
-        'TextBox13
-        '
-        Me.TextBox13.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox13.Location = New System.Drawing.Point(54, 80)
-        Me.TextBox13.Multiline = True
-        Me.TextBox13.Name = "TextBox13"
-        Me.TextBox13.ReadOnly = True
-        Me.TextBox13.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.TextBox13.Size = New System.Drawing.Size(644, 285)
-        Me.TextBox13.TabIndex = 13
-        '
-        'CheckBox17
-        '
-        Me.CheckBox17.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox17.AutoSize = True
-        Me.CheckBox17.Checked = True
-        Me.CheckBox17.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox17.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CheckBox17.Location = New System.Drawing.Point(628, 372)
-        Me.CheckBox17.Name = "CheckBox17"
-        Me.CheckBox17.Size = New System.Drawing.Size(70, 23)
-        Me.CheckBox17.TabIndex = 14
-        Me.CheckBox17.Text = "Word wrap"
-        Me.CheckBox17.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.CheckBox17.UseVisualStyleBackColor = True
-        '
-        'Label54
-        '
-        Me.Label54.AutoEllipsis = True
-        Me.Label54.Location = New System.Drawing.Point(50, 398)
-        Me.Label54.Name = "Label54"
-        Me.Label54.Size = New System.Drawing.Size(648, 35)
-        Me.Label54.TabIndex = 15
-        Me.Label54.Text = "If something is not right, you will need to go back to that page in order to chan" & _
-    "ge the setting. Do not worry: other settings will be kept intact"
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.AutoEllipsis = True
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(10, 14)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(436, 13)
-        Me.LinkLabel1.TabIndex = 2
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Go to Christoph Schneegans' Unattended Answer File Generator"
-        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2986,8 +2986,15 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.FinalReviewPanel.ResumeLayout(False)
+        Me.FinalReviewPanel.PerformLayout()
+        Me.ComponentPanel.ResumeLayout(False)
+        Me.PostInstallPanel.ResumeLayout(False)
+        Me.PostInstallPanel.PerformLayout()
         Me.SystemTelemetryPanel.ResumeLayout(False)
         Me.SystemTelemetryPanel.PerformLayout()
+        Me.TelemetryOptionsPanel.ResumeLayout(False)
+        Me.TelemetryOptionsPanel.PerformLayout()
         Me.NetworkConnectionPanel.ResumeLayout(False)
         Me.NetworkConnectionPanel.PerformLayout()
         Me.ManualNetworkConfigPanel.ResumeLayout(False)
@@ -3081,13 +3088,6 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.TelemetryOptionsPanel.ResumeLayout(False)
-        Me.TelemetryOptionsPanel.PerformLayout()
-        Me.PostInstallPanel.ResumeLayout(False)
-        Me.PostInstallPanel.PerformLayout()
-        Me.ComponentPanel.ResumeLayout(False)
-        Me.FinalReviewPanel.ResumeLayout(False)
-        Me.FinalReviewPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

@@ -606,8 +606,8 @@ Public Class NewUnattendWiz
                         TextBox13.AppendText("    - Authentication mode: open" & CrLf)
                     Case WiFiAuthenticationMode.WPA2_PSK
                         TextBox13.AppendText("    - Authentication mode: WPA2-Personal" & CrLf)
-                    Case WiFiAuthenticationMode.WPA3_PSK
-                        TextBox13.AppendText("    - Authentication mode: WPA3-Personal" & CrLf)
+                    Case WiFiAuthenticationMode.WPA3_SAE
+                        TextBox13.AppendText("    - Authentication mode: WPA3 (Simultaneous Authentication of Equals)" & CrLf)
                 End Select
                 TextBox13.AppendText("    - Password: " & SelectedNetworkConfiguration.Password & CrLf)
             End If
