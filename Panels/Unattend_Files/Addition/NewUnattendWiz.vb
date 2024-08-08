@@ -415,7 +415,7 @@ Public Class NewUnattendWiz
             End If
         End If
         ListBox1.SelectedIndex = 1
-        ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
+        ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
         TimeZonePageTimer.Enabled = True
         ' Modify script contents of disk config for sample DP Script
@@ -426,13 +426,18 @@ Public Class NewUnattendWiz
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
     End Sub
 
+    Sub SelectTreeNode(NodeIndex As Integer)
+        StepsTreeView.SelectedNode = StepsTreeView.Nodes(NodeIndex)
+        StepsTreeView.Refresh()
+    End Sub
+
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
         If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
             If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
         ElseIf NewPage > CurrentWizardPage.WizardPage AndAlso NewPage = UnattendedWizardPage.Page.ReviewPage Then
             ShowSettingOverview()
         End If
-        DisclaimerPanel.Visible = (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+        WelcomePanel.Visible = (NewPage = UnattendedWizardPage.Page.WelcomePage)
         RegionalSettingsPanel.Visible = (NewPage = UnattendedWizardPage.Page.RegionalPage)
         SysConfigPanel.Visible = (NewPage = UnattendedWizardPage.Page.SysConfigPage)
         TimeZonePanel.Visible = (NewPage = UnattendedWizardPage.Page.TimeZonePage)
@@ -450,11 +455,41 @@ Public Class NewUnattendWiz
         UnattendProgressPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProgressPage)
         FinishPanel.Visible = (NewPage = UnattendedWizardPage.Page.FinishPage)
         CurrentWizardPage.WizardPage = NewPage
-        Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
+        Next_Button.Enabled = (Not NewPage <> UnattendedWizardPage.Page.FinishPage) OrElse (Not NewPage + 1 >= UnattendedWizardPage.PageCount)
         Cancel_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.FinishPage)
-        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage) And Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.WelcomePage) And Not (NewPage = UnattendedWizardPage.Page.FinishPage)
 
         Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
+
+        ' Select tree nodes according to page
+        Select Case CurrentWizardPage.WizardPage
+            Case UnattendedWizardPage.Page.WelcomePage
+                SelectTreeNode(0)
+            Case UnattendedWizardPage.Page.RegionalPage
+                SelectTreeNode(1)
+            Case UnattendedWizardPage.Page.SysConfigPage
+                SelectTreeNode(2)
+            Case UnattendedWizardPage.Page.TimeZonePage
+                SelectTreeNode(3)
+            Case UnattendedWizardPage.Page.DiskConfigPage
+                SelectTreeNode(4)
+            Case UnattendedWizardPage.Page.ProductKeyPage
+                SelectTreeNode(5)
+            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockdownPage
+                SelectTreeNode(6)
+            Case UnattendedWizardPage.Page.VirtualMachinePage
+                SelectTreeNode(7)
+            Case UnattendedWizardPage.Page.NetworkConnectionsPage
+                SelectTreeNode(8)
+            Case UnattendedWizardPage.Page.SystemTelemetryPage
+                SelectTreeNode(9)
+            Case UnattendedWizardPage.Page.PostInstallPage
+                SelectTreeNode(10)
+            Case UnattendedWizardPage.Page.ComponentPage
+                SelectTreeNode(11)
+            Case UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage
+                SelectTreeNode(12)
+        End Select
 
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
@@ -739,7 +774,11 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
-        ChangePage(CurrentWizardPage.WizardPage + 1)
+        If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.FinishPage Then
+            Close()
+        Else
+            ChangePage(CurrentWizardPage.WizardPage + 1)
+        End If
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
@@ -1354,6 +1393,7 @@ Public Class NewUnattendWiz
                 MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & UnattendGen.ExitCode)
                 e.Cancel = True
             End If
+            ReportMessage("Generation has completed", 100)
         Catch ex As Exception
             If UnattendGen.ExitCode <> 0 Then
                 MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error: " & ex.Message)
@@ -1390,5 +1430,49 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & SaveTarget & Quote)
+    End Sub
+
+    Private Sub NewUnattendWiz_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If UnattendGeneratorBW.IsBusy Then
+            e.Cancel = True
+            Beep()
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs) Handles StepsTreeView.DrawNode
+        ' Determine the custom background color
+        Dim customBackColor As Color = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(31, 31, 31), Color.FromArgb(239, 239, 242))
+
+        ' Determine the custom foreground color based on the custom background color
+        Dim customForeColor As Color = If(customBackColor = Color.FromArgb(31, 31, 31), Color.White, Color.Black)
+
+        ' Check if the node is selected
+        If (e.State And TreeNodeStates.Selected) <> 0 Then
+            ' Draw the background with the highlight color
+            e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds)
+            ' Draw the text with the highlighted text color and vertically centered
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, If(e.Node.NodeFont, e.Node.TreeView.Font), e.Bounds, SystemColors.HighlightText, TextFormatFlags.VerticalCenter)
+        Else
+            ' Draw the background with the custom color for unselected nodes
+            Using backgroundBrush As New SolidBrush(customBackColor)
+                e.Graphics.FillRectangle(backgroundBrush, e.Bounds)
+            End Using
+            ' Draw the text with the custom foreground color and vertically centered
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, If(e.Node.NodeFont, e.Node.TreeView.Font), e.Bounds, customForeColor, TextFormatFlags.VerticalCenter)
+        End If
+
+        ' If the node has focus, draw the focus rectangle
+        If (e.State And TreeNodeStates.Focused) <> 0 Then
+            Using focusPen As New Pen(Color.Black)
+                focusPen.DashStyle = Drawing2D.DashStyle.Dot
+                Dim focusBounds As Rectangle = e.Bounds
+                focusBounds.Size = New Size(focusBounds.Width - 1, focusBounds.Height - 1)
+                e.Graphics.DrawRectangle(focusPen, focusBounds)
+            End Using
+        End If
+
+        ' Signal that the node has been drawn
+        e.DrawDefault = False
     End Sub
 End Class

@@ -117,6 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WelcomeDesc.Text" xml:space="preserve">
+    <value>The unattended answer file creation wizard lets you create unattended answer files using intuitive interfaces. This wizard is suitable for those people who have never created unattended answer files before or do not want to use a text editor.
+
+In this wizard, you will be able to configure regional settings, user accounts, wireless settings, virtual machine support, and more. If you need to add more functionality to your file after creating it, you can use the Editor mode, which you can access by clicking the button on the bottom left.
+
+Special thanks to Christoph Schneegans for making the library that makes this wizard possible. You can also use his generator website to configure more settings, like post-installation scripts or Windows Defender Application Control rules.
+
+
+To begin creating your answer file, click Next.</value>
+  </data>
   <data name="Scintilla2.Text" xml:space="preserve">
     <value>REM EXAMPLE SCRIPT. PLEASE MODIFY
 REM -----------------------------------------
@@ -134,18 +144,6 @@ FORMAT QUICK FS=NTFS LABEL="Recovery"
 SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
-  <data name="UnderConstructionDesc.Text" xml:space="preserve">
-    <value>The unattended answer file creation wizard is undergoing a major reconstruction. This means that, currently, this wizard is not complete and some things may be changed in the final version.
-
-Please provide feedback about the design and functionality of this task. Your comments are important.
-
-
-Thanks,
-CodingWonders</value>
-  </data>
-  <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

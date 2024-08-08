@@ -3,7 +3,7 @@
     Public Class UnattendedWizardPage
 
         Public Enum Page As Integer
-            DisclaimerPage = 0
+            WelcomePage = 0
             RegionalPage = 1
             SysConfigPage = 2
             TimeZonePage = 3
