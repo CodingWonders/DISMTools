@@ -5,6 +5,7 @@ Imports System.Threading
 Imports ScintillaNET
 Imports DISMTools.Elements
 Imports Microsoft.Dism
+Imports System.Net
 
 Public Class NewUnattendWiz
 
@@ -12,6 +13,9 @@ Public Class NewUnattendWiz
     Dim IsInExpress As Boolean = True
     Dim CurrentWizardPage As New UnattendedWizardPage()
     Dim VerifyInPages As New List(Of UnattendedWizardPage.Page)
+
+    Dim DotNetRuntimeSupported As Boolean
+    Dim PreferSelfContained As Boolean
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -336,6 +340,29 @@ Public Class NewUnattendWiz
 
     End Sub
 
+    Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
+        If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
+            ' Self-contained version detected
+            DotNetRuntimeSupported = True
+            PreferSelfContained = True
+            Exit Sub
+        End If
+        If Not Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet")) Then
+            DotNetRuntimeSupported = False
+            Exit Sub
+        End If
+        If Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\sdk", SDKVersion)) Then
+            ' .NET SDK exists, skip further checks
+            DotNetRuntimeSupported = True
+            Exit Sub
+        End If
+        If My.Computer.FileSystem.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Count > 0 Then
+            ' .NET Runtime exists, skip further checks
+            DotNetRuntimeSupported = True
+            Exit Sub
+        End If
+    End Sub
+
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -504,6 +531,47 @@ Public Class NewUnattendWiz
         If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
         ' Set default auth tech to WPA2
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
+
+        ' Detect .NET runtimes/SDKs
+        DetectDotNetRuntime("8.0.303", "8.0")
+        If Not DotNetRuntimeSupported Then
+            If MsgBox("This wizard requires the .NET 8 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+                Try
+                    ' Download the WIM Explorer and run it while passing the image as an argument
+                    If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
+                        Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
+                    End If
+                    Using UnattClient As New WebClient()
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                        Dim contents As String = ""
+                        Try
+                            contents = UnattClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/UnattendGen/master/DISMTools-Install.ps1")
+                        Catch ex As WebException
+                            MessageBox.Show("We couldn't download UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Status.ToString())
+                            Close()
+                        End Try
+                        If contents <> "" Then
+                            File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
+                        End If
+                    End Using
+                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                        ' Run installer
+                        Dim UAProc As New Process()
+                        UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                        UAProc.StartInfo.WorkingDirectory = Application.StartupPath
+                        UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & My.Application.Info.Version.Revision & Quote
+                        UAProc.Start()
+                        UAProc.WaitForExit()
+                    End If
+                    PreferSelfContained = True
+                Catch ex As Exception
+                    MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Message)
+                    Close()
+                End Try
+            Else
+                Close()
+            End If
+        End If
     End Sub
 
     Sub SelectTreeNode(NodeIndex As Integer)
@@ -1297,11 +1365,21 @@ Public Class NewUnattendWiz
         Dim UnattendGen As New Process()
         ' Get most appropriate binary of UnattendGen
         If Environment.Is64BitOperatingSystem Then
-            UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64\unattendgen.exe")
-            UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64")
+            If PreferSelfContained Then
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64")
+            Else
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64")
+            End If
         Else
-            UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86\unattendgen.exe")
-            UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
+            If PreferSelfContained Then
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86")
+            Else
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
+            End If
         End If
         UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
         Try
