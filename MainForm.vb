@@ -13586,11 +13586,6 @@ Public Class MainForm
         ImgWim2Esd.ShowDialog()
     End Sub
 
-    Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
-        ' Major reconstruction ahead
-        NewUnattendWiz.Show()
-    End Sub
-
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
         ImgCapture.ShowDialog()
     End Sub
@@ -19657,6 +19652,17 @@ Public Class MainForm
     End Sub
 
     Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
-        SetLayeredDriverDialog.Showdialog()
+        SetLayeredDriverDialog.ShowDialog()
+    End Sub
+
+    Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
+        If isProjectLoaded And Not (OnlineManagement Or OfflineManagement) Then
+            UnattendMgr.TextBox1.Text = Path.Combine(projPath, "unattend_xml")
+        End If
+        UnattendMgr.Show()
+    End Sub
+
+    Private Sub UnattendedAnswerFileCreatorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileCreatorToolStripMenuItem.Click
+        NewUnattendWiz.Show()
     End Sub
 End Class
