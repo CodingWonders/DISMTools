@@ -563,6 +563,13 @@ Public Class NewUnattendWiz
                         UAProc.Start()
                         UAProc.WaitForExit()
                     End If
+                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                        Try
+                            File.Delete(Application.StartupPath & "\setup.ps1")
+                        Catch ex As Exception
+                            ' Don't delete it
+                        End Try
+                    End If
                     PreferSelfContained = True
                 Catch ex As Exception
                     MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Message)
