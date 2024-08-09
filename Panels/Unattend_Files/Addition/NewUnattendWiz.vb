@@ -648,6 +648,13 @@ Public Class NewUnattendWiz
 
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
+            ' Detect if a project has been loaded
+            If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+                SaveFileDialog1.InitialDirectory = Path.Combine(MainForm.projPath, "unattend_xml")
+            Else
+                SaveFileDialog1.InitialDirectory = ""
+            End If
+            SaveFileDialog1.FileName = "unattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
             SaveFileDialog1.ShowDialog()
             UnattendGeneratorBW.RunWorkerAsync()
         ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
