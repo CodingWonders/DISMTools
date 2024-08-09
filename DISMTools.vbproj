@@ -570,6 +570,12 @@
     <Compile Include="Panels\Img_Ops\Switch\SingleImageIndexError.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.Designer.vb">
+      <DependentUpon>ApplyUnattendFile.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\WinPE\SetScratchSpace.Designer.vb">
       <DependentUpon>SetScratchSpace.vb</DependentUpon>
     </Compile>
@@ -963,6 +969,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\SingleImageIndexError.resx">
       <DependentUpon>SingleImageIndexError.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.resx">
+      <DependentUpon>ApplyUnattendFile.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetScratchSpace.resx">
       <DependentUpon>SetScratchSpace.vb</DependentUpon>

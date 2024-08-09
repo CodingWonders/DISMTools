@@ -32,7 +32,11 @@ Public Class UnattendMgr
                 If folderPath.Contains("unattend_xml") Then
                     UnattendFiles = Directory.GetFiles(folderPath, "*.xml", SearchOption.AllDirectories)
                 Else
-                    UnattendFiles = Directory.GetFiles(Path.Combine(folderPath, "unattend_xml"), "*.xml", SearchOption.AllDirectories)
+                    If Directory.Exists(Path.Combine(folderPath, "unattend_xml")) Then
+                        UnattendFiles = Directory.GetFiles(Path.Combine(folderPath, "unattend_xml"), "*.xml", SearchOption.AllDirectories)
+                    Else
+                        UnattendFiles = Directory.GetFiles(folderPath, "*.xml", SearchOption.AllDirectories)
+                    End If
                 End If
             Else
                 Throw New Exception("The folder path does not exist")
@@ -60,5 +64,31 @@ Public Class UnattendMgr
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & Path.Combine(TextBox1.Text, ListView1.FocusedItem.SubItems(0).Text) & Quote)
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        ApplyUnattendFile.TextBox1.Text = Path.Combine(TextBox1.Text, ListView1.FocusedItem.SubItems(0).Text)
+        WindowState = FormWindowState.Minimized
+        ApplyUnattendFile.ShowDialog(MainForm)
+        WindowState = FormWindowState.Normal
+    End Sub
+
+    Private Sub UnattendMgr_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+            BackColor = Color.FromArgb(31, 31, 31)
+            ForeColor = Color.White
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
+        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
+            BackColor = Color.FromArgb(238, 238, 242)
+            ForeColor = Color.Black
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
+        End If
+        ListView1.ForeColor = ForeColor
+        TextBox1.ForeColor = ForeColor
+        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
     End Sub
 End Class

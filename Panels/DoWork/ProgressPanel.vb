@@ -473,6 +473,9 @@ Public Class ProgressPanel
     ' ImportSourceInt = 2
     Public DrvImport_SourceDisk As String                   ' The disk drive that will act as the source for the driver import
 
+    ' OperationNum: 79
+    Public UnattendedFile As String                         ' The path of the unattended answer file
+
     ' OperationNum: 83
     Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
 
@@ -5185,6 +5188,52 @@ Public Class ProgressPanel
                 Catch ex As Exception
                     LogView.AppendText(CrLf & "We couldn't delete the temporary export directory. You'll need to delete the " & Quote & "export_temp" & Quote & " directory manually.")
                 End Try
+            End If
+        ElseIf opNum = 79 Then
+            ' Translations will not be available for 0.5.1
+
+            allTasks.Text = "Applying unattended answer file..."
+            currentTask.Text = "Applying specified unattended answer file to the target image..."
+            LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
+                               "- Unattended answer file: " & UnattendedFile)
+
+            ' Initialize command
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                        Case "ITA"
+                            currentTask.Text = "Raccolta del livello di errore..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+                Case 5
+                    currentTask.Text = "Raccolta del livello di errore..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 83 Then
             Select Case Language

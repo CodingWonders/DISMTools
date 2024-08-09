@@ -27,14 +27,14 @@ Partial Class UnattendMgr
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.ListView1 = New System.Windows.Forms.ListView()
-        Me.ActionsTLP = New System.Windows.Forms.TableLayoutPanel()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ActionsTLP = New System.Windows.Forms.TableLayoutPanel()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.Button2 = New System.Windows.Forms.Button()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ActionsTLP.SuspendLayout()
         Me.SuspendLayout()
@@ -74,12 +74,33 @@ Partial Class UnattendMgr
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
+        Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(12, 38)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(984, 476)
         Me.ListView1.TabIndex = 3
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "File name"
+        Me.ColumnHeader1.Width = 431
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Created"
+        Me.ColumnHeader2.Width = 168
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Last modified"
+        Me.ColumnHeader3.Width = 144
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Last accessed"
+        Me.ColumnHeader4.Width = 145
         '
         'ActionsTLP
         '
@@ -135,26 +156,6 @@ Partial Class UnattendMgr
         Me.Button2.TabIndex = 0
         Me.Button2.Text = "Open file"
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'ColumnHeader1
-        '
-        Me.ColumnHeader1.Text = "File name"
-        Me.ColumnHeader1.Width = 431
-        '
-        'ColumnHeader2
-        '
-        Me.ColumnHeader2.Text = "Created"
-        Me.ColumnHeader2.Width = 168
-        '
-        'ColumnHeader3
-        '
-        Me.ColumnHeader3.Text = "Last modified"
-        Me.ColumnHeader3.Width = 144
-        '
-        'ColumnHeader4
-        '
-        Me.ColumnHeader4.Text = "Last accessed"
-        Me.ColumnHeader4.Width = 145
         '
         'FolderBrowserDialog1
         '

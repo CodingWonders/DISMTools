@@ -1604,6 +1604,18 @@ Public Class NewUnattendWiz
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & SaveTarget & Quote)
     End Sub
 
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+            ApplyUnattendFile.TextBox1.Text = SaveTarget
+            WindowState = FormWindowState.Minimized
+            ApplyUnattendFile.ShowDialog(MainForm)
+            WindowState = FormWindowState.Normal
+        Else
+            MsgBox("You need to load a project in order to apply this file.", vbOKOnly + vbExclamation, Text)
+            Exit Sub
+        End If
+    End Sub
+
     Private Sub NewUnattendWiz_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If UnattendGeneratorBW.IsBusy Then
             e.Cancel = True
