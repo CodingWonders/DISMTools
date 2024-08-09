@@ -15,7 +15,7 @@
     Public Enum WiFiAuthenticationMode As Integer
         Open = 0
         WPA2_PSK = 1
-        WPA3_PSK = 2
+        WPA3_SAE = 2
     End Enum
 
     Public Class WirelessValidator

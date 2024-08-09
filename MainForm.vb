@@ -5992,6 +5992,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
                         CommandShellToolStripMenuItem.Text = "Command Console"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
                         ReportManagerToolStripMenuItem.Text = "Report manager"
                         MountedImageManagerTSMI.Text = "Mounted image manager"
                         CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
@@ -6366,6 +6367,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
                         CommandShellToolStripMenuItem.Text = "Consola de comandos"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
                         ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                         MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
@@ -6740,6 +6742,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remonter l'image avec les droits d'écriture"
                         CommandShellToolStripMenuItem.Text = "Console de commande"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
                         ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                         MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                         CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
@@ -7114,6 +7117,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagem com permissões de escrita"
                         CommandShellToolStripMenuItem.Text = "Consola de comandos"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
                         ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                         MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
@@ -7486,7 +7490,8 @@ Public Class MainForm
                         MergeSWM.Text = "Unire i file SWM..."
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Rimonta l'immagine con i permessi di scrittura"
                         CommandShellToolStripMenuItem.Text = "Console dei comandi"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiato"
+                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
                         ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                         MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                         CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
@@ -7866,6 +7871,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
                 CommandShellToolStripMenuItem.Text = "Command Console"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
                 CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
@@ -8240,6 +8246,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
                 CommandShellToolStripMenuItem.Text = "Consola de comandos"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
@@ -8613,6 +8620,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remonter l'image avec les droits d'écriture"
                 CommandShellToolStripMenuItem.Text = "Console de commande"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
                 ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                 MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                 CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
@@ -8987,6 +8995,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagem com permissões de escrita"
                 CommandShellToolStripMenuItem.Text = "Consola de comandos"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
                 ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                 MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
@@ -9359,7 +9368,8 @@ Public Class MainForm
                 MergeSWM.Text = "Unire i file SWM..."
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Rimonta l'immagine con i permessi di scrittura"
                 CommandShellToolStripMenuItem.Text = "Console dei comandi"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiato"
+                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
                 ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                 MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                 CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
@@ -13584,11 +13594,6 @@ Public Class MainForm
 
     Private Sub WIMESDToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles WIMESDToolStripMenuItem.Click
         ImgWim2Esd.ShowDialog()
-    End Sub
-
-    Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
-        ' Major reconstruction ahead
-        NewUnattendWiz.Show()
     End Sub
 
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
@@ -19657,6 +19662,21 @@ Public Class MainForm
     End Sub
 
     Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
-        SetLayeredDriverDialog.Showdialog()
+        SetLayeredDriverDialog.ShowDialog()
+    End Sub
+
+    Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
+        If isProjectLoaded And Not (OnlineManagement Or OfflineManagement) Then
+            UnattendMgr.TextBox1.Text = Path.Combine(projPath, "unattend_xml")
+        End If
+        UnattendMgr.Show()
+    End Sub
+
+    Private Sub UnattendedAnswerFileCreatorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileCreatorToolStripMenuItem.Click
+        NewUnattendWiz.Show()
+    End Sub
+
+    Private Sub ApplyUnattend_Click(sender As Object, e As EventArgs) Handles ApplyUnattend.Click
+        ApplyUnattendFile.ShowDialog()
     End Sub
 End Class
