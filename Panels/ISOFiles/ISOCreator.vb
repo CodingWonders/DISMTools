@@ -264,6 +264,7 @@ Public Class ISOCreator
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox2.BackColor = Color.FromArgb(31, 31, 31)
             TextBox3.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox4.BackColor = Color.FromArgb(31, 31, 31)
             ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -272,11 +273,13 @@ Public Class ISOCreator
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox2.BackColor = Color.FromArgb(238, 238, 242)
             TextBox3.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox4.BackColor = Color.FromArgb(238, 238, 242)
             ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
+        TextBox4.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
@@ -475,7 +478,7 @@ Public Class ISOCreator
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote
+        ISOCreator.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         success = (ISOCreator.ExitCode = 0)
@@ -584,5 +587,17 @@ Public Class ISOCreator
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         Close()
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        Panel2.Enabled = CheckBox1.Checked
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        OpenFileDialog2.ShowDialog()
+    End Sub
+
+    Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+        TextBox4.Text = OpenFileDialog2.FileName
     End Sub
 End Class

@@ -33,6 +33,7 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string] $arch,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string] $imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath,
+	[Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 4)] [string] $unattendFile,
 	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string] $testArch,
 	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string] $targetPath
 )
@@ -174,6 +175,11 @@ function Start-PEGeneration
 				Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
 				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
 				Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
+				{
+					Write-Host "Unattended answer file has been detected. Copying to ISO file..."
+					Copy-Item -Path "$unattendFile" -Destination "$((Get-Location).Path)\ISOTEMP\media\unattend.xml" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				}
 				Write-Host "Deleting temporary files..."
 				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
 				if ($?)
@@ -715,6 +721,18 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
+	if (Test-Path "$((Get-Location).Path)\unattend.xml" -PathType Leaf)
+	{
+        Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
+		if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):\" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
+		{
+			Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+		}
+		else
+		{
+			Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+		}
+	}
     $driverPath = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
     {
@@ -1080,7 +1098,7 @@ function Start-DismCommand
     #>
     [CmdletBinding(DefaultParameterSetName='Default')]
     param (
-        [Parameter(Mandatory = $true, Position=0)] [ValidateSet('Mount', 'Commit', 'Unmount', 'Apply', 'Add-Package', 'Remove-Package', 'Enable-Feature', 'Disable-Feature', 'Add-Appx', 'Remove-Appx', 'Add-Capability', 'Remove-Capability', 'Add-Driver')] [string] $Verb,
+        [Parameter(Mandatory = $true, Position=0)] [ValidateSet('Mount', 'Commit', 'Unmount', 'Apply', 'Add-Package', 'Remove-Package', 'Enable-Feature', 'Disable-Feature', 'Add-Appx', 'Remove-Appx', 'Add-Capability', 'Remove-Capability', 'Add-Driver', 'UnattendApply')] [string] $Verb,
         [Parameter(Mandatory = $true, Position=1)] [string] $ImagePath,
         # Parameters for mount command
         [Parameter(ParameterSetName='Mount', Mandatory = $true, Position = 2)] [int] $ImageIndex,
@@ -1114,7 +1132,9 @@ function Start-DismCommand
         [Parameter(ParameterSetName='Remove-Capability', Mandatory = $true, Position=2)] [string] $CapabilityRemovalName,
         # Parameters for driver addition
         [Parameter(ParameterSetName='Add-Driver', Mandatory = $true, Position=2)] [string] $DriverAdditionFile,
-        [Parameter(ParameterSetName='Add-Driver', Mandatory = $true, Position=3)] [bool] $DriverAdditionRecurse
+        [Parameter(ParameterSetName='Add-Driver', Mandatory = $true, Position=3)] [bool] $DriverAdditionRecurse,
+		# Parameters for unattended answer file application
+		[Parameter(ParameterSetName='UnattendApply', Mandatory = $true, Position=2)] [string] $unattendPath
     )
     try
     {
@@ -1209,6 +1229,9 @@ function Start-DismCommand
                     }
                 }
             }
+			"UnattendApply" {
+				Apply-WindowsUnattend -Path "$ImagePath" -UnattendPath "$unattendPath" -NoRestart
+			}
             default {
 
             }
