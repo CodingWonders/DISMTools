@@ -85,7 +85,34 @@ Namespace Elements
             End Set
         End Property
 
-        Public Shared Function GetKeyboardDriver(mountDir As String) As LayeredKeyboardDriver
+        Public Shared Function GetKeyboardDriver(mountDir As String, Optional onlineMode As Boolean = False) As LayeredKeyboardDriver
+            If onlineMode Then
+                Try
+                    ' Grab override keyboard type from registry
+                    Dim OverrideKeybReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Services\i8042prt\Parameters", False)
+                    Dim OverrideKeybID As String = OverrideKeybReg.GetValue("OverrideKeyboardIdentifier")
+                    OverrideKeybReg.Close()
+                    ' Check keyboard ID
+                    Select Case OverrideKeybID
+                        Case "PCAT_101KEY"
+                            Return LayeredKeyboardDriver.PCATKey
+                        Case "PCAT_101AKEY"
+                            Return LayeredKeyboardDriver.K_PCATKeyT1
+                        Case "PCAT_101BKEY"
+                            Return LayeredKeyboardDriver.K_PCATKeyT2
+                        Case "PCAT_101CKEY"
+                            Return LayeredKeyboardDriver.K_PCATKeyT3
+                        Case "PCAT_103KEY"
+                            Return LayeredKeyboardDriver.K_103106Key
+                        Case "PCAT_106KEY"
+                            Return LayeredKeyboardDriver.J_106109Key
+                    End Select
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message)
+                    Return LayeredKeyboardDriver.Unknown
+                End Try
+                Return LayeredKeyboardDriver.Unknown
+            End If
             If (mountDir <> "") AndAlso (Directory.Exists(mountDir)) Then
                 Try
                     ' Load the registry key

@@ -139,7 +139,7 @@ Public Class SetLayeredDriverDialog
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
 
         ' Get keyboard driver
-        CurrentKeyboardDriver = KeyboardDrivers.GetKeyboardDriver(MainForm.MountDir)
+        CurrentKeyboardDriver = KeyboardDrivers.GetKeyboardDriver(MainForm.MountDir, MainForm.OnlineManagement)
         Select Case CurrentKeyboardDriver
             Case KeyboardDrivers.LayeredKeyboardDriver.Unknown
                 Label4.Text = "Unknown/Not installed"
