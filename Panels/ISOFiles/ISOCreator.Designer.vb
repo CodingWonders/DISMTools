@@ -147,6 +147,8 @@ Partial Class ISOCreator
         '
         'Panel2
         '
+        Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel2.Controls.Add(Me.Button5)
         Me.Panel2.Controls.Add(Me.TextBox4)
         Me.Panel2.Enabled = False
@@ -177,6 +179,7 @@ Partial Class ISOCreator
         '
         'CheckBox1
         '
+        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoEllipsis = True
         Me.CheckBox1.Location = New System.Drawing.Point(24, 260)
         Me.CheckBox1.Name = "CheckBox1"
