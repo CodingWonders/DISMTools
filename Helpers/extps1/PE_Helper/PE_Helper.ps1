@@ -33,7 +33,7 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string] $arch,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string] $imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath,
-	[Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 4)] [string] $unattendFile,
+	[Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string] $unattendFile,
 	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string] $testArch,
 	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string] $targetPath
 )
