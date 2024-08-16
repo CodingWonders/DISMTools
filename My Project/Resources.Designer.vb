@@ -1948,13 +1948,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The Preinstallation Environment (PE) Helper now checks if there are Windows images present in your ISOs and will exit if none are detected
+        '''- Fixed an issue where detecting keyboard layered drivers would fail when managing active installations
+        '''- Video tutorial detection has been moved to a separate thread, avoiding UI deadlocks on slow wireless network connections (thanks @vadimlitvinenko87 for spotting)
+        '''- Fixed an issue in the capability information dialog where it would show feature state (as opposed to capability state) when searching items
         '''
         '''New features:
         '''
-        '''- You can now set keyboard layered drivers on your Windows image, which are useful for Japanese and Korean keyboards
-        '''- The unattended answer file features have started undergoing a major reconstruction, using the Unattended Answer File Generator from Christoph Schneegans as their new base
-        '''- The Scintilla.NET library has been updated t [resto de la cadena truncado]&quot;;.
+        '''- DockPanelSuite has been upgraded to version 3.1.1
+        '''
+        '''-- Revamped  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
