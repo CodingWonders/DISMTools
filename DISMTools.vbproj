@@ -110,10 +110,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>packages\DockPanelSuite.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2012, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
+      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -570,6 +570,12 @@
     <Compile Include="Panels\Img_Ops\Switch\SingleImageIndexError.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.Designer.vb">
+      <DependentUpon>ApplyUnattendFile.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\WinPE\SetScratchSpace.Designer.vb">
       <DependentUpon>SetScratchSpace.vb</DependentUpon>
     </Compile>
@@ -964,6 +970,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Switch\SingleImageIndexError.resx">
       <DependentUpon>SingleImageIndexError.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.resx">
+      <DependentUpon>ApplyUnattendFile.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetScratchSpace.resx">
       <DependentUpon>SetScratchSpace.vb</DependentUpon>
     </EmbeddedResource>
@@ -1138,6 +1147,18 @@
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
     <None Include="Tools\DT_WinADK.reg" />
+    <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-arm64\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-arm64\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x64\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x64\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x64\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x64\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1317,6 +1338,73 @@
     <Content Include="Installer\ISPPBuiltins.iss" />
     <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
+    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
+    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
+    <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-x64\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-x64\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-x86\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-x86\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.pdb" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
@@ -1380,31 +1468,6 @@
     <None Include="Resources\progresspanel_logview_shown.png" />
     <None Include="Resources\create_iso.png" />
     <None Include="Resources\set_layeredkeyboarddriver.png" />
-    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
-    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
     <None Include="Resources\startup\version.png" />
     <None Include="Resources\startup\preview_flag.png" />
     <None Include="Resources\startup\startup_bg.png" />
@@ -1724,6 +1787,12 @@ copy /y "$(SolutionDir)Tools\DT_WinADK.reg" "DT_WinADK.reg"
 IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	md "Tools\UnpEax"
 	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
+)
+
+:: Copy UnattendGen
+IF EXIST "$(SolutionDir)Tools\UnattendGen" (
+	md "Tools\UnattendGen"
+	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
 )
 
 IF NOT EXIST AutoUnattend (

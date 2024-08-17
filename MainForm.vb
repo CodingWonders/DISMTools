@@ -256,6 +256,7 @@ Public Class MainForm
 
     Public RecentList As New List(Of Recents)
     Public VideoList As New List(Of Video)
+    Dim thumbnailList As ImageList = New ImageList()
 
     Dim AdkCopyEx As Exception
 
@@ -688,61 +689,13 @@ Public Class MainForm
                 End If
             End If
         End If
-        Try
-            Dim videoEx As Exception = New Exception()
-            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
-            Using client As New WebClient()
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                Try
-                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
-                Catch ex As Exception
-                    videoEx = ex
-                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-                    Debug.WriteLine("Could not download video list")
-                End Try
-            End Using
-            Try
-                If File.Exists(Application.StartupPath & "\videos.xml") Then
-                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-                    File.Delete(Application.StartupPath & "\videos.xml.old")
-                End If
-            Catch ex As Exception
-                videoEx = ex
-                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
-                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
-            End Try
-            ListView2.Items.Clear()
-            Dim thumbnailList As ImageList = New ImageList()
-            thumbnailList.ImageSize = New Size(160, 90)
-            thumbnailList.ColorDepth = ColorDepth.Depth32Bit
-            ListView2.View = View.LargeIcon
-            ListView2.LargeImageList = thumbnailList
-            If VideoList IsNot Nothing Then
-                If VideoList.Count > 0 Then
-                    For Each VideoLink As Video In VideoList
-                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
-                        If thumbnail IsNot Nothing Then
-                            Dim newThumb As Image = CombineImages(thumbnail)
-                            thumbnailList.Images.Add(newThumb)
-                        End If
-                        Dim listItem As ListViewItem = New ListViewItem()
-                        listItem.ImageIndex = VideoList.IndexOf(VideoLink)
-                        listItem.Text = VideoLink.VideoName
-                        ListView2.Items.Add(listItem)
-                    Next
-                Else
-                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-                End If
-            Else
-                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
-            End If
-            VideosPanel.Visible = True
-            VideoErrorPanel.Visible = False
-        Catch ex As Exception
-            VideosPanel.Visible = False
-            VideoErrorPanel.Visible = True
-            TextBox2.Text = ex.ToString() & " - " & ex.Message
-        End Try
+
+        ' Get videos
+        ListView2.Items.Clear()
+        ListView2.View = View.LargeIcon
+
+        VideoGetterBW.RunWorkerAsync()
+
         ' Detect custom themes
         Try
             Dim themeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\ThemeManager")
@@ -5992,6 +5945,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
                         CommandShellToolStripMenuItem.Text = "Command Console"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
                         ReportManagerToolStripMenuItem.Text = "Report manager"
                         MountedImageManagerTSMI.Text = "Mounted image manager"
                         CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
@@ -6366,6 +6320,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
                         CommandShellToolStripMenuItem.Text = "Consola de comandos"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
                         ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                         MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
@@ -6740,6 +6695,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remonter l'image avec les droits d'écriture"
                         CommandShellToolStripMenuItem.Text = "Console de commande"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
                         ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                         MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                         CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
@@ -7114,6 +7070,7 @@ Public Class MainForm
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagem com permissões de escrita"
                         CommandShellToolStripMenuItem.Text = "Consola de comandos"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
                         ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                         MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
@@ -7486,7 +7443,8 @@ Public Class MainForm
                         MergeSWM.Text = "Unire i file SWM..."
                         RemountImageWithWritePermissionsToolStripMenuItem.Text = "Rimonta l'immagine con i permessi di scrittura"
                         CommandShellToolStripMenuItem.Text = "Console dei comandi"
-                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiato"
+                        UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
+                        UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
                         ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                         MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                         CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
@@ -7866,6 +7824,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
                 CommandShellToolStripMenuItem.Text = "Command Console"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
                 CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
@@ -8240,6 +8199,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagen con permisos de escritura"
                 CommandShellToolStripMenuItem.Text = "Consola de comandos"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
@@ -8613,6 +8573,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remonter l'image avec les droits d'écriture"
                 CommandShellToolStripMenuItem.Text = "Console de commande"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
                 ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                 MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                 CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
@@ -8987,6 +8948,7 @@ Public Class MainForm
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remontar imagem com permissões de escrita"
                 CommandShellToolStripMenuItem.Text = "Consola de comandos"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
                 ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                 MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
@@ -9359,7 +9321,8 @@ Public Class MainForm
                 MergeSWM.Text = "Unire i file SWM..."
                 RemountImageWithWritePermissionsToolStripMenuItem.Text = "Rimonta l'immagine con i permessi di scrittura"
                 CommandShellToolStripMenuItem.Text = "Console dei comandi"
-                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiato"
+                UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
+                UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
                 ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                 MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                 CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
@@ -13584,11 +13547,6 @@ Public Class MainForm
 
     Private Sub WIMESDToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles WIMESDToolStripMenuItem.Click
         ImgWim2Esd.ShowDialog()
-    End Sub
-
-    Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
-        ' Major reconstruction ahead
-        NewUnattendWiz.Show()
     End Sub
 
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
@@ -19657,6 +19615,87 @@ Public Class MainForm
     End Sub
 
     Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
-        SetLayeredDriverDialog.Showdialog()
+        SetLayeredDriverDialog.ShowDialog()
+    End Sub
+
+    Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
+        If isProjectLoaded And Not (OnlineManagement Or OfflineManagement) Then
+            UnattendMgr.TextBox1.Text = Path.Combine(projPath, "unattend_xml")
+        End If
+        UnattendMgr.Show()
+    End Sub
+
+    Private Sub UnattendedAnswerFileCreatorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileCreatorToolStripMenuItem.Click
+        NewUnattendWiz.Show()
+    End Sub
+
+    Private Sub ApplyUnattend_Click(sender As Object, e As EventArgs) Handles ApplyUnattend.Click
+        ApplyUnattendFile.ShowDialog()
+    End Sub
+
+    Private Sub VideoGetterBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles VideoGetterBW.DoWork
+        Try
+            Dim videoEx As Exception = New Exception()
+            If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
+            Using client As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Try
+                    client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
+                Catch ex As Exception
+                    videoEx = ex
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                    Debug.WriteLine("Could not download video list")
+                End Try
+            End Using
+            Try
+                If File.Exists(Application.StartupPath & "\videos.xml") Then
+                    VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+                    File.Delete(Application.StartupPath & "\videos.xml.old")
+                End If
+            Catch ex As Exception
+                videoEx = ex
+                If File.Exists(Application.StartupPath & "\videos.xml.old") Then File.Move(Application.StartupPath & "\videos.xml.old", Application.StartupPath & "\videos.xml")
+                VideoList = LoadVideos(Application.StartupPath & "\videos.xml")
+            End Try
+            If VideoList IsNot Nothing Then
+                If VideoList.Count > 0 Then
+                    For Each VideoLink As Video In VideoList
+                        Dim thumbnail As Image = GetItemThumbnail(VideoLink.YT_ID)
+                        If thumbnail IsNot Nothing Then
+                            Dim newThumb As Image = CombineImages(thumbnail)
+                            thumbnailList.Images.Add(newThumb)
+                        End If
+                    Next
+                Else
+                    Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+                End If
+            Else
+                Throw New Exception(If(videoEx IsNot Nothing, videoEx, "Could not get video feed"))
+            End If
+            VideosPanel.Visible = True
+            VideoErrorPanel.Visible = False
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+    Private Sub VideoGetterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles VideoGetterBW.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            VideosPanel.Visible = False
+            VideoErrorPanel.Visible = True
+            TextBox2.Text = e.Error.ToString() & " - " & e.Error.Message
+            Exit Sub
+        End If
+        ListView2.LargeImageList = thumbnailList
+        thumbnailList.ImageSize = New Size(160, 90)
+        thumbnailList.ColorDepth = ColorDepth.Depth32Bit
+        If VideoList.Count > 0 Then
+            For Each VideoLink As Video In VideoList
+                Dim listItem As ListViewItem = New ListViewItem()
+                listItem.ImageIndex = VideoList.IndexOf(VideoLink)
+                listItem.Text = VideoLink.VideoName
+                ListView2.Items.Add(listItem)
+            Next
+        End If
     End Sub
 End Class

@@ -5,6 +5,7 @@ Imports System.Threading
 Imports ScintillaNET
 Imports DISMTools.Elements
 Imports Microsoft.Dism
+Imports System.Net
 
 Public Class NewUnattendWiz
 
@@ -12,6 +13,9 @@ Public Class NewUnattendWiz
     Dim IsInExpress As Boolean = True
     Dim CurrentWizardPage As New UnattendedWizardPage()
     Dim VerifyInPages As New List(Of UnattendedWizardPage.Page)
+
+    Dim DotNetRuntimeSupported As Boolean
+    Dim PreferSelfContained As Boolean
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -77,6 +81,11 @@ Public Class NewUnattendWiz
     Dim DefaultLockdownSettings As New AccountLockdownSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
+
+    ' Progress info
+    Dim ProgressMessage As String = ""
+
+    Dim SaveTarget As String = ""
 
 
     ''' <summary>
@@ -331,6 +340,29 @@ Public Class NewUnattendWiz
 
     End Sub
 
+    Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
+        If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
+            ' Self-contained version detected
+            DotNetRuntimeSupported = True
+            PreferSelfContained = True
+            Exit Sub
+        End If
+        If Not Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet")) Then
+            DotNetRuntimeSupported = False
+            Exit Sub
+        End If
+        If Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\sdk", SDKVersion)) Then
+            ' .NET SDK exists, skip further checks
+            DotNetRuntimeSupported = True
+            Exit Sub
+        End If
+        If My.Computer.FileSystem.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Count > 0 Then
+            ' .NET Runtime exists, skip further checks
+            DotNetRuntimeSupported = True
+            Exit Sub
+        End If
+    End Sub
+
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -341,6 +373,86 @@ Public Class NewUnattendWiz
             ForeColor = Color.Black
             StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
         End If
+        ComboBox1.BackColor = BackColor
+        ComboBox2.BackColor = BackColor
+        ComboBox3.BackColor = BackColor
+        ComboBox4.BackColor = BackColor
+        ComboBox5.BackColor = BackColor
+        ComboBox6.BackColor = BackColor
+        ComboBox7.BackColor = BackColor
+        ComboBox8.BackColor = BackColor
+        ComboBox9.BackColor = BackColor
+        ComboBox10.BackColor = BackColor
+        ComboBox11.BackColor = BackColor
+        ComboBox12.BackColor = BackColor
+        ComboBox13.BackColor = BackColor
+        ListBox1.BackColor = BackColor
+        TextBox1.BackColor = BackColor
+        TextBox2.BackColor = BackColor
+        TextBox3.BackColor = BackColor
+        TextBox4.BackColor = BackColor
+        TextBox5.BackColor = BackColor
+        TextBox6.BackColor = BackColor
+        TextBox7.BackColor = BackColor
+        TextBox8.BackColor = BackColor
+        TextBox9.BackColor = BackColor
+        TextBox10.BackColor = BackColor
+        TextBox11.BackColor = BackColor
+        TextBox12.BackColor = BackColor
+        TextBox13.BackColor = BackColor
+        TextBox14.BackColor = BackColor
+        TextBox15.BackColor = BackColor
+        TextBox17.BackColor = BackColor
+        TextBox18.BackColor = BackColor
+        NumericUpDown1.BackColor = BackColor
+        NumericUpDown2.BackColor = BackColor
+        NumericUpDown3.BackColor = BackColor
+        NumericUpDown4.BackColor = BackColor
+        NumericUpDown5.BackColor = BackColor
+        NumericUpDown6.BackColor = BackColor
+        NumericUpDown7.BackColor = BackColor
+        NumericUpDown8.BackColor = BackColor
+        GroupBox1.BackColor = BackColor
+        ComboBox1.ForeColor = ForeColor
+        ComboBox2.ForeColor = ForeColor
+        ComboBox3.ForeColor = ForeColor
+        ComboBox4.ForeColor = ForeColor
+        ComboBox5.ForeColor = ForeColor
+        ComboBox6.ForeColor = ForeColor
+        ComboBox7.ForeColor = ForeColor
+        ComboBox8.ForeColor = ForeColor
+        ComboBox9.ForeColor = ForeColor
+        ComboBox10.ForeColor = ForeColor
+        ComboBox11.ForeColor = ForeColor
+        ComboBox12.ForeColor = ForeColor
+        ComboBox13.ForeColor = ForeColor
+        ListBox1.ForeColor = ForeColor
+        TextBox1.ForeColor = ForeColor
+        TextBox2.ForeColor = ForeColor
+        TextBox3.ForeColor = ForeColor
+        TextBox4.ForeColor = ForeColor
+        TextBox5.ForeColor = ForeColor
+        TextBox6.ForeColor = ForeColor
+        TextBox7.ForeColor = ForeColor
+        TextBox8.ForeColor = ForeColor
+        TextBox9.ForeColor = ForeColor
+        TextBox10.ForeColor = ForeColor
+        TextBox11.ForeColor = ForeColor
+        TextBox12.ForeColor = ForeColor
+        TextBox13.ForeColor = ForeColor
+        TextBox14.ForeColor = ForeColor
+        TextBox15.ForeColor = ForeColor
+        TextBox17.ForeColor = ForeColor
+        TextBox18.ForeColor = ForeColor
+        NumericUpDown1.ForeColor = ForeColor
+        NumericUpDown2.ForeColor = ForeColor
+        NumericUpDown3.ForeColor = ForeColor
+        NumericUpDown4.ForeColor = ForeColor
+        NumericUpDown5.ForeColor = ForeColor
+        NumericUpDown6.ForeColor = ForeColor
+        NumericUpDown7.ForeColor = ForeColor
+        NumericUpDown8.ForeColor = ForeColor
+        GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
 
@@ -410,7 +522,7 @@ Public Class NewUnattendWiz
             End If
         End If
         ListBox1.SelectedIndex = 1
-        ChangePage(UnattendedWizardPage.Page.DisclaimerPage)
+        ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
         TimeZonePageTimer.Enabled = True
         ' Modify script contents of disk config for sample DP Script
@@ -419,6 +531,59 @@ Public Class NewUnattendWiz
         If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
         ' Set default auth tech to WPA2
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
+
+        ' Detect .NET runtimes/SDKs
+        DetectDotNetRuntime("8.0.303", "8.0")
+        If Not DotNetRuntimeSupported Then
+            If MsgBox("This wizard requires the .NET 8 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+                Try
+                    ' Download the WIM Explorer and run it while passing the image as an argument
+                    If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
+                        Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
+                    End If
+                    Using UnattClient As New WebClient()
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                        Dim contents As String = ""
+                        Try
+                            contents = UnattClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/UnattendGen/master/DISMTools-Install.ps1")
+                        Catch ex As WebException
+                            MessageBox.Show("We couldn't download UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Status.ToString())
+                            Close()
+                        End Try
+                        If contents <> "" Then
+                            File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
+                        End If
+                    End Using
+                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                        ' Run installer
+                        Dim UAProc As New Process()
+                        UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                        UAProc.StartInfo.WorkingDirectory = Application.StartupPath
+                        UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & My.Application.Info.Version.Revision & Quote
+                        UAProc.Start()
+                        UAProc.WaitForExit()
+                    End If
+                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                        Try
+                            File.Delete(Application.StartupPath & "\setup.ps1")
+                        Catch ex As Exception
+                            ' Don't delete it
+                        End Try
+                    End If
+                    PreferSelfContained = True
+                Catch ex As Exception
+                    MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Message)
+                    Close()
+                End Try
+            Else
+                Close()
+            End If
+        End If
+    End Sub
+
+    Sub SelectTreeNode(NodeIndex As Integer)
+        StepsTreeView.SelectedNode = StepsTreeView.Nodes(NodeIndex)
+        StepsTreeView.Refresh()
     End Sub
 
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
@@ -427,7 +592,7 @@ Public Class NewUnattendWiz
         ElseIf NewPage > CurrentWizardPage.WizardPage AndAlso NewPage = UnattendedWizardPage.Page.ReviewPage Then
             ShowSettingOverview()
         End If
-        DisclaimerPanel.Visible = (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+        WelcomePanel.Visible = (NewPage = UnattendedWizardPage.Page.WelcomePage)
         RegionalSettingsPanel.Visible = (NewPage = UnattendedWizardPage.Page.RegionalPage)
         SysConfigPanel.Visible = (NewPage = UnattendedWizardPage.Page.SysConfigPage)
         TimeZonePanel.Visible = (NewPage = UnattendedWizardPage.Page.TimeZonePage)
@@ -442,9 +607,59 @@ Public Class NewUnattendWiz
         PostInstallPanel.Visible = (NewPage = UnattendedWizardPage.Page.PostInstallPage)
         ComponentPanel.Visible = (NewPage = UnattendedWizardPage.Page.ComponentPage)
         FinalReviewPanel.Visible = (NewPage = UnattendedWizardPage.Page.ReviewPage)
+        UnattendProgressPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProgressPage)
+        FinishPanel.Visible = (NewPage = UnattendedWizardPage.Page.FinishPage)
         CurrentWizardPage.WizardPage = NewPage
-        Next_Button.Enabled = Not (NewPage + 1 >= UnattendedWizardPage.PageCount)
-        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.DisclaimerPage)
+        Next_Button.Enabled = (Not NewPage <> UnattendedWizardPage.Page.FinishPage) OrElse (Not NewPage + 1 >= UnattendedWizardPage.PageCount)
+        Cancel_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+        Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.WelcomePage) And Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+
+        Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
+
+        ' Select tree nodes according to page
+        Select Case CurrentWizardPage.WizardPage
+            Case UnattendedWizardPage.Page.WelcomePage
+                SelectTreeNode(0)
+            Case UnattendedWizardPage.Page.RegionalPage
+                SelectTreeNode(1)
+            Case UnattendedWizardPage.Page.SysConfigPage
+                SelectTreeNode(2)
+            Case UnattendedWizardPage.Page.TimeZonePage
+                SelectTreeNode(3)
+            Case UnattendedWizardPage.Page.DiskConfigPage
+                SelectTreeNode(4)
+            Case UnattendedWizardPage.Page.ProductKeyPage
+                SelectTreeNode(5)
+            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockdownPage
+                SelectTreeNode(6)
+            Case UnattendedWizardPage.Page.VirtualMachinePage
+                SelectTreeNode(7)
+            Case UnattendedWizardPage.Page.NetworkConnectionsPage
+                SelectTreeNode(8)
+            Case UnattendedWizardPage.Page.SystemTelemetryPage
+                SelectTreeNode(9)
+            Case UnattendedWizardPage.Page.PostInstallPage
+                SelectTreeNode(10)
+            Case UnattendedWizardPage.Page.ComponentPage
+                SelectTreeNode(11)
+            Case UnattendedWizardPage.Page.ReviewPage, UnattendedWizardPage.Page.ProgressPage, UnattendedWizardPage.Page.FinishPage
+                SelectTreeNode(12)
+        End Select
+
+        ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
+        If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
+            ' Detect if a project has been loaded
+            If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+                SaveFileDialog1.InitialDirectory = Path.Combine(MainForm.projPath, "unattend_xml")
+            Else
+                SaveFileDialog1.InitialDirectory = ""
+            End If
+            SaveFileDialog1.FileName = "unattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
+            SaveFileDialog1.ShowDialog()
+            UnattendGeneratorBW.RunWorkerAsync()
+        ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
+            SaveTarget = ""
+        End If
     End Sub
 
     Function VerifyOptionsInPage(WizardPage As UnattendedWizardPage.Page) As Boolean
@@ -606,10 +821,10 @@ Public Class NewUnattendWiz
                         TextBox13.AppendText("    - Authentication mode: open" & CrLf)
                     Case WiFiAuthenticationMode.WPA2_PSK
                         TextBox13.AppendText("    - Authentication mode: WPA2-Personal" & CrLf)
-                    Case WiFiAuthenticationMode.WPA3_PSK
-                        TextBox13.AppendText("    - Authentication mode: WPA3-Personal" & CrLf)
+                    Case WiFiAuthenticationMode.WPA3_SAE
+                        TextBox13.AppendText("    - Authentication mode: WPA3 (Simultaneous Authentication of Equals)" & CrLf)
                 End Select
-                TextBox13.AppendText("    - Password: " & SelectedNetworkConfiguration.Password & CrLf)
+                TextBox13.AppendText("    - Password: " & New String("*", SelectedNetworkConfiguration.Password.Length) & " (hidden for your security)" & CrLf)
             End If
         End If
         ' 9. -- SYSTEM TELEMETRY
@@ -721,7 +936,11 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Next_Button_Click(sender As Object, e As EventArgs) Handles Next_Button.Click
-        ChangePage(CurrentWizardPage.WizardPage + 1)
+        If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.FinishPage Then
+            Close()
+        Else
+            ChangePage(CurrentWizardPage.WizardPage + 1)
+        End If
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
@@ -1120,5 +1339,324 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Process.Start("https://schneegans.de/windows/unattend-generator/")
+    End Sub
+
+    Function EditionIDFromDisplayName(displayName As String) As String
+        Select Case displayName
+            Case "Home"
+                Return "home"
+            Case "Home N"
+                Return "home_n"
+            Case "Home Single Language"
+                Return "home_single"
+            Case "Education"
+                Return "education"
+            Case "Education N"
+                Return "education_n"
+            Case "Pro"
+                Return "pro"
+            Case "Pro N"
+                Return "pro_n"
+            Case "Pro Education"
+                Return "pro_education"
+            Case "Pro Education N"
+                Return "pro_education_n"
+            Case "Pro for Workstations"
+                Return "pro_workstations"
+            Case "Pro N for Workstations"
+                Return "pro_workstations_n"
+        End Select
+        Return ""
+    End Function
+
+    Private Sub UnattendGeneratorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGeneratorBW.DoWork
+        ReportMessage("Preparing to generate file...", 0)
+        If SaveTarget = "" Then
+            e.Cancel = True
+            Exit Sub
+        End If
+        ReportMessage("Preparing to generate file...", 0)
+        Dim UnattendGen As New Process()
+        ' Get most appropriate binary of UnattendGen
+        If Environment.Is64BitOperatingSystem Then
+            If PreferSelfContained Then
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64")
+            Else
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64")
+            End If
+        Else
+            If PreferSelfContained Then
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86")
+            Else
+                UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86\unattendgen.exe")
+                UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
+            End If
+        End If
+        UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
+        Try
+            ' Save settings to appropriate XML files
+            ReportMessage("Saving user settings...", 2)
+            Dim regSetContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                "<root>" & CrLf &
+                "   <ImageLanguage Id=" & Quote & SelectedLanguage.Id & Quote & " DisplayName=" & Quote & SelectedLanguage.DisplayName & Quote & "/>" & CrLf &
+                "   <UserLocale Id=" & Quote & SelectedLocale.Id & Quote & " DisplayName=" & Quote & SelectedLocale.DisplayName & Quote & " LCID=" & Quote & SelectedLocale.LCID & Quote & " KeyboardLayout=" & Quote & SelectedLocale.KeybId & Quote & " GeoLocation=" & Quote & SelectedLocale.GeoLoc & Quote & "/>" & CrLf &
+                "   <KeyboardIdentifier Id=" & Quote & SelectedKeybIdentifier.Id & Quote & " DisplayName=" & Quote & SelectedKeybIdentifier.DisplayName & Quote & " Type=" & Quote & SelectedKeybIdentifier.Type & Quote & "/>" & CrLf &
+                "   <GeoId Id=" & Quote & SelectedGeoId.Id & Quote & " DisplayName=" & Quote & SelectedGeoId.DisplayName & Quote & "/>" & CrLf &
+                "   <TimeOffset Id=" & Quote & SelectedOffset.Id & Quote & " DisplayName=" & Quote & SelectedOffset.DisplayName & Quote & "/>" & CrLf &
+                "</root>"
+            File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
+            UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
+            ReportMessage("Saving user settings...", 4)
+            Select Case SelectedArchitecture
+                Case DismProcessorArchitecture.Intel
+                    UnattendGen.StartInfo.Arguments &= " /architecture=x86"
+                Case DismProcessorArchitecture.AMD64
+                    UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
+                Case DismProcessorArchitecture.ARM64
+                    UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
+            End Select
+            ReportMessage("Saving user settings...", 6)
+            If Win11Config.LabConfig_BypassRequirements Then
+                UnattendGen.StartInfo.Arguments &= " /LabConfig"
+            End If
+            If Win11Config.OOBE_BypassNRO Then
+                UnattendGen.StartInfo.Arguments &= " /BypassNRO"
+            End If
+            ReportMessage("Saving user settings...", 8)
+            If Not PCName.DefaultName Then
+                UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+            End If
+            ReportMessage("Saving user settings...", 10)
+            If TimeOffsetInteractive Then
+                UnattendGen.StartInfo.Arguments &= " /tzImplicit"
+            End If
+            ReportMessage("Saving user settings...", 12)
+            If DiskConfigurationInteractive Then
+                UnattendGen.StartInfo.Arguments &= " /partmode=interactive"
+            Else
+                If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
+                    UnattendGen.StartInfo.Arguments &= " /partmode=unattended"
+                    Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
+                        "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
+                ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
+                    UnattendGen.StartInfo.Arguments &= " /partmode=custom"
+                    Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <DiskPart ScriptFile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp") & Quote & " AutoInst=" & Quote & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "1", "0") & Quote & " Disk=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & Quote & " Partition=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & Quote & " />" & CrLf &
+                        "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"), SelectedDiskConfiguration.DiskPartScriptConfig.ScriptContents, UTF8)
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskPartSettings.xml"), diskPartContents, UTF8)
+                End If
+            End If
+            ReportMessage("Saving user settings...", 14)
+            If GenericChosen Then
+                UnattendGen.StartInfo.Arguments &= " /generic"
+                Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf &
+                    "   <Edition Id=" & Quote & EditionIDFromDisplayName(ComboBox6.SelectedItem) & Quote & " DisplayName=" & Quote & ComboBox6.SelectedItem & Quote & " Key=" & Quote & SelectedKey.Key & Quote & " />" & CrLf &
+                    "</root>"
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
+            Else
+                UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
+            End If
+            If Not UserAccountsInteractive Then
+                ReportMessage("Saving user settings...", 16)
+                UnattendGen.StartInfo.Arguments &= " /customusers"
+                Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf
+                If UserAccountsList.Count > 0 Then
+                    For Each account As User In UserAccountsList
+                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & account.Name & Quote & " Password=" & Quote & account.Password & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
+                    Next
+                    customUserContents &= "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
+                    If AutoLogon.EnableAutoLogon Then
+                        If AutoLogon.LogonMode = AutoLogonMode.FirstAdmin Then
+                            UnattendGen.StartInfo.Arguments &= " /autologon=firstadmin"
+                        ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
+                            UnattendGen.StartInfo.Arguments &= " /autologon=builtinadmin"
+                            Dim builtinAdminContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                                "<root>" & CrLf &
+                                "   <BuiltInAdmin Password=" & Quote & AutoLogon.LogonPassword & Quote & " />" & CrLf &
+                                "</root>"
+                            File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "autoLogon.xml"), builtinAdminContents, UTF8)
+                        End If
+                    End If
+                    If PasswordObfuscate Then
+                        UnattendGen.StartInfo.Arguments &= " /b64obscure"
+                    End If
+                Else
+                    UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
+                End If
+            End If
+            If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
+                ReportMessage("Saving user settings...", 18)
+                UnattendGen.StartInfo.Arguments &= " /pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
+            End If
+            ReportMessage("Saving user settings...", 20)
+            If SelectedLockdownSettings.Enabled Then
+                UnattendGen.StartInfo.Arguments &= " /lockdown=yes"
+                Dim lockdownContents As String = ""
+                If SelectedLockdownSettings.DefaultPolicy Then
+                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <AccountLockdown FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
+                        "</root>"
+                Else
+                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <AccountLockdown FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
+                        "</root>"
+                End If
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockDown.xml"), lockdownContents, UTF8)
+            Else
+                UnattendGen.StartInfo.Arguments &= " /lockdown=no"
+            End If
+            If VirtualMachineSupported Then
+                ReportMessage("Saving user settings...", 22)
+                Select Case SelectedVMSettings.Provider
+                    Case VMProvider.VirtualBox_GAs
+                        UnattendGen.StartInfo.Arguments &= " /vm=vbox_gas"
+                    Case VMProvider.VMware_Tools
+                        UnattendGen.StartInfo.Arguments &= " /vm=vmware"
+                    Case VMProvider.VirtIO_Guest_Tools
+                        UnattendGen.StartInfo.Arguments &= " /vm=virtio"
+                End Select
+            End If
+            If Not NetworkConfigInteractive Then
+                ReportMessage("Saving user settings...", 24)
+                If NetworkConfigManualSkip Then
+                    UnattendGen.StartInfo.Arguments &= " /wifi=no"
+                Else
+                    UnattendGen.StartInfo.Arguments &= " /wifi=yes"
+                    Dim wirelessContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                        "<root>" & CrLf &
+                        "   <WirelessNetwork Name=" & Quote & SelectedNetworkConfiguration.SSID & Quote & " Password=" & Quote & SelectedNetworkConfiguration.Password & Quote & " AuthMode=" & Quote & If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.Open, "Open", If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK, "WPA2", "WPA3")) & Quote & " NonBroadcast=" & Quote & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "1", "0") & Quote & " />" & CrLf &
+                        "</root>"
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "wireless.xml"), wirelessContents, UTF8)
+                End If
+            End If
+            If Not SystemTelemetryInteractive Then
+                ReportMessage("Saving user settings...", 24.5)
+                If SelectedTelemetrySettings.Enabled Then
+                    UnattendGen.StartInfo.Arguments &= " /telem=yes"
+                Else
+                    UnattendGen.StartInfo.Arguments &= " /telem=no"
+                End If
+            End If
+            ReportMessage("Generating unattended answer file...", 25)
+            UnattendGen.Start()
+            UnattendGen.WaitForExit()
+            ReportMessage("Generating unattended answer file...", 50)
+            ReportMessage("Deleting temporary files...", 75)
+            If File.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp")) Then
+                File.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"))
+            End If
+            For Each xmlFile In My.Computer.FileSystem.GetFiles(UnattendGen.StartInfo.WorkingDirectory, FileIO.SearchOption.SearchTopLevelOnly, "*.xml")
+                If File.Exists(xmlFile) Then File.Delete(xmlFile)
+            Next
+            If UnattendGen.ExitCode <> 0 Then
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & UnattendGen.ExitCode)
+                e.Cancel = True
+            End If
+            ReportMessage("Generation has completed", 100)
+        Catch ex As Exception
+            If UnattendGen.ExitCode <> 0 Then
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error: " & ex.Message)
+                e.Cancel = True
+            End If
+        End Try
+    End Sub
+
+    Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        SaveTarget = SaveFileDialog1.FileName
+    End Sub
+
+    Sub ReportMessage(msg As String, percent As Integer)
+        ProgressMessage = msg
+        UnattendGeneratorBW.ReportProgress(percent)
+    End Sub
+
+    Private Sub UnattendGeneratorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles UnattendGeneratorBW.ProgressChanged
+        Label56.Text = ProgressMessage
+        ProgressBar1.Value = e.ProgressPercentage
+    End Sub
+
+    Private Sub UnattendGeneratorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UnattendGeneratorBW.RunWorkerCompleted
+        If e.Cancelled Then
+            ChangePage(CurrentWizardPage.WizardPage - 1)
+            Exit Sub
+        End If
+        ChangePage(CurrentWizardPage.WizardPage + 1)
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        ChangePage(UnattendedWizardPage.Page.RegionalPage)
+    End Sub
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & SaveTarget & Quote)
+    End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+            ApplyUnattendFile.TextBox1.Text = SaveTarget
+            WindowState = FormWindowState.Minimized
+            ApplyUnattendFile.ShowDialog(MainForm)
+            WindowState = FormWindowState.Normal
+        Else
+            MsgBox("You need to load a project in order to apply this file.", vbOKOnly + vbExclamation, Text)
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub NewUnattendWiz_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If UnattendGeneratorBW.IsBusy Then
+            e.Cancel = True
+            Beep()
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs) Handles StepsTreeView.DrawNode
+        ' Determine the custom background color
+        Dim customBackColor As Color = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(31, 31, 31), Color.FromArgb(239, 239, 242))
+
+        ' Determine the custom foreground color based on the custom background color
+        Dim customForeColor As Color = If(customBackColor = Color.FromArgb(31, 31, 31), Color.White, Color.Black)
+
+        ' Check if the node is selected
+        If (e.State And TreeNodeStates.Selected) <> 0 Then
+            ' Draw the background with the highlight color
+            e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds)
+            ' Draw the text with the highlighted text color and vertically centered
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, If(e.Node.NodeFont, e.Node.TreeView.Font), e.Bounds, SystemColors.HighlightText, TextFormatFlags.VerticalCenter)
+        Else
+            ' Draw the background with the custom color for unselected nodes
+            Using backgroundBrush As New SolidBrush(customBackColor)
+                e.Graphics.FillRectangle(backgroundBrush, e.Bounds)
+            End Using
+            ' Draw the text with the custom foreground color and vertically centered
+            TextRenderer.DrawText(e.Graphics, e.Node.Text, If(e.Node.NodeFont, e.Node.TreeView.Font), e.Bounds, customForeColor, TextFormatFlags.VerticalCenter)
+        End If
+
+        ' If the node has focus, draw the focus rectangle
+        If (e.State And TreeNodeStates.Focused) <> 0 Then
+            Using focusPen As New Pen(Color.Black)
+                focusPen.DashStyle = Drawing2D.DashStyle.Dot
+                Dim focusBounds As Rectangle = e.Bounds
+                focusBounds.Size = New Size(focusBounds.Width - 1, focusBounds.Height - 1)
+                e.Graphics.DrawRectangle(focusPen, focusBounds)
+            End Using
+        End If
+
+        ' Signal that the node has been drawn
+        e.DrawDefault = False
     End Sub
 End Class

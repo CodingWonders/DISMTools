@@ -474,7 +474,7 @@ Public Class GetCapabilityInfoDlg
         If InstalledCapabilityInfo.Count > 0 Then
             For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
                 If InstalledCapability.Name.ToLower().Contains(sQuery.ToLower()) Then
-                    ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismFeatureState(InstalledCapability.State, True)}))
+                    ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
                 End If
             Next
         End If
@@ -486,7 +486,7 @@ Public Class GetCapabilityInfoDlg
             SearchCapabilities(SearchBox1.Text)
         Else
             For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismFeatureState(InstalledCapability.State, True)}))
+                ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
             Next
         End If
     End Sub

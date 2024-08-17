@@ -473,6 +473,9 @@ Public Class ProgressPanel
     ' ImportSourceInt = 2
     Public DrvImport_SourceDisk As String                   ' The disk drive that will act as the source for the driver import
 
+    ' OperationNum: 79
+    Public UnattendedFile As String                         ' The path of the unattended answer file
+
     ' OperationNum: 83
     Public peNewScratchSpace As Integer                     ' New scratch space amount to apply to the Windows PE image
 
@@ -840,26 +843,6 @@ Public Class ProgressPanel
                 AllPB.Value = CurrentPB.Value
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "scr_temp")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win51_cons")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win60_cons")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win61_cons")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win62_cons")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win62_cons\mbr")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win62_cons\uefi")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win63_cons")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win63_cons\mbr")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win63_cons\uefi")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win10_cons")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win10_cons\mbr")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win10_cons\uefi")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win60_serv")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win61_serv")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win62_serv")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win63_serv")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\win10_serv")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\sbs08")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\sbs11")
-                Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml\whs11")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "reports")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\x86")
@@ -5205,6 +5188,52 @@ Public Class ProgressPanel
                 Catch ex As Exception
                     LogView.AppendText(CrLf & "We couldn't delete the temporary export directory. You'll need to delete the " & Quote & "export_temp" & Quote & " directory manually.")
                 End Try
+            End If
+        ElseIf opNum = 79 Then
+            ' Translations will not be available for 0.5.1
+
+            allTasks.Text = "Applying unattended answer file..."
+            currentTask.Text = "Applying specified unattended answer file to the target image..."
+            LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
+                               "- Unattended answer file: " & UnattendedFile)
+
+            ' Initialize command
+            DISMProc.StartInfo.FileName = DismProgram
+            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
+            DISMProc.StartInfo.Arguments = CommandArgs
+            DISMProc.Start()
+            DISMProc.WaitForExit()
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                        Case "ITA"
+                            currentTask.Text = "Raccolta del livello di errore..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+                Case 5
+                    currentTask.Text = "Raccolta del livello di errore..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
+            GetErrorCode(False)
+            If errCode.Length >= 8 Then
+                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+            Else
+                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 83 Then
             Select Case Language
