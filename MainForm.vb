@@ -16192,6 +16192,9 @@ Public Class MainForm
     End Sub
 
     Private Sub ManageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageToolStripMenuItem.Click
+        If isProjectLoaded And Not (OnlineManagement Or OfflineManagement) Then
+            UnattendMgr.TextBox1.Text = Path.Combine(projPath, "unattend_xml")
+        End If
         UnattendMgr.Show()
     End Sub
 

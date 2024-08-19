@@ -16,6 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
+    Dim UnattendGenReleaseTag As String = "2483"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -341,6 +342,10 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
+        If Not Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen")) Then
+            DotNetRuntimeSupported = False
+            Exit Sub
+        End If
         If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
             ' Self-contained version detected
             DotNetRuntimeSupported = True
@@ -536,45 +541,8 @@ Public Class NewUnattendWiz
         DetectDotNetRuntime("8.0.303", "8.0")
         If Not DotNetRuntimeSupported Then
             If MsgBox("This wizard requires the .NET 8 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
-                Try
-                    ' Download the WIM Explorer and run it while passing the image as an argument
-                    If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
-                        Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
-                    End If
-                    Using UnattClient As New WebClient()
-                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                        Dim contents As String = ""
-                        Try
-                            contents = UnattClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/UnattendGen/master/DISMTools-Install.ps1")
-                        Catch ex As WebException
-                            MessageBox.Show("We couldn't download UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Status.ToString())
-                            Close()
-                        End Try
-                        If contents <> "" Then
-                            File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
-                        End If
-                    End Using
-                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
-                        ' Run installer
-                        Dim UAProc As New Process()
-                        UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-                        UAProc.StartInfo.WorkingDirectory = Application.StartupPath
-                        UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & My.Application.Info.Version.Revision & Quote
-                        UAProc.Start()
-                        UAProc.WaitForExit()
-                    End If
-                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
-                        Try
-                            File.Delete(Application.StartupPath & "\setup.ps1")
-                        Catch ex As Exception
-                            ' Don't delete it
-                        End Try
-                    End If
-                    PreferSelfContained = True
-                Catch ex As Exception
-                    MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Message)
-                    Close()
-                End Try
+                ExpressPanelFooter.Enabled = False
+                UnattendGenBW.RunWorkerAsync()
             Else
                 Close()
             End If
@@ -1658,5 +1626,65 @@ Public Class NewUnattendWiz
 
         ' Signal that the node has been drawn
         e.DrawDefault = False
+    End Sub
+
+    Private Sub UnattendGenBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGenBW.DoWork
+        Try
+            ' Download UnattendGen and run it
+            If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
+                Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
+            End If
+            Using UnattClient As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Dim contents As String = ""
+                Try
+                    contents = UnattClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/UnattendGen/master/DISMTools-Install.ps1")
+                Catch ex As WebException
+                    Throw ex
+                End Try
+                If contents <> "" Then
+                    File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
+                End If
+            End Using
+            If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                ' Run installer
+                Dim UAProc As New Process()
+                UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                UAProc.StartInfo.WorkingDirectory = Application.StartupPath
+                UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & UnattendGenReleaseTag & Quote
+                UAProc.Start()
+                UAProc.WaitForExit()
+                If UAProc.ExitCode <> 0 Then
+                    Throw New System.ComponentModel.Win32Exception(UAProc.ExitCode)
+                End If
+            End If
+            If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                Try
+                    File.Delete(Application.StartupPath & "\setup.ps1")
+                Catch ex As Exception
+                    ' Don't delete it
+                End Try
+            End If
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+    Private Sub UnattendGenBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UnattendGenBW.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & e.Error.Message, "UnattendGen error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
+                Try
+                    Directory.Delete(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained"), True)
+                Catch ex As Exception
+                    ' Leave dir
+                End Try
+            End If
+            Close()
+            Exit Sub
+        End If
+        ExpressPanelFooter.Enabled = True
+        PreferSelfContained = True
+        UGNotify.ShowBalloonTip(5000)
     End Sub
 End Class
