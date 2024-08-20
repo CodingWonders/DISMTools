@@ -88,6 +88,9 @@ Public Class NewUnattendWiz
 
     Dim SaveTarget As String = ""
 
+    ' Editor Mode
+    Dim DefaultContents As String
+
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -475,6 +478,8 @@ Public Class NewUnattendWiz
         FontFamilyTSCB.SelectedItem = "Consolas"
         SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
+        DefaultContents = Scintilla1.Text
+
         SetDefaultSettings()
         ' System language
         If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
@@ -546,6 +551,8 @@ Public Class NewUnattendWiz
             Else
                 Close()
             End If
+        Else
+            UGNotify.Visible = False
         End If
     End Sub
 
@@ -844,11 +851,12 @@ Public Class NewUnattendWiz
         ExpressPanelTrigger.ForeColor = Color.White
         PictureBox1.Image = My.Resources.express_mode_select
         EditorPanelTrigger.BackColor = SidePanel.BackColor
-        EditorPanelTrigger.ForeColor = Color.LightGray
+        EditorPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox3.Image = My.Resources.express_mode_fc
         Label3.Text = "Express mode"
         Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
+        FooterContainer.Visible = True
     End Sub
 
     Private Sub EditorPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles EditorPanelTrigger.MouseEnter
@@ -889,7 +897,7 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = Color.LightGray
+        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
         PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         EditorPanelTrigger.ForeColor = Color.White
@@ -897,6 +905,7 @@ Public Class NewUnattendWiz
         PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
         Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        FooterContainer.Visible = False
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
@@ -1585,7 +1594,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If UnattendGeneratorBW.IsBusy Then
+        If UnattendGeneratorBW.IsBusy OrElse UnattendGenBW.IsBusy Then
             e.Cancel = True
             Beep()
             Exit Sub
@@ -1686,5 +1695,33 @@ Public Class NewUnattendWiz
         ExpressPanelFooter.Enabled = True
         PreferSelfContained = True
         UGNotify.ShowBalloonTip(5000)
+    End Sub
+
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        Scintilla1.Text = DefaultContents
+    End Sub
+
+    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        EditorModeOFD.ShowDialog()
+    End Sub
+
+    Private Sub EditorModeOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeOFD.FileOk
+        Try
+            Scintilla1.Text = File.ReadAllText(EditorModeOFD.FileName)
+        Catch ex As Exception
+            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+        End Try
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        EditorModeSFD.ShowDialog()
+    End Sub
+
+    Private Sub EditorModeSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeSFD.FileOk
+        Try
+            File.WriteAllText(EditorModeSFD.FileName, Scintilla1.Text, UTF8)
+        Catch ex As Exception
+            MsgBox("Could not save file: " & ex.Message, vbOKOnly + vbCritical, Text)
+        End Try
     End Sub
 End Class
