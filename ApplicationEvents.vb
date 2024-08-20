@@ -80,7 +80,7 @@ Namespace My
         End Sub
 
         Private Sub SysEvts_UserPreferenceChanged(sender As Object, e As Microsoft.Win32.UserPreferenceChangedEventArgs)
-            ' Do nothing
+            Debug.WriteLine(Date.UtcNow & " UTC - User Preference Category: " & e.Category.ToString())
         End Sub
 
         Private Sub SysEvts_DisplaySettingsChanged(sender As Object, e As EventArgs)
