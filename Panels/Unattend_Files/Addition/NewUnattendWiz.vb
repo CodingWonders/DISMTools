@@ -1264,6 +1264,7 @@ Public Class NewUnattendWiz
 
     Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
         SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
+        NumericUpDown7.Maximum = NumericUpDown8.Value
     End Sub
 
     Private Sub RadioButton23_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton23.CheckedChanged
