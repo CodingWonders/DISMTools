@@ -29,7 +29,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (used in the future)"
                         Label10.Text = "Help documentation"
                         Label11.Text = "Command Help source"
-                        Label12.Text = "Unattended answer file creation wizard"
                         Label13.Text = "Scintilla.NET (NuGet package)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
@@ -45,8 +44,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Visit website"
                         LinkLabel6.Text = "Visit website"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "The Unattended answer file creation wizard is based on the Windows Answer File Generator website"
-                        LinkLabel8.LinkArea = New LinkArea(59, 29)
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
                         LinkLabel11.Text = "Microsoft"
@@ -66,7 +63,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usado en el futuro)"
                         Label10.Text = "Documentación de ayuda"
                         Label11.Text = "Fuente de ayuda de comandos"
-                        Label12.Text = "Creación de archivos de respuesta desatendida"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -82,8 +78,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Visitar sitio"
                         LinkLabel6.Text = "Visitar sitio"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "El Asistente de creación de archivos de respuesta desatendida está basado en el sitio Windows Answer File Generator"
-                        LinkLabel8.LinkArea = New LinkArea(86, 29)
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
                         LinkLabel11.Text = "Microsoft"
@@ -104,7 +98,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
                         Label10.Text = "Documentation d'aide"
                         Label11.Text = "Source d'aide à la commande"
-                        Label12.Text = "Création de fichiers de réponse sans surveillance"
                         Label13.Text = "Scintilla.NET (paquet NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
@@ -120,8 +113,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Site web"
                         LinkLabel6.Text = "Site web"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "L'assistant de création de fichiers de réponses sans surveillance est basé sur le site web Windows Answer File Generator"
-                        LinkLabel8.LinkArea = New LinkArea(79, 41)
                         LinkLabel9.Text = "Site web"
                         LinkLabel10.Text = "Site web"
                         LinkLabel11.Text = "Microsoft"
@@ -142,7 +133,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usado no futuro)"
                         Label10.Text = "Documentação de ajuda"
                         Label11.Text = "Fonte da Ajuda do Comando"
-                        Label12.Text = "Criação de ficheiros de resposta não assistida"
                         Label13.Text = "Scintilla.NET (pacote NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -158,8 +148,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Sítio Web"
                         LinkLabel6.Text = "Sítio Web"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "O assistente de criação de ficheiros de resposta não assistida baseia-se no sítio Web do Gerador de Ficheiros de Resposta do Windows"
-                        LinkLabel8.LinkArea = New LinkArea(76, 56)
                         LinkLabel9.Text = "Sítio Web"
                         LinkLabel10.Text = "Sítio Web"
                         LinkLabel11.Text = "Microsoft"
@@ -180,7 +168,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usato in futuro)"
                         Label10.Text = "Documentazione di aiuto"
                         Label11.Text = "Fonte della guida ai comandi"
-                        Label12.Text = "Creazione guidata del file di risposta non presidiato"
                         Label13.Text = "Scintilla.NET (pacchetto NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Costruito su " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " da msbuild"
@@ -196,8 +183,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Sito web"
                         LinkLabel6.Text = "Sito web"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "La procedura guidata per la creazione di file di risposta non presidiati si basa sul sito web del Generatore di file di risposta di Windows"
-                        LinkLabel8.LinkArea = New LinkArea(98, 41)
                         LinkLabel9.Text = "Sito web"
                         LinkLabel10.Text = "Sito web"
                         LinkLabel11.Text = "Microsoft"
@@ -219,7 +204,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (used in the future)"
                 Label10.Text = "Help documentation"
                 Label11.Text = "Command Help source"
-                Label12.Text = "Unattended answer file creation wizard"
                 Label13.Text = "Scintilla.NET (NuGet package)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
@@ -235,8 +219,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Visit website"
                 LinkLabel6.Text = "Visit website"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "The Unattended answer file creation wizard is based on the Windows Answer File Generator website"
-                LinkLabel8.LinkArea = New LinkArea(59, 29)
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
                 LinkLabel11.Text = "Microsoft"
@@ -257,7 +239,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usado en el futuro)"
                 Label10.Text = "Documentación de ayuda"
                 Label11.Text = "Fuente de ayuda de comandos"
-                Label12.Text = "Creación de archivos de respuesta desatendida"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -273,8 +254,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Visitar sitio"
                 LinkLabel6.Text = "Visitar sitio"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "El Asistente de creación de archivos de respuesta desatendida está basado en el sitio Windows Answer File Generator"
-                LinkLabel8.LinkArea = New LinkArea(86, 29)
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
                 LinkLabel11.Text = "Microsoft"
@@ -295,7 +274,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
                 Label10.Text = "Documentation d'aide"
                 Label11.Text = "Source d'aide à la commande"
-                Label12.Text = "Création de fichiers de réponse sans surveillance"
                 Label13.Text = "Scintilla.NET (paquet NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
@@ -311,8 +289,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Site web"
                 LinkLabel6.Text = "Site web"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "L'assistant de création de fichiers de réponses sans surveillance est basé sur le site web Windows Answer File Generator"
-                LinkLabel8.LinkArea = New LinkArea(79, 41)
                 LinkLabel9.Text = "Site web"
                 LinkLabel10.Text = "Site web"
                 LinkLabel11.Text = "Microsoft"
@@ -333,7 +309,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usado no futuro)"
                 Label10.Text = "Documentação de ajuda"
                 Label11.Text = "Fonte da Ajuda do Comando"
-                Label12.Text = "Criação de ficheiros de resposta não assistida"
                 Label13.Text = "Scintilla.NET (pacote NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -349,8 +324,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Sítio Web"
                 LinkLabel6.Text = "Sítio Web"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "O assistente de criação de ficheiros de resposta não assistida baseia-se no sítio Web do Gerador de Ficheiros de Resposta do Windows"
-                LinkLabel8.LinkArea = New LinkArea(76, 56)
                 LinkLabel9.Text = "Sítio Web"
                 LinkLabel10.Text = "Sítio Web"
                 LinkLabel11.Text = "Microsoft"
@@ -371,7 +344,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usato in futuro)"
                 Label10.Text = "Documentazione di aiuto"
                 Label11.Text = "Fonte della guida ai comandi"
-                Label12.Text = "Creazione guidata del file di risposta non presidiato"
                 Label13.Text = "Scintilla.NET (pacchetto NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Costruito su " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " da msbuild"
@@ -387,8 +359,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Sito web"
                 LinkLabel6.Text = "Sito web"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "La procedura guidata per la creazione di file di risposta non presidiati si basa sul sito web del Generatore di file di risposta di Windows"
-                LinkLabel8.LinkArea = New LinkArea(98, 41)
                 LinkLabel9.Text = "Sito web"
                 LinkLabel10.Text = "Sito web"
                 LinkLabel11.Text = "Microsoft"
@@ -439,7 +409,7 @@ Public Class PrgAbout
         Process.Start("https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/deployment-image-servicing-and-management--dism--command-line-options")
     End Sub
 
-    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("https://www.windowsafg.com/")
     End Sub
 
