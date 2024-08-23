@@ -76,6 +76,9 @@ Partial Class AddProvAppxPackage
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.Button10 = New System.Windows.Forms.Button()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -89,6 +92,7 @@ Partial Class AddProvAppxPackage
         Me.GroupBox3.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -384,9 +388,9 @@ Partial Class AddProvAppxPackage
         Me.TableLayoutPanel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel3.ColumnCount = 3
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3333282!))
         Me.TableLayoutPanel3.Controls.Add(Me.Button4, 2, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Button5, 1, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Button6, 0, 0)
@@ -627,6 +631,7 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox2)
         Me.FlowLayoutPanel1.Controls.Add(Me.Panel1)
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox3)
+        Me.FlowLayoutPanel1.Controls.Add(Me.Panel2)
         Me.FlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.FlowLayoutPanel1.Location = New System.Drawing.Point(525, 137)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
@@ -669,6 +674,36 @@ Partial Class AddProvAppxPackage
         Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.Button10.UseVisualStyleBackColor = True
         '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ComboBox1)
+        Me.Panel2.Controls.Add(Me.Label4)
+        Me.Panel2.Location = New System.Drawing.Point(3, 446)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(504, 41)
+        Me.Panel2.TabIndex = 11
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoEllipsis = True
+        Me.Label4.Location = New System.Drawing.Point(10, 13)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(115, 13)
+        Me.Label4.TabIndex = 11
+        Me.Label4.Text = "Stub preference:"
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"Do not configure stub preference", "Install application as a stub package", "Install application as a full package"})
+        Me.ComboBox1.Location = New System.Drawing.Point(131, 10)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(364, 21)
+        Me.ComboBox1.TabIndex = 12
+        Me.ComboBox1.Text = "Do not configure stub preference"
+        '
         'AddProvAppxPackage
         '
         Me.AcceptButton = Me.OK_Button
@@ -709,6 +744,7 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -767,5 +803,8 @@ Partial Class AddProvAppxPackage
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox4 As System.Windows.Forms.CheckBox
     Friend WithEvents Button10 As System.Windows.Forms.Button
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label4 As System.Windows.Forms.Label
 
 End Class

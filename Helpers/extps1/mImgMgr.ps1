@@ -3,7 +3,7 @@
 #                                         .'^""""""^.            
 #      '^`'.                            '^"""""""^.              
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.5                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.5.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Mounted image manager (CLI version)                   |
@@ -39,7 +39,7 @@ if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]:
 
 Import-Module Dism
 
-$ver = "0.5"
+$ver = "0.5.1"
 
 # Set window title
 $host.UI.RawUI.WindowTitle = "Mounted image manager"

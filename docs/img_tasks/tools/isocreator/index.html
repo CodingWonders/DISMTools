@@ -59,7 +59,7 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../offline_inst_mgmt/">Offline installation management mode</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Image management</a>
+                  <li class="toctree-l1"><a class="reference internal" >Image management</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/append_image/">Appending to an image</a>
                 </li>
@@ -71,6 +71,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/export_image/">Exporting a Windows image</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../mgmt/list_image/">Listing the contents of Windows images</a>
+                </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/mount_image/">Mounting an image</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/remount_image/">Remounting an image</a>
@@ -79,7 +81,7 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../mgmt/unmount_image/">Unmounting an image</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="#">Image information dialogs</a>
+                <li class="toctree-l2"><a class="reference internal" >Image information dialogs</a>
     <ul>
                 <li class="toctree-l3"><a class="reference internal" href="../../info/infodlgs/">Overview</a>
                 </li>
@@ -101,7 +103,7 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">OS packages</a>
+                  <li class="toctree-l1"><a class="reference internal" >OS packages</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../packages/pkgs/">Overview</a>
                 </li>
@@ -111,7 +113,7 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Features</a>
+                  <li class="toctree-l1"><a class="reference internal" >Features</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../features/features/">Overview</a>
                 </li>
@@ -121,7 +123,7 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">AppX packages</a>
+                  <li class="toctree-l1"><a class="reference internal" >AppX packages</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../appx/appx/">Overview</a>
                 </li>
@@ -131,7 +133,13 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Capabilities</a>
+                  <li class="toctree-l1"><a class="reference internal" >Languages and regional servicing</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../langs/set_layereddriver/">Setting keyboard layered drivers</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capabilities</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../capabilities/caps/">Overview</a>
                 </li>
@@ -141,7 +149,7 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Drivers</a>
+                  <li class="toctree-l1"><a class="reference internal" >Drivers</a>
     <ul>
                 <li class="toctree-l2"><a class="reference internal" href="../../drivers/drvs/">Overview</a>
                 </li>
@@ -155,7 +163,7 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Windows PE servicing</a>
+                  <li class="toctree-l1"><a class="reference internal" >Windows PE servicing</a>
     <ul>
                 <li class="toctree-l2"><a class="" href="../../winpe/set_targetpath.md">Setting the target path</a>
                 </li>
@@ -163,7 +171,19 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Tools</a>
+                  <li class="toctree-l1"><a class="reference internal" >Unattended answer files</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../unattend/unattend/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_man/">Unattended answer file manager</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_create/">Unattended answer file creator</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_apply/">Applying unattended answer files</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Tools</a>
     <ul class="current">
                 <li class="toctree-l2"><a class="reference internal" href="../mimgmgr/">Mounted image manager</a>
                 </li>
@@ -173,13 +193,15 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
                 </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="./">ISO creation tools</a>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">ISO creation tools</a>
     <ul class="current">
     <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
         <ul>
     <li class="toctree-l4"><a class="reference internal" href="#the-preinstallation-environment-pe-helper">The Preinstallation Environment (PE) Helper</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#driver-installation-module">Driver Installation Module</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#extensibility-suite">Extensibility Suite</a>
     </li>
         </ul>
     </li>
@@ -194,11 +216,11 @@
               <ul>
                   <li class="toctree-l1"><a class="" href="../../../cli_tools/cli_tools.md">Overview</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Command Console</a>
+                  <li class="toctree-l1"><a class="reference internal" >Command Console</a>
     <ul>
                 <li class="toctree-l2"><a class="" href="../../../cli_tools/cmd_console.md">Overview</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="#">Tools</a>
+                <li class="toctree-l2"><a class="reference internal" >Tools</a>
     <ul>
                 <li class="toctree-l3"><a class="" href="../../../cli_tools/cmdhelp.md">Command help</a>
                 </li>
@@ -241,12 +263,13 @@
 
 <p>If you want to test the changes made to a Windows image, you can easily do so with the ISO creation tools, which include the <strong>ISO creator</strong> and the <strong>Preinstallation Environment (PE) Helper</strong>.</p>
 <p>You will need the Windows Assessment and Deployment Kit (ADK), which you can download using the convenient link on the bottom left.</p>
-<p><em>This tool is available in DISMTools 0.5</em></p>
+<p><em>This tool is available in DISMTools 0.5 and later.</em></p>
 <h2 id="usage">Usage</h2>
 <p>To create a new ISO file, do the following:</p>
 <ol>
 <li><strong>Pick your Windows image.</strong> You can either browse through your computer for a Windows image to copy, pick an image from the pop-up mounted image picker, or pick the currently loaded one. Once you pick a Windows image, you will see information about each index in the image</li>
 <li><strong>Choose the architecture for the Preinstallation Environment</strong> by using the architecture list. It is recommended to pick the one that the image supports</li>
+<li>(Optional, new in DISMTools 0.5.1) <strong>Choose an unattended answer file to apply</strong></li>
 <li><strong>Choose the target location of the ISO file.</strong> If the target image exists, you will be asked if you want to replace it when clicking Create</li>
 </ol>
 <p>This process can take between 5 to 10 minutes, depending on the size of the Windows image and the speed of your computer's disk drive.</p>
@@ -337,6 +360,16 @@
 </ol>
 <!-- And, yes, I know how to make screenshots -->
 
+<h3 id="extensibility-suite">Extensibility Suite</h3>
+<p>The Extensibility Suite lets you expand the DISMTools Preinstallation Environment even further by letting you modify its functionality and add applications. You can add to the Preinstallation Environment applications that you may find useful, or applications that you have worked on.</p>
+<p><em>This task is available in DISMTools 0.5.1 and later.</em></p>
+<h4 id="usage_2">Usage</h4>
+<ol>
+<li>Go to Tools &gt; Create a testing environment...</li>
+<li>Specify the architecture and target location</li>
+<li>Click Create</li>
+</ol>
+<p>Then, you can look at the README file in the target directory to learn more.</p>
 <h2 id="remarks">Remarks</h2>
 <ul>
 <li><strong>Please make sure to commit your unsaved changes to your image before creating the ISO file</strong></li>

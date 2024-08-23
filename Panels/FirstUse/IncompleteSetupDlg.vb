@@ -31,6 +31,10 @@ Public Class IncompleteSetupDlg
                 Label1.Text = "O assistente de configuração ainda não está concluído e as suas configurações personalizadas não serão guardadas. Se prosseguir, o programa utilizará as configurações predefinidas." & CrLf & CrLf & "Pretende prosseguir?"
                 OK_Button.Text = "Sim"
                 Cancel_Button.Text = "Não"
+            Case "ITA"
+                Label1.Text = "L'impostazione non è ancora completa e le impostazioni personalizzate non verranno salvate. Procedendo, il programma utilizzerà le impostazioni predefinite." & CrLf & CrLf & "Volete procedere?"
+                OK_Button.Text = "Sì"
+                Cancel_Button.Text = "No"
         End Select
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then

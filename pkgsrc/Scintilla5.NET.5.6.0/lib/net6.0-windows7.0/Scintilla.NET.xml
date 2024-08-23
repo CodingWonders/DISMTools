@@ -1235,17 +1235,31 @@
         </member>
         <member name="M:ScintillaNET.HelperMethods.FromWin32Color(System.Int32)">
             <summary>
-            Converts a 32-bit WinAPI color to <see cref="T:System.Drawing.Color"/>.
+            Converts an ABGR WinAPI color to <see cref="T:System.Drawing.Color"/>.
             </summary>
             <param name="color">The color value to convert.</param>
-            <returns>A <see cref="T:System.Drawing.Color"/> equivalent of the 32-bit WinAPI color.</returns>
+            <returns>A <see cref="T:System.Drawing.Color"/> equivalent of the ABGR WinAPI color.</returns>
         </member>
         <member name="M:ScintillaNET.HelperMethods.ToWin32Color(System.Drawing.Color)">
             <summary>
-            Converts a <see cref="T:System.Drawing.Color"/> to 32-bit WinAPI color.
+            Converts a <see cref="T:System.Drawing.Color"/> to ABGR WinAPI color.
             </summary>
             <param name="color">The <see cref="T:System.Drawing.Color"/> instance to convert.</param>
-            <returns>32-bit WinAPI color value of the <see cref="T:System.Drawing.Color"/> instance.</returns>
+            <returns>ABGR WinAPI color value of the <see cref="T:System.Drawing.Color"/> instance.</returns>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.FromWin32ColorOpaque(System.Int32)">
+            <summary>
+            Converts an ABGR WinAPI color to <see cref="T:System.Drawing.Color"/> while ignoring the alpha channel.
+            </summary>
+            <param name="color">The color value to convert.</param>
+            <returns>A <see cref="T:System.Drawing.Color"/> equivalent of the ABGR WinAPI color with alpha channel value set to max (opaque).</returns>
+        </member>
+        <member name="M:ScintillaNET.HelperMethods.ToWin32ColorOpaque(System.Drawing.Color)">
+            <summary>
+            Converts a <see cref="T:System.Drawing.Color"/> to ABGR WinAPI color while ignoring the alpha channel.
+            </summary>
+            <param name="color">The <see cref="T:System.Drawing.Color"/> instance to convert.</param>
+            <returns>ABGR WinAPI color value of the <see cref="T:System.Drawing.Color"/> instance with alpha channel value set to max (opaque).</returns>
         </member>
         <member name="M:ScintillaNET.HelperMethods.GetFoldingState(ScintillaNET.Scintilla,System.String)">
             <summary>

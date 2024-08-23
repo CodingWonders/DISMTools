@@ -29,7 +29,7 @@ There are also more GUIs for DISM, but they are way less known, so they are not 
 
 ### Working with projects
 
-Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image, unattended answer files you want to apply, and a scratch directory for temporary operations.
 
 DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
 
@@ -140,6 +140,11 @@ The following actions are supported by DISMTools:
   - Driver addition and removal
 - Provisioning packages
   - Add provisioning packages to an image
+- Languages and regional servicing
+  - Setting keyboard layered drivers
+- Unattended answer files
+  - Creating and managing unattended answer files
+  - Applying unattended answer files
 - Other
   - Get complete information of an image
   - Using the project's or program's scratch directory
@@ -150,7 +155,6 @@ The following actions are supported by DISMTools:
 ## Unsupported actions
 
 - Regional settings
-- Applying unattended answer files
 - and more, it's in beta stages
 
 These actions will be supported in future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
@@ -176,10 +180,14 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: May 25, 2024 (Roberto Zamfir)</i></p>
+	<p align="center"><i>Last updated: August 3, 2024 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
+
+## Support this project
+
+If you find this project useful, consider giving it a star to encourage further development.
 
 ## Building
 
@@ -193,8 +201,7 @@ If you want to grab a copy straight from the source code, follow these instructi
 1. Begin by either cloning the project or downloading a ZIP of the source code. Go to "Code", and select an option from there
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
-4. Scroll down on the Solution Explorer until you find `UnpEax`, right-click it and select Build
-5. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 ### Additional startup flags
 
@@ -228,9 +235,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-<!-- However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2462_relcndid/Installer/Nightly/dt_setup.exe). -->
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_2483_relcndid/Installer/Nightly/dt_setup.exe).
 
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.5, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.5.1, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

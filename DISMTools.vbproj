@@ -80,8 +80,8 @@
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.3.1.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.5.6.0\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=5.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.5.6.1\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -110,10 +110,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>packages\DockPanelSuite.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2012, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
+      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +142,24 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\GeoId.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\ImageLanguage.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\KeyboardIdentifier.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\TimeOffset.vb" />
+    <Compile Include="Elements\AutoUnattend\Localization\UserLocale.vb" />
+    <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
+    <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
+    <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockdownSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
+    <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
       <SubType>Component</SubType>
@@ -492,6 +510,12 @@
     <Compile Include="Panels\Img_Ops\ImgMount.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Langs\SetLayeredDriver.Designer.vb">
+      <DependentUpon>SetLayeredDriver.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Langs\SetLayeredDriver.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Merger\ImgSwmToWim.Designer.vb">
       <DependentUpon>ImgSwmToWim.vb</DependentUpon>
     </Compile>
@@ -516,6 +540,12 @@
     <Compile Include="Panels\Img_Ops\Pkgs\AddPackage.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Pkgs\MUMAdditionDialog.Designer.vb">
+      <DependentUpon>MUMAdditionDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Pkgs\MUMAdditionDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Pkgs\RemPackage.Designer.vb">
       <DependentUpon>RemPackage.vb</DependentUpon>
     </Compile>
@@ -538,6 +568,12 @@
       <DependentUpon>SingleImageIndexError.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Switch\SingleImageIndexError.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.Designer.vb">
+      <DependentUpon>ApplyUnattendFile.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\WinPE\SetScratchSpace.Designer.vb">
@@ -574,6 +610,12 @@
       <DependentUpon>ISOCreator.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\ISOFiles\ISOCreator.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\NewTestingEnv.Designer.vb">
+      <DependentUpon>NewTestingEnv.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ISOFiles\NewTestingEnv.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\MSEdge\AddEdgeBrowser.Designer.vb">
@@ -898,6 +940,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\ImgMount.resx">
       <DependentUpon>ImgMount.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Langs\SetLayeredDriver.resx">
+      <DependentUpon>SetLayeredDriver.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Merger\ImgSwmToWim.resx">
       <DependentUpon>ImgSwmToWim.vb</DependentUpon>
     </EmbeddedResource>
@@ -910,6 +955,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\AddPackage.resx">
       <DependentUpon>AddPackage.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Pkgs\MUMAdditionDialog.resx">
+      <DependentUpon>MUMAdditionDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Pkgs\RemPackage.resx">
       <DependentUpon>RemPackage.vb</DependentUpon>
     </EmbeddedResource>
@@ -921,6 +969,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\SingleImageIndexError.resx">
       <DependentUpon>SingleImageIndexError.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Unattend\ApplyUnattendFile.resx">
+      <DependentUpon>ApplyUnattendFile.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetScratchSpace.resx">
       <DependentUpon>SetScratchSpace.vb</DependentUpon>
@@ -939,6 +990,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\ISOFiles\ISOCreator.resx">
       <DependentUpon>ISOCreator.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ISOFiles\NewTestingEnv.resx">
+      <DependentUpon>NewTestingEnv.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\MSEdge\AddEdgeBrowser.resx">
       <DependentUpon>AddEdgeBrowser.vb</DependentUpon>
@@ -1050,6 +1104,12 @@
     <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1087,6 +1147,18 @@
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
     <None Include="Tools\DT_WinADK.reg" />
+    <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-arm64\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-arm64\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x64\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x64\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x64\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x64\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
+    <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
+    <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1266,6 +1338,73 @@
     <Content Include="Installer\ISPPBuiltins.iss" />
     <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
+    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
+    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
+    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
+    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
+    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
+    <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-arm64\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-x64\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-x64\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x64\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\Library-License.txt" />
+    <Content Include="Tools\UnattendGen\win-x86\LICENSE.txt" />
+    <Content Include="Tools\UnattendGen\win-x86\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\Newtonsoft.Json.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\publish\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.exe" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGen.pdb" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.dll" />
+    <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.pdb" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
@@ -1328,31 +1467,7 @@
     <None Include="Resources\progresspanel_logview_hidden.png" />
     <None Include="Resources\progresspanel_logview_shown.png" />
     <None Include="Resources\create_iso.png" />
-    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
-    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
+    <None Include="Resources\set_layeredkeyboarddriver.png" />
     <None Include="Resources\startup\version.png" />
     <None Include="Resources\startup\preview_flag.png" />
     <None Include="Resources\startup\startup_bg.png" />
@@ -1620,7 +1735,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 ECHO Generating program structure...
@@ -1674,6 +1789,17 @@ IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
 	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
 )
 
+:: Copy UnattendGen
+IF EXIST "$(SolutionDir)Tools\UnattendGen" (
+	md "Tools\UnattendGen"
+	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
+)
+
+IF NOT EXIST AutoUnattend (
+	md AutoUnattend
+	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
+)
+
 IF %25ISPREVIEW%25=="Yes" (
 	echo You will be running a preview release, which may not be ready for production. You may experience more bugs and less stability. Please switch to a stable release whenever possible.
 )
@@ -1724,6 +1850,10 @@ IF EXIST videos (
 	rd videos /s /q
 )
 
+IF EXIST AutoUnattend (
+	rd AutoUnattend /s /q
+)
+
 IF EXIST videos.xml (del videos.xml)
 IF EXIST videos.xml.old (del videos.xml.old)
 
@@ -1731,12 +1861,12 @@ IF EXIST tools (
 	rd tools /s /q
 )</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets')" />
+  <Import Project="packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.0\build\scintilla5.net.targets'))" />
+    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.1\build\scintilla5.net.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

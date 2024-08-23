@@ -9,16 +9,23 @@ Public Class AddPackageDlg
 
     Public Language As Integer
 
+    Dim Addition_MUMFile As String
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgSource = TextBox1.Text
         pkgCount = CheckedListBox1.CheckedItems.Count
-        If RadioButton1.Checked Then
+        If RadioButton1.Checked AndAlso (Addition_MUMFile Is Nothing OrElse Addition_MUMFile = "") Then
             ProgressPanel.pkgAdditionOp = 0
         Else
-            ProgressPanel.pkgAdditionOp = 1
-            ProgressPanel.pkgCount = pkgCount
+            If Addition_MUMFile <> "" Then
+                ProgressPanel.pkgAdditionOp = 2
+                ProgressPanel.pkgCount = 1
+            Else
+                ProgressPanel.pkgAdditionOp = 1
+                ProgressPanel.pkgCount = pkgCount
+            End If
         End If
         If CheckBox1.Checked Then
             ProgressPanel.pkgIgnoreApplicabilityChecks = True
@@ -48,6 +55,8 @@ Public Class AddPackageDlg
                                 MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à ajouter et réessayer. Vous pouvez également continuer à laisser DISM analyser les paquets applicables", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                             Case "PTB", "PTG"
                                 MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a adicionar e tente novamente. Também pode continuar a deixar o DISM verificar os pacotes aplicáveis", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            Case "ITA"
+                                MessageBox.Show(MainForm, "Selezionare i pacchetti da aggiungere e riprovare. È anche possibile continuare a lasciare che DISM esegua la scansione dei pacchetti applicabili", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End Select
                     Case 1
                         MessageBox.Show(MainForm, "Please select packages to add, and try again. You can also continue with letting DISM scan applicable packages", "No packages selected", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -57,6 +66,8 @@ Public Class AddPackageDlg
                         MessageBox.Show(MainForm, "Veuillez sélectionner les paquets à ajouter et réessayer. Vous pouvez également continuer à laisser DISM analyser les paquets applicables", "Aucun paquet sélectionné", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Case 4
                         MessageBox.Show(MainForm, "Por favor, seleccione os pacotes a adicionar e tente novamente. Também pode continuar a deixar o DISM verificar os pacotes aplicáveis", "Nenhum pacote selecionado", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Case 5
+                        MessageBox.Show(MainForm, "Selezionare i pacchetti da aggiungere e riprovare. È anche possibile continuare a lasciare che DISM esegua la scansione dei pacchetti applicabili", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Select
             Else
                 If pkgCount > 65535 Then
@@ -83,6 +94,14 @@ Public Class AddPackageDlg
                 Me.Close()
             End If
         ElseIf ProgressPanel.pkgAdditionOp = 0 Then
+            ProgressPanel.OperationNum = 26
+            Visible = False
+            ProgressPanel.ShowDialog(MainForm)
+            Me.DialogResult = System.Windows.Forms.DialogResult.OK
+            Me.Close()
+        ElseIf ProgressPanel.pkgAdditionOp = 2 Then
+            pkgs(0) = Addition_MUMFile
+            ProgressPanel.pkgs(0) = pkgs(0)
             ProgressPanel.OperationNum = 26
             Visible = False
             ProgressPanel.ShowDialog(MainForm)
@@ -118,6 +137,8 @@ Public Class AddPackageDlg
                         Label4.Text = "Recherche des paquets dans le répertoire en cours. Veuillez patienter..."
                     Case "PTB", "PTG"
                         Label4.Text = "A analisar o diretório em busca de pacotes. Aguarde..."
+                    Case "ITA"
+                        Label4.Text = "Scansione della directory per i pacchetti. Attendere..."
                 End Select
             Case 1
                 Label4.Text = "Scanning directory for packages. Please wait..."
@@ -127,6 +148,8 @@ Public Class AddPackageDlg
                 Label4.Text = "Recherche des paquets dans le répertoire en cours. Veuillez patienter..."
             Case 4
                 Label4.Text = "A analisar o diretório em busca de pacotes. Aguarde..."
+            Case 5
+                Label4.Text = "Scansione della directory per i pacchetti. Attendere..."
         End Select
         Refresh()
         ' TODO: show CheckedListBox items without full path
@@ -179,6 +202,8 @@ Public Class AddPackageDlg
                             Label4.Text = "Ce répertoire ne contient aucun paquet. Veuillez utiliser une autre source et réessayer"
                         Case "PTB", "PTG"
                             Label4.Text = "Esta pasta não contém quaisquer pacotes. Utilize uma origem diferente e tente novamente"
+                        Case "ITA"
+                            Label4.Text = "Questa cartella non contiene pacchetti. Utilizzare un'altra origine e riprovare"
                     End Select
                 Case 1
                     Label4.Text = "This folder does not contain any packages. Please use a different source and try again"
@@ -188,6 +213,8 @@ Public Class AddPackageDlg
                     Label4.Text = "Ce répertoire ne contient aucun paquet. Veuillez utiliser une autre source et réessayer"
                 Case 4
                     Label4.Text = "Esta pasta não contém quaisquer pacotes. Utilize uma origem diferente e tente novamente"
+                Case 5
+                    Label4.Text = "Questa cartella non contiene pacchetti. Utilizzare un'altra origine e riprovare"
             End Select
             Beep()
         Else
@@ -202,6 +229,8 @@ Public Class AddPackageDlg
                             Label4.Text = "Ce répertoire contient " & CheckedListBox1.Items.Count & " paquet" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
                         Case "PTB", "PTG"
                             Label4.Text = "Esta pasta contém " & CheckedListBox1.Items.Count & " pacote" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                        Case "ITA"
+                            Label4.Text = "Questa cartella contiene " & CheckedListBox1.Items.Count & " pacchett" & If(CheckedListBox1.Items.Count = 1, "o.", "i.")
                     End Select
                 Case 1
                     Label4.Text = "This folder contains " & CheckedListBox1.Items.Count & " package" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
@@ -211,6 +240,8 @@ Public Class AddPackageDlg
                     Label4.Text = "Ce répertoire contient " & CheckedListBox1.Items.Count & " paquet" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
                 Case 4
                     Label4.Text = "Esta pasta contém " & CheckedListBox1.Items.Count & " pacote" & If(CheckedListBox1.Items.Count = 1, ".", "s.")
+                Case 5
+                    Label4.Text = "Questa cartella contiene " & CheckedListBox1.Items.Count & " pacchett" & If(CheckedListBox1.Items.Count = 1, "o.", "i.")
             End Select
         End If
     End Sub
@@ -227,6 +258,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Browse..."
                         Button2.Text = "Select all"
                         Button3.Text = "Select none"
+                        Button4.Text = "Add update manifest..."
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Scan folder recursively for packages"
@@ -245,6 +277,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Examinar..."
                         Button2.Text = "Todos los paquetes"
                         Button3.Text = "Ningún paquete"
+                        Button4.Text = "Añadir manifiesto de actualización..."
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         RadioButton1.Text = "Escanear carpeta de forma recursiva por paquetes"
@@ -263,6 +296,7 @@ Public Class AddPackageDlg
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Sélectionner tout"
                         Button3.Text = "Sélectionner aucun"
+                        Button4.Text = "Ajouter un manifeste de mise à jour..."
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Analyse récursive du dossier à la recherche des paquets à ajouter"
@@ -278,9 +312,10 @@ Public Class AddPackageDlg
                         Label1.Text = Text
                         Label2.Text = "Origem do pacote:"
                         Label3.Text = "Operação do pacote:"
-                        Button1.Text = " Navegar..."
+                        Button1.Text = "Navegar..."
                         Button2.Text = "Selecionar tudo"
                         Button3.Text = "Não selecionar nenhum"
+                        Button4.Text = "Adicionar manifesto de atualização..."
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         RadioButton1.Text = "Procurar pacotes na pasta de forma recursiva"
@@ -291,6 +326,25 @@ Public Class AddPackageDlg
                         FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes CAB ou MSU:"
                         GroupBox1.Text = "Pacotes"
                         GroupBox2.Text = "Opções"
+                    Case "ITA"
+                        Text = "Aggiungi pacchetti"
+                        Label1.Text = Text
+                        Label2.Text = "Origine pacchetto:"
+                        Label3.Text = "Operazione pacchetto:"
+                        Button1.Text = "Sfoglia..."
+                        Button2.Text = "Seleziona tutto"
+                        Button3.Text = "Seleziona nessuno"
+                        Button4.Text = "Aggiungere il manifesto di aggiornamento..."
+                        Cancel_Button.Text = "Annullare"
+                        OK_Button.Text = "OK"
+                        RadioButton1.Text = "Scansiona la cartella in modo ricorsivo per i pacchetti"
+                        RadioButton2.Text = "Scegliere quali pacchetti aggiungere:"
+                        CheckBox1.Text = "Ignorare i controlli di applicabilità (non consigliato)"
+                        CheckBox2.Text = "Salta l'installazione del pacchetto se sono in corso operazioni online"
+                        CheckBox3.Text = "Impegna l'immagine dopo l'aggiunta dei pacchetti"
+                        FolderBrowserDialog1.Description = "Specificare la cartella contenente i pacchetti CAB o MSU:"
+                        GroupBox1.Text = "Pacchetti"
+                        GroupBox2.Text = "Opzioni"
                 End Select
             Case 1
                 Text = "Add packages"
@@ -300,6 +354,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Browse..."
                 Button2.Text = "Select all"
                 Button3.Text = "Select none"
+                Button4.Text = "Add update manifest..."
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Scan folder recursively for packages"
@@ -318,6 +373,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Examinar..."
                 Button2.Text = "Todos los paquetes"
                 Button3.Text = "Ningún paquete"
+                Button4.Text = "Añadir manifiesto de actualización..."
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 RadioButton1.Text = "Escanear carpeta de forma recursiva por paquetes"
@@ -336,6 +392,7 @@ Public Class AddPackageDlg
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Sélectionner tout"
                 Button3.Text = "Sélectionner aucun"
+                Button4.Text = "Ajouter un manifeste de mise à jour..."
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Analyse récursive du dossier à la recherche des paquets à ajouter"
@@ -351,9 +408,10 @@ Public Class AddPackageDlg
                 Label1.Text = Text
                 Label2.Text = "Origem do pacote:"
                 Label3.Text = "Operação do pacote:"
-                Button1.Text = " Navegar..."
+                Button1.Text = "Navegar..."
                 Button2.Text = "Selecionar tudo"
                 Button3.Text = "Não selecionar nenhum"
+                Button4.Text = "Adicionar manifesto de atualização..."
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 RadioButton1.Text = "Procurar pacotes na pasta de forma recursiva"
@@ -364,6 +422,25 @@ Public Class AddPackageDlg
                 FolderBrowserDialog1.Description = "Especificar a pasta que contém os pacotes CAB ou MSU:"
                 GroupBox1.Text = "Pacotes"
                 GroupBox2.Text = "Opções"
+            Case 5
+                Text = "Aggiungi pacchetti"
+                Label1.Text = Text
+                Label2.Text = "Origine pacchetto:"
+                Label3.Text = "Operazione pacchetto:"
+                Button1.Text = "Sfoglia..."
+                Button2.Text = "Seleziona tutto"
+                Button3.Text = "Seleziona nessuno"
+                Button4.Text = "Aggiungere il manifesto di aggiornamento..."
+                Cancel_Button.Text = "Annullare"
+                OK_Button.Text = "OK"
+                RadioButton1.Text = "Scansiona la cartella in modo ricorsivo per i pacchetti"
+                RadioButton2.Text = "Scegliere quali pacchetti aggiungere:"
+                CheckBox1.Text = "Ignorare i controlli di applicabilità (non consigliato)"
+                CheckBox2.Text = "Salta l'installazione del pacchetto se sono in corso operazioni online"
+                CheckBox3.Text = "Impegna l'immagine dopo l'aggiunta dei pacchetti"
+                FolderBrowserDialog1.Description = "Specificare la cartella contenente i pacchetti CAB o MSU:"
+                GroupBox1.Text = "Pacchetti"
+                GroupBox2.Text = "Opzioni"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -401,6 +478,8 @@ Public Class AddPackageDlg
                             Label4.Text = "Veuillez indiquer un répertoire où se trouvent les fichiers CAB ou MSU."
                         Case "PTB", "PTG"
                             Label4.Text = "Especifique um diretório onde estão localizados os ficheiros CAB ou MSU."
+                        Case "ITA"
+                            Label4.Text = "Specificare una directory in cui si trovano i file CAB o MSU"
                     End Select
                 Case 1
                     Label4.Text = "Please specify a directory where CAB or MSU files are located."
@@ -410,12 +489,15 @@ Public Class AddPackageDlg
                     Label4.Text = "Veuillez indiquer un répertoire où se trouvent les fichiers CAB ou MSU."
                 Case 4
                     Label4.Text = "Especifique um diretório onde estão localizados os ficheiros CAB ou MSU."
+                Case 5
+                    Label4.Text = "Specificare una directory in cui si trovano i file CAB o MSU"
             End Select
         End If
         Language = MainForm.Language
         CheckBox3.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        Addition_MUMFile = ""
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -456,5 +538,14 @@ Public Class AddPackageDlg
 
     Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck
         CheckedCount = CheckedListBox1.CheckedItems.Count
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If MUMAdditionDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            Addition_MUMFile = MUMAdditionDialog.MUMFile
+            If File.Exists(Addition_MUMFile) Then
+                OK_Button.PerformClick()
+            End If
+        End If
     End Sub
 End Class

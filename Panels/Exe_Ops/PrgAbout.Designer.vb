@@ -31,7 +31,6 @@ Partial Class PrgAbout
         Me.ModernPanelContainer = New System.Windows.Forms.Panel()
         Me.CreditsPanel = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -49,7 +48,6 @@ Partial Class PrgAbout
         Me.Label16 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
-        Me.Label12 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
@@ -70,8 +68,6 @@ Partial Class PrgAbout
         Me.UpdCheckBtn = New System.Windows.Forms.Button()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
         Me.PictureBox5 = New System.Windows.Forms.PictureBox()
-        Me.AnniversaryLabel = New System.Windows.Forms.Label()
-        Me.SignatureLabel = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ModernPanelContainer.SuspendLayout()
@@ -185,7 +181,6 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel8, 0, 14)
         Me.TableLayoutPanel2.Controls.Add(Me.Label9, 0, 6)
         Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.Label4, 0, 1)
@@ -203,7 +198,6 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Controls.Add(Me.Label16, 0, 8)
         Me.TableLayoutPanel2.Controls.Add(Me.Label11, 0, 12)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel7, 1, 12)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label12, 0, 13)
         Me.TableLayoutPanel2.Controls.Add(Me.Label17, 0, 15)
         Me.TableLayoutPanel2.Controls.Add(Me.Label19, 0, 9)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel12, 1, 9)
@@ -235,24 +229,6 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(420, 354)
         Me.TableLayoutPanel2.TabIndex = 1
-        '
-        'LinkLabel8
-        '
-        Me.LinkLabel8.AutoSize = True
-        Me.TableLayoutPanel2.SetColumnSpan(Me.LinkLabel8, 2)
-        Me.LinkLabel8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel8.LinkArea = New System.Windows.Forms.LinkArea(59, 29)
-        Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel8.LinkColor = System.Drawing.Color.Lime
-        Me.LinkLabel8.Location = New System.Drawing.Point(3, 261)
-        Me.LinkLabel8.Name = "LinkLabel8"
-        Me.LinkLabel8.Size = New System.Drawing.Size(414, 37)
-        Me.LinkLabel8.TabIndex = 7
-        Me.LinkLabel8.TabStop = True
-        Me.LinkLabel8.Text = "The Unattended answer file creation wizard is based on the Windows Answer File Ge" & _
-    "nerator website"
-        Me.LinkLabel8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.LinkLabel8.UseCompatibleTextRendering = True
         '
         'Label9
         '
@@ -446,22 +422,11 @@ Partial Class PrgAbout
         Me.LinkLabel7.Text = "Microsoft"
         Me.LinkLabel7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.TableLayoutPanel2.SetColumnSpan(Me.Label12, 2)
-        Me.Label12.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(3, 240)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(310, 21)
-        Me.Label12.TabIndex = 1
-        Me.Label12.Text = "Unattended answer file creation wizard"
-        '
         'Label17
         '
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(3, 298)
+        Me.Label17.Location = New System.Drawing.Point(3, 240)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(129, 21)
         Me.Label17.TabIndex = 1
@@ -520,7 +485,7 @@ Partial Class PrgAbout
         Me.LinkLabel11.LinkArea = New System.Windows.Forms.LinkArea(0, 0)
         Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel11.LinkColor = System.Drawing.Color.Lime
-        Me.LinkLabel11.Location = New System.Drawing.Point(337, 319)
+        Me.LinkLabel11.Location = New System.Drawing.Point(337, 261)
         Me.LinkLabel11.Name = "LinkLabel11"
         Me.LinkLabel11.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel11.TabIndex = 9
@@ -530,7 +495,7 @@ Partial Class PrgAbout
         'Label18
         '
         Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(3, 319)
+        Me.Label18.Location = New System.Drawing.Point(3, 261)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(154, 15)
         Me.Label18.TabIndex = 2
@@ -702,31 +667,6 @@ Partial Class PrgAbout
         Me.PictureBox5.TabIndex = 9
         Me.PictureBox5.TabStop = False
         '
-        'AnniversaryLabel
-        '
-        Me.AnniversaryLabel.BackColor = System.Drawing.Color.Transparent
-        Me.AnniversaryLabel.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AnniversaryLabel.ForeColor = System.Drawing.Color.Black
-        Me.AnniversaryLabel.Location = New System.Drawing.Point(23, 199)
-        Me.AnniversaryLabel.Name = "AnniversaryLabel"
-        Me.AnniversaryLabel.Size = New System.Drawing.Size(377, 123)
-        Me.AnniversaryLabel.TabIndex = 4
-        Me.AnniversaryLabel.Text = "Thank you so much for these 2 years! Without you, this program wouldn't have been" & _
-    " possible"
-        Me.AnniversaryLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        '
-        'SignatureLabel
-        '
-        Me.SignatureLabel.BackColor = System.Drawing.Color.Transparent
-        Me.SignatureLabel.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SignatureLabel.ForeColor = System.Drawing.Color.Black
-        Me.SignatureLabel.Location = New System.Drawing.Point(23, 303)
-        Me.SignatureLabel.Name = "SignatureLabel"
-        Me.SignatureLabel.Size = New System.Drawing.Size(377, 35)
-        Me.SignatureLabel.TabIndex = 4
-        Me.SignatureLabel.Text = "- CodingWonders"
-        Me.SignatureLabel.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
         'PrgAbout
         '
         Me.AcceptButton = Me.OK_Button
@@ -740,8 +680,6 @@ Partial Class PrgAbout
         Me.Controls.Add(Me.PictureBox3)
         Me.Controls.Add(Me.PictureBox2)
         Me.Controls.Add(Me.PictureBox1)
-        Me.Controls.Add(Me.SignatureLabel)
-        Me.Controls.Add(Me.AnniversaryLabel)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label15)
         Me.Controls.Add(Me.Label1)
@@ -789,7 +727,6 @@ Partial Class PrgAbout
     Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
-    Friend WithEvents LinkLabel8 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label9 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
@@ -807,7 +744,6 @@ Partial Class PrgAbout
     Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents RichTextBox2 As System.Windows.Forms.RichTextBox
     Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
@@ -821,7 +757,5 @@ Partial Class PrgAbout
     Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
     Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
-    Friend WithEvents AnniversaryLabel As System.Windows.Forms.Label
-    Friend WithEvents SignatureLabel As System.Windows.Forms.Label
 
 End Class

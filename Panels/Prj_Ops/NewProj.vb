@@ -57,6 +57,17 @@ Public Class NewProj
                             Else
                                 Exit Sub
                             End If
+                        Case "ITA"
+                            If MsgBox("La cartella: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "non esiste. Si desidera crearla?", vbYesNo + vbQuestion, "Creare un nuovo progetto") = MsgBoxResult.Yes Then
+                                Try
+                                    Directory.CreateDirectory(TextBox2.Text)
+                                Catch ex As Exception
+                                    MsgBox("Non è stato possibile creare la cartella del progetto a causa di: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Creare un nuovo progetto")
+                                    Exit Sub
+                                End Try
+                            Else
+                                Exit Sub
+                            End If
                     End Select
                 Case 1
                     If MsgBox("The directory: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "does not exist. Do you want to create it?", vbYesNo + vbQuestion, "Create a new project") = MsgBoxResult.Yes Then
@@ -97,6 +108,17 @@ Public Class NewProj
                             Directory.CreateDirectory(TextBox2.Text)
                         Catch ex As Exception
                             MsgBox("Não foi possível criar o diretório do projeto para si devido a: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Criar um novo projeto")
+                            Exit Sub
+                        End Try
+                    Else
+                        Exit Sub
+                    End If
+                Case 5
+                    If MsgBox("La cartella: " & CrLf & Quote & TextBox2.Text & Quote & CrLf & "non esiste. Si desidera crearla?", vbYesNo + vbQuestion, "Creare un nuovo progetto") = MsgBoxResult.Yes Then
+                        Try
+                            Directory.CreateDirectory(TextBox2.Text)
+                        Catch ex As Exception
+                            MsgBox("Non è stato possibile creare la cartella del progetto a causa di: " & CrLf & ex.ToString() & "; " & ex.Message, vbOKOnly + vbCritical, "Creare un nuovo progetto")
                             Exit Sub
                         End Try
                     Else
@@ -175,6 +197,18 @@ Public Class NewProj
                         Cancel_Button.Text = "Cancelar"
                         GroupBox1.Text = "Projeto"
                         FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
+                    Case "ITA"
+                        Text = "Crea un nuovo progetto"
+                        Label1.Text = Text
+                        Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
+                        Label3.Text = "Nome*:"
+                        Label4.Text = "Ubicazione*:"
+                        Label5.Text = "I campi che terminano con * sono obbligatori"
+                        Button1.Text = "Sfoglia..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
+                        GroupBox1.Text = "Progetto"
+                        FolderBrowserDialog1.Description = "Selezionare una cartella per memorizzare questo progetto:"
                 End Select
             Case 1
                 Text = "Create a new project"
@@ -224,6 +258,18 @@ Public Class NewProj
                 Cancel_Button.Text = "Cancelar"
                 GroupBox1.Text = "Projeto"
                 FolderBrowserDialog1.Description = "Por favor, seleccione uma pasta para armazenar este projeto:"
+            Case 5
+                Text = "Crea un nuovo progetto"
+                Label1.Text = Text
+                Label2.Text = "Specificare le opzioni per creare un nuovo progetto:"
+                Label3.Text = "Nome*:"
+                Label4.Text = "Ubicazione*:"
+                Label5.Text = "I campi che terminano con * sono obbligatori"
+                Button1.Text = "Sfoglia..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
+                GroupBox1.Text = "Progetto"
+                FolderBrowserDialog1.Description = "Selezionare una cartella per memorizzare questo progetto:"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

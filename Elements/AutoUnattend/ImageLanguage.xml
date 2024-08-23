@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<root>
+    <ImageLanguage Id="ar-SA" DisplayName="Arabic"/>
+    <ImageLanguage Id="pt-BR" DisplayName="Brazilian Portuguese"/>
+    <ImageLanguage Id="bg-BG" DisplayName="Bulgarian"/>
+    <ImageLanguage Id="zh-Hans-CN" DisplayName="Chinese Simplified"/>
+    <ImageLanguage Id="zh-Hant-CN" DisplayName="Chinese Traditional"/>
+    <ImageLanguage Id="hr-HR" DisplayName="Croatian"/>
+    <ImageLanguage Id="cs-CZ" DisplayName="Czech"/>
+    <ImageLanguage Id="da-DK" DisplayName="Danish"/>
+    <ImageLanguage Id="nl-NL" DisplayName="Dutch"/>
+    <ImageLanguage Id="en-US" DisplayName="English"/>
+    <ImageLanguage Id="en-GB" DisplayName="English International"/>
+    <ImageLanguage Id="et-EE" DisplayName="Estonian"/>
+    <ImageLanguage Id="fi-FI" DisplayName="Finnish"/>
+    <ImageLanguage Id="fr-FR" DisplayName="French"/>
+    <ImageLanguage Id="fr-CA" DisplayName="French Canadian"/>
+    <ImageLanguage Id="de-DE" DisplayName="German"/>
+    <ImageLanguage Id="el-GR" DisplayName="Greek"/>
+    <ImageLanguage Id="he-IL" DisplayName="Hebrew"/>
+    <ImageLanguage Id="hu-HU" DisplayName="Hungarian"/>
+    <ImageLanguage Id="it-IT" DisplayName="Italian"/>
+    <ImageLanguage Id="ja-JP" DisplayName="Japanese"/>
+    <ImageLanguage Id="ko-KR" DisplayName="Korean"/>
+    <ImageLanguage Id="lv-LV" DisplayName="Latvian"/>
+    <ImageLanguage Id="lt-LT" DisplayName="Lithuanian"/>
+    <ImageLanguage Id="nb-NO" DisplayName="Norwegian"/>
+    <ImageLanguage Id="pl-PL" DisplayName="Polish"/>
+    <ImageLanguage Id="pt-PT" DisplayName="Portuguese"/>
+    <ImageLanguage Id="ro-RO" DisplayName="Romanian"/>
+    <ImageLanguage Id="ru-RU" DisplayName="Russian"/>
+    <ImageLanguage Id="sr-Latn-RS" DisplayName="Serbian Latin"/>
+    <ImageLanguage Id="sk-SK" DisplayName="Slovak"/>
+    <ImageLanguage Id="sl-SI" DisplayName="Slovenian"/>
+    <ImageLanguage Id="es-ES" DisplayName="Spanish"/>
+    <ImageLanguage Id="es-MX" DisplayName="Spanish (Mexico)"/>
+    <ImageLanguage Id="sv-SE" DisplayName="Swedish"/>
+    <ImageLanguage Id="th-TH" DisplayName="Thai"/>
+    <ImageLanguage Id="tr-TR" DisplayName="Turkish"/>
+    <ImageLanguage Id="uk-UA" DisplayName="Ukrainian"/>
+</root>

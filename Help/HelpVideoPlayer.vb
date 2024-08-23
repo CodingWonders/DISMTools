@@ -12,6 +12,8 @@
                         Text = "Lecteur vidéo DISMTools"
                     Case "PTB", "PTG"
                         Text = "Reprodutor de vídeo DISMTools"
+                    Case "ITA"
+                        Text = "Lettore video DISMTools"
                 End Select
             Case 1
                 Text = "DISMTools Video Player"
@@ -21,6 +23,8 @@
                 Text = "Lecteur vidéo DISMTools"
             Case 4
                 Text = "Reprodutor de vídeo DISMTools"
+            Case 5
+                Text = "Lettore video DISMTools"
         End Select
     End Sub
 

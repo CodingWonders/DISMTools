@@ -202,6 +202,51 @@ Public Class GetDriverInfo
                         DriverFileLink.Text = "Pretendo obter informações sobre ficheiros de controladores"
                         ListView1.Columns(0).Text = "Nome publicado"
                         SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
+                    Case "ITA"
+                        Text = "Ottieni informazioni sul conducente"
+                        Label1.Text = Text
+                        Label2.Text = "Su cosa si desidera ottenere informazioni?"
+                        Label3.Text = "Fare clic qui per ottenere informazioni sui driver installati o forniti con l'immagine di Windows che si sta revisionando"
+                        Label4.Text = "Fare clic qui per ottenere informazioni sui driver che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei driver"
+                        Label5.Text = "Pronto"
+                        Label6.Text = "Aggiungere o selezionare un pacchetto di driver per visualizzarne le informazioni"
+                        Label7.Text = "Obiettivi hardware"
+                        Label8.Text = "Descrizione hardware:"
+                        Label10.Text = "ID hardware:"
+                        Label12.Text = "ID aggiuntivi:"
+                        Label13.Text = "ID compatibili:"
+                        Label16.Text = "Escludere ID:"
+                        Label17.Text = "Produttore hardware:"
+                        Label20.Text = "Architettura:"
+                        Label21.Text = "Salto all'obiettivo:"
+                        Label22.Text = "Nome pubblicato:"
+                        Label24.Text = "Nome file originale:"
+                        Label26.Text = "Nome del fornitore:"
+                        Label28.Text = "È fondamentale per il processo di avvio?"
+                        Label30.Text = "Versione:"
+                        Label31.Text = "Nome della classe:"
+                        Label33.Text = "Parte della distribuzione di Windows?"
+                        Label36.Text = "Informazioni sul driver"
+                        Label37.Text = "Selezionare un driver installato per visualizzarne le informazioni"
+                        Label39.Text = "Data:"
+                        Label41.Text = "Descrizione della classe:"
+                        Label43.Text = "GUID della classe:"
+                        Label45.Text = "Stato della firma del driver:"
+                        Label47.Text = "Percorso del file di catalogo:"
+                        Label48.Text = "I processi in background sono stati configurati in modo da non mostrare tutti i driver presenti in questa immagine, che include i driver che fanno parte della distribuzione di Windows, quindi è possibile che non venga visualizzato il driver di interesse."
+                        Button1.Text = "Aggiungi driver..."
+                        Button2.Text = "Rimuovi selezionati"
+                        Button3.Text = "Rimuovi tutti"
+                        Button7.Text = "Cambia"
+                        Button8.Text = "Salva..."
+                        Button9.Text = "Visualizza informazioni sul file del driver"
+                        LinkLabel1.Text = "<- Indietro"
+                        InstalledDriverLink.Text = "Voglio ottenere informazioni sui driver installati nell'immagine"
+                        DriverFileLink.Text = "Desidero ottenere informazioni sui file dei driver"
+                        ListView1.Columns(0).Text = "Nome del file pubblicato"
+                        ListView1.Columns(1).Text = "Nome file originale"
+                        OpenFileDialog1.Title = "Individuazione dei file di driver"
+                        SearchBox1.Text = "Digitare qui per cercare un driver..."
                 End Select
             Case 1
                 Text = "Get driver information"
@@ -381,6 +426,51 @@ Public Class GetDriverInfo
                 DriverFileLink.Text = "Pretendo obter informações sobre ficheiros de controladores"
                 ListView1.Columns(0).Text = "Nome publicado"
                 SearchBox1.Text = "Digite aqui para pesquisar um controlador..."
+            Case 5
+                Text = "Ottieni informazioni sul conducente"
+                Label1.Text = Text
+                Label2.Text = "Su cosa si desidera ottenere informazioni?"
+                Label3.Text = "Fare clic qui per ottenere informazioni sui driver installati o forniti con l'immagine di Windows che si sta revisionando"
+                Label4.Text = "Fare clic qui per ottenere informazioni sui driver che si desidera aggiungere all'immagine di Windows in assistenza prima di procedere con il processo di aggiunta dei driver"
+                Label5.Text = "Pronto"
+                Label6.Text = "Aggiungere o selezionare un pacchetto di driver per visualizzarne le informazioni"
+                Label7.Text = "Obiettivi hardware"
+                Label8.Text = "Descrizione hardware:"
+                Label10.Text = "ID hardware:"
+                Label12.Text = "ID aggiuntivi:"
+                Label13.Text = "ID compatibili:"
+                Label16.Text = "Escludere ID:"
+                Label17.Text = "Produttore hardware:"
+                Label20.Text = "Architettura:"
+                Label21.Text = "Salto all'obiettivo:"
+                Label22.Text = "Nome pubblicato:"
+                Label24.Text = "Nome file originale:"
+                Label26.Text = "Nome del fornitore:"
+                Label28.Text = "È fondamentale per il processo di avvio?"
+                Label30.Text = "Versione:"
+                Label31.Text = "Nome della classe:"
+                Label33.Text = "Parte della distribuzione di Windows?"
+                Label36.Text = "Informazioni sul driver"
+                Label37.Text = "Selezionare un driver installato per visualizzarne le informazioni"
+                Label39.Text = "Data:"
+                Label41.Text = "Descrizione della classe:"
+                Label43.Text = "GUID della classe:"
+                Label45.Text = "Stato della firma del driver:"
+                Label47.Text = "Percorso del file di catalogo:"
+                Label48.Text = "I processi in background sono stati configurati in modo da non mostrare tutti i driver presenti in questa immagine, che include i driver che fanno parte della distribuzione di Windows, quindi è possibile che non venga visualizzato il driver di interesse."
+                Button1.Text = "Aggiungi driver..."
+                Button2.Text = "Rimuovi selezionati"
+                Button3.Text = "Rimuovi tutti"
+                Button7.Text = "Cambia"
+                Button8.Text = "Salva..."
+                Button9.Text = "Visualizza informazioni sul file del driver"
+                LinkLabel1.Text = "<- Indietro"
+                InstalledDriverLink.Text = "Voglio ottenere informazioni sui driver installati nell'immagine"
+                DriverFileLink.Text = "Desidero ottenere informazioni sui file dei driver"
+                ListView1.Columns(0).Text = "Nome del file pubblicato"
+                ListView1.Columns(1).Text = "Nome file originale"
+                OpenFileDialog1.Title = "Individuazione dei file di driver"
+                SearchBox1.Text = "Digitare qui per cercare un driver..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -497,6 +587,8 @@ Public Class GetDriverInfo
                                 msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                             Case "PTB", "PTG"
                                 msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
+                            Case "ITA"
+                                msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                         End Select
                     Case 1
                         msg = "Background processes need to have completed before showing package information. We'll wait until they have completed"
@@ -506,6 +598,8 @@ Public Class GetDriverInfo
                         msg = "Les processus en plan doivent être terminés avant d'afficher les paquets. Nous attendrons qu'ils soient terminés"
                     Case 4
                         msg = "Os processos em segundo plano precisam de ser concluídos antes de mostrar as informações dos pacotes. Esperamos até que estejam concluídos"
+                    Case 5
+                        msg = "I processi in secondo piano devono essere completati prima di mostrare le informazioni sul pacchetto. Aspetteremo che siano completati"
                 End Select
                 MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                 Select Case MainForm.Language
@@ -519,6 +613,8 @@ Public Class GetDriverInfo
                                 Label5.Text = "Attente de la fin des processus en arrière plan..."
                             Case "PTB", "PTG"
                                 Label5.Text = "À espera que os processos em segundo plano terminem..."
+                            Case "ITA"
+                                Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                         End Select
                     Case 1
                         Label5.Text = "Waiting for background processes to finish..."
@@ -528,6 +624,8 @@ Public Class GetDriverInfo
                         Label5.Text = "Attente de la fin des processus en arrière plan..."
                     Case 4
                         Label5.Text = "À espera que os processos em segundo plano terminem..."
+                    Case 5
+                        Label5.Text = "In attesa che i processi in secondo piano finiscano..."
                 End Select
                 While MainForm.ImgBW.IsBusy
                     Application.DoEvents()
@@ -558,6 +656,8 @@ Public Class GetDriverInfo
                             Label5.Text = "Préparation des processus d'information des pilotes en cours..."
                         Case "PTB", "PTG"
                             Label5.Text = "Preparar os processos de informação dos controladores..."
+                        Case "ITA"
+                            Label5.Text = "Preparazione per ottenere le informazioni del driver..."
                     End Select
                 Case 1
                     Label5.Text = "Preparing driver information processes..."
@@ -567,6 +667,8 @@ Public Class GetDriverInfo
                     Label5.Text = "Préparation des processus d'information des pilotes en cours..."
                 Case 4
                     Label5.Text = "Preparar os processos de informação dos controladores..."
+                Case 5
+                    Label5.Text = "Preparazione per ottenere le informazioni del driver..."
             End Select
             Application.DoEvents()
             DismApi.Initialize(DismLogLevel.LogErrors)
@@ -584,6 +686,8 @@ Public Class GetDriverInfo
                                         Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
                                     Case "PTB", "PTG"
                                         Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                                    Case "ITA"
+                                        Label5.Text = "Ottenere informazioni dal file del driver " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
                                 End Select
                             Case 1
                                 Label5.Text = "Getting information from driver file " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "This may take some time and the program may temporarily freeze"
@@ -593,6 +697,8 @@ Public Class GetDriverInfo
                                 Label5.Text = "Obtention des informations du fichier pilote " & Quote & Path.GetFileName(drvFile) & Quote & " en cours..." & CrLf & "Cette opération peut prendre un certain temps et le programme peut se bloquer temporairement."
                             Case 4
                                 Label5.Text = "Obter informações do ficheiro do controlador " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Isto pode demorar algum tempo e o programa pode congelar temporariamente"
+                            Case 5
+                                Label5.Text = "Ottenere informazioni dal file del driver " & Quote & Path.GetFileName(drvFile) & Quote & "..." & CrLf & "Questa operazione potrebbe richiedere del tempo e il programma potrebbe bloccarsi temporaneamente"
                         End Select
                         Application.DoEvents()
                         Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile)
@@ -616,6 +722,8 @@ Public Class GetDriverInfo
                         Label5.Text = "Prêt"
                     Case "PTB", "PTG"
                         Label5.Text = "Pronto"
+                    Case "ITA"
+                        Label5.Text = "Pronto"
                 End Select
             Case 1
                 Label5.Text = "Ready"
@@ -624,6 +732,8 @@ Public Class GetDriverInfo
             Case 3
                 Label5.Text = "Prêt"
             Case 4
+                Label5.Text = "Pronto"
+            Case 5
                 Label5.Text = "Pronto"
         End Select
     End Sub
@@ -650,6 +760,8 @@ Public Class GetDriverInfo
                                     Label14.Text = "Aucune déclarée par le fabricant du matériel"
                                 Case "PTB", "PTG"
                                     Label14.Text = "Nenhum declarado pelo fabricante do hardware"
+                                Case "ITA"
+                                    Label14.Text = "Nessuno dichiarato dal produttore dell'hardware"
                             End Select
                         Case 1
                             Label14.Text = "None declared by the hardware manufacturer"
@@ -659,6 +771,8 @@ Public Class GetDriverInfo
                             Label14.Text = "Aucune déclarée par le fabricant du matériel"
                         Case 4
                             Label14.Text = "Nenhum declarado pelo fabricante do hardware"
+                        Case 5
+                            Label14.Text = "Nessuno dichiarato dal produttore dell'hardware"
                     End Select
                 End If
                 If Label15.Text = "" Then
@@ -673,6 +787,8 @@ Public Class GetDriverInfo
                                     Label15.Text = "Aucune déclarée par le fabricant du matériel"
                                 Case "PTB", "PTG"
                                     Label15.Text = "Nenhum declarado pelo fabricante do hardware"
+                                Case "ITA"
+                                    Label15.Text = "Nessuno dichiarato dal produttore dell'hardware"
                             End Select
                         Case 1
                             Label15.Text = "None declared by the hardware manufacturer"
@@ -682,6 +798,8 @@ Public Class GetDriverInfo
                             Label15.Text = "Aucune déclarée par le fabricant du matériel"
                         Case 4
                             Label15.Text = "Nenhum declarado pelo fabricante do hardware"
+                        Case 5
+                            Label15.Text = "Nessuno dichiarato dal produttore dell'hardware"
                     End Select
                 End If
                 Exit For
@@ -746,6 +864,8 @@ Public Class GetDriverInfo
                                     Label7.Text = "Cible matérielle 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
                                 Case "PTB", "PTG"
                                     Label7.Text = "Equipamento-alvo 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                                Case "ITA"
+                                    Label7.Text = "Destinazione hardware 1 di " & DriverInfoList(ListBox1.SelectedIndex).Count
                             End Select
                         Case 1
                             Label7.Text = "Hardware target 1 of " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -755,6 +875,8 @@ Public Class GetDriverInfo
                             Label7.Text = "Cible matérielle 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
                         Case 4
                             Label7.Text = "Equipamento-alvo 1 de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Case 5
+                            Label7.Text = "Destinazione hardware 1 di " & DriverInfoList(ListBox1.SelectedIndex).Count
                     End Select
                 End If
                 If Not CurrentHWFile = ListBox1.SelectedIndex Then CurrentHWTarget = 1
@@ -826,6 +948,8 @@ Public Class GetDriverInfo
                             Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
                         Case "PTB", "PTG"
                             Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Case "ITA"
+                            Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
                     End Select
                 Case 1
                     Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -835,6 +959,8 @@ Public Class GetDriverInfo
                     Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
                 Case 4
                     Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Case 5
+                    Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
             End Select
             Button5.Enabled = True
             If CurrentHWTarget = 1 Then Button4.Enabled = False
@@ -856,6 +982,8 @@ Public Class GetDriverInfo
                             Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
                         Case "PTB", "PTG"
                             Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                        Case "ITA"
+                            Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
                     End Select
                 Case 1
                     Label7.Text = "Hardware target " & CurrentHWTarget & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -865,6 +993,8 @@ Public Class GetDriverInfo
                     Label7.Text = "Cible matérielle " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
                 Case 4
                     Label7.Text = "Equipamento-alvo " & CurrentHWTarget & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                Case 5
+                    Label7.Text = "Destinazione hardware " & CurrentHWTarget & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
             End Select
             Button4.Enabled = True
             If CurrentHWTarget = DriverInfoList(ListBox1.SelectedIndex).Count Then Button5.Enabled = False
@@ -884,6 +1014,8 @@ Public Class GetDriverInfo
                         msg = "Cible matérielle précédente"
                     Case "PTB", "PTG"
                         msg = "Equipamento-alvo anterior"
+                    Case "ITA"
+                        msg = "Destinazione hardware precedente"
                 End Select
             Case 1
                 msg = "Previous hardware target"
@@ -893,6 +1025,8 @@ Public Class GetDriverInfo
                 msg = "Cible matérielle précédente"
             Case 4
                 msg = "Equipamento-alvo anterior"
+            Case 5
+                msg = "Destinazione hardware precedente"
         End Select
         ButtonTT.SetToolTip(sender, msg)
     End Sub
@@ -910,6 +1044,8 @@ Public Class GetDriverInfo
                         msg = "Prochaine cible matérielle"
                     Case "PTB", "PTG"
                         msg = "Equipamento-alvo seguinte"
+                    Case "ITA"
+                        msg = "Prossima destinazione hardware"
                 End Select
             Case 1
                 msg = "Next hardware target"
@@ -919,6 +1055,8 @@ Public Class GetDriverInfo
                 msg = "Prochaine cible matérielle"
             Case 4
                 msg = "Equipamento-alvo seguinte"
+            Case 5
+                msg = "Prossima destinazione hardware"
         End Select
         ButtonTT.SetToolTip(sender, msg)
     End Sub
@@ -936,6 +1074,8 @@ Public Class GetDriverInfo
                         msg = "Sauter à la cible matérielle spécifique"
                     Case "PTB", "PTG"
                         msg = "Saltar para um equipamento-alvo específico"
+                    Case "ITA"
+                        msg = "Salta a una destinazione hardware specifica"
                 End Select
             Case 1
                 msg = "Jump to specific hardware target"
@@ -945,6 +1085,8 @@ Public Class GetDriverInfo
                 msg = "Sauter à la cible matérielle spécifique"
             Case 4
                 msg = "Saltar para um equipamento-alvo específico"
+            Case 5
+                msg = "Salta a una destinazione hardware specifica"
         End Select
         ButtonTT.SetToolTip(sender, msg)
     End Sub
@@ -963,6 +1105,8 @@ Public Class GetDriverInfo
                         Label7.Text = "Cible matérielle " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
                     Case "PTB", "PTG"
                         Label7.Text = "Equipamento-alvo " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+                    Case "ITA"
+                        Label7.Text = "Destinazione hardware " & JumpTo & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
                 End Select
             Case 1
                 Label7.Text = "Hardware target " & JumpTo & " of " & DriverInfoList(ListBox1.SelectedIndex).Count
@@ -972,6 +1116,8 @@ Public Class GetDriverInfo
                 Label7.Text = "Cible matérielle " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
             Case 4
                 Label7.Text = "Equipamento-alvo " & JumpTo & " de " & DriverInfoList(ListBox1.SelectedIndex).Count
+            Case 5
+                Label7.Text = "Destinazione hardware " & JumpTo & " di " & DriverInfoList(ListBox1.SelectedIndex).Count
         End Select
         CurrentHWTarget = JumpTo
         DisplayDriverInformation(JumpTo)
@@ -1016,6 +1162,9 @@ Public Class GetDriverInfo
                             Case "PTB", "PTG"
                                 Label27.Text = If(drv.BootCritical, "Sim", "Não")
                                 Label34.Text = If(drv.InBox, "Sim", "Não")
+                            Case "ITA"
+                                Label27.Text = If(drv.BootCritical, "Sì", "No")
+                                Label34.Text = If(drv.InBox, "Sì", "No")
                         End Select
                     Case 1
                         Label27.Text = If(drv.BootCritical, "Yes", "No")
@@ -1029,6 +1178,9 @@ Public Class GetDriverInfo
                     Case 4
                         Label27.Text = If(drv.BootCritical, "Sim", "Não")
                         Label34.Text = If(drv.InBox, "Sim", "Não")
+                    Case 5
+                        Label27.Text = If(drv.BootCritical, "Sì", "No")
+                        Label34.Text = If(drv.InBox, "Sì", "No")
                 End Select
                 Label29.Text = drv.Version.ToString()
                 Label32.Text = drv.ClassName
@@ -1052,6 +1204,8 @@ Public Class GetDriverInfo
                                     Label44.Text &= " par " & signer
                                 Case "PTB", "PTG"
                                     Label44.Text &= " por " & signer
+                                Case "ITA"
+                                    Label44.Text &= " da " & signer
                             End Select
                         Case 1
                             Label44.Text &= " by " & signer
@@ -1061,6 +1215,8 @@ Public Class GetDriverInfo
                             Label44.Text &= " par " & signer
                         Case 4
                             Label44.Text &= " por " & signer
+                        Case 5
+                            Label44.Text &= " da " & signer
                     End Select
                 End If
             Else

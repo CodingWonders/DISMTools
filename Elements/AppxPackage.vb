@@ -55,6 +55,19 @@ Namespace Elements
         Public Property PackageCustomDataFile As String
 
         Public Property PackageRegions As String
+
+        ''' <summary>
+        ''' Determines whether a stub package is available
+        ''' </summary>
+        ''' <returns>Returns true if a stub is available and false otherwise</returns>
+        ''' <remarks></remarks>
+        Public Property SupportsStub As Boolean
+
+        ''' <summary>
+        ''' The stub package option specified by the user
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Property StubPackageOption As StubPreference
     End Class
 
     ''' <summary>
@@ -89,5 +102,29 @@ Namespace Elements
         <XmlAttribute("Uri")>
         Public Property MainBundleUri As String
     End Class
+
+    ''' <summary>
+    ''' Stub package options for AppX packages
+    ''' </summary>
+    ''' <remarks>This is only supported on Windows 10 and later, and only works with bundle packages which contain stub packages. These stub packages are located at "AppxMetadata\Stub"</remarks>
+    Public Enum StubPreference
+        ''' <summary>
+        ''' No stub preference is defined
+        ''' </summary>
+        ''' <remarks></remarks>
+        NoPreference = 0
+
+        ''' <summary>
+        ''' Only installs a stub version of the package
+        ''' </summary>
+        ''' <remarks></remarks>
+        StubOnly = 1
+
+        ''' <summary>
+        ''' Installs the full package
+        ''' </summary>
+        ''' <remarks></remarks>
+        FullPackage = 2
+    End Enum
 End Namespace
 

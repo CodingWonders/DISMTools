@@ -29,7 +29,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (used in the future)"
                         Label10.Text = "Help documentation"
                         Label11.Text = "Command Help source"
-                        Label12.Text = "Unattended answer file creation wizard"
                         Label13.Text = "Scintilla.NET (NuGet package)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
@@ -45,15 +44,12 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Visit website"
                         LinkLabel6.Text = "Visit website"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "The Unattended answer file creation wizard is based on the Windows Answer File Generator website"
-                        LinkLabel8.LinkArea = New LinkArea(59, 29)
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visit website"
                         LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
-                        AnniversaryLabel.Text = "Thank you so much for these 2 years! Without you, this program wouldn't have been possible"
                     Case "ESN"
                         Text = "Acerca de este programa"
                         Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -67,7 +63,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usado en el futuro)"
                         Label10.Text = "Documentación de ayuda"
                         Label11.Text = "Fuente de ayuda de comandos"
-                        Label12.Text = "Creación de archivos de respuesta desatendida"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -83,8 +78,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Visitar sitio"
                         LinkLabel6.Text = "Visitar sitio"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "El Asistente de creación de archivos de respuesta desatendida está basado en el sitio Windows Answer File Generator"
-                        LinkLabel8.LinkArea = New LinkArea(86, 29)
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
                         LinkLabel11.Text = "Microsoft"
@@ -92,7 +85,6 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
-                        AnniversaryLabel.Text = "¡Muchas gracias por estos 2 años! Sin usted, este programa no podría haber sido posible"
                     Case "FRA"
                         Text = "À propos de ce programme"
                         Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -106,7 +98,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
                         Label10.Text = "Documentation d'aide"
                         Label11.Text = "Source d'aide à la commande"
-                        Label12.Text = "Création de fichiers de réponse sans surveillance"
                         Label13.Text = "Scintilla.NET (paquet NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
@@ -122,8 +113,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Site web"
                         LinkLabel6.Text = "Site web"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "L'assistant de création de fichiers de réponses sans surveillance est basé sur le site web Windows Answer File Generator"
-                        LinkLabel8.LinkArea = New LinkArea(79, 41)
                         LinkLabel9.Text = "Site web"
                         LinkLabel10.Text = "Site web"
                         LinkLabel11.Text = "Microsoft"
@@ -131,7 +120,6 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
-                        AnniversaryLabel.Text = "Merci beaucoup pour ces deux années ! Sans vous, ce programme n'aurait pas été possible."
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
                         Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -145,7 +133,6 @@ Public Class PrgAbout
                         Label9.Text = "wimlib-imagex (usado no futuro)"
                         Label10.Text = "Documentação de ajuda"
                         Label11.Text = "Fonte da Ajuda do Comando"
-                        Label12.Text = "Criação de ficheiros de resposta não assistida"
                         Label13.Text = "Scintilla.NET (pacote NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
                             Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -161,8 +148,6 @@ Public Class PrgAbout
                         LinkLabel5.Text = "Sítio Web"
                         LinkLabel6.Text = "Sítio Web"
                         LinkLabel7.Text = "Microsoft"
-                        LinkLabel8.Text = "O assistente de criação de ficheiros de resposta não assistida baseia-se no sítio Web do Gerador de Ficheiros de Resposta do Windows"
-                        LinkLabel8.LinkArea = New LinkArea(76, 56)
                         LinkLabel9.Text = "Sítio Web"
                         LinkLabel10.Text = "Sítio Web"
                         LinkLabel11.Text = "Microsoft"
@@ -170,7 +155,41 @@ Public Class PrgAbout
                         LinkLabel13.Text = "Sítio Web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Verificar actualizações"
-                        AnniversaryLabel.Text = "Muito obrigado por estes dois anos! Sem vós, este programa não teria sido possível"
+                    Case "ITA"
+                        Text = "Informazioni su questo programma"
+                        Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
+                        Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
+                        Label4.Text = "Risorse"
+                        Label5.Text = "Fluency"
+                        Label6.Text = "Icona di SQL Server (Color)"
+                        Label7.Text = "Utilità"
+                        Label8.Text = "7-Zip"
+                        Label9.Text = "wimlib-imagex (usato in futuro)"
+                        Label10.Text = "Documentazione di aiuto"
+                        Label11.Text = "Fonte della guida ai comandi"
+                        Label13.Text = "Scintilla.NET (pacchetto NuGet)"
+                        If Not MainForm.dtBranch.Contains("preview") Then
+                            Label15.Text = "Costruito su " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " da msbuild"
+                            Label15.Visible = True
+                        End If
+                        Label16.Text = "ManagedDism (pacchetto NuGet)"
+                        Label17.Text = "Risorse di branding"
+                        Label18.Text = "Windows Home Server 2011"
+                        LinkLabel1.Text = "CREDITI"
+                        LinkLabel2.Text = "LICENZE"
+                        LinkLabel3.Text = "COSA C'È DI NUOVO"
+                        LinkLabel4.Text = "Icons8"
+                        LinkLabel5.Text = "Sito web"
+                        LinkLabel6.Text = "Sito web"
+                        LinkLabel7.Text = "Microsoft"
+                        LinkLabel9.Text = "Sito web"
+                        LinkLabel10.Text = "Sito web"
+                        LinkLabel11.Text = "Microsoft"
+                        LinkLabel12.Text = "Sito web"
+                        LinkLabel13.Text = "Sito web"
+                        OK_Button.Text = "OK"
+                        UpdCheckBtn.Text = "Controlla gli aggiornamenti"
                 End Select
             Case 1
                 Text = "About this program"
@@ -185,7 +204,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (used in the future)"
                 Label10.Text = "Help documentation"
                 Label11.Text = "Command Help source"
-                Label12.Text = "Unattended answer file creation wizard"
                 Label13.Text = "Scintilla.NET (NuGet package)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
@@ -201,8 +219,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Visit website"
                 LinkLabel6.Text = "Visit website"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "The Unattended answer file creation wizard is based on the Windows Answer File Generator website"
-                LinkLabel8.LinkArea = New LinkArea(59, 29)
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
                 LinkLabel11.Text = "Microsoft"
@@ -210,7 +226,6 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Check for updates"
-                AnniversaryLabel.Text = "Thank you so much for these 2 years! Without you, this program wouldn't have been possible"
             Case 2
                 Text = "Acerca de este programa"
                 Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -224,7 +239,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usado en el futuro)"
                 Label10.Text = "Documentación de ayuda"
                 Label11.Text = "Fuente de ayuda de comandos"
-                Label12.Text = "Creación de archivos de respuesta desatendida"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -240,8 +254,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Visitar sitio"
                 LinkLabel6.Text = "Visitar sitio"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "El Asistente de creación de archivos de respuesta desatendida está basado en el sitio Windows Answer File Generator"
-                LinkLabel8.LinkArea = New LinkArea(86, 29)
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
                 LinkLabel11.Text = "Microsoft"
@@ -249,7 +261,6 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
-                AnniversaryLabel.Text = "¡Muchas gracias por estos 2 años! Sin usted, este programa no podría haber sido posible"
             Case 3
                 Text = "À propos de ce programme"
                 Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -263,7 +274,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
                 Label10.Text = "Documentation d'aide"
                 Label11.Text = "Source d'aide à la commande"
-                Label12.Text = "Création de fichiers de réponse sans surveillance"
                 Label13.Text = "Scintilla.NET (paquet NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
@@ -279,8 +289,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Site web"
                 LinkLabel6.Text = "Site web"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "L'assistant de création de fichiers de réponses sans surveillance est basé sur le site web Windows Answer File Generator"
-                LinkLabel8.LinkArea = New LinkArea(79, 41)
                 LinkLabel9.Text = "Site web"
                 LinkLabel10.Text = "Site web"
                 LinkLabel11.Text = "Microsoft"
@@ -288,7 +296,6 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
-                AnniversaryLabel.Text = "Merci beaucoup pour ces deux années ! Sans vous, ce programme n'aurait pas été possible."
             Case 4
                 Text = "Acerca deste programa"
                 Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
@@ -302,7 +309,6 @@ Public Class PrgAbout
                 Label9.Text = "wimlib-imagex (usado no futuro)"
                 Label10.Text = "Documentação de ajuda"
                 Label11.Text = "Fonte da Ajuda do Comando"
-                Label12.Text = "Criação de ficheiros de resposta não assistida"
                 Label13.Text = "Scintilla.NET (pacote NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
                     Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
@@ -318,8 +324,6 @@ Public Class PrgAbout
                 LinkLabel5.Text = "Sítio Web"
                 LinkLabel6.Text = "Sítio Web"
                 LinkLabel7.Text = "Microsoft"
-                LinkLabel8.Text = "O assistente de criação de ficheiros de resposta não assistida baseia-se no sítio Web do Gerador de Ficheiros de Resposta do Windows"
-                LinkLabel8.LinkArea = New LinkArea(76, 56)
                 LinkLabel9.Text = "Sítio Web"
                 LinkLabel10.Text = "Sítio Web"
                 LinkLabel11.Text = "Microsoft"
@@ -327,7 +331,41 @@ Public Class PrgAbout
                 LinkLabel13.Text = "Sítio Web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Verificar actualizações"
-                AnniversaryLabel.Text = "Muito obrigado por estes dois anos! Sem vós, este programa não teria sido possível"
+            Case 5
+                Text = "Informazioni su questo programma"
+                Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
+                Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
+                Label4.Text = "Risorse"
+                Label5.Text = "Fluency"
+                Label6.Text = "Icona di SQL Server (Color)"
+                Label7.Text = "Utilità"
+                Label8.Text = "7-Zip"
+                Label9.Text = "wimlib-imagex (usato in futuro)"
+                Label10.Text = "Documentazione di aiuto"
+                Label11.Text = "Fonte della guida ai comandi"
+                Label13.Text = "Scintilla.NET (pacchetto NuGet)"
+                If Not MainForm.dtBranch.Contains("preview") Then
+                    Label15.Text = "Costruito su " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " da msbuild"
+                    Label15.Visible = True
+                End If
+                Label16.Text = "ManagedDism (pacchetto NuGet)"
+                Label17.Text = "Risorse di branding"
+                Label18.Text = "Windows Home Server 2011"
+                LinkLabel1.Text = "CREDITI"
+                LinkLabel2.Text = "LICENZE"
+                LinkLabel3.Text = "COSA C'È DI NUOVO"
+                LinkLabel4.Text = "Icons8"
+                LinkLabel5.Text = "Sito web"
+                LinkLabel6.Text = "Sito web"
+                LinkLabel7.Text = "Microsoft"
+                LinkLabel9.Text = "Sito web"
+                LinkLabel10.Text = "Sito web"
+                LinkLabel11.Text = "Microsoft"
+                LinkLabel12.Text = "Sito web"
+                LinkLabel13.Text = "Sito web"
+                OK_Button.Text = "OK"
+                UpdCheckBtn.Text = "Controlla gli aggiornamenti"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
@@ -371,7 +409,7 @@ Public Class PrgAbout
         Process.Start("https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/deployment-image-servicing-and-management--dism--command-line-options")
     End Sub
 
-    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("https://www.windowsafg.com/")
     End Sub
 
@@ -542,6 +580,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
                     Case "PTB", "PTG"
                         PictureToolTip.SetToolTip(sender, "Consulte o repositório do projeto no GitHub")
+                    Case "ITA"
+                        PictureToolTip.SetToolTip(sender, "Controlla il repository del progetto su GitHub")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
@@ -551,6 +591,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
             Case 4
                 PictureToolTip.SetToolTip(sender, "Consulte o repositório do projeto no GitHub")
+            Case 5
+                PictureToolTip.SetToolTip(sender, "Controlla il repository del progetto su GitHub")
         End Select
     End Sub
 
@@ -566,6 +608,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
                     Case "PTB", "PTG"
                         PictureToolTip.SetToolTip(sender, "Consulte o subreddit oficial do projeto")
+                    Case "ITA"
+                        PictureToolTip.SetToolTip(sender, "Controlla il subreddit ufficiale del progetto")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
@@ -575,6 +619,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
             Case 4
                 PictureToolTip.SetToolTip(sender, "Consulte o subreddit oficial do projeto")
+            Case 5
+                PictureToolTip.SetToolTip(sender, "Controlla il subreddit ufficiale del progetto")
         End Select
     End Sub
 
@@ -590,6 +636,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
                     Case "PTB", "PTG"
                         PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
+                    Case "ITA"
+                        PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto sui forum di My Digital Life")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
@@ -599,6 +647,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
             Case 4
                 PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
+            Case 5
+                PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto sui forum di My Digital Life")
         End Select
     End Sub
 
@@ -614,6 +664,8 @@ Public Class PrgAbout
                         PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
                     Case "PTB", "PTG"
                         PictureToolTip.SetToolTip(sender, "Consulte o chat do Gitter (com tecnologia Matrix)")
+                    Case "ITA"
+                        PictureToolTip.SetToolTip(sender, "Controlla la chat Gitter (basata su Matrix)")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the Gitter chat (powered by Matrix)")
@@ -623,6 +675,8 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
             Case 4
                 PictureToolTip.SetToolTip(sender, "Consulte o chat do Gitter (com tecnologia Matrix)")
+            Case 5
+                PictureToolTip.SetToolTip(sender, "Controlla la chat Gitter (basata su Matrix)")
         End Select
     End Sub
 
@@ -645,6 +699,8 @@ Public Class PrgAbout
                             MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                         Case "PTB", "PTG"
                             MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                        Case "ITA"
+                            MsgBox("Non è stato possibile scaricare il programma di controllo degli aggiornamenti. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                     End Select
                 Case 1
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
@@ -654,6 +710,8 @@ Public Class PrgAbout
                     MsgBox("Nous n'avons pas pu télécharger le vérificateur de mise à jour. Raison :" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
                 Case 4
                     MsgBox("Não foi possível descarregar o verificador de actualizações. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
+                Case 5
+                    MsgBox("Non è stato possibile scaricare il programma di controllo degli aggiornamenti. Motivo:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, UpdCheckBtn.Text)
             End Select
             Exit Sub
         End Try

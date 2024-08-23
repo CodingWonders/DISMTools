@@ -3,7 +3,7 @@
 #                                         .'^""""""^.            
 #      '^`'.                            '^"""""""^.              
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.5                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.5.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -29,10 +29,13 @@ using namespace System.Collections.Generic
 
 [CmdletBinding(DefaultParameterSetName='Default')]
 param (
-    [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'Help')] [string] $cmd,
+    [Parameter(Mandatory = $true, Position = 0)] [ValidateSet('StartPEGen', 'StartApply', 'StartDevelopment', 'Help')] [string] $cmd,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 1)] [string] $arch,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string] $imgFile,
-    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath
+    [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string] $isoPath,
+	[Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string] $unattendFile,
+	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string] $testArch,
+	[Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string] $targetPath
 )
 
 enum PE_Arch {
@@ -66,7 +69,7 @@ function Start-PEGeneration
             Generates a Preinstallation Environment (PE) that contains the Windows image specified in the GUI or via the command line
     #>
     $architecture = [PE_Arch]::($arch)
-    $version = "0.5"
+    $version = "0.5.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
@@ -172,6 +175,11 @@ function Start-PEGeneration
 				Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
 				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
 				Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
+				{
+					Write-Host "Unattended answer file has been detected. Copying to ISO file..."
+					Copy-Item -Path "$unattendFile" -Destination "$((Get-Location).Path)\ISOTEMP\media\unattend.xml" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				}
 				Write-Host "Deleting temporary files..."
 				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
 				if ($?)
@@ -223,6 +231,7 @@ function Start-PEGeneration
 		Read-Host | Out-Null
 		exit 1		
 	}
+
 }
 
 function Copy-PEFiles
@@ -337,12 +346,15 @@ function Start-PECustomization
             The path of the mounted Windows PE image
         .PARAMETER arch
             The architecture of the target Windows PE image, which is used to customize the wallpaper
+		.PARAMETE testStartNet
+			Customizes the "startnet.cmd" file for WinPE testing
         .EXAMPLE
-            Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64"
+            Start-PECustomization -imagePath "<Mount Directory>" -arch "amd64" -testStartNet $false
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string] $imagePath,
-        [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $arch
+        [Parameter(Mandatory = $true, Position = 1)] [PE_Arch] $arch,
+		[Parameter(Mandatory = $true, Position = 2)] [bool] $testStartNet
     )
     try
     {
@@ -460,11 +472,18 @@ function Start-PECustomization
             Write-Host "CUSTOMIZATION STEP - Change Startup Commands" -BackgroundColor DarkGreen
             Write-Host "Changing startup commands..."
             Copy-Item -Path "$((Get-Location).Path)\files\startup\startnet.cmd" -Destination "$imagePath\Windows\system32\startnet.cmd" -Force
+			if ($testStartNet)
+			{
+				$contents = Get-Content -Path "$imagePath\Windows\system32\startnet.cmd"
+				$contents[5] = "set debug=2"
+				Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
+			}
+			Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
             Write-Host "Startup commands changed"
         }
         catch
         {
-            Write-Host "Could not change startup commands"            
+            Write-Host "Could not change startup commands"
         }
         Write-Host "CUSTOMIZATION STEP - Set Scratch Size" -BackgroundColor DarkGreen
         Write-Host "Setting scratch size..."
@@ -702,6 +721,18 @@ function Start-OSApplication
         Write-Host "Failed to apply the Windows image."
     }
     if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
+	if (Test-Path "$((Get-Location).Path)\unattend.xml" -PathType Leaf)
+	{
+        Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
+		if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):\" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
+		{
+			Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+		}
+		else
+		{
+			Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+		}
+	}
     $driverPath = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
     {
@@ -1067,7 +1098,7 @@ function Start-DismCommand
     #>
     [CmdletBinding(DefaultParameterSetName='Default')]
     param (
-        [Parameter(Mandatory = $true, Position=0)] [ValidateSet('Mount', 'Commit', 'Unmount', 'Apply', 'Add-Package', 'Remove-Package', 'Enable-Feature', 'Disable-Feature', 'Add-Appx', 'Remove-Appx', 'Add-Capability', 'Remove-Capability', 'Add-Driver')] [string] $Verb,
+        [Parameter(Mandatory = $true, Position=0)] [ValidateSet('Mount', 'Commit', 'Unmount', 'Apply', 'Add-Package', 'Remove-Package', 'Enable-Feature', 'Disable-Feature', 'Add-Appx', 'Remove-Appx', 'Add-Capability', 'Remove-Capability', 'Add-Driver', 'UnattendApply')] [string] $Verb,
         [Parameter(Mandatory = $true, Position=1)] [string] $ImagePath,
         # Parameters for mount command
         [Parameter(ParameterSetName='Mount', Mandatory = $true, Position = 2)] [int] $ImageIndex,
@@ -1101,7 +1132,9 @@ function Start-DismCommand
         [Parameter(ParameterSetName='Remove-Capability', Mandatory = $true, Position=2)] [string] $CapabilityRemovalName,
         # Parameters for driver addition
         [Parameter(ParameterSetName='Add-Driver', Mandatory = $true, Position=2)] [string] $DriverAdditionFile,
-        [Parameter(ParameterSetName='Add-Driver', Mandatory = $true, Position=3)] [bool] $DriverAdditionRecurse
+        [Parameter(ParameterSetName='Add-Driver', Mandatory = $true, Position=3)] [bool] $DriverAdditionRecurse,
+		# Parameters for unattended answer file application
+		[Parameter(ParameterSetName='UnattendApply', Mandatory = $true, Position=2)] [string] $unattendPath
     )
     try
     {
@@ -1196,6 +1229,9 @@ function Start-DismCommand
                     }
                 }
             }
+			"UnattendApply" {
+				Apply-WindowsUnattend -Path "$ImagePath" -UnattendPath "$unattendPath" -NoRestart
+			}
             default {
 
             }
@@ -1376,6 +1412,183 @@ function Show-Timeout {
     Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
 }
 
+function Start-ProjectDevelopment {
+    $architecture = [PE_Arch]::($testArch)
+    $version = "0.5.1"
+	$ESVer = "0.5.1"
+    Write-Host "DISMTools $version - Preinstallation Environment Helper"
+    Write-Host "(c) 2024. CodingWonders Software"
+    Write-Host "-----------------------------------------------------------"
+    # Start PE generation
+    Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
+    # Detect if the Windows ADK is present
+	try
+	{
+		if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+		{
+			# An ADK may be installed, but it may not be Windows 10 ADK
+			$progFiles = ""
+			$peToolsPath = ""
+			if ([Environment]::Is64BitOperatingSystem)
+			{
+				$progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+			}
+			else
+			{
+				$progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"            
+			}
+			if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
+			{
+				$peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+				if (-not (Test-Path "$targetPath"))
+				{
+					New-Item -Path "$targetPath" -ItemType Directory | Out-Null					
+				}
+				Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
+				if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Mounting Windows image. Please wait..."
+				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$((Get-Location).Path)\ISOTEMP\mount") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE image mount phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Copying Windows PE optional components. Please wait..."
+				if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Adding OS packages..."
+				$pkgs = [List[string]]::new()
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
+				$pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
+				foreach ($pkg in $pkgs)
+				{
+					if (Test-Path $pkg -PathType Leaf)
+					{
+						Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
+						Start-DismCommand -Verb Add-Package -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -PackagePath $pkg | Out-Null
+					}
+				}
+				Write-Host "Saving changes..."
+				Start-DismCommand -Verb Commit -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" | Out-Null
+				# Perform customization tasks later
+				Write-Host "Beginning customizations..."
+				if ((Start-PECustomization -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -arch $architecture -testStartNet $true) -eq $false)
+				{
+					Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
+					Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $false | Out-Null
+					Write-Host "`nPress ENTER to exit"
+					Read-Host | Out-Null
+					exit 1
+				}
+				Write-Host "Unmounting image..."
+				Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $true | Out-Null
+				Write-Host "PE generated successfully"
+				Write-Host "Copying project files..."
+				# Copy project files
+				Expand-Archive -Path "$((Get-Location).Path)\files\DISMTools-PE.zip" -Destination "$targetPath" -Force
+				Write-Host "Project files have been copied."
+				if ([Environment]::Is64BitOperatingSystem)
+				{
+					Copy-Item -Path "$peToolsPath\..\Deployment Tools\amd64\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
+				}
+				else
+				{
+					Copy-Item -Path "$peToolsPath\..\Deployment Tools\x86\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
+				}
+				Write-Host "Copying setup tools..."
+				Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -ItemType Directory | Out-Null
+				Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
+				Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+				Write-Host "Deleting temporary files..."
+				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
+				if ($?)
+				{
+					Write-Host "Temporary files have been deleted successfully"
+				}
+				else
+				{
+					Write-Host "Temporary files haven't been deleted successfully"
+				}
+				Write-Host "The ISO file structure has been successfully created. DISMTools will finish preparing the project after 5 seconds."
+				Start-Sleep -Seconds 5
+				Copy-Item -Path "$((Get-Location).Path)\ISOTEMP\*" -Destination "$targetPath\ISORoot" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+				if ($?)
+				{
+					Write-Host "Deleting temporary files..."
+					Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
+					# Delete local DIM src directory - not needed
+					if (Test-Path "$targetPath\ISORoot\media\Tools\DIM\src") { Remove-Item -Path "$targetPath\ISORoot\media\Tools\DIM\src" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null }
+					Write-Host "The project has been successfully created"
+					try
+					{
+						Write-Host "Mounting Windows PE image..."
+						Mount-WindowsImage -ImagePath "$targetPath\ISORoot\media\sources\boot.wim" -Index 1 -Path "$targetPath\mount"
+						Write-Host "Updating the project configuration..."
+						$dtProjConfig = Get-Content -Path "$targetPath\settings\project.ini"
+						# Only update image file, index, and mount point configs. Let DISMTools configure the rest.
+						$dtProjConfig[6] = "ImageFile=`"$targetPath\ISORoot\media\sources\boot.wim`""
+						$dtprojConfig[7] = "ImageIndex=1"
+						$dtProjConfig[8] = "ImageMountPoint=`"$targetPath\mount`""
+						Set-Content -Path "$targetPath\settings\project.ini" -Value $dtprojConfig -Force
+						Write-Host "`nThe generation process is complete! You can start testing your applications on Windows PEs."
+					}
+					catch
+					{
+						Write-Host "Could not mount the target Windows PE image. You will have to do this manually."
+					}
+				}
+				else
+				{
+					Write-Host "Could not finish preparing the project."	
+				}
+				Start-Sleep -Seconds 5
+				exit 0
+			}
+			else
+			{
+				Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+				Write-Host "`nPress ENTER to exit"
+				Read-Host | Out-Null
+				exit 1
+			}
+		}
+		else
+		{
+			Write-Host "A Windows Assessment and Deployment Kit (ADK) could not be found on your system. Please install the Windows ADK for Windows 10 (or Windows 11), and its Windows PE plugin, and try again."
+			Write-Host "`nPress ENTER to exit"
+			Read-Host | Out-Null
+			exit 1
+		}		
+	}
+	catch
+	{
+		Write-Host "This process is unsuccessful as the following error occurred: $_"
+		Write-Host "`nPress ENTER to exit"
+		Read-Host | Out-Null
+		exit 1
+	}
+}
+
 if ($cmd -eq "StartApply")
 {
     Start-OSApplication
@@ -1384,6 +1597,10 @@ elseif ($cmd -eq "StartPEGen")
 {
     Start-PEGeneration
 }
+elseif ($cmd -eq "StartDevelopment")
+{
+	Start-ProjectDevelopment
+}
 elseif ($cmd -eq "Help")
 {
     # Show help documentation
@@ -1391,7 +1608,7 @@ elseif ($cmd -eq "Help")
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------`n"
 
-    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [Help]`n"
+    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
@@ -1402,15 +1619,20 @@ elseif ($cmd -eq "Help")
     Write-Host "        https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
     Write-Host "    StartApply: starts the Windows image application process from the Preinstallation Environment (PE). Parameters: none"
     Write-Host "      This can only be run on Windows PE. Starting this action on other environments will fail."
+	Write-Host "    StartDevelopment: starts the PE project creation phase. Parameters:"
+	Write-Host "      -testArch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
+    Write-Host "                 x86, amd64, arm, arm64"
+	Write-Host "      -targetPath: (Mandatory) Specifies the target path for the PE project"
     Write-Host "    Help: shows this help documentation`n"
 
     Write-Host "Examples:`n"
     Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`""
     Write-Host "    PE_Helper.ps1 [-cmd] StartApply"
+	Write-Host "    PE_Helper.ps1 [-cmd] StartDevelopment -testArch amd64 -targetPath `"C:\FooBar`""
     Write-Host "    PE_Helper.ps1 [-cmd] Help"
 }
 else
 {
-    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), Help"
+    Write-Host "Invalid command. Available commands: StartApply (begins OS application), StartPEGen (begins custom PE generation), StartDevelopment, Help"
     exit 1
 }

@@ -1,0 +1,270 @@
+<?xml version="1.0" ?>
+<root>
+    <GeoId Id="2" DisplayName="Antigua and Barbuda"/>
+    <GeoId Id="3" DisplayName="Afghanistan"/>
+    <GeoId Id="4" DisplayName="Algeria"/>
+    <GeoId Id="5" DisplayName="Azerbaijan"/>
+    <GeoId Id="6" DisplayName="Albania"/>
+    <GeoId Id="7" DisplayName="Armenia"/>
+    <GeoId Id="8" DisplayName="Andorra"/>
+    <GeoId Id="9" DisplayName="Angola"/>
+    <GeoId Id="10" DisplayName="American Samoa"/>
+    <GeoId Id="11" DisplayName="Argentina"/>
+    <GeoId Id="12" DisplayName="Australia"/>
+    <GeoId Id="14" DisplayName="Austria"/>
+    <GeoId Id="17" DisplayName="Bahrain"/>
+    <GeoId Id="18" DisplayName="Barbados"/>
+    <GeoId Id="19" DisplayName="Botswana"/>
+    <GeoId Id="20" DisplayName="Bermuda"/>
+    <GeoId Id="21" DisplayName="Belgium"/>
+    <GeoId Id="22" DisplayName="Bahamas, The"/>
+    <GeoId Id="23" DisplayName="Bangladesh"/>
+    <GeoId Id="24" DisplayName="Belize"/>
+    <GeoId Id="25" DisplayName="Bosnia and Herzegovina"/>
+    <GeoId Id="26" DisplayName="Bolivia"/>
+    <GeoId Id="27" DisplayName="Myanmar"/>
+    <GeoId Id="28" DisplayName="Benin"/>
+    <GeoId Id="29" DisplayName="Belarus"/>
+    <GeoId Id="30" DisplayName="Solomon Islands"/>
+    <GeoId Id="32" DisplayName="Brazil"/>
+    <GeoId Id="34" DisplayName="Bhutan"/>
+    <GeoId Id="35" DisplayName="Bulgaria"/>
+    <GeoId Id="37" DisplayName="Brunei"/>
+    <GeoId Id="38" DisplayName="Burundi"/>
+    <GeoId Id="39" DisplayName="Canada"/>
+    <GeoId Id="40" DisplayName="Cambodia"/>
+    <GeoId Id="41" DisplayName="Chad"/>
+    <GeoId Id="42" DisplayName="Sri Lanka"/>
+    <GeoId Id="43" DisplayName="Congo"/>
+    <GeoId Id="44" DisplayName="Congo (DRC)"/>
+    <GeoId Id="45" DisplayName="China"/>
+    <GeoId Id="46" DisplayName="Chile"/>
+    <GeoId Id="49" DisplayName="Cameroon"/>
+    <GeoId Id="50" DisplayName="Comoros"/>
+    <GeoId Id="51" DisplayName="Colombia"/>
+    <GeoId Id="54" DisplayName="Costa Rica"/>
+    <GeoId Id="55" DisplayName="Central African Republic"/>
+    <GeoId Id="56" DisplayName="Cuba"/>
+    <GeoId Id="57" DisplayName="Cabo Verde"/>
+    <GeoId Id="59" DisplayName="Cyprus"/>
+    <GeoId Id="61" DisplayName="Denmark"/>
+    <GeoId Id="62" DisplayName="Djibouti"/>
+    <GeoId Id="63" DisplayName="Dominica"/>
+    <GeoId Id="65" DisplayName="Dominican Republic"/>
+    <GeoId Id="66" DisplayName="Ecuador"/>
+    <GeoId Id="67" DisplayName="Egypt"/>
+    <GeoId Id="68" DisplayName="Ireland"/>
+    <GeoId Id="69" DisplayName="Equatorial Guinea"/>
+    <GeoId Id="70" DisplayName="Estonia"/>
+    <GeoId Id="71" DisplayName="Eritrea"/>
+    <GeoId Id="72" DisplayName="El Salvador"/>
+    <GeoId Id="73" DisplayName="Ethiopia"/>
+    <GeoId Id="75" DisplayName="Czech Republic"/>
+    <GeoId Id="77" DisplayName="Finland"/>
+    <GeoId Id="78" DisplayName="Fiji"/>
+    <GeoId Id="80" DisplayName="Micronesia"/>
+    <GeoId Id="81" DisplayName="Faroe Islands"/>
+    <GeoId Id="84" DisplayName="France"/>
+    <GeoId Id="86" DisplayName="Gambia"/>
+    <GeoId Id="87" DisplayName="Gabon"/>
+    <GeoId Id="88" DisplayName="Georgia"/>
+    <GeoId Id="89" DisplayName="Ghana"/>
+    <GeoId Id="90" DisplayName="Gibraltar"/>
+    <GeoId Id="91" DisplayName="Grenada"/>
+    <GeoId Id="93" DisplayName="Greenland"/>
+    <GeoId Id="94" DisplayName="Germany"/>
+    <GeoId Id="98" DisplayName="Greece"/>
+    <GeoId Id="99" DisplayName="Guatemala"/>
+    <GeoId Id="100" DisplayName="Guinea"/>
+    <GeoId Id="101" DisplayName="Guyana"/>
+    <GeoId Id="103" DisplayName="Haiti"/>
+    <GeoId Id="104" DisplayName="Hong Kong SAR"/>
+    <GeoId Id="106" DisplayName="Honduras"/>
+    <GeoId Id="108" DisplayName="Croatia"/>
+    <GeoId Id="109" DisplayName="Hungary"/>
+    <GeoId Id="110" DisplayName="Iceland"/>
+    <GeoId Id="111" DisplayName="Indonesia"/>
+    <GeoId Id="113" DisplayName="India"/>
+    <GeoId Id="114" DisplayName="British Indian Ocean Territory"/>
+    <GeoId Id="116" DisplayName="Iran"/>
+    <GeoId Id="117" DisplayName="Israel"/>
+    <GeoId Id="118" DisplayName="Italy"/>
+    <GeoId Id="119" DisplayName="Côte d'Ivoire"/>
+    <GeoId Id="121" DisplayName="Iraq"/>
+    <GeoId Id="122" DisplayName="Japan"/>
+    <GeoId Id="124" DisplayName="Jamaica"/>
+    <GeoId Id="126" DisplayName="Jordan"/>
+    <GeoId Id="127" DisplayName="Johnston Atoll"/>
+    <GeoId Id="129" DisplayName="Kenya"/>
+    <GeoId Id="130" DisplayName="Kyrgyzstan"/>
+    <GeoId Id="131" DisplayName="North Korea"/>
+    <GeoId Id="133" DisplayName="Kiribati"/>
+    <GeoId Id="134" DisplayName="Korea"/>
+    <GeoId Id="136" DisplayName="Kuwait"/>
+    <GeoId Id="137" DisplayName="Kazakhstan"/>
+    <GeoId Id="138" DisplayName="Laos"/>
+    <GeoId Id="139" DisplayName="Lebanon"/>
+    <GeoId Id="140" DisplayName="Latvia"/>
+    <GeoId Id="141" DisplayName="Lithuania"/>
+    <GeoId Id="142" DisplayName="Liberia"/>
+    <GeoId Id="143" DisplayName="Slovakia"/>
+    <GeoId Id="145" DisplayName="Liechtenstein"/>
+    <GeoId Id="146" DisplayName="Lesotho"/>
+    <GeoId Id="147" DisplayName="Luxembourg"/>
+    <GeoId Id="148" DisplayName="Libya"/>
+    <GeoId Id="149" DisplayName="Madagascar"/>
+    <GeoId Id="151" DisplayName="Macao SAR"/>
+    <GeoId Id="152" DisplayName="Moldova"/>
+    <GeoId Id="154" DisplayName="Mongolia"/>
+    <GeoId Id="156" DisplayName="Malawi"/>
+    <GeoId Id="157" DisplayName="Mali"/>
+    <GeoId Id="158" DisplayName="Monaco"/>
+    <GeoId Id="159" DisplayName="Morocco"/>
+    <GeoId Id="160" DisplayName="Mauritius"/>
+    <GeoId Id="162" DisplayName="Mauritania"/>
+    <GeoId Id="163" DisplayName="Malta"/>
+    <GeoId Id="164" DisplayName="Oman"/>
+    <GeoId Id="165" DisplayName="Maldives"/>
+    <GeoId Id="166" DisplayName="Mexico"/>
+    <GeoId Id="167" DisplayName="Malaysia"/>
+    <GeoId Id="168" DisplayName="Mozambique"/>
+    <GeoId Id="173" DisplayName="Niger"/>
+    <GeoId Id="174" DisplayName="Vanuatu"/>
+    <GeoId Id="175" DisplayName="Nigeria"/>
+    <GeoId Id="176" DisplayName="Netherlands"/>
+    <GeoId Id="177" DisplayName="Norway"/>
+    <GeoId Id="178" DisplayName="Nepal"/>
+    <GeoId Id="180" DisplayName="Nauru"/>
+    <GeoId Id="181" DisplayName="Suriname"/>
+    <GeoId Id="182" DisplayName="Nicaragua"/>
+    <GeoId Id="183" DisplayName="New Zealand"/>
+    <GeoId Id="184" DisplayName="Palestinian Authority"/>
+    <GeoId Id="185" DisplayName="Paraguay"/>
+    <GeoId Id="187" DisplayName="Peru"/>
+    <GeoId Id="190" DisplayName="Pakistan"/>
+    <GeoId Id="191" DisplayName="Poland"/>
+    <GeoId Id="192" DisplayName="Panama"/>
+    <GeoId Id="193" DisplayName="Portugal"/>
+    <GeoId Id="194" DisplayName="Papua New Guinea"/>
+    <GeoId Id="195" DisplayName="Palau"/>
+    <GeoId Id="196" DisplayName="Guinea-Bissau"/>
+    <GeoId Id="197" DisplayName="Qatar"/>
+    <GeoId Id="198" DisplayName="Réunion"/>
+    <GeoId Id="199" DisplayName="Marshall Islands"/>
+    <GeoId Id="200" DisplayName="Romania"/>
+    <GeoId Id="201" DisplayName="Philippines"/>
+    <GeoId Id="202" DisplayName="Puerto Rico"/>
+    <GeoId Id="203" DisplayName="Russia"/>
+    <GeoId Id="204" DisplayName="Rwanda"/>
+    <GeoId Id="205" DisplayName="Saudi Arabia"/>
+    <GeoId Id="206" DisplayName="Saint Pierre and Miquelon"/>
+    <GeoId Id="207" DisplayName="Saint Kitts and Nevis"/>
+    <GeoId Id="208" DisplayName="Seychelles"/>
+    <GeoId Id="209" DisplayName="South Africa"/>
+    <GeoId Id="210" DisplayName="Senegal"/>
+    <GeoId Id="212" DisplayName="Slovenia"/>
+    <GeoId Id="213" DisplayName="Sierra Leone"/>
+    <GeoId Id="214" DisplayName="San Marino"/>
+    <GeoId Id="215" DisplayName="Singapore"/>
+    <GeoId Id="216" DisplayName="Somalia"/>
+    <GeoId Id="217" DisplayName="Spain"/>
+    <GeoId Id="218" DisplayName="Saint Lucia"/>
+    <GeoId Id="219" DisplayName="Sudan"/>
+    <GeoId Id="220" DisplayName="Svalbard"/>
+    <GeoId Id="221" DisplayName="Sweden"/>
+    <GeoId Id="222" DisplayName="Syria"/>
+    <GeoId Id="223" DisplayName="Switzerland"/>
+    <GeoId Id="224" DisplayName="United Arab Emirates"/>
+    <GeoId Id="225" DisplayName="Trinidad and Tobago"/>
+    <GeoId Id="227" DisplayName="Thailand"/>
+    <GeoId Id="228" DisplayName="Tajikistan"/>
+    <GeoId Id="231" DisplayName="Tonga"/>
+    <GeoId Id="232" DisplayName="Togo"/>
+    <GeoId Id="233" DisplayName="São Tomé and Príncipe"/>
+    <GeoId Id="234" DisplayName="Tunisia"/>
+    <GeoId Id="235" DisplayName="Türkiye"/>
+    <GeoId Id="236" DisplayName="Tuvalu"/>
+    <GeoId Id="237" DisplayName="Taiwan"/>
+    <GeoId Id="238" DisplayName="Turkmenistan"/>
+    <GeoId Id="239" DisplayName="Tanzania"/>
+    <GeoId Id="240" DisplayName="Uganda"/>
+    <GeoId Id="241" DisplayName="Ukraine"/>
+    <GeoId Id="242" DisplayName="United Kingdom"/>
+    <GeoId Id="244" DisplayName="United States"/>
+    <GeoId Id="245" DisplayName="Burkina Faso"/>
+    <GeoId Id="246" DisplayName="Uruguay"/>
+    <GeoId Id="247" DisplayName="Uzbekistan"/>
+    <GeoId Id="248" DisplayName="Saint Vincent and the Grenadines"/>
+    <GeoId Id="249" DisplayName="Venezuela"/>
+    <GeoId Id="251" DisplayName="Vietnam"/>
+    <GeoId Id="252" DisplayName="U.S. Virgin Islands"/>
+    <GeoId Id="253" DisplayName="Vatican City"/>
+    <GeoId Id="254" DisplayName="Namibia"/>
+    <GeoId Id="258" DisplayName="Wake Island"/>
+    <GeoId Id="259" DisplayName="Samoa"/>
+    <GeoId Id="260" DisplayName="Swaziland"/>
+    <GeoId Id="261" DisplayName="Yemen"/>
+    <GeoId Id="263" DisplayName="Zambia"/>
+    <GeoId Id="264" DisplayName="Zimbabwe"/>
+    <GeoId Id="270" DisplayName="Montenegro"/>
+    <GeoId Id="271" DisplayName="Serbia"/>
+    <GeoId Id="273" DisplayName="Curaçao"/>
+    <GeoId Id="300" DisplayName="Anguilla"/>
+    <GeoId Id="276" DisplayName="South Sudan"/>
+    <GeoId Id="301" DisplayName="Antarctica"/>
+    <GeoId Id="302" DisplayName="Aruba"/>
+    <GeoId Id="303" DisplayName="Ascension Island"/>
+    <GeoId Id="304" DisplayName="Ashmore and Cartier Islands"/>
+    <GeoId Id="305" DisplayName="Baker Island"/>
+    <GeoId Id="306" DisplayName="Bouvet Island"/>
+    <GeoId Id="307" DisplayName="Cayman Islands"/>
+    <GeoId Id="309" DisplayName="Christmas Island"/>
+    <GeoId Id="310" DisplayName="Clipperton Island"/>
+    <GeoId Id="311" DisplayName="Cocos (Keeling) Islands"/>
+    <GeoId Id="312" DisplayName="Cook Islands"/>
+    <GeoId Id="313" DisplayName="Coral Sea Islands"/>
+    <GeoId Id="314" DisplayName="Diego Garcia"/>
+    <GeoId Id="315" DisplayName="Falkland Islands"/>
+    <GeoId Id="317" DisplayName="French Guiana"/>
+    <GeoId Id="318" DisplayName="French Polynesia"/>
+    <GeoId Id="319" DisplayName="French Southern Territories"/>
+    <GeoId Id="321" DisplayName="Guadeloupe"/>
+    <GeoId Id="322" DisplayName="Guam"/>
+    <GeoId Id="323" DisplayName="Guantanamo Bay"/>
+    <GeoId Id="324" DisplayName="Guernsey"/>
+    <GeoId Id="325" DisplayName="Heard Island and McDonald Islands"/>
+    <GeoId Id="326" DisplayName="Howland Island"/>
+    <GeoId Id="327" DisplayName="Jarvis Island"/>
+    <GeoId Id="328" DisplayName="Jersey"/>
+    <GeoId Id="329" DisplayName="Kingman Reef"/>
+    <GeoId Id="330" DisplayName="Martinique"/>
+    <GeoId Id="331" DisplayName="Mayotte"/>
+    <GeoId Id="332" DisplayName="Montserrat"/>
+    <GeoId Id="334" DisplayName="New Caledonia"/>
+    <GeoId Id="335" DisplayName="Niue"/>
+    <GeoId Id="336" DisplayName="Norfolk Island"/>
+    <GeoId Id="337" DisplayName="Northern Mariana Islands"/>
+    <GeoId Id="338" DisplayName="Palmyra Atoll"/>
+    <GeoId Id="339" DisplayName="Pitcairn Islands"/>
+    <GeoId Id="340" DisplayName="Rota Island"/>
+    <GeoId Id="341" DisplayName="Saipan"/>
+    <GeoId Id="342" DisplayName="South Georgia and the South Sandwich Islands"/>
+    <GeoId Id="343" DisplayName="St Helena, Ascension and Tristan da Cunha"/>
+    <GeoId Id="346" DisplayName="Tinian Island"/>
+    <GeoId Id="347" DisplayName="Tokelau"/>
+    <GeoId Id="348" DisplayName="Tristan da Cunha"/>
+    <GeoId Id="349" DisplayName="Turks and Caicos Islands"/>
+    <GeoId Id="351" DisplayName="British Virgin Islands"/>
+    <GeoId Id="352" DisplayName="Wallis and Futuna"/>
+    <GeoId Id="15126" DisplayName="Isle of Man"/>
+    <GeoId Id="19618" DisplayName="North Macedonia"/>
+    <GeoId Id="21242" DisplayName="Midway Islands"/>
+    <GeoId Id="30967" DisplayName="Sint Maarten"/>
+    <GeoId Id="31706" DisplayName="Saint Martin"/>
+    <GeoId Id="7299303" DisplayName="Timor-Leste"/>
+    <GeoId Id="9914689" DisplayName="Kosovo"/>
+    <GeoId Id="10028789" DisplayName="Åland Islands"/>
+    <GeoId Id="161832015" DisplayName="Saint Barthélemy"/>
+    <GeoId Id="161832256" DisplayName="U.S. Minor Outlying Islands"/>
+    <GeoId Id="161832258" DisplayName="Bonaire, Sint Eustatius and Saba"/>
+</root>

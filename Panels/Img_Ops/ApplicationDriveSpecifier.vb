@@ -72,6 +72,16 @@ Public Class ApplicationDriveSpecifier
                         ListView1.Columns(1).Text = "Modelo"
                         ListView1.Columns(2).Text = "Partições"
                         ListView1.Columns(3).Text = "Tamanho"
+                    Case "ITA"
+                        Text = "Specificare il disco di destinazione..."
+                        Label2.Text = "ID disco di destinazione (\\.\PHYSICALDRIVE(n)):"
+                        Button2.Text = "Aggiorna"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annulla"
+                        ListView1.Columns(0).Text = "ID dispositivo"
+                        ListView1.Columns(1).Text = "Modello"
+                        ListView1.Columns(2).Text = "Partizioni"
+                        ListView1.Columns(3).Text = "Dimensione"
                 End Select
             Case 1
                 Text = "Specify target disk..."
@@ -113,6 +123,16 @@ Public Class ApplicationDriveSpecifier
                 ListView1.Columns(1).Text = "Modelo"
                 ListView1.Columns(2).Text = "Partições"
                 ListView1.Columns(3).Text = "Tamanho"
+            Case 5
+                Text = "Specificare il disco di destinazione..."
+                Label2.Text = "ID disco di destinazione (\\.\PHYSICALDRIVE(n)):"
+                Button2.Text = "Aggiorna"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annulla"
+                ListView1.Columns(0).Text = "ID dispositivo"
+                ListView1.Columns(1).Text = "Modello"
+                ListView1.Columns(2).Text = "Partizioni"
+                ListView1.Columns(3).Text = "Dimensione"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

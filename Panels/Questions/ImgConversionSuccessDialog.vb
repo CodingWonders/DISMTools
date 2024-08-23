@@ -37,6 +37,11 @@ Public Class ImgConversionSuccessDialog
                         Label2.Text = "A imagem especificada foi convertida com sucesso para o formato de destino. Por conveniência, o Explorador de Ficheiros pode ser aberto para ver onde se encontra a imagem de destino." & CrLf & CrLf & "Pretende abrir o diretório onde a imagem de destino está armazenada?"
                         OK_Button.Text = "Sim"
                         Cancel_Button.Text = "Não"
+                    Case "ITA"
+                        Label1.Text = "L'immagine è stata convertita con successo"
+                        Label2.Text = "L'immagine specificata è stata convertita con successo nel formato di destinazione. Per comodità, è possibile aprire l'Esplora file per vedere dove si trova l'immagine di destinazione." & CrLf & CrLf & "Si desidera aprire la directory in cui è memorizzata l'immagine di destinazione?"
+                        OK_Button.Text = "Sì"
+                        Cancel_Button.Text = "No"
                 End Select
             Case 1
                 Label1.Text = "The image has been successfully converted"
@@ -58,6 +63,11 @@ Public Class ImgConversionSuccessDialog
                 Label2.Text = "A imagem especificada foi convertida com sucesso para o formato de destino. Por conveniência, o Explorador de Ficheiros pode ser aberto para ver onde se encontra a imagem de destino." & CrLf & CrLf & "Pretende abrir o diretório onde a imagem de destino está armazenada?"
                 OK_Button.Text = "Sim"
                 Cancel_Button.Text = "Não"
+            Case 5
+                Label1.Text = "L'immagine è stata convertita con successo"
+                Label2.Text = "L'immagine specificata è stata convertita con successo nel formato di destinazione. Per comodità, è possibile aprire l'Esplora file per vedere dove si trova l'immagine di destinazione." & CrLf & CrLf & "Si desidera aprire la directory in cui è memorizzata l'immagine di destinazione?"
+                OK_Button.Text = "Sì"
+                Cancel_Button.Text = "No"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

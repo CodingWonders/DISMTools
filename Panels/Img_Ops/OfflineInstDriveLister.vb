@@ -77,6 +77,20 @@ Public Class OfflineInstDriveLister
                         Button1.Text = "Atualizar"
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
+                    Case "ITA"
+                        Text = "Scegliere un disco"
+                        Label1.Text = "Per iniziare la gestione dell'installazione offline, scegliere un disco nell'elenco sottostante. Questo elenco verrà aggiornato automaticamente ogni minuto o quando si fa clic sul pulsante Aggiorna."
+                        ListView1.Columns(0).Text = "Lettera unità"
+                        ListView1.Columns(1).Text = "Etichetta unità"
+                        ListView1.Columns(2).Text = "Tipo di unità"
+                        ListView1.Columns(3).Text = "Dimensione totale"
+                        ListView1.Columns(4).Text = "Spazio libero disponibile"
+                        ListView1.Columns(5).Text = "Formato unità"
+                        ListView1.Columns(6).Text = "Contiene Windows?"
+                        ListView1.Columns(7).Text = "Versione di Windows"
+                        Button1.Text = "Aggiorna"
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annullare"
                 End Select
             Case 1
                 Text = "Choose a disk"
@@ -134,6 +148,20 @@ Public Class OfflineInstDriveLister
                 Button1.Text = "Atualizar"
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
+            Case 5
+                Text = "Scegliere un disco"
+                Label1.Text = "Per iniziare la gestione dell'installazione offline, scegliere un disco nell'elenco sottostante. Questo elenco verrà aggiornato automaticamente ogni minuto o quando si fa clic sul pulsante Aggiorna."
+                ListView1.Columns(0).Text = "Lettera unità"
+                ListView1.Columns(1).Text = "Etichetta unità"
+                ListView1.Columns(2).Text = "Tipo di unità"
+                ListView1.Columns(3).Text = "Dimensione totale"
+                ListView1.Columns(4).Text = "Spazio libero disponibile"
+                ListView1.Columns(5).Text = "Formato unità"
+                ListView1.Columns(6).Text = "Contiene Windows?"
+                ListView1.Columns(7).Text = "Versione di Windows"
+                Button1.Text = "Aggiorna"
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annullare"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

@@ -286,392 +286,11 @@
   <data name="express_mode_fc" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\express_mode_fc.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="targetos" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\targetos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="activation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\activation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="comp_personalization" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\comp_personalization.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="comp_protection" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\comp_protection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cpl" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\cpl.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="editor_mode_select" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\glyphs\editor_mode_select.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="eula" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\eula.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="express_mode_select" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\glyphs\express_mode_select.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="net_security" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\net_security.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="oobe_skip" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\oobe_skip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="partitioning" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\partitioning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="regional_settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\regional_settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="unattend_finish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\unattend_finish.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="unattend_prep" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\unattend_prep.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="unattend_progress" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\unattend_progress.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="usr_ceip" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\usr_ceip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="usr_personalization" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\usr_personalization.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="usr_security" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\usr_security.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="wireless" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\wireless.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cpl_catview" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\cpl_catview.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cpl_classic_largeview" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\cpl_classic_largeview.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="cpl_classic_smallview" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\cpl_classic_smallview.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="eula_scr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\eula_scr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="eula_scr_disabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\eula_scr_disabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="home_net" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\home_net.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="public_net" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\public_net.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="usr_pic" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\usr_pic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_0_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_0_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_10_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_10_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_11_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_11_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_12_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_12_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_13" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_13_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_13_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_14" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_14_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_14_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_15" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_15.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_15_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_15_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_16_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_16_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_17" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_17.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_17_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_17_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_18" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_18.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_18_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_18_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_19" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_19.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_19_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_19_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_1_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_1_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_20_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_20_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_21" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_21_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_21_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_22" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_22.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_22_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_22_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_23" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_23.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_23_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_23_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_24_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_24_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_2_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_2_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_3_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_3_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_4_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_4_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_5_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_5_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_6_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_6_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_7_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_7_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_8_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_8_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win81\win81_9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win81_9_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win81\win81_9_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_0_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_0_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_10_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_10_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_11_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_11_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_12" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_12_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_12_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_13" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_13_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_13_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_14" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_14_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_14_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_15" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_15.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_15_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_15_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_16_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_16_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_17" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_17.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_17_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_17_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_18" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_18.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_18_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_18_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_19" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_19.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_19_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_19_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_1_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_1_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_20" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_20_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_20_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_21" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_21_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_21_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_22" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_22.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_22_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_22_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_23" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_23.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_23_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_23_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_24_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_24_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_2_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_2_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_3_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_3_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_4_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_4_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_5_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_5_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_6_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_6_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_7_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_7_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_8" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_8_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_8_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_9" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\win8\win8_9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="win8_9_previews" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\win8_accents\btn_previews\win8\win8_9_previews.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="windows_update" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\windows_update.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="work_net" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ua_creation\work_net.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="uninst_os" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\uninst_os.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -937,7 +556,19 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-</value>
+- Unattended answer file generator
+
+The unattended answer file creation wizard is based on the technology of Christoph Schneegans' answer file generator website, with some modifications made to some files of its core library.
+
+MIT License
+
+Copyright (c) 2024 Christoph Schneegans
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</value>
   </data>
   <data name="help_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\help_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1117,9 +748,44 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>To get more information about what's new in this release, check out the release notes over at:
+    <value>Changes made since last preview:
 
-https://github.com/CodingWonders/DISMTools/releases/tag/v0.5_upd1</value>
+--- Bugfixes:
+
+- Fixed some visual issues in the unattended answer file creation wizard
+
+--- New features:
+
+- Downloading the self-contained version of the unattended answer file generator program now happens in a separate thread. After downloading, you will also see a notification in your system tray
+- 7-Zip has been updated to version 24.08
+- A confirmation dialog has been added to the ISO creation dialog that makes sure you have saved your changes to your image
+
+Overall changes:
+
+--- Bugfixes:
+
+- The reliability of AppX background processes has been improved
+- The Preinstallation Environment (PE) Helper now checks if there are Windows images present in your ISOs and will exit if none are detected
+- Fixed an issue where detecting keyboard layered drivers would fail when managing active installations
+- Video tutorial detection has been moved to a separate thread, avoiding UI deadlocks on slow wireless network connections (thanks @vadimlitvinenko87 for spotting)
+- Fixed an issue in the capability information dialog where it would show feature state (as opposed to capability state) when searching items
+
+--- New features:
+
+- The Preinstallation Environment (PE) Helper has had several improvements:
+    - A new tool has been added: the Driver Installation Module (DIM), which assists you in installing device drivers on active Windows PEs. These drivers are then added to the target image
+    - Now, you can create testing environments in which you can test your applications for Windows PE compatibility and with which you can make further customizations to the Preinstallation Environment if necessary
+- Italian translations have been added
+- If the Windows ADK is installed, but the "AdkInstallation" registry value is not present, the program can add it automatically
+- CODE: MSU package addition has been simplified
+- If an operation completes with errors, the program will now show a description of the error, in the system language, from the Windows APIs instead of a generic string
+- Stub package options can now be set for AppX packages that are added
+- You can now add packages by specifying Microsoft Update Manifest (MUM) files (thanks @AnubyteCode for suggesting this)
+- The Scintilla.NET component has been updated to version 5.6.1
+- You can now list the contents of any Windows image with the new Windows Image Explorer
+- You can now set keyboard layered drivers on your Windows image, which are useful for Japanese and Korean keyboards
+- The unattended answer file features have been revamped, using the Unattended Answer File Generator from Christoph Schneegans as their new base
+- DockPanelSuite has been upgraded to version 3.1.1</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1240,5 +906,8 @@ https://github.com/CodingWonders/DISMTools/releases/tag/v0.5_upd1</value>
   </data>
   <data name="create_iso" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\create_iso.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="set_layeredkeyboarddriver" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\set_layeredkeyboarddriver.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
