@@ -50,6 +50,7 @@ Partial Class NewUnattendWiz
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
         Me.FinishPanel = New System.Windows.Forms.Panel()
+        Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
@@ -288,12 +289,14 @@ Partial Class NewUnattendWiz
         Me.Next_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Help_Button = New System.Windows.Forms.Button()
-        Me.EditorPanelFooter = New System.Windows.Forms.Panel()
         Me.TimeZonePageTimer = New System.Windows.Forms.Timer(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.UnattendGeneratorBW = New System.ComponentModel.BackgroundWorker()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
-        Me.Label59 = New System.Windows.Forms.Label()
+        Me.UnattendGenBW = New System.ComponentModel.BackgroundWorker()
+        Me.UGNotify = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.EditorModeOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -555,6 +558,15 @@ Partial Class NewUnattendWiz
         Me.FinishPanel.Name = "FinishPanel"
         Me.FinishPanel.Size = New System.Drawing.Size(752, 449)
         Me.FinishPanel.TabIndex = 16
+        '
+        'Label59
+        '
+        Me.Label59.AutoSize = True
+        Me.Label59.Location = New System.Drawing.Point(182, 263)
+        Me.Label59.Name = "Label59"
+        Me.Label59.Size = New System.Drawing.Size(320, 13)
+        Me.Label59.TabIndex = 16
+        Me.Label59.Text = "NOTE: you will return to this wizard after applying the answer file"
         '
         'LinkLabel4
         '
@@ -1152,6 +1164,7 @@ Partial Class NewUnattendWiz
         'NumericUpDown8
         '
         Me.NumericUpDown8.Location = New System.Drawing.Point(351, 91)
+        Me.NumericUpDown8.Maximum = New Decimal(New Integer() {99999, 0, 0, 0})
         Me.NumericUpDown8.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown8.Name = "NumericUpDown8"
         Me.NumericUpDown8.Size = New System.Drawing.Size(120, 21)
@@ -1161,6 +1174,7 @@ Partial Class NewUnattendWiz
         'NumericUpDown7
         '
         Me.NumericUpDown7.Location = New System.Drawing.Point(351, 64)
+        Me.NumericUpDown7.Maximum = New Decimal(New Integer() {10, 0, 0, 0})
         Me.NumericUpDown7.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumericUpDown7.Name = "NumericUpDown7"
         Me.NumericUpDown7.Size = New System.Drawing.Size(120, 21)
@@ -1170,7 +1184,7 @@ Partial Class NewUnattendWiz
         'NumericUpDown6
         '
         Me.NumericUpDown6.Location = New System.Drawing.Point(351, 37)
-        Me.NumericUpDown6.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.NumericUpDown6.Maximum = New Decimal(New Integer() {999, 0, 0, 0})
         Me.NumericUpDown6.Name = "NumericUpDown6"
         Me.NumericUpDown6.Size = New System.Drawing.Size(120, 21)
         Me.NumericUpDown6.TabIndex = 1
@@ -1526,6 +1540,7 @@ Partial Class NewUnattendWiz
         Me.TextBox17.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox17.Enabled = False
         Me.TextBox17.Location = New System.Drawing.Point(151, 128)
+        Me.TextBox17.MaxLength = 20
         Me.TextBox17.Name = "TextBox17"
         Me.TextBox17.Size = New System.Drawing.Size(142, 21)
         Me.TextBox17.TabIndex = 17
@@ -1545,6 +1560,7 @@ Partial Class NewUnattendWiz
         Me.TextBox14.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox14.Enabled = False
         Me.TextBox14.Location = New System.Drawing.Point(151, 103)
+        Me.TextBox14.MaxLength = 20
         Me.TextBox14.Name = "TextBox14"
         Me.TextBox14.Size = New System.Drawing.Size(142, 21)
         Me.TextBox14.TabIndex = 14
@@ -1564,6 +1580,7 @@ Partial Class NewUnattendWiz
         Me.TextBox11.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox11.Enabled = False
         Me.TextBox11.Location = New System.Drawing.Point(151, 78)
+        Me.TextBox11.MaxLength = 20
         Me.TextBox11.Name = "TextBox11"
         Me.TextBox11.Size = New System.Drawing.Size(142, 21)
         Me.TextBox11.TabIndex = 11
@@ -1583,6 +1600,7 @@ Partial Class NewUnattendWiz
         Me.TextBox8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox8.Enabled = False
         Me.TextBox8.Location = New System.Drawing.Point(151, 53)
+        Me.TextBox8.MaxLength = 20
         Me.TextBox8.Name = "TextBox8"
         Me.TextBox8.Size = New System.Drawing.Size(142, 21)
         Me.TextBox8.TabIndex = 8
@@ -1683,6 +1701,7 @@ Partial Class NewUnattendWiz
         '
         Me.TextBox4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox4.Location = New System.Drawing.Point(151, 28)
+        Me.TextBox4.MaxLength = 20
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.Size = New System.Drawing.Size(142, 21)
         Me.TextBox4.TabIndex = 4
@@ -2874,7 +2893,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 25)
-        Me.ToolStripButton2.Text = "New"
+        Me.ToolStripButton2.Text = "New (overwrites existing content)"
         '
         'ToolStripButton3
         '
@@ -3009,7 +3028,6 @@ Partial Class NewUnattendWiz
         'FooterContainer
         '
         Me.FooterContainer.Controls.Add(Me.ExpressPanelFooter)
-        Me.FooterContainer.Controls.Add(Me.EditorPanelFooter)
         Me.FooterContainer.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.FooterContainer.Location = New System.Drawing.Point(256, 521)
         Me.FooterContainer.Name = "FooterContainer"
@@ -3089,14 +3107,6 @@ Partial Class NewUnattendWiz
         Me.Help_Button.TabIndex = 1
         Me.Help_Button.Text = "Help"
         '
-        'EditorPanelFooter
-        '
-        Me.EditorPanelFooter.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.EditorPanelFooter.Location = New System.Drawing.Point(0, 0)
-        Me.EditorPanelFooter.Name = "EditorPanelFooter"
-        Me.EditorPanelFooter.Size = New System.Drawing.Size(752, 40)
-        Me.EditorPanelFooter.TabIndex = 0
-        '
         'TimeZonePageTimer
         '
         '
@@ -3113,14 +3123,26 @@ Partial Class NewUnattendWiz
         '
         Me.SaveFileDialog1.Filter = "Answer files|*.xml"
         '
-        'Label59
+        'UnattendGenBW
         '
-        Me.Label59.AutoSize = True
-        Me.Label59.Location = New System.Drawing.Point(182, 263)
-        Me.Label59.Name = "Label59"
-        Me.Label59.Size = New System.Drawing.Size(320, 13)
-        Me.Label59.TabIndex = 16
-        Me.Label59.Text = "NOTE: you will return to this wizard after applying the answer file"
+        '
+        'UGNotify
+        '
+        Me.UGNotify.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
+        Me.UGNotify.BalloonTipText = "The self-contained version of UnattendGen has been successfully downloaded. DISMT" & _
+    "ools will use this version from now on"
+        Me.UGNotify.BalloonTipTitle = "UnattendGen download complete"
+        Me.UGNotify.Icon = CType(resources.GetObject("UGNotify.Icon"), System.Drawing.Icon)
+        Me.UGNotify.Text = "DISMTools"
+        Me.UGNotify.Visible = True
+        '
+        'EditorModeOFD
+        '
+        Me.EditorModeOFD.Filter = "Answer files|*.xml"
+        '
+        'EditorModeSFD
+        '
+        Me.EditorModeSFD.Filter = "Answer files|*.xml"
         '
         'NewUnattendWiz
         '
@@ -3272,7 +3294,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents HeaderPanel As System.Windows.Forms.Panel
     Friend WithEvents FooterContainer As System.Windows.Forms.Panel
     Friend WithEvents ExpressPanelFooter As System.Windows.Forms.Panel
-    Friend WithEvents EditorPanelFooter As System.Windows.Forms.Panel
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
@@ -3518,4 +3539,8 @@ Partial Class NewUnattendWiz
     Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel
     Friend WithEvents WelcomeHeader As System.Windows.Forms.Label
     Friend WithEvents Label59 As System.Windows.Forms.Label
+    Friend WithEvents UnattendGenBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents UGNotify As System.Windows.Forms.NotifyIcon
+    Friend WithEvents EditorModeOFD As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents EditorModeSFD As System.Windows.Forms.SaveFileDialog
 End Class

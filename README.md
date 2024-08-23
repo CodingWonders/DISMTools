@@ -29,7 +29,7 @@ There are also more GUIs for DISM, but they are way less known, so they are not 
 
 ### Working with projects
 
-Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image and unattended answer files you want to apply (using the command line at this time), while also providing a scratch directory for temporary operations.
+Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects store the mounted image, unattended answer files you want to apply, and a scratch directory for temporary operations.
 
 DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
 
@@ -140,6 +140,11 @@ The following actions are supported by DISMTools:
   - Driver addition and removal
 - Provisioning packages
   - Add provisioning packages to an image
+- Languages and regional servicing
+  - Setting keyboard layered drivers
+- Unattended answer files
+  - Creating and managing unattended answer files
+  - Applying unattended answer files
 - Other
   - Get complete information of an image
   - Using the project's or program's scratch directory
@@ -150,7 +155,6 @@ The following actions are supported by DISMTools:
 ## Unsupported actions
 
 - Regional settings
-- Applying unattended answer files
 - and more, it's in beta stages
 
 These actions will be supported in future releases. They aren't implemented yet because it takes time to create working implementations that don't conflict with the rest of the program
@@ -176,7 +180,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: July 4, 2024 (Andrei Verdeanu)</i></p>
+	<p align="center"><i>Last updated: August 3, 2024 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.

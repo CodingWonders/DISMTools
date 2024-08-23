@@ -431,6 +431,34 @@ Public Class ISOCreator
             MsgBox(ISOMsg, vbOKOnly + vbCritical, Label1.Text)
             Exit Sub
         End If
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        ISOMsg = "Make sure that you have saved all your changes before continuing." & CrLf & CrLf & "If you have not done so, click No, save your image, and start the process again. You don't have to close this window." & CrLf & CrLf & "Do you want to create an ISO with this file?"
+                    Case "ESN"
+                        ISOMsg = "Asegúrese de que haya guardado todos sus cambios antes de continuar." & CrLf & CrLf & "Si no lo ha hecho, haga clic en No, guarde su imagen, y comience el proceso de nuevo. No tiene que cerrar esta ventana." & CrLf & CrLf & "¿Desea crear un archivo ISO con esta imagen?"
+                    Case "FRA"
+                        ISOMsg = "Assurez-vous d'avoir enregistré toutes vos modifications avant de continuer." & CrLf & CrLf & "Si vous ne l'avez pas fait, cliquez sur Non, enregistrez votre image et recommencez le processus. Vous n'êtes pas obligé de fermer cette fenêtre." & CrLf & CrLf & "Voulez-vous créer une ISO avec ce fichier ?"
+                    Case "PTB", "PTG"
+                        ISOMsg = "Certifique-se de que guardou todas as suas alterações antes de continuar." & CrLf & CrLf & "Se ainda não o fez, clique em Não, guarde a sua imagem e comece o processo novamente. Não é necessário fechar esta janela." & CrLf & CrLf & "Deseja criar uma ISO com este ficheiro?"
+                    Case "ITA"
+                        ISOMsg = "Assicurarsi di aver salvato tutte le modifiche prima di continuare." & CrLf & CrLf & "Se non lo si è fatto, fare clic su No, salvare l'immagine e ricominciare il processo. Non è necessario chiudere questa finestra." & CrLf & CrLf & "Si desidera creare una ISO con questo file?"
+                End Select
+            Case 1
+                ISOMsg = "Make sure that you have saved all your changes before continuing." & CrLf & CrLf & "If you have not done so, click No, save your image, and start the process again. You don't have to close this window." & CrLf & CrLf & "Do you want to create an ISO with this file?"
+            Case 2
+                ISOMsg = "Asegúrese de que haya guardado todos sus cambios antes de continuar." & CrLf & CrLf & "Si no lo ha hecho, haga clic en No, guarde su imagen, y comience el proceso de nuevo. No tiene que cerrar esta ventana." & CrLf & CrLf & "¿Desea crear un archivo ISO con esta imagen?"
+            Case 3
+                ISOMsg = "Assurez-vous d'avoir enregistré toutes vos modifications avant de continuer." & CrLf & CrLf & "Si vous ne l'avez pas fait, cliquez sur Non, enregistrez votre image et recommencez le processus. Vous n'êtes pas obligé de fermer cette fenêtre." & CrLf & CrLf & "Voulez-vous créer une ISO avec ce fichier ?"
+            Case 4
+                ISOMsg = "Certifique-se de que guardou todas as suas alterações antes de continuar." & CrLf & CrLf & "Se ainda não o fez, clique em Não, guarde a sua imagem e comece o processo novamente. Não é necessário fechar esta janela." & CrLf & CrLf & "Deseja criar uma ISO com este ficheiro?"
+            Case 5
+                ISOMsg = "Assicurarsi di aver salvato tutte le modifiche prima di continuare." & CrLf & CrLf & "Se non lo si è fatto, fare clic su No, salvare l'immagine e ricominciare il processo. Non è necessario chiudere questa finestra." & CrLf & CrLf & "Si desidera creare una ISO con questo file?"
+        End Select
+        If MsgBox(ISOMsg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.No Then
+            Exit Sub
+        End If
         If File.Exists(TextBox3.Text) Then
             Select Case MainForm.Language
                 Case 0

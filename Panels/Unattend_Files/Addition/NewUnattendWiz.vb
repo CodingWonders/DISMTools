@@ -16,6 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
+    Dim UnattendGenReleaseTag As String = "2483"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -86,6 +87,9 @@ Public Class NewUnattendWiz
     Dim ProgressMessage As String = ""
 
     Dim SaveTarget As String = ""
+
+    ' Editor Mode
+    Dim DefaultContents As String
 
 
     ''' <summary>
@@ -341,6 +345,10 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
+        If Not Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen")) Then
+            DotNetRuntimeSupported = False
+            Exit Sub
+        End If
         If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
             ' Self-contained version detected
             DotNetRuntimeSupported = True
@@ -470,6 +478,8 @@ Public Class NewUnattendWiz
         FontFamilyTSCB.SelectedItem = "Consolas"
         SetNodeColors(StepsTreeView.Nodes, BackColor, ForeColor)
 
+        DefaultContents = Scintilla1.Text
+
         SetDefaultSettings()
         ' System language
         If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
@@ -536,48 +546,13 @@ Public Class NewUnattendWiz
         DetectDotNetRuntime("8.0.303", "8.0")
         If Not DotNetRuntimeSupported Then
             If MsgBox("This wizard requires the .NET 8 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
-                Try
-                    ' Download the WIM Explorer and run it while passing the image as an argument
-                    If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
-                        Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
-                    End If
-                    Using UnattClient As New WebClient()
-                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                        Dim contents As String = ""
-                        Try
-                            contents = UnattClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/UnattendGen/master/DISMTools-Install.ps1")
-                        Catch ex As WebException
-                            MessageBox.Show("We couldn't download UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Status.ToString())
-                            Close()
-                        End Try
-                        If contents <> "" Then
-                            File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
-                        End If
-                    End Using
-                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
-                        ' Run installer
-                        Dim UAProc As New Process()
-                        UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-                        UAProc.StartInfo.WorkingDirectory = Application.StartupPath
-                        UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & My.Application.Info.Version.Revision & Quote
-                        UAProc.Start()
-                        UAProc.WaitForExit()
-                    End If
-                    If File.Exists(Application.StartupPath & "\setup.ps1") Then
-                        Try
-                            File.Delete(Application.StartupPath & "\setup.ps1")
-                        Catch ex As Exception
-                            ' Don't delete it
-                        End Try
-                    End If
-                    PreferSelfContained = True
-                Catch ex As Exception
-                    MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & ex.Message)
-                    Close()
-                End Try
+                ExpressPanelFooter.Enabled = False
+                UnattendGenBW.RunWorkerAsync()
             Else
                 Close()
             End If
+        Else
+            UGNotify.Visible = False
         End If
     End Sub
 
@@ -876,11 +851,12 @@ Public Class NewUnattendWiz
         ExpressPanelTrigger.ForeColor = Color.White
         PictureBox1.Image = My.Resources.express_mode_select
         EditorPanelTrigger.BackColor = SidePanel.BackColor
-        EditorPanelTrigger.ForeColor = Color.LightGray
+        EditorPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox3.Image = My.Resources.express_mode_fc
         Label3.Text = "Express mode"
         Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
+        FooterContainer.Visible = True
     End Sub
 
     Private Sub EditorPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles EditorPanelTrigger.MouseEnter
@@ -921,7 +897,7 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = Color.LightGray
+        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
         PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
         EditorPanelTrigger.ForeColor = Color.White
@@ -929,6 +905,7 @@ Public Class NewUnattendWiz
         PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
         Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        FooterContainer.Visible = False
     End Sub
 
     Private Sub Back_Button_Click(sender As Object, e As EventArgs) Handles Back_Button.Click
@@ -1287,6 +1264,7 @@ Public Class NewUnattendWiz
 
     Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
         SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
+        NumericUpDown7.Maximum = NumericUpDown8.Value
     End Sub
 
     Private Sub RadioButton23_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton23.CheckedChanged
@@ -1617,7 +1595,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If UnattendGeneratorBW.IsBusy Then
+        If UnattendGeneratorBW.IsBusy OrElse UnattendGenBW.IsBusy Then
             e.Cancel = True
             Beep()
             Exit Sub
@@ -1658,5 +1636,100 @@ Public Class NewUnattendWiz
 
         ' Signal that the node has been drawn
         e.DrawDefault = False
+    End Sub
+
+    Private Sub UnattendGenBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGenBW.DoWork
+        Try
+            ' Download UnattendGen and run it
+            If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
+                Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
+            End If
+            Using UnattClient As New WebClient()
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                Dim contents As String = ""
+                Try
+                    contents = UnattClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/UnattendGen/master/DISMTools-Install.ps1")
+                Catch ex As WebException
+                    Throw ex
+                End Try
+                If contents <> "" Then
+                    File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
+                End If
+            End Using
+            If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                ' Run installer
+                Dim UAProc As New Process()
+                UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
+                UAProc.StartInfo.WorkingDirectory = Application.StartupPath
+                UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & UnattendGenReleaseTag & Quote
+                UAProc.Start()
+                UAProc.WaitForExit()
+                If UAProc.ExitCode <> 0 Then
+                    Throw New System.ComponentModel.Win32Exception(UAProc.ExitCode)
+                End If
+            End If
+            If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                Try
+                    File.Delete(Application.StartupPath & "\setup.ps1")
+                Catch ex As Exception
+                    ' Don't delete it
+                End Try
+            End If
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+
+    Private Sub UnattendGenBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UnattendGenBW.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MessageBox.Show("We couldn't prepare UnattendGen Self-Contained Setup. Reason:" & CrLf & e.Error.Message, "UnattendGen error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
+                Try
+                    Directory.Delete(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained"), True)
+                Catch ex As Exception
+                    ' Leave dir
+                End Try
+            End If
+            Close()
+            Exit Sub
+        End If
+        ExpressPanelFooter.Enabled = True
+        PreferSelfContained = True
+        UGNotify.ShowBalloonTip(5000)
+    End Sub
+
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        Scintilla1.Text = DefaultContents
+    End Sub
+
+    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        EditorModeOFD.ShowDialog()
+    End Sub
+
+    Private Sub EditorModeOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeOFD.FileOk
+        Try
+            Scintilla1.Text = File.ReadAllText(EditorModeOFD.FileName)
+        Catch ex As Exception
+            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+        End Try
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        EditorModeSFD.ShowDialog()
+    End Sub
+
+    Private Sub EditorModeSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeSFD.FileOk
+        Try
+            File.WriteAllText(EditorModeSFD.FileName, Scintilla1.Text, UTF8)
+        Catch ex As Exception
+            MsgBox("Could not save file: " & ex.Message, vbOKOnly + vbCritical, Text)
+        End Try
+    End Sub
+
+    Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click, ToolStripButton6.Click
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create\index.html")
+        HelpBrowserForm.MinimizeBox = False
+        HelpBrowserForm.MaximizeBox = False
+        HelpBrowserForm.ShowDialog()
     End Sub
 End Class

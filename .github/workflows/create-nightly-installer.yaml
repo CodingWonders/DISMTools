@@ -5,6 +5,9 @@ on:
     branches:
       - dt_pre_*
       - dt_rel*
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
