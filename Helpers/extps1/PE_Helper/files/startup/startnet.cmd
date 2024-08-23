@@ -1,7 +1,7 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 title DISMTools Preinstallation Environment
-set version=0.5.1
+set version=0.6
 set sysdrive=%SYSTEMDRIVE%
 set debug=0
 echo DISMTools %version% - Preinstallation Environment
