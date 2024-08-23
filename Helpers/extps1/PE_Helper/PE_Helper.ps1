@@ -654,6 +654,19 @@ function Start-OSApplication
     }
     Write-Host "Selected disk: disk $($drive)"
     $partition = Get-Partitions $drive
+	if ($partition -eq "B")
+	{
+		do {
+			$drive = Get-Disks
+			if ($drive -eq "ERROR")
+			{
+				Write-Host "Script has failed."
+				return
+			}
+			Write-Host "Selected disk: disk $($drive)"
+			$partition = Get-Partitions $drive
+		} until ($partition -ne "B")
+	}
     if ($partition -eq 0)
     {
         $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
@@ -669,6 +682,19 @@ function Start-OSApplication
         do
         {
             $partition = Get-Partitions $drive
+			if ($partition -eq "B")
+			{
+				do {
+					$drive = Get-Disks
+					if ($drive -eq "ERROR")
+					{
+						Write-Host "Script has failed."
+						return
+					}
+					Write-Host "Selected disk: disk $($drive)"
+					$partition = Get-Partitions $drive
+				} until ($partition -ne "B")
+			}
             if ($partition -eq 0)
             {
                 $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
@@ -884,11 +910,18 @@ function Get-Partitions
     $partLister | Out-File -FilePath "X:\files\diskpart\dp_listpart.dp" -Force -Encoding utf8
     $part = -1
     diskpart /s "X:\files\diskpart\dp_listpart.dp" | Out-Host
-    $part = Read-Host -Prompt "Please choose the partition to apply the image to. If the disk contains no partitions, leave it empty"
+	Write-Host ""
+	Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
+	Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
+    $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
         return $part
     }
+	elseif ($part -eq "B")
+	{
+		return $part
+	}
     else 
     {
         try
