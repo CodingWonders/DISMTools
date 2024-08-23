@@ -7,9 +7,21 @@ Namespace Elements
     <Serializable(), XmlRoot("ImageLanguage")>
     Public Class ImageLanguage
 
+        ''' <summary>
+        ''' The ID of the image language
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("Id")>
         Public Property Id As String
 
+        ''' <summary>
+        ''' The display name of the image language
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("DisplayName")>
         Public Property DisplayName As String
 

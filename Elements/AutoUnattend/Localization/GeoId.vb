@@ -7,9 +7,21 @@ Namespace Elements
     <Serializable(), XmlRoot("GeoId")>
     Public Class GeoId
 
+        ''' <summary>
+        ''' The ID of the home location
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("Id")>
         Public Property Id As Integer
 
+        ''' <summary>
+        ''' The display name of the home location
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("DisplayName")>
         Public Property DisplayName As String
 

@@ -2,12 +2,36 @@
 
     Public Class WirelessSettings
 
+        ''' <summary>
+        ''' The wireless network name
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property SSID As String
 
+        ''' <summary>
+        ''' Determines whether to connect without broadcasting the wireless network
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ConnectWithoutBroadcast As Boolean
 
+        ''' <summary>
+        ''' The authentication mode for the network connection
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks>Possible values: Open, WPA2-PSK, WPA3-SAE (Simultaneous Authentication of Equals)</remarks>
         Public Property Authentication As WiFiAuthenticationMode
 
+        ''' <summary>
+        ''' The password of the wireless network
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Password As String
 
     End Class

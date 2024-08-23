@@ -4,8 +4,20 @@ Namespace Elements
 
     Public Class ProductKey
 
+        ''' <summary>
+        ''' Determines whether the product key is valid using a regex parser (more reliable than the one from CrowdStrike)
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Valid As Boolean
 
+        ''' <summary>
+        ''' The product key
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Key As String
 
     End Class

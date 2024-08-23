@@ -7,12 +7,30 @@ Namespace Elements
     <Serializable(), XmlRoot("KeyboardIdentifier")>
     Public Class KeyboardIdentifier
 
+        ''' <summary>
+        ''' The ID of the keyboard identifier
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("Id")>
         Public Property Id As String
 
+        ''' <summary>
+        ''' The display name of the keyboard identifier
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("DisplayName")>
         Public Property DisplayName As String
 
+        ''' <summary>
+        ''' The type of the keyboard identifier
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks>Possible values: Keyboard, IME</remarks>
         <XmlAttribute("Type")>
         Public Property Type As String
 

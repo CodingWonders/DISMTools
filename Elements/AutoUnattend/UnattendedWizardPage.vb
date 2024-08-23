@@ -22,8 +22,18 @@
             FinishPage = 16
         End Enum
 
+        ''' <summary>
+        ''' The page of the unattended answer file wizard
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property WizardPage As Page
 
+        ''' <summary>
+        ''' Page count
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Const PageCount As Integer = 17
     End Class
 

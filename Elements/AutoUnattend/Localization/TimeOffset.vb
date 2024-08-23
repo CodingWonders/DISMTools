@@ -7,9 +7,21 @@ Namespace Elements
     <Serializable(), XmlRoot("TimeOffset")>
     Public Class TimeOffset
 
+        ''' <summary>
+        ''' The ID of the time offset
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("Id")>
         Public Property Id As String
 
+        ''' <summary>
+        ''' The display name of the time offset
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <XmlAttribute("DisplayName")>
         Public Property DisplayName As String
 

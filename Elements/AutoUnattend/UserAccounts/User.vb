@@ -2,12 +2,36 @@
 
     Public Class User
 
+        ''' <summary>
+        ''' Determines whether the account can be added
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Enabled As Boolean
 
+        ''' <summary>
+        ''' The name of the account
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks>Account names must not exceed 20 characters</remarks>
         Public Property Name As String
 
+        ''' <summary>
+        ''' The password of the account
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Password As String
 
+        ''' <summary>
+        ''' The group of the user account
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks>See enum for more information</remarks>
         Public Property Group As UserGroup
 
         Public Sub New(enabled As Boolean, name As String, password As String, group As UserGroup)

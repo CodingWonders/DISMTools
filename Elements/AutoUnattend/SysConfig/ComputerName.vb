@@ -2,12 +2,36 @@
 
     Public Class ComputerName
 
+        ''' <summary>
+        ''' Determines whether to let Windows set a random computer name
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property DefaultName As Boolean = True
 
+        ''' <summary>
+        ''' The name of the computer
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Name As String
 
+        ''' <summary>
+        ''' Determines whether the specified computer name is valid according to checks in ComputerNameValidator
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Valid As Boolean
 
+        ''' <summary>
+        ''' The error message from ComputerValidator if computer name is not valid
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ErrorMessage As String
 
     End Class
