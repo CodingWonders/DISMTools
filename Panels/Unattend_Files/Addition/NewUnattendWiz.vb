@@ -1732,4 +1732,12 @@ Public Class NewUnattendWiz
         HelpBrowserForm.MaximizeBox = False
         HelpBrowserForm.ShowDialog()
     End Sub
+
+    Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
+        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
+        WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
+    End Sub
 End Class
