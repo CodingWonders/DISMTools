@@ -3,8 +3,8 @@
     <ImageLanguage Id="ar-SA" DisplayName="Arabic"/>
     <ImageLanguage Id="pt-BR" DisplayName="Brazilian Portuguese"/>
     <ImageLanguage Id="bg-BG" DisplayName="Bulgarian"/>
-    <ImageLanguage Id="zh-Hans-CN" DisplayName="Chinese Simplified"/>
-    <ImageLanguage Id="zh-Hant-CN" DisplayName="Chinese Traditional"/>
+    <ImageLanguage Id="zh-CN" DisplayName="Chinese Simplified"/>
+    <ImageLanguage Id="zh-TW" DisplayName="Chinese Traditional"/>
     <ImageLanguage Id="hr-HR" DisplayName="Croatian"/>
     <ImageLanguage Id="cs-CZ" DisplayName="Czech"/>
     <ImageLanguage Id="da-DK" DisplayName="Danish"/>
