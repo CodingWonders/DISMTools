@@ -239,7 +239,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetPackageInformation] Getting basic package information...")
                 ReportChanges(msg(0), 5)
                 InstalledPkgInfo = DismApi.GetPackages(imgSession)
-                Contents &= "**Information summary for " & InstalledPkgInfo.Count & " package(s):**"
+                Contents &= "**Information summary for " & InstalledPkgInfo.Count & " package(s):**" & CrLf & CrLf
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -705,7 +705,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetFeatureInformation] Getting basic feature information...")
                 ReportChanges(msg(0), 5)
                 InstalledFeatInfo = DismApi.GetFeatures(imgSession)
-                Contents &= "**Information summary for " & InstalledFeatInfo.Count & " feature(s):**"
+                Contents &= "**Information summary for " & InstalledFeatInfo.Count & " feature(s):**" & CrLf & CrLf
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1701,7 +1701,7 @@ Public Class ImgInfoSaveDlg
                     Debug.WriteLine("[GetCapabilityInformation] Getting basic capability information...")
                     ReportChanges(msg(0), 5)
                     InstalledCapInfo = DismApi.GetCapabilities(imgSession)
-                    Contents &= "**Information summary for " & InstalledCapInfo.Count & " capability/ies:**"
+                    Contents &= "**Information summary for " & InstalledCapInfo.Count & " capability/ies:**" & CrLf & CrLf
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1957,7 +1957,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetDriverInformation] Getting basic driver information...")
                 ReportChanges(msg(0), 5)
                 InstalledDrvInfo = DismApi.GetDrivers(imgSession, AllDrivers)
-                Contents &= "**Information summary for " & InstalledDrvInfo.Count & " driver(s):**"
+                Contents &= "**Information summary for " & InstalledDrvInfo.Count & " driver(s):**" & CrLf & CrLf
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
