@@ -12,10 +12,7 @@ Please describe the bug you're experiencing. Examples:
 
 - *When doing something, the program crashes*
 
-> [!NOTE]
-> In the case of an exception, its details have been copied to your clipboard. All you need to do is paste the information.
-> 
-> If it hasn't been copied to your clipboard, a local copy has been saved to the following location: `<program directory>\Logs\Errors`
+**IF YOU HAVE ENCOUNTERED A PROGRAM EXCEPTION, YOU NEED TO USE ITS RESPECTIVE TEMPLATE. Go to the issue types and select "Program exception"**
 
 **How does it happen?**
 Please provide the steps necessary to reproduce this bug:
