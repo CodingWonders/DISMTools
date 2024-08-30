@@ -1946,17 +1946,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''--- Bugfixes:
+        '''- Fixed an issue where some properties for image information reports were not obtained
         '''
-        '''- Fixed some visual issues in the unattended answer file creation wizard
+        '''New features:
         '''
-        '''--- New features:
-        '''
-        '''- Downloading the self-contained version of the unattended answer file generator program now happens in a separate thread. After downloading, you will also see a notification in your system tray
-        '''- 7-Zip has been updated to version 24.08
-        '''- A confirmation dialog has been added to the ISO creation dialog that makes sure you have saved your changes to your image [resto de la cadena truncado]&quot;;.
+        '''- The Preinstallation Environment Helper has had some improvements:
+        '''  - You can now press &quot;B&quot; on the partition selection screen to go back to the disk selection screen if you chose the wrong disk
+        '''  - The Operating System installer now shows a cleaner progress output for DiskPart and DISM
+        '''- The unattended answer file creation wizard can now be resized
+        '''- UnattendGen has been updated to t [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
