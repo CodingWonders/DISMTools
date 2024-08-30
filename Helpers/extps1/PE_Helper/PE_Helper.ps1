@@ -734,6 +734,7 @@ function Start-OSApplication
             } until ($driveLetter -ne "")
         }
     }
+	Write-Host "Creating page file for Windows PE..."
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
@@ -1016,7 +1017,7 @@ function Write-DiskConfiguration
             $formatter = $formatter.Replace("#GPTPART#", "REM Unused Partition Block").Trim()            
         }
         $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
-        diskpart /s "X:\files\diskpart\dp_format.dp" | Out-Host
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"X:\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     else
     {
@@ -1029,7 +1030,7 @@ function Write-DiskConfiguration
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
         $formatter = $formatter.Replace("#PARTID#", $partId).Trim()
         $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
-        diskpart /s "X:\files\diskpart\dp_format.dp" | Out-Host        
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"X:\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     Write-Host "Disk configuration has been written successfully."
 }
@@ -1190,7 +1191,8 @@ function Start-DismCommand
                 }
             }
             "Apply" {
-                dism /apply-image /imagefile="$WimFile" /index=$WimIndex /applydir="$ImagePath" | Out-Host
+				$dismProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\dism.exe" -ArgumentList "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath" -Wait -PassThru -NoNewWindow
+				return ($($dismProc.ExitCode) -eq 0)
             }
             "Add-Package" {
                 Add-WindowsPackage -Path "$ImagePath" -PackagePath "$PackagePath" -NoRestart | Out-Null
