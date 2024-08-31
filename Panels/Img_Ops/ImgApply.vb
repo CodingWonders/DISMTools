@@ -7,6 +7,9 @@ Imports System.Threading
 
 Public Class ImgApply
 
+    Dim ImageVersions As New List(Of Version)
+    Dim ImageEditions As New List(Of String)
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
@@ -505,11 +508,15 @@ Public Class ImgApply
         End While
         Dim imgInfo As DismImageInfoCollection = Nothing
         ComboBox1.Items.Clear()
+        ImageVersions.Clear()
+        ImageEditions.Clear()
         Try
             DismApi.Initialize(DismLogLevel.LogErrors)
             imgInfo = DismApi.GetImageInfo(TextBox1.Text)
             For Each imageInfo In imgInfo
                 ComboBox1.Items.Add(imageInfo.ImageIndex & " (" & imageInfo.ImageName & ")")
+                ImageVersions.Add(imageInfo.ProductVersion)
+                ImageEditions.Add(imageInfo.EditionId)
             Next
         Catch ex As Exception
             Dim msg As String = ""
@@ -540,10 +547,17 @@ Public Class ImgApply
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As DismException
+                ' Don't do anything
+            End Try
         End Try
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         MainForm.WatcherTimer.Enabled = True
+        If ComboBox1.Items.Count > 0 Then
+            ComboBox1.SelectedIndex = 0
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -644,5 +658,20 @@ Public Class ImgApply
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
         SWMFilePanel.Enabled = CheckBox4.Checked = True
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        Try
+            If (ImageVersions.Count > 0) AndAlso (ImageEditions.Count > 0) Then
+                ' Windows PE 4.0 (based on Windows 8 - NT 6.2.9200)
+                If ImageEditions(ComboBox1.SelectedIndex).Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) AndAlso ImageVersions(ComboBox1.SelectedIndex) >= New Version(6, 2, 9200, 0) Then
+                    CheckBox5.Enabled = True
+                Else
+                    CheckBox5.Enabled = False
+                End If
+            End If
+        Catch ex As Exception
+            CheckBox5.Enabled = False
+        End Try
     End Sub
 End Class
