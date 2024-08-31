@@ -8,6 +8,7 @@ on:
     paths-ignore:
       - '.github/**'
       - 'README.md'
+      - 'res/**'
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
