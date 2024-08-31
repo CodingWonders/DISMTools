@@ -7,7 +7,7 @@ Public Class ExceptionForm
 
     Private Sub Issue_Btn_Click(sender As Object, e As EventArgs) Handles Issue_Btn.Click
         DialogResult = Windows.Forms.DialogResult.None
-        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new?assignees=CodingWonders&labels=bug%2C+good+first+issue&projects=&template=bug.md&title=Program%20Exception")
+        Process.Start("https://github.com/CodingWonders/DISMTools/issues/new?assignees=CodingWonders&labels=bug%2C+good+first+issue&projects=&template=program-exception.md&title=Program+exception")
     End Sub
 
     Private Sub Continue_Btn_Click(sender As Object, e As EventArgs) Handles Continue_Btn.Click

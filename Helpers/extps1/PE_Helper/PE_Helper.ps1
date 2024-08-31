@@ -654,6 +654,19 @@ function Start-OSApplication
     }
     Write-Host "Selected disk: disk $($drive)"
     $partition = Get-Partitions $drive
+	if ($partition -eq "B")
+	{
+		do {
+			$drive = Get-Disks
+			if ($drive -eq "ERROR")
+			{
+				Write-Host "Script has failed."
+				return
+			}
+			Write-Host "Selected disk: disk $($drive)"
+			$partition = Get-Partitions $drive
+		} until ($partition -ne "B")
+	}
     if ($partition -eq 0)
     {
         $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
@@ -669,6 +682,19 @@ function Start-OSApplication
         do
         {
             $partition = Get-Partitions $drive
+			if ($partition -eq "B")
+			{
+				do {
+					$drive = Get-Disks
+					if ($drive -eq "ERROR")
+					{
+						Write-Host "Script has failed."
+						return
+					}
+					Write-Host "Selected disk: disk $($drive)"
+					$partition = Get-Partitions $drive
+				} until ($partition -ne "B")
+			}
             if ($partition -eq 0)
             {
                 $msg = "This will perform disk configuration changes on disk $drive. THIS WILL DELETE ALL PARTITIONS IN IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
@@ -708,6 +734,7 @@ function Start-OSApplication
             } until ($driveLetter -ne "")
         }
     }
+	Write-Host "Creating page file for Windows PE..."
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
@@ -884,11 +911,18 @@ function Get-Partitions
     $partLister | Out-File -FilePath "X:\files\diskpart\dp_listpart.dp" -Force -Encoding utf8
     $part = -1
     diskpart /s "X:\files\diskpart\dp_listpart.dp" | Out-Host
-    $part = Read-Host -Prompt "Please choose the partition to apply the image to. If the disk contains no partitions, leave it empty"
+	Write-Host ""
+	Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
+	Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
+    $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
         return $part
     }
+	elseif ($part -eq "B")
+	{
+		return $part
+	}
     else 
     {
         try
@@ -983,7 +1017,7 @@ function Write-DiskConfiguration
             $formatter = $formatter.Replace("#GPTPART#", "REM Unused Partition Block").Trim()            
         }
         $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
-        diskpart /s "X:\files\diskpart\dp_format.dp" | Out-Host
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"X:\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     else
     {
@@ -996,7 +1030,7 @@ function Write-DiskConfiguration
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
         $formatter = $formatter.Replace("#PARTID#", $partId).Trim()
         $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
-        diskpart /s "X:\files\diskpart\dp_format.dp" | Out-Host        
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"X:\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     Write-Host "Disk configuration has been written successfully."
 }
@@ -1157,7 +1191,8 @@ function Start-DismCommand
                 }
             }
             "Apply" {
-                dism /apply-image /imagefile="$WimFile" /index=$WimIndex /applydir="$ImagePath" | Out-Host
+				$dismProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\dism.exe" -ArgumentList "/apply-image /imagefile=`"$WimFile`" /index=$WimIndex /applydir=$ImagePath" -Wait -PassThru -NoNewWindow
+				return ($($dismProc.ExitCode) -eq 0)
             }
             "Add-Package" {
                 Add-WindowsPackage -Path "$ImagePath" -PackagePath "$PackagePath" -NoRestart | Out-Null

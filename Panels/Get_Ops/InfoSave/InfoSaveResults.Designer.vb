@@ -63,6 +63,7 @@ Partial Class InfoSaveResults
         Me.Button2.TabIndex = 3
         Me.Button2.Text = "Print..."
         Me.Button2.UseVisualStyleBackColor = True
+        Me.Button2.Visible = False
         '
         'PrintDialog1
         '
