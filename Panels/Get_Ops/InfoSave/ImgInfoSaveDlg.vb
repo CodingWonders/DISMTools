@@ -298,12 +298,12 @@ Public Class ImgInfoSaveDlg
                                         "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & CrLf & _
                                         "    - Copyright: " & pkgInfoEx.Copyright & CrLf & _
                                         "    - Company: " & pkgInfoEx.Company & CrLf & _
-                                        "    - Creation time: " & pkgInfoEx.CreationTime & CrLf & _
+                                        "    - Creation time: " & pkgInfoEx.CreationTime & If(pkgInfoEx.CreationTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Description: " & pkgInfoEx.Description & CrLf & _
                                         "    - Install client: " & pkgInfoEx.InstallClient & CrLf & _
                                         "    - Install package name: " & pkgInfoEx.InstallPackageName & CrLf & _
                                         "    - Install time: " & pkgInfoEx.InstallTime & CrLf & _
-                                        "    - Last update time: " & pkgInfoEx.LastUpdateTime & CrLf & _
+                                        "    - Last update time: " & pkgInfoEx.LastUpdateTime & If(pkgInfoEx.LastUpdateTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Display name: " & pkgInfoEx.DisplayName & CrLf & _
                                         "    - Product name: " & pkgInfoEx.ProductName & CrLf & _
                                         "    - Product version: " & pkgInfoEx.ProductVersion.ToString() & CrLf & _
@@ -333,12 +333,12 @@ Public Class ImgInfoSaveDlg
                                         "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & CrLf & _
                                         "    - Copyright: " & pkgInfo.Copyright & CrLf & _
                                         "    - Company: " & pkgInfo.Company & CrLf & _
-                                        "    - Creation time: " & pkgInfo.CreationTime & CrLf & _
+                                        "    - Creation time: " & pkgInfo.CreationTime & If(pkgInfo.CreationTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Description: " & pkgInfo.Description & CrLf & _
                                         "    - Install client: " & pkgInfo.InstallClient & CrLf & _
                                         "    - Install package name: " & pkgInfo.InstallPackageName & CrLf & _
                                         "    - Install time: " & pkgInfo.InstallTime & CrLf & _
-                                        "    - Last update time: " & pkgInfo.LastUpdateTime & CrLf & _
+                                        "    - Last update time: " & pkgInfo.LastUpdateTime & If(pkgInfo.LastUpdateTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Display name: " & pkgInfo.DisplayName & CrLf & _
                                         "    - Product name: " & pkgInfo.ProductName & CrLf & _
                                         "    - Product version: " & pkgInfo.ProductVersion.ToString() & CrLf & _
@@ -411,12 +411,12 @@ Public Class ImgInfoSaveDlg
                                         "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & CrLf & _
                                         "    - Copyright: " & pkgInfoEx.Copyright & CrLf & _
                                         "    - Company: " & pkgInfoEx.Company & CrLf & _
-                                        "    - Creation time: " & pkgInfoEx.CreationTime & CrLf & _
+                                        "    - Creation time: " & pkgInfoEx.CreationTime & If(pkgInfoEx.CreationTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Description: " & pkgInfoEx.Description & CrLf & _
                                         "    - Install client: " & pkgInfoEx.InstallClient & CrLf & _
                                         "    - Install package name: " & pkgInfoEx.InstallPackageName & CrLf & _
                                         "    - Install time: " & pkgInfoEx.InstallTime & CrLf & _
-                                        "    - Last update time: " & pkgInfoEx.LastUpdateTime & CrLf & _
+                                        "    - Last update time: " & pkgInfoEx.LastUpdateTime & If(pkgInfoEx.LastUpdateTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Display name: " & pkgInfoEx.DisplayName & CrLf & _
                                         "    - Product name: " & pkgInfoEx.ProductName & CrLf & _
                                         "    - Product version: " & pkgInfoEx.ProductVersion.ToString() & CrLf & _
@@ -446,12 +446,12 @@ Public Class ImgInfoSaveDlg
                                         "    - Is applicable? " & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & CrLf & _
                                         "    - Copyright: " & pkgInfo.Copyright & CrLf & _
                                         "    - Company: " & pkgInfo.Company & CrLf & _
-                                        "    - Creation time: " & pkgInfo.CreationTime & CrLf & _
+                                        "    - Creation time: " & pkgInfo.CreationTime & If(pkgInfo.CreationTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Description: " & pkgInfo.Description & CrLf & _
                                         "    - Install client: " & pkgInfo.InstallClient & CrLf & _
                                         "    - Install package name: " & pkgInfo.InstallPackageName & CrLf & _
                                         "    - Install time: " & pkgInfo.InstallTime & CrLf & _
-                                        "    - Last update time: " & pkgInfo.LastUpdateTime & CrLf & _
+                                        "    - Last update time: " & pkgInfo.LastUpdateTime & If(pkgInfo.LastUpdateTime.Year < 1900, " (Preposterous time and date)", "") & CrLf & _
                                         "    - Display name: " & pkgInfo.DisplayName & CrLf & _
                                         "    - Product name: " & pkgInfo.ProductName & CrLf & _
                                         "    - Product version: " & pkgInfo.ProductVersion.ToString() & CrLf & _
