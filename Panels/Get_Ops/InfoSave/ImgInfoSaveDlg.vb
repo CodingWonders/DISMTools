@@ -51,7 +51,7 @@ Public Class ImgInfoSaveDlg
     Public ForceAppxApi As Boolean
 
     Const TableSeparator As String = "|"
-    Const CodeBlockChar As String = "`"
+    Const CodeBlockChar As String = " ` "       ' It is " ` " to prevent Markdig problem "Markdown elements in the input are too deeply nested - depth limit exceeded. Input is most likely not sensible or is a very large table."
 
     ' Table Headers
     Const ImageFileTableHeader As String = "| Version | Image name | Image description | Image size | Architecture | HAL | Service Pack build | Service Pack level | Installation type | Edition | Product type | Product suite | System root directory | Languages | Date of creation | Date of modification |" & CrLf & _
