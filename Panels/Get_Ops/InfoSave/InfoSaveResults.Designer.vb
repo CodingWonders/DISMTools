@@ -30,6 +30,7 @@ Partial Class InfoSaveResults
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -65,7 +66,6 @@ Partial Class InfoSaveResults
         Me.Button2.TabIndex = 3
         Me.Button2.Text = "Print..."
         Me.Button2.UseVisualStyleBackColor = True
-        Me.Button2.Visible = False
         '
         'PrintDialog1
         '
@@ -113,12 +113,24 @@ Partial Class InfoSaveResults
         Me.WebBrowser1.Size = New System.Drawing.Size(981, 477)
         Me.WebBrowser1.TabIndex = 6
         '
+        'Label2
+        '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Location = New System.Drawing.Point(94, 531)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(595, 13)
+        Me.Label2.TabIndex = 7
+        Me.Label2.Text = "When printing, set orientation to landscape for a better viewing experience"
+        '
         'InfoSaveResults
         '
         Me.AcceptButton = Me.Button1
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1007, 561)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.WebBrowser1)
         Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.TextBox1)
@@ -143,4 +155,5 @@ Partial Class InfoSaveResults
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents WebBrowser1 As System.Windows.Forms.WebBrowser
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 End Class

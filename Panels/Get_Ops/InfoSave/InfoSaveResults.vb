@@ -9,11 +9,13 @@ Public Class InfoSaveResults
     Dim stringToPrint As String = ""
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        PrintDialog1.Document = document
-        If PrintDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            stringToPrint = TextBox1.Text
-            document.Print()
-        End If
+        ' Old implementation - 0.4-0.5.1
+        'PrintDialog1.Document = document
+        'If PrintDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        '    stringToPrint = TextBox1.Text
+        '    document.Print()
+        'End If
+        WebBrowser1.ShowPrintDialog()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -151,5 +153,17 @@ Public Class InfoSaveResults
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         WebBrowser1.Visible = CheckBox1.Checked
+        Button2.Visible = CheckBox1.Checked
+        Label2.Visible = CheckBox1.Checked
+    End Sub
+
+    Private Sub InfoSaveResults_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If File.Exists(Application.StartupPath & "\report.html") Then
+            Try
+                File.Delete(Application.StartupPath & "\report.html")
+            Catch ex As Exception
+                ' Let something else delete it
+            End Try
+        End If
     End Sub
 End Class
