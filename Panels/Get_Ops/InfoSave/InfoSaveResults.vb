@@ -1,5 +1,7 @@
 ﻿Imports System.IO
 Imports System.Drawing.Printing
+Imports Markdig
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class InfoSaveResults
 
@@ -7,11 +9,13 @@ Public Class InfoSaveResults
     Dim stringToPrint As String = ""
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        PrintDialog1.Document = document
-        If PrintDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
-            stringToPrint = TextBox1.Text
-            document.Print()
-        End If
+        ' Old implementation - 0.4-0.5.1
+        'PrintDialog1.Document = document
+        'If PrintDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        '    stringToPrint = TextBox1.Text
+        '    document.Print()
+        'End If
+        WebBrowser1.ShowPrintDialog()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -104,7 +108,62 @@ Public Class InfoSaveResults
         TextBox1.Clear()
         TextBox1.Text = File.ReadAllText(ImgInfoSaveDlg.SaveTarget)
         TextBox1.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Regular)
+
+        ' Convert Markdown report to HTML and add style tags to make the HTML report prettier. None of the contents need to be in <body> - all web browsers handle HTML content separately
+        Dim prettyHTML As String = "<html>" & CrLf &
+                                   "    <head>" & CrLf &
+                                   "        <title>DISMTools Image Information Report</title>" & CrLf &
+                                   "        <style>" & CrLf &
+                                   "            body {" & CrLf &
+                                   "                font-family: " & Quote & "Segoe UI" & Quote & ", Arial, Verdana, sans-serif" & CrLf &
+                                   "            }" & CrLf &
+                                   "            table {" & CrLf &
+                                   "                border-collapse: collapse;" & CrLf &
+                                   "                margin-bottom: 20px;" & CrLf &
+                                   "            }" & CrLf &
+                                   "            table th {" & CrLf &
+                                   "                padding: 8px;" & CrLf &
+                                   "                border-bottom: 1px solid #222" & CrLf &
+                                   "            }" & CrLf &
+                                   "            table td {" & CrLf &
+                                   "                padding: 8px;" & CrLf &
+                                   "                border-bottom: 1px solid #222" & CrLf &
+                                   "            }" & CrLf &
+                                   "            code {" & CrLf &
+                                   "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
+                                   "                font-size: 16px" & CrLf &
+                                   "            }" & CrLf &
+                                   "        </style>" & CrLf &
+                                   "    </head>" & CrLf &
+                                   "</html>" & CrLf
+        Try
+            Dim pipeline = New MarkdownPipelineBuilder().UseAdvancedExtensions().Build()
+            Dim result As String = Markdown.ToHtml(TextBox1.Text, pipeline)
+            File.WriteAllText(Application.StartupPath & "\report.html", prettyHTML & result)
+            If File.Exists(Application.StartupPath & "\report.html") Then
+                WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
+            End If
+        Catch ex As Exception
+            MsgBox(ex.Message, vbOKOnly + vbCritical, "Markdig failure")
+        End Try
+
         AddHandler document.PrintPage, AddressOf doc_PrintPage
         BringToFront()
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        WebBrowser1.Visible = CheckBox1.Checked
+        Button2.Visible = CheckBox1.Checked
+        Label2.Visible = CheckBox1.Checked
+    End Sub
+
+    Private Sub InfoSaveResults_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If File.Exists(Application.StartupPath & "\report.html") Then
+            Try
+                File.Delete(Application.StartupPath & "\report.html")
+            Catch ex As Exception
+                ' Let something else delete it
+            End Try
+        End If
     End Sub
 End Class

@@ -65,11 +65,16 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\Markdig.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Microsoft.Dism.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Scintilla.NET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Buffers.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Drawing.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Management.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Memory.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Numerics.Vectors.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.ServiceModel.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Windows.Forms.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
