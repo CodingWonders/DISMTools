@@ -1741,7 +1741,6 @@ SET COPY_DOCS="Yes"
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
-	ATTRIB portable +H
 )
 IF NOT EXIST bin (
 	md "bin"
