@@ -629,7 +629,7 @@ Public Class NewUnattendWiz
             Else
                 SaveFileDialog1.InitialDirectory = ""
             End If
-            SaveFileDialog1.FileName = "unattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
+            SaveFileDialog1.FileName = "autounattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
             SaveFileDialog1.ShowDialog()
             UnattendGeneratorBW.RunWorkerAsync()
         ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
