@@ -436,7 +436,11 @@ Public Class GetImgInfoDlg
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
         End Try
     End Sub
 
