@@ -267,8 +267,8 @@ function Copy-PEFiles
         {
             Set-Item -Path "env:OSCDImgRoot" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
-        Start-Process "$peToolsPath\copype.cmd" -ArgumentList "$architecture `"$targetDir`"" -Wait | Out-Host
-        if ($?)
+        $copype = Start-Process -FilePath "$peToolsPath\copype.cmd" -ArgumentList "$architecture `"$targetDir`"" -Wait -PassThru -NoNewWindow
+        if ($copype.ExitCode -eq 0)
         {
             Write-Host "PE files copied successfully."
         }
@@ -277,7 +277,7 @@ function Copy-PEFiles
             Write-Host "Failed to copy PE files."
         }
         Set-Location $og_Location
-        return $?
+        return $($copype.ExitCode -eq 0)
     }
     catch
     {
@@ -315,14 +315,14 @@ function Copy-PEComponents
         $totalSize = 1
         foreach ($file in $general_OCs)
         {
-            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\$file" -Destination "$targetDir\OCs" -Force -Container -PassThru -Verbose | ForEach-Object {
+            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\$($file.Name)" -Destination "$targetDir\OCs" -Force -Container -PassThru -Verbose | ForEach-Object {
                 $copied = ($_.BytesTransferred / $totalSize) * 100
                 Write-Debug $copied
             }
         }
         foreach ($file in $loc_OCs)
         {
-            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US\$file" -Destination "$targetDir\OCs\en-US" -Force -Container -PassThru -Verbose | ForEach-Object {
+            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US\$($file.Name)" -Destination "$targetDir\OCs\en-US" -Force -Container -PassThru -Verbose | ForEach-Object {
                 $copied = ($_.BytesTransferred / $totalSize) * 100
                 Write-Debug $copied
             }
@@ -610,16 +610,16 @@ function New-WinPEIso
             Write-Host "Generating ISO file with UEFI compatibility..."
             $bootData = "1#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\efisys.bin`""
         }
-        Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait | Out-Null
-        if ($?)
+        $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
+        if ($oscdimgProc.ExitCode -eq 0)
         {
-            Write-Host "ISO generation has completed successfully."            
+            Write-Host "ISO generation has completed successfully."
         }
         else
         {
-            Write-Host "Failed to generate an ISO file." 
+            Write-Host "Failed to generate an ISO file."
         }
-        return $?
+        return $($oscdimgProc.ExitCode -eq 0)
     }
     catch
     {
@@ -1623,6 +1623,8 @@ function Start-ProjectDevelopment {
 		exit 1
 	}
 }
+
+$host.UI.RawUI.WindowTitle = "DISMTools - Preinstallation Environment Helper"
 
 if ($cmd -eq "StartApply")
 {
