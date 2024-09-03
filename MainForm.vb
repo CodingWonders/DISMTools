@@ -581,6 +581,9 @@ Public Class MainForm
         If DismExe <> "" Then
             DismVersionChecker = FileVersionInfo.GetVersionInfo(DismExe)
         End If
+        If Environment.GetCommandLineArgs().Contains("/english") Then
+            ChangeLangs(1)
+        End If
         UnblockPSHelpers()
         If StartupRemount Then RemountOrphanedImages() Else HasRemounted = True
         While Not HasRemounted
