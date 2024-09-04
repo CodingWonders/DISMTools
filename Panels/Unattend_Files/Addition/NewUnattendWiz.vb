@@ -621,6 +621,13 @@ Public Class NewUnattendWiz
                 SelectTreeNode(12)
         End Select
 
+        ' Change sizes of controls if the normal resize event does not work
+        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
+        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
+        WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
+
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
             ' Detect if a project has been loaded
