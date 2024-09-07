@@ -142,7 +142,7 @@ Public Class AppInstallerDownloader
                                     Dim propertyLine As String = ""
                                     If Not reader.Lines(x).EndsWith(" />") Then
                                         Dim Properties As New List(Of String)
-                                        Properties.Add(reader.Lines(x).Replace(" ", "").Trim())
+                                        Properties.Add(If(reader.Lines(x).EndsWith("MainBundle"), reader.Lines(x).Replace(" ", "").Trim(), reader.Lines(x)))
                                         Properties.Add(reader.Lines(x + 1).Replace(" ", "").Trim())
                                         Properties.Add(reader.Lines(x + 2).Replace(" ", "").Trim())
                                         Properties.Add(reader.Lines(x + 3).Replace(" ", "").Trim())
