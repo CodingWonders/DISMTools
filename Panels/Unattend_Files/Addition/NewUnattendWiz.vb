@@ -1547,7 +1547,7 @@ Public Class NewUnattendWiz
                 If File.Exists(xmlFile) Then File.Delete(xmlFile)
             Next
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & UnattendGen.ExitCode)
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
                 e.Cancel = True
             End If
             ReportMessage("Generation has completed", 100)
