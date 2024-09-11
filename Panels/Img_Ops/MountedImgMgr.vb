@@ -376,6 +376,10 @@ Public Class MountedImgMgr
 
     Private Sub DetectorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles DetectorBW.ProgressChanged
         If DetectorBW.CancellationPending Then Exit Sub
+        If MainForm.MountedImageImgFiles.Count <= 0 Then
+            ListView1.Items.Clear()
+            Exit Sub
+        End If
         Try
             For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                 If ignoreRepeats Then
