@@ -8,6 +8,8 @@ Public Class InfoSaveResults
     Dim document As PrintDocument = New PrintDocument()
     Dim stringToPrint As String = ""
 
+    Public FilePath As String = ""
+
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         ' Old implementation - 0.4-0.5.1
         'PrintDialog1.Document = document
@@ -144,7 +146,10 @@ Public Class InfoSaveResults
                 WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
             End If
         Catch ex As Exception
-            MsgBox(ex.Message, vbOKOnly + vbCritical, "Markdig failure")
+            If MsgBox("Conversion to HTML has failed due to the following error: " & ex.Message & CrLf & CrLf & "Do you want to open this file in a text editor?", vbYesNo + vbCritical, "Conversion error") = MsgBoxResult.Yes Then
+                Process.Start(FilePath)
+                Close()
+            End If
         End Try
 
         AddHandler document.PrintPage, AddressOf doc_PrintPage
