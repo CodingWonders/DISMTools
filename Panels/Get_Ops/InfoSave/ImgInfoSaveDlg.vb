@@ -2607,6 +2607,7 @@ Public Class ImgInfoSaveDlg
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget)
+        InfoSaveResults.FilePath = SaveTarget
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         MainForm.WatcherTimer.Enabled = True
         Close()
