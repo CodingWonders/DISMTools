@@ -5,7 +5,8 @@ Imports System.IO
 Imports System.Text.Encoding
 
 Namespace My
-    ' Los siguientes eventos están disponibles para MyApplication:
+
+    ' Los siguientes eventos están disponibles para MyApplication:
     ' 
     ' Inicio: se desencadena cuando se inicia la aplicación, antes de que se cree el formulario de inicio.
     ' Apagado: generado después de cerrar todos los formularios de la aplicación. Este evento no se genera si la aplicación termina de forma anómala.
@@ -25,6 +26,14 @@ Namespace My
                                            "Error Message: " & e.Exception.Message & CrLf & CrLf &
                                            "Error Code (HRESULT): " & Hex(e.Exception.HResult)
             Try
+                ' Get version of DISMTools that threw the exception. Include program version, branch, and (possibly) build time
+                ' in the case of nightly installers
+                ExceptionForm.ErrorText.AppendText(CrLf & CrLf &
+                                                   "Program information:" & CrLf &
+                                                   " - DISMTools Version: " & My.Application.Info.Version.ToString() & CrLf &
+                                                   " - Preview release? " & If(DISMTools.MainForm.dtBranch.Contains("preview"), "Yes", "No") & CrLf &
+                                                   " - Branch: " & DISMTools.MainForm.dtBranch & CrLf &
+                                                   " - Build time: " & DISMTools.PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
                 ' Get basic information about the system. This does not include any personally identifiable information (PII) or
                 ' serial numbers that can identify the computer this program is run on
                 Dim CS_Searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT Manufacturer, Model FROM Win32_ComputerSystem")
@@ -33,7 +42,7 @@ Namespace My
                 Dim CS_Results As ManagementObjectCollection = CS_Searcher.Get()
                 Dim BIOS_Results As ManagementObjectCollection = BIOS_Searcher.Get()
                 Dim Proc_Results As ManagementObjectCollection = Proc_Searcher.Get()
-                ExceptionForm.ErrorText.AppendText(CrLf & CrLf &
+                ExceptionForm.ErrorText.AppendText(CrLf &
                                                    "Machine information:" & CrLf)
                 For Each CS_Result As ManagementObject In CS_Results
                     ExceptionForm.ErrorText.AppendText(" - Computer manufacturer: " & CS_Result("Manufacturer") & CrLf &
