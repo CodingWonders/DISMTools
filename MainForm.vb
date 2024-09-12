@@ -16176,7 +16176,11 @@ Public Class MainForm
         ElseIf prjTreeView.SelectedNode.Name.EndsWith("arm64") Then
             Process.Start(projPath & "\dandi\arm64")
         ElseIf prjTreeView.SelectedNode.Name = "mount" Then
-            Process.Start(projPath & "\mount")
+            If Not MountDir = (projPath & "\mount") Then
+                Process.Start(MountDir)
+            Else
+                Process.Start(projPath & "\mount")
+            End If
         ElseIf prjTreeView.SelectedNode.Name = "unattend_xml" Then
             Process.Start(projPath & "\unattend_xml")
         ElseIf prjTreeView.SelectedNode.Name = "scr_temp" Then
