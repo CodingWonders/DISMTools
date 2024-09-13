@@ -34,6 +34,7 @@ Partial Class ImgApply
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.CheckBox8 = New System.Windows.Forms.CheckBox()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -63,7 +64,6 @@ Partial Class ImgApply
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -214,6 +214,14 @@ Partial Class ImgApply
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
         '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(374, 77)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(269, 21)
+        Me.ComboBox1.TabIndex = 1
+        '
         'CheckBox8
         '
         Me.CheckBox8.AutoSize = True
@@ -256,6 +264,7 @@ Partial Class ImgApply
         'CheckBox5
         '
         Me.CheckBox5.AutoSize = True
+        Me.CheckBox5.Enabled = False
         Me.CheckBox5.Location = New System.Drawing.Point(19, 125)
         Me.CheckBox5.Name = "CheckBox5"
         Me.CheckBox5.Size = New System.Drawing.Size(194, 17)
@@ -492,14 +501,6 @@ Partial Class ImgApply
         '
         Me.FolderBrowserDialog1.Description = "Please specify the destination directory to apply the image to:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
-        '
-        'ComboBox1
-        '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(374, 77)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(269, 21)
-        Me.ComboBox1.TabIndex = 1
         '
         'ImgApply
         '

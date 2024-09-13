@@ -68,6 +68,7 @@ function Start-PEGeneration
         .SYNOPSIS
             Generates a Preinstallation Environment (PE) that contains the Windows image specified in the GUI or via the command line
     #>
+	$mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
     $version = "0.6"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
@@ -102,8 +103,19 @@ function Start-PEGeneration
 					Read-Host | Out-Null
 					exit 1
 				}
+				Write-Host "Creating temporary mount directory..."
+				try
+				{
+					$mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+					New-Item "$mountDirectory" -ItemType Directory | Out-Null
+				}
+				catch
+				{
+					Write-Host "Could not create temporary mount directory. Using default folder..."
+					$mountDirectory = "$((Get-Location).Path)\ISOTEMP\mount"
+				}
 				Write-Host "Mounting Windows image. Please wait..."
-				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$((Get-Location).Path)\ISOTEMP\mount") -eq $false)
+				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$mountDirectory") -eq $false)
 				{
 					Write-Host "Preinstallation Environment creation has failed in the PE image mount phase."
 					Write-Host "`nPress ENTER to exit"
@@ -133,23 +145,23 @@ function Start-PEGeneration
 					if (Test-Path $pkg -PathType Leaf)
 					{
 						Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
-						Start-DismCommand -Verb Add-Package -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -PackagePath $pkg | Out-Null
+						Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath $pkg | Out-Null
 					}
 				}
 				Write-Host "Saving changes..."
-				Start-DismCommand -Verb Commit -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" | Out-Null
+				Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
 				# Perform customization tasks later
 				Write-Host "Beginning customizations..."
-				if ((Start-PECustomization -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -arch $architecture -testStartNet $false) -eq $false)
+				if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $false) -eq $false)
 				{
 					Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
-					Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $false | Out-Null
+					Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null
 					Write-Host "`nPress ENTER to exit"
 					Read-Host | Out-Null
 					exit 1
 				}
 				Write-Host "Unmounting image..."
-				Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $true | Out-Null
+				Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $true | Out-Null
 				Write-Host "PE generated successfully"
 				# Continue ISO customization
 				Write-Host "Copying image file. This can take some time..."
@@ -204,6 +216,10 @@ function Start-PEGeneration
 				}
 				Write-Host "Deleting temporary files..."
 				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
+				if ($mountDirectory.StartsWith("$env:TEMP"))
+				{
+					Remove-Item -Path "$mountDirectory" -Recurse -Force -ErrorAction SilentlyContinue
+				}
 				Write-Host "The ISO file has been successfully created on the location you specified"
 				Start-Sleep -Seconds 5
 				exit 0
@@ -267,8 +283,8 @@ function Copy-PEFiles
         {
             Set-Item -Path "env:OSCDImgRoot" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
-        Start-Process "$peToolsPath\copype.cmd" -ArgumentList "$architecture `"$targetDir`"" -Wait | Out-Host
-        if ($?)
+        $copype = Start-Process -FilePath "$peToolsPath\copype.cmd" -ArgumentList "$architecture `"$targetDir`"" -Wait -PassThru -NoNewWindow
+        if ($copype.ExitCode -eq 0)
         {
             Write-Host "PE files copied successfully."
         }
@@ -277,7 +293,7 @@ function Copy-PEFiles
             Write-Host "Failed to copy PE files."
         }
         Set-Location $og_Location
-        return $?
+        return $($copype.ExitCode -eq 0)
     }
     catch
     {
@@ -315,14 +331,14 @@ function Copy-PEComponents
         $totalSize = 1
         foreach ($file in $general_OCs)
         {
-            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\$file" -Destination "$targetDir\OCs" -Force -Container -PassThru -Verbose | ForEach-Object {
+            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\$($file.Name)" -Destination "$targetDir\OCs" -Force -Container -PassThru -Verbose | ForEach-Object {
                 $copied = ($_.BytesTransferred / $totalSize) * 100
                 Write-Debug $copied
             }
         }
         foreach ($file in $loc_OCs)
         {
-            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US\$file" -Destination "$targetDir\OCs\en-US" -Force -Container -PassThru -Verbose | ForEach-Object {
+            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US\$($file.Name)" -Destination "$targetDir\OCs\en-US" -Force -Container -PassThru -Verbose | ForEach-Object {
                 $copied = ($_.BytesTransferred / $totalSize) * 100
                 Write-Debug $copied
             }
@@ -610,16 +626,16 @@ function New-WinPEIso
             Write-Host "Generating ISO file with UEFI compatibility..."
             $bootData = "1#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\efisys.bin`""
         }
-        Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait | Out-Null
-        if ($?)
+        $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
+        if ($oscdimgProc.ExitCode -eq 0)
         {
-            Write-Host "ISO generation has completed successfully."            
+            Write-Host "ISO generation has completed successfully."
         }
         else
         {
-            Write-Host "Failed to generate an ISO file." 
+            Write-Host "Failed to generate an ISO file."
         }
-        return $?
+        return $($oscdimgProc.ExitCode -eq 0)
     }
     catch
     {
@@ -1448,6 +1464,7 @@ function Show-Timeout {
 }
 
 function Start-ProjectDevelopment {
+	$mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
     $version = "0.6"
 	$ESVer = "0.5.1"
@@ -1487,8 +1504,19 @@ function Start-ProjectDevelopment {
 					Read-Host | Out-Null
 					exit 1
 				}
+				Write-Host "Creating temporary mount directory..."
+				try
+				{
+					$mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+					New-Item "$mountDirectory" -ItemType Directory | Out-Null
+				}
+				catch
+				{
+					Write-Host "Could not create temporary mount directory. Using default folder..."
+					$mountDirectory = "$((Get-Location).Path)\ISOTEMP\mount"
+				}
 				Write-Host "Mounting Windows image. Please wait..."
-				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$((Get-Location).Path)\ISOTEMP\mount") -eq $false)
+				if ((Start-DismCommand -Verb Mount -ImagePath "$((Get-Location).Path)\ISOTEMP\media\sources\boot.wim" -ImageIndex 1 -MountPath "$mountDirectory") -eq $false)
 				{
 					Write-Host "Preinstallation Environment creation has failed in the PE image mount phase."
 					Write-Host "`nPress ENTER to exit"
@@ -1518,23 +1546,23 @@ function Start-ProjectDevelopment {
 					if (Test-Path $pkg -PathType Leaf)
 					{
 						Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
-						Start-DismCommand -Verb Add-Package -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -PackagePath $pkg | Out-Null
+						Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath $pkg | Out-Null
 					}
 				}
 				Write-Host "Saving changes..."
-				Start-DismCommand -Verb Commit -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" | Out-Null
+				Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
 				# Perform customization tasks later
 				Write-Host "Beginning customizations..."
-				if ((Start-PECustomization -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -arch $architecture -testStartNet $true) -eq $false)
+				if ((Start-PECustomization -ImagePath "$mountDirectory" -arch $architecture -testStartNet $true) -eq $false)
 				{
 					Write-Host "Preinstallation Environment creation has failed in the PE customization phase. Discarding changes..."
-					Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $false | Out-Null
+					Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $false | Out-Null
 					Write-Host "`nPress ENTER to exit"
 					Read-Host | Out-Null
 					exit 1
 				}
 				Write-Host "Unmounting image..."
-				Start-DismCommand -Verb Unmount -ImagePath "$((Get-Location).Path)\ISOTEMP\mount" -Commit $true | Out-Null
+				Start-DismCommand -Verb Unmount -ImagePath "$mountDirectory" -Commit $true | Out-Null
 				Write-Host "PE generated successfully"
 				Write-Host "Copying project files..."
 				# Copy project files
@@ -1556,6 +1584,10 @@ function Start-ProjectDevelopment {
 				Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
 				Write-Host "Deleting temporary files..."
 				Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
+				if ($mountDirectory.StartsWith("$env:TEMP"))
+				{
+					Remove-Item -Path "$mountDirectory" -Recurse -Force -ErrorAction SilentlyContinue
+				}
 				if ($?)
 				{
 					Write-Host "Temporary files have been deleted successfully"
@@ -1623,6 +1655,8 @@ function Start-ProjectDevelopment {
 		exit 1
 	}
 }
+
+$host.UI.RawUI.WindowTitle = "DISMTools - Preinstallation Environment Helper"
 
 if ($cmd -eq "StartApply")
 {

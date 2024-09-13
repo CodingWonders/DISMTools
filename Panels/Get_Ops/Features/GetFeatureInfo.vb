@@ -579,11 +579,38 @@ Public Class GetFeatureInfoDlg
         End If
     End Sub
 
-    Sub SearchFeatures(sQuery As String)
+    Sub SearchFeatures(sQuery As String, Optional featureState As String = "")
+        Dim expectedFeatureState As DismPackageFeatureState = DismPackageFeatureState.NotPresent
+        If featureState <> "" Then
+            Select Case featureState.ToLower()
+                Case "notpresent"
+                    expectedFeatureState = DismPackageFeatureState.NotPresent
+                Case "disablepending"
+                    expectedFeatureState = DismPackageFeatureState.UninstallPending
+                Case "disabled"
+                    expectedFeatureState = DismPackageFeatureState.Staged
+                Case "removed"
+                    expectedFeatureState = DismPackageFeatureState.Removed
+                Case "resolved"
+                    expectedFeatureState = DismPackageFeatureState.Resolved
+                Case "enabled"
+                    expectedFeatureState = DismPackageFeatureState.Installed
+                Case "enablepending"
+                    expectedFeatureState = DismPackageFeatureState.InstallPending
+                Case "superseded"
+                    expectedFeatureState = DismPackageFeatureState.Superseded
+                Case "partiallyinstalled"
+                    expectedFeatureState = DismPackageFeatureState.PartiallyInstalled
+            End Select
+        End If
         If InstalledFeatureInfo.Count > 0 Then
             For Each InstalledFeature As DismFeature In InstalledFeatureInfo
                 If InstalledFeature.FeatureName.ToLower().Contains(sQuery.ToLower()) Then
-                    ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
+                    If featureState <> "" AndAlso InstalledFeature.State = expectedFeatureState Then
+                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
+                    ElseIf featureState = "" Then
+                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
+                    End If
                 End If
             Next
         End If
@@ -592,7 +619,12 @@ Public Class GetFeatureInfoDlg
     Private Sub SearchBox1_TextChanged(sender As Object, e As EventArgs) Handles SearchBox1.TextChanged
         ListView1.Items.Clear()
         If SearchBox1.Text <> "" Then
-            SearchFeatures(SearchBox1.Text)
+            If SearchBox1.Text.ToLower().Contains("state:") Then
+                Dim state As String = SearchBox1.Text.Substring(SearchBox1.Text.IndexOf("state:") + "state:".Length).Trim()
+                SearchFeatures(SearchBox1.Text.Replace("state:" & state, "").Trim(), state)
+            Else
+                SearchFeatures(SearchBox1.Text)
+            End If
         Else
             For Each InstalledFeature As DismFeature In InstalledFeatureInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
