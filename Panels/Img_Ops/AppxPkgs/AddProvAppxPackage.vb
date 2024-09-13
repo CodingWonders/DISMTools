@@ -2173,9 +2173,9 @@ Public Class AddProvAppxPackage
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         Cursor = Cursors.WaitCursor
         For Each PackageFile In PackageFiles
-            If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or _
-                Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or _
-                Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or _
+            If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or
+                Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or
+                Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
                 ScanAppxPackage(False, PackageFile)
             ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
@@ -2183,12 +2183,12 @@ Public Class AddProvAppxPackage
                 AppInstallerDownloader.AppInstallerFile = PackageFile
                 If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then AppInstallerDownloader.ShowDialog(Me)
                 If File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
-            ElseIf File.GetAttributes(PackageFile) = FileAttributes.Directory Then
+            ElseIf File.GetAttributes(PackageFile) = (FileAttributes.Directory Or FileAttributes.Archive) Then
                 Dim msg As String = ""
                 ' Temporary support for directories
                 If File.Exists(PackageFile & "\AppxSignature.p7x") And File.Exists(PackageFile & "\AppxMetadata\AppxBundleManifest.xml") Or File.Exists(PackageFile & "\AppxManifest.xml") Then
                     ScanAppxPackage(True, PackageFile)
-                ElseIf My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.appx").Count > 0 Or My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.msix").Count > 0 Or _
+                ElseIf My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.appx").Count > 0 Or My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.msix").Count > 0 Or
                     My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.appxbundle").Count > 0 Or My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.msixbundle").Count > 0 Then
                     Select Case MainForm.Language
                         Case 0
@@ -2217,7 +2217,7 @@ Public Class AddProvAppxPackage
                     End Select
                     If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
                         For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
-                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or _
+                            If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or
                                 Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
                                 ScanAppxPackage(False, AppPkg)
                             ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
