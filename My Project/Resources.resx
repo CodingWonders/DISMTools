@@ -763,17 +763,33 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where some properties for image information reports were not obtained
+- The image application task and the image file information dialog are more reliable
+- Fixed an issue where all images would be remounted, but the first mounted image would never show in the automatic reload panel
+- Fixed an issue where the mounted image list in the mounted image manager would not be cleared if all images were unmounted by an external program
+- Fixed an issue where clicking the "Access directory" option of the "Mount directory" tree view item would always load the project's mount directory, even if the image was mounted elsewhere (thanks @Procstas for spotting)
+- Fixed a parser issue in the App Installer downloader
+- Fixed attribute filter issues for AppX package directories when they are dropped
 
 New features:
 
-- The Preinstallation Environment Helper has had some improvements:
-  - You can now press "B" on the partition selection screen to go back to the disk selection screen if you chose the wrong disk
-  - The Operating System installer now shows a cleaner progress output for DiskPart and DISM
-- The unattended answer file creation wizard can now be resized
-- UnattendGen has been updated to the latest version
-- The link to report program exceptions has changed to point to its new issue template
-- Image information reports are now saved in Markdown</value>
+- A requirement for Windows PE 4.0 (based on Windows 8) and newer images has been added for the image application task if you want to validate a Windows image for Trusted Desktop
+- You can now filter features and capabilities based on their state
+- Added feature update detection for Selenium builds of Windows
+- The exception dialog has seen a major redesign to show more information and feature more information on how to report problems. Program version reporting is now included as well
+- The Preinstallation Environment Helper has seen improvements:
+  - Compatibility with PowerShell based on the new, open-source .NET (e.g., PowerShell 7) has been improved
+  - Output for "CopyPE" and OSCDIMG is now shown more cleanly
+  - To avoid bloating the program directory, the Windows PE image is now mounted to the %TEMP% folder
+  - A custom title is now used for both the PE generator and the OS installer
+  - PowerShell is now called without loading any existing profiles, to speed up script launch
+- The image information saver technologies have seen improvements:
+  - If a package contains preposterous dates, reports will now show such a mark
+  - The program now uses Markdig to convert the Markdown report to HTML. With this change, printing support has been re-instated
+- The unattended answer file features have seen improvements:
+  - For fully unattended installations (including setup), unattended answer files are now named "autounattend"
+  - Panels in the disk configuration, user accounts, and wireless configuration pages are now properly resized when you resize the window
+  - Exit codes for the unattended answer file generator are now shown in Hex
+  - Fixed some XML writer issues for the UnattendGen parser (thanks David Retzloff on the MDL forums for spotting)</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
