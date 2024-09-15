@@ -158,6 +158,8 @@
     </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
+    <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
     <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\GeoId.vb" />
     <Compile Include="Elements\AutoUnattend\Localization\ImageLanguage.vb" />

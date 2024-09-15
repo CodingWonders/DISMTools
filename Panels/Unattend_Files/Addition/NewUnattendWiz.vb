@@ -69,6 +69,9 @@ Public Class NewUnattendWiz
     Dim SystemTelemetryInteractive As Boolean
     Dim SelectedTelemetrySettings As New SystemTelemetry()
 
+    ' Component Panel
+    Dim SystemComponents As New List(Of Component)
+
     ' Space for more pages
 
     ' Default Settings
@@ -529,6 +532,15 @@ Public Class NewUnattendWiz
                     ComboBox5.Items.Add(Offset.DisplayName)
                 Next
                 If ComboBox5.SelectedItem = Nothing Then ComboBox5.SelectedItem = DefaultOffset.DisplayName
+            End If
+        End If
+        ' System components
+        If File.Exists(Application.StartupPath & "\AutoUnattend\Component.xml") Then
+            SystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
+            If SystemComponents IsNot Nothing Then
+                For Each SystemComponent As Component In SystemComponents
+                    ListBox2.Items.Add(SystemComponent.Id)
+                Next
             End If
         End If
         ListBox1.SelectedIndex = 1
@@ -1746,5 +1758,35 @@ Public Class NewUnattendWiz
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
+    End Sub
+
+    Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
+        PassConfigurationPanel.Visible = (ListBox2.SelectedItems.Count = 1)
+        If ListBox2.SelectedItems.Count = 1 Then
+            For Each configurationPass As Pass In SystemComponents(ListBox2.SelectedIndex).Passes
+                Select Case configurationPass.Name
+                    Case "windowsPE"
+                        windowsPE.Enabled = configurationPass.Compatible
+                    Case "offlineServicing"
+                        offlineServicing.Enabled = configurationPass.Compatible
+                    Case "specialize"
+                        specialize.Enabled = configurationPass.Compatible
+                    Case "generalize"
+                        generalize.Enabled = configurationPass.Compatible
+                    Case "auditSystem"
+                        auditSystem.Enabled = configurationPass.Compatible
+                    Case "auditUser"
+                        auditUser.Enabled = configurationPass.Compatible
+                    Case "oobeSystem"
+                        oobeSystem.Enabled = configurationPass.Compatible
+                End Select
+            Next
+        Else
+
+        End If
+    End Sub
+
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+        Process.Start("https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/components-b-unattend")
     End Sub
 End Class
