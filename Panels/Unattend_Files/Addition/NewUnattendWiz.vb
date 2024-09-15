@@ -71,6 +71,7 @@ Public Class NewUnattendWiz
 
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
+    Dim FinalComponents As New List(Of Component)
 
     ' Space for more pages
 
@@ -85,6 +86,7 @@ Public Class NewUnattendWiz
     Dim DefaultLockdownSettings As New AccountLockdownSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
+    Dim DefaultSystemComponents As New List(Of Component)
 
     ' Progress info
     Dim ProgressMessage As String = ""
@@ -398,6 +400,7 @@ Public Class NewUnattendWiz
         ComboBox12.BackColor = BackColor
         ComboBox13.BackColor = BackColor
         ListBox1.BackColor = BackColor
+        ListBox2.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox3.BackColor = BackColor
@@ -438,6 +441,7 @@ Public Class NewUnattendWiz
         ComboBox12.ForeColor = ForeColor
         ComboBox13.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
+        ListBox2.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -537,6 +541,7 @@ Public Class NewUnattendWiz
         ' System components
         If File.Exists(Application.StartupPath & "\AutoUnattend\Component.xml") Then
             SystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
+            DefaultSystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
             If SystemComponents IsNot Nothing Then
                 For Each SystemComponent As Component In SystemComponents
                     ListBox2.Items.Add(SystemComponent.Id)
@@ -827,6 +832,22 @@ Public Class NewUnattendWiz
             TextBox13.AppendText("- (Attempt to) disable telemetry? " & If(Not SelectedTelemetrySettings.Enabled, "Yes", "No") & CrLf)
         End If
         ' Post Install Scripts and Component Manager will be added in a future release
+        ' 11. -- COMPONENTS
+        TextBox13.AppendText("Additional components: " & If(Not AreComponentListsEqual(SystemComponents, DefaultSystemComponents), "", "none") & CrLf)
+        If Not AreComponentListsEqual(SystemComponents, DefaultSystemComponents) Then
+            FinalComponents = GetComponentDifferences(SystemComponents, DefaultSystemComponents)
+            If FinalComponents.Count > 0 Then
+                For Each systemComponent As Component In FinalComponents
+                    TextBox13.AppendText("- Component name: " & Quote & systemComponent.Id & Quote & CrLf &
+                                         "  - Passes:" & CrLf)
+                    If systemComponent.Passes.Count > 0 Then
+                        For Each systemPass As Pass In systemComponent.Passes
+                            TextBox13.AppendText("    - " & Quote & systemPass.Name & Quote & ": " & If(systemPass.Enabled, "enabled", "disabled") & CrLf)
+                        Next
+                    End If
+                Next
+            End If
+        End If
     End Sub
 
     Private Sub ExpressPanelTrigger_MouseEnter(sender As Object, e As EventArgs) Handles ExpressPanelTrigger.MouseEnter
@@ -1767,26 +1788,164 @@ Public Class NewUnattendWiz
                 Select Case configurationPass.Name
                     Case "windowsPE"
                         windowsPE.Enabled = configurationPass.Compatible
+                        windowsPE.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                     Case "offlineServicing"
                         offlineServicing.Enabled = configurationPass.Compatible
+                        offlineServicing.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                     Case "specialize"
                         specialize.Enabled = configurationPass.Compatible
+                        specialize.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                     Case "generalize"
                         generalize.Enabled = configurationPass.Compatible
+                        generalize.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                     Case "auditSystem"
                         auditSystem.Enabled = configurationPass.Compatible
+                        auditSystem.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                     Case "auditUser"
                         auditUser.Enabled = configurationPass.Compatible
+                        auditUser.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                     Case "oobeSystem"
                         oobeSystem.Enabled = configurationPass.Compatible
+                        oobeSystem.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
                 End Select
             Next
-        Else
-
         End If
     End Sub
 
     Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
         Process.Start("https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/components-b-unattend")
     End Sub
+
+    Sub ConfigureComponent(componentName As String, componentPass As String, componentPassEnabled As Boolean)
+        If String.IsNullOrWhiteSpace(componentName) Then Exit Sub
+        If String.IsNullOrWhiteSpace(componentPass) Then Exit Sub
+        Dim componentNames As New List(Of String)
+        Dim knownPasses As New Dictionary(Of String, Boolean)
+        knownPasses.Add("offlineServicing", False)
+        knownPasses.Add("windowsPE", False)
+        knownPasses.Add("generalize", False)
+        knownPasses.Add("specialize", False)
+        knownPasses.Add("auditSystem", False)
+        knownPasses.Add("auditUser", False)
+        knownPasses.Add("oobeSystem", False)
+        For Each systemComponent As Component In SystemComponents
+            componentNames.Add(systemComponent.Id)
+        Next
+        ' Determine if the passed component ID "componentName" exists in the grabbed components
+        If componentNames.Contains(componentName) Then
+            Dim placementIndex As Integer = componentNames.IndexOf(componentName)
+            ' Grab pass to configure and configure it
+            If Not knownPasses.ContainsKey(componentPass) Then
+                MsgBox("The component pass " & componentPass & " does not exist in the pass list", vbOKOnly + vbCritical, Text)
+                Exit Sub
+            End If
+            Dim editedPass As Pass = SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass)
+            If editedPass IsNot Nothing Then
+                editedPass.Enabled = componentPassEnabled
+                Debug.WriteLine("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
+            Else
+
+            End If
+        Else
+            MsgBox("The component " & componentName & " does not exist in the component list", vbOKOnly + vbCritical, Text)
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub oobeSystem_CheckedChanged(sender As Object, e As EventArgs) Handles oobeSystem.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "oobeSystem", oobeSystem.Checked)
+    End Sub
+
+    Private Sub auditUser_CheckedChanged(sender As Object, e As EventArgs) Handles auditUser.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "auditUser", auditUser.Checked)
+    End Sub
+
+    Private Sub auditSystem_CheckedChanged(sender As Object, e As EventArgs) Handles auditSystem.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "auditSystem", auditSystem.Checked)
+    End Sub
+
+    Private Sub generalize_CheckedChanged(sender As Object, e As EventArgs) Handles generalize.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "generalize", generalize.Checked)
+    End Sub
+
+    Private Sub specialize_CheckedChanged(sender As Object, e As EventArgs) Handles specialize.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "specialize", specialize.Checked)
+    End Sub
+
+    Private Sub offlineServicing_CheckedChanged(sender As Object, e As EventArgs) Handles offlineServicing.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "offlineServicing", offlineServicing.Checked)
+    End Sub
+
+    Private Sub windowsPE_CheckedChanged(sender As Object, e As EventArgs) Handles windowsPE.CheckedChanged
+        ConfigureComponent(ListBox2.SelectedItem, "windowsPE", windowsPE.Checked)
+    End Sub
+
+    Function AreComponentListsEqual(list1 As List(Of Component), list2 As List(Of Component)) As Boolean
+        ' Check if the counts of both lists are the same
+        If list1.Count <> list2.Count Then Return False
+
+        ' Iterate through components in both lists
+        For i As Integer = 0 To list1.Count - 1
+            Dim component1 As Component = list1(i)
+            Dim component2 As Component = list2(i)
+
+            ' Compare component IDs
+            If component1.Id <> component2.Id Then Return False
+
+            ' Compare the number of passes in each component
+            If component1.Passes.Count <> component2.Passes.Count Then Return False
+
+            ' Compare each pass
+            For j As Integer = 0 To component1.Passes.Count - 1
+                Dim pass1 As Pass = component1.Passes(j)
+                Dim pass2 As Pass = component2.Passes(j)
+
+                ' Compare pass names and compatible states
+                If pass1.Name <> pass2.Name OrElse pass1.Enabled <> pass2.Enabled Then
+                    Return False
+                End If
+            Next
+        Next
+
+        ' If all comparisons pass, the lists are equal
+        Return True
+    End Function
+
+    Function GetComponentDifferences(list1 As List(Of Component), list2 As List(Of Component)) As List(Of Component)
+        Dim differences As New List(Of Component)
+
+        ' Combine both lists to check for differences in either
+        Dim allComponents As List(Of Component) = list1.Concat(list2).GroupBy(Function(c) c.Id).Select(Function(g) g.First()).ToList()
+
+        For Each component In allComponents
+            ' Find the component in both lists
+            Dim component1 As Component = list1.FirstOrDefault(Function(c) c.Id = component.Id)
+            Dim component2 As Component = list2.FirstOrDefault(Function(c) c.Id = component.Id)
+
+            If component1 Is Nothing OrElse component2 Is Nothing Then
+                ' If a component is missing in one of the lists, it's different
+                differences.Add(component)
+            Else
+                ' Compare passes if the component exists in both lists
+                Dim differingComponent As New Component() With {.Id = component.Id}
+                For Each pass1 In component1.Passes
+                    ' Find corresponding pass in component2
+                    Dim pass2 As Pass = component2.Passes.FirstOrDefault(Function(p) p.Name = pass1.Name)
+
+                    If pass2 Is Nothing OrElse pass1.Enabled <> pass2.Enabled Then
+                        ' If pass is missing or its status is different, mark it as different
+                        differingComponent.Passes.Add(pass1)
+                    End If
+                Next
+
+                ' Only add the component if there are differing passes
+                If differingComponent.Passes.Count > 0 Then
+                    differences.Add(differingComponent)
+                End If
+            End If
+        Next
+
+        Return differences
+    End Function
+
 End Class
