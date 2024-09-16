@@ -51,6 +51,8 @@ Partial Class NewUnattendWiz
         Me.StepsContainer = New System.Windows.Forms.Panel()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
+        Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel6 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
@@ -549,6 +551,8 @@ Partial Class NewUnattendWiz
         'FinishPanel
         '
         Me.FinishPanel.Controls.Add(Me.Label59)
+        Me.FinishPanel.Controls.Add(Me.LinkLabel7)
+        Me.FinishPanel.Controls.Add(Me.LinkLabel6)
         Me.FinishPanel.Controls.Add(Me.LinkLabel4)
         Me.FinishPanel.Controls.Add(Me.LinkLabel3)
         Me.FinishPanel.Controls.Add(Me.LinkLabel2)
@@ -568,6 +572,30 @@ Partial Class NewUnattendWiz
         Me.Label59.Size = New System.Drawing.Size(320, 13)
         Me.Label59.TabIndex = 16
         Me.Label59.Text = "NOTE: you will return to this wizard after applying the answer file"
+        '
+        'LinkLabel7
+        '
+        Me.LinkLabel7.AutoSize = True
+        Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel7.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel7.Location = New System.Drawing.Point(157, 316)
+        Me.LinkLabel7.Name = "LinkLabel7"
+        Me.LinkLabel7.Size = New System.Drawing.Size(80, 13)
+        Me.LinkLabel7.TabIndex = 15
+        Me.LinkLabel7.TabStop = True
+        Me.LinkLabel7.Text = "Edit answer file"
+        '
+        'LinkLabel6
+        '
+        Me.LinkLabel6.AutoSize = True
+        Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel6.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel6.Location = New System.Drawing.Point(157, 291)
+        Me.LinkLabel6.Name = "LinkLabel6"
+        Me.LinkLabel6.Size = New System.Drawing.Size(218, 13)
+        Me.LinkLabel6.TabIndex = 15
+        Me.LinkLabel6.TabStop = True
+        Me.LinkLabel6.Text = "Open with Windows System Image Manager"
         '
         'LinkLabel4
         '
@@ -3669,6 +3697,8 @@ Partial Class NewUnattendWiz
     Friend WithEvents FinishPanel As System.Windows.Forms.Panel
     Friend WithEvents Label58 As System.Windows.Forms.Label
     Friend WithEvents FinishHeader As System.Windows.Forms.Label
+    Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LinkLabel6 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel4 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel3 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel

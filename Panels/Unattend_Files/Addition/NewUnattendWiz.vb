@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2483"
+    Dim UnattendGenReleaseTag As String = "2493"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -553,6 +553,14 @@ Public Class NewUnattendWiz
             End If
         Else
             UGNotify.Visible = False
+        End If
+
+        ' Detect presence of Windows SIM
+        If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
+                                    "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            LinkLabel6.Enabled = True
+        Else
+            LinkLabel6.Enabled = False
         End If
     End Sub
 
@@ -1746,5 +1754,36 @@ Public Class NewUnattendWiz
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
+                                    "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            Process.Start(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)), "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe"), Quote & SaveTarget & Quote)
+        End If
+    End Sub
+
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        Try
+            Scintilla1.Text = File.ReadAllText(SaveTarget)
+        Catch ex As Exception
+            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+            Exit Sub
+        End Try
+
+        IsInExpress = False
+        StepsTreeView.Enabled = False
+        EditorPanelContainer.Visible = True
+        ExpressPanelContainer.Visible = False
+        ExpressPanelTrigger.BackColor = SidePanel.BackColor
+        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
+        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
+        EditorPanelTrigger.ForeColor = Color.White
+        PictureBox2.Image = My.Resources.editor_mode_select
+        PictureBox3.Image = My.Resources.editor_mode_fc
+        Label3.Text = "Editor mode"
+        Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        FooterContainer.Visible = False
     End Sub
 End Class
