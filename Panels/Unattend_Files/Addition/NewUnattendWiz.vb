@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2491"
+    Dim UnattendGenReleaseTag As String = "2493"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -571,6 +571,14 @@ Public Class NewUnattendWiz
         Else
             UGNotify.Visible = False
         End If
+
+        ' Detect presence of Windows SIM
+        If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
+                                    "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            LinkLabel6.Enabled = True
+        Else
+            LinkLabel6.Enabled = False
+        End If
     End Sub
 
     Sub SelectTreeNode(NodeIndex As Integer)
@@ -842,7 +850,7 @@ Public Class NewUnattendWiz
                                          "  - Passes:" & CrLf)
                     If systemComponent.Passes.Count > 0 Then
                         For Each systemPass As Pass In systemComponent.Passes
-                            TextBox13.AppendText("    - " & Quote & systemPass.Name & Quote & ": " & If(systemPass.Enabled, "enabled", "disabled") & CrLf)
+                            TextBox13.AppendText("    - " & Quote & systemPass.Name & Quote & CrLf)
                         Next
                     End If
                 Next
@@ -1568,6 +1576,24 @@ Public Class NewUnattendWiz
                     UnattendGen.StartInfo.Arguments &= " /telem=no"
                 End If
             End If
+            If FinalComponents.Count > 0 Then
+                ReportMessage("Saving user settings...", 24.75)
+                UnattendGen.StartInfo.Arguments &= " /customcomponents"
+                Dim customComponentContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf
+                For Each systemComponent As Component In FinalComponents
+                    Dim passName As String = ""
+                    If systemComponent.Passes.Count > 0 Then
+                        For Each systemPass As Pass In systemComponent.Passes
+                            passName &= systemPass.Name & ","
+                        Next
+                        passName = passName.TrimEnd(",")
+                    End If
+                    customComponentContents &= "    <Component Id=" & Quote & systemComponent.Id.Replace("&", "&amp;").Trim() & Quote & " Passes=" & Quote & passName.Replace("&", "&amp;").Trim() & Quote & " />" & CrLf
+                Next
+                customComponentContents &= "</root>"
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "components.xml"), customComponentContents, UTF8)
+            End If
             ReportMessage("Generating unattended answer file...", 25)
             UnattendGen.Start()
             UnattendGen.WaitForExit()
@@ -1948,4 +1974,34 @@ Public Class NewUnattendWiz
         Return differences
     End Function
 
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
+                                    "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            Process.Start(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)), "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe"), Quote & SaveTarget & Quote)
+        End If
+    End Sub
+
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        Try
+            Scintilla1.Text = File.ReadAllText(SaveTarget)
+        Catch ex As Exception
+            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+            Exit Sub
+        End Try
+
+        IsInExpress = False
+        StepsTreeView.Enabled = False
+        EditorPanelContainer.Visible = True
+        ExpressPanelContainer.Visible = False
+        ExpressPanelTrigger.BackColor = SidePanel.BackColor
+        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
+        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
+        EditorPanelTrigger.ForeColor = Color.White
+        PictureBox2.Image = My.Resources.editor_mode_select
+        PictureBox3.Image = My.Resources.editor_mode_fc
+        Label3.Text = "Editor mode"
+        Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        FooterContainer.Visible = False
+    End Sub
 End Class
