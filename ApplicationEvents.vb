@@ -15,6 +15,9 @@ Namespace My
     ' NetworkAvailabilityChanged: se desencadena cuando la conexión de red está conectada o desconectada.
     Partial Friend Class MyApplication
 
+        Private lastThemeChangeTime As DateTime = DateTime.Now
+        Private debounceInterval As TimeSpan = TimeSpan.FromSeconds(2)
+
         Private Sub Start(sender As Object, e As EventArgs) Handles Me.Startup
             AddHandler Microsoft.Win32.SystemEvents.UserPreferenceChanged, AddressOf SysEvts_UserPreferenceChanged
             AddHandler Microsoft.Win32.SystemEvents.DisplaySettingsChanging, AddressOf SysEvts_DisplaySettingsChanging
@@ -90,6 +93,13 @@ Namespace My
 
         Private Sub SysEvts_UserPreferenceChanged(sender As Object, e As Microsoft.Win32.UserPreferenceChangedEventArgs)
             Debug.WriteLine(Date.UtcNow & " UTC - User Preference Category: " & e.Category.ToString())
+            If e.Category = UserPreferenceCategory.General And DISMTools.MainForm.ColorMode = 0 Then
+                Dim currentTime As DateTime = DateTime.Now
+                If currentTime - lastThemeChangeTime > debounceInterval Then
+                    DISMTools.MainForm.ChangePrgColors(0)
+                    lastThemeChangeTime = currentTime
+                End If
+            End If
         End Sub
 
         Private Sub SysEvts_DisplaySettingsChanged(sender As Object, e As EventArgs)

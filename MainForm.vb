@@ -13948,40 +13948,6 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
-        If WindowState <> FormWindowState.Maximized Then
-            WndWidth = Width
-            WndHeight = Height
-        End If
-        If Visible And ColorMode = 0 Then
-            ChangePrgColors(0)
-        End If
-        If GroupBox1.Left < 0 Then
-            SplitPanels.SplitterDistance = 264
-        End If
-        If BGProcNotify.Visible Then
-            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
-                BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
-            ElseIf Environment.OSVersion.Version.Major = 6 Then
-                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
-                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
-                Else
-                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
-                End If
-            End If
-        ElseIf BGProcDetails.Visible And pinState = 0 Then
-            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
-                BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
-            ElseIf Environment.OSVersion.Version.Major = 6 Then
-                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
-                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
-                Else
-                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
-                End If
-            End If
-        End If
-    End Sub
-
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
