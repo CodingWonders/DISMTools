@@ -4344,7 +4344,8 @@ Public Class ProgressPanel
                         ' Get capability information
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
                         LogView.AppendText(CrLf & CrLf & _
-                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability identity: " & capInfo.Name & CrLf & _
+                                           "- Capability name: " & capInfo.DisplayName & CrLf & _
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
@@ -4530,7 +4531,8 @@ Public Class ProgressPanel
                     Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
                         LogView.AppendText(CrLf & CrLf & _
-                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability identity: " & capInfo.Name & CrLf & _
+                                           "- Capability name: " & capInfo.DisplayName & CrLf & _
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
