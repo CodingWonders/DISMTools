@@ -436,7 +436,11 @@ Public Class GetImgInfoDlg
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
         End Try
     End Sub
 
@@ -685,8 +689,10 @@ Public Class GetImgInfoDlg
                         FeatUpd = "24H1 (Gallium)"
                     Case 25942 To 27500
                         FeatUpd = "24H2 (Germanium)"
-                    Case Is >= 27500
+                    Case 27501 To 27686
                         FeatUpd = "25H1 (Dilithium)"
+                    Case Is >= 27687
+                        FeatUpd = "25H2 (Selenium)"
                 End Select
             Case Else
                 Exit Sub

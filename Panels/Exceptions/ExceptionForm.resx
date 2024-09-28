@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Label4.Text" xml:space="preserve">
+  <data name="Label5.Text" xml:space="preserve">
     <value>You may be able to continue running the program by clicking Continue. However, if this error is displayed for a second time, you can forcefully close the program by clicking Exit. Do note that changes made to projects, as well as changes in the Recents list, will not be saved.
 
 What do you want to do?</value>

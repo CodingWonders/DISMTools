@@ -1946,17 +1946,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''--- Bugfixes:
-        '''
-        '''- Fixed some visual issues in the unattended answer file creation wizard
-        '''
-        '''--- New features:
-        '''
-        '''- Downloading the self-contained version of the unattended answer file generator program now happens in a separate thread. After downloading, you will also see a notification in your system tray
-        '''- 7-Zip has been updated to version 24.08
-        '''- A confirmation dialog has been added to the ISO creation dialog that makes sure you have saved your changes to your image [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.5.1_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

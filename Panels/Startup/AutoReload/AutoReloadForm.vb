@@ -30,6 +30,8 @@ Public Class AutoReloadForm
                 MountDirs.Add(imageinfo.MountPath)
                 MountStatus.Add(imageinfo.MountStatus)
             Next
+            fileMsg = ImgFiles(0)
+            mntMsg = MountDirs(0)
         End If
         DismApi.Shutdown()
         BackgroundWorker1.ReportProgress(0)
@@ -101,9 +103,9 @@ Public Class AutoReloadForm
                 End Select
             Case Else
                 Label2.Text = message
-                imgFile.Text = fileMsg
-                imgMtPnt.Text = mntMsg
         End Select
+        imgFile.Text = fileMsg
+        imgMtPnt.Text = mntMsg
         ProgressBar1.Style = ProgressBarStyle.Blocks
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
