@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -1948,10 +1948,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The image application task and the image file information dialog are more reliable
-        '''- Fixed an issue where all images would be remounted, but the first mounted image would never show in the automatic reload panel
-        '''- Fixed an issue where the mounted image list in the mounted image manager would not be cleared if all images were unmounted by an external program
-        '''- Fixed an issue where clicking the &quot;Access directory&quot; option of the &quot;Mount directory&quot; tree view item would always load the project&apos;s  [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue that happened when adding and removing capabilities where capability display names would be misclassified as capability identities
+        '''
+        '''New features:
+        '''
+        '''- The testing environment portion of the Preinstallation Environment Helper is now loaded without loading profiles
+        '''- If the program is configured to use the system color mode, the changes to these will now be handled much more smoothly and automatically
+        '''- The unattended answer file manager and the application task have received [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

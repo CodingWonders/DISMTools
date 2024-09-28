@@ -41,10 +41,10 @@ Partial Class UnattendMgr
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoEllipsis = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(70, 13)
+        Me.Label1.Size = New System.Drawing.Size(119, 13)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Project path:"
         '
@@ -52,9 +52,9 @@ Partial Class UnattendMgr
         '
         Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(89, 10)
+        Me.TextBox1.Location = New System.Drawing.Point(138, 10)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(826, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(777, 21)
         Me.TextBox1.TabIndex = 1
         '
         'Button1

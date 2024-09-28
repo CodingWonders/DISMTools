@@ -4344,7 +4344,8 @@ Public Class ProgressPanel
                         ' Get capability information
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
                         LogView.AppendText(CrLf & CrLf & _
-                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability identity: " & capInfo.Name & CrLf & _
+                                           "- Capability name: " & capInfo.DisplayName & CrLf & _
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
@@ -4530,7 +4531,8 @@ Public Class ProgressPanel
                     Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
                         LogView.AppendText(CrLf & CrLf & _
-                                           "- Capability identity: " & capInfo.DisplayName & CrLf & _
+                                           "- Capability identity: " & capInfo.Name & CrLf & _
+                                           "- Capability name: " & capInfo.DisplayName & CrLf & _
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
@@ -5190,10 +5192,41 @@ Public Class ProgressPanel
                 End Try
             End If
         ElseIf opNum = 79 Then
-            ' Translations will not be available for 0.5.1
-
-            allTasks.Text = "Applying unattended answer file..."
-            currentTask.Text = "Applying specified unattended answer file to the target image..."
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Applying unattended answer file..."
+                            currentTask.Text = "Applying specified unattended answer file to the target image..."
+                        Case "ESN"
+                            allTasks.Text = "Aplicando archivo de respuesta desatendida..."
+                            currentTask.Text = "Aplicando archivo de respuesta desatendida especificado a la imagen de destino..."
+                        Case "FRA"
+                            allTasks.Text = "Appliquer le fichier de réponse sans surveillance en cours..."
+                            currentTask.Text = "Appliquer le fichier de réponse non assisté spécifié à l'image cible en cours..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Aplicar ficheiro de resposta não assistido..."
+                            currentTask.Text = "Aplicar o ficheiro de resposta automática especificado à imagem de destino..."
+                        Case "ITA"
+                            allTasks.Text = "Applicazione del file di risposta non presidiato..."
+                            currentTask.Text = "Applicazione del file di risposta non presidiato specificato all'immagine di destinazione..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Applying unattended answer file..."
+                    currentTask.Text = "Applying specified unattended answer file to the target image..."
+                Case 2
+                    allTasks.Text = "Aplicando archivo de respuesta desatendida..."
+                    currentTask.Text = "Aplicando archivo de respuesta desatendida especificado a la imagen de destino..."
+                Case 3
+                    allTasks.Text = "Appliquer le fichier de réponse sans surveillance en cours..."
+                    currentTask.Text = "Appliquer le fichier de réponse non assisté spécifié à l'image cible en cours..."
+                Case 4
+                    allTasks.Text = "Aplicar ficheiro de resposta não assistido..."
+                    currentTask.Text = "Aplicar o ficheiro de resposta automática especificado à imagem de destino..."
+                Case 5
+                    allTasks.Text = "Applicazione del file di risposta non presidiato..."
+                    currentTask.Text = "Applicazione del file di risposta non presidiato specificato all'immagine di destinazione..."
+            End Select
             LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
                                "- Unattended answer file: " & UnattendedFile)
 
