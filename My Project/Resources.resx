@@ -748,44 +748,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <value>..\Resources\get_appxpkg_info.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview:
+    <value>To get more information about what's new in this release, check out the release notes over at:
 
---- Bugfixes:
-
-- Fixed some visual issues in the unattended answer file creation wizard
-
---- New features:
-
-- Downloading the self-contained version of the unattended answer file generator program now happens in a separate thread. After downloading, you will also see a notification in your system tray
-- 7-Zip has been updated to version 24.08
-- A confirmation dialog has been added to the ISO creation dialog that makes sure you have saved your changes to your image
-
-Overall changes:
-
---- Bugfixes:
-
-- The reliability of AppX background processes has been improved
-- The Preinstallation Environment (PE) Helper now checks if there are Windows images present in your ISOs and will exit if none are detected
-- Fixed an issue where detecting keyboard layered drivers would fail when managing active installations
-- Video tutorial detection has been moved to a separate thread, avoiding UI deadlocks on slow wireless network connections (thanks @vadimlitvinenko87 for spotting)
-- Fixed an issue in the capability information dialog where it would show feature state (as opposed to capability state) when searching items
-
---- New features:
-
-- The Preinstallation Environment (PE) Helper has had several improvements:
-    - A new tool has been added: the Driver Installation Module (DIM), which assists you in installing device drivers on active Windows PEs. These drivers are then added to the target image
-    - Now, you can create testing environments in which you can test your applications for Windows PE compatibility and with which you can make further customizations to the Preinstallation Environment if necessary
-- Italian translations have been added
-- If the Windows ADK is installed, but the "AdkInstallation" registry value is not present, the program can add it automatically
-- CODE: MSU package addition has been simplified
-- If an operation completes with errors, the program will now show a description of the error, in the system language, from the Windows APIs instead of a generic string
-- Stub package options can now be set for AppX packages that are added
-- You can now add packages by specifying Microsoft Update Manifest (MUM) files (thanks @AnubyteCode for suggesting this)
-- The Scintilla.NET component has been updated to version 5.6.1
-- You can now list the contents of any Windows image with the new Windows Image Explorer
-- You can now set keyboard layered drivers on your Windows image, which are useful for Japanese and Korean keyboards
-- The unattended answer file features have been revamped, using the Unattended Answer File Generator from Christoph Schneegans as their new base
-- DockPanelSuite has been upgraded to version 3.1.1</value>
+https://github.com/CodingWonders/DISMTools/releases/tag/v0.5.1_upd1</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

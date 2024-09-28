@@ -12,6 +12,8 @@ Please describe the bug you're experiencing. Examples:
 
 - *When doing something, the program crashes*
 
+**IF YOU HAVE ENCOUNTERED A PROGRAM EXCEPTION, YOU NEED TO USE ITS RESPECTIVE TEMPLATE. Go to the issue types and select "Program exception"**
+
 **How does it happen?**
 Please provide the steps necessary to reproduce this bug:
 
@@ -27,5 +29,3 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
-
-**NOTE:** in the case of a program exception, you need to paste the error information in the first section. Remove example information beforehand.

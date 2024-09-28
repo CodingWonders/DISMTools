@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2483"
+    Dim UnattendGenReleaseTag As String = "2493"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -554,6 +554,14 @@ Public Class NewUnattendWiz
         Else
             UGNotify.Visible = False
         End If
+
+        ' Detect presence of Windows SIM
+        If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
+                                    "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            LinkLabel6.Enabled = True
+        Else
+            LinkLabel6.Enabled = False
+        End If
     End Sub
 
     Sub SelectTreeNode(NodeIndex As Integer)
@@ -621,6 +629,13 @@ Public Class NewUnattendWiz
                 SelectTreeNode(12)
         End Select
 
+        ' Change sizes of controls if the normal resize event does not work
+        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
+        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
+        WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
+
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
             ' Detect if a project has been loaded
@@ -629,7 +644,7 @@ Public Class NewUnattendWiz
             Else
                 SaveFileDialog1.InitialDirectory = ""
             End If
-            SaveFileDialog1.FileName = "unattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
+            SaveFileDialog1.FileName = "autounattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
             SaveFileDialog1.ShowDialog()
             UnattendGeneratorBW.RunWorkerAsync()
         ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
@@ -1383,7 +1398,7 @@ Public Class NewUnattendWiz
                 "   <UserLocale Id=" & Quote & SelectedLocale.Id & Quote & " DisplayName=" & Quote & SelectedLocale.DisplayName & Quote & " LCID=" & Quote & SelectedLocale.LCID & Quote & " KeyboardLayout=" & Quote & SelectedLocale.KeybId & Quote & " GeoLocation=" & Quote & SelectedLocale.GeoLoc & Quote & "/>" & CrLf &
                 "   <KeyboardIdentifier Id=" & Quote & SelectedKeybIdentifier.Id & Quote & " DisplayName=" & Quote & SelectedKeybIdentifier.DisplayName & Quote & " Type=" & Quote & SelectedKeybIdentifier.Type & Quote & "/>" & CrLf &
                 "   <GeoId Id=" & Quote & SelectedGeoId.Id & Quote & " DisplayName=" & Quote & SelectedGeoId.DisplayName & Quote & "/>" & CrLf &
-                "   <TimeOffset Id=" & Quote & SelectedOffset.Id & Quote & " DisplayName=" & Quote & SelectedOffset.DisplayName & Quote & "/>" & CrLf &
+                "   <TimeOffset Id=" & Quote & SelectedOffset.Id & Quote & " DisplayName=" & Quote & If(SelectedOffset.DisplayName.Contains("&"), SelectedOffset.DisplayName.Replace("&", "&amp;").Trim(), SelectedOffset.DisplayName) & Quote & "/>" & CrLf &
                 "</root>"
             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
             UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
@@ -1450,7 +1465,7 @@ Public Class NewUnattendWiz
                     "<root>" & CrLf
                 If UserAccountsList.Count > 0 Then
                     For Each account As User In UserAccountsList
-                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & account.Name & Quote & " Password=" & Quote & account.Password & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
+                        customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
                     Next
                     customUserContents &= "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
@@ -1461,7 +1476,7 @@ Public Class NewUnattendWiz
                             UnattendGen.StartInfo.Arguments &= " /autologon=builtinadmin"
                             Dim builtinAdminContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                                 "<root>" & CrLf &
-                                "   <BuiltInAdmin Password=" & Quote & AutoLogon.LogonPassword & Quote & " />" & CrLf &
+                                "   <BuiltInAdmin Password=" & Quote & If(AutoLogon.LogonPassword.Contains("&"), AutoLogon.LogonPassword.Replace("&", "&amp;").Trim(), AutoLogon.LogonPassword) & Quote & " />" & CrLf &
                                 "</root>"
                             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "autoLogon.xml"), builtinAdminContents, UTF8)
                         End If
@@ -1515,7 +1530,7 @@ Public Class NewUnattendWiz
                     UnattendGen.StartInfo.Arguments &= " /wifi=yes"
                     Dim wirelessContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <WirelessNetwork Name=" & Quote & SelectedNetworkConfiguration.SSID & Quote & " Password=" & Quote & SelectedNetworkConfiguration.Password & Quote & " AuthMode=" & Quote & If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.Open, "Open", If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK, "WPA2", "WPA3")) & Quote & " NonBroadcast=" & Quote & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "1", "0") & Quote & " />" & CrLf &
+                        "   <WirelessNetwork Name=" & Quote & If(SelectedNetworkConfiguration.SSID.Contains("&"), SelectedNetworkConfiguration.SSID.Replace("&", "&amp;").Trim(), SelectedNetworkConfiguration.SSID) & Quote & " Password=" & Quote & If(SelectedNetworkConfiguration.Password.Contains("&"), SelectedNetworkConfiguration.Password.Replace("&", "&amp;").Trim(), SelectedNetworkConfiguration.Password) & Quote & " AuthMode=" & Quote & If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.Open, "Open", If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK, "WPA2", "WPA3")) & Quote & " NonBroadcast=" & Quote & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "1", "0") & Quote & " />" & CrLf &
                         "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "wireless.xml"), wirelessContents, UTF8)
                 End If
@@ -1540,7 +1555,7 @@ Public Class NewUnattendWiz
                 If File.Exists(xmlFile) Then File.Delete(xmlFile)
             Next
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & UnattendGen.ExitCode)
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
                 e.Cancel = True
             End If
             ReportMessage("Generation has completed", 100)
@@ -1731,5 +1746,44 @@ Public Class NewUnattendWiz
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
         HelpBrowserForm.ShowDialog()
+    End Sub
+
+    Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
+        DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
+        GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
+        WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
+    End Sub
+
+    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
+        If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
+                                    "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            Process.Start(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)), "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe"), Quote & SaveTarget & Quote)
+        End If
+    End Sub
+
+    Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
+        Try
+            Scintilla1.Text = File.ReadAllText(SaveTarget)
+        Catch ex As Exception
+            MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
+            Exit Sub
+        End Try
+
+        IsInExpress = False
+        StepsTreeView.Enabled = False
+        EditorPanelContainer.Visible = True
+        ExpressPanelContainer.Visible = False
+        ExpressPanelTrigger.BackColor = SidePanel.BackColor
+        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
+        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
+        EditorPanelTrigger.ForeColor = Color.White
+        PictureBox2.Image = My.Resources.editor_mode_select
+        PictureBox3.Image = My.Resources.editor_mode_fc
+        Label3.Text = "Editor mode"
+        Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
+        FooterContainer.Visible = False
     End Sub
 End Class
