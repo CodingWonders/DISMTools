@@ -1760,6 +1760,9 @@ ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
 )
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\Compile.ps1" (
+	"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -noprofile -nologo -file "$(SolutionDir)Helpers\extps1\PE_Helper\Compile.ps1"
+)
 IF NOT EXIST bin (
 	md "bin"
 	md "bin\exthelpers"
@@ -1771,6 +1774,15 @@ IF NOT EXIST bin (
 	move "helpers\extps1\*.*" "bin\extps1"
 	md "bin\extps1\PE_Helper"
 	xcopy "helpers\extps1\PE_Helper\*.*" "bin\extps1\PE_Helper" /cehyi
+	IF EXIST "$(SolutionDir)helpers\extps1\PE_Helper\Compile.ps1" (
+		:: Compile the script with CTT's compilation script (license in source code and About section)
+		ECHO Invoking pre-processing...
+		COPY "$(SolutionDir)helpers\extps1\PE_Helper\Compile.ps1" "$(TargetDir)bin\extps1\PE_Helper\Compile.ps1"
+		COPY "$(SolutionDir)helpers\extps1\PE_Helper\tools\Invoke-Preprocessing.ps1" "$(TargetDir)bin\extps1\PE_Helper\tools\Invoke-Preprocessing.ps1"
+		"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -noprofile -nologo -file "$(TargetDir)bin\extps1\PE_Helper\Compile.ps1"
+		DEL "$(TargetDir)bin\extps1\PE_Helper\Compile.ps1" /F /Q
+		DEL "$(TargetDir)bin\extps1\PE_Helper\tools\Invoke-Preprocessing.ps1" /F /Q
+	)
 	IF EXIST HELPERS (
 		rd HELPERS /s /q
 	)
