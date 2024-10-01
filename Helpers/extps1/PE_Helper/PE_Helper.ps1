@@ -1472,7 +1472,7 @@ function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
     $version = "0.6"
-    $ESVer = "0.5.1"
+    $ESVer = "0.6"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
