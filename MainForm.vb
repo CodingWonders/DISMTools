@@ -538,6 +538,20 @@ Public Class MainForm
             MsgBox("This program is incompatible with Windows 7 and Server 2008 R2." & CrLf & "This program uses the DISM API, which requires files from the Assessment and Deployment Kit (ADK). However, support for Windows 7 is not included." & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        ' Detect .NET Framework version, as the program somehow runs without it
+        Try
+            Dim NDPCheckerReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full")
+            Dim NDPReleaseInt As Integer = NDPCheckerReg.GetValue("Release")
+            NDPCheckerReg.Close()
+            ' Detect .NET Framework 4.8
+            If NDPReleaseInt < 528040 Then
+                SplashScreen.Hide()
+                MsgBox("This program requires .NET Framework 4.8 to function." & CrLf & "You can download it from: dotnet.microsoft.com. Install the framework and run the program again. You may need to restart your system" & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
+                Environment.Exit(1)
+            End If
+        Catch ex As Exception
+
+        End Try
         If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
