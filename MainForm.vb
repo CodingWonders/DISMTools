@@ -10729,6 +10729,9 @@ Public Class MainForm
         BGProcDetails.Hide()
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
+        If RegistryControlPanel IsNot Nothing Then
+            RegistryControlPanel.Close()
+        End If
         If OnlineManagement Then EndOnlineManagement()
         If OfflineManagement Then EndOfflineManagement()
     End Sub
@@ -19718,6 +19721,18 @@ Public Class MainForm
                     BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
                 End If
             End If
+        End If
+    End Sub
+
+    Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
+        If isProjectLoaded Then
+            If IsImageMounted And Not OnlineManagement Then
+                RegistryControlPanel.Show()
+            ElseIf IsImageMounted And OnlineManagement Then
+                MsgBox("This control panel is not available on active installations.", vbOKOnly + vbCritical, Text)
+            End If
+        Else
+            MsgBox("You need to load a project or mode to manage registry hives.", vbOKOnly + vbExclamation, Text)
         End If
     End Sub
 End Class
