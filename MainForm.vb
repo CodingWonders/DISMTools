@@ -19735,4 +19735,12 @@ Public Class MainForm
             MsgBox("You need to load a project or mode to manage registry hives.", vbOKOnly + vbExclamation, Text)
         End If
     End Sub
+
+    Sub RestartDetector()
+        Try
+            MountedImageDetectorBW.RunWorkerAsync()
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class

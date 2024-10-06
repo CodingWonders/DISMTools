@@ -125,7 +125,7 @@ Namespace My
                 Call DISMTools.MainForm.MountedImageDetectorBW.RunWorkerAsync()
                 Threading.Thread.Sleep(250)
             Catch ex As Exception
-                ' Don't do anything
+                DISMTools.MainForm.RestartDetector()
             End Try
         End Sub
 
