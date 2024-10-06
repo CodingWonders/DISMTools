@@ -19719,4 +19719,12 @@ Public Class MainForm
             Next
         End If
     End Sub
+
+    Sub RestartDetector()
+        Try
+            MountedImageDetectorBW.RunWorkerAsync()
+        Catch ex As Exception
+
+        End Try
+    End Sub
 End Class
