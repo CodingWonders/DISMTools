@@ -114,6 +114,7 @@ Public Class InfoSaveResults
         ' Convert Markdown report to HTML and add style tags to make the HTML report prettier. None of the contents need to be in <body> - all web browsers handle HTML content separately
         Dim prettyHTML As String = "<html>" & CrLf &
                                    "    <head>" & CrLf &
+                                   "        <meta charset=" & Quote & "utf-8" & Quote & ">" & CrLf &
                                    "        <title>DISMTools Image Information Report</title>" & CrLf &
                                    "        <style>" & CrLf &
                                    "            body {" & CrLf &
