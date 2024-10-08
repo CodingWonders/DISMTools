@@ -363,7 +363,11 @@ Public Class ISOCreator
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
         End Try
         Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
