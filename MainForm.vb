@@ -19722,9 +19722,19 @@ Public Class MainForm
 
     Sub RestartDetector()
         Try
-            MountedImageDetectorBW.RunWorkerAsync()
+            If Not MountedImageDetectorBW.IsBusy Then
+                Call MountedImageDetectorBW.RunWorkerAsync()
+            Else
+                Exit Sub
+            End If
+            Debug.WriteLine("Mounted Image Detector Restart Successful")
+            MountedImageDetectorBWRestarterTimer.Enabled = False
         Catch ex As Exception
-
+            Debug.WriteLine("Mounted Image Detector Restart Not Successful")
         End Try
+    End Sub
+
+    Private Sub MountedImageDetectorBWRestarterTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorBWRestarterTimer.Tick
+        RestartDetector()
     End Sub
 End Class

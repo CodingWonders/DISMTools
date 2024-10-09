@@ -537,6 +537,7 @@ Partial Class MainForm
         Me.CreateDiscImageWithThisFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
+        Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -5245,6 +5246,10 @@ Partial Class MainForm
         Me.VideoGetterBW.WorkerReportsProgress = True
         Me.VideoGetterBW.WorkerSupportsCancellation = True
         '
+        'MountedImageDetectorBWRestarterTimer
+        '
+        Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -5895,4 +5900,5 @@ Partial Class MainForm
     Friend WithEvents UnattendedAnswerFileCreatorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator41 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents VideoGetterBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents MountedImageDetectorBWRestarterTimer As System.Windows.Forms.Timer
 End Class
