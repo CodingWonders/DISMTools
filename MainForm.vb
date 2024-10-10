@@ -19753,4 +19753,32 @@ Public Class MainForm
     Private Sub MountedImageDetectorBWRestarterTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorBWRestarterTimer.Tick
         RestartDetector()
     End Sub
+
+    Private Sub LanguagesAndOptionalFeaturesISOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndOptionalFeaturesISOToolStripMenuItem.Click
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "ESN"
+                        Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "FRA"
+                        Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "PTB", "PTG"
+                        Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "ITA"
+                        Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                End Select
+            Case 1
+                Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 2
+                Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 3
+                Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 4
+                Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 5
+                Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+        End Select
+    End Sub
 End Class
