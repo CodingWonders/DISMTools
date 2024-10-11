@@ -777,16 +777,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue that happened when adding and removing capabilities where capability display names would be misclassified as capability identities
+- CODE: the indentation of the PE Helper is now consistent
+- Fixed an issue where the program would continue running without having .NET Framework 4.8
+- Fixed an issue where the program would randomly freeze, even though it was still responding
 
 New features:
 
-- The testing environment portion of the Preinstallation Environment Helper is now loaded without loading profiles
-- If the program is configured to use the system color mode, the changes to these will now be handled much more smoothly and automatically
-- The unattended answer file manager and the application task have received translations
-- You can now specify placeholders of the system components to add to your unattended answer file
-- UnattendGen has been updated to the latest version, which adds support for components and passes
-- After you have created your unattended answer file using the wizard, you can now open it in the Windows System Image Manager (SIM), or load it in the Editor mode to fill in placeholder passes</value>
+- Exception reporting now includes some basic information about the image you are servicing. This does not occur when managing active installations
+- A new tool has been introduced that lets you manage the registry hives of the image
+- You can now download Windows 11 Languages and Optional Features ISOs more easily
+- Output of OSCDIMG has been improved for the Extensibility Suite
+- HTML versions of Markdown reports now force UTF-8 encoding
+- Fixed an issue where external links would be opened in the HTML report preview browser</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
