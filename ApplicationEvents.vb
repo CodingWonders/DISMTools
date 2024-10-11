@@ -37,6 +37,18 @@ Namespace My
                                                    " - Preview release? " & If(DISMTools.MainForm.dtBranch.Contains("preview"), "Yes", "No") & CrLf &
                                                    " - Branch: " & DISMTools.MainForm.dtBranch & CrLf &
                                                    " - Build time: " & DISMTools.PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
+                ' Get image information if a project has been loaded
+                If DISMTools.MainForm.isProjectLoaded And Not DISMTools.MainForm.OnlineManagement Then
+                    Try
+                        ExceptionForm.ErrorText.AppendText(CrLf &
+                                                           "Information about the image loaded in this project:" & CrLf &
+                                                           " - Image name: " & DISMTools.MainForm.Label46.Text & CrLf &
+                                                           " - Image description: " & DISMTools.MainForm.Label47.Text & CrLf &
+                                                           " - Image version: " & DISMTools.MainForm.Label48.Text)
+                    Catch ex As Exception
+                        ' Don't get this info
+                    End Try
+                End If
                 ' Get basic information about the system. This does not include any personally identifiable information (PII) or
                 ' serial numbers that can identify the computer this program is run on
                 Dim CS_Searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT Manufacturer, Model FROM Win32_ComputerSystem")
