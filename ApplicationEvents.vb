@@ -37,6 +37,18 @@ Namespace My
                                                    " - Preview release? " & If(DISMTools.MainForm.dtBranch.Contains("preview"), "Yes", "No") & CrLf &
                                                    " - Branch: " & DISMTools.MainForm.dtBranch & CrLf &
                                                    " - Build time: " & DISMTools.PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
+                ' Get image information if a project has been loaded
+                If DISMTools.MainForm.isProjectLoaded And Not DISMTools.MainForm.OnlineManagement Then
+                    Try
+                        ExceptionForm.ErrorText.AppendText(CrLf &
+                                                           "Information about the image loaded in this project:" & CrLf &
+                                                           " - Image name: " & DISMTools.MainForm.Label46.Text & CrLf &
+                                                           " - Image description: " & DISMTools.MainForm.Label47.Text & CrLf &
+                                                           " - Image version: " & DISMTools.MainForm.Label48.Text)
+                    Catch ex As Exception
+                        ' Don't get this info
+                    End Try
+                End If
                 ' Get basic information about the system. This does not include any personally identifiable information (PII) or
                 ' serial numbers that can identify the computer this program is run on
                 Dim CS_Searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT Manufacturer, Model FROM Win32_ComputerSystem")
@@ -93,6 +105,26 @@ Namespace My
 
         Private Sub SysEvts_UserPreferenceChanged(sender As Object, e As Microsoft.Win32.UserPreferenceChangedEventArgs)
             Debug.WriteLine(Date.UtcNow & " UTC - User Preference Category: " & e.Category.ToString())
+
+            ' Prevent the program from freezing. This is a fix for a very long-standing bug that was introduced with the mounted image detector,
+            ' where the program would randomly freeze and never come back. And, even while the program itself was still responding, its UI thread
+            ' wasn't.
+            '
+            ' This is a problem with Windows Forms that has been present since .NET Framework 2.0. More on that here: 
+            ' https://www.ikriv.com/dev/dotnet/MysteriousHang
+            '
+            ' Even though this bug took a year and a half to fix, a lot was gathered from previous attempts at fixing this problem:
+            ' 1. It's random
+            ' 2. It affects all versions of Windows supported by this program (Win8.1-Win11, incl. servers)
+            ' 3. It happens when the following conditions occur:
+            '    - The mounted image detector is running
+            '    - This event is triggered
+            '
+            ' This fixes the problem by temporarily stopping the mounted image detector, doing the event code, and restarting it afterward.
+            ' It hasn't caused any freezes for me yet, but I may be proven wrong.
+            If DISMTools.MainForm.MountedImageDetectorBW.IsBusy Then
+                DISMTools.MainForm.MountedImageDetectorBW.CancelAsync()
+            End If
             If e.Category = UserPreferenceCategory.General And DISMTools.MainForm.ColorMode = 0 Then
                 Dim currentTime As DateTime = DateTime.Now
                 If currentTime - lastThemeChangeTime > debounceInterval Then
@@ -100,6 +132,13 @@ Namespace My
                     lastThemeChangeTime = currentTime
                 End If
             End If
+            Try
+                Threading.Thread.Sleep(1000)
+                Call DISMTools.MainForm.MountedImageDetectorBW.RunWorkerAsync()
+                Threading.Thread.Sleep(250)
+            Catch ex As Exception
+                DISMTools.MainForm.MountedImageDetectorBWRestarterTimer.Enabled = True
+            End Try
         End Sub
 
         Private Sub SysEvts_DisplaySettingsChanged(sender As Object, e As EventArgs)

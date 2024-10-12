@@ -576,6 +576,12 @@
     <Compile Include="Panels\Img_Ops\ProvisioningPkgs\AddProvisioningPkg.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Registry\RegistryControlPanel.Designer.vb">
+      <DependentUpon>RegistryControlPanel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Registry\RegistryControlPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.Designer.vb">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
     </Compile>
@@ -982,6 +988,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\ProvisioningPkgs\AddProvisioningPkg.resx">
       <DependentUpon>AddProvisioningPkg.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Registry\RegistryControlPanel.resx">
+      <DependentUpon>RegistryControlPanel.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
     </EmbeddedResource>
@@ -1338,6 +1347,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_x86.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\files\README1ST.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\amd64\DT-DIM.exe">
@@ -1760,6 +1772,9 @@ ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
 )
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\Compile.ps1" (
+	"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -noprofile -nologo -file "$(SolutionDir)Helpers\extps1\PE_Helper\Compile.ps1"
+)
 IF NOT EXIST bin (
 	md "bin"
 	md "bin\exthelpers"
@@ -1771,6 +1786,15 @@ IF NOT EXIST bin (
 	move "helpers\extps1\*.*" "bin\extps1"
 	md "bin\extps1\PE_Helper"
 	xcopy "helpers\extps1\PE_Helper\*.*" "bin\extps1\PE_Helper" /cehyi
+	IF EXIST "$(SolutionDir)helpers\extps1\PE_Helper\Compile.ps1" (
+		:: Compile the script with CTT's compilation script (license in source code and About section)
+		ECHO Invoking pre-processing...
+		COPY "$(SolutionDir)helpers\extps1\PE_Helper\Compile.ps1" "$(TargetDir)bin\extps1\PE_Helper\Compile.ps1"
+		COPY "$(SolutionDir)helpers\extps1\PE_Helper\tools\Invoke-Preprocessing.ps1" "$(TargetDir)bin\extps1\PE_Helper\tools\Invoke-Preprocessing.ps1"
+		"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -noprofile -nologo -file "$(TargetDir)bin\extps1\PE_Helper\Compile.ps1"
+		DEL "$(TargetDir)bin\extps1\PE_Helper\Compile.ps1" /F /Q
+		DEL "$(TargetDir)bin\extps1\PE_Helper\tools\Invoke-Preprocessing.ps1" /F /Q
+	)
 	IF EXIST HELPERS (
 		rd HELPERS /s /q
 	)

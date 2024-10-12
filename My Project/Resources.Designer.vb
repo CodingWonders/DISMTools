@@ -1948,13 +1948,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue that happened when adding and removing capabilities where capability display names would be misclassified as capability identities
+        '''- CODE: the indentation of the PE Helper is now consistent
+        '''- Fixed an issue where the program would continue running without having .NET Framework 4.8
+        '''- Fixed an issue where the program would randomly freeze, even though it was still responding
         '''
         '''New features:
         '''
-        '''- The testing environment portion of the Preinstallation Environment Helper is now loaded without loading profiles
-        '''- If the program is configured to use the system color mode, the changes to these will now be handled much more smoothly and automatically
-        '''- The unattended answer file manager and the application task have received [resto de la cadena truncado]&quot;;.
+        '''- Exception reporting now includes some basic information about the image you are servicing. This does not occur when managing active installations
+        '''- A new tool has been introduced that lets you manage the registry hives of the ima [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

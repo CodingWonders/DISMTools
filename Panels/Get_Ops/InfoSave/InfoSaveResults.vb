@@ -114,6 +114,7 @@ Public Class InfoSaveResults
         ' Convert Markdown report to HTML and add style tags to make the HTML report prettier. None of the contents need to be in <body> - all web browsers handle HTML content separately
         Dim prettyHTML As String = "<html>" & CrLf &
                                    "    <head>" & CrLf &
+                                   "        <meta charset=" & Quote & "utf-8" & Quote & ">" & CrLf &
                                    "        <title>DISMTools Image Information Report</title>" & CrLf &
                                    "        <style>" & CrLf &
                                    "            body {" & CrLf &
@@ -169,6 +170,13 @@ Public Class InfoSaveResults
             Catch ex As Exception
                 ' Let something else delete it
             End Try
+        End If
+    End Sub
+
+    Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
+        If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+            Process.Start(e.Url.AbsoluteUri)
+            WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
         End If
     End Sub
 End Class

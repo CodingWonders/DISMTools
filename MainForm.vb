@@ -538,6 +538,20 @@ Public Class MainForm
             MsgBox("This program is incompatible with Windows 7 and Server 2008 R2." & CrLf & "This program uses the DISM API, which requires files from the Assessment and Deployment Kit (ADK). However, support for Windows 7 is not included." & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
             Environment.Exit(1)
         End If
+        ' Detect .NET Framework version, as the program somehow runs without it
+        Try
+            Dim NDPCheckerReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full")
+            Dim NDPReleaseInt As Integer = NDPCheckerReg.GetValue("Release")
+            NDPCheckerReg.Close()
+            ' Detect .NET Framework 4.8
+            If NDPReleaseInt < 528040 Then
+                SplashScreen.Hide()
+                MsgBox("This program requires .NET Framework 4.8 to function." & CrLf & "You can download it from: dotnet.microsoft.com. Install the framework and run the program again. You may need to restart your system" & CrLf & CrLf & "The program will be closed.", vbOKOnly + vbCritical, "DISMTools")
+                Environment.Exit(1)
+            End If
+        Catch ex As Exception
+
+        End Try
         If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
@@ -10715,6 +10729,9 @@ Public Class MainForm
         BGProcDetails.Hide()
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         PendingTasks = Enumerable.Repeat(True, PendingTasks.Length).ToArray()
+        If RegistryControlPanel IsNot Nothing Then
+            RegistryControlPanel.Close()
+        End If
         If OnlineManagement Then EndOnlineManagement()
         If OfflineManagement Then EndOfflineManagement()
     End Sub
@@ -19674,5 +19691,94 @@ Public Class MainForm
                 ListView2.Items.Add(listItem)
             Next
         End If
+    End Sub
+
+    Private Sub MainForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState <> FormWindowState.Maximized Then
+            WndWidth = Width
+            WndHeight = Height
+        End If
+        If GroupBox1.Left < 0 Then
+            SplitPanels.SplitterDistance = 264
+        End If
+        If BGProcNotify.Visible Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - (7 + StatusStrip.Height))
+                Else
+                    BGProcNotify.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 7)
+                End If
+            End If
+        ElseIf BGProcDetails.Visible And pinState = 0 Then
+            If Environment.OSVersion.Version.Major = 10 Then    ' The Left property also includes the window shadows on Windows 10 and 11
+                BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
+            ElseIf Environment.OSVersion.Version.Major = 6 Then
+                If Environment.OSVersion.Version.Minor = 1 Then ' The same also applies to Windows 7
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - (75 + StatusStrip.Height))
+                Else
+                    BGProcDetails.Location = New Point(Left + 8, Top + StatusStrip.Top - StatusStrip.Height - 75)
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
+        If isProjectLoaded Then
+            If IsImageMounted And Not OnlineManagement Then
+                RegistryControlPanel.Show()
+            ElseIf IsImageMounted And OnlineManagement Then
+                MsgBox("This control panel is not available on active installations.", vbOKOnly + vbCritical, Text)
+            End If
+        Else
+            MsgBox("You need to load a project or mode to manage registry hives.", vbOKOnly + vbExclamation, Text)
+        End If
+    End Sub
+
+    Sub RestartDetector()
+        Try
+            If Not MountedImageDetectorBW.IsBusy Then
+                Call MountedImageDetectorBW.RunWorkerAsync()
+            Else
+                Exit Sub
+            End If
+            Debug.WriteLine("Mounted Image Detector Restart Successful")
+            MountedImageDetectorBWRestarterTimer.Enabled = False
+        Catch ex As Exception
+            Debug.WriteLine("Mounted Image Detector Restart Not Successful")
+        End Try
+    End Sub
+
+    Private Sub MountedImageDetectorBWRestarterTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorBWRestarterTimer.Tick
+        RestartDetector()
+    End Sub
+
+    Private Sub LanguagesAndOptionalFeaturesISOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndOptionalFeaturesISOToolStripMenuItem.Click
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "ESN"
+                        Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "FRA"
+                        Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "PTB", "PTG"
+                        Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                    Case "ITA"
+                        Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+                End Select
+            Case 1
+                Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 2
+                Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 3
+                Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 4
+                Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+            Case 5
+                Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+        End Select
     End Sub
 End Class
