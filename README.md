@@ -206,7 +206,7 @@ DISMTools has been featured in news sites. Check them out if you're interested:
 
 - [DeskModder](https://www.deskmodder.de/blog/2024/06/24/dismtools-iso-oder-image-bearbeiten-in-neuer-stable-version-erschienen/)
 - [Computer BILD](https://www.computerbild.de/artikel/cb-Tipps-Windows-Windows-Media-Player-deinstallieren-31424181.html)
-- [PC-Welt](https://www.pcwelt.de/article/1110927/kommandozeilen-tools-per-maus-gui.html)
+- [PC World](https://www.pcworld.com/article/2430467/operating-command-line-tools-with-the-mouse-the-best-guis.html)
 
 ## Support this project
 
@@ -258,7 +258,7 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_24101/Installer/Nightly/dt_setup.exe).
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/DISMTools/raw/dt_pre_24102/Installer/Nightly/dt_setup.exe).
 
 <!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.5.1, and will be deleted once this version gets published as a stable release -->
 
