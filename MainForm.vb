@@ -610,7 +610,7 @@ Public Class MainForm
         Else
             UpdatePanel.Visible = False
         End If
-        MountedImageDetectorBW.RunWorkerAsync()
+        If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
         If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
