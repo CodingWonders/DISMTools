@@ -240,8 +240,6 @@ Public Class MainForm
     Public SkipQuestions As Boolean             ' Skips questions in the info saver
     Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
 
-    Public GoToNewView As Boolean
-
     Public ColorSchemes As Integer = 0           ' Color scheme for the status bar and panels. 0 = green (v0.5+); 1 = blue (v0.1.1-v0.4.2)
 
     Public AutoCleanMounts As Boolean
@@ -1421,16 +1419,10 @@ Public Class MainForm
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
-                GoToNewView = (CInt(PersKey.GetValue("NewDesign")) = 1)
                 ColorSchemes = PersKey.GetValue("ColorSchemes")
                 ExpandedProgressPanel = (CInt(PersKey.GetValue("ExpandedProgressPanel")) = 1)
-                If GoToNewView Then
-                    ProjectView.Visible = True
-                    SplitPanels.Visible = False
-                Else
-                    ProjectView.Visible = False
-                    SplitPanels.Visible = True
-                End If
+                ProjectView.Visible = True
+                SplitPanels.Visible = False
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
                 LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
@@ -1590,11 +1582,6 @@ Public Class MainForm
                     ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
                     HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
                 End If
-                If DTSettingForm.RichTextBox1.Text.Contains("NewDesign=1") Then
-                    GoToNewView = True
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NewDesign=0") Then
-                    GoToNewView = False
-                End If
                 If DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=0") Then
                     ColorSchemes = 0
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=1") Then
@@ -1605,13 +1592,8 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
                     ExpandedProgressPanel = 1
                 End If
-                If GoToNewView Then
-                    ProjectView.Visible = True
-                    SplitPanels.Visible = False
-                Else
-                    ProjectView.Visible = False
-                    SplitPanels.Visible = True
-                End If
+                ProjectView.Visible = True
+                SplitPanels.Visible = False
                 ' Detect log file level: 1 - Errors only
                 '                        2 - Errors and warnings
                 '                        3 - Errors, warnings and informations
@@ -4996,11 +4978,6 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
                 End If
-                If GoToNewView Then
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
-                Else
-                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=0")
-                End If
                 Select Case ColorSchemes
                     Case 0
                         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
@@ -5166,7 +5143,6 @@ Public Class MainForm
                 PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                 PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
-                PersKey.SetValue("NewDesign", If(GoToNewView, 1, 0), RegistryValueKind.DWord)
                 PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
                 PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
                 PersKey.Close()
@@ -6047,8 +6023,6 @@ Public Class MainForm
                         Button11.Text = "Reload servicing session..."
                         Button12.Text = "Perform component cleanup and/or repair..."
                         Button13.Text = "Switch indexes..."
-                        Button19.Text = "Preview the new design"
-                        Button20.Text = "Go back to the old design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Get basic information (all packages)"
                         PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -6422,8 +6396,6 @@ Public Class MainForm
                         Button11.Text = "Recargar sesión de servicio..."
                         Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                         Button13.Text = "Cambiar índices..."
-                        Button19.Text = "Ver el nuevo diseño"
-                        Button20.Text = "Regresar al diseño antiguo"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                         PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -6797,8 +6769,6 @@ Public Class MainForm
                         Button11.Text = "Recharger la session de maintenance..."
                         Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                         Button13.Text = "Changer d'index de l'image..."
-                        Button19.Text = "Prévisualiser le nouveau design"
-                        Button20.Text = "Revenir à l'ancien design"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                         PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -7171,8 +7141,6 @@ Public Class MainForm
                         Button11.Text = "Recarregar sessão de manutenção..."
                         Button12.Text = "Efetuar limpeza e/ou reparação de componentes..."
                         Button13.Text = "Mudar os índices..."
-                        Button19.Text = "Pré-visualizar o novo desenho"
-                        Button20.Text = "Regressar ao desenho antigo"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Obter informações básicas (todos os pacotes)"
                         PkgDetailedInfo.Text = "Obter informações detalhadas (pacote específico)"
@@ -7546,8 +7514,6 @@ Public Class MainForm
                         Button11.Text = "Ricarica sessione di assistenza..."
                         Button12.Text = "Eseguire la pulizia e/o la riparazione dei componenti..."
                         Button13.Text = "Cambia gli indici..."
-                        Button19.Text = "Anteprima del nuovo progetto"
-                        Button20.Text = "Torna al vecchio progetto"
                         ' Pop-up context menus
                         PkgBasicInfo.Text = "Ottieni informazioni elementari (tutti i pacchetti)"
                         PkgDetailedInfo.Text = "Ottiene informazioni dettagliate (pacchetto specifico)"
@@ -7926,8 +7892,6 @@ Public Class MainForm
                 Button11.Text = "Reload servicing session..."
                 Button12.Text = "Perform component cleanup and/or repair..."
                 Button13.Text = "Switch indexes..."
-                Button19.Text = "Preview the new design"
-                Button20.Text = "Go back to the old design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Get basic information (all packages)"
                 PkgDetailedInfo.Text = "Get detailed information (specific package)"
@@ -8301,8 +8265,6 @@ Public Class MainForm
                 Button11.Text = "Recargar sesión de servicio..."
                 Button12.Text = "Realizar limpieza y/o reparación de componentes..."
                 Button13.Text = "Cambiar índices..."
-                Button19.Text = "Ver el nuevo diseño"
-                Button20.Text = "Regresar al diseño antiguo"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtener información básica (todos los paquetes)"
                 PkgDetailedInfo.Text = "Obtener información detallada (paquete específico)"
@@ -8675,8 +8637,6 @@ Public Class MainForm
                 Button11.Text = "Recharger la session de maintenance..."
                 Button12.Text = "Effectuer le nettoyage et/ou la réparation des composants..."
                 Button13.Text = "Changer d'index de l'image..."
-                Button19.Text = "Prévisualiser le nouveau design"
-                Button20.Text = "Revenir à l'ancien design"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obtenir des informations basiques (tous les paquets)"
                 PkgDetailedInfo.Text = "Obtenir des informations détaillées (paquet spécifique)"
@@ -9049,8 +9009,6 @@ Public Class MainForm
                 Button11.Text = "Recarregar sessão de manutenção..."
                 Button12.Text = "Efetuar limpeza e/ou reparação de componentes..."
                 Button13.Text = "Mudar os índices..."
-                Button19.Text = "Pré-visualizar o novo desenho"
-                Button20.Text = "Regressar ao desenho antigo"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Obter informações básicas (todos os pacotes)"
                 PkgDetailedInfo.Text = "Obter informações detalhadas (pacote específico)"
@@ -9424,8 +9382,6 @@ Public Class MainForm
                 Button11.Text = "Ricarica sessione di assistenza..."
                 Button12.Text = "Eseguire la pulizia e/o la riparazione dei componenti..."
                 Button13.Text = "Cambia gli indici..."
-                Button19.Text = "Anteprima del nuovo progetto"
-                Button20.Text = "Torna al vecchio progetto"
                 ' Pop-up context menus
                 PkgBasicInfo.Text = "Ottieni informazioni elementari (tutti i pacchetti)"
                 PkgDetailedInfo.Text = "Ottiene informazioni dettagliate (pacchetto specifico)"
@@ -16850,18 +16806,6 @@ Public Class MainForm
 
     Private Sub ContributeToTheHelpSystemToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ContributeToTheHelpSystemToolStripMenuItem.Click
         Process.Start("https://github.com/CodingWonders/dt_help")
-    End Sub
-
-    Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
-        ProjectView.Visible = True
-        SplitPanels.Visible = False
-        GoToNewView = True
-    End Sub
-
-    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
-        ProjectView.Visible = False
-        SplitPanels.Visible = True
-        GoToNewView = False
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick

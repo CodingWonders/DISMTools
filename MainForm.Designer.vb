@@ -322,7 +322,6 @@ Partial Class MainForm
         Me.Button57 = New System.Windows.Forms.Button()
         Me.Button56 = New System.Windows.Forms.Button()
         Me.Button55 = New System.Windows.Forms.Button()
-        Me.Button20 = New System.Windows.Forms.Button()
         Me.SpaceLabel = New System.Windows.Forms.Label()
         Me.ProjectSidePanel = New System.Windows.Forms.Panel()
         Me.ProjectSidePanelContainer = New System.Windows.Forms.Panel()
@@ -430,7 +429,6 @@ Partial Class MainForm
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.OldActionPanel = New System.Windows.Forms.Panel()
-        Me.Button19 = New System.Windows.Forms.Button()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button9 = New System.Windows.Forms.Button()
@@ -2590,7 +2588,6 @@ Partial Class MainForm
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox8)
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox9)
         Me.FlowLayoutPanel1.Controls.Add(Me.GroupBox10)
-        Me.FlowLayoutPanel1.Controls.Add(Me.Button20)
         Me.FlowLayoutPanel1.Controls.Add(Me.SpaceLabel)
         Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel1.ForeColor = System.Drawing.SystemColors.ControlText
@@ -3116,24 +3113,12 @@ Partial Class MainForm
         Me.Button55.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.Button55.UseVisualStyleBackColor = True
         '
-        'Button20
-        '
-        Me.Button20.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Button20.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button20.Location = New System.Drawing.Point(11, 870)
-        Me.Button20.Name = "Button20"
-        Me.Button20.Size = New System.Drawing.Size(281, 23)
-        Me.Button20.TabIndex = 0
-        Me.Button20.Text = "Go back to the old design"
-        Me.Button20.UseVisualStyleBackColor = True
-        Me.Button20.Visible = False
-        '
         'SpaceLabel
         '
         Me.SpaceLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SpaceLabel.AutoEllipsis = True
-        Me.SpaceLabel.Location = New System.Drawing.Point(11, 896)
+        Me.SpaceLabel.Location = New System.Drawing.Point(11, 867)
         Me.SpaceLabel.Name = "SpaceLabel"
         Me.SpaceLabel.Size = New System.Drawing.Size(675, 17)
         Me.SpaceLabel.TabIndex = 1
@@ -4020,7 +4005,7 @@ Partial Class MainForm
         Me.TableLayoutPanel2.ColumnCount = 3
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.4200897!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.5799103!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 148.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 149.0!))
         Me.TableLayoutPanel2.Controls.Add(Me.ProjNameEditBtn, 2, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel1, 1, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.Panel8, 1, 0)
@@ -4069,7 +4054,7 @@ Partial Class MainForm
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(49, 3)
         Me.Panel8.Name = "Panel8"
-        Me.Panel8.Size = New System.Drawing.Size(91, 23)
+        Me.Panel8.Size = New System.Drawing.Size(90, 23)
         Me.Panel8.TabIndex = 8
         '
         'projName
@@ -4078,7 +4063,7 @@ Partial Class MainForm
         Me.projName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projName.Location = New System.Drawing.Point(0, 0)
         Me.projName.Name = "projName"
-        Me.projName.Size = New System.Drawing.Size(91, 23)
+        Me.projName.Size = New System.Drawing.Size(90, 23)
         Me.projName.TabIndex = 2
         Me.projName.Text = "projName"
         Me.projName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -4088,7 +4073,7 @@ Partial Class MainForm
         Me.projNameText.Dock = System.Windows.Forms.DockStyle.Fill
         Me.projNameText.Location = New System.Drawing.Point(0, 0)
         Me.projNameText.Name = "projNameText"
-        Me.projNameText.Size = New System.Drawing.Size(91, 21)
+        Me.projNameText.Size = New System.Drawing.Size(90, 21)
         Me.projNameText.TabIndex = 4
         Me.projNameText.Text = "projName"
         Me.projNameText.Visible = False
@@ -4457,7 +4442,6 @@ Partial Class MainForm
         '
         'OldActionPanel
         '
-        Me.OldActionPanel.Controls.Add(Me.Button19)
         Me.OldActionPanel.Controls.Add(Me.GroupBox3)
         Me.OldActionPanel.Controls.Add(Me.GroupBox1)
         Me.OldActionPanel.Controls.Add(Me.GroupBox2)
@@ -4466,18 +4450,6 @@ Partial Class MainForm
         Me.OldActionPanel.Name = "OldActionPanel"
         Me.OldActionPanel.Size = New System.Drawing.Size(692, 574)
         Me.OldActionPanel.TabIndex = 3
-        '
-        'Button19
-        '
-        Me.Button19.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button19.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button19.Location = New System.Drawing.Point(479, 533)
-        Me.Button19.Name = "Button19"
-        Me.Button19.Size = New System.Drawing.Size(188, 23)
-        Me.Button19.TabIndex = 3
-        Me.Button19.Text = "Preview the new design"
-        Me.Button19.UseVisualStyleBackColor = True
-        Me.Button19.Visible = False
         '
         'GroupBox3
         '
@@ -5760,10 +5732,8 @@ Partial Class MainForm
     Friend WithEvents Panel10 As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel4 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Panel11 As System.Windows.Forms.Panel
-    Friend WithEvents Button20 As System.Windows.Forms.Button
     Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel13 As System.Windows.Forms.LinkLabel
-    Friend WithEvents Button19 As System.Windows.Forms.Button
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents ProjectSidePanelContainer As System.Windows.Forms.Panel
     Friend WithEvents SidePanel_ProjectView As System.Windows.Forms.Panel
