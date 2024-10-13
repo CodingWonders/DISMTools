@@ -119,7 +119,6 @@ Public Class PleaseWaitDialog
             MainForm.Refresh()
             MainForm.HomePanel.Visible = False
             MainForm.PrjPanel.Visible = True
-            MainForm.SplitPanels.Visible = True
             If ProjectValueLoadForm.RichTextBox5.Text = "N/A" Or ProjectValueLoadForm.RichTextBox6.Text = "N/A" Or ProjectValueLoadForm.RichTextBox7.Text = "N/A" Then
                 MainForm.IsImageMounted = False
             End If
@@ -168,7 +167,6 @@ Public Class PleaseWaitDialog
             MainForm.Refresh()
             MainForm.HomePanel.Visible = False
             MainForm.PrjPanel.Visible = True
-            MainForm.SplitPanels.Visible = True
             If ProjectValueLoadForm.RichTextBox5.Text = "N/A" Or ProjectValueLoadForm.RichTextBox6.Text = "N/A" Or ProjectValueLoadForm.RichTextBox7.Text = "N/A" Then
                 MainForm.IsImageMounted = False
             Else

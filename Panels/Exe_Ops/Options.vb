@@ -183,8 +183,6 @@ Public Class Options
         MainForm.AutoCompleteInfo(2) = CheckBox17.Checked
         MainForm.AutoCompleteInfo(3) = CheckBox18.Checked
         MainForm.AutoCompleteInfo(4) = CheckBox19.Checked
-        MainForm.ProjectView.Visible = True
-        MainForm.SplitPanels.Visible = False
         MainForm.ColorSchemes = If(RadioButton1.Checked, 0, 1)
         Select Case MainForm.ColorSchemes
             Case 0

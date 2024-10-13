@@ -181,7 +181,6 @@ Public Class PrgSetup
                 MainForm.LogFontIsBold = Toggle1.Checked
                 MainForm.ProgressPanelStyle = If(RadioButton1.Checked, 1, 0)
                 MainForm.ProjectView.Visible = True
-                MainForm.SplitPanels.Visible = False
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
                 LogsPanel.Visible = True
