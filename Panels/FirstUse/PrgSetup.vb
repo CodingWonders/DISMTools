@@ -180,14 +180,7 @@ Public Class PrgSetup
                 MainForm.LogFontSize = NumericUpDown1.Value
                 MainForm.LogFontIsBold = Toggle1.Checked
                 MainForm.ProgressPanelStyle = If(RadioButton1.Checked, 1, 0)
-                MainForm.GoToNewView = CheckBox2.Checked
-                If MainForm.GoToNewView Then
-                    MainForm.ProjectView.Visible = True
-                    MainForm.SplitPanels.Visible = False
-                Else
-                    MainForm.ProjectView.Visible = False
-                    MainForm.SplitPanels.Visible = True
-                End If
+                MainForm.ProjectView.Visible = True
                 WelcomePanel.Visible = False
                 CustomizationPanel.Visible = False
                 LogsPanel.Visible = True
@@ -433,7 +426,6 @@ Public Class PrgSetup
                 Button6.Text = "Get started"
                 Button7.Text = "Check for updates"
                 CheckBox1.Text = "Automatically create logs in the program's log directory"
-                CheckBox2.Text = "Use the new project view design"
                 RadioButton1.Text = "Modern"
                 RadioButton2.Text = "Classic"
                 SaveFileDialog1.Title = "Specify the log file"
@@ -484,7 +476,6 @@ Public Class PrgSetup
                 Button6.Text = "Comenzar"
                 Button7.Text = "Comprobar actualizaciones"
                 CheckBox1.Text = "Crear archivos de registro automáticamente en la carpeta de registros del programa"
-                CheckBox2.Text = "Utilizar el nuevo diseño de la vista de proyectos"
                 RadioButton1.Text = "Moderno"
                 RadioButton2.Text = "Clásico"
                 SaveFileDialog1.Title = "Especifique el archivo de registro"
@@ -535,7 +526,6 @@ Public Class PrgSetup
                 Button6.Text = "Commencer"
                 Button7.Text = "Mettre à jour les données"
                 CheckBox1.Text = "Créer automatiquement des journaux dans le répertoire des journaux du programme"
-                CheckBox2.Text = "Utiliser le nouveau design de la vue du projet"
                 RadioButton1.Text = "Moderne"
                 RadioButton2.Text = "Classique"
                 SaveFileDialog1.Title = "Spécifier le fichier journal"
@@ -586,7 +576,6 @@ Public Class PrgSetup
                 Button6.Text = "Obter"
                 Button7.Text = "Verificar se há actualizações"
                 CheckBox1.Text = "Criar automaticamente registos no diretório de registos do programa"
-                CheckBox2.Text = "Utilizar o novo design da vista de projeto"
                 RadioButton1.Text = "Moderno"
                 RadioButton2.Text = "Clássico"
                 SaveFileDialog1.Title = "Especificar o ficheiro de registo"
@@ -637,7 +626,6 @@ Public Class PrgSetup
                 Button6.Text = "Iniziare"
                 Button7.Text = "Controlla gli aggiornamenti"
                 CheckBox1.Text = "Crea automaticamente i log nella directory dei log del programma"
-                CheckBox2.Text = "Utilizza il nuovo design di visualizzazione del progetto"
                 RadioButton1.Text = "Moderno"
                 RadioButton2.Text = "Classica"
                 SaveFileDialog1.Title = "Specificare il file di registro"

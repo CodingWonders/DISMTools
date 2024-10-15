@@ -977,11 +977,11 @@ Public Class ProjProperties
             Win10Title.Visible = True
         End If
         Label4.Visible = True
-        Label9.Text = MainForm.projName.Text
+        Label9.Text = MainForm.Label49.Text
         Label10.Text = MainForm.projPath
         Label11.Text = File.GetCreationTime(MainForm.projPath)
         Dim rtb As New RichTextBox With {
-            .Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\" & MainForm.projName.Text & ".dtproj")
+            .Text = My.Computer.FileSystem.ReadAllText(MainForm.projPath & "\" & MainForm.Label49.Text & ".dtproj")
         }
         If rtb.Lines(6).StartsWith("ProjGuid") Then
             Label12.Text = rtb.Lines(6).Replace("ProjGuid=", "").Trim()
