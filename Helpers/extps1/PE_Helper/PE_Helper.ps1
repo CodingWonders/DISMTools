@@ -188,6 +188,8 @@ function Start-PEGeneration
                 Copy-Item -Path "$((Get-Location).Path)\files\README1ST.TXT" -Destination "$((Get-Location).Path)\ISOTEMP\media\README.TXT" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\RestartDialog" -ItemType Directory | Out-Null
+                Copy-Item -Path "$((Get-Location).Path)\tools\RestartDialog\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\RestartDialog" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
                 {
                     Write-Host "Unattended answer file has been detected. Copying to ISO file..."
@@ -807,11 +809,33 @@ function Start-OSApplication
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     Start-Sleep -Milliseconds 250
-    # Show message before rebooting system
-    Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
-    Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
-    Write-Host "When your computer restarts, Setup will continue."
-    Show-Timeout -Seconds 10
+    try
+    {
+        # Get CPU architecture and launch Driver Installation Module
+        $supportedArchitectures = [List[string]]::new()
+        $supportedArchitectures.Add("i386")
+        $supportedArchitectures.Add("amd64")
+        $systemArchitecture = Get-SystemArchitecture
+
+        if ($supportedArchitectures.Contains($systemArchitecture))
+        {
+            if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe")
+            {
+                Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe" -Wait
+            }
+        }
+
+        Start-Sleep -Milliseconds 250
+        Write-Host "Restarting your system..."
+    }
+    catch
+    {
+        # Show message before rebooting system
+        Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
+        Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
+        Write-Host "When your computer restarts, Setup will continue."
+        Show-Timeout -Seconds 10
+    }
     wpeutil reboot
 }
 

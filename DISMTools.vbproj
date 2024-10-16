@@ -1358,6 +1358,12 @@
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\amd64\DTPE-RestartDialog.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\i386\DTPE-RestartDialog.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />

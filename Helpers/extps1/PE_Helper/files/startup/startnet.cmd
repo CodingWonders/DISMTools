@@ -26,6 +26,10 @@ if %debug% lss 2 (
 					if not exist "%sysdrive%\Tools\DIM" (md "%sysdrive%\Tools\DIM")
 					xcopy "%%D:\Tools\DIM\*" "%sysdrive%\Tools\DIM" /cehyi > nul
 				)
+				if exist "%%D:\Tools\RestartDialog" (
+					if not exist "%sysdrive%\Tools\RestartDialog" (md "%sysdrive%\Tools\RestartDialog")
+					xcopy "%%D:\Tools\RestartDialog\*" "%sysdrive%\Tools\RestartDialog" /cehyi > nul
+				)
 				powershell .\PE_Helper.ps1 StartApply
 			)
 		)
