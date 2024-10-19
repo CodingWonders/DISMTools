@@ -4941,6 +4941,24 @@ Public Class MainForm
         End If
     End Sub
 
+    Sub ChangeMenuItemColors(bgColor As Color, fgColor As Color, itemCollection As ToolStripItemCollection)
+        For Each tsi As ToolStripItem In itemCollection
+            If TypeOf tsi Is ToolStripDropDownItem Then
+                Dim item As ToolStripDropDownItem = CType(tsi, ToolStripDropDownItem)
+                Try
+                    item.DropDown.BackColor = bgColor
+                    item.DropDown.ForeColor = fgColor
+                    If item.DropDownItems.Count > 0 Then
+                        ChangeMenuItemColors(bgColor, fgColor, item.DropDownItems)
+                    End If
+                Catch ex As Exception
+                    Debug.WriteLine("Item " & tsi.Name & " of type " & tsi.GetType().ToString() & " could not be modified")
+                    Continue For
+                End Try
+            End If
+        Next
+    End Sub
+
     ''' <summary>
     ''' Change program colors accordingly. Due to developer's preference, match those of VS2012
     ''' </summary>
@@ -4967,18 +4985,7 @@ Public Class MainForm
                         PrjPanel.ForeColor = Color.White
                         MenuStrip1.BackColor = Color.FromArgb(48, 48, 48)
                         MenuStrip1.ForeColor = Color.White
-                        For Each item As ToolStripDropDownItem In MenuStrip1.Items
-                            item.DropDown.BackColor = Color.FromArgb(27, 27, 28)
-                            item.DropDown.ForeColor = Color.White
-                            Try
-                                For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
-                                    dropDownItem.DropDown.BackColor = Color.FromArgb(27, 27, 28)
-                                    dropDownItem.DropDown.ForeColor = Color.White
-                                Next
-                            Catch ex As Exception
-                                Continue For
-                            End Try
-                        Next
+                        ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, MenuStrip1.Items)
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
                         ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                         ToolStrip1.ForeColor = Color.White
@@ -5017,22 +5024,7 @@ Public Class MainForm
                         TreeViewCMS.ForeColor = Color.White
                         AppxResCMS.ForeColor = Color.White
                         ImgSpecialToolsCMS.ForeColor = Color.White
-                        Dim items = TreeViewCMS.Items
-                        Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
-                        For Each item As ToolStripDropDownItem In mItem
-                            If item.DropDownItems.Count > 0 Then
-                                Dim ditems = item.DropDownItems
-                                Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
-                                Try
-                                    For Each dropDownItem As ToolStripDropDownItem In dmItem
-                                        dropDownItem.BackColor = Color.FromArgb(27, 27, 28)
-                                        dropDownItem.ForeColor = Color.White
-                                    Next
-                                Catch ex As Exception
-                                    Continue For
-                                End Try
-                            End If
-                        Next
+                        ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                         ' New design stuff
@@ -5058,18 +5050,7 @@ Public Class MainForm
                         PrjPanel.ForeColor = Color.Black
                         MenuStrip1.BackColor = Color.FromArgb(239, 239, 242)
                         MenuStrip1.ForeColor = Color.Black
-                        For Each item As ToolStripDropDownItem In MenuStrip1.Items
-                            item.DropDown.BackColor = Color.FromArgb(231, 232, 236)
-                            item.DropDown.ForeColor = Color.Black
-                            Try
-                                For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
-                                    dropDownItem.DropDown.BackColor = Color.FromArgb(231, 232, 236)
-                                    dropDownItem.DropDown.ForeColor = Color.Black
-                                Next
-                            Catch ex As Exception
-                                Continue For
-                            End Try
-                        Next
+                        ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, MenuStrip1.Items)
                         PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
                         ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
                         ToolStrip1.ForeColor = Color.Black
@@ -5108,22 +5089,7 @@ Public Class MainForm
                         TreeViewCMS.ForeColor = Color.Black
                         AppxResCMS.ForeColor = Color.Black
                         ImgSpecialToolsCMS.ForeColor = Color.Black
-                        Dim items = TreeViewCMS.Items
-                        Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
-                        For Each item As ToolStripDropDownItem In mItem
-                            If item.DropDownItems.Count > 0 Then
-                                Dim ditems = item.DropDownItems
-                                Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
-                                Try
-                                    For Each dropDownItem As ToolStripDropDownItem In dmItem
-                                        dropDownItem.BackColor = Color.FromArgb(231, 232, 236)
-                                        dropDownItem.ForeColor = Color.Black
-                                    Next
-                                Catch ex As Exception
-                                    Continue For
-                                End Try
-                            End If
-                        Next
+                        ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                         ' New design stuff
@@ -5153,18 +5119,7 @@ Public Class MainForm
                 PrjPanel.ForeColor = Color.Black
                 MenuStrip1.BackColor = Color.FromArgb(239, 239, 242)
                 MenuStrip1.ForeColor = Color.Black
-                For Each item As ToolStripDropDownItem In MenuStrip1.Items
-                    item.DropDown.BackColor = Color.FromArgb(231, 232, 236)
-                    item.DropDown.ForeColor = Color.Black
-                    Try
-                        For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
-                            dropDownItem.DropDown.BackColor = Color.FromArgb(231, 232, 236)
-                            dropDownItem.DropDown.ForeColor = Color.Black
-                        Next
-                    Catch ex As Exception
-                        Continue For
-                    End Try
-                Next
+                ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, MenuStrip1.Items)
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
                 ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
                 ToolStrip1.ForeColor = Color.Black
@@ -5203,22 +5158,7 @@ Public Class MainForm
                 TreeViewCMS.ForeColor = Color.Black
                 AppxResCMS.ForeColor = Color.Black
                 ImgSpecialToolsCMS.ForeColor = Color.Black
-                Dim items = TreeViewCMS.Items
-                Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
-                For Each item As ToolStripDropDownItem In mItem
-                    If item.DropDownItems.Count > 0 Then
-                        Dim ditems = item.DropDownItems
-                        Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
-                        Try
-                            For Each dropDownItem As ToolStripDropDownItem In dmItem
-                                dropDownItem.BackColor = Color.FromArgb(231, 232, 236)
-                                dropDownItem.ForeColor = Color.Black
-                            Next
-                        Catch ex As Exception
-                            Continue For
-                        End Try
-                    End If
-                Next
+                ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
                 ' New design stuff
@@ -5244,18 +5184,7 @@ Public Class MainForm
                 PrjPanel.ForeColor = Color.White
                 MenuStrip1.BackColor = Color.FromArgb(48, 48, 48)
                 MenuStrip1.ForeColor = Color.White
-                For Each item As ToolStripDropDownItem In MenuStrip1.Items
-                    item.DropDown.BackColor = Color.FromArgb(27, 27, 28)
-                    item.DropDown.ForeColor = Color.White
-                    Try
-                        For Each dropDownItem As ToolStripDropDownItem In item.DropDownItems
-                            dropDownItem.DropDown.BackColor = Color.FromArgb(27, 27, 28)
-                            dropDownItem.DropDown.ForeColor = Color.White
-                        Next
-                    Catch ex As Exception
-                        Continue For
-                    End Try
-                Next
+                ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, MenuStrip1.Items)
                 PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
                 ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
                 ToolStrip1.ForeColor = Color.White
@@ -5294,22 +5223,7 @@ Public Class MainForm
                 TreeViewCMS.ForeColor = Color.White
                 AppxResCMS.ForeColor = Color.White
                 ImgSpecialToolsCMS.ForeColor = Color.White
-                Dim items = TreeViewCMS.Items
-                Dim mItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(items)
-                For Each item As ToolStripDropDownItem In mItem
-                    If item.DropDownItems.Count > 0 Then
-                        Dim ditems = item.DropDownItems
-                        Dim dmItem As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(ditems)
-                        Try
-                            For Each dropDownItem As ToolStripDropDownItem In dmItem
-                                dropDownItem.BackColor = Color.FromArgb(27, 27, 28)
-                                dropDownItem.ForeColor = Color.White
-                            Next
-                        Catch ex As Exception
-                            Continue For
-                        End Try
-                    End If
-                Next
+                ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                 ' New design stuff
@@ -5384,17 +5298,6 @@ Public Class MainForm
                 StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
         StatusStrip.ForeColor = Color.White
-        ' Set foreground color on the recent list in File menu
-        Dim recItems = RecentProjectsListMenu.DropDownItems
-        Dim remItems As IEnumerable(Of ToolStripMenuItem) = Enumerable.OfType(Of ToolStripMenuItem)(recItems)
-        Try
-            For Each dropDownItem As ToolStripDropDownItem In remItems
-                dropDownItem.BackColor = RecentProjectsListMenu.BackColor
-                dropDownItem.ForeColor = RecentProjectsListMenu.ForeColor
-            Next
-        Catch ex As Exception
-
-        End Try
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -18344,6 +18247,34 @@ Public Class MainForm
                 Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/windows-11-language-packs#prerequisites")
             Case 5
                 Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/windows-11-language-packs#prerequisites")
+        End Select
+    End Sub
+
+    Private Sub LanguagesAndFODWin10ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LanguagesAndFODWin10ToolStripMenuItem.Click
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/language-packs#prerequisites")
+                    Case "ESN"
+                        Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/language-packs#prerequisites")
+                    Case "FRA"
+                        Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/language-packs#prerequisites")
+                    Case "PTB", "PTG"
+                        Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/language-packs#prerequisites")
+                    Case "ITA"
+                        Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/language-packs#prerequisites")
+                End Select
+            Case 1
+                Process.Start("https://learn.microsoft.com/en-us/azure/virtual-desktop/language-packs#prerequisites")
+            Case 2
+                Process.Start("https://learn.microsoft.com/es-es/azure/virtual-desktop/language-packs#prerequisites")
+            Case 3
+                Process.Start("https://learn.microsoft.com/fr-fr/azure/virtual-desktop/language-packs#prerequisites")
+            Case 4
+                Process.Start("https://learn.microsoft.com/pt-pt/azure/virtual-desktop/language-packs#prerequisites")
+            Case 5
+                Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/language-packs#prerequisites")
         End Select
     End Sub
 End Class
