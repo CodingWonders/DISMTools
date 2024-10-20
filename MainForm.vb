@@ -8771,6 +8771,13 @@ Public Class MainForm
     End Sub
 
     Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean, SkipBGProcs As Boolean)
+        If RegistryControlPanel.Visible Then
+            RegistryControlPanel.Close()
+            If RegistryControlPanel.Visible Then
+                MsgBox("The image registry control panel needs to be closed before loading projects.", vbOKOnly + vbExclamation, Text)
+                Exit Sub
+            End If
+        End If
         If File.Exists(DTProjPath) Then
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
@@ -9683,6 +9690,13 @@ Public Class MainForm
     End Sub
 
     Sub BeginOfflineManagement(ImageDrive As String)
+        If RegistryControlPanel.Visible Then
+            RegistryControlPanel.Close()
+            If RegistryControlPanel.Visible Then
+                MsgBox("The image registry control panel needs to be closed before loading this mode.", vbOKOnly + vbExclamation, Text)
+                Exit Sub
+            End If
+        End If
         IsImageMounted = True
         isProjectLoaded = True
         Select Case Language
@@ -11705,6 +11719,10 @@ Public Class MainForm
         If ImgBW.IsBusy Then
             e.Cancel = True
             Beep()
+            Exit Sub
+        End If
+        If RegistryControlPanel.Visible Then
+            e.Cancel = True
             Exit Sub
         End If
         If WimScriptEditor.Visible Then

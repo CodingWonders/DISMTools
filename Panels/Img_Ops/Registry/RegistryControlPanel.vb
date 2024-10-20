@@ -12,6 +12,8 @@ Public Class RegistryControlPanel
 
     Dim LoadedHives As Integer = 0
 
+    Dim CustomHiveLoaded As Boolean
+
     Private Sub RegistryControlPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Language translations will be added later
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -152,17 +154,18 @@ Public Class RegistryControlPanel
 
     Private Sub RegistryControlPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         Dim msg As String = "The registry hives need to be unloaded to close this window. Do you want to unload them now?"
-        If LoadedHives > 0 Then
+        If LoadedHives > 0 Or CustomHiveLoaded Then
             If MsgBox(msg, vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
                 If Button9.Text <> LoadButtonText Then Button9.PerformClick()
                 If Button10.Text <> LoadButtonText Then Button10.PerformClick()
                 If Button11.Text <> LoadButtonText Then Button11.PerformClick()
                 If Button12.Text <> LoadButtonText Then Button12.PerformClick()
+                If CustomHiveLoaded Then Button6.PerformClick()
             Else
                 e.Cancel = True
                 Exit Sub
             End If
-            If LoadedHives > 0 Then
+            If LoadedHives > 0 Or CustomHiveLoaded Then
                 ' Some hives could not be unloaded
                 MsgBox("Some hives could not be unloaded. Please unload them before closing this window.", vbOKOnly + vbCritical, Text)
                 e.Cancel = True
@@ -198,6 +201,7 @@ Public Class RegistryControlPanel
             Button7.Enabled = True
             Button6.Enabled = True
             Button5.Enabled = False
+            CustomHiveLoaded = True
         End If
     End Sub
 
@@ -219,6 +223,7 @@ Public Class RegistryControlPanel
             Button7.Enabled = False
             Button6.Enabled = False
             Button5.Enabled = True
+            CustomHiveLoaded = False
         End If
     End Sub
 End Class
