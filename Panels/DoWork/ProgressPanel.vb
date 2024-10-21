@@ -6826,7 +6826,20 @@ Public Class ProgressPanel
             End If
         End If
         taskCountLbl.Visible = True
-        ProgressBW.RunWorkerAsync()
+        If RegistryControlPanel.Visible Then
+            RegistryControlPanel.Close()
+            If RegistryControlPanel.Visible Then
+                LogView.AppendText(CrLf & "The image registry hives need to be unloaded before continuing to perform the task.")
+            End If
+        End If
+        If Not RegistryControlPanel.Visible Then
+            ProgressBW.RunWorkerAsync()
+        Else
+            Visible = True
+            Application.DoEvents()
+            Thread.Sleep(2000)
+            Close()
+        End If
     End Sub
 
 #Region "Actions"
@@ -6955,5 +6968,35 @@ Public Class ProgressPanel
 
     Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If ValidationForm.Visible Then ValidationForm.Close()
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        MainForm.MenuDesc.Text = "Ready"
+                    Case "ESN"
+                        MainForm.MenuDesc.Text = "Listo"
+                    Case "FRA"
+                        MainForm.MenuDesc.Text = "Prêt"
+                    Case "PTB", "PTG"
+                        MainForm.MenuDesc.Text = "Pronto"
+                    Case "ITA"
+                        MainForm.MenuDesc.Text = "Pronto"
+                End Select
+            Case 1
+                MainForm.MenuDesc.Text = "Ready"
+            Case 2
+                MainForm.MenuDesc.Text = "Listo"
+            Case 3
+                MainForm.MenuDesc.Text = "Prêt"
+            Case 4
+                MainForm.MenuDesc.Text = "Pronto"
+            Case 5
+                MainForm.MenuDesc.Text = "Pronto"
+        End Select
+        ActionRunning = False
+        MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+        MainForm.ToolStripButton4.Visible = False
+        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.WatcherTimer.Enabled = True
     End Sub
 End Class
