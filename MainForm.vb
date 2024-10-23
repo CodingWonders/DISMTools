@@ -5451,6 +5451,7 @@ Public Class MainForm
                         CommandShellToolStripMenuItem.Text = "Command Console"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                         UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
+                        RegCplToolStripMenuItem.Text = "Manage image registry hives..."
                         ReportManagerToolStripMenuItem.Text = "Report manager"
                         MountedImageManagerTSMI.Text = "Mounted image manager"
                         CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
@@ -5778,6 +5779,7 @@ Public Class MainForm
                         CommandShellToolStripMenuItem.Text = "Consola de comandos"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                         UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
+                        RegCplToolStripMenuItem.Text = "Administrar subárboles del registro de la imagen..."
                         ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                         MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
@@ -6105,6 +6107,7 @@ Public Class MainForm
                         CommandShellToolStripMenuItem.Text = "Console de commande"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
                         UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
+                        RegCplToolStripMenuItem.Text = "Gérer les ruches du registre de l'image..."
                         ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                         MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                         CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
@@ -6431,6 +6434,7 @@ Public Class MainForm
                         CommandShellToolStripMenuItem.Text = "Consola de comandos"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
                         UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
+                        RegCplToolStripMenuItem.Text = "Gerir as colmeias do registo de imagens..."
                         ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                         MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                         CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
@@ -6757,6 +6761,7 @@ Public Class MainForm
                         CommandShellToolStripMenuItem.Text = "Console dei comandi"
                         UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
                         UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
+                        RegCplToolStripMenuItem.Text = "Gestire gli alveari del registro delle immagini..."
                         ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                         MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                         CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
@@ -7089,6 +7094,7 @@ Public Class MainForm
                 CommandShellToolStripMenuItem.Text = "Command Console"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
                 UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
+                RegCplToolStripMenuItem.Text = "Manage image registry hives..."
                 ReportManagerToolStripMenuItem.Text = "Report manager"
                 MountedImageManagerTSMI.Text = "Mounted image manager"
                 CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
@@ -7416,6 +7422,7 @@ Public Class MainForm
                 CommandShellToolStripMenuItem.Text = "Consola de comandos"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Administrador de archivos de respuesta desatendida"
                 UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creador de archivos de respuesta desatendida"
+                RegCplToolStripMenuItem.Text = "Administrar subárboles del registro de la imagen..."
                 ReportManagerToolStripMenuItem.Text = "Administrador de informes"
                 MountedImageManagerTSMI.Text = "Administrador de imágenes montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
@@ -7742,6 +7749,7 @@ Public Class MainForm
                 CommandShellToolStripMenuItem.Text = "Console de commande"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestionnaire de fichiers de réponse sans surveillance"
                 UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Créateur de fichiers de réponse sans surveillance"
+                RegCplToolStripMenuItem.Text = "Gérer les ruches du registre de l'image..."
                 ReportManagerToolStripMenuItem.Text = "Gestionnaire de rapports"
                 MountedImageManagerTSMI.Text = "Gestionnaire des images montées"
                 CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
@@ -8069,6 +8077,7 @@ Public Class MainForm
                 CommandShellToolStripMenuItem.Text = "Consola de comandos"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestor de ficheiros de resposta não assistida"
                 UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Criador de ficheiros de resposta não assistida"
+                RegCplToolStripMenuItem.Text = "Gerir as colmeias do registo de imagens..."
                 ReportManagerToolStripMenuItem.Text = "Gestor de relatórios"
                 MountedImageManagerTSMI.Text = "Gestor de imagens montadas"
                 CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
@@ -8395,6 +8404,7 @@ Public Class MainForm
                 CommandShellToolStripMenuItem.Text = "Console dei comandi"
                 UnattendedAnswerFileManagerToolStripMenuItem.Text = "Gestore file di risposta non presidiata"
                 UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
+                RegCplToolStripMenuItem.Text = "Gestire gli alveari del registro delle immagini..."
                 ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                 MountedImageManagerTSMI.Text = "Gestore di immagini montate"
                 CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
@@ -8774,7 +8784,33 @@ Public Class MainForm
         If RegistryControlPanel.Visible Then
             RegistryControlPanel.Close()
             If RegistryControlPanel.Visible Then
-                MsgBox("The image registry control panel needs to be closed before loading projects.", vbOKOnly + vbExclamation, Text)
+                Dim msg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "The image registry control panel needs to be closed before loading projects."
+                            Case "ESN"
+                                msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar proyectos."
+                            Case "FRA"
+                                msg = "Le panneau de contrôle du registre des images doit être fermé avant le chargement des projets."
+                            Case "PTB", "PTG"
+                                msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar projectos."
+                            Case "ITA"
+                                msg = "Il pannello di controllo del registro immagini deve essere chiuso prima di caricare i progetti."
+                        End Select
+                    Case 1
+                        msg = "The image registry control panel needs to be closed before loading projects."
+                    Case 2
+                        msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar proyectos."
+                    Case 3
+                        msg = "Le panneau de contrôle du registre des images doit être fermé avant le chargement des projets."
+                    Case 4
+                        msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar projectos."
+                    Case 5
+                        msg = "Il pannello di controllo del registro immagini deve essere chiuso prima di caricare i progetti."
+                End Select
+                MsgBox(msg, vbOKOnly + vbExclamation, Text)
                 Exit Sub
             End If
         End If
@@ -9693,7 +9729,33 @@ Public Class MainForm
         If RegistryControlPanel.Visible Then
             RegistryControlPanel.Close()
             If RegistryControlPanel.Visible Then
-                MsgBox("The image registry control panel needs to be closed before loading this mode.", vbOKOnly + vbExclamation, Text)
+                Dim msg As String = ""
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "The image registry control panel needs to be closed before loading this mode."
+                            Case "ESN"
+                                msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar este modo."
+                            Case "FRA"
+                                msg = "Le panneau de contrôle du registre des images doit être fermé avant de charger ce mode."
+                            Case "PTB", "PTG"
+                                msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar este modo."
+                            Case "ITA"
+                                msg = "Il pannello di controllo del registro immagini deve essere chiuso prima di caricare questa modalità."
+                        End Select
+                    Case 1
+                        msg = "The image registry control panel needs to be closed before loading this mode."
+                    Case 2
+                        msg = "El panel de control del registro de la imagen debe ser cerrado antes de cargar este modo."
+                    Case 3
+                        msg = "Le panneau de contrôle du registre des images doit être fermé avant de charger ce mode."
+                    Case 4
+                        msg = "O painel de controlo do registo de imagens tem de ser fechado antes de carregar este modo."
+                    Case 5
+                        msg = "Il pannello di controllo del registro immagini deve essere chiuso prima di caricare questa modalità."
+                End Select
+                MsgBox(msg, vbOKOnly + vbExclamation, Text)
                 Exit Sub
             End If
         End If
@@ -18211,14 +18273,65 @@ Public Class MainForm
     End Sub
 
     Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
+        Dim msg As String = ""
         If isProjectLoaded Then
             If IsImageMounted And Not OnlineManagement Then
                 RegistryControlPanel.Show()
             ElseIf IsImageMounted And OnlineManagement Then
-                MsgBox("This control panel is not available on active installations.", vbOKOnly + vbCritical, Text)
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "This control panel is not available on active installations."
+                            Case "ESN"
+                                msg = "Este panel de control no está disponible en instalaciones activas."
+                            Case "FRA"
+                                msg = "Ce panneau de contrôle n'est pas disponible sur les installations actives."
+                            Case "PTB", "PTG"
+                                msg = "Este painel de controlo não está disponível em instalações activas."
+                            Case "ITA"
+                                msg = "Questo pannello di controllo non è disponibile sulle installazioni attive."
+                        End Select
+                    Case 1
+                        msg = "This control panel is not available on active installations."
+                    Case 2
+                        msg = "Este panel de control no está disponible en instalaciones activas."
+                    Case 3
+                        msg = "Ce panneau de contrôle n'est pas disponible sur les installations actives."
+                    Case 4
+                        msg = "Este painel de controlo não está disponível em instalações activas."
+                    Case 5
+                        msg = "Questo pannello di controllo non è disponibile sulle installazioni attive."
+                End Select
+                MsgBox(msg, vbOKOnly + vbCritical, Text)
             End If
         Else
-            MsgBox("You need to load a project or mode to manage registry hives.", vbOKOnly + vbExclamation, Text)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "You need to load a project or mode to manage registry hives."
+                        Case "ESN"
+                            msg = "Debe cargar un proyecto o modo para administrar subárboles del registro."
+                        Case "FRA"
+                            msg = "Vous devez charger un projet ou un mode pour gérer les ruches du registre."
+                        Case "PTB", "PTG"
+                            msg = "É necessário carregar um projeto ou modo para gerir as colmeias de registo."
+                        Case "ITA"
+                            msg = "È necessario caricare un progetto o una modalità per gestire gli alveari del registro."
+                    End Select
+                Case 1
+                    msg = "You need to load a project or mode to manage registry hives."
+                Case 2
+                    msg = "Debe cargar un proyecto o modo para administrar subárboles del registro."
+                Case 3
+                    msg = "Vous devez charger un projet ou un mode pour gérer les ruches du registre."
+                Case 4
+                    msg = "É necessário carregar um projeto ou modo para gerir as colmeias de registo."
+                Case 5
+                    msg = "È necessario caricare un progetto o una modalità per gestire gli alveari del registro."
+            End Select
+            MsgBox(msg, vbOKOnly + vbExclamation, Text)
         End If
     End Sub
 
