@@ -1948,14 +1948,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- CODE: the indentation of the PE Helper is now consistent
-        '''- Fixed an issue where the program would continue running without having .NET Framework 4.8
-        '''- Fixed an issue where the program would randomly freeze, even though it was still responding
+        '''- Fixed an issue where the program would sometimes throw an exception at startup
         '''
         '''New features:
         '''
-        '''- Exception reporting now includes some basic information about the image you are servicing. This does not occur when managing active installations
-        '''- A new tool has been introduced that lets you manage the registry hives of the ima [resto de la cadena truncado]&quot;;.
+        '''- CODE: the functionality for changing menu item colors has been refactored
+        '''- You can now download Windows 10 languages and FOD discs
+        '''- The Scintilla.NET component has been updated to version 5.6.2
+        '''- The computer restart popup of the OS installer has been improved
+        '''- More situations now require the registry control panel to be closed, such as loading projects or performing tasks
+        '''- The regist [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
