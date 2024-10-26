@@ -9,6 +9,7 @@ on:
       - '.github/**'
       - 'README.md'
       - 'res/**'
+  workflow_dispatch:
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
