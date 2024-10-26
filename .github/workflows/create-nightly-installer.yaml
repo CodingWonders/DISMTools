@@ -34,17 +34,19 @@ jobs:
         msbuild Tools\UnpEax\UnpEax.csproj /p:Configuration=Debug /p:DeployOnBuild=true
         msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
         Move-Item -Path "$($solutionDir.TrimEnd("\"))\Installer\Output\dt_setup.exe" -Destination "$($solutionDir.TrimEnd("\"))\Installer\Nightly\dt_setup.exe" -Force
-    - name: Push nightly installer
-      #uses: stefanzweifel/git-auto-commit-action@v5
-      #with:
-      #  commit_message: DISMTools Nightly Installer
-      uses: cpina/github-action-push-to-another-repository@v1.7.2
-      env:
-        SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
-        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
       with:
-          source-directory: '$env:GITHUB_REF_NAME'
-          destination-github-username: 'CodingWonders'
-          destination-repository-name: 'dt-nightly-installers'
-          target-branch: main
-      if: success()
+        name: build-result
+        path: ${{ github.workspace }}\Installer\Nightly\dt_setup.exe
+  upload-installer:
+    runs-on: ubuntu-latest
+    needs: build-runspace
+    steps:
+      - name: Grab Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-result
+          path: ./downloaded_artifacts
+      - name: List files
+        run: ls ./downloaded_artifacts
