@@ -47,6 +47,6 @@ jobs:
         # Configure git parameters to be me the one who pushes them
         git config user.name "CodingWonders"
         git config user.email "101426328+CodingWonders@users.noreply.github.com"
-        git commit -m "DISMTools Nightly Installer ($($env:GITHUB_REF_NAME))"
+        git commit -a -m "DISMTools Nightly Installer ($($env:GITHUB_REF_NAME))"
         git push
       if: success()
