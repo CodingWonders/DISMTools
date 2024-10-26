@@ -63,4 +63,5 @@ jobs:
           source-directory: '${{ GITHUB.REF_NAME }}'
           destination-github-username: 'CodingWonders'
           destination-repository-name: 'dt-nightly-installers'
+          target-directory: '${{ GITHUB.REF_NAME }}'
           target-branch: main
