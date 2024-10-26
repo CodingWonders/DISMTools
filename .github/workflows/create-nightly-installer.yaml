@@ -39,7 +39,7 @@ jobs:
       #  commit_message: DISMTools Nightly Installer
       run: |
         cd ..\..
-        git clone https://github.com/CodingWonders/dt-nightly-installers
+        git clone git@github.com:CodingWonders/dt-nightly-installers.git
         #Write-Host $env:GITHUB_REF_NAME
         New-Item -Path ".\dt-nightly-installers\$($env:GITHUB_REF_NAME)" -ItemType Directory -Force
         Move-Item -Path ".\DISMTools\DISMTools\Installer\Nightly\dt_setup.exe" ".\dt-nightly-installers\$($env:GITHUB_REF_NAME)\dt_setup.exe" -Force
@@ -49,8 +49,8 @@ jobs:
         git config user.email "101426328+CodingWonders@users.noreply.github.com"
         git add .
         git commit -a -m "DISMTools Nightly Installer ($($env:GITHUB_REF_NAME))"
-        git config --unset-all http.https://github.com/.extraheader
+        #git config --unset-all http.https://github.com/.extraheader
         Write-Host "Debug: getting remotes..."
         git remote get-url origin
-        #git push
+        git push
       if: success()
