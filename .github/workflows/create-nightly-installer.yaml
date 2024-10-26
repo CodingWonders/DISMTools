@@ -51,8 +51,8 @@ jobs:
           path: ./downloaded_artifacts
       - name: Prepare directory
         run: |
-          mkdir "./${{GITHUB_REF_NAME}}"
-          mv -f "./downloaded_artifacts/dt_setup.exe" "./${{GITHUB_REF_NAME}}/dt_setup.exe"
+          mkdir "./${{ GITHUB.REF_NAME }}"
+          mv -f "./downloaded_artifacts/dt_setup.exe" "./${{ GITHUB.REF_NAME }}/dt_setup.exe"
           rm -rf "./downloaded_artifacts"
       - name: Upload Installer
         env:
@@ -60,7 +60,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         uses: cpina/github-action-push-to-another-repository@main
         with:
-          source-directory: '${{GITHUB_REF_NAME}}'
+          source-directory: '${{ GITHUB.REF_NAME }}'
           destination-github-username: 'CodingWonders'
           destination-repository-name: 'dt-nightly-installers'
           target-branch: main
