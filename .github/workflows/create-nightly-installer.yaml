@@ -40,5 +40,5 @@ jobs:
       run: |
         #cd ..\..
         #git clone https://github.com/CodingWonders/dt-nightly-installers
-        Write-Host ${GITHUB_REF_NAME}
+        Write-Host $env:GITHUB_REF_NAME
       if: success()
