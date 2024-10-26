@@ -44,6 +44,9 @@ jobs:
         New-Item -Path ".\dt-nightly-installers\$($env:GITHUB_REF_NAME)" -ItemType Directory -Force
         Move-Item -Path ".\DISMTools\DISMTools\Installer\Nightly\dt_setup.exe" ".\dt-nightly-installers\$($env:GITHUB_REF_NAME)\dt_setup.exe" -Force
         cd .\dt-nightly-installers
+        # Configure git parameters to be me the one who pushes them
+        git config user.name "CodingWonders"
+        git config user.email "101426328+CodingWonders@users.noreply.github.com"
         git commit -m "DISMTools Nightly Installer ($($env:GITHUB_REF_NAME))"
         git push
       if: success()
