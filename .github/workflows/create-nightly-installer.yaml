@@ -38,5 +38,7 @@ jobs:
       #with:
       #  commit_message: DISMTools Nightly Installer
       run: |
-        pwd
+        #cd ..\..
+        #git clone https://github.com/CodingWonders/dt-nightly-installers
+        Write-Host ${GITHUB_REF_NAME}
       if: success()
