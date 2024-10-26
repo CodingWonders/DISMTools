@@ -50,5 +50,7 @@ jobs:
         git add .
         git commit -a -m "DISMTools Nightly Installer ($($env:GITHUB_REF_NAME))"
         git config --unset-all http.https://github.com/.extraheader
-        git push
+        Write-Host "Debug: getting remotes..."
+        git remote
+        #git push
       if: success()
