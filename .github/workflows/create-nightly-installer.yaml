@@ -51,7 +51,8 @@ jobs:
         git add .
         git commit -a -m "DISMTools Nightly Installer ($($env:GITHUB_REF_NAME))"
         git config --unset-all http.https://github.com/.extraheader
+        git remote set-url origin https://$env:GITHUB_TOKEN@github.com/CodingWonders/dt-nightly-installers.git
         Write-Host "Debug: getting remotes..."
         git remote get-url origin
-        git push https://$env:GITHUB_TOKEN@github.com/CodingWonders/dt-nightly-installers.git HEAD:main
+        git push origin HEAD:main
       if: success()
