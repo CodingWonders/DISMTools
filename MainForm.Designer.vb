@@ -3748,6 +3748,7 @@ Partial Class MainForm
         Me.Label46.Size = New System.Drawing.Size(168, 84)
         Me.Label46.TabIndex = 6
         Me.Label46.Text = "imgName"
+        Me.Label46.UseMnemonic = False
         '
         'Label47
         '
@@ -3758,6 +3759,7 @@ Partial Class MainForm
         Me.Label47.Size = New System.Drawing.Size(168, 178)
         Me.Label47.TabIndex = 6
         Me.Label47.Text = "imgDesc"
+        Me.Label47.UseMnemonic = False
         '
         'Label48
         '
