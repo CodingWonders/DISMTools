@@ -181,6 +181,7 @@ Partial Class MainForm
         Me.ToolStripSeparator43 = New System.Windows.Forms.ToolStripSeparator()
         Me.WebResourcesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LanguagesAndFODWin10ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -477,7 +478,6 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.LanguagesAndFODWin10ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1515,6 +1515,12 @@ Partial Class MainForm
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Name = "LanguagesAndOptionalFeaturesISOToolStripMenuItem"
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Size = New System.Drawing.Size(360, 22)
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Download Languages and Optional Features ISOs..."
+        '
+        'LanguagesAndFODWin10ToolStripMenuItem
+        '
+        Me.LanguagesAndFODWin10ToolStripMenuItem.Name = "LanguagesAndFODWin10ToolStripMenuItem"
+        Me.LanguagesAndFODWin10ToolStripMenuItem.Size = New System.Drawing.Size(360, 22)
+        Me.LanguagesAndFODWin10ToolStripMenuItem.Text = "Download Languages and FOD discs for Windows 10..."
         '
         'ToolStripSeparator41
         '
@@ -3680,6 +3686,7 @@ Partial Class MainForm
         Me.Label46.Size = New System.Drawing.Size(168, 84)
         Me.Label46.TabIndex = 6
         Me.Label46.Text = "imgName"
+        Me.Label46.UseMnemonic = False
         '
         'Label47
         '
@@ -3690,6 +3697,7 @@ Partial Class MainForm
         Me.Label47.Size = New System.Drawing.Size(168, 178)
         Me.Label47.TabIndex = 6
         Me.Label47.Text = "imgDesc"
+        Me.Label47.UseMnemonic = False
         '
         'Label48
         '
@@ -4387,12 +4395,6 @@ Partial Class MainForm
         'MountedImageDetectorBWRestarterTimer
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
-        '
-        'LanguagesAndFODWin10ToolStripMenuItem
-        '
-        Me.LanguagesAndFODWin10ToolStripMenuItem.Name = "LanguagesAndFODWin10ToolStripMenuItem"
-        Me.LanguagesAndFODWin10ToolStripMenuItem.Size = New System.Drawing.Size(360, 22)
-        Me.LanguagesAndFODWin10ToolStripMenuItem.Text = "Download Languages and FOD discs for Windows 10..."
         '
         'MainForm
         '

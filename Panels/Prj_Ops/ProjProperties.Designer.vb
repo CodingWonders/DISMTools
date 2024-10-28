@@ -828,6 +828,7 @@ Partial Class ProjProperties
         Me.imgMountedDesc.Size = New System.Drawing.Size(172, 28)
         Me.imgMountedDesc.TabIndex = 11
         Me.imgMountedDesc.Text = "imgMountedDesc"
+        Me.imgMountedDesc.UseMnemonic = False
         '
         'imgMountedName
         '
@@ -837,6 +838,7 @@ Partial Class ProjProperties
         Me.imgMountedName.Size = New System.Drawing.Size(172, 28)
         Me.imgMountedName.TabIndex = 11
         Me.imgMountedName.Text = "imgMountedName"
+        Me.imgMountedName.UseMnemonic = False
         '
         'imgVersion
         '
