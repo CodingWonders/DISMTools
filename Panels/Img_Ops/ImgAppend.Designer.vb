@@ -22,6 +22,7 @@ Partial Class ImgAppend
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -29,8 +30,11 @@ Partial Class ImgAppend
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.CheckBox6 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.CheckBox5 = New System.Windows.Forms.CheckBox()
         Me.CheckBox4 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
@@ -48,12 +52,11 @@ Partial Class ImgAppend
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Button5 = New System.Windows.Forms.Button()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -137,6 +140,7 @@ Partial Class ImgAppend
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Label2)
+        Me.GroupBox2.Controls.Add(Me.Button4)
         Me.GroupBox2.Controls.Add(Me.Button3)
         Me.GroupBox2.Controls.Add(Me.CheckBox6)
         Me.GroupBox2.Controls.Add(Me.CheckBox7)
@@ -156,6 +160,28 @@ Partial Class ImgAppend
         Me.GroupBox2.TabIndex = 7
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Options"
+        '
+        'Button5
+        '
+        Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button5.Enabled = False
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button5.Location = New System.Drawing.Point(903, 100)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 13
+        Me.Button5.Text = "Create..."
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Label2
+        '
+        Me.Label2.AutoEllipsis = True
+        Me.Label2.Enabled = False
+        Me.Label2.Location = New System.Drawing.Point(34, 104)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(135, 13)
+        Me.Label2.TabIndex = 12
+        Me.Label2.Text = "Path of configuration file:"
         '
         'Button3
         '
@@ -179,6 +205,16 @@ Partial Class ImgAppend
         Me.CheckBox6.TabIndex = 0
         Me.CheckBox6.Text = "Use the reparse point tag fix"
         Me.CheckBox6.UseVisualStyleBackColor = True
+        '
+        'CheckBox7
+        '
+        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.Location = New System.Drawing.Point(16, 243)
+        Me.CheckBox7.Name = "CheckBox7"
+        Me.CheckBox7.Size = New System.Drawing.Size(164, 17)
+        Me.CheckBox7.TabIndex = 0
+        Me.CheckBox7.Text = "Capture extended attributes"
+        Me.CheckBox7.UseVisualStyleBackColor = True
         '
         'CheckBox5
         '
@@ -238,7 +274,7 @@ Partial Class ImgAppend
         '
         Me.TextBox3.Location = New System.Drawing.Point(175, 24)
         Me.TextBox3.Name = "TextBox3"
-        Me.TextBox3.Size = New System.Drawing.Size(803, 21)
+        Me.TextBox3.Size = New System.Drawing.Size(641, 21)
         Me.TextBox3.TabIndex = 3
         '
         'CheckBox1
@@ -344,28 +380,6 @@ Partial Class ImgAppend
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Source image directory:"
         '
-        'Label2
-        '
-        Me.Label2.AutoEllipsis = True
-        Me.Label2.Enabled = False
-        Me.Label2.Location = New System.Drawing.Point(34, 104)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(135, 13)
-        Me.Label2.TabIndex = 12
-        Me.Label2.Text = "Path of configuration file:"
-        '
-        'Button5
-        '
-        Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button5.Enabled = False
-        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(903, 100)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(75, 23)
-        Me.Button5.TabIndex = 13
-        Me.Button5.Text = "Create..."
-        Me.Button5.UseVisualStyleBackColor = True
-        '
         'FolderBrowserDialog1
         '
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
@@ -380,15 +394,15 @@ Partial Class ImgAppend
         Me.OpenFileDialog1.Filter = "WimScript.ini|WimScript.ini"
         Me.OpenFileDialog1.Title = "Specify a WimScript.ini configuration file"
         '
-        'CheckBox7
+        'Button4
         '
-        Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Location = New System.Drawing.Point(16, 243)
-        Me.CheckBox7.Name = "CheckBox7"
-        Me.CheckBox7.Size = New System.Drawing.Size(164, 17)
-        Me.CheckBox7.TabIndex = 0
-        Me.CheckBox7.Text = "Capture extended attributes"
-        Me.CheckBox7.UseVisualStyleBackColor = True
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(822, 23)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(156, 23)
+        Me.Button4.TabIndex = 4
+        Me.Button4.Text = "Grab from last image"
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'ImgAppend
         '
@@ -452,5 +466,7 @@ Partial Class ImgAppend
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents CheckBox7 As System.Windows.Forms.CheckBox
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 
 End Class

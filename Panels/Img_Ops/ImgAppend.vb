@@ -1,5 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.Dism
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ImgAppend
 
@@ -474,5 +476,46 @@ Public Class ImgAppend
             TextBox5.Text = WimScriptEditor.ConfigListFile
         End If
         Visible = True
+    End Sub
+
+    Function GetLastImageName() As String
+        Dim imageName As String = ""
+        Try
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(TextBox2.Text)
+            imageName = ImageInfoCollection.Last.ImageName
+        Catch ex As Exception
+            MsgBox("Could not grab last image name. Error information:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
+        End Try
+        Return imageName
+    End Function
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        If TextBox2.Text = "" OrElse Not File.Exists(TextBox2.Text) Then Exit Sub
+        If MainForm.MountedImageDetectorBW.IsBusy Then
+            MainForm.MountedImageDetectorBW.CancelAsync()
+            While MainForm.MountedImageDetectorBW.IsBusy
+                Application.DoEvents()
+                Threading.Thread.Sleep(500)
+            End While
+        End If
+        MainForm.WatcherTimer.Enabled = False
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
+        TextBox3.Text = GetLastImageName()
+        Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub Button4_MouseHover(sender As Object, e As EventArgs) Handles Button4.MouseHover
+        ToolTip1.SetToolTip(sender, "Grab the name of the last index of the target image")
     End Sub
 End Class
