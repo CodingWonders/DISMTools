@@ -35,7 +35,7 @@ jobs:
         msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
         Move-Item -Path "$($solutionDir.TrimEnd("\"))\Installer\Output\dt_setup.exe" -Destination "$($solutionDir.TrimEnd("\"))\Installer\Nightly\dt_setup.exe" -Force
     - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-result
         path: ${{ github.workspace }}\Installer\Nightly\dt_setup.exe
@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Grab Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-result
           path: ./downloaded_artifacts
