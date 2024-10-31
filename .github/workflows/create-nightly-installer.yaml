@@ -32,6 +32,7 @@ jobs:
         $solutionDir = "$((Get-Location).Path)\"
         $projectDir = "$((Get-Location).Path)\"
         $targetDir = (Get-Location).Path + "\bin\Debug\"
+        "$($solutionDir)CheckMissingDlls.ps1"
         msbuild Tools\UnpEax\UnpEax.csproj /p:Configuration=Debug /p:DeployOnBuild=true
         msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
         Move-Item -Path "$($solutionDir.TrimEnd("\"))\Installer\Output\dt_setup.exe" -Destination "$($solutionDir.TrimEnd("\"))\Installer\Nightly\dt_setup.exe" -Force
