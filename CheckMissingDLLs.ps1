@@ -4,6 +4,11 @@ if ($ghAction -ne "yes")
 	$TargetDir = "$((Get-Location).Path)"
 }
 
+if (-not (Test-Path ".\bin\Debug"))
+{
+	New-Item "$($SolutionDir)bin\Debug" -ItemType Directory -Force
+}
+
 if (-not (Test-Path ".\bin\Debug\System.IO.dll" -PathType Leaf)) {
 	Copy-Item "$($SolutionDir)\packages\System.IO.4.3.0\lib\net462\System.IO.dll" "$($TargetDir)\System.IO.dll"
 }
