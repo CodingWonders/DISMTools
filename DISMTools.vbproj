@@ -98,6 +98,9 @@
     <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
@@ -1931,6 +1934,8 @@ IF %25COPY_DOCS%25=="Yes" (
 )
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
+	:: Workaround for DLLs not copying
+	"\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -noprofile -nologo -file "$(SolutionDir)CheckMissingDLLs.ps1"
 	echo Copying program files...
 	IF EXIST "$(SolutionDir)Installer\files" (rd "$(SolutionDir)Installer\files" /s /q)
 	IF NOT EXIST "$(SolutionDir)Installer\files" (md "$(SolutionDir)Installer\files")
