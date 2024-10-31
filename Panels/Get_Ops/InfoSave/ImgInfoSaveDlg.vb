@@ -82,6 +82,7 @@ Public Class ImgInfoSaveDlg
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
+        TaskbarHelper.SetIndicatorState(ProgressPercentage, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
         Application.DoEvents()
     End Sub
 
@@ -2454,6 +2455,7 @@ Public Class ImgInfoSaveDlg
                 Case 5
                     Label2.Text = "In attesa che i processi in background finiscano..."
             End Select
+            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
             While MainForm.ImgBW.IsBusy
                 Application.DoEvents()
                 Thread.Sleep(500)
@@ -2603,6 +2605,7 @@ Public Class ImgInfoSaveDlg
                 saveMsg = "Salvataggio dei contenuti..."
         End Select
         ReportChanges(saveMsg, ProgressBar1.Maximum)
+        TaskbarHelper.SetIndicatorState(ProgressBar1.Maximum, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
 
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)

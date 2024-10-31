@@ -67,20 +67,31 @@ Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Markdig.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Microsoft.Dism.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\Microsoft.WindowsAPI*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\PresentationFramework.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Scintilla.NET.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Buffers.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Co*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Design.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Drawing.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.IO.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Management.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Memory.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Net.Http.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Numerics.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Numerics.Vectors.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Runtime.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\System.Security*.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.ServiceModel.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Windows.Forms.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\System.Xml.Linq.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\WindowsBase.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\WindowsFormsIntegration.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\AutoUnattend\*"; DestDir: "{#pfDir}\AutoUnattend"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\bin\*"; DestDir: "{#pfDir}\bin"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\files\docs\*"; DestDir: "{#pfDir}\docs"; Flags: ignoreversion recursesubdirs createallsubdirs

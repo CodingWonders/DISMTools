@@ -3,6 +3,7 @@ Imports Microsoft.Dism
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports DISMTools.Utilities
 
 Public Class AutoReloadForm
 
@@ -108,10 +109,12 @@ Public Class AutoReloadForm
         imgMtPnt.Text = mntMsg
         ProgressBar1.Style = ProgressBarStyle.Blocks
         ProgressBar1.Value = e.ProgressPercentage
+        TaskbarHelper.SetIndicatorState(e.ProgressPercentage, Windows.Shell.TaskbarItemProgressState.Normal, Handle)
     End Sub
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         Refresh()
+        TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, Handle)
         Application.DoEvents()
         Thread.Sleep(1000)
         Close()
@@ -160,6 +163,7 @@ Public Class AutoReloadForm
                 Label4.Text = "Punto di montaggio dell'immagine:"
                 GroupBox1.Text = "Informazioni sull'immagine"
         End Select
+        TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, Handle)
         Thread.Sleep(2000)
         BackgroundWorker1.RunWorkerAsync()
     End Sub
