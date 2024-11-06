@@ -6680,6 +6680,7 @@ Public Class ProgressPanel
             End While
         End If
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
+        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
