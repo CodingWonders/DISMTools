@@ -127,6 +127,7 @@ Public Class AppInstallerDownloader
         Language = MainForm.Language
         Visible = True
         If AppInstallerFile IsNot Nothing And File.Exists(AppInstallerFile) Then
+            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
             ' Create a reader and get the URL information, since .appinstaller files are XML
             Try
                 Dim reader As New RichTextBox()
@@ -292,9 +293,13 @@ Public Class AppInstallerDownloader
                 downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s""."
                 downETALbl.Text = "Tempo stimato rimanente: " & time.ToString("m\:ss") & " secondi"
         End Select
+        If ProgressBar1.Value <= ProgressBar1.Maximum Then
+            TaskbarHelper.SetIndicatorState(ProgressBar1.Value, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
+        End If
     End Sub
 
     Private Sub AppInstallerDownloader_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         Timer1.Stop()
     End Sub
 End Class
