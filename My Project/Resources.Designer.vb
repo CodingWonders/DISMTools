@@ -1948,16 +1948,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where the program would sometimes throw an exception at startup
+        '''- The image name and description fields of the new design no longer use mnemonics, to prevent ampersands from showing as underscores
         '''
         '''New features:
         '''
-        '''- CODE: the functionality for changing menu item colors has been refactored
-        '''- You can now download Windows 10 languages and FOD discs
-        '''- The Scintilla.NET component has been updated to version 5.6.2
-        '''- The computer restart popup of the OS installer has been improved
-        '''- More situations now require the registry control panel to be closed, such as loading projects or performing tasks
-        '''- The regist [resto de la cadena truncado]&quot;;.
+        '''- The menu items of Web Resources are now translated
+        '''- Markdig has been updated to version 0.38.0
+        '''- The program installer is now built with a new version of Inno Setup
+        '''- When appending changes of an image to another index, you can now grab the name of the last index
+        '''- The time taken for the unattended answer file to be applied by the OS ins [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

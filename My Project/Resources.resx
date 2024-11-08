@@ -777,21 +777,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where the program would sometimes throw an exception at startup
+- The image name and description fields of the new design no longer use mnemonics, to prevent ampersands from showing as underscores
 
 New features:
 
-- CODE: the functionality for changing menu item colors has been refactored
-- You can now download Windows 10 languages and FOD discs
-- The Scintilla.NET component has been updated to version 5.6.2
-- The computer restart popup of the OS installer has been improved
-- More situations now require the registry control panel to be closed, such as loading projects or performing tasks
-- The registry control panel will now close hives that are in a different location and that you have mounted
-- The registry control panel has received translations
-
-Removed features:
-
-- The old project view has been fully removed</value>
+- The menu items of Web Resources are now translated
+- Markdig has been updated to version 0.38.0
+- The program installer is now built with a new version of Inno Setup
+- When appending changes of an image to another index, you can now grab the name of the last index
+- The time taken for the unattended answer file to be applied by the OS installer has been reduced
+- You will now see progress indication in the taskbar for certain tasks
+- CODE: work on a unified logging infrastructure has started</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
