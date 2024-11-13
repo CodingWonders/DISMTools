@@ -207,7 +207,7 @@ Public Class AddProvisioningPkg
                         Cancel_Button.Text = "Annullare"
                         Button1.Text = "Sfoglia..."
                         Button2.Text = "Sfoglia..."
-                        CheckBox1.Text = "Impegna l'immagine dopo aver aggiunto questo pacchetto di approvvigionamento"
+                        CheckBox1.Text = "Applica l'immagine dopo aver aggiunto questo pacchetto di approvvigionamento"
                 End Select
             Case 1
                 Text = "Add provisioning packages"
@@ -263,7 +263,7 @@ Public Class AddProvisioningPkg
                 Cancel_Button.Text = "Annullare"
                 Button1.Text = "Sfoglia..."
                 Button2.Text = "Sfoglia..."
-                CheckBox1.Text = "Impegna l'immagine dopo aver aggiunto questo pacchetto di approvvigionamento"
+                CheckBox1.Text = "Applica l'immagine dopo aver aggiunto questo pacchetto di approvvigionamento"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
