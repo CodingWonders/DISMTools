@@ -1369,8 +1369,16 @@ function Set-Serviceability
         New-Item -Path "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr" -ItemType Directory | Out-Null
         Write-Host "Successfully created the scratch directory."
         $scratchDir = "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr"
+        New-Item -Path "$folderPath\Windows\Logs\DISMTools" -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
         # Bit of a mouthful, but good for PowerShell verbs (+ scratch dir support)
-        dism /image=$ImagePath /scratchdir="$scratchDir" /is-serviceable
+        if (Test-Path -Path "$folderPath\Windows\Logs\DISMTools")
+        {
+            dism /image=$ImagePath /logpath="$folderPath\Windows\Logs\DISMTools\serviceability.log" /scratchdir="$scratchDir" /is-serviceable
+        }
+        else
+        {
+            dism /image=$ImagePath /scratchdir="$scratchDir" /is-serviceable
+        }
     }
     catch
     {
