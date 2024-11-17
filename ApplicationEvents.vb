@@ -33,7 +33,8 @@ Namespace My
                                                    " - DISMTools Version: " & My.Application.Info.Version.ToString() & CrLf &
                                                    " - Preview release? " & If(DISMTools.MainForm.dtBranch.Contains("preview"), "Yes", "No") & CrLf &
                                                    " - Branch: " & DISMTools.MainForm.dtBranch & CrLf &
-                                                   " - Build time: " & DISMTools.PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
+                                                   " - Build time: " & DISMTools.PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm") & CrLf &
+                                                   " - Portable copy? " & If(File.Exists(My.Application.Info.DirectoryPath & "\portable"), "Yes", "No") & CrLf)
                 ' Get image information if a project has been loaded
                 If DISMTools.MainForm.isProjectLoaded And Not DISMTools.MainForm.OnlineManagement Then
                     Try
