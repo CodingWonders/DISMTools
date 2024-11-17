@@ -163,4 +163,8 @@ Public Class AutoReloadForm
         Thread.Sleep(2000)
         BackgroundWorker1.RunWorkerAsync()
     End Sub
+
+    Private Sub AutoReloadForm_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
+    End Sub
 End Class
