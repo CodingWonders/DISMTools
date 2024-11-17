@@ -96,4 +96,8 @@ Public Class MigrationForm
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
         Close()
     End Sub
+
+    Private Sub MigrationForm_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
+    End Sub
 End Class
