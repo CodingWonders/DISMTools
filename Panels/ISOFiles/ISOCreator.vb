@@ -523,9 +523,11 @@ Public Class ISOCreator
         If e.ProgressPercentage < 100 Then
             Label8.Text = progressMessages(1)
             ProgressBar1.Style = ProgressBarStyle.Marquee
+            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
         Else
             If success Then Label8.Text = progressMessages(2)
             ProgressBar1.Style = ProgressBarStyle.Blocks
+            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         End If
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
