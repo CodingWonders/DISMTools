@@ -34,11 +34,17 @@ Public Class ISOCreator
                         Button2.Text = "Pick..."
                         Button3.Text = "Browse..."
                         Button4.Text = "Use mounted image"
+                        Button5.Text = "Browse..."
                         OK_Button.Text = "Create"
                         Cancel_Button.Text = "Cancel"
                         GroupBox1.Text = "Options"
                         GroupBox2.Text = "Progress"
                         LinkLabel1.Text = "Download the Windows ADK"
+                        ColumnHeader2.Text = "Image Name"
+                        ColumnHeader3.Text = "Image Description"
+                        ColumnHeader4.Text = "Image Version"
+                        ColumnHeader5.Text = "Image Architecture"
+                        CheckBox1.Text = "Unattended answer file:"
                     Case "ESN"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -58,11 +64,17 @@ Public Class ISOCreator
                         Button2.Text = "Escoger..."
                         Button3.Text = "Examinar..."
                         Button4.Text = "Usar imagen montada"
+                        Button5.Text = "Examinar..."
                         OK_Button.Text = "Crear"
                         Cancel_Button.Text = "Cancelar"
                         GroupBox1.Text = "Opciones"
                         GroupBox2.Text = "Progreso"
                         LinkLabel1.Text = "Descargar el ADK de Windows"
+                        ColumnHeader2.Text = "Nombre de la imagen"
+                        ColumnHeader3.Text = "Descripción de la imagen"
+                        ColumnHeader4.Text = "Versión"
+                        ColumnHeader5.Text = "Arquitectura"
+                        CheckBox1.Text = "Archivo de respuesta:"
                     Case "FRA"
                         progressMessages(0) = "Statut"
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -82,11 +94,17 @@ Public Class ISOCreator
                         Button2.Text = "Choisir..."
                         Button3.Text = "Parcourir..."
                         Button4.Text = "Utiliser une image montée"
+                        Button5.Text = "Parcourir..."
                         OK_Button.Text = "Créer"
                         Cancel_Button.Text = "Annuler"
                         GroupBox1.Text = "Paramètres"
                         GroupBox2.Text = "Progrès"
                         LinkLabel1.Text = "Télécharger l'ADK Windows"
+                        ColumnHeader2.Text = "Nom de l'image"
+                        ColumnHeader3.Text = "Description de l'image"
+                        ColumnHeader4.Text = "Version"
+                        ColumnHeader5.Text = "Architecture"
+                        CheckBox1.Text = "Fichier de réponse :"
                     Case "PTB", "PTG"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -102,15 +120,21 @@ Public Class ISOCreator
                         Label7.Text = "Localização ISO de destino:"
                         Label8.Text = progressMessages(0)
                         Label9.Text = "Pode fazer outras coisas enquanto o ISO está a ser criado. Volte aqui em qualquer altura para obter um estado atualizado."
-                        Button1.Text = "Navegar..."
+                        Button1.Text = "Procurar..."
                         Button2.Text = "Escolher..."
                         Button3.Text = "Procurar..."
                         Button4.Text = "Utilizar imagem montada"
+                        Button5.Text = "Procurar..."
                         OK_Button.Text = "Criar"
                         Cancel_Button.Text = "Cancelar"
                         GroupBox1.Text = "Configurações"
                         GroupBox2.Text = "Progresso"
                         LinkLabel1.Text = "Baixar o Windows ADK"
+                        ColumnHeader2.Text = "Nome da imagem"
+                        ColumnHeader3.Text = "Descrição da imagem"
+                        ColumnHeader4.Text = "Versão"
+                        ColumnHeader5.Text = "Arquitetura"
+                        CheckBox1.Text = "Ficheiro de resposta:"
                     Case "ITA"
                         progressMessages(0) = "Stato"
                         progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -130,11 +154,17 @@ Public Class ISOCreator
                         Button2.Text = "Scegli..."
                         Button3.Text = "Sfoglia..."
                         Button4.Text = "Usa immagine montata"
+                        Button5.Text = "Sfoglia..."
                         OK_Button.Text = "Crea"
                         Cancel_Button.Text = "Annulla"
                         GroupBox1.Text = "Opzioni"
                         GroupBox2.Text = "Avanzamento"
                         LinkLabel1.Text = "Scarica l'ADK di Windows"
+                        ColumnHeader2.Text = "Nome dell'immagine"
+                        ColumnHeader3.Text = "Descrizione dell'immagine"
+                        ColumnHeader4.Text = "Versione"
+                        ColumnHeader5.Text = "Architettura"
+                        CheckBox1.Text = "File di risposta:"
                 End Select
             Case 1
                 progressMessages(0) = "Status"
@@ -155,11 +185,17 @@ Public Class ISOCreator
                 Button2.Text = "Pick..."
                 Button3.Text = "Browse..."
                 Button4.Text = "Use mounted image"
+                Button5.Text = "Browse..."
                 OK_Button.Text = "Create"
                 Cancel_Button.Text = "Cancel"
                 GroupBox1.Text = "Options"
                 GroupBox2.Text = "Progress"
                 LinkLabel1.Text = "Download the Windows ADK"
+                ColumnHeader2.Text = "Image Name"
+                ColumnHeader3.Text = "Image Description"
+                ColumnHeader4.Text = "Image Version"
+                ColumnHeader5.Text = "Image Architecture"
+                CheckBox1.Text = "Unattended answer file:"
             Case 2
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -179,11 +215,17 @@ Public Class ISOCreator
                 Button2.Text = "Escoger..."
                 Button3.Text = "Examinar..."
                 Button4.Text = "Usar imagen montada"
+                Button5.Text = "Examinar..."
                 OK_Button.Text = "Crear"
                 Cancel_Button.Text = "Cancelar"
                 GroupBox1.Text = "Opciones"
                 GroupBox2.Text = "Progreso"
                 LinkLabel1.Text = "Descargar el ADK de Windows"
+                ColumnHeader2.Text = "Nombre de la imagen"
+                ColumnHeader3.Text = "Descripción de la imagen"
+                ColumnHeader4.Text = "Versión"
+                ColumnHeader5.Text = "Arquitectura"
+                CheckBox1.Text = "Archivo de respuesta:"
             Case 3
                 progressMessages(0) = "Statut"
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -203,11 +245,17 @@ Public Class ISOCreator
                 Button2.Text = "Choisir..."
                 Button3.Text = "Parcourir..."
                 Button4.Text = "Utiliser une image montée"
+                Button5.Text = "Parcourir..."
                 OK_Button.Text = "Créer"
                 Cancel_Button.Text = "Annuler"
                 GroupBox1.Text = "Paramètres"
                 GroupBox2.Text = "Progrès"
                 LinkLabel1.Text = "Télécharger l'ADK Windows"
+                ColumnHeader2.Text = "Nom de l'image"
+                ColumnHeader3.Text = "Description de l'image"
+                ColumnHeader4.Text = "Version"
+                ColumnHeader5.Text = "Architecture"
+                CheckBox1.Text = "Fichier de réponse :"
             Case 4
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -223,15 +271,21 @@ Public Class ISOCreator
                 Label7.Text = "Localização ISO de destino:"
                 Label8.Text = progressMessages(0)
                 Label9.Text = "Pode fazer outras coisas enquanto o ISO está a ser criado. Volte aqui em qualquer altura para obter um estado atualizado."
-                Button1.Text = "Navegar..."
+                Button1.Text = "Procurar..."
                 Button2.Text = "Escolher..."
                 Button3.Text = "Procurar..."
                 Button4.Text = "Utilizar imagem montada"
+                Button5.Text = "Procurar..."
                 OK_Button.Text = "Criar"
                 Cancel_Button.Text = "Cancelar"
                 GroupBox1.Text = "Configurações"
                 GroupBox2.Text = "Progresso"
                 LinkLabel1.Text = "Baixar o Windows ADK"
+                ColumnHeader2.Text = "Nome da imagem"
+                ColumnHeader3.Text = "Descrição da imagem"
+                ColumnHeader4.Text = "Versão"
+                ColumnHeader5.Text = "Arquitetura"
+                CheckBox1.Text = "Ficheiro de resposta:"
             Case 5
                 progressMessages(0) = "Stato"
                 progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -251,18 +305,24 @@ Public Class ISOCreator
                 Button2.Text = "Scegli..."
                 Button3.Text = "Sfoglia..."
                 Button4.Text = "Usa immagine montata"
+                Button5.Text = "Sfoglia..."
                 OK_Button.Text = "Crea"
                 Cancel_Button.Text = "Annulla"
                 GroupBox1.Text = "Opzioni"
                 GroupBox2.Text = "Avanzamento"
                 LinkLabel1.Text = "Scarica l'ADK di Windows"
+                ColumnHeader2.Text = "Nome dell'immagine"
+                ColumnHeader3.Text = "Descrizione dell'immagine"
+                ColumnHeader4.Text = "Versione"
+                ColumnHeader5.Text = "Architettura"
+                CheckBox1.Text = "File di risposta:"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
             BackColor = Color.FromArgb(31, 31, 31)
             ForeColor = Color.White
             TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
+            ListView1.BackColor = Color.FromArgb(31, 31, 31)
             TextBox3.BackColor = Color.FromArgb(31, 31, 31)
             TextBox4.BackColor = Color.FromArgb(31, 31, 31)
             ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
@@ -271,13 +331,13 @@ Public Class ISOCreator
             BackColor = Color.FromArgb(238, 238, 242)
             ForeColor = Color.Black
             TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
+            ListView1.BackColor = Color.FromArgb(238, 238, 242)
             TextBox3.BackColor = Color.FromArgb(238, 238, 242)
             TextBox4.BackColor = Color.FromArgb(238, 238, 242)
             ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
         End If
         TextBox1.ForeColor = ForeColor
-        TextBox2.ForeColor = ForeColor
+        ListView1.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
         TextBox4.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
@@ -309,7 +369,7 @@ Public Class ISOCreator
     End Sub
 
     Sub GetImageInfo(ImageFile As String)
-        TextBox2.Text = ""
+        ListView1.Items.Clear()
         If MainForm.MountedImageDetectorBW.IsBusy Then
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
@@ -326,13 +386,14 @@ Public Class ISOCreator
         Try
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
-            TextBox2.Text = "Images in selected file: " & ImageInfoCollection.Count & CrLf & CrLf
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                TextBox2.AppendText(" - Image " & ImageInfoCollection.IndexOf(ImageInfo) + 1 & " of " & ImageInfoCollection.Count & CrLf &
-                                    "   - Image name: " & ImageInfo.ImageName & CrLf &
-                                    "   - Image description: " & ImageInfo.ImageDescription & CrLf &
-                                    "   - Image version: " & ImageInfo.ProductVersion.ToString() & CrLf &
-                                    "   - Image architecture: " & Casters.CastDismArchitecture(ImageInfo.Architecture) & CrLf & CrLf)
+                ListView1.Items.Add(New ListViewItem(New String() {
+                                                     (ImageInfoCollection.IndexOf(ImageInfo) + 1),
+                                                     ImageInfo.ImageName,
+                                                     ImageInfo.ImageDescription,
+                                                     ImageInfo.ProductVersion.ToString(),
+                                                     Casters.CastDismArchitecture(ImageInfo.Architecture)
+                                                 }))
             Next
         Catch ex As Exception
             Dim msg As String = ""
