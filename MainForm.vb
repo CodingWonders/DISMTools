@@ -591,6 +591,16 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+
+        ' Detect presence of verified AME Playbooks in current system. This is NOT a way to block these projects, but a way to help isolate
+        ' specific program bugs on those types of systems
+        If PlaybookDetector.DetectInstalledPlaybook(PlaybookDetector.VerifiedPlaybooks.AtlasOS) Then
+            DynaLog.LogMessage("Atlas OS has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
+        End If
+        If PlaybookDetector.DetectInstalledPlaybook(PlaybookDetector.VerifiedPlaybooks.ReviOS) Then
+            DynaLog.LogMessage("Revision (ReviOS) has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
+        End If
+
         If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
