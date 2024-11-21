@@ -6,6 +6,7 @@ Public Class PlaybookDetector
     Public Enum VerifiedPlaybooks
         AtlasOS
         ReviOS
+        AME
     End Enum
 
     Public Shared Function DetectInstalledPlaybook(InstalledPlaybook As VerifiedPlaybooks) As Boolean
@@ -32,6 +33,16 @@ Public Class PlaybookDetector
                     DynaLog.LogMessage("Number of Revision packages in system servicing folder: " & OSPackageCount)
                 Catch ex As Exception
                     DynaLog.LogMessage("Could not detect presence of Revision on this system. Error information:" & CrLf & CrLf & ex.ToString())
+                    OSPackageCount = 0
+                End Try
+            Case VerifiedPlaybooks.AME
+                ' Detect content for standard AME Playbooks
+                DynaLog.LogMessage("Detecting if AME 10/11 is installed...")
+                Try
+                    OSPackageCount = (Directory.GetFiles((Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\servicing\packages"), "Z-AME-NoDefender-Package*", SearchOption.TopDirectoryOnly).Count)
+                    DynaLog.LogMessage("Number of AME packages in system servicing folder: " & OSPackageCount)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not detect presence of AME 10/11 on this system. Error information:" & CrLf & CrLf & ex.ToString())
                     OSPackageCount = 0
                 End Try
         End Select
