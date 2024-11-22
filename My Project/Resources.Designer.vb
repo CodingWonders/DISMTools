@@ -1948,7 +1948,7 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.5.1_upd2.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.5.1_upd3.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

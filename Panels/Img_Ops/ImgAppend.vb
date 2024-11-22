@@ -256,7 +256,7 @@ Public Class ImgAppend
                         Text = "Aggiungi a un'immagine"
                         Label1.Text = Text
                         Label2.Text = "Percorso del file di configurazione:"
-                        Label3.Text = " Cartella dell'immagine di origine:"
+                        Label3.Text = "Cartella dell'immagine di origine:"
                         Label5.Text = "Descrizione immagine di destinazione:"
                         Label6.Text = "File immagine di destinazione:"
                         Label7.Text = "Nome immagine di destinazione:"
@@ -372,7 +372,7 @@ Public Class ImgAppend
                 Text = "Aggiungi a un'immagine"
                 Label1.Text = Text
                 Label2.Text = "Percorso del file di configurazione:"
-                Label3.Text = " Cartella dell'immagine di origine:"
+                Label3.Text = "Cartella dell'immagine di origine:"
                 Label5.Text = "Descrizione immagine di destinazione:"
                 Label6.Text = "File immagine di destinazione:"
                 Label7.Text = "Nome immagine di destinazione:"

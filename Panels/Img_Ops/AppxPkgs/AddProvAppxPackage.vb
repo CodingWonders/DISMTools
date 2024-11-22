@@ -405,7 +405,7 @@ Public Class AddProvAppxPackage
                         Cancel_Button.Text = "Annullare"
                         OK_Button.Text = "OK"
                         CheckBox1.Text = "File dati personalizzato:"
-                        CheckBox2.Text = "Impegnare l'immagine dopo l'aggiunta dei pacchetti AppX"
+                        CheckBox2.Text = "Applicare l'immagine dopo l'aggiunta dei pacchetti AppX"
                         CustomDataFileOFD.Title = "Specifica un file di dati personalizzato"
                         GroupBox2.Text = "Dipendenze AppX"
                         GroupBox3.Text = "Regioni di AppX"
@@ -581,7 +581,7 @@ Public Class AddProvAppxPackage
                 Cancel_Button.Text = "Annullare"
                 OK_Button.Text = "OK"
                 CheckBox1.Text = "File dati personalizzato:"
-                CheckBox2.Text = "Impegnare l'immagine dopo l'aggiunta dei pacchetti AppX"
+                CheckBox2.Text = "Applicare l'immagine dopo l'aggiunta dei pacchetti AppX"
                 CustomDataFileOFD.Title = "Specifica un file di dati personalizzato"
                 GroupBox2.Text = "Dipendenze AppX"
                 GroupBox3.Text = "Regioni di AppX"
@@ -682,17 +682,22 @@ Public Class AddProvAppxPackage
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
-        If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
-            (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
-            GroupBox3.Enabled = True
-        Else
+        Try
+            If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
+                (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+                GroupBox3.Enabled = True
+            Else
+                GroupBox3.Enabled = False
+            End If
+            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
+                Panel2.Enabled = True
+            Else
+                Panel2.Enabled = False
+            End If
+        Catch ex As Exception
             GroupBox3.Enabled = False
-        End If
-        If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
-            Panel2.Enabled = True
-        Else
             Panel2.Enabled = False
-        End If
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

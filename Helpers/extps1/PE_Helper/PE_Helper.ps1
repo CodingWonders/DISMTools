@@ -770,7 +770,7 @@ function Start-OSApplication
     if (Test-Path "$((Get-Location).Path)\unattend.xml" -PathType Leaf)
     {
         Write-Host "A possible unattended answer file has been detected, applying it...        " -NoNewline
-        if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):\" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
+        if ((Start-DismCommand -Verb UnattendApply -ImagePath "$($driveLetter):" -unattendPath "$((Get-Location).Path)\unattend.xml") -eq $true)
         {
             Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
         }
@@ -1311,7 +1311,18 @@ function Start-DismCommand
                 }
             }
             "UnattendApply" {
-                Apply-WindowsUnattend -Path "$ImagePath" -UnattendPath "$unattendPath" -NoRestart
+                try
+                {
+                    # Copy unattended answer file to target image
+                    New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\Panther"
+                    Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\Panther\unattend.xml" -Force
+                    New-Item -ItemType Directory -Force -Path "$ImagePath\Windows\System32\Sysprep"
+                    Copy-Item -Path "$unattendPath" -Destination "$ImagePath\Windows\System32\Sysprep\unattend.xml" -Force
+                }
+                catch
+                {
+                    Apply-WindowsUnattend -Path "$ImagePath\" -UnattendPath "$unattendPath" -NoRestart
+                }
             }
             default {
 
@@ -1358,8 +1369,16 @@ function Set-Serviceability
         New-Item -Path "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr" -ItemType Directory | Out-Null
         Write-Host "Successfully created the scratch directory."
         $scratchDir = "$folderPath\`$DISMTOOLS.~LS\PackageTemp\$guidStr"
+        New-Item -Path "$folderPath\Windows\Logs\DISMTools" -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
         # Bit of a mouthful, but good for PowerShell verbs (+ scratch dir support)
-        dism /image=$ImagePath /scratchdir="$scratchDir" /is-serviceable
+        if (Test-Path -Path "$folderPath\Windows\Logs\DISMTools")
+        {
+            dism /image=$ImagePath /logpath="$folderPath\Windows\Logs\DISMTools\serviceability.log" /scratchdir="$scratchDir" /is-serviceable
+        }
+        else
+        {
+            dism /image=$ImagePath /scratchdir="$scratchDir" /is-serviceable
+        }
     }
     catch
     {
