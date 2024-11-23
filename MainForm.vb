@@ -11703,6 +11703,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -11749,6 +11750,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -11816,6 +11818,7 @@ Public Class MainForm
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If OnlineManagement Then
             EndOnlineManagement()
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -11829,6 +11832,7 @@ Public Class MainForm
         End If
         If OfflineManagement Then
             EndOfflineManagement()
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -11881,6 +11885,7 @@ Public Class MainForm
         If Not VolatileMode Then
             SaveDTSettings()
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -12429,6 +12434,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -14842,6 +14848,7 @@ Public Class MainForm
     End Sub
 
     Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -14863,6 +14870,7 @@ Public Class MainForm
     End Sub
 
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -14884,6 +14892,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
@@ -15038,6 +15047,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15104,6 +15114,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15178,6 +15189,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15225,6 +15237,7 @@ Public Class MainForm
             Exit Sub
         End If
         If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -15521,6 +15534,7 @@ Public Class MainForm
 #Region "Task Links"
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15621,6 +15635,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15675,6 +15690,7 @@ Public Class MainForm
 #Region "Common Task button functionality in new design"
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
@@ -15725,6 +15741,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15828,6 +15845,7 @@ Public Class MainForm
             Exit Sub
         End If
         If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -15985,6 +16003,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -16804,6 +16823,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -16967,6 +16987,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -17369,6 +17390,7 @@ Public Class MainForm
         If Not ImageStatus = ImageWatcher.Status.OK Then
             WatcherTimer.Enabled = False
             If MountedImageDetectorBW.IsBusy Then
+                MountedImageDetectorBWRestarterTimer.Enabled = False
                 MountedImageDetectorBW.CancelAsync()
                 While MountedImageDetectorBW.IsBusy
                     Application.DoEvents()

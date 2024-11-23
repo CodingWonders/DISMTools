@@ -371,6 +371,7 @@ Public Class ISOCreator
     Sub GetImageInfo(ImageFile As String)
         ListView1.Items.Clear()
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
                 Application.DoEvents()

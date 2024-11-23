@@ -321,6 +321,7 @@ Public Class ImgIndexDelete
     End Sub
 
     Sub GetImageIndexInfo(SourceImage As String)
+        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()

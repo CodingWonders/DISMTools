@@ -509,6 +509,7 @@ Public Class ImgAppend
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If TextBox2.Text = "" OrElse Not File.Exists(TextBox2.Text) Then Exit Sub
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
                 Application.DoEvents()

@@ -495,6 +495,7 @@ Public Class ImgApply
     End Sub
 
     Sub GetIndexes(ImgFile As String)
+        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
