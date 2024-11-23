@@ -43,7 +43,7 @@ Partial Class InfoSaveResults
         Me.Label1.Size = New System.Drawing.Size(982, 26)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "The report has been saved to the location you had specified, and its contents wil" & _
-    "l be shown in the text box below."
+    "l be shown below."
         '
         'Button1
         '

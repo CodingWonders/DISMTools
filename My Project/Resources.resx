@@ -595,6 +595,18 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+- Windows API Code Pack
+
+MIT License
+
+Copyright (c) 2009 - 2010 Microsoft Corporation, then modifications by Jacob Slusser 2014, Peter William Wagner 2017 - 2024
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</value>
   </data>
   <data name="help_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -777,17 +789,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The image name and description fields of the new design no longer use mnemonics, to prevent ampersands from showing as underscores
+- The image information report results dialog no longer mentions a text box
+- Italian translations have been slightly fixed (thanks @bovirus for spotting)
+- Fixed an issue where a log path warning would be triggered during serviceability tests with the OS installer
+- Fixed an exception that would sometimes happen when launching the AppX package addition dialog
 
 New features:
 
-- The menu items of Web Resources are now translated
-- Markdig has been updated to version 0.38.0
-- The program installer is now built with a new version of Inno Setup
-- When appending changes of an image to another index, you can now grab the name of the last index
-- The time taken for the unattended answer file to be applied by the OS installer has been reduced
-- You will now see progress indication in the taskbar for certain tasks
-- CODE: work on a unified logging infrastructure has started</value>
+- The DynaLog logging system has received log cleanup functionality
+- Improvements have been made to the installers (#192, thanks @bovirus)
+- UnattendGen has been updated to the latest version
+- Exception reporting now includes information about whether or not a copy is portable
+- During ISO creation, the taskbar button will now show a progress bar
+- The mask character of password fields in the unattended answer file generation wizard has been updated
+- Image file information in the ISO creation wizard is now shown in a list view
+- The program now detects verified AME Playbooks and logs results with DynaLog. This is done to help isolate issues more</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -283,7 +283,7 @@ Public Class AddCapabilities
                         GroupBox2.Text = "Opzioni"
                         CheckBox1.Text = "Specifica un'origine diversa per l'installazione delle capacità"
                         CheckBox2.Text = "Limita l'accesso a Windows Update"
-                        CheckBox3.Text = "Impegna l'immagine dopo l'aggiunta delle funzionalità"
+                        CheckBox3.Text = "Applica l'immagine dopo l'aggiunta delle funzionalità"
                         ListView1.Columns(0).Text = "Capacità"
                         ListView1.Columns(1).Text = "Stato"
                 End Select
@@ -369,7 +369,7 @@ Public Class AddCapabilities
                 GroupBox2.Text = "Opzioni"
                 CheckBox1.Text = "Specifica un'origine diversa per l'installazione delle capacità"
                 CheckBox2.Text = "Limita l'accesso a Windows Update"
-                CheckBox3.Text = "Impegna l'immagine dopo l'aggiunta delle funzionalità"
+                CheckBox3.Text = "Applica l'immagine dopo l'aggiunta delle funzionalità"
                 ListView1.Columns(0).Text = "Capacità"
                 ListView1.Columns(1).Text = "Stato"
         End Select

@@ -538,6 +538,7 @@ Public Class MainForm
     End Function
 
     Sub InitDynaLog()
+        DynaLog.CheckLogAge()
         DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
@@ -590,6 +591,19 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+
+        ' Detect presence of verified AME Playbooks in current system. This is NOT a way to block these projects, but a way to help isolate
+        ' specific program bugs on those types of systems
+        If PlaybookDetector.DetectInstalledPlaybook(PlaybookDetector.VerifiedPlaybooks.AtlasOS) Then
+            DynaLog.LogMessage("Atlas OS has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
+        End If
+        If PlaybookDetector.DetectInstalledPlaybook(PlaybookDetector.VerifiedPlaybooks.ReviOS) Then
+            DynaLog.LogMessage("Revision (ReviOS) has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
+        End If
+        If PlaybookDetector.DetectInstalledPlaybook(PlaybookDetector.VerifiedPlaybooks.AME) Then
+            DynaLog.LogMessage("AME 10/11 has been detected on this system. There may be compatibility issues with DISMTools on your system", False)
+        End If
+
         If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
         If Not Debugger.IsAttached Then SplashScreen.Show()
         Thread.Sleep(2000)
@@ -6928,8 +6942,8 @@ Public Class MainForm
                         LinkLabel19.Text = "Smontare l'immagine"
                         GroupBox4.Text = "Operazioni sull'immagine"
                         Button26.Text = "Monta l'immagine..."
-                        Button27.Text = "Impegna le modifiche correnti"
-                        Button28.Text = "Impegnare e smontare l'immagine"
+                        Button27.Text = "Applica le modifiche correnti"
+                        Button28.Text = "Applicare e smontare l'immagine"
                         Button29.Text = "Smonta l'immagine eliminando le modifiche"
                         Button25.Text = "Ricarica la sessione di assistenza"
                         Button24.Text = "Cambia gli indici dell'immagine..."
@@ -8586,8 +8600,8 @@ Public Class MainForm
                 LinkLabel19.Text = "Smontare l'immagine"
                 GroupBox4.Text = "Operazioni sull'immagine"
                 Button26.Text = "Monta l'immagine..."
-                Button27.Text = "Impegna le modifiche correnti"
-                Button28.Text = "Impegnare e smontare l'immagine"
+                Button27.Text = "Applica le modifiche correnti"
+                Button28.Text = "Applicare e smontare l'immagine"
                 Button29.Text = "Smonta l'immagine eliminando le modifiche"
                 Button25.Text = "Ricarica la sessione di assistenza"
                 Button24.Text = "Cambia gli indici dell'immagine..."

@@ -1172,7 +1172,7 @@ Partial Class NewUnattendWiz
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox10.Location = New System.Drawing.Point(277, 155)
         Me.TextBox10.Name = "TextBox10"
-        Me.TextBox10.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox10.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox10.Size = New System.Drawing.Size(221, 21)
         Me.TextBox10.TabIndex = 2
         '
@@ -1822,7 +1822,7 @@ Partial Class NewUnattendWiz
         Me.TextBox18.Enabled = False
         Me.TextBox18.Location = New System.Drawing.Point(300, 129)
         Me.TextBox18.Name = "TextBox18"
-        Me.TextBox18.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox18.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox18.Size = New System.Drawing.Size(141, 21)
         Me.TextBox18.TabIndex = 18
         '
@@ -1842,7 +1842,7 @@ Partial Class NewUnattendWiz
         Me.TextBox15.Enabled = False
         Me.TextBox15.Location = New System.Drawing.Point(300, 104)
         Me.TextBox15.Name = "TextBox15"
-        Me.TextBox15.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox15.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox15.Size = New System.Drawing.Size(141, 21)
         Me.TextBox15.TabIndex = 15
         '
@@ -1862,7 +1862,7 @@ Partial Class NewUnattendWiz
         Me.TextBox12.Enabled = False
         Me.TextBox12.Location = New System.Drawing.Point(300, 79)
         Me.TextBox12.Name = "TextBox12"
-        Me.TextBox12.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox12.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox12.Size = New System.Drawing.Size(141, 21)
         Me.TextBox12.TabIndex = 12
         '
@@ -1882,7 +1882,7 @@ Partial Class NewUnattendWiz
         Me.TextBox9.Enabled = False
         Me.TextBox9.Location = New System.Drawing.Point(300, 54)
         Me.TextBox9.Name = "TextBox9"
-        Me.TextBox9.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox9.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox9.Size = New System.Drawing.Size(141, 21)
         Me.TextBox9.TabIndex = 9
         '
@@ -1901,7 +1901,7 @@ Partial Class NewUnattendWiz
         Me.TextBox6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TextBox6.Location = New System.Drawing.Point(300, 29)
         Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox6.Size = New System.Drawing.Size(141, 21)
         Me.TextBox6.TabIndex = 6
         '
@@ -2053,7 +2053,7 @@ Partial Class NewUnattendWiz
         Me.TextBox5.Enabled = False
         Me.TextBox5.Location = New System.Drawing.Point(327, 31)
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
+        Me.TextBox5.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox5.Size = New System.Drawing.Size(204, 21)
         Me.TextBox5.TabIndex = 7
         '

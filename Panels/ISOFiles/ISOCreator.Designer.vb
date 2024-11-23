@@ -29,6 +29,12 @@ Partial Class ISOCreator
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.ListView1 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
@@ -37,7 +43,6 @@ Partial Class ISOCreator
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -125,11 +130,11 @@ Partial Class ISOCreator
         Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.ListView1)
         Me.GroupBox1.Controls.Add(Me.Panel2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Controls.Add(Me.Panel1)
         Me.GroupBox1.Controls.Add(Me.Label5)
-        Me.GroupBox1.Controls.Add(Me.TextBox2)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button1)
@@ -144,6 +149,46 @@ Partial Class ISOCreator
         Me.GroupBox1.TabIndex = 8
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Options"
+        '
+        'ListView1
+        '
+        Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
+        Me.ListView1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ListView1.FullRowSelect = True
+        Me.ListView1.Location = New System.Drawing.Point(24, 73)
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(932, 126)
+        Me.ListView1.TabIndex = 10
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        Me.ListView1.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader1
+        '
+        Me.ColumnHeader1.Text = "#"
+        Me.ColumnHeader1.Width = 29
+        '
+        'ColumnHeader2
+        '
+        Me.ColumnHeader2.Text = "Image Name"
+        Me.ColumnHeader2.Width = 265
+        '
+        'ColumnHeader3
+        '
+        Me.ColumnHeader3.Text = "Image Description"
+        Me.ColumnHeader3.Width = 343
+        '
+        'ColumnHeader4
+        '
+        Me.ColumnHeader4.Text = "Image Version"
+        Me.ColumnHeader4.Width = 103
+        '
+        'ColumnHeader5
+        '
+        Me.ColumnHeader5.Text = "Image Architecture"
+        Me.ColumnHeader5.Width = 130
         '
         'Panel2
         '
@@ -228,21 +273,6 @@ Partial Class ISOCreator
         Me.Label5.Size = New System.Drawing.Size(132, 13)
         Me.Label5.TabIndex = 4
         Me.Label5.Text = "Environment architecture:"
-        '
-        'TextBox2
-        '
-        Me.TextBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox2.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(27, 73)
-        Me.TextBox2.Multiline = True
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.ReadOnly = True
-        Me.TextBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox2.Size = New System.Drawing.Size(929, 126)
-        Me.TextBox2.TabIndex = 3
         '
         'Button2
         '
@@ -354,7 +384,7 @@ Partial Class ISOCreator
         Me.GroupBox2.Controls.Add(Me.ProgressContainer)
         Me.GroupBox2.Location = New System.Drawing.Point(13, 462)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(983, 98)
+        Me.GroupBox2.Size = New System.Drawing.Size(982, 98)
         Me.GroupBox2.TabIndex = 10
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Progress"
@@ -366,7 +396,7 @@ Partial Class ISOCreator
         Me.ProgressContainer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ProgressContainer.Location = New System.Drawing.Point(3, 17)
         Me.ProgressContainer.Name = "ProgressContainer"
-        Me.ProgressContainer.Size = New System.Drawing.Size(977, 78)
+        Me.ProgressContainer.Size = New System.Drawing.Size(976, 78)
         Me.ProgressContainer.TabIndex = 0
         '
         'IdlePanel
@@ -375,7 +405,7 @@ Partial Class ISOCreator
         Me.IdlePanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.IdlePanel.Location = New System.Drawing.Point(0, 0)
         Me.IdlePanel.Name = "IdlePanel"
-        Me.IdlePanel.Size = New System.Drawing.Size(977, 78)
+        Me.IdlePanel.Size = New System.Drawing.Size(976, 78)
         Me.IdlePanel.TabIndex = 0
         '
         'Label3
@@ -384,7 +414,7 @@ Partial Class ISOCreator
         Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label3.Location = New System.Drawing.Point(0, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(977, 78)
+        Me.Label3.Size = New System.Drawing.Size(976, 78)
         Me.Label3.TabIndex = 0
         Me.Label3.Text = "Once you're ready, click the Create button."
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -397,7 +427,7 @@ Partial Class ISOCreator
         Me.ISOProgressPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ISOProgressPanel.Location = New System.Drawing.Point(0, 0)
         Me.ISOProgressPanel.Name = "ISOProgressPanel"
-        Me.ISOProgressPanel.Size = New System.Drawing.Size(977, 78)
+        Me.ISOProgressPanel.Size = New System.Drawing.Size(976, 78)
         Me.ISOProgressPanel.TabIndex = 0
         Me.ISOProgressPanel.Visible = False
         '
@@ -408,7 +438,7 @@ Partial Class ISOCreator
         Me.ProgressBar1.Location = New System.Drawing.Point(15, 29)
         Me.ProgressBar1.MarqueeAnimationSpeed = 25
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(946, 23)
+        Me.ProgressBar1.Size = New System.Drawing.Size(945, 23)
         Me.ProgressBar1.TabIndex = 1
         '
         'Label9
@@ -418,7 +448,7 @@ Partial Class ISOCreator
         Me.Label9.AutoEllipsis = True
         Me.Label9.Location = New System.Drawing.Point(12, 57)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(949, 13)
+        Me.Label9.Size = New System.Drawing.Size(948, 13)
         Me.Label9.TabIndex = 0
         Me.Label9.Text = "You can do other things while the ISO is being created. Come back here anytime fo" & _
     "r an updated status."
@@ -430,7 +460,7 @@ Partial Class ISOCreator
         Me.Label8.AutoEllipsis = True
         Me.Label8.Location = New System.Drawing.Point(12, 12)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(949, 13)
+        Me.Label8.Size = New System.Drawing.Size(948, 13)
         Me.Label8.TabIndex = 0
         Me.Label8.Text = "Status"
         '
@@ -505,7 +535,6 @@ Partial Class ISOCreator
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
@@ -532,4 +561,10 @@ Partial Class ISOCreator
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents OpenFileDialog2 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
 End Class

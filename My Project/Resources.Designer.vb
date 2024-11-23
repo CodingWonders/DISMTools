@@ -1948,15 +1948,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The image name and description fields of the new design no longer use mnemonics, to prevent ampersands from showing as underscores
+        '''- The image information report results dialog no longer mentions a text box
+        '''- Italian translations have been slightly fixed (thanks @bovirus for spotting)
+        '''- Fixed an issue where a log path warning would be triggered during serviceability tests with the OS installer
+        '''- Fixed an exception that would sometimes happen when launching the AppX package addition dialog
         '''
         '''New features:
         '''
-        '''- The menu items of Web Resources are now translated
-        '''- Markdig has been updated to version 0.38.0
-        '''- The program installer is now built with a new version of Inno Setup
-        '''- When appending changes of an image to another index, you can now grab the name of the last index
-        '''- The time taken for the unattended answer file to be applied by the OS ins [resto de la cadena truncado]&quot;;.
+        '''- The DynaLog logging system has received log cleanup functionality
+        '''- Improvements have been made to the install [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
