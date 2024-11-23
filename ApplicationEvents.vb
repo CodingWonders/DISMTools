@@ -1,4 +1,4 @@
-﻿Imports Microsoft.Win32
+Imports Microsoft.Win32
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Management
 Imports System.IO
