@@ -354,6 +354,11 @@ Public Class ISOCreator
             Text = ""
             Win10Title.Visible = True
         End If
+
+        ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
+        Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
+        Graphics.FromImage(bm).Clear(ListView1.BackColor)
+        ListView1.BackgroundImage = bm
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -695,5 +700,14 @@ Public Class ISOCreator
 
     Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
         TextBox4.Text = OpenFileDialog2.FileName
+    End Sub
+
+    Private Sub ISOCreator_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If Visible And WindowState <> FormWindowState.Minimized Then
+            ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
+            Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
+            Graphics.FromImage(bm).Clear(ListView1.BackColor)
+            ListView1.BackgroundImage = bm
+        End If
     End Sub
 End Class
