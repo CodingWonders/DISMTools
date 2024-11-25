@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24112"
+    Dim UnattendGenReleaseTag As String = "24121"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -50,6 +50,7 @@ Public Class NewUnattendWiz
 
     ' User Accounts Panel
     Dim UserAccountsInteractive As Boolean = True
+    Dim MicrosoftAccountInteractive As Boolean
     Dim UserAccountsList As New List(Of User)
     Dim AutoLogon As New AutoLogonSettings()
     Dim PasswordObfuscate As Boolean
@@ -650,6 +651,7 @@ Public Class NewUnattendWiz
         AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
 
@@ -771,7 +773,7 @@ Public Class NewUnattendWiz
                              "- Key: " & SelectedKey.Key & CrLf)
         ' 6. -- USER ACCOUNTS
         TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
-        If Not UserAccountsInteractive Then
+        If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
             For Each UserAccount As User In UserAccountsList
                 TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
                 If UserAccount.Enabled Then
@@ -789,6 +791,8 @@ Public Class NewUnattendWiz
                 End If
             End If
             TextBox13.AppendText("- Obscure passwords with Base64? " & If(PasswordObfuscate, "Yes", "No") & CrLf)
+        ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
+            TextBox13.AppendText("- The target system will ask for a Microsoft account" & CrLf)
         End If
         TextBox13.AppendText("Password expiration policy: " & If(SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited, "enabled" & CrLf, "disabled" & CrLf))
         If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
@@ -1278,6 +1282,13 @@ Public Class NewUnattendWiz
         PasswordObfuscate = CheckBox7.Checked
     End Sub
 
+    Private Sub CheckBox18_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox18.CheckedChanged
+        MicrosoftAccountInteractive = CheckBox18.Checked
+        AccountsPanel.Enabled = Not CheckBox18.Checked
+        GroupBox1.Enabled = Not CheckBox18.Checked
+        CheckBox7.Enabled = Not CheckBox18.Checked
+    End Sub
+
     Private Sub RadioButton17_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton17.CheckedChanged
         SelectedExpirationSettings.Mode = If(RadioButton17.Checked, PasswordExpirationMode.NIST_Unlimited, PasswordExpirationMode.NIST_Limited)
         AutoExpirationPanel.Enabled = Not RadioButton17.Checked
@@ -1422,6 +1433,9 @@ Public Class NewUnattendWiz
             End If
         End If
         UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
+        If Debugger.IsAttached Then
+            UnattendGen.StartInfo.Arguments &= " /debug"
+        End If
         Try
             ' Save settings to appropriate XML files
             ReportMessage("Saving user settings...", 2)
@@ -1491,7 +1505,7 @@ Public Class NewUnattendWiz
             Else
                 UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
             End If
-            If Not UserAccountsInteractive Then
+            If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
                 ReportMessage("Saving user settings...", 16)
                 UnattendGen.StartInfo.Arguments &= " /customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -1520,6 +1534,9 @@ Public Class NewUnattendWiz
                 Else
                     UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
                 End If
+            ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
+                ReportMessage("Saving user settings...", 16)
+                UnattendGen.StartInfo.Arguments &= " /msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
                 ReportMessage("Saving user settings...", 18)
@@ -1803,6 +1820,7 @@ Public Class NewUnattendWiz
         AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
     End Sub
