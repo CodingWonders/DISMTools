@@ -14037,55 +14037,59 @@ Public Class MainForm
     ''' <returns>pkgName: the suitable package display name</returns>
     ''' <remarks>If pkgName returns Nothing, the callers will hide those options calling this function</remarks>
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
-        If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
-        If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
-            ' Copy manifest to startup dir
-            File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
-            Dim XMLReaderRTB As New RichTextBox With {
-                .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
-            }
-            ' Go through each line until we find the properties tag
-            For x = 0 To XMLReaderRTB.Lines.Count - 1
-                If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                    ' Go through each line until we find the display name
-                    For y = x To XMLReaderRTB.Lines.Count - 1
-                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
-                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
-                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                            Return pkgName
-                        End If
-                    Next
-                End If
-            Next
-        Else
-            If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
-                ' Skip architecture neutral packages
-                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
-                For Each folder In pkgDirs
-                    If Not folder.Contains("neutral") Then
-                        If Not File.Exists(folder & "\AppxManifest.xml") Then Continue For
-                        ' Copy manifest to startup dir
-                        File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
-                        Dim XMLReaderRTB As New RichTextBox With {
-                            .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
-                        }
-                        ' Go through each line until we find the properties tag
-                        For x = 0 To XMLReaderRTB.Lines.Count - 1
-                            If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                                ' Go through each line until we find the display name
-                                For y = x To XMLReaderRTB.Lines.Count - 1
-                                    If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
-                                        Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
-                                        File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                                        Return pkgName
-                                    End If
-                                Next
+        Try
+            If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
+            If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+                ' Copy manifest to startup dir
+                File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+                Dim XMLReaderRTB As New RichTextBox With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+                }
+                ' Go through each line until we find the properties tag
+                For x = 0 To XMLReaderRTB.Lines.Count - 1
+                    If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                        ' Go through each line until we find the display name
+                        For y = x To XMLReaderRTB.Lines.Count - 1
+                            If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                Return pkgName
                             End If
                         Next
                     End If
                 Next
+            Else
+                If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                    ' Skip architecture neutral packages
+                    Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
+                    For Each folder In pkgDirs
+                        If Not folder.Contains("neutral") Then
+                            If Not File.Exists(folder & "\AppxManifest.xml") Then Continue For
+                            ' Copy manifest to startup dir
+                            File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+                            Dim XMLReaderRTB As New RichTextBox With {
+                                .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+                            }
+                            ' Go through each line until we find the properties tag
+                            For x = 0 To XMLReaderRTB.Lines.Count - 1
+                                If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                                    ' Go through each line until we find the display name
+                                    For y = x To XMLReaderRTB.Lines.Count - 1
+                                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                            Return pkgName
+                                        End If
+                                    Next
+                                End If
+                            Next
+                        End If
+                    Next
+                End If
             End If
-        End If
+        Catch ex As Exception
+            Return Nothing
+        End Try
         Return Nothing
     End Function
 
