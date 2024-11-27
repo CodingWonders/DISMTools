@@ -2478,6 +2478,17 @@ Public Class ImgInfoSaveDlg
             Thread.Sleep(100)
         End While
 
+        ' Close the image registry control panel before continuing. Operations with the DISM API open the image registry hives, something
+        ' the control panel already loads. This causes the program to freeze for around a minute and then create a report with an
+        ' exception thrown
+        If RegistryControlPanel.Visible Then
+            RegistryControlPanel.Close()
+            If RegistryControlPanel.Visible Then
+                Close()
+                Exit Sub
+            End If
+        End If
+
         ' Create the target if it doesn't exist
         If Not File.Exists(SaveTarget) Then
             Try
