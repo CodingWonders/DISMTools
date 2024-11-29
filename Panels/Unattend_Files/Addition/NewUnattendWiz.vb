@@ -711,18 +711,20 @@ Public Class NewUnattendWiz
                     MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses the Administrator name, and try again", "User Accounts error")
                     Return False
                 End If
-                Dim AtLeastOneAdmin As Boolean = False
-                If UserAccountsList.Count > 0 Then
-                    For Each UserAccount As User In UserAccountsList
-                        If UserAccount.Group = UserGroup.Administrators Then
-                            AtLeastOneAdmin = True
-                            Exit For
-                        End If
-                    Next
-                End If
-                If Not AtLeastOneAdmin Then
-                    MessageBox.Show("At least one account must be part of the Administrators user group. Please configure the user groups accordingly and try again", "User Accounts error")
-                    Return False
+                If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
+                    Dim AtLeastOneAdmin As Boolean = False
+                    If UserAccountsList.Count > 0 Then
+                        For Each UserAccount As User In UserAccountsList
+                            If UserAccount.Group = UserGroup.Administrators Then
+                                AtLeastOneAdmin = True
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If Not AtLeastOneAdmin Then
+                        MessageBox.Show("At least one account must be part of the Administrators user group. Please configure the user groups accordingly and try again", "User Accounts error")
+                        Return False
+                    End If
                 End If
             Case UnattendedWizardPage.Page.NetworkConnectionsPage
                 If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
