@@ -816,9 +816,9 @@ Public Class NewUnattendWiz
                 TextBox13.AppendText("    - Expiration period: " & SelectedExpirationSettings.Days & " days" & CrLf)
             End If
         End If
-        TextBox13.AppendText("Account Lockdown policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
+        TextBox13.AppendText("Account Lockout policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
         If SelectedLockdownSettings.Enabled Then
-            TextBox13.AppendText("- Account Lockdown policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
+            TextBox13.AppendText("- Account Lockout policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
             If Not SelectedLockdownSettings.DefaultPolicy Then
                 TextBox13.AppendText("    - After " & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & " failed attempts within " & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & " minutes, unlock account after " & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & " minutes" & CrLf)
             End If

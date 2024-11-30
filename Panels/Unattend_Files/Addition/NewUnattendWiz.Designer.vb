@@ -1513,7 +1513,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton22.Name = "RadioButton22"
         Me.RadioButton22.Size = New System.Drawing.Size(257, 17)
         Me.RadioButton22.TabIndex = 9
-        Me.RadioButton22.Text = "Continue with custom Account Lockdown policies"
+        Me.RadioButton22.Text = "Continue with custom Account Lockout policies"
         Me.RadioButton22.UseVisualStyleBackColor = True
         '
         'RadioButton21
@@ -1525,7 +1525,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton21.Size = New System.Drawing.Size(257, 17)
         Me.RadioButton21.TabIndex = 9
         Me.RadioButton21.TabStop = True
-        Me.RadioButton21.Text = "Continue with default Account Lockdown policies"
+        Me.RadioButton21.Text = "Continue with default Account Lockout policies"
         Me.RadioButton21.UseVisualStyleBackColor = True
         '
         'CheckBox13
@@ -1547,7 +1547,7 @@ Partial Class NewUnattendWiz
         Me.AccountLockdownHeader.Name = "AccountLockdownHeader"
         Me.AccountLockdownHeader.Size = New System.Drawing.Size(708, 51)
         Me.AccountLockdownHeader.TabIndex = 8
-        Me.AccountLockdownHeader.Text = "Configure Account Lockdown policies for the target system"
+        Me.AccountLockdownHeader.Text = "Configure Account Lockout policies for the target system"
         '
         'PWExpirationPanel
         '

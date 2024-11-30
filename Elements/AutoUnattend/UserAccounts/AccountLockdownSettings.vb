@@ -11,7 +11,7 @@
         Public Property Enabled As Boolean = True
 
         ''' <summary>
-        ''' Determines whether to use default Windows lockdown policies
+        ''' Determines whether to use default Windows lockout policies
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
