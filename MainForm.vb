@@ -533,7 +533,7 @@ Public Class MainForm
         If current = start Then
             Return current.ToString()
         Else
-            Return start.ToString() & " - " & current.ToString()
+            Return start.ToString() & "-" & current.ToString()
         End If
     End Function
 
@@ -542,27 +542,26 @@ Public Class MainForm
         DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
-        DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright)
-        DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: © " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("- PE Helper: © " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: © " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC")
+        DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
+        DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: (c) " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC")
         DynaLog.LogMessage("- Scintilla.NET: " &
-                           "© " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
-                           "© " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
-                           "© " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
-        DynaLog.LogMessage("- ManagedDism: © " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
-        DynaLog.LogMessage("- DarkUI: © " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
-        DynaLog.LogMessage("- DockPanelSuite: © " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
-        DynaLog.LogMessage("- 7-Zip: " &
-                           "© " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov, " &
-                           "© " & GetCopyrightTimespan(2015, 2016) & " Apple Inc. (LZFSE compression library)")
-        DynaLog.LogMessage("- UnpEax: © " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
+                           "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
+                           "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
+                           "(c) " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
+        DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
+        DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
+        DynaLog.LogMessage("- DockPanelSuite: (c) " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
+        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov")
+        DynaLog.LogMessage("  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
+        DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
         DynaLog.LogMessage("- UnattendGen: " &
-                           "© " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
-                           "© " & GetCopyrightTimespan(2024, Date.Now.Year) & " Christoph Schneegans")
-        DynaLog.LogMessage("- Markdig: © " & GetCopyrightTimespan(2018, 2019) & " Alexandre Mutel")
+                           "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
+                           "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " Christoph Schneegans")
+        DynaLog.LogMessage("- Markdig: (c) " & GetCopyrightTimespan(2018, 2019) & " Alexandre Mutel")
         DynaLog.LogMessage("- Windows API Code Pack: " &
-                           "© " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
+                           "(c) " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, Date.Now.Year) & ")")
         DynaLog.BeginLogging()
