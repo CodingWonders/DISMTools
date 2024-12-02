@@ -582,6 +582,97 @@ Public Class NewUnattendWiz
         End If
     End Sub
 
+    Sub ReloadSettings()
+        ' Restore regional configuration
+        ComboBox1.SelectedItem = DefaultLanguage.DisplayName
+        ComboBox2.SelectedItem = DefaultLocale.DisplayName
+        ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
+        ComboBox4.SelectedItem = DefaultGeoId.DisplayName
+        ' Restore basic system configuration
+        ListBox1.SelectedIndex = 1
+        Win11Config.LabConfig_BypassRequirements = False
+        Win11Config.OOBE_BypassNRO = False
+        CheckBox1.Checked = False
+        CheckBox2.Checked = False
+        CheckBox3.Checked = True
+        TextBox1.Text = ""
+        ' Restore time zone
+        ComboBox5.SelectedItem = DefaultOffset.DisplayName
+        RadioButton1.Checked = True
+        ' Restore disk configuration
+        CheckBox4.Checked = True
+        RadioButton5.Checked = True
+        RadioButton7.Checked = True
+        NumericUpDown1.Value = 300
+        CheckBox5.Checked = True
+        RadioButton9.Checked = True
+        NumericUpDown2.Value = 1000
+        Scintilla2.Text = My.Resources.DefaultDiskPartConfig
+        RadioButton11.Checked = True
+        NumericUpDown3.Value = 0
+        NumericUpDown4.Value = 3
+        SelectedDiskConfiguration = DefaultDiskConfiguration
+        ' Restore product key
+        RadioButton13.Checked = True
+        ComboBox6.SelectedItem = "Pro"
+        TextBox3.Text = ""
+        ' Restore user accounts
+        CheckBox6.Checked = True
+        TextBox4.Text = "Admin"
+        TextBox6.Text = ""
+        TextBox8.Text = ""
+        TextBox9.Text = ""
+        TextBox11.Text = ""
+        TextBox12.Text = ""
+        TextBox14.Text = ""
+        TextBox15.Text = ""
+        TextBox17.Text = ""
+        TextBox18.Text = ""
+        CheckBox8.Checked = False
+        CheckBox9.Checked = False
+        CheckBox10.Checked = False
+        CheckBox11.Checked = False
+        ComboBox7.SelectedIndex = 0
+        ComboBox9.SelectedIndex = 1
+        ComboBox10.SelectedIndex = 1
+        ComboBox11.SelectedIndex = 1
+        ComboBox12.SelectedIndex = 1
+        CheckBox12.Checked = False
+        RadioButton15.Checked = True
+        TextBox5.Text = ""
+        CheckBox7.Checked = True
+        CheckBox18.Checked = False
+        ' Restore password expiration
+        RadioButton17.Checked = True
+        RadioButton19.Checked = True
+        NumericUpDown5.Value = 10
+        ' Restore Account lockout
+        CheckBox13.Checked = False
+        RadioButton21.Checked = True
+        NumericUpDown6.Value = 10
+        NumericUpDown7.Value = 10
+        NumericUpDown8.Value = 10
+        ' Restore VM support
+        ComboBox8.SelectedIndex = 2
+        RadioButton24.Checked = True
+        ' Restore network settings
+        CheckBox14.Checked = True
+        RadioButton25.Checked = True
+        TextBox7.Text = ""
+        CheckBox15.Checked = False
+        ComboBox13.SelectedIndex = 1
+        TextBox10.Text = ""
+        ' Restore system telemetry
+        CheckBox16.Checked = False
+        RadioButton26.Checked = True
+        ' Restore default selections for components
+        SystemComponents = DefaultSystemComponents
+
+        ' Restore variables
+        UserAccountsList.Clear()
+        SetDefaultSettings()
+    End Sub
+
     Sub SelectTreeNode(NodeIndex As Integer)
         StepsTreeView.SelectedNode = StepsTreeView.Nodes(NodeIndex)
         StepsTreeView.Refresh()
@@ -1060,6 +1151,13 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        Try
+            If New StackFrame(6).GetMethod().Name = "ReloadSettings" Then
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ' Continue the method
+        End Try
         ' Hold default value for now
         Dim defVal As Boolean = False
         defVal = PCName.DefaultName
@@ -1673,6 +1771,10 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        If MsgBox("Do you want to reuse the settings you've used in this answer file for the new one?", vbQuestion + vbYesNo, Text) = MsgBoxResult.No Then
+            ' Refresh the settings
+            ReloadSettings()
+        End If
         ChangePage(UnattendedWizardPage.Page.RegionalPage)
     End Sub
 

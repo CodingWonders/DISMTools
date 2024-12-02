@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode53 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode54 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode55 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode56 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode57 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode58 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode59 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode60 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode61 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode62 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode63 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode64 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode65 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -183,6 +183,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton15 = New System.Windows.Forms.RadioButton()
         Me.CheckBox12 = New System.Windows.Forms.CheckBox()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
         Me.FillerLabel2 = New System.Windows.Forms.Label()
         Me.UserAccountHeader = New System.Windows.Forms.Label()
         Me.ProductKeyPanel = New System.Windows.Forms.Panel()
@@ -316,7 +317,6 @@ Partial Class NewUnattendWiz
         Me.UGNotify = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.EditorModeOFD = New System.Windows.Forms.OpenFileDialog()
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
-        Me.CheckBox18 = New System.Windows.Forms.CheckBox()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -434,33 +434,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode53.Name = "Nodo0"
-        TreeNode53.Text = "Welcome"
-        TreeNode54.Name = "Nodo1"
-        TreeNode54.Text = "Regional Configuration"
-        TreeNode55.Name = "Nodo2"
-        TreeNode55.Text = "Basic System Configuration"
-        TreeNode56.Name = "Nodo3"
-        TreeNode56.Text = "Time Zone"
-        TreeNode57.Name = "Nodo4"
-        TreeNode57.Text = "Disk Configuration"
-        TreeNode58.Name = "Nodo5"
-        TreeNode58.Text = "Product Key"
-        TreeNode59.Name = "Nodo6"
-        TreeNode59.Text = "User Accounts"
-        TreeNode60.Name = "Nodo9"
-        TreeNode60.Text = "Virtual Machine Support"
-        TreeNode61.Name = "Nodo10"
-        TreeNode61.Text = "Wireless Networking"
-        TreeNode62.Name = "Nodo11"
-        TreeNode62.Text = "System Telemetry"
-        TreeNode63.Name = "Nodo12"
-        TreeNode63.Text = "Post-Installation Scripts"
-        TreeNode64.Name = "Nodo13"
-        TreeNode64.Text = "Component Settings"
-        TreeNode65.Name = "Nodo14"
-        TreeNode65.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode53, TreeNode54, TreeNode55, TreeNode56, TreeNode57, TreeNode58, TreeNode59, TreeNode60, TreeNode61, TreeNode62, TreeNode63, TreeNode64, TreeNode65})
+        TreeNode14.Name = "Nodo0"
+        TreeNode14.Text = "Welcome"
+        TreeNode15.Name = "Nodo1"
+        TreeNode15.Text = "Regional Configuration"
+        TreeNode16.Name = "Nodo2"
+        TreeNode16.Text = "Basic System Configuration"
+        TreeNode17.Name = "Nodo3"
+        TreeNode17.Text = "Time Zone"
+        TreeNode18.Name = "Nodo4"
+        TreeNode18.Text = "Disk Configuration"
+        TreeNode19.Name = "Nodo5"
+        TreeNode19.Text = "Product Key"
+        TreeNode20.Name = "Nodo6"
+        TreeNode20.Text = "User Accounts"
+        TreeNode21.Name = "Nodo9"
+        TreeNode21.Text = "Virtual Machine Support"
+        TreeNode22.Name = "Nodo10"
+        TreeNode22.Text = "Wireless Networking"
+        TreeNode23.Name = "Nodo11"
+        TreeNode23.Text = "System Telemetry"
+        TreeNode24.Name = "Nodo12"
+        TreeNode24.Text = "Post-Installation Scripts"
+        TreeNode25.Name = "Nodo13"
+        TreeNode25.Text = "Component Settings"
+        TreeNode26.Name = "Nodo14"
+        TreeNode26.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -1511,7 +1511,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton22.AutoSize = True
         Me.RadioButton22.Location = New System.Drawing.Point(8, 29)
         Me.RadioButton22.Name = "RadioButton22"
-        Me.RadioButton22.Size = New System.Drawing.Size(257, 17)
+        Me.RadioButton22.Size = New System.Drawing.Size(247, 17)
         Me.RadioButton22.TabIndex = 9
         Me.RadioButton22.Text = "Continue with custom Account Lockout policies"
         Me.RadioButton22.UseVisualStyleBackColor = True
@@ -1522,7 +1522,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton21.Checked = True
         Me.RadioButton21.Location = New System.Drawing.Point(8, 6)
         Me.RadioButton21.Name = "RadioButton21"
-        Me.RadioButton21.Size = New System.Drawing.Size(257, 17)
+        Me.RadioButton21.Size = New System.Drawing.Size(247, 17)
         Me.RadioButton21.TabIndex = 9
         Me.RadioButton21.TabStop = True
         Me.RadioButton21.Text = "Continue with default Account Lockout policies"
@@ -2102,6 +2102,16 @@ Partial Class NewUnattendWiz
         Me.CheckBox7.TabIndex = 3
         Me.CheckBox7.Text = "Obscure passwords with Base64"
         Me.CheckBox7.UseVisualStyleBackColor = True
+        '
+        'CheckBox18
+        '
+        Me.CheckBox18.AutoSize = True
+        Me.CheckBox18.Location = New System.Drawing.Point(7, 306)
+        Me.CheckBox18.Name = "CheckBox18"
+        Me.CheckBox18.Size = New System.Drawing.Size(219, 17)
+        Me.CheckBox18.TabIndex = 5
+        Me.CheckBox18.Text = "Ask for a Microsoft account interactively"
+        Me.CheckBox18.UseVisualStyleBackColor = True
         '
         'FillerLabel2
         '
@@ -3518,16 +3528,6 @@ Partial Class NewUnattendWiz
         'EditorModeSFD
         '
         Me.EditorModeSFD.Filter = "Answer files|*.xml"
-        '
-        'CheckBox18
-        '
-        Me.CheckBox18.AutoSize = True
-        Me.CheckBox18.Location = New System.Drawing.Point(7, 306)
-        Me.CheckBox18.Name = "CheckBox18"
-        Me.CheckBox18.Size = New System.Drawing.Size(219, 17)
-        Me.CheckBox18.TabIndex = 5
-        Me.CheckBox18.Text = "Ask for a Microsoft account interactively"
-        Me.CheckBox18.UseVisualStyleBackColor = True
         '
         'NewUnattendWiz
         '
