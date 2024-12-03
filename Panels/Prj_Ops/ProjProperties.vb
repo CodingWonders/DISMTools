@@ -212,6 +212,7 @@ Public Class ProjProperties
                     For Each info As DismImageInfo In infoCollection
                         If info.ImageIndex = MainForm.MountedImageImgIndexes(x) Then
                             imgVersion.Text = info.ProductVersion.ToString()
+                            MainForm.imgVersion = imgVersion.Text
                             DetectFeatureUpdate(info.ProductVersion)
                             imgMountedName.Text = info.ImageName
                             imgMountedDesc.Text = info.ImageDescription
@@ -289,64 +290,7 @@ Public Class ProjProperties
                             imgPType.Text = info.ProductType
                             imgPSuite.Text = info.ProductSuite
                             imgSysRoot.Text = info.SystemRoot
-                            imgLangText.Clear()
                             For Each language In info.Languages
-                                ' Leave this temporarily
-                                If imgLangText.Text = "" Then
-                                    Select Case MainForm.Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
-                                                Case "ESN"
-                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
-                                                Case "FRA"
-                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", "
-                                                Case "PTB", "PTG"
-                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", "
-                                                Case "ITA"
-                                                    imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", "
-                                            End Select
-                                        Case 1
-                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", "
-                                        Case 2
-                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", "
-                                        Case 3
-                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", "
-                                        Case 4
-                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", "
-                                        Case 5
-                                            imgLangText.Text = language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", "
-                                    End Select
-                                Else
-                                    Select Case MainForm.Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
-                                                Case "ESN"
-                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
-                                                Case "FRA"
-                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", ")
-                                                Case "PTB", "PTG"
-                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", ")
-                                                Case "ITA"
-                                                    imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", ")
-                                            End Select
-                                        Case 1
-                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (default)", "") & ", ")
-                                        Case 2
-                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predeterminado)", "") & ", ")
-                                        Case 3
-                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (défaut)", "") & ", ")
-                                        Case 4
-                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinido)", "") & ", ")
-                                        Case 5
-                                            imgLangText.AppendText(language.Name & If(info.DefaultLanguage.Name = language.Name, " (predefinito)", "") & ", ")
-                                    End Select
-                                End If
-
-                                ' Our new, recommended way
                                 Select Case MainForm.Language
                                     Case 0
                                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -373,9 +317,6 @@ Public Class ProjProperties
                                         LanguageList.Items.Add(language.Name & " (" & language.DisplayName & If(info.DefaultLanguage.Name = language.Name, ", predefinito", "") & ")")
                                 End Select
                             Next
-                            Dim langarr() As Char = imgLangText.Text.ToCharArray()
-                            langarr(langarr.Count - 2) = ""
-                            imgLangText.Text = New String(langarr)
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -931,7 +872,6 @@ Public Class ProjProperties
             ForeColor = Color.White
             TabPage1.BackColor = Color.FromArgb(31, 31, 31)
             TabPage2.BackColor = Color.FromArgb(31, 31, 31)
-            imgLangText.BackColor = Color.FromArgb(31, 31, 31)
             LanguageList.BackColor = Color.FromArgb(31, 31, 31)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Win10Title.BackColor = Color.White
@@ -939,12 +879,10 @@ Public Class ProjProperties
             ForeColor = Color.Black
             TabPage1.BackColor = Color.FromArgb(238, 238, 242)
             TabPage2.BackColor = Color.FromArgb(238, 238, 242)
-            imgLangText.BackColor = Color.FromArgb(238, 238, 242)
             LanguageList.BackColor = Color.FromArgb(238, 238, 242)
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
-        imgLangText.ForeColor = ForeColor
         LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""
@@ -970,7 +908,6 @@ Public Class ProjProperties
         imgModification.Text = ""
         imgFormat.Text = ""
         imgRW.Text = ""
-        imgLangText.Text = ""
         LanguageList.Items.Clear()
         Visible = True
         If Environment.OSVersion.Version.Major = 10 Then
@@ -1018,7 +955,6 @@ Public Class ProjProperties
                     Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
                 End If
                 DetectImageProperties()
-                MainForm.imgVersion = imgVersion.Text
                 MainForm.imgMountedStatus = imgMountedStatus.Text
                 MainForm.imgMountedName = imgMountedName.Text
                 MainForm.imgMountedDesc = imgMountedDesc.Text
@@ -1037,7 +973,15 @@ Public Class ProjProperties
                 MainForm.CreationTime = MainForm.imgCreation.Replace(" - ", " ")
                 MainForm.imgModification = imgModification.Text
                 MainForm.ModifyTime = MainForm.imgModification.Replace(" - ", " ")
-                MainForm.imgLangs = imgLangText.Text
+                If LanguageList.Items.Count > 0 Then
+                    Dim langStr As String = ""
+                    For x = 0 To LanguageList.Items.Count - 1
+                        langStr &= LanguageList.Items(x)
+                        If x >= LanguageList.Items.Count - 1 Then Exit For
+                        langStr &= ", "
+                    Next
+                    MainForm.imgLangs = langStr
+                End If
                 MainForm.imgRW = imgRW.Text
             Catch ex As Exception
 

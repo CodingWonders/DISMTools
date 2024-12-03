@@ -2786,6 +2786,7 @@ Public Class MainForm
                                         imgMountedName = imageInfo.ImageName
                                         imgMountedDesc = imageInfo.ImageDescription
                                         imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
+                                        imgArch = Casters.CastDismArchitecture(imageInfo.Architecture)
                                         imgSPBuild = imageInfo.ProductVersion.Revision
                                         imgSPLvl = imageInfo.SpLevel
                                         imgEdition = imageInfo.EditionId

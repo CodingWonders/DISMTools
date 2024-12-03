@@ -45,7 +45,6 @@ Partial Class ProjProperties
         Me.RemountImgBtn = New System.Windows.Forms.Button()
         Me.RecoverButton = New System.Windows.Forms.Button()
         Me.RWRemountBtn = New System.Windows.Forms.Button()
-        Me.imgLangText = New System.Windows.Forms.TextBox()
         Me.Label62 = New System.Windows.Forms.Label()
         Me.imgRW = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
@@ -306,7 +305,6 @@ Partial Class ProjProperties
         Me.TabPage2.Controls.Add(Me.RemountImgBtn)
         Me.TabPage2.Controls.Add(Me.RecoverButton)
         Me.TabPage2.Controls.Add(Me.RWRemountBtn)
-        Me.TabPage2.Controls.Add(Me.imgLangText)
         Me.TabPage2.Controls.Add(Me.Label62)
         Me.TabPage2.Controls.Add(Me.imgRW)
         Me.TabPage2.Controls.Add(Me.Panel3)
@@ -410,17 +408,6 @@ Partial Class ProjProperties
         Me.RWRemountBtn.Text = "Remount with write permissions"
         Me.RWRemountBtn.UseVisualStyleBackColor = True
         Me.RWRemountBtn.Visible = False
-        '
-        'imgLangText
-        '
-        Me.imgLangText.Location = New System.Drawing.Point(613, 261)
-        Me.imgLangText.Multiline = True
-        Me.imgLangText.Name = "imgLangText"
-        Me.imgLangText.ReadOnly = True
-        Me.imgLangText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.imgLangText.Size = New System.Drawing.Size(278, 96)
-        Me.imgLangText.TabIndex = 17
-        Me.imgLangText.Visible = False
         '
         'Label62
         '
@@ -939,7 +926,6 @@ Partial Class ProjProperties
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
-        Me.TabPage2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -969,7 +955,6 @@ Partial Class ProjProperties
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents RWRemountBtn As System.Windows.Forms.Button
-    Friend WithEvents imgLangText As System.Windows.Forms.TextBox
     Friend WithEvents Label62 As System.Windows.Forms.Label
     Friend WithEvents imgRW As System.Windows.Forms.Label
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
