@@ -928,7 +928,15 @@ Public Class MainForm
                     Next
                 Catch ex As Exception
                     If DebugLog Then Debug.WriteLine("[DetectMountedImages] Exception: " & ex.Message & " has occurred when detecting the image version. Proceeding with detecting image version with ntoskrnl...")
-                    MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                    Try
+                        If File.Exists(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe") Then
+                            MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                        Else
+                            MountedImageImgVersionList.Add(New Version(0, 0, 0, 0).ToString())
+                        End If
+                    Catch ex2 As Exception
+                        MountedImageImgVersionList.Add(New Version(0, 0, 0, 0).ToString())
+                    End Try
                 End Try
             Next
         End If
