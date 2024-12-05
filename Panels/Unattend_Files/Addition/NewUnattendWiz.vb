@@ -799,7 +799,7 @@ Public Class NewUnattendWiz
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
                 If Not UserAccountsInteractive AndAlso Not UserValidator.ValidateUsers(UserAccountsList) Then
-                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses the Administrator name, and try again", "User Accounts error")
+                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses system user names, and try again", "User Accounts error")
                     Return False
                 End If
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
