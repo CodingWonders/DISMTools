@@ -789,21 +789,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The image information report results dialog no longer mentions a text box
-- Italian translations have been slightly fixed (thanks @bovirus for spotting)
-- Fixed an issue where a log path warning would be triggered during serviceability tests with the OS installer
-- Fixed an exception that would sometimes happen when launching the AppX package addition dialog
+- Fixed an issue where operations would no longer start sometimes
+- Fixed a visual issue with the image file information list view of the ISO creation wizard
+- Fixed an issue where the program would throw an IO exception when getting information about AppX packages, such as Intel Graphics Experience or MSI Center, in some cases (#199, #200, thanks @yyg1208 for spotting)
+- Fixed a startup exception related to the mounted image detector (#201, thanks @Oldsch00lpunk for spotting)
+- The DynaLog logging system has seen some fixes in the log maintenance functions
 
 New features:
 
-- The DynaLog logging system has received log cleanup functionality
-- Improvements have been made to the installers (#192, thanks @bovirus)
+- The Scintilla.NET component has been updated to version 5.6.3
+- 7-Zip has been updated to version 24.09
+
+- Unattended answer file features
+
 - UnattendGen has been updated to the latest version
-- Exception reporting now includes information about whether or not a copy is portable
-- During ISO creation, the taskbar button will now show a progress bar
-- The mask character of password fields in the unattended answer file generation wizard has been updated
-- Image file information in the ISO creation wizard is now shown in a list view
-- The program now detects verified AME Playbooks and logs results with DynaLog. This is done to help isolate issues more</value>
+- User passwords are now encoded (obscured) with Base64 by default, for increased security
+- The default window size has been increased
+- You can now make the target system ask for a Microsoft account interactively
+- More account checks have been added. Now, you need at least one user in the Administrators group before continuing with the creation of your answer file
+- After creating an answer file, if you want to create another one, you can now decide whether or not to reuse what you used for the answer file
+- More user name checks have been added, keeping you from using more system user names and groups (such as Guest or SYSTEM)</value>
   </data>
   <data name="split_img" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\split_img.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

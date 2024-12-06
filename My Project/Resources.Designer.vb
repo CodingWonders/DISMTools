@@ -1971,15 +1971,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The image information report results dialog no longer mentions a text box
-        '''- Italian translations have been slightly fixed (thanks @bovirus for spotting)
-        '''- Fixed an issue where a log path warning would be triggered during serviceability tests with the OS installer
-        '''- Fixed an exception that would sometimes happen when launching the AppX package addition dialog
-        '''
-        '''New features:
-        '''
-        '''- The DynaLog logging system has received log cleanup functionality
-        '''- Improvements have been made to the install [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where operations would no longer start sometimes
+        '''- Fixed a visual issue with the image file information list view of the ISO creation wizard
+        '''- Fixed an issue where the program would throw an IO exception when getting information about AppX packages, such as Intel Graphics Experience or MSI Center, in some cases (#199, #200, thanks @yyg1208 for spotting)
+        '''- Fixed a startup exception related to the mounted image detector (#201, thanks @Oldsch00lpunk for spotting)
+        '''- The DynaLog [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
