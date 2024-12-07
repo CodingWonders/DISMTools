@@ -798,14 +798,17 @@ Public Class NewUnattendWiz
                     End If
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
-                If Not UserAccountsInteractive AndAlso Not UserValidator.ValidateUsers(UserAccountsList) Then
-                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses system user names, and try again", "User Accounts error")
+                Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList)
+                If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
+                    MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
+                Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">"}
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
                     Dim AtLeastOneAdmin As Boolean = False
                     If UserAccountsList.Count > 0 Then
                         For Each UserAccount As User In UserAccountsList
+                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray())
                             If UserAccount.Group = UserGroup.Administrators Then
                                 AtLeastOneAdmin = True
                                 Exit For
