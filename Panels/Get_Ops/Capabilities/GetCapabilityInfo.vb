@@ -268,6 +268,7 @@ Public Class GetCapabilityInfoDlg
                     End While
                 End If
                 If MainForm.MountedImageDetectorBW.IsBusy Then
+                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                     MainForm.MountedImageDetectorBW.CancelAsync()
                     While MainForm.MountedImageDetectorBW.IsBusy
                         Application.DoEvents()

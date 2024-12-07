@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24112"
+    Dim UnattendGenReleaseTag As String = "24121"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -50,6 +50,7 @@ Public Class NewUnattendWiz
 
     ' User Accounts Panel
     Dim UserAccountsInteractive As Boolean = True
+    Dim MicrosoftAccountInteractive As Boolean
     Dim UserAccountsList As New List(Of User)
     Dim AutoLogon As New AutoLogonSettings()
     Dim PasswordObfuscate As Boolean
@@ -581,6 +582,97 @@ Public Class NewUnattendWiz
         End If
     End Sub
 
+    Sub ReloadSettings()
+        ' Restore regional configuration
+        ComboBox1.SelectedItem = DefaultLanguage.DisplayName
+        ComboBox2.SelectedItem = DefaultLocale.DisplayName
+        ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
+        ComboBox4.SelectedItem = DefaultGeoId.DisplayName
+        ' Restore basic system configuration
+        ListBox1.SelectedIndex = 1
+        Win11Config.LabConfig_BypassRequirements = False
+        Win11Config.OOBE_BypassNRO = False
+        CheckBox1.Checked = False
+        CheckBox2.Checked = False
+        CheckBox3.Checked = True
+        TextBox1.Text = ""
+        ' Restore time zone
+        ComboBox5.SelectedItem = DefaultOffset.DisplayName
+        RadioButton1.Checked = True
+        ' Restore disk configuration
+        CheckBox4.Checked = True
+        RadioButton5.Checked = True
+        RadioButton7.Checked = True
+        NumericUpDown1.Value = 300
+        CheckBox5.Checked = True
+        RadioButton9.Checked = True
+        NumericUpDown2.Value = 1000
+        Scintilla2.Text = My.Resources.DefaultDiskPartConfig
+        RadioButton11.Checked = True
+        NumericUpDown3.Value = 0
+        NumericUpDown4.Value = 3
+        SelectedDiskConfiguration = DefaultDiskConfiguration
+        ' Restore product key
+        RadioButton13.Checked = True
+        ComboBox6.SelectedItem = "Pro"
+        TextBox3.Text = ""
+        ' Restore user accounts
+        CheckBox6.Checked = True
+        TextBox4.Text = "Admin"
+        TextBox6.Text = ""
+        TextBox8.Text = ""
+        TextBox9.Text = ""
+        TextBox11.Text = ""
+        TextBox12.Text = ""
+        TextBox14.Text = ""
+        TextBox15.Text = ""
+        TextBox17.Text = ""
+        TextBox18.Text = ""
+        CheckBox8.Checked = False
+        CheckBox9.Checked = False
+        CheckBox10.Checked = False
+        CheckBox11.Checked = False
+        ComboBox7.SelectedIndex = 0
+        ComboBox9.SelectedIndex = 1
+        ComboBox10.SelectedIndex = 1
+        ComboBox11.SelectedIndex = 1
+        ComboBox12.SelectedIndex = 1
+        CheckBox12.Checked = False
+        RadioButton15.Checked = True
+        TextBox5.Text = ""
+        CheckBox7.Checked = True
+        CheckBox18.Checked = False
+        ' Restore password expiration
+        RadioButton17.Checked = True
+        RadioButton19.Checked = True
+        NumericUpDown5.Value = 10
+        ' Restore Account lockout
+        CheckBox13.Checked = False
+        RadioButton21.Checked = True
+        NumericUpDown6.Value = 10
+        NumericUpDown7.Value = 10
+        NumericUpDown8.Value = 10
+        ' Restore VM support
+        ComboBox8.SelectedIndex = 2
+        RadioButton24.Checked = True
+        ' Restore network settings
+        CheckBox14.Checked = True
+        RadioButton25.Checked = True
+        TextBox7.Text = ""
+        CheckBox15.Checked = False
+        ComboBox13.SelectedIndex = 1
+        TextBox10.Text = ""
+        ' Restore system telemetry
+        CheckBox16.Checked = False
+        RadioButton26.Checked = True
+        ' Restore default selections for components
+        SystemComponents = DefaultSystemComponents
+
+        ' Restore variables
+        UserAccountsList.Clear()
+        SetDefaultSettings()
+    End Sub
+
     Sub SelectTreeNode(NodeIndex As Integer)
         StepsTreeView.SelectedNode = StepsTreeView.Nodes(NodeIndex)
         StepsTreeView.Refresh()
@@ -650,6 +742,7 @@ Public Class NewUnattendWiz
         AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
 
@@ -706,8 +799,23 @@ Public Class NewUnattendWiz
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
                 If Not UserAccountsInteractive AndAlso Not UserValidator.ValidateUsers(UserAccountsList) Then
-                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses the Administrator name, and try again", "User Accounts error")
+                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses system user names, and try again", "User Accounts error")
                     Return False
+                End If
+                If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
+                    Dim AtLeastOneAdmin As Boolean = False
+                    If UserAccountsList.Count > 0 Then
+                        For Each UserAccount As User In UserAccountsList
+                            If UserAccount.Group = UserGroup.Administrators Then
+                                AtLeastOneAdmin = True
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    If Not AtLeastOneAdmin Then
+                        MessageBox.Show("At least one account must be part of the Administrators user group. Please configure the user groups accordingly and try again", "User Accounts error")
+                        Return False
+                    End If
                 End If
             Case UnattendedWizardPage.Page.NetworkConnectionsPage
                 If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
@@ -771,7 +879,7 @@ Public Class NewUnattendWiz
                              "- Key: " & SelectedKey.Key & CrLf)
         ' 6. -- USER ACCOUNTS
         TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
-        If Not UserAccountsInteractive Then
+        If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
             For Each UserAccount As User In UserAccountsList
                 TextBox13.AppendText("- Account " & UserAccountsList.IndexOf(UserAccount) + 1 & "? " & If(UserAccount.Enabled, "Yes", "No") & CrLf)
                 If UserAccount.Enabled Then
@@ -789,6 +897,8 @@ Public Class NewUnattendWiz
                 End If
             End If
             TextBox13.AppendText("- Obscure passwords with Base64? " & If(PasswordObfuscate, "Yes", "No") & CrLf)
+        ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
+            TextBox13.AppendText("- The target system will ask for a Microsoft account" & CrLf)
         End If
         TextBox13.AppendText("Password expiration policy: " & If(SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited, "enabled" & CrLf, "disabled" & CrLf))
         If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
@@ -797,9 +907,9 @@ Public Class NewUnattendWiz
                 TextBox13.AppendText("    - Expiration period: " & SelectedExpirationSettings.Days & " days" & CrLf)
             End If
         End If
-        TextBox13.AppendText("Account Lockdown policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
+        TextBox13.AppendText("Account Lockout policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
         If SelectedLockdownSettings.Enabled Then
-            TextBox13.AppendText("- Account Lockdown policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
+            TextBox13.AppendText("- Account Lockout policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
             If Not SelectedLockdownSettings.DefaultPolicy Then
                 TextBox13.AppendText("    - After " & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & " failed attempts within " & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & " minutes, unlock account after " & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & " minutes" & CrLf)
             End If
@@ -1041,6 +1151,13 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        Try
+            If New StackFrame(6).GetMethod().Name = "ReloadSettings" Then
+                Exit Sub
+            End If
+        Catch ex As Exception
+            ' Continue the method
+        End Try
         ' Hold default value for now
         Dim defVal As Boolean = False
         defVal = PCName.DefaultName
@@ -1278,6 +1395,13 @@ Public Class NewUnattendWiz
         PasswordObfuscate = CheckBox7.Checked
     End Sub
 
+    Private Sub CheckBox18_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox18.CheckedChanged
+        MicrosoftAccountInteractive = CheckBox18.Checked
+        AccountsPanel.Enabled = Not CheckBox18.Checked
+        GroupBox1.Enabled = Not CheckBox18.Checked
+        CheckBox7.Enabled = Not CheckBox18.Checked
+    End Sub
+
     Private Sub RadioButton17_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton17.CheckedChanged
         SelectedExpirationSettings.Mode = If(RadioButton17.Checked, PasswordExpirationMode.NIST_Unlimited, PasswordExpirationMode.NIST_Limited)
         AutoExpirationPanel.Enabled = Not RadioButton17.Checked
@@ -1422,6 +1546,9 @@ Public Class NewUnattendWiz
             End If
         End If
         UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
+        If Debugger.IsAttached Then
+            UnattendGen.StartInfo.Arguments &= " /debug"
+        End If
         Try
             ' Save settings to appropriate XML files
             ReportMessage("Saving user settings...", 2)
@@ -1491,7 +1618,7 @@ Public Class NewUnattendWiz
             Else
                 UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
             End If
-            If Not UserAccountsInteractive Then
+            If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
                 ReportMessage("Saving user settings...", 16)
                 UnattendGen.StartInfo.Arguments &= " /customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -1520,6 +1647,9 @@ Public Class NewUnattendWiz
                 Else
                     UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
                 End If
+            ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
+                ReportMessage("Saving user settings...", 16)
+                UnattendGen.StartInfo.Arguments &= " /msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
                 ReportMessage("Saving user settings...", 18)
@@ -1641,6 +1771,10 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        If MsgBox("Do you want to reuse the settings you've used in this answer file for the new one?", vbQuestion + vbYesNo, Text) = MsgBoxResult.No Then
+            ' Refresh the settings
+            ReloadSettings()
+        End If
         ChangePage(UnattendedWizardPage.Page.RegionalPage)
     End Sub
 
@@ -1803,6 +1937,7 @@ Public Class NewUnattendWiz
         AutoDiskConfigPanel.Width = ManualPartPanel.Width - (AutoDiskConfigPanel.Margin.Left * 2) - 4
         DiskPartPanel.Width = ManualPartPanel.Width - (DiskPartPanel.Margin.Left * 2) - 4
         GroupBox1.Width = ManualAccountPanel.Width - (GroupBox1.Margin.Left * 2) - 4
+        AccountsPanel.Width = UserAccountListing.Width
         UserAccountListing.Width = ManualAccountPanel.Width - (UserAccountListing.Margin.Left * 2) - 4
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
     End Sub

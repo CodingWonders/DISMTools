@@ -19,6 +19,7 @@ Public Class DynaLog
                     Try
                         File.Move(Application.StartupPath & "\logs\DT_DynaLog.log", Application.StartupPath & "\logs\" & ArchivedFileName)
                         LogMessage("The old log file has been archived. New messages will be shown in a new log file", False)       ' A blank sheet of... logs?
+                        File.SetCreationTimeUtc(Application.StartupPath & "\logs\DT_DynaLog.log", Date.UtcNow)
                     Catch ex As Exception
                         LogMessage("Could not archive log. Error info:" & CrLf & CrLf & ex.ToString(), False)
                     End Try

@@ -2464,6 +2464,7 @@ Public Class ImgInfoSaveDlg
 
         ' Stop the mounted image detector, as it makes the program crash when performing DISM API operations
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -2476,6 +2477,17 @@ Public Class ImgInfoSaveDlg
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+
+        ' Close the image registry control panel before continuing. Operations with the DISM API open the image registry hives, something
+        ' the control panel already loads. This causes the program to freeze for around a minute and then create a report with an
+        ' exception thrown
+        If RegistryControlPanel.Visible Then
+            RegistryControlPanel.Close()
+            If RegistryControlPanel.Visible Then
+                Close()
+                Exit Sub
+            End If
+        End If
 
         ' Create the target if it doesn't exist
         If Not File.Exists(SaveTarget) Then

@@ -309,6 +309,7 @@ Public Class ImgWim2Esd
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             If MainForm.MountedImageDetectorBW.IsBusy Then
+                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                 MainForm.MountedImageDetectorBW.CancelAsync()
                 While MainForm.MountedImageDetectorBW.IsBusy
                     Application.DoEvents()

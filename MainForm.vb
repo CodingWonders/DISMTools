@@ -533,7 +533,7 @@ Public Class MainForm
         If current = start Then
             Return current.ToString()
         Else
-            Return start.ToString() & " - " & current.ToString()
+            Return start.ToString() & "-" & current.ToString()
         End If
     End Function
 
@@ -542,27 +542,26 @@ Public Class MainForm
         DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
-        DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright)
-        DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: © " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("- PE Helper: © " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: © " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC")
+        DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
+        DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: (c) " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software")
+        DynaLog.LogMessage("  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC")
         DynaLog.LogMessage("- Scintilla.NET: " &
-                           "© " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
-                           "© " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
-                           "© " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
-        DynaLog.LogMessage("- ManagedDism: © " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
-        DynaLog.LogMessage("- DarkUI: © " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
-        DynaLog.LogMessage("- DockPanelSuite: © " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
-        DynaLog.LogMessage("- 7-Zip: " &
-                           "© " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov, " &
-                           "© " & GetCopyrightTimespan(2015, 2016) & " Apple Inc. (LZFSE compression library)")
-        DynaLog.LogMessage("- UnpEax: © " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
+                           "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
+                           "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
+                           "(c) " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
+        DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
+        DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
+        DynaLog.LogMessage("- DockPanelSuite: (c) " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
+        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov")
+        DynaLog.LogMessage("  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
+        DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
         DynaLog.LogMessage("- UnattendGen: " &
-                           "© " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
-                           "© " & GetCopyrightTimespan(2024, Date.Now.Year) & " Christoph Schneegans")
-        DynaLog.LogMessage("- Markdig: © " & GetCopyrightTimespan(2018, 2019) & " Alexandre Mutel")
+                           "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
+                           "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " Christoph Schneegans")
+        DynaLog.LogMessage("- Markdig: (c) " & GetCopyrightTimespan(2018, 2019) & " Alexandre Mutel")
         DynaLog.LogMessage("- Windows API Code Pack: " &
-                           "© " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
+                           "(c) " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, Date.Now.Year) & ")")
         DynaLog.BeginLogging()
@@ -929,7 +928,15 @@ Public Class MainForm
                     Next
                 Catch ex As Exception
                     If DebugLog Then Debug.WriteLine("[DetectMountedImages] Exception: " & ex.Message & " has occurred when detecting the image version. Proceeding with detecting image version with ntoskrnl...")
-                    MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                    Try
+                        If File.Exists(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe") Then
+                            MountedImageImgVersionList.Add(FileVersionInfo.GetVersionInfo(MountedImageMountDirs(x) & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+                        Else
+                            MountedImageImgVersionList.Add(New Version(0, 0, 0, 0).ToString())
+                        End If
+                    Catch ex2 As Exception
+                        MountedImageImgVersionList.Add(New Version(0, 0, 0, 0).ToString())
+                    End Try
                 End Try
             Next
         End If
@@ -2787,6 +2794,7 @@ Public Class MainForm
                                         imgMountedName = imageInfo.ImageName
                                         imgMountedDesc = imageInfo.ImageDescription
                                         imgHal = If(Not imageInfo.Hal = "", imageInfo.Hal, "Undefined by the image")
+                                        imgArch = Casters.CastDismArchitecture(imageInfo.Architecture)
                                         imgSPBuild = imageInfo.ProductVersion.Revision
                                         imgSPLvl = imageInfo.SpLevel
                                         imgEdition = imageInfo.EditionId
@@ -11703,6 +11711,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -11749,6 +11758,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -11816,6 +11826,7 @@ Public Class MainForm
     Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If OnlineManagement Then
             EndOnlineManagement()
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -11829,6 +11840,7 @@ Public Class MainForm
         End If
         If OfflineManagement Then
             EndOfflineManagement()
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -11881,6 +11893,7 @@ Public Class MainForm
         If Not VolatileMode Then
             SaveDTSettings()
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -12429,6 +12442,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -14031,55 +14045,59 @@ Public Class MainForm
     ''' <returns>pkgName: the suitable package display name</returns>
     ''' <remarks>If pkgName returns Nothing, the callers will hide those options calling this function</remarks>
     Function GetPackageDisplayName(PackageName As String, Optional DisplayName As String = "")
-        If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
-        If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
-            ' Copy manifest to startup dir
-            File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
-            Dim XMLReaderRTB As New RichTextBox With {
-                .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
-            }
-            ' Go through each line until we find the properties tag
-            For x = 0 To XMLReaderRTB.Lines.Count - 1
-                If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                    ' Go through each line until we find the display name
-                    For y = x To XMLReaderRTB.Lines.Count - 1
-                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
-                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
-                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                            Return pkgName
-                        End If
-                    Next
-                End If
-            Next
-        Else
-            If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
-                ' Skip architecture neutral packages
-                Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
-                For Each folder In pkgDirs
-                    If Not folder.Contains("neutral") Then
-                        If Not File.Exists(folder & "\AppxManifest.xml") Then Continue For
-                        ' Copy manifest to startup dir
-                        File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
-                        Dim XMLReaderRTB As New RichTextBox With {
-                            .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
-                        }
-                        ' Go through each line until we find the properties tag
-                        For x = 0 To XMLReaderRTB.Lines.Count - 1
-                            If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
-                                ' Go through each line until we find the display name
-                                For y = x To XMLReaderRTB.Lines.Count - 1
-                                    If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
-                                        Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
-                                        File.Delete(Application.StartupPath & "\AppxManifest.xml")
-                                        Return pkgName
-                                    End If
-                                Next
+        Try
+            If File.Exists(Application.StartupPath & "\AppxManifest.xml") Then File.Delete(Application.StartupPath & "\AppxManifest.xml")
+            If File.Exists(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml") Then
+                ' Copy manifest to startup dir
+                File.Copy(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps\" & PackageName & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+                Dim XMLReaderRTB As New RichTextBox With {
+                    .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+                }
+                ' Go through each line until we find the properties tag
+                For x = 0 To XMLReaderRTB.Lines.Count - 1
+                    If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                        ' Go through each line until we find the display name
+                        For y = x To XMLReaderRTB.Lines.Count - 1
+                            If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                Return pkgName
                             End If
                         Next
                     End If
                 Next
+            Else
+                If Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly).Count > 1 Then
+                    ' Skip architecture neutral packages
+                    Dim pkgDirs() As String = Directory.GetDirectories(If(OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MountDir) & "\Program Files\WindowsApps", DisplayName & "*", SearchOption.TopDirectoryOnly)
+                    For Each folder In pkgDirs
+                        If Not folder.Contains("neutral") Then
+                            If Not File.Exists(folder & "\AppxManifest.xml") Then Continue For
+                            ' Copy manifest to startup dir
+                            File.Copy(folder & "\AppxManifest.xml", Application.StartupPath & "\AppxManifest.xml")
+                            Dim XMLReaderRTB As New RichTextBox With {
+                                .Text = File.ReadAllText(Application.StartupPath & "\AppxManifest.xml")
+                            }
+                            ' Go through each line until we find the properties tag
+                            For x = 0 To XMLReaderRTB.Lines.Count - 1
+                                If XMLReaderRTB.Lines(x).EndsWith("<Properties>") Then
+                                    ' Go through each line until we find the display name
+                                    For y = x To XMLReaderRTB.Lines.Count - 1
+                                        If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
+                                            Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                            File.Delete(Application.StartupPath & "\AppxManifest.xml")
+                                            Return pkgName
+                                        End If
+                                    Next
+                                End If
+                            Next
+                        End If
+                    Next
+                End If
             End If
-        End If
+        Catch ex As Exception
+            Return Nothing
+        End Try
         Return Nothing
     End Function
 
@@ -14842,6 +14860,7 @@ Public Class MainForm
     End Sub
 
     Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -14863,6 +14882,7 @@ Public Class MainForm
     End Sub
 
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -14884,6 +14904,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
@@ -15038,6 +15059,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15104,6 +15126,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15178,6 +15201,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15225,6 +15249,7 @@ Public Class MainForm
             Exit Sub
         End If
         If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -15521,6 +15546,7 @@ Public Class MainForm
 #Region "Task Links"
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15621,6 +15647,7 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15675,6 +15702,7 @@ Public Class MainForm
 #Region "Common Task button functionality in new design"
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
@@ -15725,6 +15753,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -15828,6 +15857,7 @@ Public Class MainForm
             Exit Sub
         End If
         If MountedImageDetectorBW.IsBusy Then
+            MountedImageDetectorBWRestarterTimer.Enabled = False
             MountedImageDetectorBW.CancelAsync()
             While MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
@@ -15985,6 +16015,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -16804,6 +16835,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -16967,6 +16999,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
@@ -17369,6 +17402,7 @@ Public Class MainForm
         If Not ImageStatus = ImageWatcher.Status.OK Then
             WatcherTimer.Enabled = False
             If MountedImageDetectorBW.IsBusy Then
+                MountedImageDetectorBWRestarterTimer.Enabled = False
                 MountedImageDetectorBW.CancelAsync()
                 While MountedImageDetectorBW.IsBusy
                     Application.DoEvents()

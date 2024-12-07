@@ -471,6 +471,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca una cadena traducida similar a REM EXAMPLE SCRIPT. PLEASE MODIFY
+        '''REM -----------------------------------------
+        '''SELECT DISK=0
+        '''CLEAN
+        '''CONVERT GPT
+        '''CREATE PARTITION EFI SIZE=300
+        '''FORMAT QUICK FS=FAT32 LABEL=&quot;System&quot;
+        '''CREATE PARTITION MSR SIZE=16
+        '''CREATE PARTITION PRIMARY
+        '''SHRINK MINIMUM=1000
+        '''FORMAT QUICK FS=NTFS LABEL=&quot;Windows&quot;
+        '''CREATE PARTITION PRIMARY
+        '''FORMAT QUICK FS=NTFS LABEL=&quot;Recovery&quot;
+        '''SET ID=&quot;de94bba4-06d1-4d40-a16a-bfd50179d6ac&quot;
+        '''GPT ATTRIBUTES=0x8000000000000001.
+        '''</summary>
+        Friend ReadOnly Property DefaultDiskPartConfig() As String
+            Get
+                Return ResourceManager.GetString("DefaultDiskPartConfig", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
@@ -1948,15 +1971,11 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The image information report results dialog no longer mentions a text box
-        '''- Italian translations have been slightly fixed (thanks @bovirus for spotting)
-        '''- Fixed an issue where a log path warning would be triggered during serviceability tests with the OS installer
-        '''- Fixed an exception that would sometimes happen when launching the AppX package addition dialog
-        '''
-        '''New features:
-        '''
-        '''- The DynaLog logging system has received log cleanup functionality
-        '''- Improvements have been made to the install [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where operations would no longer start sometimes
+        '''- Fixed a visual issue with the image file information list view of the ISO creation wizard
+        '''- Fixed an issue where the program would throw an IO exception when getting information about AppX packages, such as Intel Graphics Experience or MSI Center, in some cases (#199, #200, thanks @yyg1208 for spotting)
+        '''- Fixed a startup exception related to the mounted image detector (#201, thanks @Oldsch00lpunk for spotting)
+        '''- The DynaLog [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -108,53 +108,56 @@ Public Class InfoSaveResults
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         TextBox1.Clear()
-        TextBox1.Text = File.ReadAllText(ImgInfoSaveDlg.SaveTarget)
-        TextBox1.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Regular)
+        If File.Exists(ImgInfoSaveDlg.SaveTarget) Then
+            TextBox1.Text = File.ReadAllText(ImgInfoSaveDlg.SaveTarget)
+            TextBox1.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Regular)
 
-        ' Convert Markdown report to HTML and add style tags to make the HTML report prettier. None of the contents need to be in <body> - all web browsers handle HTML content separately
-        Dim prettyHTML As String = "<html>" & CrLf &
-                                   "    <head>" & CrLf &
-                                   "        <meta charset=" & Quote & "utf-8" & Quote & ">" & CrLf &
-                                   "        <title>DISMTools Image Information Report</title>" & CrLf &
-                                   "        <style>" & CrLf &
-                                   "            body {" & CrLf &
-                                   "                font-family: " & Quote & "Segoe UI" & Quote & ", Arial, Verdana, sans-serif" & CrLf &
-                                   "            }" & CrLf &
-                                   "            table {" & CrLf &
-                                   "                border-collapse: collapse;" & CrLf &
-                                   "                margin-bottom: 20px;" & CrLf &
-                                   "            }" & CrLf &
-                                   "            table th {" & CrLf &
-                                   "                padding: 8px;" & CrLf &
-                                   "                border-bottom: 1px solid #222" & CrLf &
-                                   "            }" & CrLf &
-                                   "            table td {" & CrLf &
-                                   "                padding: 8px;" & CrLf &
-                                   "                border-bottom: 1px solid #222" & CrLf &
-                                   "            }" & CrLf &
-                                   "            code {" & CrLf &
-                                   "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
-                                   "                font-size: 16px" & CrLf &
-                                   "            }" & CrLf &
-                                   "        </style>" & CrLf &
-                                   "    </head>" & CrLf &
-                                   "</html>" & CrLf
-        Try
-            Dim pipeline = New MarkdownPipelineBuilder().UseAdvancedExtensions().Build()
-            Dim result As String = Markdown.ToHtml(TextBox1.Text, pipeline)
-            File.WriteAllText(Application.StartupPath & "\report.html", prettyHTML & result)
-            If File.Exists(Application.StartupPath & "\report.html") Then
-                WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
-            End If
-        Catch ex As Exception
-            If MsgBox("Conversion to HTML has failed due to the following error: " & ex.Message & CrLf & CrLf & "Do you want to open this file in a text editor?", vbYesNo + vbCritical, "Conversion error") = MsgBoxResult.Yes Then
-                Process.Start(FilePath)
-                Close()
-            End If
-        End Try
-
-        AddHandler document.PrintPage, AddressOf doc_PrintPage
-        BringToFront()
+            ' Convert Markdown report to HTML and add style tags to make the HTML report prettier. None of the contents need to be in <body> - all web browsers handle HTML content separately
+            Dim prettyHTML As String = "<html>" & CrLf &
+                                       "    <head>" & CrLf &
+                                       "        <meta charset=" & Quote & "utf-8" & Quote & ">" & CrLf &
+                                       "        <title>DISMTools Image Information Report</title>" & CrLf &
+                                       "        <style>" & CrLf &
+                                       "            body {" & CrLf &
+                                       "                font-family: " & Quote & "Segoe UI" & Quote & ", Arial, Verdana, sans-serif" & CrLf &
+                                       "            }" & CrLf &
+                                       "            table {" & CrLf &
+                                       "                border-collapse: collapse;" & CrLf &
+                                       "                margin-bottom: 20px;" & CrLf &
+                                       "            }" & CrLf &
+                                       "            table th {" & CrLf &
+                                       "                padding: 8px;" & CrLf &
+                                       "                border-bottom: 1px solid #222" & CrLf &
+                                       "            }" & CrLf &
+                                       "            table td {" & CrLf &
+                                       "                padding: 8px;" & CrLf &
+                                       "                border-bottom: 1px solid #222" & CrLf &
+                                       "            }" & CrLf &
+                                       "            code {" & CrLf &
+                                       "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
+                                       "                font-size: 16px" & CrLf &
+                                       "            }" & CrLf &
+                                       "        </style>" & CrLf &
+                                       "    </head>" & CrLf &
+                                       "</html>" & CrLf
+            Try
+                Dim pipeline = New MarkdownPipelineBuilder().UseAdvancedExtensions().Build()
+                Dim result As String = Markdown.ToHtml(TextBox1.Text, pipeline)
+                File.WriteAllText(Application.StartupPath & "\report.html", prettyHTML & result)
+                If File.Exists(Application.StartupPath & "\report.html") Then
+                    WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
+                End If
+                AddHandler document.PrintPage, AddressOf doc_PrintPage
+                BringToFront()
+            Catch ex As Exception
+                If MsgBox("Conversion to HTML has failed due to the following error: " & ex.Message & CrLf & CrLf & "Do you want to open this file in a text editor?", vbYesNo + vbCritical, "Conversion error") = MsgBoxResult.Yes Then
+                    Process.Start(FilePath)
+                    Close()
+                End If
+            End Try
+        Else
+            Close()
+        End If
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

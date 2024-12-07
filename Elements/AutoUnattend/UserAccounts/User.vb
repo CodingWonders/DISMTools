@@ -54,11 +54,12 @@
             If userList Is Nothing OrElse userList.Count = 0 Then
                 Return False
             End If
+            Dim ExistingUsers() As String = New String(5) {"administrator", "guest", "defaultaccount", "system", "network service", "local service"}
             ' Assume it's true by default
             Dim FullyValid As Boolean = True
             For Each listedUser As User In userList
                 If listedUser.Enabled Then
-                    If listedUser.Name = "" OrElse listedUser.Name = "Administrator" Then
+                    If listedUser.Name = "" OrElse ExistingUsers.Contains(listedUser.Name, StringComparer.OrdinalIgnoreCase) Then
                         FullyValid = False
                         Exit For
                     Else
