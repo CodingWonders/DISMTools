@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24121"
+    Dim UnattendGenReleaseTag As String = "24122"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -561,9 +561,9 @@ Public Class NewUnattendWiz
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
 
         ' Detect .NET runtimes/SDKs
-        DetectDotNetRuntime("8.0.303", "8.0")
+        DetectDotNetRuntime("9.0.100", "9.0")
         If Not DotNetRuntimeSupported Then
-            If MsgBox("This wizard requires the .NET 8 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+            If MsgBox("This wizard requires the .NET 9 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
             Else
@@ -692,7 +692,7 @@ Public Class NewUnattendWiz
         ProductKeyPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProductKeyPage)
         UserAccountPanel.Visible = (NewPage = UnattendedWizardPage.Page.UserAccountsPage)
         PWExpirationPanel.Visible = (NewPage = UnattendedWizardPage.Page.PWExpirationPage)
-        AccountLockdownPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockdownPage)
+        AccountLockoutPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockoutPage)
         VirtualMachinePanel.Visible = (NewPage = UnattendedWizardPage.Page.VirtualMachinePage)
         NetworkConnectionPanel.Visible = (NewPage = UnattendedWizardPage.Page.NetworkConnectionsPage)
         SystemTelemetryPanel.Visible = (NewPage = UnattendedWizardPage.Page.SystemTelemetryPage)
@@ -722,7 +722,7 @@ Public Class NewUnattendWiz
                 SelectTreeNode(4)
             Case UnattendedWizardPage.Page.ProductKeyPage
                 SelectTreeNode(5)
-            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockdownPage
+            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockoutPage
                 SelectTreeNode(6)
             Case UnattendedWizardPage.Page.VirtualMachinePage
                 SelectTreeNode(7)
@@ -1660,22 +1660,22 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Saving user settings...", 20)
             If SelectedLockdownSettings.Enabled Then
-                UnattendGen.StartInfo.Arguments &= " /lockdown=yes"
+                UnattendGen.StartInfo.Arguments &= " /lockout=yes"
                 Dim lockdownContents As String = ""
                 If SelectedLockdownSettings.DefaultPolicy Then
                     lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <AccountLockdown FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
+                        "   <AccountLockout FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
                         "</root>"
                 Else
                     lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <AccountLockdown FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
+                        "   <AccountLockout FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
                         "</root>"
                 End If
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockDown.xml"), lockdownContents, UTF8)
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockdownContents, UTF8)
             Else
-                UnattendGen.StartInfo.Arguments &= " /lockdown=no"
+                UnattendGen.StartInfo.Arguments &= " /lockout=no"
             End If
             If VirtualMachineSupported Then
                 ReportMessage("Saving user settings...", 22)

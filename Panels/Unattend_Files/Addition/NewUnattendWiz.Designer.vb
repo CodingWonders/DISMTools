@@ -121,7 +121,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton24 = New System.Windows.Forms.RadioButton()
         Me.RadioButton23 = New System.Windows.Forms.RadioButton()
         Me.VirtualMachineHeader = New System.Windows.Forms.Label()
-        Me.AccountLockdownPanel = New System.Windows.Forms.Panel()
+        Me.AccountLockoutPanel = New System.Windows.Forms.Panel()
         Me.Label44 = New System.Windows.Forms.Label()
         Me.EnabledAccountLockdownPanel = New System.Windows.Forms.Panel()
         Me.AccountLockdownParametersPanel = New System.Windows.Forms.Panel()
@@ -346,7 +346,7 @@ Partial Class NewUnattendWiz
         Me.WirelessNetworkSettingsPanel.SuspendLayout()
         Me.VirtualMachinePanel.SuspendLayout()
         Me.VMProviderPanel.SuspendLayout()
-        Me.AccountLockdownPanel.SuspendLayout()
+        Me.AccountLockoutPanel.SuspendLayout()
         Me.EnabledAccountLockdownPanel.SuspendLayout()
         Me.AccountLockdownParametersPanel.SuspendLayout()
         CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -558,7 +558,7 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Controls.Add(Me.SystemTelemetryPanel)
         Me.StepsContainer.Controls.Add(Me.NetworkConnectionPanel)
         Me.StepsContainer.Controls.Add(Me.VirtualMachinePanel)
-        Me.StepsContainer.Controls.Add(Me.AccountLockdownPanel)
+        Me.StepsContainer.Controls.Add(Me.AccountLockoutPanel)
         Me.StepsContainer.Controls.Add(Me.PWExpirationPanel)
         Me.StepsContainer.Controls.Add(Me.UserAccountPanel)
         Me.StepsContainer.Controls.Add(Me.ProductKeyPanel)
@@ -1381,15 +1381,15 @@ Partial Class NewUnattendWiz
         '
         'AccountLockdownPanel
         '
-        Me.AccountLockdownPanel.Controls.Add(Me.Label44)
-        Me.AccountLockdownPanel.Controls.Add(Me.EnabledAccountLockdownPanel)
-        Me.AccountLockdownPanel.Controls.Add(Me.CheckBox13)
-        Me.AccountLockdownPanel.Controls.Add(Me.AccountLockdownHeader)
-        Me.AccountLockdownPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AccountLockdownPanel.Location = New System.Drawing.Point(0, 0)
-        Me.AccountLockdownPanel.Name = "AccountLockdownPanel"
-        Me.AccountLockdownPanel.Size = New System.Drawing.Size(1008, 569)
-        Me.AccountLockdownPanel.TabIndex = 8
+        Me.AccountLockoutPanel.Controls.Add(Me.Label44)
+        Me.AccountLockoutPanel.Controls.Add(Me.EnabledAccountLockdownPanel)
+        Me.AccountLockoutPanel.Controls.Add(Me.CheckBox13)
+        Me.AccountLockoutPanel.Controls.Add(Me.AccountLockdownHeader)
+        Me.AccountLockoutPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AccountLockoutPanel.Location = New System.Drawing.Point(0, 0)
+        Me.AccountLockoutPanel.Name = "AccountLockdownPanel"
+        Me.AccountLockoutPanel.Size = New System.Drawing.Size(1008, 569)
+        Me.AccountLockoutPanel.TabIndex = 8
         '
         'Label44
         '
@@ -3589,8 +3589,8 @@ Partial Class NewUnattendWiz
         Me.VirtualMachinePanel.PerformLayout()
         Me.VMProviderPanel.ResumeLayout(False)
         Me.VMProviderPanel.PerformLayout()
-        Me.AccountLockdownPanel.ResumeLayout(False)
-        Me.AccountLockdownPanel.PerformLayout()
+        Me.AccountLockoutPanel.ResumeLayout(False)
+        Me.AccountLockoutPanel.PerformLayout()
         Me.EnabledAccountLockdownPanel.ResumeLayout(False)
         Me.EnabledAccountLockdownPanel.PerformLayout()
         Me.AccountLockdownParametersPanel.ResumeLayout(False)
@@ -3858,7 +3858,7 @@ Partial Class NewUnattendWiz
     Friend WithEvents RadioButton18 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton17 As System.Windows.Forms.RadioButton
     Friend WithEvents PWExpirationHeader As System.Windows.Forms.Label
-    Friend WithEvents AccountLockdownPanel As System.Windows.Forms.Panel
+    Friend WithEvents AccountLockoutPanel As System.Windows.Forms.Panel
     Friend WithEvents Label44 As System.Windows.Forms.Label
     Friend WithEvents EnabledAccountLockdownPanel As System.Windows.Forms.Panel
     Friend WithEvents AccountLockdownParametersPanel As System.Windows.Forms.Panel
