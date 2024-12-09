@@ -798,7 +798,7 @@ Public Class NewUnattendWiz
                     End If
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
-                Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList)
+                Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList, PCName)
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
                     MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False

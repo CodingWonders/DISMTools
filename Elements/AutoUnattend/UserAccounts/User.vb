@@ -68,7 +68,7 @@ Namespace Elements
 
     Public Class UserValidator
 
-        Public Shared Function ValidateUsers(userList As List(Of User)) As UserValidationResults
+        Public Shared Function ValidateUsers(userList As List(Of User), Optional computerName As ComputerName = Nothing) As UserValidationResults
             Dim ProblematicAccountNumbers As New List(Of Integer)
             Dim validationResults As New UserValidationResults()
             If userList Is Nothing OrElse userList.Count = 0 Then
@@ -101,11 +101,23 @@ Namespace Elements
                              .Select(Function(group) String.Format("'{0}'", group.Key))
             If Collisions.Any() Then
                 If errorReason = "" Then
-                    errorReason = "- Some accounts are duplicated. This is not allowed."
+                    errorReason = "- Some accounts are duplicated. This is not allowed." & CrLf
                 Else
-                    errorReason &= "- Some accounts are duplicated. This is not allowed."
+                    errorReason &= "- Some accounts are duplicated. This is not allowed." & CrLf
                 End If
                 FullyValid = False
+            End If
+
+            If computerName IsNot Nothing AndAlso Not computerName.DefaultName Then
+                Dim computerNameCollisions = userList.Where(Function(User) User.Name.Equals(computerName.Name, StringComparison.OrdinalIgnoreCase))
+                If computerNameCollisions.Any() Then
+                    If errorReason = "" Then
+                        errorReason = "- Some accounts use the computer name (" & computerName.Name & ") as their name. This is not allowed."
+                    Else
+                        errorReason &= "- Some accounts use the computer name (" & computerName.Name & ") as their name. This is not allowed."
+                    End If
+                    FullyValid = False
+                End If
             End If
 
             Return New UserValidationResults(FullyValid, errorReason)
