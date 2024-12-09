@@ -1138,6 +1138,8 @@ Public Class NewUnattendWiz
             Case 2
                 SelectedArchitecture = DismProcessorArchitecture.ARM64
         End Select
+        ' Disable Windows 11 settings for x86
+        WinSVSettingsPanel.Enabled = Not (SelectedArchitecture = DismProcessorArchitecture.Intel)
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
