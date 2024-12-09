@@ -4,6 +4,11 @@
         <name>Microsoft.Dism</name>
     </assembly>
     <members>
+        <member name="T:System.Runtime.CompilerServices.CallerMemberNameAttribute">
+            <summary>
+            Allows you to obtain the method or property name of the caller to the method.
+            </summary>
+        </member>
         <member name="T:Microsoft.Dism.DismApi">
             <summary>
             Represents the main entry point into the Deployment Image Servicing and Management (DISM) API.
@@ -282,6 +287,14 @@
             <param name="info">Pointer that will receive the info of capability.</param>
             <returns>Returns S_OK on success.</returns>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetCurrentEdition(Microsoft.Dism.DismSession,System.IntPtr@)">
+            <summary>
+            Gets edition information about a Windows image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the DismOpenSession Function.</param>
+            <param name="editionId">Recieves a pointer to a <see cref="T:Microsoft.Dism.DismApi.DismString"/> structure containing the edition ID of the image.</param>
+            <returns>Returns <c>S_OK</c> on success.</returns>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetDriverInfo(Microsoft.Dism.DismSession,System.String,System.IntPtr@,System.UInt32@,System.IntPtr@)">
              <summary>
              Gets information about an .inf file in a specified image.
@@ -452,6 +465,16 @@
              HRESULT WINAPI DismGetPackages (_In_ DismSession Session, _Outptr_result_buffer_(*Count) DismPackage** Package, _Out_ UINT* Count);
              </remarks>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetProductKeyInfo(Microsoft.Dism.DismSession,System.String,System.IntPtr@,System.IntPtr@)">
+            <summary>
+            Gets information related to a Windows product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="productKey">The product key to get information about.</param>
+            <param name="editionIdPtr">Pointer that will receive a <see cref="T:Microsoft.Dism.DismApi.DismString"/> with the edition ID.</param>
+            <param name="channelPtr">Pointer that will receive a <see cref="T:Microsoft.Dism.DismApi.DismString"/> with the channel name.</param>
+            <returns>Returns <c>S_OK</c> on success.</returns>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods._DismGetProvisionedAppxPackages(Microsoft.Dism.DismSession,System.IntPtr@,System.UInt32@)">
             <summary>
             Gets a provisioned appx package.
@@ -460,6 +483,15 @@
             <param name="packageBufPtr">Receives the array of packages.</param>
             <param name="packageCount">Receives the count of packages.</param>
             <returns>Returns S_OK on success.</returns>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetTargetEditions(Microsoft.Dism.DismSession,System.IntPtr@,System.UInt32@)">
+            <summary>
+            Gets the list of Windows edition IDs the provided image can be set to.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionIds">Pointer to an array of <see cref="T:Microsoft.Dism.DismApi.DismString"/> structures containing the target edition IDs of the image.</param>
+            <param name="count">The number of edition IDs that are returned.</param>
+            <returns>Returns <c>S_OK</c> on success.</returns>
         </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismInitialize(Microsoft.Dism.DismLogLevel,System.String,System.String)">
              <summary>
@@ -627,6 +659,26 @@
              HRESULT WINAPI DismRestoreImageHealth(_In_ DismSession Session, _In_reads_opt_(SourcePathCount) PCWSTR* SourcePaths, _In_opt_ UINT SourcePathCount, _In_ BOOL LimitAccess, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
              </remarks>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismSetEdition(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Win32.SafeHandles.SafeWaitHandle,Microsoft.Dism.DismApi.DismProgressCallback,System.IntPtr)">
+            <summary>
+            Changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionID">The edition to set the image to.</param>
+            <param name="productKey">Optional. A product key for the specified edition.</param>
+            <param name="cancelEvent">Optional. You can set a CancelEvent for this function in order to cancel the operation in progress when signaled by the client. If the CancelEvent is received at a stage when the operation cannot be canceled, the operation will continue and return a success code. If the CancelEvent is received and the operation is canceled, the image state is unknown. You should verify the image state before continuing or discard the changes and start again.</param>
+            <param name="progress">Optional. A pointer to a client-defined DismProgressCallback Function.</param>
+            <param name="userData">Optional. User defined custom data.</param>
+            <returns>Returns <c>S_OK</c> on success.</returns>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismSetProductKey(Microsoft.Dism.DismSession,System.String)">
+            <summary>
+            Sets the product key of the current image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="productKey">The product key.</param>
+            <returns>Returns <c>S_OK</c> on success.</returns>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismShutdown">
              <summary>
              Shuts down DISM API. DismShutdown must be called once per process. Other DISM API function calls will fail after DismShutdown has been called.
@@ -668,6 +720,19 @@
              <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/hh824802.aspx" />
              HRESULT WINAPI DismUnmountImage(_In_ PCWSTR MountPath, _In_ DWORD Flags, _In_opt_ HANDLE CancelEvent, _In_opt_ DISM_PROGRESS_CALLBACK Progress, _In_opt_ PVOID UserData);
              </remarks>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismValidateProductKey(Microsoft.Dism.DismSession,System.String)">
+            <summary>
+            Validates that the provided product key is valid for the current image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="productKey">The product key to validate.</param>
+            <returns>
+            <list type="bullet">
+              <item><see cref="F:Microsoft.Dism.DismApi.ERROR_SUCCESS"/> if the key is valid.</item>
+              <item><see cref="F:Microsoft.Dism.DismApi.DISMAPI_E_UNKNOWN_PRODUCT"/> if the key is invalid</item>
+            </list>
+            </returns>
         </member>
         <member name="M:Microsoft.Dism.DismApi.AddDriver(Microsoft.Dism.DismSession,System.String,System.Boolean)">
             <summary>
@@ -1106,6 +1171,14 @@
             <returns>A <see cref="T:Microsoft.Dism.DismCapabilityInfo" /> object.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.GetCurrentEdition(Microsoft.Dism.DismSession)">
+            <summary>
+            Gets the Windows edition ID of the image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <returns>The Windows edition ID of the image.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.GetDriverInfo(Microsoft.Dism.DismSession,System.String)">
             <summary>
             Gets information about an .inf file in a specified image.
@@ -1321,6 +1394,15 @@
             <returns>A <see cref="T:Microsoft.Dism.DismPackageCollection" /> object containing a collection of <see cref="T:Microsoft.Dism.DismPackage" />objects.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.GetProductKeyInfo(Microsoft.Dism.DismSession,System.String)">
+            <summary>
+            Gets information related to a Windows product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="productKey">The product key to get information for.</param>
+            <returns>A <see cref="T:Microsoft.Dism.DismProductKeyInfo"/> object.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.GetProvisionedAppxPackages(Microsoft.Dism.DismSession)">
             <summary>
             Gets information about app packages (.appx) in an image that will be installed for each new user.
@@ -1329,6 +1411,14 @@
             <returns>A <see cref="T:Microsoft.Dism.DismAppxPackageCollection" /> object containing a collection of <see cref="T:Microsoft.Dism.DismAppxPackage" /> objects.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.GetTargetEditions(Microsoft.Dism.DismSession)">
+            <summary>
+            Gets the list of Windows edition IDs the provided image can be set to.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <returns>The list of editions the provided image can be set to.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
         <member name="F:Microsoft.Dism.DismApi.InitializeShutDownLock">
             <summary>
@@ -1778,6 +1868,89 @@
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEdition(Microsoft.Dism.DismSession,System.String)">
+            <summary>
+            Changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEdition(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismProgressCallback)">
+            <summary>
+            Changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEdition(Microsoft.Dism.DismSession,System.String,Microsoft.Dism.DismProgressCallback,System.Object)">
+            <summary>
+            Changes an offline Windows image to a higher edition.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAndProductKey(Microsoft.Dism.DismSession,System.String,System.String)">
+            <summary>
+            Changes an offline Windows image to a higher edition and sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">A product key for the specified edition.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAndProductKey(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismProgressCallback)">
+            <summary>
+            Changes an offline Windows image to a higher edition and sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">A product key for the specified edition.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEditionAndProductKey(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismProgressCallback,System.Object)">
+            <summary>
+            Changes an offline Windows image to a higher edition and sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">A product key for the specified edition.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetEdition(Microsoft.Dism.DismSession,System.String,System.String,Microsoft.Dism.DismProgressCallback,System.Object)">
+            <summary>
+            Changes an offline Windows image to a higher edition and optionaly sets the product key.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="editionId">The edition to set the image to.</param>
+            <param name="productKey">Optional. A product key for the specified edition.</param>
+            <param name="progressCallback">A progress callback method to invoke when progress is made.</param>
+            <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+            <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.SetProductKey(Microsoft.Dism.DismSession,System.String)">
+            <summary>
+            Sets the product key of the current image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="productKey">The product key.</param>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.Shutdown">
             <summary>
             Shuts down DISM API. Shutdown must be called once per process. Other DISM API function calls will fail after Shutdown has been called.
@@ -1819,6 +1992,15 @@
             <param name="userData">Optional user data to pass to the DismProgressCallback method.</param>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:System.OperationCanceledException">When the user requested the operation be canceled.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.ValidateProductKey(Microsoft.Dism.DismSession,System.String)">
+            <summary>
+            Validates that the provided product key is valid for the current image.
+            </summary>
+            <param name="session">A valid DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="productKey">The product key to validate.</param>
+            <returns><see langword="true"/> if the product key is valid, <see langword="false"/> otherwise.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
         <member name="P:Microsoft.Dism.DismApi.CurrentDismGeneration">
             <summary>
@@ -2906,6 +3088,11 @@
             The feature is not present in the package.
             </summary>
         </member>
+        <member name="F:Microsoft.Dism.DismApi.DISMAPI_E_UNKNOWN_PRODUCT">
+            <summary>
+            The product is unknown, e.g. invalid product key.
+            </summary>
+        </member>
         <member name="F:Microsoft.Dism.DismApi.ERROR_CANCELLED">
             <summary>
             The request was cancelled.
@@ -3386,6 +3573,18 @@
             Initializes a new instance of the <see cref="T:Microsoft.Dism.DismDriverPackageCollection" /> class.
             </summary>
             <param name="pointer">A pointer to the array of <see cref="T:Microsoft.Dism.DismApi.DismAppxPackage_" /> objects.</param>
+            <param name="count">The number of objects in the array.</param>
+        </member>
+        <member name="T:Microsoft.Dism.DismEditionCollection">
+            <summary>
+            Represents a collection of edition ID <see langword="string" />s.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Dism.DismEditionCollection.#ctor(System.IntPtr,System.UInt32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Dism.DismEditionCollection" /> class.
+            </summary>
+            <param name="pointer">A pointer to the array of <see cref="T:Microsoft.Dism.DismApi.DismString" /> objects.</param>
             <param name="count">The number of objects in the array.</param>
         </member>
         <member name="T:Microsoft.Dism.DismException">
@@ -4111,6 +4310,48 @@
             <returns><see langword="true" /> if the specified <see cref="T:Microsoft.Dism.DismPackageInfoEx" /> is equal to the current <see cref="T:Microsoft.Dism.DismPackageInfoEx" />, otherwise <see langword="false" />.</returns>
         </member>
         <member name="M:Microsoft.Dism.DismPackageInfoEx.GetHashCode">
+            <summary>
+            Serves as a hash function for a particular type.
+            </summary>
+            <returns>A hash code for the current <see cref="T:System.Object" />.</returns>
+        </member>
+        <member name="T:Microsoft.Dism.DismProductKeyInfo">
+            <summary>
+            Represents information related to a Windows product key, such as the Windows edition ID and channel.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Dism.DismProductKeyInfo.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Dism.DismProductKeyInfo" /> class.
+            </summary>
+            <param name="editionId">The edition ID.</param>
+            <param name="channel">The channel name.</param>
+        </member>
+        <member name="P:Microsoft.Dism.DismProductKeyInfo.EditionId">
+            <summary>
+            Gets the edition ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Dism.DismProductKeyInfo.Channel">
+            <summary>
+            Gets the channel name.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Dism.DismProductKeyInfo.Equals(System.Object)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />.
+            </summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns><see langword="true" /> if the specified <see cref="T:System.Object" /> is equal to the current <see cref="T:System.Object" />, otherwise <see langword="false" />.</returns>
+        </member>
+        <member name="M:Microsoft.Dism.DismProductKeyInfo.Equals(Microsoft.Dism.DismProductKeyInfo)">
+            <summary>
+            Determines whether the specified <see cref="T:Microsoft.Dism.DismProductKeyInfo" /> is equal to the current <see cref="T:Microsoft.Dism.DismProductKeyInfo" />.
+            </summary>
+            <param name="other">The <see cref="T:Microsoft.Dism.DismProductKeyInfo" /> object to compare with the current object.</param>
+            <returns><see langword="true" /> if the specified <see cref="T:Microsoft.Dism.DismProductKeyInfo" /> is equal to the current <see cref="T:Microsoft.Dism.DismProductKeyInfo" />, otherwise <see langword="false" />.</returns>
+        </member>
+        <member name="M:Microsoft.Dism.DismProductKeyInfo.GetHashCode">
             <summary>
             Serves as a hash function for a particular type.
             </summary>
