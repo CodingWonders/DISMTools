@@ -2144,4 +2144,12 @@ Public Class NewUnattendWiz
         Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
         FooterContainer.Visible = False
     End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        TextBox1.Text = My.Computer.Name
+    End Sub
+
+    Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
+        CNameTTip.Show("Uses the name of your computer as the computer name of the unattended answer file." & CrLf & "Only use this if the system you want to target is this one", sender)
+    End Sub
 End Class
