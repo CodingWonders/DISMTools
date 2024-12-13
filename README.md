@@ -109,7 +109,7 @@ You can also get and save image file information using the manager:
 	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator.png" />
 </p>
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/af2a2655-02de-4618-9423-30882303b424" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_installation.png" />
 </p>
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_results.png" />
