@@ -316,6 +316,7 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("DXG7C-N36C4-C4HTG-X4T3X-2YV77"))     ' Pro for Workstations
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
+        GenericKeys.Add(NewKeyVar("XGVPP-NMH47-7TTHJ-W3FW7-8HV2C"))     ' Enterprise
 
         UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
         For i = 1 To 4
@@ -1520,6 +1521,8 @@ Public Class NewUnattendWiz
                 Return "pro_workstations"
             Case "Pro N for Workstations"
                 Return "pro_workstations_n"
+            Case "Enterprise"
+                Return "enterprise"
         End Select
         Return ""
     End Function
