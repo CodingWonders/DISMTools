@@ -111,9 +111,6 @@ You can also get and save image file information using the manager:
 <p align="center">
 	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_installation.png" />
 </p>
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_results.png" />
-</p>
 
 > [!NOTE]
 > The Windows ADK and its Windows PE plugin are required for this feature to work
