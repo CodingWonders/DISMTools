@@ -14,6 +14,10 @@ if %debug% equ 1 (
 	taskmgr
 )
 powershell -command Set-ExecutionPolicy Unrestricted
+if exist "%sysdrive%\HotInstall" (
+	echo Please insert the disc image and press ENTER...
+	pause > nul
+)
 if %debug% lss 2 (
 	for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 		if exist "%%D:\" (
