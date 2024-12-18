@@ -50,13 +50,13 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">What's new</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#test-your-windows-images-with-more-confidence">Test your Windows images with more confidence</a>
+    <li class="toctree-l2"><a class="reference internal" href="#see-image-information-reports-in-a-prettier-way">See image information reports in a prettier way</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#task-additions-and-improvements">Task additions and improvements</a>
+    <li class="toctree-l2"><a class="reference internal" href="#get-information-about-the-features-and-capabilities-you-want">Get information about the features and capabilities you want</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#revamped-unattended-answer-file-features">Revamped unattended answer file features</a>
+    <li class="toctree-l2"><a class="reference internal" href="#manage-image-registry-hives-more-easily">Manage image registry hives more easily</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#new-translations">New translations</a>
+    <li class="toctree-l2"><a class="reference internal" href="#improved-unattended-answer-file-features">Improved unattended answer file features</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#overall-refinements">Overall refinements</a>
     </li>
@@ -207,6 +207,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/isocreator/">ISO creation tools</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/regcpl/">Image registry control panel</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -255,54 +257,51 @@
                 <h1 id="release-highlights">Release highlights</h1>
 <p>This new version of DISMTools comes with new features that enhance image management and servicing tasks. Here are some of its key changes.</p>
 <p>If you want to take a look at everything that has changed though, check out the <a href="https://github.com/CodingWonders/DISMTools/releases/latest">release notes page</a> for more information.</p>
-<h2 id="test-your-windows-images-with-more-confidence">Test your Windows images with more confidence</h2>
-<p>The ISO creation tools have seen several improvements with the addition of 2 new features. The <strong>Driver Installation Module</strong> lets you add drivers to Windows Preinstallation Environments to add support for devices that are not compatible by default, and the <strong>Extensibility Suite</strong> lets you perform further customizations to the DISMTools Preinstallation Environment to include your applications (either the ones that you have made or the ones that you find useful to include).</p>
+<h2 id="see-image-information-reports-in-a-prettier-way">See image information reports in a prettier way</h2>
+<p>When saving the information of a Windows image, you will now see prettier results due to the reports now being saved as Markdown files and, with the inclusion of <a href="https://www.github.com/xoofx/Markdig">Markdig</a>, results can be shown in Web view.</p>
+<p><strong>See more with less scrolling</strong>, with the use of tables for the properties of any elements you may be interested in getting information about.</p>
 <p align="center">
     <img src="../../res/whats_new/WhatsNew_1.png" />
 </p>
 
-<p><a href="../../img_tasks/tools/isocreator#driver-installation-module">Check out the new features</a></p>
-<h2 id="task-additions-and-improvements">Task additions and improvements</h2>
-<p>DISMTools 0.5.1 comes with improvements to existing tasks and some newcomers. For example, you can now configure stub package preferences for AppX packages, so that you can either explicitly install the full version of an application, its stub version (meaning that the full application will be downloaded on first launch), or go with the defaults for the application package.</p>
-<p>Also, you can now list the contents of Windows images (even the ones that haven't been mounted) with the <strong>Windows Image Explorer</strong>, which is also available as a standalone download.</p>
-<p>Next, package addition has received the ability to add Microsoft Update Manifest (MUM) files. And, finally, you can now configure keyboard layered drivers for Japanese and Korean keyboards.</p>
+<p><strong>Print beautiful information and read more at once</strong>. The printing functionalities now print the contents of the Web view, allowing you to have the same output as the HTML page:</p>
 <p align="center">
     <img src="../../res/whats_new/WhatsNew_2.png" />
 </p>
 
-<p>Learn more about:</p>
-<ul>
-<li><a href="../../img_tasks/appx/add_provisionedappxpackage/#options">Stub package preferences</a></li>
-<li><a href="../../img_tasks/mgmt/list_image">Listing files of Windows images</a></li>
-<li><a href="../../img_tasks/packages/add_package/#microsoft-update-manifest-files">Microsoft Update Manifest files</a></li>
-<li><a href="../../img_tasks/langs/set_layereddriver">Setting keyboard layered drivers</a></li>
-</ul>
-<h2 id="revamped-unattended-answer-file-features">Revamped unattended answer file features</h2>
-<p>The unattended answer file features have been significantly revamped, thanks to a new base powered by the <a href="https://schneegans.de/windows/unattend-generator/">unattended answer file generator from Christoph Schneegans</a>. This includes a revamped creation wizard, a new manager, and a new task that lets you apply such files.</p>
-<p>When creating your ISO files, you can also use your unattended answer file to test it. The Operating System installer will apply it for you.</p>
+<p><strong>View the Markdown source</strong>. If you prefer to look at what forms the Markdown report, you can switch to the source view by clicking "Display content in Web view"</p>
+<p><a href="../../img_tasks/info/infodlgs/#saving-image-information">Learn how to make the most of image information reports</a></p>
+<h2 id="get-information-about-the-features-and-capabilities-you-want">Get information about the features and capabilities you want</h2>
+<p>DISMTools 0.6 lets you get information about a set of features and capabilities filtered by their state. For example, to get Client features that are enabled, type <code>Client state:enabled</code>. To get the features that are disabled, type <code>state:disabled</code> in your search query.</p>
+<p align="center">
+    <img src="../../res/img_tasks/info/feat_info_state_filter.gif" />
+</p>
+
+<p><a href="../../img_tasks/info/infodlgs/#searching-through-this-information">Learn more</a></p>
+<h2 id="manage-image-registry-hives-more-easily">Manage image registry hives more easily</h2>
+<p>DISMTools 0.6 introduces an easy-to-use control panel for the registry hives of the image or offline installation you are managing. You can use this control panel to load one or more hives from our default set (<code>SOFTWARE</code>, <code>SYSTEM</code>, <code>DEFAULT</code> and <code>NTUSER.DAT</code>), or any other hive in the image. When you close this control panel, all loaded hives will be automatically unloaded for you, so you don't have to unload them manually.</p>
 <p align="center">
     <img src="../../res/whats_new/WhatsNew_3.png" />
 </p>
 
-<p><a href="../../img_tasks/unattend/unattend">Explore the new unattended answer file features</a></p>
-<h2 id="new-translations">New translations</h2>
-<p><em>Ciao!</em> We have travelled to a country with amazing places like Rome or Venice, with amazing food like spaghetti or <em>ravioli</em>, and with tourist attractions like the Colosseum or the leaning tower of Pisa.</p>
-<p>Jokes aside, we have added Italian translations to this version, making it the fifth supported language.</p>
-<p align="center">
-    <img src="../../res/whats_new/WhatsNew_4.jpg" />
-</p>
-
+<p><a href="../../img_tasks/tools/regcpl">Learn more</a></p>
+<h2 id="improved-unattended-answer-file-features">Improved unattended answer file features</h2>
+<p>The unattended answer file features have seen slight improvements as well. Now, you can configure placeholders for additional components automatically, without having to resort to manual additions of such components to the passes of your unattended answer files. And, after creating the answer file, you can quickly begin editing it further on both the Editor mode and the Windows System Image Manager (SIM), which is part of the Assessment and Deployment Kit.</p>
+<p>There are some minor improvements to the overall features too.</p>
 <h2 id="overall-refinements">Overall refinements</h2>
-<p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, you can now get a description of operation errors instead of generic instructions telling you to look at the error codes online. We have updated the dependencies of the program, simplified the logic of some tasks, and improved detection of Assessment and Deployment Kits as well.</p>
+<p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, more items have received translations, the program is more reliable, and components have been updated to their latest versions.</p>
 <!-- Room for more features -->
 
 <h1 id="thanks-to-the-contributors">Thanks to the contributors</h1>
 <p>The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:</p>
 <ul>
-<li><a href="https://github.com/AnubyteCode">AnubyteCode</a> for suggesting MUM package addition,</li>
-<li><a href="https://forums.mydigitallife.net/members/drew84.422144/">drew84</a> for suggesting Christoph Schneegans' library for the unattended answer file features, and</li>
-<li><a href="https://github.com/vadimlitvinenko87">vadimlitvinenko87</a> for spotting video feed detector issues</li>
+<li><a href="https://forums.mydigitallife.net/members/david-retzloff.1567430/">David Retzloff</a> for spotting issues with the unattended answer file features,</li>
+<li><a href="https://github.com/Procstas">Procstas</a> for spotting issues with some actions of the project tree view,</li>
+<li><a href="https://github.com/l33m4n">l33m4n</a> for spotting issues with the configuration of some settings, and</li>
+<li><a href="https://github.com/bovirus">bovirus</a> for spotting and fixing issues with the installer</li>
 </ul>
+<!-- The third one is temporary depending on whether or not the issues had been fixed by the time of the release of 0.6 -->
+
 <p>If you want to appear in this list, you can report issues or suggestions in any channel you prefer (via the <a href="https://forums.mydigitallife.net/threads/dismtools.87263/">MDL forum thread</a>, via the <a href="https://github.com/CodingWonders/DISMTools">GitHub repository</a>, or via any announcements on the <a href="https://reddit.com/r/DISMTools">DISMTools subreddit</a> or on the <a href="https://reddit.com/r/Windows">Windows</a>, <a href="https://reddit.com/r/Windows11">Windows11</a> and <a href="https://reddit.com/r/Windows10">Windows10</a> subreddits (as comments)) or submit new code changes (read the <a href="https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md">contribution guidelines</a> for more information).</p>
               
             </div>
