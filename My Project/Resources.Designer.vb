@@ -1969,13 +1969,20 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''- Fixed an issue where operations would no longer start sometimes
-        '''- Fixed a visual issue with the image file information list view of the ISO creation wizard
-        '''- Fixed an issue where the program would throw an IO exception when getting information about AppX packages, such as Intel Graphics Experience or MSI Center, in some cases (#199, #200, thanks @yyg1208 for spotting)
-        '''- Fixed a startup exception related to the mounted image detector (#201, thanks @Oldsch00lpunk for spotting)
-        '''- The DynaLog [resto de la cadena truncado]&quot;;.
+        '''-- Bugfixes:
+        '''
+        '''- Fixed some visual issues in the testing environment creator
+        '''
+        '''-- New features:
+        '''
+        '''- The unattended answer file features have seen several improvements:
+        '''  - UnattendGen has been updated to the latest version. This now requires .NET 9 to function
+        '''  - Duplicate user account detection has been added
+        '''  - User validation errors are more meaningful
+        '''  - Invalid characters are automatically trimmed from user names
+        '''  - Account checks have been added to block [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
