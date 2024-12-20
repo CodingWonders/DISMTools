@@ -11,7 +11,7 @@
             ProductKeyPage = 5
             UserAccountsPage = 6
             PWExpirationPage = 7
-            AccountLockdownPage = 8
+            AccountLockoutPage = 8
             VirtualMachinePage = 9
             NetworkConnectionsPage = 10
             SystemTelemetryPage = 11

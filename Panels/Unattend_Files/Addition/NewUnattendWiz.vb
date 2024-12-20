@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24121"
+    Dim UnattendGenReleaseTag As String = "24122"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -316,6 +316,7 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("DXG7C-N36C4-C4HTG-X4T3X-2YV77"))     ' Pro for Workstations
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
+        GenericKeys.Add(NewKeyVar("XGVPP-NMH47-7TTHJ-W3FW7-8HV2C"))     ' Enterprise
 
         UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
         For i = 1 To 4
@@ -561,9 +562,9 @@ Public Class NewUnattendWiz
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
 
         ' Detect .NET runtimes/SDKs
-        DetectDotNetRuntime("8.0.303", "8.0")
+        DetectDotNetRuntime("9.0.100", "9.0")
         If Not DotNetRuntimeSupported Then
-            If MsgBox("This wizard requires the .NET 8 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+            If MsgBox("This wizard requires the .NET 9 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
             Else
@@ -692,7 +693,7 @@ Public Class NewUnattendWiz
         ProductKeyPanel.Visible = (NewPage = UnattendedWizardPage.Page.ProductKeyPage)
         UserAccountPanel.Visible = (NewPage = UnattendedWizardPage.Page.UserAccountsPage)
         PWExpirationPanel.Visible = (NewPage = UnattendedWizardPage.Page.PWExpirationPage)
-        AccountLockdownPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockdownPage)
+        AccountLockoutPanel.Visible = (NewPage = UnattendedWizardPage.Page.AccountLockoutPage)
         VirtualMachinePanel.Visible = (NewPage = UnattendedWizardPage.Page.VirtualMachinePage)
         NetworkConnectionPanel.Visible = (NewPage = UnattendedWizardPage.Page.NetworkConnectionsPage)
         SystemTelemetryPanel.Visible = (NewPage = UnattendedWizardPage.Page.SystemTelemetryPage)
@@ -722,7 +723,7 @@ Public Class NewUnattendWiz
                 SelectTreeNode(4)
             Case UnattendedWizardPage.Page.ProductKeyPage
                 SelectTreeNode(5)
-            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockdownPage
+            Case UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.PWExpirationPage, UnattendedWizardPage.Page.AccountLockoutPage
                 SelectTreeNode(6)
             Case UnattendedWizardPage.Page.VirtualMachinePage
                 SelectTreeNode(7)
@@ -798,14 +799,17 @@ Public Class NewUnattendWiz
                     End If
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
-                If Not UserAccountsInteractive AndAlso Not UserValidator.ValidateUsers(UserAccountsList) Then
-                    MessageBox.Show("There is a problem with one or more of the users specified. Make sure that all user name fields are filled, or make sure no user uses system user names, and try again", "User Accounts error")
+                Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList, PCName)
+                If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
+                    MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
+                Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">"}
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
                     Dim AtLeastOneAdmin As Boolean = False
                     If UserAccountsList.Count > 0 Then
                         For Each UserAccount As User In UserAccountsList
+                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray())
                             If UserAccount.Group = UserGroup.Administrators Then
                                 AtLeastOneAdmin = True
                                 Exit For
@@ -1135,6 +1139,8 @@ Public Class NewUnattendWiz
             Case 2
                 SelectedArchitecture = DismProcessorArchitecture.ARM64
         End Select
+        ' Disable Windows 11 settings for x86
+        WinSVSettingsPanel.Enabled = Not (SelectedArchitecture = DismProcessorArchitecture.Intel)
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
@@ -1515,6 +1521,8 @@ Public Class NewUnattendWiz
                 Return "pro_workstations"
             Case "Pro N for Workstations"
                 Return "pro_workstations_n"
+            Case "Enterprise"
+                Return "enterprise"
         End Select
         Return ""
     End Function
@@ -1657,22 +1665,22 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Saving user settings...", 20)
             If SelectedLockdownSettings.Enabled Then
-                UnattendGen.StartInfo.Arguments &= " /lockdown=yes"
+                UnattendGen.StartInfo.Arguments &= " /lockout=yes"
                 Dim lockdownContents As String = ""
                 If SelectedLockdownSettings.DefaultPolicy Then
                     lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <AccountLockdown FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
+                        "   <AccountLockout FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
                         "</root>"
                 Else
                     lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <AccountLockdown FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
+                        "   <AccountLockout FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
                         "</root>"
                 End If
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockDown.xml"), lockdownContents, UTF8)
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockdownContents, UTF8)
             Else
-                UnattendGen.StartInfo.Arguments &= " /lockdown=no"
+                UnattendGen.StartInfo.Arguments &= " /lockout=no"
             End If
             If VirtualMachineSupported Then
                 ReportMessage("Saving user settings...", 22)
@@ -2138,5 +2146,13 @@ Public Class NewUnattendWiz
         Label3.Text = "Editor mode"
         Label4.Text = "Create your unattended answer files from scratch and save them anywhere"
         FooterContainer.Visible = False
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        TextBox1.Text = My.Computer.Name
+    End Sub
+
+    Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
+        CNameTTip.Show("Uses the name of your computer as the computer name of the unattended answer file." & CrLf & "Only use this if the system you want to target is this one", sender)
     End Sub
 End Class

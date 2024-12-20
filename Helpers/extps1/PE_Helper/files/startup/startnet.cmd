@@ -14,6 +14,10 @@ if %debug% equ 1 (
 	taskmgr
 )
 powershell -command Set-ExecutionPolicy Unrestricted
+if exist "%sysdrive%\HotInstall" (
+	echo Please insert the disc image and press ENTER...
+	pause > nul
+)
 if %debug% lss 2 (
 	for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 		if exist "%%D:\" (
@@ -43,7 +47,7 @@ if %debug% lss 2 (
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
-	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a driver containing a Windows image
+	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
 	echo.
 	doskey StartInstall=powershell -file "\StartInstall.ps1"
 	exit /b

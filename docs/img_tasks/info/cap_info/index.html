@@ -99,6 +99,8 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#information-regarding-download-and-install-sizes">Information regarding download and install sizes</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#additional-search-functionality">Additional search functionality</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
     </li>
     </ul>
@@ -203,6 +205,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../tools/regcpl/">Image registry control panel</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -267,6 +271,14 @@
 <h2 id="information-regarding-download-and-install-sizes">Information regarding download and install sizes</h2>
 <p>In DISMTools versions from the 0.3 series that support this action (0.3.1-0.3.3) have an issue where the download and install sizes could overflow, returning negative values. This issue is caused by the managed DISM API library. </p>
 <p>DISMTools 0.4 is not affected by this issue due to it having an updated version of that library that fixes this issue.</p>
+<h2 id="additional-search-functionality">Additional search functionality</h2>
+<p>With the state filter functionality introduced in DISMTools 0.6 you can get the information you want based on a capability's state. To filter capabilities by state, <strong>type <code>state:</code> and provide one of the following state values</strong>:</p>
+<ul>
+<li><code>installed</code></li>
+<li><code>notpresent</code></li>
+<li><code>installpending</code></li>
+</ul>
+<p>To get capabilities in a certain state containing a given name, you need to type the <code>state</code> flag after the name.</p>
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="../infodlgs/">Image information dialogs</a></li>

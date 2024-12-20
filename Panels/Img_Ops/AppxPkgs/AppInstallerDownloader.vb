@@ -40,6 +40,8 @@ Public Class AppInstallerDownloader
                         Label2.Text = "Download URL:"
                         downSpdLbl.Text = "Download speed: unknown"
                         downETALbl.Text = "Estimated time remaining: unknown"
+                        Cancel_Button.Text = "Cancel"
+                        Label3.Text = "Please wait..."
                     Case "ESN"
                         Text = "Descargando paquete de aplicación..."
                         Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
@@ -48,6 +50,8 @@ Public Class AppInstallerDownloader
                         Label2.Text = "URL de descarga:"
                         downSpdLbl.Text = "Velocidad de descarga: desconocida"
                         downETALbl.Text = "Tiempo restante estimado: desconocido"
+                        Cancel_Button.Text = "Cancelar"
+                        Label3.Text = "Espere..."
                     Case "FRA"
                         Text = "Téléchargement du paquet de l'application en cours..."
                         Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
@@ -56,6 +60,8 @@ Public Class AppInstallerDownloader
                         Label2.Text = "URL de téléchargement :"
                         downSpdLbl.Text = "Vitesse de téléchargement : inconnue"
                         downETALbl.Text = "Temps restant estimé : inconnu"
+                        Cancel_Button.Text = "Annuler"
+                        Label3.Text = "Veuillez patienter..."
                     Case "PTB", "PTG"
                         Text = "Descarregando o pacote da aplicação..."
                         Label1.Text = "Aguarde enquanto o DISMTools baixa o pacote de aplicativos para adicioná-lo a esta imagem. Isso pode levar algum tempo, dependendo da velocidade da conexão de rede."
@@ -64,6 +70,8 @@ Public Class AppInstallerDownloader
                         Label2.Text = "URL de transferência:"
                         downSpdLbl.Text = "Velocidade de transferência: desconhecida"
                         downETALbl.Text = "Tempo estimado restante: desconhecido"
+                        Cancel_Button.Text = "Cancelar"
+                        Label3.Text = "Aguarde..."
                     Case "ITA"
                         Text = " Scaricamento del pacchetto dell'applicazione..."
                         Label1.Text = "Attendere che DISMTools scarichi il pacchetto applicativo per aggiungerlo a questa immagine. Questa operazione può richiedere del tempo, a seconda della velocità della connessione di rete."
@@ -72,6 +80,8 @@ Public Class AppInstallerDownloader
                         Label2.Text = "URL di scaricamento:"
                         downSpdLbl.Text = "Velocità di scaricamento: sconosciuta"
                         downETALbl.Text = "Tempo stimato rimanente: sconosciuto"
+                        Cancel_Button.Text = "Annullare"
+                        Label3.Text = "Attendere..."
                 End Select
             Case 1
                 Text = "Downloading application package..."
@@ -81,6 +91,8 @@ Public Class AppInstallerDownloader
                 Label2.Text = "Download URL:"
                 downSpdLbl.Text = "Download speed: unknown"
                 downETALbl.Text = "Estimated time remaining: unknown"
+                Cancel_Button.Text = "Cancel"
+                Label3.Text = "Please wait..."
             Case 2
                 Text = "Descargando paquete de aplicación..."
                 Label1.Text = "Espere mientras DISMTools descarga el paquete de aplicación para añadirlo a esta imagen. Esto puede llevar algo de tiempo, dependiendo de la velocidad de su conexión de red."
@@ -89,6 +101,8 @@ Public Class AppInstallerDownloader
                 Label2.Text = "URL de descarga:"
                 downSpdLbl.Text = "Velocidad de descarga: desconocida"
                 downETALbl.Text = "Tiempo restante estimado: desconocido"
+                Cancel_Button.Text = "Cancelar"
+                Label3.Text = "Espere..."
             Case 3
                 Text = "Téléchargement du paquet de l'application en cours..."
                 Label1.Text = "Veuillez patienter pendant que DISMTools télécharge le paquet d'application pour l'ajouter à cette image. Cela peut prendre un certain temps, en fonction de la vitesse de votre connexion réseau."
@@ -97,6 +111,8 @@ Public Class AppInstallerDownloader
                 Label2.Text = "URL de téléchargement :"
                 downSpdLbl.Text = "Vitesse de téléchargement : inconnue"
                 downETALbl.Text = "Temps restant estimé : inconnu"
+                Cancel_Button.Text = "Annuler"
+                Label3.Text = "Veuillez patienter..."
             Case 4
                 Text = "Descarregando o pacote da aplicação..."
                 Label1.Text = "Aguarde enquanto o DISMTools baixa o pacote de aplicativos para adicioná-lo a esta imagem. Isso pode levar algum tempo, dependendo da velocidade da conexão de rede."
@@ -105,6 +121,8 @@ Public Class AppInstallerDownloader
                 Label2.Text = "URL de transferência:"
                 downSpdLbl.Text = "Velocidade de transferência: desconhecida"
                 downETALbl.Text = "Tempo estimado restante: desconhecido"
+                Cancel_Button.Text = "Cancelar"
+                Label3.Text = "Aguarde..."
             Case 5
                 Text = " Scaricamento del pacchetto dell'applicazione..."
                 Label1.Text = "Attendere che DISMTools scarichi il pacchetto applicativo per aggiungerlo a questa immagine. Questa operazione può richiedere del tempo, a seconda della velocità della connessione di rete."
@@ -113,6 +131,8 @@ Public Class AppInstallerDownloader
                 Label2.Text = "URL di scaricamento:"
                 downSpdLbl.Text = "Velocità di scaricamento: sconosciuta"
                 downETALbl.Text = "Tempo stimato rimanente: sconosciuto"
+                Cancel_Button.Text = "Annullare"
+                Label3.Text = "Attendere..."
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)
@@ -167,6 +187,8 @@ Public Class AppInstallerDownloader
                 ' Detect if a URL has been detected and download it
                 If AppInstallerUri <> "" Then
                     downUriLbl.Text = AppInstallerUri
+                    Cancel_Button.Enabled = True
+                    Label3.Visible = False
                     BackgroundWorker1.RunWorkerAsync()
                 End If
             Catch ex As Exception
@@ -218,7 +240,7 @@ Public Class AppInstallerDownloader
     End Sub
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
-        If e.Error IsNot Nothing Then
+        If Not e.Cancelled AndAlso e.Error IsNot Nothing Then
             Dim msg As String = ""
             Select Case Language
                 Case 0
@@ -249,6 +271,10 @@ Public Class AppInstallerDownloader
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
                 File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
             End If
+        ElseIf e.Cancelled Then
+            If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
+                File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
+            End If
         End If
         Thread.Sleep(500)
         Close()
@@ -274,7 +300,7 @@ Public Class AppInstallerDownloader
                         downSpdLbl.Text = "Velocidade de transferência: " & BytesToReadableSize(downSpd) & "/s"
                         downETALbl.Text = "Tempo restante estimado: " & time.ToString("m\:ss") & " segundos"
                     Case "ITA"
-                        downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s""."
+                        downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s"
                         downETALbl.Text = "Tempo stimato rimanente: " & time.ToString("m\:ss") & " secondi"
                 End Select
             Case 1
@@ -290,7 +316,7 @@ Public Class AppInstallerDownloader
                 downSpdLbl.Text = "Velocidade de transferência: " & BytesToReadableSize(downSpd) & "/s"
                 downETALbl.Text = "Tempo restante estimado: " & time.ToString("m\:ss") & " segundos"
             Case 5
-                downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s""."
+                downSpdLbl.Text = "Velocità di scaricamento: " & BytesToReadableSize(downSpd) & "/s"
                 downETALbl.Text = "Tempo stimato rimanente: " & time.ToString("m\:ss") & " secondi"
         End Select
         If ProgressBar1.Value <= ProgressBar1.Maximum Then
@@ -301,5 +327,11 @@ Public Class AppInstallerDownloader
     Private Sub AppInstallerDownloader_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         Timer1.Stop()
+    End Sub
+
+    Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
+        Downloader.CancelAsync()
+        Cancel_Button.Enabled = False
+        Label3.Visible = True
     End Sub
 End Class

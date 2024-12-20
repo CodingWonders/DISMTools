@@ -109,10 +109,7 @@ You can also get and save image file information using the manager:
 	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator.png" />
 </p>
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/af2a2655-02de-4618-9423-30882303b424" />
-</p>
-<p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_results.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_installation.png" />
 </p>
 
 > [!NOTE]
@@ -260,7 +257,7 @@ We continue the development of the next version in the Preview branch. To go to 
 
 However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/dt-nightly-installers/raw/refs/heads/main/dt_pre_24122_relcndid/dt_setup.exe).
 
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.5.1, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.6, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 
