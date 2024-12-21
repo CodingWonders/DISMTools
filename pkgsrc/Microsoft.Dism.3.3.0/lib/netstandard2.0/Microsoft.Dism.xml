@@ -479,6 +479,15 @@
             <param name="packageCount">Receives the count of packages.</param>
             <returns>Returns S_OK on success.</returns>
         </member>
+        <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetRegistryMountPoint(Microsoft.Dism.DismSession,Microsoft.Dism.DismRegistryHive,System.IntPtr@)">
+            <summary>
+            Returns an array of DismMountedImageInfo Structure elements that describe the images that are mounted currently.
+            </summary>
+            <param name="session">A valid offline DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="registryHive">The <see cref="T:Microsoft.Dism.DismRegistryHive"/> to get the mount point for.</param>
+            <param name="registryMountPointPtr">A pointer which will receive the <see cref="T:Microsoft.Dism.DismApi.DismString"/> wrapped mount point.</param>
+            <returns>Returns <c>S_OK</c> on success.</returns>
+        </member>
         <member name="M:Microsoft.Dism.DismApi.NativeMethods.DismGetTargetEditions(Microsoft.Dism.DismSession,System.IntPtr@,System.UInt32@)">
             <summary>
             Gets the list of Windows edition IDs the provided image can be set to.
@@ -1406,6 +1415,15 @@
             <returns>A <see cref="T:Microsoft.Dism.DismAppxPackageCollection" /> object containing a collection of <see cref="T:Microsoft.Dism.DismAppxPackage" /> objects.</returns>
             <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
             <exception cref="T:Microsoft.Dism.DismRebootRequiredException">When the operation requires a reboot to complete.</exception>
+        </member>
+        <member name="M:Microsoft.Dism.DismApi.GetRegistryMountPoint(Microsoft.Dism.DismSession,Microsoft.Dism.DismRegistryHive)">
+            <summary>
+            Gets the registry mount point for the given <see cref="T:Microsoft.Dism.DismRegistryHive"/>.
+            </summary>
+            <param name="session">A valid offline DISM Session. The DISM Session must be associated with an image. You can associate a session with an image by using the <see cref="M:Microsoft.Dism.DismApi.OpenOfflineSession(System.String)" /> method.</param>
+            <param name="registryHive">The <see cref="T:Microsoft.Dism.DismRegistryHive"/> to get the mount point for.</param>
+            <returns>The registry mount point for the given <see cref="T:Microsoft.Dism.DismRegistryHive"/>.</returns>
+            <exception cref="T:Microsoft.Dism.DismException">When a failure occurs.</exception>
         </member>
         <member name="M:Microsoft.Dism.DismApi.GetTargetEditions(Microsoft.Dism.DismSession)">
             <summary>
@@ -4965,6 +4983,51 @@
         <member name="F:Microsoft.Dism.DismProcessorArchitecture.Neutral">
             <summary>
             A neutral processor architecture.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Dism.DismRegistryHive">
+            <summary>
+            Specifies a registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.Software">
+            <summary>
+            The <strong>HKLM\SOFTWARE</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.System">
+            <summary>
+            The <strong>HKLM\SYSTEM</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.Security">
+            <summary>
+            The <strong>HKLM\SECURITY</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.SAM">
+            <summary>
+            The <strong>HKLM\SAM</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.Default">
+            <summary>
+            The <strong>HKU\.DEFAULT</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.HKCU">
+            <summary>
+            The <strong>HKCU</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.Components">
+            <summary>
+            The <strong>COMPONENTS</strong> registry hive.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Dism.DismRegistryHive.Drivers">
+            <summary>
+            The <strong>DRIVERS</strong> registry hive.
             </summary>
         </member>
         <member name="T:Microsoft.Dism.DismReleaseType">
