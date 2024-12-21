@@ -1,11 +1,11 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 title DISMTools Preinstallation Environment
-set version=0.6
+set version=0.6.1
 set sysdrive=%SYSTEMDRIVE%
 set debug=0
 echo DISMTools %version% - Preinstallation Environment
-echo (c) 2024. CodingWonders Software
+echo (c) 2024-2025. CodingWonders Software
 echo.
 echo Please wait while the environment starts up...
 wpeinit
