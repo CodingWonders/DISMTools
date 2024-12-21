@@ -4,7 +4,7 @@ Imports Microsoft.VisualBasic.ControlChars
 ''' <summary>
 ''' Dynamic Logging (DynaLog) Logger Class
 ''' </summary>
-''' <remarks>Primitive form in 0.6. Will be fully used in future versions</remarks>
+''' <remarks></remarks>
 Public Class DynaLog
 
     Public Shared Sub CheckLogAge()
@@ -55,8 +55,7 @@ Public Class DynaLog
                 Contents = File.ReadAllText(Application.StartupPath & "\logs\DT_DynaLog.log")
             End If
             Dim MessageLine As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] " & message
-            Contents &= If(Contents <> "", CrLf, "") & MessageLine
-            File.WriteAllText(Application.StartupPath & "\logs\DT_DynaLog.log", Contents)
+            File.AppendAllText(Application.StartupPath & "\logs\DT_DynaLog.log", If(Contents <> "", CrLf, "") & MessageLine)
         Catch ex As Exception
             Debug.WriteLine("DynaLog logging could not log this operation. Error:" & CrLf & CrLf & ex.ToString())
         End Try
