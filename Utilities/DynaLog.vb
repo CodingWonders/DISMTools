@@ -7,6 +7,8 @@ Imports Microsoft.VisualBasic.ControlChars
 ''' <remarks></remarks>
 Public Class DynaLog
 
+    Public Shared Property LoggerEnabled As Boolean = True
+
     Public Shared Sub CheckLogAge()
         LogMessage("Checking existing logs...", False)
         If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
@@ -43,7 +45,18 @@ Public Class DynaLog
         LogMessage("DynaLog Logger has stopped logging program operations...", False)
     End Sub
 
+    Public Shared Sub DisableLogging()
+        LogMessage("Logger has been temporarily disabled by caller " & New StackFrame(1).GetMethod().Name)
+        LoggerEnabled = False
+    End Sub
+
+    Public Shared Sub EnableLogging()
+        LoggerEnabled = True
+        LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name)
+    End Sub
+
     Public Shared Sub LogMessage(message As String, Optional GetParentCaller As Boolean = True)
+        If Not LoggerEnabled Then Exit Sub
         Debug.WriteLine(message)
         Try
             ' DynaLog will NOT display logs for log file/folder creation - ONLY in debugger.

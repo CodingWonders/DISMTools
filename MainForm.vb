@@ -14725,7 +14725,7 @@ Public Class MainForm
                         ' Go through each line until we find the display name
                         For y = x To XMLReaderRTB.Lines.Count - 1
                             If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
-                                DynaLog.LogMessage("Line " & y & " contains display name information. Grabbing display name...")
+                                DynaLog.LogMessage("Line " & y + 1 & " contains display name information. Grabbing display name...")
                                 Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
                                 DynaLog.LogMessage("Deleting AppX manifest...")
                                 File.Delete(Application.StartupPath & "\AppxManifest.xml")
@@ -14759,7 +14759,7 @@ Public Class MainForm
                                     ' Go through each line until we find the display name
                                     For y = x To XMLReaderRTB.Lines.Count - 1
                                         If XMLReaderRTB.Lines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
-                                            DynaLog.LogMessage("Line " & y & " contains display name information. Grabbing display name...")
+                                            DynaLog.LogMessage("Line " & y + 1 & " contains display name information. Grabbing display name...")
                                             Dim pkgName As String = XMLReaderRTB.Lines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
                                             DynaLog.LogMessage("Deleting AppX manifest...")
                                             File.Delete(Application.StartupPath & "\AppxManifest.xml")
@@ -15605,12 +15605,15 @@ Public Class MainForm
     End Sub
 
     Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening image mount dialog...")
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Stopping watchers...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
@@ -15621,18 +15624,22 @@ Public Class MainForm
     End Sub
 
     Private Sub UnmountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnmountImageToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening image unmount dialog...")
         ImgUMount.RadioButton1.Checked = True
         ImgUMount.RadioButton2.Checked = False
         ImgUMount.ShowDialog()
     End Sub
 
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening volume image removal dialog...")
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Stopping watchers...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
@@ -15649,14 +15656,22 @@ Public Class MainForm
     End Sub
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
+        DynaLog.LogMessage("Opening image index switch dialog...")
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Threading.Thread.Sleep(100)
+        End While
+        DynaLog.LogMessage("Stopping watchers...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Getting image indexes...")
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -15688,13 +15703,17 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
+            DynaLog.LogMessage("This image has more than 1 index. Switching is possible.")
             ImgIndexSwitch.ShowDialog()
         End If
     End Sub
 
     Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
+        DynaLog.LogMessage("Beginning online installation management...")
         Dim showMessage As Boolean = isProjectLoaded
+        DynaLog.LogMessage("Will message be shown a second time? " & If(showMessage, "Yes", "No"))
         If isProjectLoaded Then
+            DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
             ActiveInstAccessWarn.ShowDialog()
             If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
@@ -15705,11 +15724,16 @@ Public Class MainForm
     End Sub
 
     Private Sub ManageOfflineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOfflineInstallationToolStripMenuItem.Click
+        DynaLog.LogMessage("Beginning offline installation management...")
         If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Selected drive path: " & drivePath)
+            DynaLog.LogMessage("User has accepted the disk chooser popup.")
             If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+                DynaLog.LogMessage("Selected drive is the same as the drive currently booted to.")
                 Exit Sub
             End If
             If isProjectLoaded Then
+                DynaLog.LogMessage("Unloading project...")
                 UnloadDTProj(False, True, False)
                 If ImgBW.IsBusy Then Exit Sub
             End If
@@ -15717,20 +15741,24 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub UpdCheckupPanel_Paint(sender As Object, e As PaintEventArgs)
-        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, Color.FromArgb(0, 122, 204), ButtonBorderStyle.Solid)
-    End Sub
-
     Private Sub UpdCheckerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UpdCheckerBW.DoWork
+        DynaLog.LogMessage("Beginning update checks...")
         CheckForUpdates(dtBranch)
     End Sub
 
     Private Sub RemountImageWithWritePermissionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.Click
+        DynaLog.LogMessage("Preparing to remount the image with write permissions...")
         ' Go through each mounted image until we find it
         If MountedImageMountDirs.Count > 0 Then
+            DynaLog.LogMessage("This system has " & MountedImageMountDirs.Count() & " mounted image(s)")
             If MountedImageMountDirs.Contains(MountDir) Then
+                DynaLog.LogMessage("This image is in the mounted image list...")
                 For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                     If MountedImageMountDirs(x) = MountDir Then
+                        DynaLog.LogMessage("Information of image to remount with write permissions:")
+                        DynaLog.LogMessage("- Image file: " & Quote & MountedImageImgFiles(x) & Quote)
+                        DynaLog.LogMessage("- Image index: " & CInt(MountedImageImgIndexes(x)))
+                        DynaLog.LogMessage("- Mount directory: " & Quote & MountedImageMountDirs(x) & Quote)
                         EnableWritePermissions(MountedImageImgFiles(x), CInt(MountedImageImgIndexes(x)), MountedImageMountDirs(x))
                         Exit For
                     End If
@@ -15740,9 +15768,13 @@ Public Class MainForm
     End Sub
 
     Sub EnableWritePermissions(SourceImage As String, SourceIndex As Integer, DestinationPath As String)
+        DynaLog.LogMessage("Checking if source image " & Quote & SourceImage & Quote & " exists...")
         If File.Exists(SourceImage) Then
+            DynaLog.LogMessage("The source image exists in the file system. Preparing to remount it...")
             If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
             ' Configure settings to remount image with write permissions
+
+            DynaLog.LogMessage("Configuring progress panel tasks...")
 
             ' Unmount image discarding changes
             ProgressPanel.UMountLocalDir = True
@@ -15765,8 +15797,10 @@ Public Class MainForm
             ProgressPanel.ShowDialog(Me)
 
             If isProjectLoaded And IsImageMounted And MountDir = DestinationPath Then
+                DynaLog.LogMessage("Updating project properties...")
                 UpdateProjProperties(True, False, False)
             Else
+                DynaLog.LogMessage("Restarting mounted image detector and watcher...")
                 If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
                 WatcherTimer.Enabled = True
             End If
@@ -15774,6 +15808,7 @@ Public Class MainForm
     End Sub
 
     Private Sub GetDrivers_Click(sender As Object, e As EventArgs) Handles GetDrivers.Click
+        DynaLog.LogMessage("Opening driver information dialog...")
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -15801,6 +15836,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
         End Select
         If Not CompletedTasks(4) Then
+            DynaLog.LogMessage("Device driver background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -15821,10 +15857,12 @@ Public Class MainForm
     End Sub
 
     Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening project location in File Explorer...")
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & projPath & "\" & Label49.Text & ".dtproj" & Quote)
     End Sub
 
     Private Sub WimScriptEditorCommand_Click(sender As Object, e As EventArgs) Handles WimScriptEditorCommand.Click
+        DynaLog.LogMessage("Opening WIMScript Configuration Editor...")
         WimScriptEditor.MinimizeBox = True
         WimScriptEditor.MaximizeBox = True
         If WimScriptEditor.Visible Then
@@ -15841,6 +15879,7 @@ Public Class MainForm
 
     Private Sub GetFeatures_Click(sender As Object, e As EventArgs) Handles GetFeatures.Click
         If Not IsImageMounted Then Exit Sub
+        DynaLog.LogMessage("Opening feature information dialog...")
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -15868,6 +15907,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
         End Select
         If Not CompletedTasks(1) Then
+            DynaLog.LogMessage("Feature background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -15888,7 +15928,9 @@ Public Class MainForm
     End Sub
 
     Private Sub GetCapabilities_Click(sender As Object, e As EventArgs) Handles GetCapabilities.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -15916,6 +15958,8 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+        DynaLog.LogMessage("Opening capability information dialog...")
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -15943,6 +15987,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
         End Select
         If Not CompletedTasks(3) Then
+            DynaLog.LogMessage("Capability background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -15963,6 +16008,7 @@ Public Class MainForm
     End Sub
 
     Private Sub GetPackages_Click(sender As Object, e As EventArgs) Handles GetPackages.Click
+        DynaLog.LogMessage("Opening OS package information dialog...")
         ProgressPanel.OperationNum = 993
         Select Case Language
             Case 0
@@ -15990,6 +16036,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
         End Select
         If Not CompletedTasks(0) Then
+            DynaLog.LogMessage("OS package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -16012,7 +16059,9 @@ Public Class MainForm
     End Sub
 
     Private Sub GetProvisionedAppxPackages_Click(sender As Object, e As EventArgs) Handles GetProvisionedAppxPackages.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -16040,6 +16089,8 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+        DynaLog.LogMessage("Opening AppX package information dialog...")
         ProgressPanel.OperationNum = 993
         Select Case Language
             Case 0
@@ -16067,6 +16118,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
         End Select
         If Not CompletedTasks(2) Then
+            DynaLog.LogMessage("AppX package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -16075,6 +16127,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveResourceToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveResourceToolStripMenuItem.Click
+        DynaLog.LogMessage("Triggering logo asset resource save...")
         If OnlineManagement Then AppxResSFD.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) Else AppxResSFD.InitialDirectory = projPath
         AppxResSFD.FileName = If(GetAppxPkgInfoDlg.displayName <> "", GetAppxPkgInfoDlg.displayName, GetAppxPkgInfoDlg.Label25.Text)
         AppxResSFD.ShowDialog()
@@ -16082,6 +16135,8 @@ Public Class MainForm
 
     Private Sub AppxResSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxResSFD.FileOk
         Try
+            DynaLog.LogMessage("Saving image...")
+            DynaLog.LogMessage("Destination: " & AppxResSFD.FileName)
             GetAppxPkgInfoDlg.PictureBox2.Image.Save(AppxResSFD.FileName, Imaging.ImageFormat.Png)
             Notifications.Visible = True
             Notifications.Icon = Icon
@@ -16122,12 +16177,13 @@ Public Class MainForm
             End Select
             Notifications.ShowBalloonTip(3000)
         Catch ex As Exception
-
+            DynaLog.LogMessage("Could not save logo asset. Error message: " & ex.Message)
         End Try
     End Sub
 
     Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
         Try
+            DynaLog.LogMessage("Copying image to system clipboard...")
             Dim data As New DataObject()
             data.SetImage(GetAppxPkgInfoDlg.PictureBox2.Image)
             Clipboard.SetDataObject(data, True)
@@ -16170,7 +16226,7 @@ Public Class MainForm
             End Select
             Notifications.ShowBalloonTip(3000)
         Catch ex As Exception
-
+            DynaLog.LogMessage("Could not copy logo asset. Error message: " & ex.Message)
         End Try
     End Sub
 
@@ -16179,11 +16235,13 @@ Public Class MainForm
     End Sub
 
     Private Sub SplitImage_Click(sender As Object, e As EventArgs) Handles SplitImage.Click
+        DynaLog.LogMessage("Opening image split dialog...")
         ImgSplit.ShowDialog()
     End Sub
 
     Private Sub Notifications_BalloonTipClicked(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClicked
         If Notifications.BalloonTipText.Contains("saved") Or Notifications.BalloonTipText.Contains("guardado") Or Notifications.BalloonTipText.Contains("sauvegardé") Or Notifications.BalloonTipText.Contains("salvata") Then
+            DynaLog.LogMessage("Opening saved asset...")
             If File.Exists(AppxResSFD.FileName) Then
                 Process.Start(AppxResSFD.FileName)
             End If
@@ -16191,11 +16249,14 @@ Public Class MainForm
     End Sub
 
     Private Sub ExportDriver_Click(sender As Object, e As EventArgs) Handles ExportDriver.Click
+        DynaLog.LogMessage("Opening device driver export dialog...")
         ExportDrivers.ShowDialog()
     End Sub
 
     Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
+        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
         If ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
             BGProcsBusyDialog.ShowDialog()
             Exit Sub
         End If
@@ -16203,7 +16264,9 @@ Public Class MainForm
     End Sub
 
     Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
+        DynaLog.LogMessage("Opening target path configuration dialog...")
         If ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
             BGProcsBusyDialog.ShowDialog()
             Exit Sub
         End If
@@ -16211,7 +16274,9 @@ Public Class MainForm
     End Sub
 
     Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
+        DynaLog.LogMessage("Opening scratch space configuration dialog...")
         If ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
             BGProcsBusyDialog.ShowDialog()
             Exit Sub
         End If
@@ -16219,6 +16284,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ISFix_Click(sender As Object, e As EventArgs) Handles ISFix.Click
+        DynaLog.LogMessage("Showing dialog for invalid settings...")
         InvalidSettingsDialog.ShowDialog()
     End Sub
 
@@ -16232,11 +16298,13 @@ Public Class MainForm
 
     Private Sub SaveImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveImageInformationToolStripMenuItem.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             If MountedImageMountDirs.Count > 0 Then
                 For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                     If MountedImageMountDirs(x) = MountDir Then
+                        DynaLog.LogMessage("Image to get information about: " & MountedImageImgFiles(x))
                         ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
                         Exit For
                     End If
@@ -16256,12 +16324,17 @@ Public Class MainForm
     End Sub
 
     Private Sub OfflineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OfflineInstMgmt.LinkClicked
+        DynaLog.LogMessage("Beginning offline installation management...")
         If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Selected drive path: " & drivePath)
+            DynaLog.LogMessage("User has accepted the disk chooser popup.")
             If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
+                DynaLog.LogMessage("Selected drive is the same as the drive currently booted to. Entering online installation management mode instead...")
                 ActiveInstAccessWarn.Label2.Visible = False
                 BeginOnlineManagement(True)
                 Exit Sub
             End If
+            DynaLog.LogMessage("Entering offline installation management mode...")
             BeginOfflineManagement(drivePath)
         End If
     End Sub
@@ -16291,12 +16364,14 @@ Public Class MainForm
 #Region "Task Links"
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Stopping watcher...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
@@ -16334,10 +16409,12 @@ Public Class MainForm
         Else
             ProjProperties.Text = ProjProperties.Label1.Text
         End If
+        DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog()
     End Sub
 
     Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
+        DynaLog.LogMessage("Opening project location in File Explorer...")
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & projPath & "\" & Label49.Text & ".dtproj" & Quote)
     End Sub
 
@@ -16346,9 +16423,11 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
+        DynaLog.LogMessage("Opening popup mounted image picker...")
         PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
         PopupImageManager.Top -= PopupImageManager.Height
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            DynaLog.LogMessage("User accepted the popup.")
             If MountedImageMountDirs.Count > 0 Then
                 MountDir = PopupImageManager.selectedMntDir
                 If MountedImageMountDirs.Count > 0 Then
@@ -16363,7 +16442,12 @@ Public Class MainForm
                     Catch ex As Exception
                         Exit Try
                     End Try
-                    UpdateProjProperties(True, If(isReadOnly, True, False))
+                    DynaLog.LogMessage("Information obtained about the image to load here:")
+                    DynaLog.LogMessage("- Image file: " & SourceImg)
+                    DynaLog.LogMessage("- Image index: " & ImgIndex)
+                    DynaLog.LogMessage("- Mount directory: " & MountDir)
+                    DynaLog.LogMessage("- Loaded with read/write privileges? " & If(isReadOnly, "No", "Yes"))
+                    UpdateProjProperties(True, isReadOnly)
                     SaveDTProj()
                 End If
             Else
@@ -16378,6 +16462,8 @@ Public Class MainForm
             For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
                 If MountedImageMountDirs(x) = MountDir Then
                     If MountedImageMountedReWr(x) = 1 Then
+                        DynaLog.LogMessage("The image that is about to be unmounted is mounted with read-only permissions. Committing changes to this image makes no sense.")
+                        DynaLog.LogMessage("Unmounting image directly...")
                         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                         imgCommitOperation = 1
                         UnloadDTProj(False, True, True)
@@ -16386,18 +16472,21 @@ Public Class MainForm
                 End If
             Next
         End If
+        DynaLog.LogMessage("Opening image unmount dialog...")
         ImgUMount.RadioButton1.Checked = True
         ImgUMount.RadioButton2.Checked = False
         ImgUMount.ShowDialog()
     End Sub
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Stopping watcher...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
@@ -16435,10 +16524,12 @@ Public Class MainForm
         Else
             ProjProperties.Text = ProjProperties.Label1.Text
         End If
+        DynaLog.LogMessage("Showing project/image properties...")
         ProjProperties.ShowDialog()
     End Sub
 
     Private Sub LinkLabel21_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel21.LinkClicked
+        DynaLog.LogMessage("Opening image mount dialog...")
         ImgMount.ShowDialog()
     End Sub
 
@@ -16447,6 +16538,8 @@ Public Class MainForm
 #Region "Common Task button functionality in new design"
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
+        DynaLog.LogMessage("Opening image index switch dialog...")
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
         WatcherTimer.Enabled = False
@@ -16455,6 +16548,7 @@ Public Class MainForm
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Stopping watchers...")
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -16486,11 +16580,13 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
         If PleaseWaitDialog.imgIndexes > 1 Then
+            DynaLog.LogMessage("This image has more than 1 index. Switching is possible.")
             ImgIndexSwitch.ShowDialog()
         End If
     End Sub
 
     Private Sub Button25_Click(sender As Object, e As EventArgs) Handles Button25.Click
+        DynaLog.LogMessage("Reloading servicing session of image...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ProgressPanel.OperationNum = 18
@@ -16498,6 +16594,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
+        DynaLog.LogMessage("Opening image mount dialog...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
@@ -16514,6 +16611,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
+        DynaLog.LogMessage("Committing changes to the image...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MountDir
         ' TODO: Add additional options later
@@ -16522,36 +16620,43 @@ Public Class MainForm
     End Sub
 
     Private Sub Button28_Click(sender As Object, e As EventArgs) Handles Button28.Click
+        DynaLog.LogMessage("Unmounting the Windows image whilst committing changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 0
         UnloadDTProj(False, True, True)
     End Sub
 
     Private Sub Button29_Click(sender As Object, e As EventArgs) Handles Button29.Click
+        DynaLog.LogMessage("Unmounting the Windows image whilst discarding changes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         imgCommitOperation = 1
         UnloadDTProj(False, True, True)
     End Sub
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
+        DynaLog.LogMessage("Opening image application dialog...")
         ImgApply.ShowDialog()
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
+        DynaLog.LogMessage("Opening image capture dialog...")
         ImgCapture.ShowDialog()
     End Sub
 
     Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
+        DynaLog.LogMessage("Opening volume image removal dialog...")
         ImgIndexDelete.ShowDialog()
     End Sub
 
     Private Sub Button33_Click(sender As Object, e As EventArgs) Handles Button33.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             If MountedImageMountDirs.Count > 0 Then
                 For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
                     If MountedImageMountDirs(x) = MountDir Then
+                        DynaLog.LogMessage("Image to get information about: " & MountedImageImgFiles(x))
                         ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
                         Exit For
                     End If
@@ -16571,6 +16676,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button34_Click(sender As Object, e As EventArgs) Handles Button34.Click
+        DynaLog.LogMessage("Opening OS package information dialog...")
         ProgressPanel.OperationNum = 993
         Select Case Language
             Case 0
@@ -16598,6 +16704,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
         End Select
         If Not CompletedTasks(0) Then
+            DynaLog.LogMessage("OS package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -16620,6 +16727,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
+        DynaLog.LogMessage("Opening package removal dialog...")
         ElementCount = 0
         RemPackage.CheckedListBox1.Items.Clear()
         ProgressPanel.OperationNum = 993
@@ -16650,10 +16758,12 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
         End Select
         If Not CompletedTasks(0) Then
+            DynaLog.LogMessage("Package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
         Try
+            DynaLog.LogMessage("Adding packages to arrays...")
             For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
                 If imgPackageNames(x) = "" Then
                     Continue For
@@ -16704,15 +16814,18 @@ Public Class MainForm
     End Sub
 
     Private Sub Button36_Click(sender As Object, e As EventArgs) Handles Button36.Click
+        DynaLog.LogMessage("Opening package addition dialog...")
         AddPackageDlg.ShowDialog()
     End Sub
 
     Private Sub Button37_Click(sender As Object, e As EventArgs) Handles Button37.Click
+        DynaLog.LogMessage("Opening image cleanup dialog...")
         ImgCleanup.ShowDialog()
     End Sub
 
     Private Sub Button38_Click(sender As Object, e As EventArgs) Handles Button38.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving installed package information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.PackageFiles.Count > 0 Then ImgInfoSaveDlg.PackageFiles.Clear()
             ImgInfoSaveDlg.SourceImage = SourceImg
@@ -16730,6 +16843,7 @@ Public Class MainForm
 
     Private Sub Button39_Click(sender As Object, e As EventArgs) Handles Button39.Click
         If Not IsImageMounted Then Exit Sub
+        DynaLog.LogMessage("Opening feature information dialog...")
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -16757,6 +16871,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
         End Select
         If Not CompletedTasks(1) Then
+            DynaLog.LogMessage("Feature background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -16777,6 +16892,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
+        DynaLog.LogMessage("Opening feature disablement dialog...")
         ElementCount = 0
         EnableFeat.ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
@@ -16809,9 +16925,11 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
         End Select
         If Not CompletedTasks(1) Then
+            DynaLog.LogMessage("Feature background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        DynaLog.LogMessage("Adding features to arrays...")
         Select Case PleaseWaitDialog.featOpType
             Case 0
                 Try
@@ -16916,6 +17034,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
+        DynaLog.LogMessage("Opening feature enablement dialog...")
         ElementCount = 0
         EnableFeat.ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
@@ -16948,9 +17067,11 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
         End Select
         If Not CompletedTasks(1) Then
+            DynaLog.LogMessage("Feature background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        DynaLog.LogMessage("Adding features to arrays...")
         Select Case PleaseWaitDialog.featOpType
             Case 0
                 Try
@@ -17055,6 +17176,7 @@ Public Class MainForm
 
     Private Sub Button42_Click(sender As Object, e As EventArgs) Handles Button42.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving feature information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
@@ -17071,7 +17193,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17099,6 +17223,7 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         ElementCount = 0
         RemProvAppxPackage.ListView1.Items.Clear()
         Select Case Language
@@ -17128,9 +17253,11 @@ Public Class MainForm
         End Select
         ProgressPanel.OperationNum = 994
         If Not CompletedTasks(2) Then
+            DynaLog.LogMessage("AppX package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        DynaLog.LogMessage("Adding AppX packages to arrays...")
         Try
             For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
                 If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
@@ -17194,9 +17321,12 @@ Public Class MainForm
     End Sub
 
     Private Sub Button44_Click(sender As Object, e As EventArgs) Handles Button44.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("All requirements are met. Continuing with the task...")
             AddProvAppxPackage.ShowDialog()
         Else
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17226,7 +17356,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17254,6 +17386,8 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+        DynaLog.LogMessage("Opening AppX package information dialog...")
         ProgressPanel.OperationNum = 993
         Select Case Language
             Case 0
@@ -17281,6 +17415,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
         End Select
         If Not CompletedTasks(2) Then
+            DynaLog.LogMessage("AppX package background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -17290,6 +17425,7 @@ Public Class MainForm
 
     Private Sub Button46_Click(sender As Object, e As EventArgs) Handles Button46.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving installed AppX package information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
@@ -17306,7 +17442,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17334,6 +17472,7 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         ElementCount = 0
         RemCapabilities.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
@@ -17363,9 +17502,11 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
         End Select
         If Not CompletedTasks(3) Then
+            DynaLog.LogMessage("Capability background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        DynaLog.LogMessage("Adding capabilities to arrays...")
         Try
             For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
                 If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
@@ -17415,7 +17556,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17443,6 +17586,7 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         ElementCount = 0
         AddCapabilities.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
@@ -17472,9 +17616,11 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
         End Select
         If Not CompletedTasks(3) Then
+            DynaLog.LogMessage("Capability background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        DynaLog.LogMessage("Adding capabilities to arrays...")
         Try
             For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
                 If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
@@ -17524,7 +17670,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button49_Click(sender As Object, e As EventArgs) Handles Button49.Click
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17552,6 +17700,8 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+        DynaLog.LogMessage("Opening capability information dialog...")
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -17577,6 +17727,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
         End Select
         If Not CompletedTasks(3) Then
+            DynaLog.LogMessage("Capability background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -17598,6 +17749,7 @@ Public Class MainForm
 
     Private Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving capability information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
@@ -17614,7 +17766,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
+        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
         If OnlineManagement Then
+            DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17642,6 +17796,7 @@ Public Class MainForm
             End Select
             Exit Sub
         End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         RemDrivers.ListView1.Items.Clear()
         ProgressPanel.OperationNum = 994
         Select Case Language
@@ -17670,9 +17825,11 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
         End Select
         If Not CompletedTasks(4) Then
+            DynaLog.LogMessage("Device driver background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
+        DynaLog.LogMessage("Adding device drivers to arrays...")
         Try
             For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
                 If RemDrivers.CheckBox1.Checked Then
@@ -17714,6 +17871,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button52_Click(sender As Object, e As EventArgs) Handles Button52.Click
+        DynaLog.LogMessage("Opening driver information dialog...")
         ProgressPanel.OperationNum = 994
         Select Case Language
             Case 0
@@ -17741,6 +17899,7 @@ Public Class MainForm
                 PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
         End Select
         If Not CompletedTasks(4) Then
+            DynaLog.LogMessage("Device driver background processes haven't completed.")
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
@@ -17761,9 +17920,12 @@ Public Class MainForm
     End Sub
 
     Private Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
+        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
         If Not OnlineManagement Then
+            DynaLog.LogMessage("The active installation is not being managed. Continuing with the task...")
             AddDrivers.ShowDialog()
         Else
+            DynaLog.LogMessage("The active installation is being managed. This is not supported.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17794,6 +17956,7 @@ Public Class MainForm
 
     Private Sub Button54_Click(sender As Object, e As EventArgs) Handles Button54.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving installed device driver information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
             ImgInfoSaveDlg.SourceImage = SourceImg
@@ -17812,7 +17975,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button55_Click(sender As Object, e As EventArgs) Handles Button55.Click
+        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
         If ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
             BGProcsBusyDialog.ShowDialog()
             Exit Sub
         End If
@@ -17821,6 +17986,7 @@ Public Class MainForm
 
     Private Sub Button56_Click(sender As Object, e As EventArgs) Handles Button56.Click
         If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving Windows PE configuration information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
@@ -17836,7 +18002,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button57_Click(sender As Object, e As EventArgs) Handles Button57.Click
+        DynaLog.LogMessage("Opening target path configuration dialog...")
         If ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
             BGProcsBusyDialog.ShowDialog()
             Exit Sub
         End If
@@ -17844,7 +18012,9 @@ Public Class MainForm
     End Sub
 
     Private Sub Button58_Click(sender As Object, e As EventArgs) Handles Button58.Click
+        DynaLog.LogMessage("Opening scratch space configuration dialog...")
         If ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
             BGProcsBusyDialog.ShowDialog()
             Exit Sub
         End If
@@ -17854,6 +18024,7 @@ Public Class MainForm
 #End Region
 
     Sub GetFeedNews()
+        DynaLog.LogMessage("Pulling news feed from DISMTools subreddit...")
         FeedContents = New SyndicationFeed()
         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
         Try
@@ -17864,12 +18035,14 @@ Public Class MainForm
                 rssContent = client.DownloadString(rssUrl)
             End Using
             If Not String.IsNullOrWhiteSpace(rssContent) Then
+                DynaLog.LogMessage("RSS Feed Content is not nothing. Attempting to create XML reader from content...")
                 Dim reader As XmlReader = XmlReader.Create(New StringReader(rssContent))
+                DynaLog.LogMessage("Loading reader...")
                 FeedContents = SyndicationFeed.Load(reader)
                 reader.Close()
             End If
         Catch ex As Exception
-            Debug.WriteLine("[GetFeedNews] Failed to get feed news")
+            DynaLog.LogMessage("Failed to get feed news. Error message: " & ex.Message)
             FeedEx = ex
         End Try
     End Sub
@@ -17903,18 +18076,21 @@ Public Class MainForm
 
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
         If ListView1.SelectedItems.Count = 1 Then
+            DynaLog.LogMessage("Starting URL of news article: " & FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
             Process.Start(FeedLinks(ListView1.FocusedItem.Index).AbsoluteUri)
         End If
     End Sub
 
     Private Sub HelpTopicsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HelpTopicsToolStripMenuItem.Click
         If HelpBrowserForm.Visible Then
+            DynaLog.LogMessage("Showing Help docs window...")
             If HelpBrowserForm.WindowState = FormWindowState.Minimized Then
                 HelpBrowserForm.WindowState = FormWindowState.Normal
             Else
                 HelpBrowserForm.BringToFront()
             End If
         Else
+            DynaLog.LogMessage("Loading Help docs window...")
             HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\index.html")
             HelpBrowserForm.MinimizeBox = True
             HelpBrowserForm.MaximizeBox = True
@@ -17965,9 +18141,11 @@ Public Class MainForm
     End Sub
 
     Private Sub Button59_Click(sender As Object, e As EventArgs) Handles Button59.Click
+        DynaLog.LogMessage("Refreshing news feed...")
         ListView1.Items.Clear()
         FeedLinks.Clear()
         GetFeedNews()
+        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
         If FeedContents.Items.Count > 0 Then
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
@@ -17979,6 +18157,7 @@ Public Class MainForm
                 FeedLinks.Add(item.Links(0).Uri)
             Next
         Else
+            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
             FeedsPanel.Visible = False
             FeedErrorPanel.Visible = True
             TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
@@ -17986,15 +18165,20 @@ Public Class MainForm
     End Sub
 
     Private Sub FeedWorker_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles FeedWorker.DoWork
+        DynaLog.LogMessage("Detecting if worker needs to be cancelled...")
         If FeedWorker.CancellationPending Then Exit Sub
+        DynaLog.LogMessage("Getting feed news...")
         GetFeedNews()
+        DynaLog.LogMessage("Reporting progress to UI. We got feeds!!!")
         FeedWorker.ReportProgress(0)
         If Not FeedWorker.CancellationPending Then Thread.Sleep(2000)
     End Sub
 
     Private Sub FeedWorker_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles FeedWorker.ProgressChanged
+        DynaLog.LogMessage("Refreshing news feed...")
         ListView1.Items.Clear()
         FeedLinks.Clear()
+        DynaLog.LogMessage("Items in feed: " & FeedContents.Items.Count)
         If FeedContents.Items.Count > 0 Then
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
@@ -18006,6 +18190,7 @@ Public Class MainForm
                 FeedLinks.Add(item.Links(0).Uri)
             Next
         Else
+            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
             FeedsPanel.Visible = False
             FeedErrorPanel.Visible = True
             TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
@@ -18055,6 +18240,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
+        DynaLog.LogMessage("Refreshing news feed...")
         FeedWorker.RunWorkerAsync()
     End Sub
 
@@ -18144,7 +18330,10 @@ Public Class MainForm
     End Sub
 
     Private Sub WatcherBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles WatcherBW.RunWorkerCompleted
+        Debug.WriteLine("Image status watcher has finished.")
+        Debug.WriteLine("Detected image status: " & ImageStatus.ToString())
         If Not ImageStatus = ImageWatcher.Status.OK Then
+            DynaLog.LogMessage("Image status is not OK. Stopping mounted image detector to step in...")
             WatcherTimer.Enabled = False
             If MountedImageDetectorBW.IsBusy Then
                 MountedImageDetectorBWRestarterTimer.Enabled = False
@@ -18157,24 +18346,30 @@ Public Class MainForm
         End If
         Select Case ImageStatus
             Case ImageWatcher.Status.NeedsRemount
+                DynaLog.LogMessage("The image is in need of a servicing session reload.")
                 If Not OrphanedMountedImgDialog.IsDisposed Then OrphanedMountedImgDialog.Dispose()
                 OrphanedMountedImgDialog.ShowDialog(Me)
                 If OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    DynaLog.LogMessage("Ready to reload. Doing so...")
                     ProgressPanel.Validate()
                     ProgressPanel.MountDir = MountDir
                     ProgressPanel.OperationNum = 18
                     ProgressPanel.ShowDialog(Me)
                     If ProgressPanel.IsSuccessful Then ImageStatus = ImageWatcher.Status.OK
                 ElseIf OrphanedMountedImgDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    DynaLog.LogMessage("Not ready to reload. The image needs to be reloading before using this project again. Unloading project...")
                     UnloadDTProj(False, False, False)
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
             Case ImageWatcher.Status.NotMounted
+                DynaLog.LogMessage("The image is no longer mounted. The project needs to be reconfigured")
                 If Not ReloadProjectQuestionDialog.IsDisposed Then ReloadProjectQuestionDialog.Dispose()
                 ReloadProjectQuestionDialog.ShowDialog(Me)
                 If ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    DynaLog.LogMessage("Ready to reconfigure. Doing so...")
                     UpdateProjProperties(False, False)
                 ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                    DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
                     UnloadDTProj(False, False, False)
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
@@ -18189,8 +18384,10 @@ Public Class MainForm
 
     Private Sub ImportDriver_Click(sender As Object, e As EventArgs) Handles ImportDriver.Click
         If Not OnlineManagement Then
+            DynaLog.LogMessage("The active installation is not being managed right now. Continuing...")
             ImportDrivers.ShowDialog()
         Else
+            DynaLog.LogMessage("This image is not supported.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -18227,12 +18424,15 @@ Public Class MainForm
     End Sub
 
     Function CheckOSUninstallCapability() As Boolean
+        DynaLog.LogMessage("Getting OS uninstallation capabilities...")
         Try
             Dim uninstReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\Setup")
             Dim uninstFlag As Integer = CInt(uninstReg.GetValue("UninstallActive").ToString())
             uninstReg.Close()
+            DynaLog.LogMessage("Uninstallation is active: " & uninstFlag)
             Return (uninstFlag = 1)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get uninstallation capabilities. Error message: " & ex.Message)
             Return False
         End Try
         Return False
@@ -18240,12 +18440,15 @@ Public Class MainForm
 
     Private Sub SetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.Click
         If OnlineManagement Then
+            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
             If Not CheckOSUninstallCapability() Then
+                DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
                 OSNoRollbackErrorDlg.ShowDialog(Me)
                 Exit Sub
             End If
             SetOSUninstWindow.ShowDialog()
         Else
+            DynaLog.LogMessage("The active installation is not being managed right now.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -18276,14 +18479,17 @@ Public Class MainForm
 
     Private Sub GetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.Click
         If OnlineManagement Then
+            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
             Try
                 If Not CheckOSUninstallCapability() Then
+                    DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
                     OSNoRollbackErrorDlg.ShowDialog(Me)
                     Exit Sub
                 End If
                 Dim osUninstReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\Setup")
                 Dim RollbackDays As Integer = CInt(osUninstReg.GetValue("UninstallWindow").ToString())
                 osUninstReg.Close()
+                DynaLog.LogMessage("OS Uninstallation Window: " & RollbackDays & " day(s)")
                 Dim msg As String = ""
                 Select Case Language
                     Case 0
@@ -18345,6 +18551,7 @@ Public Class MainForm
                 Exit Sub
             End Try
         Else
+            DynaLog.LogMessage("The active installation is not being managed right now.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -18375,8 +18582,10 @@ Public Class MainForm
 
     Private Sub InitiateOSUninstall_Click(sender As Object, e As EventArgs) Handles InitiateOSUninstall.Click
         If OnlineManagement Then
+            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
             Try
                 If Not CheckOSUninstallCapability() Then
+                    DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
                     OSNoRollbackErrorDlg.ShowDialog(Me)
                     Exit Sub
                 End If
@@ -18447,17 +18656,21 @@ Public Class MainForm
                               "Volete avviare il processo di ritorno?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    DynaLog.LogMessage("User accepted the question. Proceeding with OS uninstallation...")
                     If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                     ProgressPanel.OperationNum = 86
                     ProgressPanel.ShowDialog(Me)
                     Close()
                 Else
+                    DynaLog.LogMessage("User didn't accept the question. Exiting...")
                     Exit Sub
                 End If
             Catch ex As Exception
+                DynaLog.LogMessage("An error occurred. Error message: " & ex.Message)
                 Exit Sub
             End Try
         Else
+            DynaLog.LogMessage("The active installation is not being managed right now.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -18488,8 +18701,10 @@ Public Class MainForm
 
     Private Sub RemoveOSUninstall_Click(sender As Object, e As EventArgs) Handles RemoveOSUninstall.Click
         If OnlineManagement Then
+            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
             Try
                 If Not CheckOSUninstallCapability() Then
+                    DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
                     OSNoRollbackErrorDlg.ShowDialog(Me)
                     Exit Sub
                 End If
@@ -18550,16 +18765,20 @@ Public Class MainForm
                               "Volete rimuovere la possibilità di tornare a una versione precedente di Windows?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
+                    DynaLog.LogMessage("User accepted the question. Proceeding with removal of OS uninstallation capability...")
                     If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
                     ProgressPanel.OperationNum = 87
                     ProgressPanel.ShowDialog(Me)
                 Else
+                    DynaLog.LogMessage("User didn't accept the question. Exiting...")
                     Exit Sub
                 End If
             Catch ex As Exception
+                DynaLog.LogMessage("An error occurred. Error message: " & ex.Message)
                 Exit Sub
             End Try
         Else
+            DynaLog.LogMessage("The active installation is not being managed right now.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -18589,11 +18808,16 @@ Public Class MainForm
     End Sub
 
     Private Sub RecentsLV_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles RecentsLV.MouseDoubleClick
+        DynaLog.LogMessage("Selected items: " & RecentsLV.SelectedItems.Count)
         If RecentsLV.SelectedItems.Count = 1 Then
+            DynaLog.LogMessage("Selected item count is 1. Continuing...")
             Dim itmOrder As Integer = 0
             If RecentList(RecentsLV.FocusedItem.Index).ProjPath <> "" And File.Exists(RecentList(RecentsLV.FocusedItem.Index).ProjPath) Then
+                DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
                 itmOrder = RecentsLV.FocusedItem.Index
                 Dim recentProj As Recents = RecentList(itmOrder)
+                DynaLog.LogMessage("Selected project: " & recentProj.ToString())
+                DynaLog.LogMessage("Reordering projects in recents list...")
                 ChangeRecentListOrder(recentProj, itmOrder)
                 ProgressPanel.OperationNum = 990
                 LoadDTProj(recentProj.ProjPath, _
@@ -18649,6 +18873,7 @@ Public Class MainForm
     Private Sub RecentRemoveLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles RecentRemoveLink.LinkClicked
         Dim itmOrder As Integer = 0
         itmOrder = RecentsLV.FocusedItem.Index
+        DynaLog.LogMessage("Removing entry at index " & itmOrder & "...")
         RecentsLV.Items.Clear()
         RecentList.RemoveAt(itmOrder)
         For Each recentProject In RecentList
@@ -18708,40 +18933,54 @@ Public Class MainForm
     End Sub
 
     Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
+        DynaLog.LogMessage("Opening image export dialog...")
         ImgExport.ShowDialog()
     End Sub
 
     Private Sub CleanupMountpoints_Click(sender As Object, e As EventArgs) Handles CleanupMountpoints.Click
+        DynaLog.LogMessage("Preparing to clean up mount points...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.OperationNum = 7
         ProgressPanel.ShowDialog(Me)
     End Sub
 
     Sub LoadVideo(ID As String, Name As String, Description As String)
+        DynaLog.LogMessage("Deleting existing video player HTML file (if it exists) and recreating from template...")
         If File.Exists(Application.StartupPath & "\videos\videoplay.html") Then File.Delete(Application.StartupPath & "\videos\videoplay.html")
         If File.Exists(Application.StartupPath & "\videos\videoplay_tmp.html") Then
+            DynaLog.LogMessage("Reading HTML...")
             Dim vidPlayRTB As New RichTextBox() With {
                 .Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\videos\videoplay_tmp.html")
             }
+            DynaLog.LogMessage("Modifying HTML according following values:")
+            DynaLog.LogMessage("- Video ID: " & ID)
+            DynaLog.LogMessage("- Video Name: " & Name)
+            DynaLog.LogMessage("- Video Description: " & Description)
             vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
             ' Set appropriate color mode in light theme
+            DynaLog.LogMessage("Setting colors...")
             If BackColor = Color.FromArgb(239, 239, 242) Then
                 vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
             End If
             File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
             HelpVideoPlayer.WebBrowser1.Navigate(Application.StartupPath & "\videos\videoplay.html")
             ' Check emulation mode settings of IE for DISMTools and set them to IE11 (+Edge) (if not detected)
+            DynaLog.LogMessage("Checking Internet Explorer browser emulation settings (necessary step for you to watch videos on web browser controls)...")
             Try
                 Dim IECompatRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", True)
                 Dim IECompatInt As Integer = IECompatRk.GetValue("DISMTools.exe", -1)
+                DynaLog.LogMessage("Browser emulation setting level: " & IECompatInt)
                 If IECompatInt <> 11001 Then
+                    DynaLog.LogMessage("Browser emulation setting level < 11001 (IE 11+Edge). Setting value...")
                     IECompatRk.SetValue("DISMTools.exe", 11001, RegistryValueKind.DWord)
+                    DynaLog.LogMessage("Value set. A program restart is necessary.")
                     MsgBox("Modified Internet Explorer emulation settings for DISMTools. You will need to restart DISMTools in order to start video playback", vbOKOnly + vbInformation, "DISMTools")
                     IECompatRk.Close()
                     Exit Sub
                 End If
                 IECompatRk.Close()
             Catch ex As Exception
+                DynaLog.LogMessage("Could not detect/modify IE browser emulation settings. Error message: " & ex.Message)
                 MsgBox("DISMTools could not modify Internet Explorer emulation settings. Video playback will not start.", vbOKOnly + vbCritical, "DISMTools")
                 Exit Sub
             End Try
@@ -18759,6 +18998,7 @@ Public Class MainForm
         ' Alt-B (Background process panel)
         If e.KeyCode = Keys.B And e.Alt Then
             If Not HomePanel.Visible Then
+                DynaLog.LogMessage("Toggling background processes details panel...")
                 BackgroundProcessesButton.PerformClick()
                 Focus()
             End If
@@ -18766,14 +19006,17 @@ Public Class MainForm
     End Sub
 
     Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
+        DynaLog.LogMessage("Opening image append dialog...")
         ImgAppend.ShowDialog()
     End Sub
 
     Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
         Try
+            DynaLog.LogMessage("Getting videos...")
             Dim videoEx As Exception = New Exception()
             If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
             Using client As New WebClient()
+                DynaLog.LogMessage("Downloading XML...")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
                 Try
                     client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
@@ -18819,6 +19062,7 @@ Public Class MainForm
             VideosPanel.Visible = True
             VideoErrorPanel.Visible = False
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get video feed. Error message: " & ex.Message)
             VideosPanel.Visible = False
             VideoErrorPanel.Visible = True
             TextBox2.Text = ex.ToString() & " - " & ex.Message
@@ -18828,10 +19072,13 @@ Public Class MainForm
     Sub LoadRecentsFromMenu(itemOrder As Integer)
         Dim itmOrder As Integer = 0
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
+            DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
             If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
             If ImgBW.IsBusy Then Exit Sub
             itmOrder = itemOrder
             Dim recentProj As Recents = RecentList(itmOrder)
+            DynaLog.LogMessage("Selected project: " & recentProj.ToString())
+            DynaLog.LogMessage("Reordering projects in recents list...")
             ChangeRecentListOrder(recentProj, itmOrder)
             ProgressPanel.OperationNum = 990
             LoadDTProj(recentProj.ProjPath, _
@@ -18932,6 +19179,7 @@ Public Class MainForm
 
     Private Sub SaveCompleteImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveCompleteImageInformationToolStripMenuItem.Click
         If ImgInfoSFD.ShowDialog(MountedImgMgr) = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving complete image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
             ImgInfoSaveDlg.SourceImage = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
@@ -18950,6 +19198,7 @@ Public Class MainForm
 
     Private Sub CreateDiscImageWithThisFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateDiscImageWithThisFileToolStripMenuItem.Click
         If ISOCreator.BackgroundWorker1.IsBusy Then Exit Sub
+        DynaLog.LogMessage("Opening ISO creator...")
         ISOCreator.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(0).Text
         If ISOCreator.Visible Then
             If ISOCreator.WindowState = FormWindowState.Minimized Then
@@ -18964,11 +19213,13 @@ Public Class MainForm
     End Sub
 
     Private Sub CreateTestingEnvironmentToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CreateTestingEnvironmentToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening test environment creator...")
         NewTestingEnv.Show()
     End Sub
 
     Private Sub ListImage_Click(sender As Object, e As EventArgs) Handles ListImage.Click
         If Not WIEDownloaderBW.IsBusy Then
+            DynaLog.LogMessage("Downloading the WIM Explorer...")
             WIEDownloaderBW.RunWorkerAsync()
         End If
     End Sub
@@ -18979,20 +19230,24 @@ Public Class MainForm
             If Not Directory.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer") Then
                 Directory.CreateDirectory(Application.StartupPath & "\bin\utils\WIM-Explorer")
             End If
+            DynaLog.LogMessage("Downloading WIM Explorer installer script from GitHub repository...")
             Using WIMExpClient As New WebClient()
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
                 Dim contents As String = ""
                 Try
                     contents = WIMExpClient.DownloadString("https://raw.githubusercontent.com/CodingWonders/WIM-Explorer/main/DISMTools-Install.ps1")
                 Catch ex As WebException
+                    DynaLog.LogMessage("Could not download WIM Explorer Setup. Error message: " & ex.Status.ToString())
                     MessageBox.Show("We couldn't download WIM Explorer Setup. Reason:" & CrLf & ex.Status.ToString())
                     Exit Sub
                 End Try
                 If contents <> "" Then
+                    DynaLog.LogMessage("Writing contents...")
                     File.WriteAllText(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1", contents, UTF8)
                 End If
             End Using
             If File.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1") Then
+                DynaLog.LogMessage("Running script...")
                 ' Run installer
                 Dim WEProc As New Process()
                 WEProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
@@ -19006,6 +19261,8 @@ Public Class MainForm
                 WEProc.WaitForExit()
             End If
             If File.Exists(Application.StartupPath & "\bin\utils\WIM-Explorer\WIMExplorer.exe") Then
+                DynaLog.LogMessage("Loading WIM Explorer...")
+                DynaLog.LogMessage("Source image: " & SourceImg)
                 ' Delete temporary files
                 Directory.Delete(Application.StartupPath & "\bin\utils\WIM-Explorer\temp", True)
                 File.Delete(Application.StartupPath & "\bin\utils\WIM-Explorer\setup.ps1")
@@ -19024,10 +19281,12 @@ Public Class MainForm
     End Sub
 
     Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
+        DynaLog.LogMessage("Opening layered driver configuration dialog...")
         SetLayeredDriverDialog.ShowDialog()
     End Sub
 
     Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening unattended answer file manager...")
         If isProjectLoaded And Not (OnlineManagement Or OfflineManagement) Then
             UnattendMgr.TextBox1.Text = Path.Combine(projPath, "unattend_xml")
         End If
@@ -19035,18 +19294,22 @@ Public Class MainForm
     End Sub
 
     Private Sub UnattendedAnswerFileCreatorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileCreatorToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening unattended answer file creator...")
         NewUnattendWiz.Show()
     End Sub
 
     Private Sub ApplyUnattend_Click(sender As Object, e As EventArgs) Handles ApplyUnattend.Click
+        DynaLog.LogMessage("Opening unattended answer file application dialog...")
         ApplyUnattendFile.ShowDialog()
     End Sub
 
     Private Sub VideoGetterBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles VideoGetterBW.DoWork
         Try
+            DynaLog.LogMessage("Getting videos...")
             Dim videoEx As Exception = New Exception()
             If File.Exists(Application.StartupPath & "\videos.xml") Then File.Move(Application.StartupPath & "\videos.xml", Application.StartupPath & "\videos.xml.old")
             Using client As New WebClient()
+                DynaLog.LogMessage("Downloading XML...")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
                 Try
                     client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt_videos/main/videos.xml", Application.StartupPath & "\videos.xml")
@@ -19090,6 +19353,7 @@ Public Class MainForm
 
     Private Sub VideoGetterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles VideoGetterBW.RunWorkerCompleted
         If e.Error IsNot Nothing Then
+            DynaLog.LogMessage("Could not get video feed. Error message: " & e.Error.Message)
             VideosPanel.Visible = False
             VideoErrorPanel.Visible = True
             TextBox2.Text = e.Error.ToString() & " - " & e.Error.Message
@@ -19137,11 +19401,15 @@ Public Class MainForm
     End Sub
 
     Private Sub RegCplToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RegCplToolStripMenuItem.Click
+        DynaLog.LogMessage("Opening image registry control panel...")
         Dim msg As String = ""
         If isProjectLoaded Then
+            DynaLog.LogMessage("A project has been loaded.")
             If IsImageMounted And Not OnlineManagement Then
+                DynaLog.LogMessage("All requirements are met (an image is mounted, and no active installation is being managed). Continuing...")
                 RegistryControlPanel.Show()
             ElseIf IsImageMounted And OnlineManagement Then
+                DynaLog.LogMessage("The active installation is being managed right now. The image is not supported.")
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -19170,6 +19438,7 @@ Public Class MainForm
                 MsgBox(msg, vbOKOnly + vbCritical, Text)
             End If
         Else
+            DynaLog.LogMessage("No project has been loaded.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -19200,10 +19469,13 @@ Public Class MainForm
     End Sub
 
     Sub RestartDetector()
+        Debug.WriteLine("Restarting mounted image detector...")
         Try
             If Not MountedImageDetectorBW.IsBusy Then
+                Debug.WriteLine("The detector is not busy. Calling it...")
                 Call MountedImageDetectorBW.RunWorkerAsync()
             Else
+                Debug.WriteLine("The detector is busy.")
                 Exit Sub
             End If
             Debug.WriteLine("Mounted Image Detector Restart Successful")
@@ -19214,6 +19486,7 @@ Public Class MainForm
     End Sub
 
     Private Sub MountedImageDetectorBWRestarterTimer_Tick(sender As Object, e As EventArgs) Handles MountedImageDetectorBWRestarterTimer.Tick
+        Debug.WriteLine("An event that requires the mounted image detector to be restarted has been triggered.")
         RestartDetector()
     End Sub
 
