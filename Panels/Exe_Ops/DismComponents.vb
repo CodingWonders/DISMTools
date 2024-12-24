@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class DismComponents
 
@@ -80,10 +81,12 @@ Public Class DismComponents
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Visible = True
+        DynaLog.LogMessage("Getting DISM components...")
         For Each DismComponent In My.Computer.FileSystem.GetFiles(Path.GetDirectoryName(Options.TextBox1.Text) & "\dism", FileIO.SearchOption.SearchTopLevelOnly)
             Try
                 fv = FileVersionInfo.GetVersionInfo(DismComponent)
-                ListView1.Items.Add(Path.GetFileName(DismComponent)).SubItems.Add(fv.ProductVersion.ToString())
+                DynaLog.LogMessage("Version of component " & Quote & Path.GetFileName(DismComponent) & Quote & ": " & fv.ProductVersion)
+                ListView1.Items.Add(Path.GetFileName(DismComponent)).SubItems.Add(fv.ProductVersion)
             Catch ex As Exception
                 Continue For
             End Try

@@ -473,6 +473,8 @@ Public Class NewUnattendWiz
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
 
+        DynaLog.DisableLogging()
+
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
         PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
@@ -560,6 +562,8 @@ Public Class NewUnattendWiz
         If ComboBox6.SelectedItem = Nothing Then ComboBox6.SelectedItem = "Pro"
         ' Set default auth tech to WPA2
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
+
+        DynaLog.EnableLogging()
 
         ' Detect .NET runtimes/SDKs
         DetectDotNetRuntime("9.0.100", "9.0")
