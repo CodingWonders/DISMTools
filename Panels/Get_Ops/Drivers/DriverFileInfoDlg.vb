@@ -14,6 +14,7 @@ Public Class DriverFileInfoDlg
     End Sub
 
     Private Sub Copy_Button_Click(sender As Object, e As EventArgs) Handles Copy_Button.Click
+        DynaLog.LogMessage("Copying driver information to clipboard...")
         Dim clipStr As String = "Driver file information of " & GetDriverInfo.ListBox1.Items(GetDriverInfo.ListBox1.SelectedIndex) & ":" & CrLf & CrLf & _
                                 "Published name: " & drvPkg.PublishedName & CrLf & _
                                 "Original file name: " & drvPkg.OriginalFileName & CrLf & _
@@ -112,10 +113,14 @@ Public Class DriverFileInfoDlg
         ListView1.Items.Clear()
         drvPkg = Nothing
         Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
+            DynaLog.LogMessage("Creating session...")
             Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
+                DynaLog.LogMessage("Driver file to get information about: " & Quote & GetDriverInfo.ListBox1.Items(GetDriverInfo.ListBox1.SelectedIndex) & Quote)
                 Dim drvInfo As DismDriverCollection = DismApi.GetDriverInfo(imgSession, GetDriverInfo.ListBox1.Items(GetDriverInfo.ListBox1.SelectedIndex), drvPkg)
                 If drvPkg IsNot Nothing Then
+                    DynaLog.LogMessage("Driver information was obtained successfully. Adding values to list...")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -254,9 +259,15 @@ Public Class DriverFileInfoDlg
                 End If
             End Using
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get information. Error: " & ex.Message)
             MsgBox(ex.Message & " (HRESULT: " & ex.HResult & ")", vbOKOnly + vbCritical, Text)
         Finally
-            DismApi.Shutdown()
+            DynaLog.LogMessage("Shutting down API...")
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

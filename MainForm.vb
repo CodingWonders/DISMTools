@@ -4472,7 +4472,7 @@ Public Class MainForm
                     imgCapabilityState = imgCapabilityStateList.ToArray()
                 End Using
             Catch ex As DismException
-                DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
+                DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
                 DynaLog.LogMessage("Shutting down API...")

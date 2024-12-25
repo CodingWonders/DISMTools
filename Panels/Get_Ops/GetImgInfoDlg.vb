@@ -384,7 +384,10 @@ Public Class GetImgInfoDlg
     End Sub
 
     Sub GetImageInfo(ImageFile As String)
+        DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
+        DynaLog.LogMessage("Checking if mounted image detector is busy...")
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
             MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
@@ -392,7 +395,9 @@ Public Class GetImgInfoDlg
                 Thread.Sleep(500)
             End While
         End If
+        DynaLog.LogMessage("Checking if image status watchers are busy...")
         MainForm.WatcherTimer.Enabled = False
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
             Application.DoEvents()
@@ -401,14 +406,20 @@ Public Class GetImgInfoDlg
         ImageInfoList.Clear()
         ListView1.Items.Clear()
         Try
+            DynaLog.LogMessage("Getting information about the image file...")
             SelectedImageFile = ImageFile
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
-            For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                ImageInfoList.Add(ImageInfo)
-                ListView1.Items.Add(New ListViewItem(New String() {ImageInfo.ImageIndex, ImageInfo.ImageName}))
-            Next
+            DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
+            If ImageInfoCollection.Count > 0 Then
+                DynaLog.LogMessage("This file has images. Updating lists...")
+                For Each ImageInfo As DismImageInfo In ImageInfoCollection
+                    ImageInfoList.Add(ImageInfo)
+                    ListView1.Items.Add(New ListViewItem(New String() {ImageInfo.ImageIndex, ImageInfo.ImageName}))
+                Next
+            End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -437,15 +448,19 @@ Public Class GetImgInfoDlg
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
+            DynaLog.LogMessage("Shutting down API...")
             Try
                 DismApi.Shutdown()
             Catch ex As Exception
                 ' Don't do anything
             End Try
         End Try
+        DynaLog.LogMessage("This process has finished.")
     End Sub
 
     Sub DisplayImageInfo(Index As Integer)
+        DynaLog.LogMessage("Displaying information of specified image file...")
+        DynaLog.LogMessage("Index to get information about: " & Index + 1)
         Label23.Text = ImageInfoList(Index).ProductVersion.ToString()
         DetectFeatureUpdate(ImageInfoList(Index).ProductVersion)
         Label25.Text = ImageInfoList(Index).ImageName
@@ -582,6 +597,8 @@ Public Class GetImgInfoDlg
                 Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
                     "Data di modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
         End Select
+
+        DynaLog.LogMessage("Getting WIMBoot status...")
 
         ' The DISM API part is over. Switch to regular DISM.exe mode for missing details
         Try     ' Try getting image properties
@@ -742,6 +759,7 @@ Public Class GetImgInfoDlg
                 Button3.Enabled = False
                 For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                     If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                        DynaLog.LogMessage("Getting information about the mounted image...")
                         GetImageInfo(MainForm.MountedImageImgFiles(x))
                         Button2.Enabled = True
                         Exit For
@@ -788,6 +806,7 @@ Public Class GetImgInfoDlg
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SelectedImageFile
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName

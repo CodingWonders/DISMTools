@@ -1,19 +1,25 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports System.ComponentModel
 
 Public Class GetWinPESettings
 
     Sub GetPESettings()
         ' Mount the SOFTWARE and SYSTEM keys
         Using reg As New Process
+            DynaLog.LogMessage("Preparing to get Windows PE settings...")
+            DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
             reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
             reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
             reg.StartInfo.CreateNoWindow = True
             reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             reg.Start()
             reg.WaitForExit()
+            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
             If reg.ExitCode <> 0 Then
+                DynaLog.LogMessage("Could not load the hive.")
+                DynaLog.LogMessage("Error message: " & New Win32Exception(reg.ExitCode).Message)
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -41,10 +47,14 @@ Public Class GetWinPESettings
                 End Select
                 Button1.Visible = False
             End If
+            DynaLog.LogMessage("Loading SYSTEM hive of WinPE image...")
             reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
             reg.Start()
             reg.WaitForExit()
+            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
             If reg.ExitCode <> 0 Then
+                DynaLog.LogMessage("Could not load the hive.")
+                DynaLog.LogMessage("Error message: " & New Win32Exception(reg.ExitCode).Message)
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -99,17 +109,22 @@ Public Class GetWinPESettings
                     Case 5
                         msg = "Impossibile ottenere il valore"
                 End Select
+                DynaLog.LogMessage("Getting target path...")
                 ' Get target path first
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+                DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
                 Label5.Text = regKey.GetValue("InstRoot", msg).ToString()
                 regKey.Close()
+                DynaLog.LogMessage("Getting scratch space...")
                 regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
+                DynaLog.LogMessage("Scratch space: " & regKey.GetValue("WinPECacheThreshold", 0) & " MB")
                 Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
                 Label6.Text = If(Not scSize = "", scSize & " MB", msg)
                 regKey.Close()
             Catch ex As Exception
 
             End Try
+            DynaLog.LogMessage("Unloading hives...")
             ' Unload registry hives
             reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
             reg.Start()
@@ -256,12 +271,14 @@ Public Class GetWinPESettings
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        DynaLog.LogMessage("Preparing to configure target path...")
         Visible = False
         If SetPETargetPath.ShowDialog(MainForm) = Windows.Forms.DialogResult.OK Then GetPESettings()
         Visible = True
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Preparing to configure scratch space...")
         Visible = False
         If SetPEScratchSpace.ShowDialog(MainForm) = Windows.Forms.DialogResult.OK Then GetPESettings()
         Visible = True
@@ -269,6 +286,7 @@ Public Class GetWinPESettings
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving Windows PE configuration information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
             ImgInfoSaveDlg.SaveTarget = MainForm.ImgInfoSFD.FileName

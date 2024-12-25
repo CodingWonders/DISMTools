@@ -596,7 +596,7 @@ Public Class GetAppxPkgInfoDlg
         If SearchBox1.Text <> "" Then
             SearchPackages(SearchBox1.Text)
         Else
-            DynaLog.LogMessage("No search query has been specified. Showing all packages...")
+            DynaLog.LogMessage("No search query has been specified. Showing all items...")
             For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
                 ListBox1.Items.Add(InstalledAppx.PackageName)
             Next
