@@ -10864,8 +10864,14 @@ Public Class MainForm
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         End If
         If SkipBGProcs Then Exit Sub
+        DynaLog.LogMessage("Checking if background processes are busy...")
         ' Set image properties
-        If Not ImgBW.IsBusy Then ImgBW.RunWorkerAsync()
+        If Not ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are not busy. Starting them...")
+            ImgBW.RunWorkerAsync()
+        Else
+            DynaLog.LogMessage("Background processes are busy.")
+        End If
     End Sub
 
     Sub UpdateImgProps()
@@ -19001,6 +19007,11 @@ Public Class MainForm
                 DynaLog.LogMessage("Toggling background processes details panel...")
                 BackgroundProcessesButton.PerformClick()
                 Focus()
+            End If
+        ElseIf e.KeyCode = Keys.R And e.Alt Then
+            If Not ImgBW.IsBusy Then
+                DynaLog.LogMessage("Triggering background processes...")
+                ImgBW.RunWorkerAsync()
             End If
         End If
     End Sub
