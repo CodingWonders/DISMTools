@@ -1,4 +1,5 @@
 ﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace Elements
 
@@ -68,6 +69,14 @@ Namespace Elements
         ''' </summary>
         ''' <remarks></remarks>
         Public Property StubPackageOption As StubPreference
+
+        Public Overrides Function ToString() As String
+            Return "AppX package:" & CrLf &
+                "- Name: " & Quote & Me.PackageName & Quote & CrLf &
+                "- Publisher: " & Quote & Me.PackagePublisher & Quote & CrLf &
+                "- Version: " & Quote & Me.PackageVersion & Quote & CrLf &
+                "- Architecture: " & Quote & Me.PackageArchitecture & Quote
+        End Function
     End Class
 
     ''' <summary>

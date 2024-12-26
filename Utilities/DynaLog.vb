@@ -7,7 +7,21 @@ Imports Microsoft.VisualBasic.ControlChars
 ''' <remarks></remarks>
 Public Class DynaLog
 
+    ''' <summary>
+    ''' Determines whether the logger is temporarily enabled or disabled
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>This can be called by any function/method</remarks>
     Public Shared Property LoggerEnabled As Boolean = True
+
+    ''' <summary>
+    ''' Determines whether the logger is permanently enabled or disabled
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>This can only be called by specific methods used by DISMTools</remarks>
+    Public Shared Property UltimatelyEnabled As Boolean = True
 
     Public Shared Sub CheckLogAge()
         LogMessage("Checking existing logs...", False)
@@ -50,9 +64,18 @@ Public Class DynaLog
         LoggerEnabled = False
     End Sub
 
-    Public Shared Sub EnableLogging()
-        LoggerEnabled = True
-        LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name)
+    Public Shared Sub EnableLogging(Optional UltimateEnable As Boolean = False)
+        If UltimatelyEnabled Then
+            LoggerEnabled = True
+            LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name)
+        Else
+            If UltimateEnable Then
+                UltimatelyEnabled = True
+                EnableLogging()
+                Exit Sub
+            End If
+            Debug.WriteLine("The logger has been ultimately disabled and cannot be enabled with this method. Use the Ultimate switch to bypass.")
+        End If
     End Sub
 
     Public Shared Sub LogMessage(message As String, Optional GetParentCaller As Boolean = True)
