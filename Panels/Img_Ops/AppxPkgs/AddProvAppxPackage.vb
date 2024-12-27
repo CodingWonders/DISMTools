@@ -1852,7 +1852,11 @@ Public Class AddProvAppxPackage
         Catch ex As NullReferenceException
             Button9.Enabled = True
         End Try
-        DynaLog.LogMessage("Getting properties of selected item. Index: " & ListView1.FocusedItem.Index)
+        Try
+            DynaLog.LogMessage("Getting properties of selected item. Index: " & ListView1.FocusedItem.Index)
+        Catch ex As Exception
+            ' Do Not Log
+        End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
