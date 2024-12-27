@@ -9,10 +9,12 @@ Public Class AddCapabilities
     Dim capIds(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         Dim capIdList As New List(Of String)
         ProgressPanel.MountDir = MainForm.MountDir
         capCount = ListView1.CheckedItems.Count
+        DynaLog.LogMessage("Detecting capabilities to add...")
         If ListView1.CheckedItems.Count >= 1 Then
             For x = 0 To capCount - 1
                 capIdList.Add(ListView1.CheckedItems(x).SubItems(0).Text)
@@ -21,6 +23,7 @@ Public Class AddCapabilities
             For x = 0 To capIds.Length - 1
                 ProgressPanel.capAdditionIds(x) = capIds(x)
             Next
+            DynaLog.LogMessage("Getting states of capabilities for any missing sources...")
             For x = 0 To capCount - 1
                 If MainForm.OnlineManagement And Not CheckBox2.Checked Then Exit For
                 If ListView1.CheckedItems(x).SubItems(1).Text = "Not present" Then
@@ -85,11 +88,14 @@ Public Class AddCapabilities
             Next
             ProgressPanel.capAdditionLastId = ListView1.CheckedItems(capCount - 1).SubItems(0).Text
             If CheckBox1.Checked Then
+                DynaLog.LogMessage("Specified source: " & Quote & RichTextBox1.Text & Quote)
                 If RichTextBox1.Text <> "" Then
                     If Directory.Exists(RichTextBox1.Text) Then
+                        DynaLog.LogMessage("The specified source exists in the file system.")
                         ProgressPanel.capAdditionUseSource = True
                         ProgressPanel.capAdditionSource = RichTextBox1.Text         ' Don't know if it would work on cases where it begins with "wim:\"
                     Else
+                        DynaLog.LogMessage("The specified source does not exist in the file system.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -118,6 +124,7 @@ Public Class AddCapabilities
                         Exit Sub
                     End If
                 Else
+                    DynaLog.LogMessage("No source has been specified.")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -157,6 +164,7 @@ Public Class AddCapabilities
                 ProgressPanel.capAdditionCommit = False
             End If
         Else
+            DynaLog.LogMessage("No items have been added to the queue.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -452,6 +460,7 @@ Public Class AddCapabilities
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        DynaLog.LogMessage("Getting source established in the group policy...")
         RichTextBox1.Text = MainForm.GetSrcFromGPO()
         If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
             TextBoxSourcePanel.Visible = False

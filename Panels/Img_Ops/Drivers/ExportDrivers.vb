@@ -1,12 +1,19 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ExportDrivers
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Specified driver export target: " & Quote & TextBox1.Text & Quote)
+        DynaLog.LogMessage("Checking if directory exists...")
         If TextBox1.Text <> "" And Directory.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("Export target exists.")
             ProgressPanel.drvExportTarget = TextBox1.Text
         Else
+            DynaLog.LogMessage("Export target does not exist.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -156,6 +163,7 @@ Public Class ExportDrivers
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Selected path: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub
