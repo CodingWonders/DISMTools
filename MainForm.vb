@@ -3454,205 +3454,209 @@ Public Class MainForm
     End Sub
 
     Sub DetectVersions(DismVer As FileVersionInfo, NTVer As Version)
-        ' Restore enabled properties of each menu item and group in the new design
-        DynaLog.LogMessage("Restoring state of items...")
-        For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
-            Item.Enabled = True
-            Try
-                For Each DropDownItem As ToolStripDropDownItem In Item.DropDownItems
-                    DropDownItem.Enabled = True
-                Next
-            Catch ex As Exception
-                Continue For
-            End Try
-        Next
-        GroupBox7.Enabled = True    ' AppX package group
-        GroupBox8.Enabled = True    ' Capability group
-        GroupBox10.Enabled = True   ' Windows PE settings group
+        Try
+            ' Restore enabled properties of each menu item and group in the new design
+            DynaLog.LogMessage("Restoring state of items...")
+            For Each Item As ToolStripDropDownItem In CommandsToolStripMenuItem.DropDownItems
+                Item.Enabled = True
+                Try
+                    For Each DropDownItem As ToolStripDropDownItem In Item.DropDownItems
+                        DropDownItem.Enabled = True
+                    Next
+                Catch ex As Exception
+                    Continue For
+                End Try
+            Next
+            GroupBox7.Enabled = True    ' AppX package group
+            GroupBox8.Enabled = True    ' Capability group
+            GroupBox10.Enabled = True   ' Windows PE settings group
 
-        DynaLog.LogMessage("Provided version information:")
-        DynaLog.LogMessage("- Information of ntoskrnl: " & NTVer.ToString())
-        DynaLog.LogMessage("- Information of DISM: " & DismVer.ProductVersion)
+            DynaLog.LogMessage("Provided version information:")
+            DynaLog.LogMessage("- Information of ntoskrnl: " & NTVer.ToString())
+            DynaLog.LogMessage("- Information of DISM: " & DismVer.ProductVersion)
 
-        ' Detect if an image has been mounted, and act accordingly
-        If IsImageMounted Then
-            DynaLog.LogMessage("An image has been mounted. Comparing ntoskrnl versions...")
-            ' Now, detect the Windows version
-            Select Case NTVer.Major
-                Case 6
-                    Select Case NTVer.Minor
-                        Case 1
-                            DynaLog.LogMessage("The Windows image contains Windows 7. Disabling AppX, WIMBoot and capability-related actions...")
-                            ' All AppX and capability stuff goes away
-                            AppPackagesToolStripMenuItem.Enabled = False
-                            CapabilitiesToolStripMenuItem.Enabled = False
-                            GroupBox7.Enabled = False
-                            GroupBox8.Enabled = False
+            ' Detect if an image has been mounted, and act accordingly
+            If IsImageMounted Then
+                DynaLog.LogMessage("An image has been mounted. Comparing ntoskrnl versions...")
+                ' Now, detect the Windows version
+                Select Case NTVer.Major
+                    Case 6
+                        Select Case NTVer.Minor
+                            Case 1
+                                DynaLog.LogMessage("The Windows image contains Windows 7. Disabling AppX, WIMBoot and capability-related actions...")
+                                ' All AppX and capability stuff goes away
+                                AppPackagesToolStripMenuItem.Enabled = False
+                                CapabilitiesToolStripMenuItem.Enabled = False
+                                GroupBox7.Enabled = False
+                                GroupBox8.Enabled = False
 
-                            ' WIMBoot also goes away
-                            GetWIMBootEntry.Enabled = False
-                            UpdateWIMBootEntry.Enabled = False
+                                ' WIMBoot also goes away
+                                GetWIMBootEntry.Enabled = False
+                                UpdateWIMBootEntry.Enabled = False
 
-                            ' Microsoft Edge stuff, you know what I mean...
-                            MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                ' Microsoft Edge stuff, you know what I mean...
+                                MicrosoftEdgeToolStripMenuItem.Enabled = False
 
-                            ' Disable other stuff
-                            ExportDriver.Enabled = False
-                            ReservedStorageToolStripMenuItem.Enabled = False
-                            SetSysUILang.Enabled = False
-                            ProvisioningPackagesToolStripMenuItem.Enabled = False
-                            OSUninstallToolStripMenuItem.Enabled = False
-                        Case 2
-                            Select Case NTVer.Build
-                                Case Is >= 8102
-                                    DynaLog.LogMessage("The Windows image contains Windows Developer Preview or higher. Disabling WIMBoot and capability-related actions...")
-                                    CapabilitiesToolStripMenuItem.Enabled = False
-                                    GroupBox8.Enabled = False
-                                    GetWIMBootEntry.Enabled = False
-                                    UpdateWIMBootEntry.Enabled = False
-                                    MicrosoftEdgeToolStripMenuItem.Enabled = False
-                                    ReservedStorageToolStripMenuItem.Enabled = False
-                                    SetSysUILang.Enabled = False
-                                    ProvisioningPackagesToolStripMenuItem.Enabled = False
-                                    OSUninstallToolStripMenuItem.Enabled = False
-                                Case Else
-                                    DynaLog.LogMessage("The Windows image contains an earlier beta build of Windows 8. Disabling AppX, WIMBoot and capability-related actions...")
-                                    AppPackagesToolStripMenuItem.Enabled = False
-                                    CapabilitiesToolStripMenuItem.Enabled = False
-                                    GroupBox7.Enabled = False
-                                    GroupBox8.Enabled = False
-                                    GetWIMBootEntry.Enabled = False
-                                    UpdateWIMBootEntry.Enabled = False
-                                    MicrosoftEdgeToolStripMenuItem.Enabled = False
-                                    ReservedStorageToolStripMenuItem.Enabled = False
-                                    SetSysUILang.Enabled = False
-                                    ProvisioningPackagesToolStripMenuItem.Enabled = False
-                                    OSUninstallToolStripMenuItem.Enabled = False
-                            End Select
-                        Case 3
-                            DynaLog.LogMessage("The Windows image contains Windows 8.1. Disabling capability-related actions...")
-                            CapabilitiesToolStripMenuItem.Enabled = False
-                            GroupBox8.Enabled = False
-                            MicrosoftEdgeToolStripMenuItem.Enabled = False
-                            ReservedStorageToolStripMenuItem.Enabled = False
-                            SetSysUILang.Enabled = False
-                            ProvisioningPackagesToolStripMenuItem.Enabled = False
-                            OSUninstallToolStripMenuItem.Enabled = False
-                    End Select
-                Case 10
-                    Select Case NTVer.Build
-                        Case Is < 21996
-                            DynaLog.LogMessage("The Windows image contains Windows 10")
-                            ' Microsoft Edge stuff only affects Windows 11
-                            MicrosoftEdgeToolStripMenuItem.Enabled = False
-                    End Select
-            End Select
+                                ' Disable other stuff
+                                ExportDriver.Enabled = False
+                                ReservedStorageToolStripMenuItem.Enabled = False
+                                SetSysUILang.Enabled = False
+                                ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                OSUninstallToolStripMenuItem.Enabled = False
+                            Case 2
+                                Select Case NTVer.Build
+                                    Case Is >= 8102
+                                        DynaLog.LogMessage("The Windows image contains Windows Developer Preview or higher. Disabling WIMBoot and capability-related actions...")
+                                        CapabilitiesToolStripMenuItem.Enabled = False
+                                        GroupBox8.Enabled = False
+                                        GetWIMBootEntry.Enabled = False
+                                        UpdateWIMBootEntry.Enabled = False
+                                        MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                        ReservedStorageToolStripMenuItem.Enabled = False
+                                        SetSysUILang.Enabled = False
+                                        ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                        OSUninstallToolStripMenuItem.Enabled = False
+                                    Case Else
+                                        DynaLog.LogMessage("The Windows image contains an earlier beta build of Windows 8. Disabling AppX, WIMBoot and capability-related actions...")
+                                        AppPackagesToolStripMenuItem.Enabled = False
+                                        CapabilitiesToolStripMenuItem.Enabled = False
+                                        GroupBox7.Enabled = False
+                                        GroupBox8.Enabled = False
+                                        GetWIMBootEntry.Enabled = False
+                                        UpdateWIMBootEntry.Enabled = False
+                                        MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                        ReservedStorageToolStripMenuItem.Enabled = False
+                                        SetSysUILang.Enabled = False
+                                        ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                        OSUninstallToolStripMenuItem.Enabled = False
+                                End Select
+                            Case 3
+                                DynaLog.LogMessage("The Windows image contains Windows 8.1. Disabling capability-related actions...")
+                                CapabilitiesToolStripMenuItem.Enabled = False
+                                GroupBox8.Enabled = False
+                                MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                ReservedStorageToolStripMenuItem.Enabled = False
+                                SetSysUILang.Enabled = False
+                                ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                OSUninstallToolStripMenuItem.Enabled = False
+                        End Select
+                    Case 10
+                        Select Case NTVer.Build
+                            Case Is < 21996
+                                DynaLog.LogMessage("The Windows image contains Windows 10")
+                                ' Microsoft Edge stuff only affects Windows 11
+                                MicrosoftEdgeToolStripMenuItem.Enabled = False
+                        End Select
+                End Select
 
-            ' Disable Windows PE stuff when not working with a Windows PE image
-            WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
-            GroupBox10.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
-            ' Disable AppX and capability stuff when working with a Windows PE image
-            AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-            CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-            GroupBox7.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-            GroupBox8.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                ' Disable Windows PE stuff when not working with a Windows PE image
+                WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+                GroupBox10.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+                ' Disable AppX and capability stuff when working with a Windows PE image
+                AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                GroupBox7.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                GroupBox8.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
 
-            ' Next, detect the DISM version, so that we can determine which things are applicable
-            DynaLog.LogMessage("Comparing DISM versions...")
-            Select Case DismVer.ProductMajorPart
-                Case 6
-                    Select Case DismVer.ProductMinorPart
-                        Case 1
-                            DynaLog.LogMessage("Provided DISM is from Windows 7")
-                            AppendImage.Enabled = False
-                            ApplyFFU.Enabled = False
-                            ApplyImage.Enabled = False
-                            CaptureCustomImage.Enabled = False
-                            CaptureFFU.Enabled = False
-                            CaptureImage.Enabled = False
-                            CleanupMountpoints.Enabled = False
-                            DeleteImage.Enabled = False
-                            ExportImage.Enabled = False
-                            GetWIMBootEntry.Enabled = False
-                            ListImage.Enabled = False
-                            OptimizeFFU.Enabled = False
-                            OptimizeImage.Enabled = False
-                            SplitFFU.Enabled = False
-                            SplitImage.Enabled = False
-                            UpdateWIMBootEntry.Enabled = False
-                            ApplySiloedPackage.Enabled = False
-                            ProvisioningPackagesToolStripMenuItem.Enabled = False
-                            AddProvisionedAppxPackage.Enabled = False
-                            RemoveProvisionedAppxPackage.Enabled = False
-                            OptimizeProvisionedAppxPackages.Enabled = False
-                            SetProvisionedAppxDataFile.Enabled = False
-                            ExportDefaultAppAssociations.Enabled = False
-                            GetDefaultAppAssociations.Enabled = False
-                            ImportDefaultAppAssociations.Enabled = False
-                            RemoveDefaultAppAssociations.Enabled = False
-                            AddCapability.Enabled = False
-                            ExportSource.Enabled = False
-                            RemoveCapability.Enabled = False
-                            ExportDriver.Enabled = False
-                            GetOSUninstallWindow.Enabled = False
-                            InitiateOSUninstall.Enabled = False
-                            RemoveOSUninstall.Enabled = False
-                            SetOSUninstallWindow.Enabled = False
-                            ReservedStorageToolStripMenuItem.Enabled = False
-                            MicrosoftEdgeToolStripMenuItem.Enabled = False
-                            SetSysUILang.Enabled = False
-                            GroupBox7.Enabled = False
-                            GroupBox8.Enabled = False
-                        Case 2
-                            DynaLog.LogMessage("Provided DISM is from Windows 8")
-                            CaptureFFU.Enabled = False
-                            GetWIMBootEntry.Enabled = False
-                            OptimizeFFU.Enabled = False
-                            OptimizeImage.Enabled = False
-                            SplitFFU.Enabled = False
-                            UpdateWIMBootEntry.Enabled = False
-                            ApplySiloedPackage.Enabled = False
-                            ProvisioningPackagesToolStripMenuItem.Enabled = False
-                            OptimizeProvisionedAppxPackages.Enabled = False
-                            AddCapability.Enabled = False
-                            ExportSource.Enabled = False
-                            RemoveCapability.Enabled = False
-                            GetOSUninstallWindow.Enabled = False
-                            InitiateOSUninstall.Enabled = False
-                            RemoveOSUninstall.Enabled = False
-                            SetOSUninstallWindow.Enabled = False
-                            ReservedStorageToolStripMenuItem.Enabled = False
-                            MicrosoftEdgeToolStripMenuItem.Enabled = False
-                            SetSysUILang.Enabled = False
-                            GroupBox8.Enabled = False
-                        Case 3
-                            DynaLog.LogMessage("Provided DISM is from Windows 8.1")
-                            CaptureFFU.Enabled = False
-                            OptimizeFFU.Enabled = False
-                            OptimizeImage.Enabled = False
-                            SplitFFU.Enabled = False
-                            ApplySiloedPackage.Enabled = False
-                            ProvisioningPackagesToolStripMenuItem.Enabled = False
-                            OptimizeProvisionedAppxPackages.Enabled = False
-                            AddCapability.Enabled = False
-                            ExportSource.Enabled = False
-                            RemoveCapability.Enabled = False
-                            GetOSUninstallWindow.Enabled = False
-                            InitiateOSUninstall.Enabled = False
-                            RemoveOSUninstall.Enabled = False
-                            SetOSUninstallWindow.Enabled = False
-                            ReservedStorageToolStripMenuItem.Enabled = False
-                            MicrosoftEdgeToolStripMenuItem.Enabled = False
-                            SetSysUILang.Enabled = False
-                            GroupBox8.Enabled = False
-                    End Select
-                Case 10
-                    DynaLog.LogMessage("Provided DISM is from Windows 10 or newer")
-                    ' Everything is enabled
-            End Select
-        Else
+                ' Next, detect the DISM version, so that we can determine which things are applicable
+                DynaLog.LogMessage("Comparing DISM versions...")
+                Select Case DismVer.ProductMajorPart
+                    Case 6
+                        Select Case DismVer.ProductMinorPart
+                            Case 1
+                                DynaLog.LogMessage("Provided DISM is from Windows 7")
+                                AppendImage.Enabled = False
+                                ApplyFFU.Enabled = False
+                                ApplyImage.Enabled = False
+                                CaptureCustomImage.Enabled = False
+                                CaptureFFU.Enabled = False
+                                CaptureImage.Enabled = False
+                                CleanupMountpoints.Enabled = False
+                                DeleteImage.Enabled = False
+                                ExportImage.Enabled = False
+                                GetWIMBootEntry.Enabled = False
+                                ListImage.Enabled = False
+                                OptimizeFFU.Enabled = False
+                                OptimizeImage.Enabled = False
+                                SplitFFU.Enabled = False
+                                SplitImage.Enabled = False
+                                UpdateWIMBootEntry.Enabled = False
+                                ApplySiloedPackage.Enabled = False
+                                ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                AddProvisionedAppxPackage.Enabled = False
+                                RemoveProvisionedAppxPackage.Enabled = False
+                                OptimizeProvisionedAppxPackages.Enabled = False
+                                SetProvisionedAppxDataFile.Enabled = False
+                                ExportDefaultAppAssociations.Enabled = False
+                                GetDefaultAppAssociations.Enabled = False
+                                ImportDefaultAppAssociations.Enabled = False
+                                RemoveDefaultAppAssociations.Enabled = False
+                                AddCapability.Enabled = False
+                                ExportSource.Enabled = False
+                                RemoveCapability.Enabled = False
+                                ExportDriver.Enabled = False
+                                GetOSUninstallWindow.Enabled = False
+                                InitiateOSUninstall.Enabled = False
+                                RemoveOSUninstall.Enabled = False
+                                SetOSUninstallWindow.Enabled = False
+                                ReservedStorageToolStripMenuItem.Enabled = False
+                                MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                SetSysUILang.Enabled = False
+                                GroupBox7.Enabled = False
+                                GroupBox8.Enabled = False
+                            Case 2
+                                DynaLog.LogMessage("Provided DISM is from Windows 8")
+                                CaptureFFU.Enabled = False
+                                GetWIMBootEntry.Enabled = False
+                                OptimizeFFU.Enabled = False
+                                OptimizeImage.Enabled = False
+                                SplitFFU.Enabled = False
+                                UpdateWIMBootEntry.Enabled = False
+                                ApplySiloedPackage.Enabled = False
+                                ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                OptimizeProvisionedAppxPackages.Enabled = False
+                                AddCapability.Enabled = False
+                                ExportSource.Enabled = False
+                                RemoveCapability.Enabled = False
+                                GetOSUninstallWindow.Enabled = False
+                                InitiateOSUninstall.Enabled = False
+                                RemoveOSUninstall.Enabled = False
+                                SetOSUninstallWindow.Enabled = False
+                                ReservedStorageToolStripMenuItem.Enabled = False
+                                MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                SetSysUILang.Enabled = False
+                                GroupBox8.Enabled = False
+                            Case 3
+                                DynaLog.LogMessage("Provided DISM is from Windows 8.1")
+                                CaptureFFU.Enabled = False
+                                OptimizeFFU.Enabled = False
+                                OptimizeImage.Enabled = False
+                                SplitFFU.Enabled = False
+                                ApplySiloedPackage.Enabled = False
+                                ProvisioningPackagesToolStripMenuItem.Enabled = False
+                                OptimizeProvisionedAppxPackages.Enabled = False
+                                AddCapability.Enabled = False
+                                ExportSource.Enabled = False
+                                RemoveCapability.Enabled = False
+                                GetOSUninstallWindow.Enabled = False
+                                InitiateOSUninstall.Enabled = False
+                                RemoveOSUninstall.Enabled = False
+                                SetOSUninstallWindow.Enabled = False
+                                ReservedStorageToolStripMenuItem.Enabled = False
+                                MicrosoftEdgeToolStripMenuItem.Enabled = False
+                                SetSysUILang.Enabled = False
+                                GroupBox8.Enabled = False
+                        End Select
+                    Case 10
+                        DynaLog.LogMessage("Provided DISM is from Windows 10 or newer")
+                        ' Everything is enabled
+                End Select
+            Else
 
-        End If
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     ''' <summary>
@@ -13019,6 +13023,11 @@ Public Class MainForm
     End Sub
 
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
+        DynaLog.LogMessage("Preparing background processes...")
+        DynaLog.LogMessage("- Run all background processes? " & If(bwAllBackgroundProcesses, "Yes", "No"))
+        DynaLog.LogMessage("- Background process action: " & bwBackgroundProcessAction)
+        DynaLog.LogMessage("- Get basic image information? " & If(bwGetImageInfo, "Yes", "No"))
+        DynaLog.LogMessage("- Get advanced image information? " & If(bwGetAdvImgInfo, "Yes", "No"))
         DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         MountedImageDetectorBW.CancelAsync()
@@ -19008,8 +19017,12 @@ Public Class MainForm
                 BackgroundProcessesButton.PerformClick()
                 Focus()
             End If
-        ElseIf e.KeyCode = Keys.R And e.Alt Then
+        ElseIf e.KeyCode = Keys.U And e.Alt Then
             If Not ImgBW.IsBusy Then
+                bwBackgroundProcessAction = 0
+                bwAllBackgroundProcesses = True
+                bwGetImageInfo = True
+                bwGetAdvImgInfo = True
                 DynaLog.LogMessage("Triggering background processes...")
                 ImgBW.RunWorkerAsync()
             End If
