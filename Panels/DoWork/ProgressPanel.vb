@@ -333,7 +333,7 @@ Public Class ProgressPanel
     Public pkgIgnoreApplicabilityChecks As Boolean          ' If option is checked, ignore applicability checks
     Public pkgPreventIfPendingOnline As Boolean             ' If option is checked, ignore package if online actions are required on the image
     Public imgCommitAfterOps As Boolean                     ' If option is checked, commit image after operations are done
-    Public pkgAdditionOp As Integer                         ' 0: recursive operation; 1: selective operation
+    Public pkgAdditionOp As Integer                         ' 0: recursive operation; 1: selective operation; 2: Microsoft Update Manifest operation
     Public pkgCount As Integer                              ' Gather package count
     Public pkgCurrentNum As Integer                         ' Current package number
     Public pkgSuccessfulAdditions As Integer                ' Determine successful package additions

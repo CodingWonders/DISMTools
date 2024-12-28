@@ -408,6 +408,7 @@ Public Class GetImgInfoDlg
         Try
             DynaLog.LogMessage("Getting information about the image file...")
             SelectedImageFile = ImageFile
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)

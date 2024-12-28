@@ -86,13 +86,19 @@ Namespace Elements
         End Property
 
         Public Shared Function GetKeyboardDriver(mountDir As String, Optional onlineMode As Boolean = False) As LayeredKeyboardDriver
+            DynaLog.LogMessage("Getting keyboard layered driver...")
+            DynaLog.LogMessage("- Mount directory: " & Quote & mountDir & Quote)
+            DynaLog.LogMessage("- Is active installation being managed? " & If(onlineMode, "Yes", "No"))
             If onlineMode Then
+                DynaLog.LogMessage("Attempting to get the keyboard layered driver from the host system...")
                 Try
                     ' Grab override keyboard type from registry
                     Dim OverrideKeybReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Services\i8042prt\Parameters", False)
                     Dim OverrideKeybID As String = OverrideKeybReg.GetValue("OverrideKeyboardIdentifier")
                     OverrideKeybReg.Close()
                     ' Check keyboard ID
+                    DynaLog.LogMessage("Override keyboard ID: " & OverrideKeybID)
+                    DynaLog.LogMessage("Evaluating keyboard ID...")
                     Select Case OverrideKeybID
                         Case "PCAT_101KEY"
                             Return LayeredKeyboardDriver.PCATKey
@@ -108,13 +114,16 @@ Namespace Elements
                             Return LayeredKeyboardDriver.J_106109Key
                     End Select
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not get keyboard layered driver. Error message: " & ex.Message)
                     MessageBox.Show(ex.Message)
                     Return LayeredKeyboardDriver.Unknown
                 End Try
                 Return LayeredKeyboardDriver.Unknown
             End If
             If (mountDir <> "") AndAlso (Directory.Exists(mountDir)) Then
+                DynaLog.LogMessage("Attempting to get the keyboard layered driver from the specified Windows image...")
                 Try
+                    DynaLog.LogMessage("Loading image SYSTEM registry hive...")
                     ' Load the registry key
                     Dim RegProc As New Process()
                     RegProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
@@ -125,6 +134,7 @@ Namespace Elements
                     End If
                     RegProc.Start()
                     RegProc.WaitForExit()
+                    DynaLog.LogMessage("REG process exited with error code " & Hex(RegProc.ExitCode))
                     If RegProc.ExitCode <> 0 Then
                         Throw New Exception("Process exited with code " & RegProc.ExitCode)
                     End If
@@ -132,13 +142,17 @@ Namespace Elements
                     Dim OverrideKeybReg As RegistryKey = Registry.LocalMachine.OpenSubKey("zSYS\ControlSet001\Services\i8042prt\Parameters", False)
                     Dim OverrideKeybID As String = OverrideKeybReg.GetValue("OverrideKeyboardIdentifier")
                     OverrideKeybReg.Close()
+                    DynaLog.LogMessage("Unloading image SYSTEM registry hive...")
                     ' Unload image registry
                     RegProc.StartInfo.Arguments = "unload HKLM\zSYS"
                     RegProc.Start()
                     RegProc.WaitForExit()
+                    DynaLog.LogMessage("REG process exited with error code " & Hex(RegProc.ExitCode))
                     If RegProc.ExitCode <> 0 Then
                         Throw New Exception("Process exited with code " & RegProc.ExitCode)
                     End If
+                    DynaLog.LogMessage("Override keyboard ID: " & OverrideKeybID)
+                    DynaLog.LogMessage("Evaluating keyboard ID...")
                     ' Check keyboard ID
                     Select Case OverrideKeybID
                         Case "PCAT_101KEY"

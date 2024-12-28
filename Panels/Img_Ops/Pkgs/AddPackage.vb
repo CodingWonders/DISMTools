@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class AddPackageDlg
 
@@ -12,17 +13,23 @@ Public Class AddPackageDlg
     Dim Addition_MUMFile As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgSource = TextBox1.Text
         pkgCount = CheckedListBox1.CheckedItems.Count
         If RadioButton1.Checked AndAlso (Addition_MUMFile Is Nothing OrElse Addition_MUMFile = "") Then
+            DynaLog.LogMessage("Packages will be added recursively.")
             ProgressPanel.pkgAdditionOp = 0
         Else
+            DynaLog.LogMessage("Packages will not be added recursively.")
+            DynaLog.LogMessage("Getting whether or not a MUM (Microsoft Update Manifest) file has been specified...")
             If Addition_MUMFile <> "" Then
+                DynaLog.LogMessage("An update manifest has been specified for addition.")
                 ProgressPanel.pkgAdditionOp = 2
                 ProgressPanel.pkgCount = 1
             Else
+                DynaLog.LogMessage("An update manifest has not been specified for addition. Proceeding with selective operation...")
                 ProgressPanel.pkgAdditionOp = 1
                 ProgressPanel.pkgCount = pkgCount
             End If
@@ -43,7 +50,9 @@ Public Class AddPackageDlg
             ProgressPanel.imgCommitAfterOps = False
         End If
         If ProgressPanel.pkgAdditionOp = 1 Then
+            DynaLog.LogMessage("A selective package addition operation will be started. Checking packages to add...")
             If CheckedListBox1.CheckedItems.Count <= 0 Then
+                DynaLog.LogMessage("No items have been added to the queue.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -70,9 +79,11 @@ Public Class AddPackageDlg
                         MessageBox.Show(MainForm, "Selezionare i pacchetti da aggiungere e riprovare. È anche possibile continuare a lasciare che DISM esegua la scansione dei pacchetti applicabili", "Nessun pacchetto selezionato", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Select
             Else
+                DynaLog.LogMessage("OS packages to add to the queue: " & pkgCount)
                 If pkgCount > 65535 Then
                     MessageBox.Show(MainForm, "Right now, due to program limitations, you can select 65535 packages or less.", "Current program limitation", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Else
+                    DynaLog.LogMessage("Adding AppX packages to queue...")
                     Try
                         For x As Integer = 0 To pkgCount - 1
                             pkgs(x) = CheckedListBox1.CheckedItems(x).ToString()
@@ -124,6 +135,9 @@ Public Class AddPackageDlg
     End Sub
 
     Sub GatherPackages(FolderToScan As String)
+        DynaLog.LogMessage("Scanning folder for possible packages...")
+        DynaLog.LogMessage("- Folder to scan: " & Quote & FolderToScan & Quote)
+        DynaLog.LogMessage("Clearing existing items...")
         CheckedListBox1.Items.Clear()
         Cursor = Cursors.WaitCursor
         Select Case Language
@@ -154,24 +168,30 @@ Public Class AddPackageDlg
         Refresh()
         ' TODO: show CheckedListBox items without full path
         Try
+            DynaLog.LogMessage("Getting CAB files in directory (recursive operation)...")
             For Each CabPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchAllSubDirectories, "*.cab")
                 If CabPkg.Contains("MsuExtract") Then
                     ' CAB files stored in MsuExtract are skipped, as they come from MSU files. Skip these items and continue loop
+                    DynaLog.LogMessage("CAB file " & Quote & Path.GetFileName(CabPkg) & Quote & " is in a directory that is a result of MSU content extraction. Skipping...")
                     Continue For
                 End If
                 CheckedListBox1.Items.Add(CabPkg)
             Next
+            DynaLog.LogMessage("Getting MSU files in directory (recursive operation)...")
             For Each MsuPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchAllSubDirectories, "*.msu")
                 CheckedListBox1.Items.Add(MsuPkg)
             Next
         Catch ex As Exception
+            DynaLog.LogMessage("Getting CAB files in directory...")
             For Each CabPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchTopLevelOnly, "*.cab")
                 If CabPkg.Contains("MsuExtract") Then
                     ' CAB files stored in MsuExtract are skipped, as they come from MSU files. Skip these items and continue loop
+                    DynaLog.LogMessage("CAB file " & Quote & Path.GetFileName(CabPkg) & Quote & " is in a directory that is a result of MSU content extraction. Skipping...")
                     Continue For
                 End If
                 CheckedListBox1.Items.Add(CabPkg)
             Next
+            DynaLog.LogMessage("Getting MSU files in directory...")
             For Each MsuPkg In My.Computer.FileSystem.GetFiles(FolderToScan, FileIO.SearchOption.SearchTopLevelOnly, "*.msu")
                 CheckedListBox1.Items.Add(MsuPkg)
             Next
@@ -181,6 +201,8 @@ Public Class AddPackageDlg
     End Sub
 
     Sub CountItems()
+        DynaLog.LogMessage("Counting items in list...")
+        DynaLog.LogMessage("Balancing count of checked items if necessary...")
         If CheckedCount > CheckedListBox1.CheckedItems.Count Then
             Do Until CheckedCount = CheckedListBox1.CheckedItems.Count
                 CheckedCount -= 1
@@ -190,7 +212,9 @@ Public Class AddPackageDlg
                 CheckedCount += 1
             Loop
         End If
+        DynaLog.LogMessage("Items in list: " & CheckedListBox1.Items.Count)
         If CheckedListBox1.Items.Count = 0 Then
+            DynaLog.LogMessage("This folder does not have any items")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -516,6 +540,7 @@ Public Class AddPackageDlg
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Checking all packages in list to add to the addition queue...")
         For i As Integer = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, True)
             CheckedCount += 1
@@ -524,6 +549,7 @@ Public Class AddPackageDlg
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DynaLog.LogMessage("Unchecking all packages in list to add to the addition queue...")
         For i As Integer = 0 To CheckedListBox1.Items.Count - 1
             CheckedListBox1.SetItemChecked(i, False)
             CheckedCount -= 1
@@ -533,6 +559,7 @@ Public Class AddPackageDlg
     End Sub
 
     Private Sub ScanBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ScanBW.DoWork
+        DynaLog.LogMessage("Getting items in specified folder")
         GatherPackages(TextBox1.Text)
     End Sub
 
@@ -542,8 +569,10 @@ Public Class AddPackageDlg
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If MUMAdditionDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("A user may have specified an update manifest file.")
             Addition_MUMFile = MUMAdditionDialog.MUMFile
             If File.Exists(Addition_MUMFile) Then
+                DynaLog.LogMessage("The specified update manifest exists in the file system. Proceeding to add it...")
                 OK_Button.PerformClick()
             End If
         End If

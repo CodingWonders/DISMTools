@@ -28,6 +28,7 @@ Public Class AddCapabilities
                 If MainForm.OnlineManagement And Not CheckBox2.Checked Then Exit For
                 If ListView1.CheckedItems(x).SubItems(1).Text = "Not present" Then
                     If CheckBox1.Checked And RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
+                        DynaLog.LogMessage("No source has been specified or it does not exist.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

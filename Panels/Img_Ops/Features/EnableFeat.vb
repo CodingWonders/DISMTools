@@ -8,11 +8,14 @@ Public Class EnableFeat
     Public featEnablementNames(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         featEnablementCount = ListView1.CheckedItems.Count
         ProgressPanel.featEnablementCount = featEnablementCount
+        DynaLog.LogMessage("Detecting features to enable...")
         If ListView1.CheckedItems.Count <= 0 Then
+            DynaLog.LogMessage("No items have been added to the queue.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -50,10 +53,12 @@ Public Class EnableFeat
             Catch ex As Exception
 
             End Try
+            DynaLog.LogMessage("Getting states of features for any missing sources...")
             For x = 0 To featEnablementCount - 1
                 If MainForm.OnlineManagement And CheckBox4.Checked Then Exit For
                 If ListView1.CheckedItems(x).SubItems(1).Text = "Removed" Or ListView1.CheckedItems(x).SubItems(1).Text = "Eliminado" Or ListView1.CheckedItems(x).SubItems(1).Text = "Supprimée" Or ListView1.CheckedItems(x).SubItems(1).Text = "Removido" Or ListView1.CheckedItems(x).SubItems(1).Text = "Rimosso" Then
                     If RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
+                        DynaLog.LogMessage("No source has been specified or it does not exist.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -126,6 +131,7 @@ Public Class EnableFeat
             If CheckBox2.Checked Then
                 ProgressPanel.featisSourceSpecified = True
                 If RichTextBox1.Text = "" Or Not Directory.Exists(RichTextBox1.Text) Then
+                    DynaLog.LogMessage("No source has been specified or it does not exist.")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -449,9 +455,17 @@ Public Class EnableFeat
                 Label2.Text &= " Vengono mostrate solo le caratteristiche disabilitate (" & ListView1.Items.Count & ")"
         End Select
         CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
+        DynaLog.LogMessage("Detecting ability to contact Windows Update (in the case of active installation management)...")
+        DynaLog.LogMessage("Boot Mode of Host System: " & SystemInformation.BootMode.ToString())
         If MainForm.OnlineManagement And (SystemInformation.BootMode = BootMode.Normal Or SystemInformation.BootMode = BootMode.FailSafeWithNetwork) Then
+            DynaLog.LogMessage("Host system is booted to either normal mode or Safe Mode with networking.")
             CheckBox4.Enabled = True
         Else
+            If MainForm.OnlineManagement Then
+                DynaLog.LogMessage("Host system is booted to Safe Mode. This mode does not have networking capabilities.")
+            Else
+                DynaLog.LogMessage("The active installation is not being managed. No online capabilities are supported, regardless of the mode the host system is in.")
+            End If
             CheckBox4.Checked = False
             CheckBox4.Enabled = False
         End If
@@ -478,6 +492,7 @@ Public Class EnableFeat
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         PkgParentNameLookupDlg.pkgSource = MainForm.MountDir
+        PkgParentNameLookupDlg.OriginatedFrom = "enablement"
         PkgParentNameLookupDlg.ShowDialog(Me)
     End Sub
 
@@ -488,6 +503,7 @@ Public Class EnableFeat
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DynaLog.LogMessage("Getting source established in the group policy...")
         RichTextBox1.Text = MainForm.GetSrcFromGPO()
         If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
             TextBoxSourcePanel.Visible = False

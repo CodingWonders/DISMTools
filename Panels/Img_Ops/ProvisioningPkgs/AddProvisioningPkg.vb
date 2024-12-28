@@ -5,11 +5,16 @@ Imports Microsoft.VisualBasic.ControlChars
 Public Class AddProvisioningPkg
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Selected provisioning package for addition: " & Quote & TextBox1.Text & Quote)
         If TextBox1.Text <> "" Then
+            DynaLog.LogMessage("A provisioning package has been selected.")
             If File.Exists(TextBox1.Text) Then
+                DynaLog.LogMessage("The provisioning package specified exists in the file system.")
                 ProgressPanel.ppkgAdditionPackagePath = TextBox1.Text
             Else
+                DynaLog.LogMessage("The provisioning package specified does not exist in the file system.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -37,9 +42,12 @@ Public Class AddProvisioningPkg
                 End Select
                 Exit Sub
             End If
+            DynaLog.LogMessage("Checking catalog path...")
             If TextBox2.Text <> "" And File.Exists(TextBox2.Text) Then
+                DynaLog.LogMessage("A catalog path has been selected and exists in the file system.")
                 ProgressPanel.ppkgAdditionCatalogPath = TextBox2.Text
             ElseIf TextBox2.Text <> "" And Not File.Exists(TextBox2.Text) Then
+                DynaLog.LogMessage("Either no catalog path has been selected or it does not exist in the file system.")
                 Dim msg As String = ""
                 Select Case MainForm.Language
                     Case 0
