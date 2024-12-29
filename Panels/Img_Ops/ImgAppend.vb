@@ -7,8 +7,11 @@ Public Class ImgAppend
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Dim msg As String = ""
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Checking source image directory...")
         If TextBox1.Text = "" Or Not Directory.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("Either no source directory has been specified or it does not exist in the file system.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -39,7 +42,9 @@ Public Class ImgAppend
         Else
             ProgressPanel.AppendixSourceDir = TextBox1.Text
         End If
+        DynaLog.LogMessage("Checking destination image...")
         If TextBox2.Text = "" Or Not File.Exists(TextBox2.Text) Then
+            DynaLog.LogMessage("Either no destination image has been specified or it does not exist in the file system.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -70,7 +75,9 @@ Public Class ImgAppend
         Else
             ProgressPanel.AppendixDestinationImage = TextBox2.Text
         End If
+        DynaLog.LogMessage("Checking name of image to append to destination...")
         If TextBox3.Text = "" Then
+            DynaLog.LogMessage("No name has been specified.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -103,9 +110,13 @@ Public Class ImgAppend
         End If
         ProgressPanel.AppendixDescription = TextBox4.Text
         If CheckBox1.Checked Then
+            DynaLog.LogMessage("A configuration list file is expected to be used. Checking specified file...")
             If TextBox5.Text <> "" And File.Exists(TextBox5.Text) Then
+                DynaLog.LogMessage("A configuration list file has been specified and it exists in the file system.")
                 ProgressPanel.AppendixWimScriptConfig = TextBox5.Text
             Else
+                DynaLog.LogMessage("Either no configuration list file has been specified or it does not exist in the file system.")
+                DynaLog.LogMessage("We can continue without it, but that may not be what the user wants. Asking...")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -132,12 +143,15 @@ Public Class ImgAppend
                         msg = "Non è stato specificato alcun file dell'elenco di configurazione oppure non è stato possibile rilevare il file dell'elenco di configurazione nel file system. Si desidera continuare senza alcun file dell'elenco di configurazione?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbCritical, Label1.Text) = MsgBoxResult.Ok Then
+                    DynaLog.LogMessage("The user does not mind if we continue without the configuration list file.")
                     ProgressPanel.AppendixWimScriptConfig = ""
                 Else
+                    DynaLog.LogMessage("The user wants the configuration list file.")
                     Exit Sub
                 End If
             End If
         Else
+            DynaLog.LogMessage("A configuration list file is not expected to be used.")
             ProgressPanel.AppendixWimScriptConfig = ""
         End If
         ProgressPanel.AppendixUseWimBoot = CheckBox2.Checked
@@ -442,6 +456,7 @@ Public Class ImgAppend
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Selected source directory: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub
@@ -451,6 +466,7 @@ Public Class ImgAppend
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        DynaLog.LogMessage("Selected destination image file: " & Quote & SaveFileDialog1.FileName & Quote)
         TextBox2.Text = SaveFileDialog1.FileName
     End Sub
 
@@ -489,26 +505,36 @@ Public Class ImgAppend
     End Sub
 
     Function GetLastImageName() As String
+        DynaLog.LogMessage("Image file to get information about: " & Quote & TextBox2.Text & Quote)
         Dim imageName As String = ""
         Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             Dim ImageInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(TextBox2.Text)
+            DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
+            DynaLog.LogMessage("Getting name of last index...")
             imageName = ImageInfoCollection.Last.ImageName
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             MsgBox("Could not grab last image name. Error information:" & CrLf & CrLf & ex.ToString(), vbOKOnly + vbCritical, Label1.Text)
         Finally
             Try
+                DynaLog.LogMessage("Shutting down API...")
                 DismApi.Shutdown()
             Catch ex As Exception
                 ' Don't do anything
             End Try
         End Try
+        DynaLog.LogMessage("Name of last image: " & imageName)
         Return imageName
     End Function
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        DynaLog.LogMessage("Checking if the destination file has been specified and exists...")
         If TextBox2.Text = "" OrElse Not File.Exists(TextBox2.Text) Then Exit Sub
+        DynaLog.LogMessage("Checking if mounted image detector is busy...")
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
             MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
@@ -516,7 +542,9 @@ Public Class ImgAppend
                 Threading.Thread.Sleep(500)
             End While
         End If
+        DynaLog.LogMessage("Checking if image status watchers are busy...")
         MainForm.WatcherTimer.Enabled = False
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
             Application.DoEvents()

@@ -20,9 +20,11 @@ Public Class ApplicationDriveSpecifier
     End Sub
 
     Sub ListDisks()
+        DynaLog.LogMessage("Preparing to list disks...")
         ListView1.Items.Clear()
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT DeviceID, Model, Partitions, Size FROM Win32_DiskDrive")
         Dim dskResults As ManagementObjectCollection = searcher.Get()
+        DynaLog.LogMessage("Management object searcher returned " & dskResults.Count & " result(s)")
         For Each result As ManagementObject In dskResults
             ListView1.Items.Add(New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"}))
         Next
@@ -156,6 +158,7 @@ Public Class ApplicationDriveSpecifier
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Refreshing lists...")
         ListDisks()
     End Sub
 

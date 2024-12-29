@@ -137,7 +137,9 @@ Public Class PopupImageManager
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        DynaLog.LogMessage("Determining selected items...")
         If ListView1.SelectedItems.Count < 1 Then
+            DynaLog.LogMessage("There are no selected items.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

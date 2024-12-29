@@ -1,16 +1,21 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ImgSplit
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("The source WIM file has been specified and exists in the file system.")
             ProgressPanel.SWMSplitSourceFile = TextBox1.Text
             ProgressPanel.SWMSplitFileSize = NumericUpDown1.Value
             If TextBox2.Text <> "" And Directory.Exists(Path.GetDirectoryName(TextBox2.Text)) Then
+                DynaLog.LogMessage("A target file has been specified and its directory exists in the file system.")
                 ProgressPanel.SWMSplitTargetFile = TextBox2.Text
             Else
+                DynaLog.LogMessage("Either no target file has been specified or its directory does not exist in the file system.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -40,6 +45,7 @@ Public Class ImgSplit
             End If
             ProgressPanel.SWMSplitCheckIntegrity = CheckBox1.Checked
         Else
+            DynaLog.LogMessage("Either no source WIM file has been specified or it does not exist in the file system.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -261,10 +267,12 @@ Public Class ImgSplit
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Source WIM file specified: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        DynaLog.LogMessage("Target SWM file specified: " & Quote & SaveFileDialog1.FileName & Quote)
         TextBox2.Text = SaveFileDialog1.FileName
     End Sub
 End Class

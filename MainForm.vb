@@ -850,6 +850,7 @@ Public Class MainForm
             DynaLog.LogMessage("System Theme   : " & Quote & ThemeDll & Quote)
             DynaLog.LogMessage("PrePolicy Theme: " & Quote & PrePol & Quote)
             If Not ThemeDll.Equals(PrePol, StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("System Theme and PrePolicy Theme are different.")
                 DynaLog.LogMessage("A custom theme has been detected. There may be visual issues with DISMTools")
                 Dim msg As String = ""
                 Dim titleMsg As String = ""
@@ -889,6 +890,8 @@ Public Class MainForm
                         msg = "DISMTools ha rilevato che su questo sistema è stato impostato un tema personalizzato. Alcuni temi personalizzati fanno sì che il programma non abbia un aspetto corretto, quindi si consiglia di passare al tema predefinito."
                 End Select
                 MsgBox(msg, vbOKOnly + vbExclamation, titleMsg)
+            Else
+                DynaLog.LogMessage("System Theme and PrePolicy Theme are the same.")
             End If
         Catch ex As Exception
 

@@ -6,19 +6,25 @@ Public Class SetPETargetPath
 
     Sub GetTargetPath()
         Using reg As New Process
+            DynaLog.LogMessage("Preparing to get Windows PE settings...")
+            DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
             reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
             reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
             reg.StartInfo.CreateNoWindow = True
             reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             reg.Start()
             reg.WaitForExit()
+            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
             Try
+                DynaLog.LogMessage("Getting target path...")
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+                DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
                 TextBox1.Text = regKey.GetValue("InstRoot", "").ToString()
                 regKey.Close()
             Catch ex As Exception
 
             End Try
+            DynaLog.LogMessage("Unloading hives...")
             ' Unload registry hives
             reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
             reg.Start()
@@ -27,6 +33,7 @@ Public Class SetPETargetPath
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ' Detect the following requirements before proceeding:
         ' - Right length (3-32 chars)
@@ -35,7 +42,9 @@ Public Class SetPETargetPath
         ' - Drive letter is followed by :
         ' - Doesn't contain spaces or quotation marks
         Dim msg As String = ""
+        DynaLog.LogMessage("Checking specified target path...")
         If TextBox1.TextLength < 3 Or TextBox1.TextLength > 32 Then
+            DynaLog.LogMessage("Target path is not long enough or is too long.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -65,6 +74,7 @@ Public Class SetPETargetPath
             Exit Sub
         End If
         If TextBox1.Text.StartsWith("A", StringComparison.OrdinalIgnoreCase) Or TextBox1.Text.StartsWith("B", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Target path points to a drive commonly used by floppy disks.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -94,6 +104,7 @@ Public Class SetPETargetPath
             Exit Sub
         End If
         If Not TextBox1.Text.Chars(1).Equals(":"c) Then
+            DynaLog.LogMessage("The drive letter is ill-formed.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -123,6 +134,7 @@ Public Class SetPETargetPath
             Exit Sub
         End If
         If TextBox1.Text.Contains(".\") Or TextBox1.Text.Contains("..\") Then
+            DynaLog.LogMessage("A relative path is being used.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -152,6 +164,7 @@ Public Class SetPETargetPath
             Exit Sub
         End If
         If TextBox1.Text.Contains(" ") Or TextBox1.Text.Contains(Quote) Then
+            DynaLog.LogMessage("The target path contains spaces or quotes.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

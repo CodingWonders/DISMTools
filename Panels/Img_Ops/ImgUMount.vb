@@ -7,19 +7,27 @@ Public Class ImgUMount
     Dim UMountOperations() As String = New String(1) {"Save changes and unmount", "Discard changes and unmount"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If RadioButton1.Checked = True Then
+            DynaLog.LogMessage("The image mounted in this project will be unmounted.")
             ProgressPanel.UMountLocalDir = True
             ProgressPanel.RandomMountDir = ""   ' Hope there isn't anything to set here
             ProgressPanel.MountDir = MainForm.MountDir
         Else
+            DynaLog.LogMessage("An image mounted in a different folder will be unmounted.")
+            DynaLog.LogMessage("- Provided mount directory: " & Quote & TextBox1.Text & Quote)
             ProgressPanel.UMountLocalDir = False
             ' Determine if given mount dir exists
+            DynaLog.LogMessage("Checking if the provided mount directory exists...")
             If Directory.Exists(TextBox1.Text) Then
+                DynaLog.LogMessage("The provided mount directory exists. Checking if an image is mounted there...")
                 ' Detect whether the mount dir has an image mounted (I don't believe on what users claim, just to be sure)
                 If MainForm.MountedImageMountDirs.Contains(TextBox1.Text) Then
+                    DynaLog.LogMessage("An image is mounted there. This is a valid mount directory.")
                     ProgressPanel.RandomMountDir = TextBox1.Text
                 Else
+                    DynaLog.LogMessage("No image is mounted there. This is not a valid mount directory.")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -48,6 +56,7 @@ Public Class ImgUMount
                     Exit Sub
                 End If
             Else
+                DynaLog.LogMessage("The provided mount directory does not exist.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -358,7 +367,9 @@ Public Class ImgUMount
         PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
             TextBox1.Text = PopupImageManager.selectedMntDir
+            DynaLog.LogMessage("Checking if selected item is the mount directory of the project...")
             If TextBox1.Text = MainForm.MountDir Then
+                DynaLog.LogMessage("The selected item is the mount directory of the project.")
                 TextBox1.Text = ""
                 RadioButton1.Checked = True
                 RadioButton2.Checked = False
