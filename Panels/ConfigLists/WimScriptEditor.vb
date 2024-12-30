@@ -286,9 +286,14 @@ Public Class WimScriptEditor
     ''' <param name="fntSize">The size of the font used in the Scintilla editor</param>
     ''' <remarks></remarks>
     Sub InitScintilla(fntName As String, fntSize As Integer)
+        DynaLog.LogMessage("Initializing the Scintilla Editor...")
+        DynaLog.LogMessage("- Font name: " & fntName)
+        DynaLog.LogMessage("- Font size: " & fntSize)
         ' Initialize Scintilla editor
+        DynaLog.LogMessage("Resetting styles...")
         Scintilla1.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
+        DynaLog.LogMessage("Setting colors for selection...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
@@ -298,6 +303,7 @@ Public Class WimScriptEditor
         Scintilla1.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
+        DynaLog.LogMessage("Setting colors for styles...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla1.Styles(Style.Default).ForeColor = Color.White
@@ -310,6 +316,7 @@ Public Class WimScriptEditor
         Scintilla1.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
+        DynaLog.LogMessage("Setting colors for INI lexer...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Properties.Default).ForeColor = Color.FromArgb(220, 220, 204)
             Scintilla1.Styles(Style.Properties.Comment).ForeColor = Color.FromArgb(127, 159, 127)
@@ -331,6 +338,7 @@ Public Class WimScriptEditor
         Scintilla1.LexerName = "props"
 
         ' Set line number margin properties
+        DynaLog.LogMessage("Setting colors for line margin...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
@@ -344,12 +352,14 @@ Public Class WimScriptEditor
         Margin.Mask = 0
 
         ' Initialize code folding
+        DynaLog.LogMessage("Setting code folding...")
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
         Scintilla1.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
+        DynaLog.LogMessage("Seting bookmark margins...")
         Dim Bookmarks = Scintilla1.Margins(2)
         Bookmarks.Width = 20
         Bookmarks.Sensitive = True
@@ -362,22 +372,26 @@ Public Class WimScriptEditor
         Marker.SetAlpha(100)
 
         ' Set editor caret settings
+        DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
+        DynaLog.LogMessage("Setting margins for code folding...")
         Scintilla1.Margins(3).Type = MarginType.Symbol
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
         Scintilla1.Margins(3).Width = 1
 
         ' Set colors for all folding markers
+        DynaLog.LogMessage("Setting colors for folding markers...")
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
         Next
 
         ' Folding marker configuration
+        DynaLog.LogMessage("Setting folding marker...")
         Scintilla1.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
         Scintilla1.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
         Scintilla1.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
@@ -387,7 +401,10 @@ Public Class WimScriptEditor
         Scintilla1.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
+        DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+
+        DynaLog.LogMessage("Scintilla editor initialization complete.")
     End Sub
 
     Private Sub Scintilla1_TextChanged(sender As Object, e As EventArgs) Handles Scintilla1.TextChanged
@@ -407,6 +424,7 @@ Public Class WimScriptEditor
                     If Scintilla1.Lines(TextLine.Index + nextLine).Text.Contains("[CompressionExclusionList]") Or Scintilla1.Lines(TextLine.Index + nextLine).Text.Contains("[ExclusionException]") Then Exit While
                     nextLine += 1
                     If String.IsNullOrWhiteSpace(Scintilla1.Lines(TextLine.Index + nextLine).Text) Then Continue While
+                    DynaLog.LogMessage("Adding item to exclusion list...")
                     ListView1.Items.Add(Scintilla1.Lines(TextLine.Index + nextLine).Text)
                 End While
             ElseIf TextLine.Text.Contains("[ExclusionException]") Then
@@ -415,6 +433,7 @@ Public Class WimScriptEditor
                     If Scintilla1.Lines(TextLine.Index + nextLine).Text.Contains("[CompressionExclusionList]") Or Scintilla1.Lines(TextLine.Index + nextLine).Text.Contains("[ExclusionList]") Then Exit While
                     nextLine += 1
                     If String.IsNullOrWhiteSpace(Scintilla1.Lines(TextLine.Index + nextLine).Text) Then Continue While
+                    DynaLog.LogMessage("Adding item to exclusion exception list...")
                     ListView2.Items.Add(Scintilla1.Lines(TextLine.Index + nextLine).Text)
                 End While
             ElseIf TextLine.Text.Contains("[CompressionExclusionList]") Then
@@ -423,6 +442,7 @@ Public Class WimScriptEditor
                     If Scintilla1.Lines(TextLine.Index + nextLine).Text.Contains("[ExclusionList]") Or Scintilla1.Lines(TextLine.Index + nextLine).Text.Contains("[ExclusionException]") Then Exit While
                     nextLine += 1
                     If String.IsNullOrWhiteSpace(Scintilla1.Lines(TextLine.Index + nextLine).Text) Then Continue While
+                    DynaLog.LogMessage("Adding item to compression exclusion list...")
                     ListView3.Items.Add(Scintilla1.Lines(TextLine.Index + nextLine).Text)
                 End While
             End If
@@ -455,6 +475,7 @@ Public Class WimScriptEditor
         If ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) Then
             Dim titleMsg As String = ""
             If File.ReadAllText(ConfigListFile).ToString() = Scintilla1.Text Then
+                DynaLog.LogMessage("This file does not have pending modifications.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -481,6 +502,7 @@ Public Class WimScriptEditor
                         titleMsg = Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
                 End Select
             Else
+                DynaLog.LogMessage("This file has pending modifications.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -550,6 +572,7 @@ Public Class WimScriptEditor
                 titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & " - Editor dell'elenco di configurazione DISM"
         End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            DynaLog.LogMessage("Asking user whether or not to save the file...")
             Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
             Select Case Result
                 Case MsgBoxResult.Yes
@@ -623,6 +646,7 @@ Public Class WimScriptEditor
         Else
             Try
                 If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    DynaLog.LogMessage("Asking user whether or not to save modifications...")
                     Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
                     Select Case Result
                         Case MsgBoxResult.Yes
@@ -790,6 +814,7 @@ Public Class WimScriptEditor
                 titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
         End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            DynaLog.LogMessage("Asking user whether or not to save the file...")
             Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
             Select Case Result
                 Case MsgBoxResult.Yes
@@ -864,6 +889,7 @@ Public Class WimScriptEditor
         Else
             Try
                 If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    DynaLog.LogMessage("Asking user whether or not to save modifications...")
                     Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
                     Select Case Result
                         Case MsgBoxResult.Yes
@@ -945,10 +971,14 @@ Public Class WimScriptEditor
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
         If ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile) Then
             If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                DynaLog.LogMessage("Saving contents to file...")
+                DynaLog.LogMessage("Destination file: " & Quote & WimScriptSFD.FileName & Quote)
                 File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                 ConfigListFile = WimScriptSFD.FileName
             End If
         Else
+            DynaLog.LogMessage("Saving contents to file...")
+            DynaLog.LogMessage("Destination file: " & Quote & ConfigListFile & Quote)
             File.WriteAllText(ConfigListFile, Scintilla1.Text, ASCII)
         End If
         Select Case MainForm.Language
@@ -979,6 +1009,8 @@ Public Class WimScriptEditor
     End Sub
 
     Private Sub WimScriptOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles WimScriptOFD.FileOk
+        DynaLog.LogMessage("Loading file contents...")
+        DynaLog.LogMessage("Configuration list file: " & Quote & WimScriptOFD.FileName & Quote)
         Scintilla1.Text = File.ReadAllText(WimScriptOFD.FileName)
         ConfigListFile = WimScriptOFD.FileName
         Select Case MainForm.Language
@@ -1060,6 +1092,7 @@ Public Class WimScriptEditor
         ' Clear text in Scintilla editor and add it back
         Scintilla1.ClearAll()
         If ListView1.Items.Count > 0 Then
+            DynaLog.LogMessage("Adding exclusion list items...")
             Scintilla1.AppendText(CrLf & _
                                   "[ExclusionList]" & CrLf)
             For Each LVI As ListViewItem In ListView1.Items
@@ -1069,6 +1102,7 @@ Public Class WimScriptEditor
             Scintilla1.AppendText(CrLf)
         End If
         If ListView2.Items.Count > 0 Then
+            DynaLog.LogMessage("Adding exclusion exception list items...")
             Scintilla1.AppendText(CrLf & _
                                   "[ExclusionException]" & CrLf)
             For Each LVI As ListViewItem In ListView2.Items
@@ -1078,6 +1112,7 @@ Public Class WimScriptEditor
             Scintilla1.AppendText(CrLf)
         End If
         If ListView3.Items.Count > 0 Then
+            DynaLog.LogMessage("Adding compression exclusion list items...")
             Scintilla1.AppendText(CrLf & _
                                   "[CompressionExclusionList]" & CrLf)
             For Each LVI As ListViewItem In ListView3.Items
@@ -1363,6 +1398,7 @@ Public Class WimScriptEditor
                 titleMsg = If((ConfigListFile IsNot Nothing And File.Exists(ConfigListFile)), Path.GetFileName(ConfigListFile), "") & Path.GetFileName(ConfigListFile) & " - Editor dell'elenco di configurazione DISM"
         End Select
         If (ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile)) And Scintilla1.Text <> "" Then
+            DynaLog.LogMessage("Asking user whether or not to save the file...")
             Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
             Select Case Result
                 Case MsgBoxResult.Yes
@@ -1437,6 +1473,7 @@ Public Class WimScriptEditor
         Else
             Try
                 If (ConfigListFile IsNot Nothing And File.Exists(ConfigListFile) And File.ReadAllText(ConfigListFile).ToString() <> Scintilla1.Text) Then
+                    DynaLog.LogMessage("Asking user whether or not to save modifications...")
                     Dim Result As MsgBoxResult = MsgBox(msg, vbYesNoCancel + vbQuestion, Text)
                     Select Case Result
                         Case MsgBoxResult.Yes
@@ -1526,6 +1563,7 @@ Public Class WimScriptEditor
             If OneDriveExclusionDlg.ExcludedFolders.Count > 0 Then
                 For Each ExcludedFolder In OneDriveExclusionDlg.ExcludedFolders
                     ListView1.Items.Add(If(ExcludedFolder.Contains(" "), Quote & ExcludedFolder & Quote, ExcludedFolder))
+                    DynaLog.LogMessage("Adding OneDrive item to exclusion...")
                     UpdateConfigListContents()
                 Next
             End If

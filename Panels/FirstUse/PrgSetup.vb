@@ -124,10 +124,6 @@ Public Class PrgSetup
         btnToolTip.SetToolTip(sender, msg)
     End Sub
 
-    'Private Sub backBox_Click(sender As Object, e As EventArgs) Handles backBox.Click
-    '    Back_Button.PerformClick()
-    'End Sub
-
     Private Sub wndControlPanel_MouseDown(sender As Object, e As MouseEventArgs) Handles wndControlPanel.MouseDown
         If e.Button = Windows.Forms.MouseButtons.Left Then
             ' Get the new position
@@ -658,11 +654,15 @@ Public Class PrgSetup
     End Sub
 
     Function DetectFont(FontName As String) As Boolean
+        DynaLog.LogMessage("Detecting if specified font is installed in this computer...")
+        DynaLog.LogMessage("Font to test: " & FontName)
         For Each fntFamily As FontFamily In FontFamily.Families
             If fntFamily.Name = FontName Then
+                DynaLog.LogMessage("The specified font is installed.")
                 Return True
             End If
         Next
+        DynaLog.LogMessage("The specified font is not installed.")
         Return False
     End Function
 
@@ -671,6 +671,7 @@ Public Class PrgSetup
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox3.Items.Add(fntFamily.Name)
         Next
+        DynaLog.LogMessage(ComboBox3.Items.Count & " font(s) have been detected on this system.")
         ComboBox3.SelectedItem = "Consolas"
     End Sub
 
@@ -683,9 +684,13 @@ Public Class PrgSetup
     End Sub
 
     Function IsMonospacedFont(ftName As String) As Boolean
+        DynaLog.LogMessage("Detecting if font " & Quote & ftName & Quote & " is monospaced...")
         Using testFont As Font = New Font(ftName, 10)
             Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
             Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            DynaLog.LogMessage("Width of character " & Quote & "i" & Quote & ": " & widthI)
+            DynaLog.LogMessage("Width of character " & Quote & "W" & Quote & ": " & widthW)
+            DynaLog.LogMessage("Are widths equal? " & If(widthI = widthW, "Yes", "No"))
             Return widthI = widthW
         End Using
         Return False
@@ -724,6 +729,7 @@ Public Class PrgSetup
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+        DynaLog.LogMessage("Value of log level trackbar: " & TrackBar1.Value)
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
                 Select Case TrackBar1.Value
@@ -836,13 +842,16 @@ Public Class PrgSetup
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        DynaLog.LogMessage("Beginning download of Update System...")
         If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
         Try
+            DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
                 client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & MainForm.dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
             End Using
         Catch ex As WebException
+            DynaLog.LogMessage("Could not get updater. Error message: " & ex.Status.ToString())
             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                 Case "ENU", "ENG"
                     MsgBox("We couldn't download the update checker. Reason:" & CrLf & ex.Status.ToString(), vbOKOnly + vbCritical, "Check for updates")
@@ -857,8 +866,11 @@ Public Class PrgSetup
             End Select
             Exit Sub
         End Try
+        DynaLog.LogMessage("Information to pass to updater:")
+        DynaLog.LogMessage("- Branch: " & MainForm.dtBranch)
+        DynaLog.LogMessage("- Process ID (PID): " & Process.GetCurrentProcess().Id)
         If File.Exists(Application.StartupPath & "\update.exe") Then
-            Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch)
+            Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
             Next_Button.PerformClick()
         End If
     End Sub

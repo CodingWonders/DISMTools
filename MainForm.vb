@@ -14994,7 +14994,7 @@ Public Class MainForm
                 client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
             End Using
         Catch ex As WebException
-            DynaLog.LogMessage("Could not get updater. Error message: " & ex.Message)
+            DynaLog.LogMessage("Could not get updater. Error message: " & ex.Status.ToString())
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

@@ -92,7 +92,8 @@ Public Class DynaLog
             If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
                 FileLength = New FileInfo(Application.StartupPath & "\logs\DT_DynaLog.log").Length
             End If
-            Dim MessageLine As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] " & message
+            Dim MessagePrefix As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] "
+            Dim MessageLine As String = MessagePrefix & message.Replace(CrLf, CrLf & MessagePrefix).Trim()
             File.AppendAllText(Application.StartupPath & "\logs\DT_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
         Catch ex As Exception
             Debug.WriteLine("DynaLog logging could not log this operation. Error:" & CrLf & CrLf & ex.ToString())

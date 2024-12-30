@@ -652,6 +652,8 @@ Public Class GetImgInfoDlg
     End Sub
 
     Sub DetectFeatureUpdate(SysVer As Version)
+        DynaLog.LogMessage("Detecting feature update from version...")
+        DynaLog.LogMessage("Version: " & SysVer.ToString())
         Dim FeatUpd As String = ""
         Select Case SysVer.Major
             Case 10
@@ -716,6 +718,7 @@ Public Class GetImgInfoDlg
             Case Else
                 Exit Sub
         End Select
+        DynaLog.LogMessage("Detected feature update: " & FeatUpd)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

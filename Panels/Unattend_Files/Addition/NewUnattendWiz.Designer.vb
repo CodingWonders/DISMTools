@@ -123,8 +123,8 @@ Partial Class NewUnattendWiz
         Me.VirtualMachineHeader = New System.Windows.Forms.Label()
         Me.AccountLockoutPanel = New System.Windows.Forms.Panel()
         Me.Label44 = New System.Windows.Forms.Label()
-        Me.EnabledAccountLockdownPanel = New System.Windows.Forms.Panel()
-        Me.AccountLockdownParametersPanel = New System.Windows.Forms.Panel()
+        Me.EnabledAccountLockoutPanel = New System.Windows.Forms.Panel()
+        Me.AccountLockoutParametersPanel = New System.Windows.Forms.Panel()
         Me.NumericUpDown8 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown7 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown6 = New System.Windows.Forms.NumericUpDown()
@@ -349,8 +349,8 @@ Partial Class NewUnattendWiz
         Me.VirtualMachinePanel.SuspendLayout()
         Me.VMProviderPanel.SuspendLayout()
         Me.AccountLockoutPanel.SuspendLayout()
-        Me.EnabledAccountLockdownPanel.SuspendLayout()
-        Me.AccountLockdownParametersPanel.SuspendLayout()
+        Me.EnabledAccountLockoutPanel.SuspendLayout()
+        Me.AccountLockoutParametersPanel.SuspendLayout()
         CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1384,7 +1384,7 @@ Partial Class NewUnattendWiz
         'AccountLockoutPanel
         '
         Me.AccountLockoutPanel.Controls.Add(Me.Label44)
-        Me.AccountLockoutPanel.Controls.Add(Me.EnabledAccountLockdownPanel)
+        Me.AccountLockoutPanel.Controls.Add(Me.EnabledAccountLockoutPanel)
         Me.AccountLockoutPanel.Controls.Add(Me.CheckBox13)
         Me.AccountLockoutPanel.Controls.Add(Me.AccountLockdownHeader)
         Me.AccountLockoutPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -1404,35 +1404,35 @@ Partial Class NewUnattendWiz
         Me.Label44.Text = "Checking this option will make the target installation more vulnerable to brute-f" & _
     "orce attacks"
         '
-        'EnabledAccountLockdownPanel
+        'EnabledAccountLockoutPanel
         '
-        Me.EnabledAccountLockdownPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.EnabledAccountLockoutPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.EnabledAccountLockdownPanel.Controls.Add(Me.AccountLockdownParametersPanel)
-        Me.EnabledAccountLockdownPanel.Controls.Add(Me.RadioButton22)
-        Me.EnabledAccountLockdownPanel.Controls.Add(Me.RadioButton21)
-        Me.EnabledAccountLockdownPanel.Location = New System.Drawing.Point(57, 65)
-        Me.EnabledAccountLockdownPanel.Name = "EnabledAccountLockdownPanel"
-        Me.EnabledAccountLockdownPanel.Size = New System.Drawing.Size(906, 318)
-        Me.EnabledAccountLockdownPanel.TabIndex = 12
+        Me.EnabledAccountLockoutPanel.Controls.Add(Me.AccountLockoutParametersPanel)
+        Me.EnabledAccountLockoutPanel.Controls.Add(Me.RadioButton22)
+        Me.EnabledAccountLockoutPanel.Controls.Add(Me.RadioButton21)
+        Me.EnabledAccountLockoutPanel.Location = New System.Drawing.Point(57, 65)
+        Me.EnabledAccountLockoutPanel.Name = "EnabledAccountLockoutPanel"
+        Me.EnabledAccountLockoutPanel.Size = New System.Drawing.Size(906, 318)
+        Me.EnabledAccountLockoutPanel.TabIndex = 12
         '
-        'AccountLockdownParametersPanel
+        'AccountLockoutParametersPanel
         '
-        Me.AccountLockdownParametersPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.AccountLockoutParametersPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown8)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown7)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown6)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label43)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label42)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label41)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label40)
-        Me.AccountLockdownParametersPanel.Enabled = False
-        Me.AccountLockdownParametersPanel.Location = New System.Drawing.Point(27, 54)
-        Me.AccountLockdownParametersPanel.Name = "AccountLockdownParametersPanel"
-        Me.AccountLockdownParametersPanel.Size = New System.Drawing.Size(858, 139)
-        Me.AccountLockdownParametersPanel.TabIndex = 10
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.NumericUpDown8)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.NumericUpDown7)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.NumericUpDown6)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label43)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label42)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label41)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label40)
+        Me.AccountLockoutParametersPanel.Enabled = False
+        Me.AccountLockoutParametersPanel.Location = New System.Drawing.Point(27, 54)
+        Me.AccountLockoutParametersPanel.Name = "AccountLockoutParametersPanel"
+        Me.AccountLockoutParametersPanel.Size = New System.Drawing.Size(858, 139)
+        Me.AccountLockoutParametersPanel.TabIndex = 10
         '
         'NumericUpDown8
         '
@@ -3340,7 +3340,7 @@ Partial Class NewUnattendWiz
         Me.FontSizeTSCB.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
         Me.FontSizeTSCB.Name = "FontSizeTSCB"
         Me.FontSizeTSCB.Size = New System.Drawing.Size(75, 28)
-        Me.FontSizeTSCB.Text = "10"
+        Me.FontSizeTSCB.Text = "11"
         '
         'ToolStripSeparator5
         '
@@ -3605,10 +3605,10 @@ Partial Class NewUnattendWiz
         Me.VMProviderPanel.PerformLayout()
         Me.AccountLockoutPanel.ResumeLayout(False)
         Me.AccountLockoutPanel.PerformLayout()
-        Me.EnabledAccountLockdownPanel.ResumeLayout(False)
-        Me.EnabledAccountLockdownPanel.PerformLayout()
-        Me.AccountLockdownParametersPanel.ResumeLayout(False)
-        Me.AccountLockdownParametersPanel.PerformLayout()
+        Me.EnabledAccountLockoutPanel.ResumeLayout(False)
+        Me.EnabledAccountLockoutPanel.PerformLayout()
+        Me.AccountLockoutParametersPanel.ResumeLayout(False)
+        Me.AccountLockoutParametersPanel.PerformLayout()
         CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown7, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3874,8 +3874,8 @@ Partial Class NewUnattendWiz
     Friend WithEvents PWExpirationHeader As System.Windows.Forms.Label
     Friend WithEvents AccountLockoutPanel As System.Windows.Forms.Panel
     Friend WithEvents Label44 As System.Windows.Forms.Label
-    Friend WithEvents EnabledAccountLockdownPanel As System.Windows.Forms.Panel
-    Friend WithEvents AccountLockdownParametersPanel As System.Windows.Forms.Panel
+    Friend WithEvents EnabledAccountLockoutPanel As System.Windows.Forms.Panel
+    Friend WithEvents AccountLockoutParametersPanel As System.Windows.Forms.Panel
     Friend WithEvents NumericUpDown8 As System.Windows.Forms.NumericUpDown
     Friend WithEvents NumericUpDown7 As System.Windows.Forms.NumericUpDown
     Friend WithEvents NumericUpDown6 As System.Windows.Forms.NumericUpDown
