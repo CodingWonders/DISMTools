@@ -777,6 +777,34 @@ Public Class ProgressPanel
         If successfulTasks > failedTasks Then IsSuccessful = True Else IsSuccessful = False
     End Sub
 
+    ''' <summary>
+    ''' Runs the specified process and returns an exit code
+    ''' </summary>
+    ''' <param name="FilePath">The path of the file to run</param>
+    ''' <param name="CommandArguments">The command-line arguments to pass to the file to run</param>
+    ''' <param name="WorkingDirectory">The directory the file is in. This is optional and can be set to fix issues with the file to open</param>
+    ''' <remarks>Any logging is done with DynaLog</remarks>
+    Sub RunProcess(FilePath As String, CommandArguments As String, Optional WorkingDirectory As String = "")
+        Try
+            DynaLog.LogMessage("Preparing to run process...")
+            DynaLog.LogMessage("- Process path: " & Quote & FilePath & Quote)
+            DynaLog.LogMessage("- Arguments: " & CommandArguments)
+            DynaLog.LogMessage("- Working directory: " & Quote & WorkingDirectory & Quote)
+            DISMProc.StartInfo.FileName = FilePath
+            DISMProc.StartInfo.Arguments = CommandArguments
+            If WorkingDirectory <> "" Then
+                DISMProc.StartInfo.WorkingDirectory = WorkingDirectory
+            End If
+            DISMProc.Start()
+            ' Process output redirection goes here
+            ' TODO: implement above
+            DISMProc.WaitForExit()
+            DynaLog.LogMessage("Process finished with exit code " & Hex(DISMProc.ExitCode))
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not run process. Error message: " & ex.Message)
+        End Try
+    End Sub
+
     Sub RunOps(opNum As Integer)
         If DismProgram = "" Then DismProgram = MainForm.DismExe
         If Not File.Exists(DismProgram) Then DismProgram = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
@@ -962,7 +990,6 @@ Public Class ProgressPanel
                                "- Check for file errors? " & If(AppendixVerify, "Yes", "No") & CrLf &
                                "- Use the reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No") & CrLf &
                                "- Capture extended attributes? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -986,9 +1013,7 @@ Public Class ProgressPanel
             If AppendixVerify Then CommandArgs &= " /verify"
             If Not AppendixReparsePt Then CommandArgs &= " /norpfix"
             If AppendixCaptureExtendedAttribs Then CommandArgs &= " /EA"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1059,11 +1084,10 @@ Public Class ProgressPanel
                     allTasks.Text = "Applicazione dell'immagine..."
                     currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
             End Select
-            LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf & _
-                               "- Source image file: " & ApplicationSourceImg & CrLf & _
-                               "- Index to apply: " & ApplicationIndex & CrLf & _
+            LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
+                               "- Source image file: " & ApplicationSourceImg & CrLf &
+                               "- Index to apply: " & ApplicationIndex & CrLf &
                                "- Target directory: " & ApplicationDestDir & CrLf)
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1134,9 +1158,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText("- Destination drive ID: " & ApplicationDestDrive & CrLf)
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1212,7 +1234,6 @@ Public Class ProgressPanel
                                "- Source directory: " & CaptureSourceDir & CrLf &
                                "- Destination image: " & CaptureDestinationImage & CrLf &
                                "- Captured image name: " & CaptureName & CrLf)
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1289,9 +1310,7 @@ Public Class ProgressPanel
                 LogView.AppendText("- Capture extended attributes? No" & CrLf)
             End If
             LogView.AppendText(CrLf & "Capturing image...")
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1368,7 +1387,11 @@ Public Class ProgressPanel
             Catch ex As DismException
                 errCode = Hex(ex.ErrorCode)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
@@ -1446,7 +1469,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                                "- Mount directory: " & MountDir)
 
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1459,9 +1481,7 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
             End Select
             ' TODO: Add additional options later
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1560,8 +1580,8 @@ Public Class ProgressPanel
                     allTasks.Text = "Eliminazione delle immagini..."
                     currentTask.Text = "Preparazione alla rimozione delle immagini del volume..."
             End Select
-            LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf & _
-                               "Options:" & CrLf & _
+            LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf &
+                               "Options:" & CrLf &
                                "- Source image: " & imgIndexDeletionSourceImg & CrLf)
             If imgIndexDeletionIntCheck Then
                 LogView.AppendText("- Check image integrity? Yes")
@@ -1570,7 +1590,7 @@ Public Class ProgressPanel
             End If
             CurrentPB.Maximum = imgIndexDeletionCount
             ' Removing volume images
-            LogView.AppendText(CrLf & _
+            LogView.AppendText(CrLf &
                                "Removing volume images..." & CrLf)
             For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
                 If x + 1 > CurrentPB.Maximum Then Exit For
@@ -1600,16 +1620,13 @@ Public Class ProgressPanel
                     Case 5
                         currentTask.Text = "Rimozione dell'immagine del volume " & Quote & imgIndexDeletionNames(x) & Quote & "..."
                 End Select
-                LogView.AppendText(CrLf & _
+                LogView.AppendText(CrLf &
                                    "- " & imgIndexDeletionNames(x) & "...")
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
                 If imgIndexDeletionIntCheck Then
                     CommandArgs &= " /checkintegrity"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     LogView.AppendText(" Error level : " & DISMProc.ExitCode)
                 Else
@@ -1677,7 +1694,6 @@ Public Class ProgressPanel
             If Path.GetExtension(imgExportSourceImage).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
                 LogView.AppendText(CrLf & CrLf & "NOTE: the source image contains an asterisk sign (*) in the file name to merge all SWM files")
             End If
-            DISMProc.StartInfo.FileName = DismProgram
             ' Configure basic command arguments
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
@@ -1707,9 +1723,7 @@ Public Class ProgressPanel
             If imgExportMarkBootable Then CommandArgs &= " /bootable"
             If imgExportUseWimBoot Then CommandArgs &= " /wimboot"
             If imgExportCheckIntegrity Then CommandArgs &= " /checkintegrity"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1742,8 +1756,6 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
-        ElseIf opNum = 11 Then
-            ' Operation handled by the image file information dialog - Redundant OpNum
         ElseIf opNum = 15 Then
             Select Case Language
                 Case 0
@@ -1784,7 +1796,6 @@ Public Class ProgressPanel
                                "- Image file: " & SourceImg & CrLf &
                                "- Image index: " & ImgIndex & CrLf &
                                "- Mount point: " & MountDir)
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1814,9 +1825,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Check image integrity? No")
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1894,7 +1903,11 @@ Public Class ProgressPanel
                 errCode = Hex(ex.ErrorCode)
                 IsSuccessful = False
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
@@ -1976,7 +1989,6 @@ Public Class ProgressPanel
                                "- Check integrity before splitting this image? " & If(SWMSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf & _
                                "Do note that, if the image contains a large file that can't fit within the maximum size, a SWM file may be larger than the rest, to accommodate it." & CrLf)
             ' Check the DISM version, as the Windows 7 version doesn't allow this action
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1988,9 +2000,7 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs &= " /split-image /imagefile=" & Quote & SWMSplitSourceFile & Quote & " /swmfile=" & Quote & SWMSplitTargetFile & Quote & " /filesize=" & SWMSplitFileSize & If(SWMSplitCheckIntegrity, " /checkintegrity", "")
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -2053,7 +2063,6 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & "- Unmount operation: Commit")
                 ' Commit the image and unmount it
                 Try
-                    DISMProc.StartInfo.FileName = DismProgram
                     Select Case DismVersionChecker.ProductMajorPart
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
@@ -2065,13 +2074,10 @@ Public Class ProgressPanel
                         Case 10
                             CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
                     End Select
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                     If DISMProc.ExitCode = Decimal.ToInt32(-1052638964) Then
                         LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
                         ' It mostly came from a read-only source. Discard changes
-                        DISMProc.StartInfo.FileName = DismProgram
                         Select Case DismVersionChecker.ProductMajorPart
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
@@ -2083,9 +2089,7 @@ Public Class ProgressPanel
                             Case 10
                                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
                         End Select
-                        DISMProc.StartInfo.Arguments = CommandArgs
-                        DISMProc.Start()
-                        DISMProc.WaitForExit()
+                        RunProcess(DismProgram, CommandArgs)
                     End If
                 Catch ex As Exception
                     File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
@@ -2128,7 +2132,6 @@ Public Class ProgressPanel
                 End If
             Else
                 Try
-                    DISMProc.StartInfo.FileName = DismProgram
                     Select Case DismVersionChecker.ProductMajorPart
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
@@ -2173,9 +2176,7 @@ Public Class ProgressPanel
                             LogView.AppendText(CrLf & "- Append changes to new index? No")
                         End If
                     End If
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                 Catch ex As Exception
                     ' Let's try this before setting things up here
                 End Try
@@ -2332,7 +2333,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf &
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
@@ -2340,9 +2340,7 @@ Public Class ProgressPanel
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2454,11 +2452,14 @@ Public Class ProgressPanel
                         pkgFailedAdditions += 1
                         pkgIsApplicable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
-                    DISMProc.StartInfo.FileName = DismProgram
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
@@ -2466,9 +2467,7 @@ Public Class ProgressPanel
                     If pkgPreventIfPendingOnline Then
                         CommandArgs &= " /preventpending"
                     End If
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                     LogView.AppendText(CrLf & "Getting error level...")
                     GetPkgErrorLevel()
                     LogView.AppendText(" Error level: " & errCode)
@@ -2514,7 +2513,6 @@ Public Class ProgressPanel
                 CurrentPB.Value = 1
                 LogView.AppendText(CrLf & "The package about to be added is a Microsoft Update Manifest (MUM) file.")
                 LogView.AppendText(CrLf & "Processing package...")
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(0) & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
@@ -2522,9 +2520,7 @@ Public Class ProgressPanel
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetPkgErrorLevel()
                 LogView.AppendText(" Error level: " & errCode)
@@ -2715,16 +2711,17 @@ Public Class ProgressPanel
                         pkgFailedRemovals += 1
                         pkgIsRemovable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
-                        DISMProc.StartInfo.FileName = DismProgram
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
-                        DISMProc.StartInfo.Arguments = CommandArgs
-                        DISMProc.Start()
-                        DISMProc.WaitForExit()
+                        RunProcess(DismProgram, CommandArgs)
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -2732,7 +2729,6 @@ Public Class ProgressPanel
                         Else
                             pkgFailedRemovals += 1
                         End If
-                        'GetPkgErrorLevel()
                         If errCode.Length >= 8 Then
                             LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
                         Else
@@ -2821,16 +2817,17 @@ Public Class ProgressPanel
                         pkgFailedRemovals += 1
                         pkgIsRemovable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
                         LogView.AppendText(CrLf & "Processing package removal...")
-                        DISMProc.StartInfo.FileName = DismProgram
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
-                        DISMProc.StartInfo.Arguments = CommandArgs
-                        DISMProc.Start()
-                        DISMProc.WaitForExit()
+                        RunProcess(DismProgram, CommandArgs)
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -2838,7 +2835,6 @@ Public Class ProgressPanel
                         Else
                             pkgFailedRemovals += 1
                         End If
-                        'GetPkgErrorLevel()
                         If errCode.Length >= 8 Then
                             LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
                         Else
@@ -2960,8 +2956,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf & "Enumerating features to enable...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of features to enable: " & featEnablementCount)
-            ' Get command ready
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3028,7 +3022,11 @@ Public Class ProgressPanel
                                            "- Feature description: " & featInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
@@ -3043,9 +3041,7 @@ Public Class ProgressPanel
                 If Not featContactWindowsUpdate And OnlineMgmt Then
                     CommandArgs &= " /limitaccess"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetFeatErrorLevel()
                 If errCode.Length >= 8 Then
@@ -3169,8 +3165,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf & "Enumerating features to disable...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
-            ' Get command ready
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3238,7 +3232,11 @@ Public Class ProgressPanel
 
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
@@ -3247,11 +3245,8 @@ Public Class ProgressPanel
                 If Not featRemoveManifest Then
                     CommandArgs &= " /remove"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
-                'GetFeatErrorLevel()
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
                     featSuccessfulDisablements += 1
@@ -3317,8 +3312,6 @@ Public Class ProgressPanel
                 Case 5
                     allTasks.Text = "Pulire l'immagine..."
             End Select
-            ' Initialize command
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
@@ -3535,9 +3528,7 @@ Public Class ProgressPanel
                                        If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", ""))
                     CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3611,11 +3602,8 @@ Public Class ProgressPanel
                                "- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote & CrLf & _
                                "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
                                "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -3834,8 +3822,6 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Encrypted packages can only be added to active installations. Skipping this package..." & CrLf)
                     Continue For
                 Else
-                    ' Initialize command
-                    DISMProc.StartInfo.FileName = DismProgram
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
                     If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
                         CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
@@ -3894,9 +3880,7 @@ Public Class ProgressPanel
                                 CommandArgs &= " /stubpackageoption:installfull"
                         End Select
                     End If
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                 End If
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
@@ -4092,11 +4076,8 @@ Public Class ProgressPanel
                 ' Initialize command. Its syntax is simple, so don't spend too much time determining options
                 LogView.AppendText(CrLf & CrLf & _
                                    "Processing package...")
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -4214,11 +4195,8 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the keyboard layered driver..." & CrLf & _
                                "- Current keyboard layered driver: " & currentLayout & CrLf & _
                                "- New keyboard layered driver: " & newLayout & CrLf)
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-layereddriver:" & KeyboardLayeredDriverType
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -4349,17 +4327,18 @@ Public Class ProgressPanel
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
                 If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
-                DISMProc.StartInfo.FileName = DismProgram
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4536,13 +4515,14 @@ Public Class ProgressPanel
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4714,13 +4694,16 @@ Public Class ProgressPanel
                             End If
                         End Using
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                 Else
                     LogView.AppendText(CrLf & CrLf & _
                                        "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
                 End If
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
@@ -4729,9 +4712,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
                     CommandArgs &= " /recurse"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4844,7 +4825,11 @@ Public Class ProgressPanel
                     drvCollection = DismApi.GetDrivers(imgSession, AllDrivers)
                 End Using
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             Select Case Language
                 Case 0
@@ -4933,13 +4918,14 @@ Public Class ProgressPanel
                         Next
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -5016,7 +5002,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf & _
                                "- Export target: " & Quote & drvExportTarget & Quote)
             ' Check the DISM version, as the Windows 7 version doesn't allow this action
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5028,9 +5013,7 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -5123,10 +5106,7 @@ Public Class ProgressPanel
             If Directory.Exists(Application.StartupPath & "\export_temp") Then
                 LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
                 CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
-                DISMProc.StartInfo.FileName = DismProgram
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -5169,9 +5149,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
                     CommandArgs = BckArgs
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                     If Hex(DISMProc.ExitCode).Length < 8 Then
                         errCode = DISMProc.ExitCode
                     Else
@@ -5230,12 +5208,8 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
                                "- Unattended answer file: " & UnattendedFile)
 
-            ' Initialize command
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5307,10 +5281,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the Windows PE scratch space..." & CrLf & _
                                "- New scratch space amount: " & peNewScratchSpace & " MB")
             CommandArgs &= " /image=" & targetImage & " /set-scratchspace=" & peNewScratchSpace
-            DISMProc.StartInfo.FileName = DismProgram
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -5362,10 +5333,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf & _
                                "- New target path: " & Quote & peNewTargetPath & Quote)
             CommandArgs &= " /image=" & targetImage & " /set-targetpath=" & peNewTargetPath
-            DISMProc.StartInfo.FileName = DismProgram
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -5415,11 +5383,8 @@ Public Class ProgressPanel
                     currentTask.Text = "Preparazione del ripristino del sistema operativo..."
             End Select
             LogView.AppendText(CrLf & "Preparing operating system rollback...")
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs = " /online /norestart /initiate-osuninstall"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5464,11 +5429,8 @@ Public Class ProgressPanel
                     currentTask.Text = "Rimozione della possibilità di tornare a una vecchia installazione di Windows..."
             End Select
             LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= " /online /remove-osuninstall"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5514,11 +5476,8 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= " /online /set-osuninstallwindow /value:" & osUninstDayCount
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5576,7 +5535,6 @@ Public Class ProgressPanel
             End If
 
             ' Run commands
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5593,9 +5551,7 @@ Public Class ProgressPanel
             ElseIf imgConversionMode = 1 Then
                 CommandArgs &= " /compress:max"
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5672,7 +5628,6 @@ Public Class ProgressPanel
                                "- Destination image file: " & imgWimDestination & CrLf)
 
             ' Run commands
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5684,9 +5639,7 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5767,7 +5720,6 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & "- Commit source index? No")
             End If
             ' Run commands
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5784,9 +5736,7 @@ Public Class ProgressPanel
             Else
                 CommandArgs &= " /discard"
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5857,9 +5807,7 @@ Public Class ProgressPanel
                     Case 10
                         CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                 End Select
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5948,9 +5896,7 @@ Public Class ProgressPanel
             If SwitchMountAsReadOnly Then
                 CommandArgs &= " /readonly"
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
