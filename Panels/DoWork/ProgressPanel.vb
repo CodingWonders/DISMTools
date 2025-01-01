@@ -5492,16 +5492,18 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
                                "- Unattended answer file: " & UnattendedFile)
             Try
+                LogView.AppendText(CrLf & CrLf & "Creating directories and copying files...")
                 DynaLog.LogMessage("Copying unattended answer file to the Panther directory of the Windows image...")
                 If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
                     Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
                 End If
                 File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"), True)
-                DynaLog.LogMessage("Copying unattended answer file to the System32 directory of the Windows image...")
+                DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
                 If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
                     Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
                 End If
                 File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
+                LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
                 GetErrorCode(True)
                 Exit Sub
             Catch ex As Exception
@@ -6555,6 +6557,9 @@ Public Class ProgressPanel
                 End If
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 79 Then
+                DynaLog.LogMessage("Saving project...")
+                MainForm.SaveDTProj()
             ElseIf OperationNum = 991 Then
                 DynaLog.LogMessage("Conversion succeeded.")
                 Visible = False
