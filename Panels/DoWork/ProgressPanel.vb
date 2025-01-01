@@ -5493,15 +5493,17 @@ Public Class ProgressPanel
                                "- Unattended answer file: " & UnattendedFile)
             Try
                 DynaLog.LogMessage("Copying unattended answer file to the Panther directory of the Windows image...")
-                If Not Directory.Exists(Path.Combine(targetImage, "Windows", "Panther")) Then
-                    Directory.CreateDirectory(Path.Combine(targetImage, "Windows", "Panther"))
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
                 End If
-                File.Copy(UnattendedFile, Path.Combine(targetImage, "Windows", "Panther", "unattend.xml"))
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"), True)
                 DynaLog.LogMessage("Copying unattended answer file to the System32 directory of the Windows image...")
-                If Not Directory.Exists(Path.Combine(targetImage, "Windows", "system32", "Sysprep")) Then
-                    Directory.CreateDirectory(Path.Combine(targetImage, "Windows", "system32", "Sysprep"))
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
                 End If
-                File.Copy(UnattendedFile, Path.Combine(targetImage, "Windows", "system32", "sysprep", "unattend.xml"))
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
+                GetErrorCode(True)
+                Exit Sub
             Catch ex As Exception
                 DynaLog.LogMessage("Could not copy unattended answer file to targets. Error message: " & ex.Message)
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
