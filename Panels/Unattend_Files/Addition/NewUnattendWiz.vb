@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24122"
+    Dim UnattendGenReleaseTag As String = "2511"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -33,6 +33,7 @@ Public Class NewUnattendWiz
     Dim SelectedArchitecture As New DismProcessorArchitecture()
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
+    Dim UseConfigSet As Boolean
 
     ' Time Zone Panel
     Dim TimeOffsets As New List(Of TimeOffset)
@@ -339,6 +340,7 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
         GenericKeys.Add(NewKeyVar("XGVPP-NMH47-7TTHJ-W3FW7-8HV2C"))     ' Enterprise
+        GenericKeys.Add(NewKeyVar("WGGHN-J84D6-QYCPR-T7PJ7-X766F"))     ' Enterprise N
 
         DynaLog.LogMessage("Adding default users. 1 Admin and 4 unused Users...")
         UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
@@ -651,6 +653,7 @@ Public Class NewUnattendWiz
         CheckBox2.Checked = False
         CheckBox3.Checked = True
         TextBox1.Text = ""
+        CheckBox19.Checked = False
         ' Restore time zone
         ComboBox5.SelectedItem = DefaultOffset.DisplayName
         RadioButton1.Checked = True
@@ -929,7 +932,8 @@ Public Class NewUnattendWiz
                              "- Windows 11 Settings:" & CrLf &
                              "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
                              "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
-                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf)
+                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf &
+                             "- Will a configuration set or distribution share be used? " & If(UseConfigSet, "Yes", "No") & CrLf)
         ' 3. -- TIME ZONE
         TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
         If Not TimeOffsetInteractive Then
@@ -1607,6 +1611,8 @@ Public Class NewUnattendWiz
                 Return "pro_workstations_n"
             Case "Enterprise"
                 Return "enterprise"
+            Case "Enterprise N"
+                Return "enterprise_n"
         End Select
         Return ""
     End Function
@@ -1689,6 +1695,10 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Saving computer settings...")
             If Not PCName.DefaultName Then
                 UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+            End If
+            DynaLog.LogMessage("Saving configuration set/distribution share settings...")
+            If UseConfigSet Then
+                UnattendGen.StartInfo.Arguments &= " /ConfigSet"
             End If
             ReportMessage("Saving user settings...", 10)
             DynaLog.LogMessage("Saving time zone settings...")
@@ -2305,5 +2315,9 @@ Public Class NewUnattendWiz
 
     Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
         CNameTTip.Show("Uses the name of your computer as the computer name of the unattended answer file." & CrLf & "Only use this if the system you want to target is this one", sender)
+    End Sub
+
+    Private Sub CheckBox19_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox19.CheckedChanged
+        UseConfigSet = CheckBox19.Checked
     End Sub
 End Class
