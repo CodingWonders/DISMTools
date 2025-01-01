@@ -8,6 +8,7 @@ Public Class SetOSUninstWindow
     Dim uninstWindow As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If NumericUpDown1.Value = uninstWindow Then Exit Sub
         ProgressPanel.osUninstDayCount = NumericUpDown1.Value
@@ -111,6 +112,7 @@ Public Class SetOSUninstWindow
         End Select
         ' Get the uninstall window from the registry first
         Try
+            DynaLog.LogMessage("Getting OS uninstall window...")
             Dim osUninstReg As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\Setup")
             uninstWindow = CInt(osUninstReg.GetValue("UninstallWindow").ToString())
             osUninstReg.Close()
@@ -118,6 +120,8 @@ Public Class SetOSUninstWindow
             MsgBox(ex.ToString() & " - " & ex.Message & "(HRESULT " & ex.HResult & ")", vbOKOnly + vbCritical, Label1.Text)
             Close()
         End Try
+        DynaLog.LogMessage("Uninstall window: " & uninstWindow)
+        DynaLog.LogMessage("Checking value...")
         If (uninstWindow >= 2 And uninstWindow <= 60) Then NumericUpDown1.Value = uninstWindow
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

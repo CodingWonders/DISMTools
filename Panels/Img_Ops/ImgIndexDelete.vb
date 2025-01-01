@@ -13,11 +13,14 @@ Public Class ImgIndexDelete
     Public IndexRemovalNames(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         Array.Clear(IndexRemovalNames, 0, IndexRemovalNames.Last)
         Dim imageCount As Integer = ListView1.CheckedItems.Count
         ' Detect whether volume indexes have been marked for removal
+        DynaLog.LogMessage("Detecting indexes that are marked for removal...")
         If ListView1.CheckedItems.Count <= 0 Then
+            DynaLog.LogMessage("No indexes have been marked for removal.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -49,6 +52,7 @@ Public Class ImgIndexDelete
         ' Detect whether image is mounted
         ProgressPanel.imgIndexDeletionUnmount = False
         If MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+            DynaLog.LogMessage("The image selected for index removal is mounted and needs to be unmounted before proceeding with this task.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -79,6 +83,7 @@ Public Class ImgIndexDelete
                 Try
                     For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                         If MainForm.MountedImageImgFiles(x) = TextBox1.Text Then
+                            DynaLog.LogMessage("The image has been detected. Marking for unmount...")
                             ProgressPanel.imgIndexDeletionUnmount = True
                             ProgressPanel.UMountImgIndex = MainForm.MountedImageImgIndexes(x)
                             If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then ProgressPanel.UMountLocalDir = True Else ProgressPanel.UMountLocalDir = False
@@ -321,12 +326,15 @@ Public Class ImgIndexDelete
     End Sub
 
     Sub GetImageIndexInfo(SourceImage As String)
+        DynaLog.LogMessage("Preparing to get image file information...")
+        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         MainForm.WatcherTimer.Enabled = False
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
@@ -342,10 +350,19 @@ Public Class ImgIndexDelete
         Label4.Visible = True
         Dim infoCollection As DismImageInfoCollection = Nothing
         Try
-            infoCollection = DismApi.GetImageInfo(SourceImage)
-        Catch ex As DismNotInitializedException
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             infoCollection = DismApi.GetImageInfo(SourceImage)
+            DynaLog.LogMessage("Information collection count: " & infoCollection.Count)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
+        Finally
+            Try
+                DynaLog.LogMessage("Shutting down API...")
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
         If infoCollection.Count <= 1 Then
             Select Case MainForm.Language
@@ -377,13 +394,13 @@ Public Class ImgIndexDelete
             OK_Button.Enabled = False
             Exit Sub
         Else
+            DynaLog.LogMessage("Adding indexes to lists...")
             For Each indexInfo As DismImageInfo In infoCollection
                 ListView1.Items.Add(New ListViewItem(New String() {indexInfo.ImageIndex, indexInfo.ImageName}))
                 ListView2.Items.Add(New ListViewItem(New String() {indexInfo.ImageIndex, indexInfo.ImageName}))
             Next
         End If
         OK_Button.Enabled = True
-        DismApi.Shutdown()
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
@@ -396,6 +413,7 @@ Public Class ImgIndexDelete
                 Path.GetExtension(TextBox1.Text).Equals(".esd", StringComparison.OrdinalIgnoreCase) Or _
                 Path.GetExtension(TextBox1.Text).Equals(".vhd", StringComparison.OrdinalIgnoreCase) Or _
                 Path.GetExtension(TextBox1.Text).Equals(".vhdx", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Getting information about image file " & Quote & TextBox1.Text & Quote & "...")
                 GetImageIndexInfo(TextBox1.Text)
             End If
         End If
@@ -414,6 +432,7 @@ Public Class ImgIndexDelete
     End Sub
 
     Private Sub ListView1_ItemChecked(sender As Object, e As ItemCheckedEventArgs) Handles ListView1.ItemChecked
+        DynaLog.LogMessage("Items have changed. Every item that has not been checked in the first list stays in the second list.")
         ListView2.Items.Clear()
         Try
             For x = 0 To ListView1.Items.Count - 1

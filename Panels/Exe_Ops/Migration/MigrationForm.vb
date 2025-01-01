@@ -4,7 +4,9 @@ Public Class MigrationForm
     Dim msg As String
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+        DynaLog.LogMessage("Beginning migration...")
         Threading.Thread.Sleep(2000)
+        DynaLog.LogMessage("Loading old settings file...")
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
                 msg = "Loading old settings file..."
@@ -20,6 +22,7 @@ Public Class MigrationForm
         BackgroundWorker1.ReportProgress(33.299999999999997)
         MainForm.LoadDTSettings(1)
         Threading.Thread.Sleep(250)
+        DynaLog.LogMessage("Saving new settings...")
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
                 msg = "Saving new settings file..."

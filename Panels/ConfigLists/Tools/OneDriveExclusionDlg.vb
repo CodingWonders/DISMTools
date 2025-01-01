@@ -8,6 +8,7 @@ Public Class OneDriveExclusionDlg
     Dim successfulExclusion As Boolean
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Preparing to exclude user OneDrive/SkyDrive folders...")
         ExcludeFolders(TextBox1.Text)
         If Not successfulExclusion Then Exit Sub
         Select Case MainForm.Language
@@ -46,11 +47,15 @@ Public Class OneDriveExclusionDlg
     End Sub
 
     Sub ExcludeFolders(ImagePath As String)
+        DynaLog.LogMessage("Excluding user OneDrive/SkyDrive folders...")
+        DynaLog.LogMessage("Image Path: " & ImagePath)
         If ImagePath = "" Or Not Directory.Exists(ImagePath) Then
+            DynaLog.LogMessage("Image Path is nothing or doesn't exist. Exiting...")
             successfulExclusion = False
             Exit Sub
         End If
         If Directory.Exists(ImagePath & "\Users") Then
+            DynaLog.LogMessage("A users folder exists in Image Path. Scanning for OneDrive/SkyDrive folder...")
             Try
                 Select Case MainForm.Language
                     Case 0
@@ -81,10 +86,12 @@ Public Class OneDriveExclusionDlg
                 ' Go through all User folders and exclude all OneDrive folders
                 For Each UserDir In Directory.GetDirectories(ImagePath & "\Users", "*", SearchOption.TopDirectoryOnly)
                     If Directory.Exists(UserDir & "\OneDrive") Then
+                        DynaLog.LogMessage("A user OneDrive folder exists. Adding to DISM Configuration List File...")
                         Dim excludedPath As String = ""
                         excludedPath = UserDir.Replace(ImagePath & "\", "\").Trim() & "\OneDrive"
                         ExcludedFolders.Add(excludedPath)
                     ElseIf Directory.Exists(UserDir & "\SkyDrive") Then
+                        DynaLog.LogMessage("A user SkyDrive folder exists. Adding to DISM Configuration List File...")
                         Dim excludedPath As String = ""
                         excludedPath = UserDir.Replace(ImagePath & "\", "\").Trim() & "\SkyDrive"
                         ExcludedFolders.Add(excludedPath)
@@ -92,6 +99,7 @@ Public Class OneDriveExclusionDlg
                 Next
                 successfulExclusion = True
             Catch ex As Exception
+                DynaLog.LogMessage("Could not exclude user OneDrive/SkyDrive folders. Error message: " & ex.Message)
                 successfulExclusion = False
             End Try
         Else

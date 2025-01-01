@@ -120,6 +120,7 @@ Public Class MUMAdditionDialog
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Selected Microsoft Update Manifest file: " & Quote & OpenFileDialog1.FileName & Quote)
         MUMFile = OpenFileDialog1.FileName
         TextBox1.Text = OpenFileDialog1.FileName
     End Sub

@@ -17,68 +17,93 @@ Public Class Options
     Public SectionNum As Integer = 0
 
     Sub DetermineSettingValidity()
+        DynaLog.LogMessage("Validating settings...")
         If TextBox1.Text = "" Then
+            DynaLog.LogMessage("No DISM executable has been specified.")
             CanExit = False
             GiveErrorExplanation(1)
         Else
+            DynaLog.LogMessage("A DISM executable was specified.")
+            DynaLog.LogMessage("Provided DISM executable: " & Quote & TextBox1.Text & Quote)
+            DynaLog.LogMessage("Checking if provided DISM executable exists...")
             If File.Exists(TextBox1.Text) Then
+                DynaLog.LogMessage("The DISM executable exists.")
                 CanExit = True
             Else
+                DynaLog.LogMessage("The DISM executable does not exist.")
                 CanExit = False
                 GiveErrorExplanation(2)
             End If
         End If
         If TextBox2.Text = "" Then
+            DynaLog.LogMessage("No log file has been specified.")
             CanExit = False
             GiveErrorExplanation(3)
         Else
+            DynaLog.LogMessage("A log file was specified.")
+            DynaLog.LogMessage("Provided log file: " & Quote & TextBox2.Text & Quote)
+            DynaLog.LogMessage("Checking if provided log file exists...")
             If File.Exists(TextBox2.Text) Then
+                DynaLog.LogMessage("The log file exists.")
                 CanExit = True
             Else
+                DynaLog.LogMessage("The log file does not exist. Attempting to create it...")
                 Try
                     If Not Directory.Exists(Path.GetDirectoryName(TextBox2.Text)) Then
+                        DynaLog.LogMessage("The parent directory of the provided log file does not exist. Attempting to create it...")
                         Directory.CreateDirectory(Path.GetDirectoryName(TextBox2.Text))
                     End If
                     File.Create(TextBox2.Text)
                     CanExit = True
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not create log file. Error message: " & ex.Message)
                     CanExit = False
                     GiveErrorExplanation(4)
                 End Try
             End If
         End If
         If CheckBox4.Checked Then
+            DynaLog.LogMessage("Checking scratch directory settings...")
             If RadioButton3.Checked Then
+                DynaLog.LogMessage("The scratch directory provided by the program or the project will be used. Skipping check...")
                 CanExit = True
                 Exit Sub
             End If
             If TextBox3.Text = "" Then
+                DynaLog.LogMessage("No scratch directory has been specified.")
                 CanExit = False
                 GiveErrorExplanation(5)
             Else
+                DynaLog.LogMessage("A scratch directory was specified.")
+                DynaLog.LogMessage("Provided scratch directory: " & Quote & TextBox3.Text & Quote)
+                DynaLog.LogMessage("Checking if provided scratch directory exists...")
                 If Directory.Exists(TextBox3.Text) Then
+                    DynaLog.LogMessage("The scratch directory exists.")
                     CanExit = True
                 Else
+                    DynaLog.LogMessage("The scratch directory does not exist. Attempting to create it...")
                     Try
                         Directory.CreateDirectory(TextBox3.Text)
                         CanExit = True
                     Catch ex As Exception
+                        DynaLog.LogMessage("Could not create scratch directory. Error message: " & ex.Message)
                         CanExit = False
-                        GiveErrorExplanation(5)
+                        GiveErrorExplanation(6)
                     End Try
                 End If
             End If
         End If
         If Not CanExit Then
+            DynaLog.LogMessage("We cannot continue until all options are correctly set.")
             Exit Sub
         End If
     End Sub
 
     Sub ApplyProgSettings()
+        DynaLog.LogMessage("Beginning application of user settings...")
+        DynaLog.LogMessage("Determining whether or not settings are valid...")
         DetermineSettingValidity()
-        If MainForm.Language = 1 And ComboBox3.SelectedIndex <> 1 Then
-            MsgBox("Support for languages is partial, so this program isn't fully translated yet. Please wait until the next version to experience full language support." & CrLf & CrLf & "El soporte para idiomas es parcial, así que este programa aún no está traducido completamente. Espere hasta la próxima versión para experimentar soporte completo de idiomas.", vbOKOnly + vbInformation, "Options/Opciones")
-        End If
+        DynaLog.LogMessage("Continuing setting application...")
         MainForm.DismExe = TextBox1.Text
         Select Case ComboBox1.SelectedIndex
             Case 0
@@ -194,6 +219,7 @@ Public Class Options
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
+        DynaLog.LogMessage("Error Code: " & ErrorCode)
         Select Case ErrorCode
             Case 1
                 MsgBox("The DISM executable path was not specified. Please specify one and try again", MsgBoxStyle.Critical, "DISMTools")
@@ -203,20 +229,30 @@ Public Class Options
                 MsgBox("The log file was not specified. Please specify one and try again", MsgBoxStyle.Critical, "DISMTools")
             Case 4
                 MsgBox("The program tried to create the specified log file, but has failed. Please try again", MsgBoxStyle.Critical, "DISMTools")
+            Case 5
+                MsgBox("The scratch directory was not specified. Please specify one and try again", MsgBoxStyle.Critical, "DISMTools")
+            Case 6
+                MsgBox("The program tried to create the specified scratch directory, but has failed. Please try again", MsgBoxStyle.Critical, "DISMTools")
         End Select
     End Sub
 
     Function DetectFileAssociations() As Boolean
+        DynaLog.LogMessage("Detecting file associations...")
         Try
+            DynaLog.LogMessage("Getting values from root class " & Quote & "DISMTools.Project" & Quote & "...")
             Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\Shell\Open\Command", False)
             Dim AssocCmd As String = AssocRk.GetValue(Nothing).ToString()
             AssocRk.Close()
+            DynaLog.LogMessage("Command-line of association: " & Quote & AssocCmd & Quote)
             If File.Exists(AssocCmd.Replace(" " & Quote & "/load=" & Quote & "%1" & Quote & Quote, "").Trim().Replace(Quote, "").Trim()) Then
+                DynaLog.LogMessage("DISMTools exists in the association cmdline. Associations have been established.")
                 Return True
             Else
+                DynaLog.LogMessage("DISMTools does not exist in the association cmdline. Associations have not been established.")
                 Return False
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not detect file associations. Error message: " & ex.Message)
             Return False
         End Try
         Return False
@@ -229,14 +265,22 @@ Public Class Options
     ''' <param name="UseCustomIcons"></param>
     ''' <remarks></remarks>
     Sub ManageAssociations(AssocOp As Integer, UseCustomIcons As Boolean)
+        DynaLog.LogMessage("Setting file associations...")
+        DynaLog.LogMessage("- Association operation: " & If(AssocOp = 0, "set associations", "remove associations"))
+        DynaLog.LogMessage("- Use a custom icon? " & If(UseCustomIcons, "Yes", "No"))
         Select Case AssocOp
             Case 0
+                DynaLog.LogMessage("Setting associations and file types on the system...")
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=DISMTools.Project").WaitForExit()
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=" & Quote & Environment.CurrentDirectory & "\DISMTools.exe" & Quote & " " & Quote & "/load=" & Quote & "%1" & Quote & Quote).WaitForExit()
+                DynaLog.LogMessage("Modifying DISMTools project association...")
                 Dim AssocRk As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project", True)
+                DynaLog.LogMessage("Setting the description of projects for Windows...")
                 AssocRk.SetValue(Nothing, "DISMTools project", RegistryValueKind.String)
                 If UseCustomIcons Then
+                    DynaLog.LogMessage("A custom icon for the project will be used. Checking if it exists...")
                     If File.Exists(Environment.CurrentDirectory & "\resources\dtproj.ico") Then
+                        DynaLog.LogMessage("The custom project icon exists. Setting it in the association...")
                         AssocRk.CreateSubKey("DefaultIcon")
                         Dim DefIcon As RegistryKey = Registry.ClassesRoot.OpenSubKey("DISMTools.Project\DefaultIcon", True)
                         DefIcon.SetValue(Nothing, Environment.CurrentDirectory & "\resources\dtproj.ico", RegistryValueKind.String)
@@ -245,16 +289,20 @@ Public Class Options
                 End If
                 AssocRk.Close()
             Case 1
+                DynaLog.LogMessage("Removing associations and file types from the system...")
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
                 ' Delete registry key remnants
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "delete HKCR\DISMTools.Project /f").WaitForExit()
         End Select
         ' Clear icon cache
+        DynaLog.LogMessage("Clearing icon cache with ie4uinit...")
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ie4uinit.exe", "-ClearIconCache").WaitForExit()
         ' Restart explorer.exe
+        DynaLog.LogMessage("Restarting Windows Explorer...")
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\taskkill.exe", "/f /im explorer.exe").WaitForExit()
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe")
+        DynaLog.LogMessage("Checking file associations one more time...")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -294,8 +342,10 @@ Public Class Options
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Applying program settings...")
         ApplyProgSettings()
         If CanExit Then
+            DynaLog.LogMessage("We can close the Options dialog.")
             Me.DialogResult = System.Windows.Forms.DialogResult.OK
             Me.Close()
         End If
@@ -307,6 +357,7 @@ Public Class Options
     End Sub
 
     Private Sub Options_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DynaLog.LogMessage("Resetting values to add translated resources...")
         ComboBox1.Items.Clear()
         ComboBox2.Items.Clear()
         ComboBox3.Items.Clear()
@@ -1492,17 +1543,20 @@ Public Class Options
         ComboBox3.Items.AddRange(Languages)
         ComboBox5.Items.AddRange(LogViews)
         ComboBox6.Items.AddRange(NotFreqs)
+        DynaLog.LogMessage("Checking if portable marker exists...")
         If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
+        DynaLog.LogMessage("Getting system fonts...")
         GetSystemFonts()
         ' Set default values before loading custom ones
         TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
         TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Windows\Logs\DISM\DISM.log"
+        DynaLog.LogMessage("Gathering custom settings...")
         GatherCustomSettings()
 
         ' Set program colors
@@ -1631,10 +1685,12 @@ Public Class Options
         For Each fntFamily As FontFamily In FontFamily.Families
             ComboBox4.Items.Add(fntFamily.Name)
         Next
+        DynaLog.LogMessage(ComboBox4.Items.Count & " font(s) have been detected on this system.")
         If ComboBox4.SelectedItem = Nothing Then ComboBox4.SelectedItem = "Consolas"
     End Sub
 
     Sub GatherCustomSettings()
+        DynaLog.LogMessage("Getting custom settings...")
         TextBox1.Text = MainForm.DismExe
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
         Label4.Text = DismVersion.ProductVersion
@@ -1784,6 +1840,7 @@ Public Class Options
     End Sub
 
     Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
+        DynaLog.LogMessage("Changing bold font status. Toggle checked? " & If(Toggle1.Checked, "Yes", "No"))
         If Toggle1.Checked Then
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
         Else
@@ -1793,9 +1850,13 @@ Public Class Options
     End Sub
 
     Function IsMonospacedFont(ftName As String) As Boolean
+        DynaLog.LogMessage("Detecting if font " & Quote & ftName & Quote & " is monospaced...")
         Using testFont As Font = New Font(ftName, 10)
             Dim widthI As Decimal = MeasureCharacterWidth(testFont, "i")
             Dim widthW As Decimal = MeasureCharacterWidth(testFont, "w")
+            DynaLog.LogMessage("Width of character " & Quote & "i" & Quote & ": " & widthI)
+            DynaLog.LogMessage("Width of character " & Quote & "W" & Quote & ": " & widthW)
+            DynaLog.LogMessage("Are widths equal? " & If(widthI = widthW, "Yes", "No"))
             Return widthI = widthW
         End Using
         Return False
@@ -1812,7 +1873,9 @@ Public Class Options
     End Function
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Checking if a system DISM folder exists...")
         If Not Directory.Exists(Path.Combine(Path.GetDirectoryName(TextBox1.Text), "dism")) Then
+            DynaLog.LogMessage("Said folder does not exist on the file system.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -1842,6 +1905,7 @@ Public Class Options
             MsgBox(msg, vbOKOnly + vbExclamation, Label1.Text)
             Exit Sub
         End If
+        DynaLog.LogMessage("Showing component information...")
         DismComponents.ShowDialog()
     End Sub
 
@@ -1857,7 +1921,9 @@ Public Class Options
         If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
             TextBox1.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         End If
+        DynaLog.LogMessage("Detecting product version of " & Quote & TextBox1.Text & Quote)
         DismVersion = FileVersionInfo.GetVersionInfo(TextBox1.Text)
+        DynaLog.LogMessage("Product version: " & DismVersion.ProductVersion)
         Label4.Text = DismVersion.ProductVersion
     End Sub
 
@@ -1866,6 +1932,7 @@ Public Class Options
     End Sub
 
     Private Sub LogSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LogSFD.FileOk
+        DynaLog.LogMessage("Log file path: " & Quote & LogSFD.FileName & Quote)
         TextBox2.Text = LogSFD.FileName
     End Sub
 
@@ -1877,6 +1944,7 @@ Public Class Options
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As Object, e As EventArgs) Handles TrackBar1.Scroll
+        DynaLog.LogMessage("Log level (trackbar value + 1): " & (TrackBar1.Value + 1))
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2059,6 +2127,7 @@ Public Class Options
     End Sub
 
     Private Sub TextBox3_TextChanged(sender As Object, e As EventArgs) Handles TextBox3.TextChanged
+        DynaLog.LogMessage("Getting space of drive containing folder " & Quote & TextBox3.Text & Quote & "...")
         GetRootSpace(TextBox3.Text)
     End Sub
 
@@ -2456,6 +2525,7 @@ Public Class Options
     End Sub
 
     Private Sub Toggle1_CheckedChanged(sender As Object, e As EventArgs) Handles Toggle1.CheckedChanged
+        DynaLog.LogMessage("Changing bold font status. Toggle checked? " & If(Toggle1.Checked, "Yes", "No"))
         If Toggle1.Checked Then
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
         Else
@@ -2464,6 +2534,7 @@ Public Class Options
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
+        DynaLog.LogMessage("Changing bold font status. Toggle checked? " & If(Toggle1.Checked, "Yes", "No"))
         If Toggle1.Checked Then
             LogPreview.Font = New Font(ComboBox4.Text, NumericUpDown1.Value, FontStyle.Bold)
         Else
@@ -2472,6 +2543,7 @@ Public Class Options
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        DynaLog.LogMessage("Toggling state of mounted image detector...")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2586,6 +2658,7 @@ Public Class Options
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        DynaLog.LogMessage("Toggling state of file associations...")
         If DetectFileAssociations() Then ManageAssociations(1, False) Else ManageAssociations(0, If(CheckBox11.Checked, True, False))
     End Sub
 
@@ -2642,8 +2715,10 @@ Public Class Options
     End Sub
 
     Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
+        DynaLog.LogMessage("Preparing to reset settings... It will be done if the user wants to do so")
         SettingsResetDlg.ShowDialog()
         If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Proceeding to reset settings - User accepted the question.")
             MainForm.ResetDTSettings()
             Cancel_Button.PerformClick()
         End If
@@ -2656,6 +2731,7 @@ Public Class Options
 #Region "Section functionality"
 
     Sub ChangeSections(Number As Integer)
+        DynaLog.LogMessage("Changing visible section in the settings. Section number index: " & Number)
         Select Case Number
             Case 0
                 Options_Program.Visible = True
@@ -3082,11 +3158,14 @@ Public Class Options
 #End Region
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
+        DynaLog.LogMessage("Changing color scheme preview...")
         If RadioButton1.Checked Then
+            DynaLog.LogMessage("New color scheme: DISMTools 0.5+")
             StatusBar_Idle.Image = My.Resources.CS_Idle_Green
             StatusBar_Ops.Image = My.Resources.CS_Ops_Green
             ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Green
         Else
+            DynaLog.LogMessage("New color scheme: DISMTools 0.1.1-0.4.2")
             StatusBar_Idle.Image = My.Resources.CS_Idle_Blue
             StatusBar_Ops.Image = My.Resources.CS_Ops_Blue
             ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Blue
@@ -3094,6 +3173,7 @@ Public Class Options
     End Sub
 
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
+        DynaLog.LogMessage("Toggling progress panel state preview...")
         ProgressPanelPic.Image = If(CheckBox7.Checked, My.Resources.progresspanel_logview_shown, My.Resources.progresspanel_logview_hidden)
     End Sub
 End Class

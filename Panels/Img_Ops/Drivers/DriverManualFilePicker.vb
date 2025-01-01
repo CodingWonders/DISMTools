@@ -8,7 +8,9 @@ Public Class DriverManualFilePicker
     Dim Language As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Items checked for addition: " & CheckedListBox1.CheckedItems.Count)
         If CheckedListBox1.CheckedItems.Count <= 0 Then Exit Sub
+        DynaLog.LogMessage("Adding selected items...")
         Dim SelectedDrivers As New List(Of String)
         For Each DrvItem As ListViewItem In AddDrivers.ListView1.Items
             SelectedDrivers.Add(DrvItem.SubItems(0).Text)
@@ -137,6 +139,7 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub ScanBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ScanBW.DoWork
+        DynaLog.LogMessage("Scanning directory " & Quote & DriverDir & Quote & "...")
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -210,6 +213,7 @@ Public Class DriverManualFilePicker
                                   "File di driver trovati finora: " & CheckedListBox1.Items.Count
             End Select
         Next
+        DynaLog.LogMessage("Items detected in directory: " & CheckedListBox1.Items.Count)
     End Sub
 
     Private Sub ScanBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ScanBW.RunWorkerCompleted
@@ -251,6 +255,7 @@ Public Class DriverManualFilePicker
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        DynaLog.LogMessage("Preparing to refresh results...")
         CheckedListBox1.Items.Clear()
         If DriverDir <> "" And Directory.Exists(DriverDir) Then ScanBW.RunWorkerAsync()
     End Sub

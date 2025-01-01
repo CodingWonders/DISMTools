@@ -1,4 +1,6 @@
-﻿Namespace Elements
+﻿Imports Microsoft.VisualBasic.ControlChars
+
+Namespace Elements
 
     Public Class WirelessSettings
 
@@ -34,6 +36,10 @@
         ''' <remarks></remarks>
         Public Property Password As String
 
+        Public Overrides Function ToString() As String
+            Return Me.SSID
+        End Function
+
     End Class
 
     Public Enum WiFiAuthenticationMode As Integer
@@ -45,8 +51,10 @@
     Public Class WirelessValidator
 
         Public Shared Function ValidateWiFi(connection As WirelessSettings) As Boolean
+            DynaLog.LogMessage("Validating Wi-Fi SSID " & Quote & connection.ToString() & Quote & "...")
             Dim valid As Boolean = True
             If connection.SSID = "" OrElse String.IsNullOrWhiteSpace(connection.SSID) Then
+                DynaLog.LogMessage("SSID is empty or has whitespaces. Wi-Fi configuration is invalid.")
                 valid = False
             End If
             Return valid

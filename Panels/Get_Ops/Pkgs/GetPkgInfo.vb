@@ -669,7 +669,9 @@ Public Class GetPkgInfoDlg
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
 
         ' Populate installed package listing
+        DynaLog.LogMessage("Updating items in list...")
         ListBox2.Items.Clear()
+        DynaLog.LogMessage("Getting installed packages...")
         For Each InstalledPackage As DismPackage In InstalledPkgInfo
             ListBox2.Items.Add(InstalledPackage.PackageName)
         Next
@@ -706,7 +708,9 @@ Public Class GetPkgInfoDlg
         Try
             If ListBox2.SelectedItems.Count = 1 Then
                 ' Background processes need to have completed before showing information
+                DynaLog.LogMessage("Checking if background processes are busy...")
                 If MainForm.ImgBW.IsBusy Then
+                    DynaLog.LogMessage("Background processes are busy. Stopping them...")
                     Dim msg As String = ""
                     Select Case MainForm.Language
                         Case 0
@@ -764,7 +768,9 @@ Public Class GetPkgInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                DynaLog.LogMessage("Checking if mounted image detector is busy...")
                 If MainForm.MountedImageDetectorBW.IsBusy Then
+                    DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                     MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                     MainForm.MountedImageDetectorBW.CancelAsync()
                     While MainForm.MountedImageDetectorBW.IsBusy
@@ -772,7 +778,9 @@ Public Class GetPkgInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                DynaLog.LogMessage("Checking if image status watchers are busy...")
                 MainForm.WatcherTimer.Enabled = False
+                DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
                 If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
                 While MainForm.WatcherBW.IsBusy
                     Application.DoEvents()
@@ -808,8 +816,11 @@ Public Class GetPkgInfoDlg
                 End Select
                 Application.DoEvents()
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Creating session...")
                     Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
+                        DynaLog.LogMessage("Package to get information about: " & Quote & ListBox2.SelectedItem & Quote)
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -839,9 +850,12 @@ Public Class GetPkgInfoDlg
                         Dim PkgInfo As DismPackageInfo = Nothing
                         ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
                         ' Windows 8 and earlier cannot use the extended type, as no "Ex" function is declared in their DISM API DLL
+                        DynaLog.LogMessage("Detecting conditions imposed by host system...")
                         If Environment.OSVersion.Version.Major >= 10 Then
+                            DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
                             PkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
                         Else
+                            DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
                             PkgInfo = DismApi.GetPackageInfoByName(imgSession, ListBox2.SelectedItem)
                         End If
                         Label23.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
@@ -865,7 +879,9 @@ Public Class GetPkgInfoDlg
                         If Environment.OSVersion.Version.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
                         Label57.Text = ""
                         Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
+                        DynaLog.LogMessage("Custom property count: " & cProps.Count)
                         If cProps.Count > 0 Then
+                            DynaLog.LogMessage("This package has custom properties.")
                             Label57.Visible = False
                             CPropViewer.Visible = True
                             Dim cPropContents As String = ""
@@ -899,6 +915,7 @@ Public Class GetPkgInfoDlg
                                     cPropValue.Text = "Selezionare o espandere un elemento."
                             End Select
                         Else
+                            DynaLog.LogMessage("This package does not have custom properties.")
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -929,12 +946,15 @@ Public Class GetPkgInfoDlg
                         End If
                         Label59.Text = ""
                         Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
+                        DynaLog.LogMessage("Feature count: " & pkgFeats.Count)
                         If pkgFeats.Count > 0 Then
+                            DynaLog.LogMessage("This package has features.")
                             ' Output all features
                             For Each pkgFeat As DismFeature In pkgFeats
                                 Label59.Text &= "- " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State, True) & ")" & CrLf
                             Next
                         Else
+                            DynaLog.LogMessage("This package does not have features.")
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -990,19 +1010,25 @@ Public Class GetPkgInfoDlg
                             Label5.Text = "Pronto"
                     End Select
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
             Else
                 Panel4.Visible = False
                 Panel7.Visible = True
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)
+        DynaLog.LogMessage("Populating items in custom property tree view...")
         Dim lines As String() = input.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
         For Each line As String In lines
             ' Split the line at the last colon to get the path and value
@@ -1044,6 +1070,7 @@ Public Class GetPkgInfoDlg
         cPropName.Text = cPropPathView.SelectedNode.Text
         Dim selectedNode As TreeNode = cPropPathView.SelectedNode
         If selectedNode IsNot Nothing AndAlso selectedNode.Tag IsNot Nothing Then
+            DynaLog.LogMessage("Value of selected custom property: " & selectedNode.Tag.ToString())
             cPropValue.Text = selectedNode.Tag.ToString()
         Else
             Select Case MainForm.Language
@@ -1075,11 +1102,14 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub GetPackageFileInformation()
+        DynaLog.LogMessage("Clearing information lists...")
         PackageInfoList.Clear()
         PackageInfoExList.Clear()
         Try
             ' Background processes need to have completed before showing information
+            DynaLog.LogMessage("Checking if background processes are busy...")
             If MainForm.ImgBW.IsBusy Then
+                DynaLog.LogMessage("Background processes are busy. Stopping them...")
                 Dim msg As String = ""
                 Select Case MainForm.Language
                     Case 0
@@ -1137,7 +1167,9 @@ Public Class GetPkgInfoDlg
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Checking if mounted image detector is busy...")
             If MainForm.MountedImageDetectorBW.IsBusy Then
+                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                 MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                 MainForm.MountedImageDetectorBW.CancelAsync()
                 While MainForm.MountedImageDetectorBW.IsBusy
@@ -1145,7 +1177,9 @@ Public Class GetPkgInfoDlg
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Checking if image status watchers are busy...")
             MainForm.WatcherTimer.Enabled = False
+            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
             If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
             While MainForm.WatcherBW.IsBusy
                 Application.DoEvents()
@@ -1178,10 +1212,14 @@ Public Class GetPkgInfoDlg
             End Select
             Application.DoEvents()
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
+                DynaLog.LogMessage("Creating session...")
                 Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                     For Each pkgFile In ListBox1.Items
+                        DynaLog.LogMessage("Package file to get information about: " & Quote & Path.GetFileName(pkgFile) & Quote)
                         If File.Exists(pkgFile) Then
+                            DynaLog.LogMessage("Package file exists.")
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1210,9 +1248,12 @@ Public Class GetPkgInfoDlg
                             Application.DoEvents()
                             Dim pkgInfoEx As DismPackageInfoEx = Nothing
                             Dim pkgInfo As DismPackageInfo = Nothing
+                            DynaLog.LogMessage("Detecting conditions imposed by host system...")
                             If Environment.OSVersion.Version.Major >= 10 Then
+                                DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
                                 pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
                             Else
+                                DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
                                 pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
                             End If
                             If pkgInfoEx IsNot Nothing Then PackageInfoExList.Add(pkgInfoEx)
@@ -1221,13 +1262,19 @@ Public Class GetPkgInfoDlg
                     Next
                 End Using
             Catch DISMEx As DismException
+                DynaLog.LogMessage("Could not get package file information. Error message: " & DISMEx.Message)
                 MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, Label1.Text)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
         Catch ex As Exception
             ' Cancel it
         End Try
+        DynaLog.LogMessage("This process has finished.")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1256,6 +1303,8 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)
+        DynaLog.LogMessage("Displaying information of a specific package file...")
+        DynaLog.LogMessage("Index of Selected Package File: " & PkgFile)
         Label9.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageName, PackageInfoList(PkgFile).PackageName)
         Label11.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
         Label17.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Copyright, PackageInfoList(PkgFile).Copyright)
@@ -1277,11 +1326,14 @@ Public Class GetPkgInfoDlg
         If Environment.OSVersion.Version.Major >= 10 Then Label90.Text = PackageInfoExList(PkgFile).CapabilityId Else Label90.Text = ""
         Label92.Text = ""
         Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CustomProperties, PackageInfoList(PkgFile).CustomProperties)
+        DynaLog.LogMessage("Custom property count: " & cProps.Count)
         If cProps.Count > 0 Then
+            DynaLog.LogMessage("This package has custom properties.")
             For Each cProp As DismCustomProperty In cProps
                 Label92.Text &= "- " & If(cProp.Path <> "", cProp.Path & "\", "") & cProp.Name & ": " & cProp.Value & CrLf
             Next
         Else
+            DynaLog.LogMessage("This package does not have custom properties.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1310,12 +1362,15 @@ Public Class GetPkgInfoDlg
         End If
         Label94.Text = ""
         Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Features, PackageInfoList(PkgFile).Features)
+        DynaLog.LogMessage("Feature count: " & pkgFeats.Count)
         If pkgFeats.Count > 0 Then
+            DynaLog.LogMessage("This package has features.")
             ' Output all features
             For Each pkgFeat As DismFeature In pkgFeats
                 Label94.Text &= "- " & pkgFeat.FeatureName & " (" & Casters.CastDismFeatureState(pkgFeat.State, True) & ")" & CrLf
             Next
         Else
+            DynaLog.LogMessage("This package does not have features.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1441,6 +1496,7 @@ Public Class GetPkgInfoDlg
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving package information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.PackageFiles.Count > 0 Then ImgInfoSaveDlg.PackageFiles.Clear()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
@@ -1462,6 +1518,7 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub SearchPackages(sQuery As String)
+        DynaLog.LogMessage("Search query: " & sQuery)
         If InstalledPkgInfo.Count > 0 Then
             For Each InstalledPackage As DismPackage In InstalledPkgInfo
                 If InstalledPackage.PackageName.ToLower().Contains(sQuery.ToLower()) Then
@@ -1476,6 +1533,7 @@ Public Class GetPkgInfoDlg
         If SearchBox1.Text <> "" Then
             SearchPackages(SearchBox1.Text)
         Else
+            DynaLog.LogMessage("No search query has been specified. Showing all items...")
             For Each InstalledPackage As DismPackage In InstalledPkgInfo
                 ListBox2.Items.Add(InstalledPackage.PackageName)
             Next

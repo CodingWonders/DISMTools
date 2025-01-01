@@ -12,6 +12,7 @@ Public Class ImgCleanup
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.CleanupTask = ComboBox1.SelectedIndex
+        DynaLog.LogMessage("Image cleanup task: " & ComboBox1.SelectedIndex)
         Select Case ComboBox1.SelectedIndex
             Case 1
                 ProgressPanel.CleanupHideSP = CheckBox1.Checked = True
@@ -20,7 +21,9 @@ Public Class ImgCleanup
                 ProgressPanel.DeferCleanupOps = If(CheckBox2.Checked And CheckBox3.Checked, True, False)
             Case 6
                 ProgressPanel.UseCompRepairSource = CheckBox4.Checked = True
+                DynaLog.LogMessage("Detecting state of component repair sources...")
                 If CheckBox4.Checked And RichTextBox1.Text = "" Then
+                    DynaLog.LogMessage("No source has been provided.")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -412,7 +415,9 @@ Public Class ImgCleanup
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         ' Determine when the last base reset was run
+        DynaLog.LogMessage("Getting status of last base reset...")
         If MainForm.OnlineManagement Then
+            DynaLog.LogMessage("Detecting last base reset of active installation...")
             Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
             Dim LastResetBase_UTC As String = ""
             Select Case MainForm.Language
@@ -444,15 +449,19 @@ Public Class ImgCleanup
             Dim charArray() As Char = LastResetBase_UTC.ToCharArray()
             If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
             LastResetBase_UTC = New String(charArray)
+            DynaLog.LogMessage("Detected date: " & LastResetBase_UTC)
             Label6.Text = LastResetBase_UTC
         Else
+            DynaLog.LogMessage("Detecting last base reset of image...")
             Using reg As New Process
+                DynaLog.LogMessage("Loading SOFTWARE hive...")
                 reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
                 reg.StartInfo.Arguments = "load HKLM\MountedSoft " & Quote & MainForm.MountDir & "\Windows\system32\config\software" & Quote
                 reg.StartInfo.CreateNoWindow = True
                 reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
                 reg.Start()
                 reg.WaitForExit()
+                DynaLog.LogMessage("Registry process finished with exit code " & Hex(reg.ExitCode))
                 If reg.ExitCode = 0 Then
                     Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("MountedSoft\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
                     Dim LastResetBase_UTC As String = ""
@@ -486,6 +495,7 @@ Public Class ImgCleanup
                     If LastResetBase_UTC.Contains("/") Then charArray(10) = " "
                     LastResetBase_UTC = New String(charArray)
                     Label6.Text = LastResetBase_UTC
+                    DynaLog.LogMessage("Detected date: " & LastResetBase_UTC)
                     reg.StartInfo.Arguments = "unload HKLM\MountedSoft"
                     reg.Start()
                     reg.WaitForExit()
@@ -816,6 +826,7 @@ Public Class ImgCleanup
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Getting source established in the group policy...")
         RichTextBox1.Text = MainForm.GetSrcFromGPO()
         If RichTextBox1.Text.StartsWith("wim:\", StringComparison.OrdinalIgnoreCase) Then
             TextBoxSourcePanel.Visible = False

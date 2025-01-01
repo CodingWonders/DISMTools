@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class HelpBrowserForm
 
@@ -38,12 +39,16 @@ Public Class HelpBrowserForm
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
+        DynaLog.LogMessage("Navigating to page " & Quote & e.Url.AbsoluteUri & Quote & "...")
         If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
+            DynaLog.LogMessage("HTML exists in Absolute URI path. Navigating...")
             WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")
         ElseIf e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Absolute URI points to an external website. Opening in default browser...")
             Process.Start(e.Url.AbsoluteUri)
             WebBrowser1.Navigate(CurrentSite)
         End If
+        DynaLog.LogMessage("Document title: " & WebBrowser1.DocumentTitle)
         If WebBrowser1.DocumentTitle = "" Then
             Text = DocTitle & " - " & TitleMsg
         Else

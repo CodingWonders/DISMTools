@@ -1,9 +1,9 @@
 ﻿Namespace Elements
 
-    Public Class AccountLockdownSettings
+    Public Class AccountLockoutSettings
 
         ''' <summary>
-        ''' Determines whether to enable account lockdown
+        ''' Determines whether to enable account lockout
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
@@ -19,19 +19,19 @@
         Public Property DefaultPolicy As Boolean = True
 
         ''' <summary>
-        ''' Timed lockdown settings in case the default policy is not used
+        ''' Timed lockout settings in case the default policy is not used
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks>See class declaration for more information</remarks>
-        Public Property TimedLockdownSettings As New TimedLockdown()
+        Public Property TimedLockoutSettings As New TimedLockout()
 
     End Class
 
-    Public Class TimedLockdown
+    Public Class TimedLockout
 
         ''' <summary>
-        ''' The number of failed attempts at signing in before the account is locked down
+        ''' The number of failed attempts at signing in before the account is locked out
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
@@ -39,7 +39,7 @@
         Public Property FailedAttempts As Integer
 
         ''' <summary>
-        ''' The timeframe (in minutes) in which the number of failed attempts can be exceeded to enable lockdown on an account
+        ''' The timeframe (in minutes) in which the number of failed attempts can be exceeded to enable lockout on an account
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>

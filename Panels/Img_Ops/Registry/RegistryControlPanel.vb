@@ -176,12 +176,15 @@ Public Class RegistryControlPanel
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Try
+            DynaLog.LogMessage("Getting last key that was opened in the Registry Editor...")
             Dim LastKeyReg As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Applets\Regedit")
-            PreviouslyLoadedKey = LastKeyReg.GetValue("LastKey")
+            PreviouslyLoadedKey = LastKeyReg.GetValue("LastKey", "")
+            DynaLog.LogMessage("Last key opened: " & Quote & PreviouslyLoadedKey & Quote)
             LastKeyReg.Close()
         Catch ex As Exception
             ' Could not grab Last Key
         End Try
+        DynaLog.LogMessage("Setting path of default registry hives in the image...")
         RegHiveLocation = Path.Combine(MainForm.MountDir, "Windows\system32\config")
         If RegHiveLocation <> "" Then
             OpenFileDialog1.InitialDirectory = RegHiveLocation
@@ -189,6 +192,9 @@ Public Class RegistryControlPanel
     End Sub
 
     Function ModifyRegistryHives(Load As Boolean, HiveLocation As String) As Boolean
+        DynaLog.LogMessage("Modifying the state of the registry hives...")
+        DynaLog.LogMessage("- Type of operation: " & If(Load, "load hive", "unload hive"))
+        DynaLog.LogMessage("- Hive that will be affected by this operation: " & Path.GetFileName(HiveLocation))
         Dim regLoaderProc As New Process()
         regLoaderProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
         Dim regName As String = "z" & Path.GetFileNameWithoutExtension(HiveLocation)
@@ -201,6 +207,7 @@ Public Class RegistryControlPanel
         regLoaderProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
         regLoaderProc.Start()
         regLoaderProc.WaitForExit()
+        DynaLog.LogMessage("The REG process finished with exit code " & Hex(regLoaderProc.ExitCode))
         If regLoaderProc.ExitCode = 0 Then
             Return True
         Else
@@ -263,6 +270,7 @@ Public Class RegistryControlPanel
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Try
+            DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zSOFTWARE" & Quote & " /f").WaitForExit()
         Catch ex As Exception
 
@@ -272,6 +280,7 @@ Public Class RegistryControlPanel
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Try
+            DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zSYSTEM" & Quote & " /f").WaitForExit()
         Catch ex As Exception
 
@@ -281,6 +290,7 @@ Public Class RegistryControlPanel
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Try
+            DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zDEFAULT" & Quote & " /f").WaitForExit()
         Catch ex As Exception
 
@@ -290,6 +300,7 @@ Public Class RegistryControlPanel
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         Try
+            DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zNTUSER" & Quote & " /f").WaitForExit()
         Catch ex As Exception
 
@@ -325,7 +336,9 @@ Public Class RegistryControlPanel
                 msg = "Gli alveari del registro devono essere scaricati per chiudere questa finestra. Volete scaricarli ora?"
         End Select
         If LoadedHives > 0 Or CustomHiveLoaded Then
+            DynaLog.LogMessage("Registry hives were loaded and need to be unloaded before closing the control panel.")
             If MsgBox(msg, vbYesNo + vbQuestion, Text) = MsgBoxResult.Yes Then
+                DynaLog.LogMessage("Unloading loaded hives...")
                 If Button9.Text <> LoadButtonText Then Button9.PerformClick()
                 If Button10.Text <> LoadButtonText Then Button10.PerformClick()
                 If Button11.Text <> LoadButtonText Then Button11.PerformClick()
@@ -336,6 +349,7 @@ Public Class RegistryControlPanel
                 Exit Sub
             End If
             If LoadedHives > 0 Or CustomHiveLoaded Then
+                DynaLog.LogMessage("Some hives are still loaded.")
                 ' Some hives could not be unloaded
                 Select Case MainForm.Language
                     Case 0
@@ -370,6 +384,7 @@ Public Class RegistryControlPanel
 
         ' Set last key back
         If PreviouslyLoadedKey <> "" Then
+            DynaLog.LogMessage("Setting last key that was opened in the Registry Editor to be the key to open...")
             Try
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & PreviouslyLoadedKey & Quote & " /f")
             Catch ex As Exception
@@ -383,6 +398,7 @@ Public Class RegistryControlPanel
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Hive to load: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
         TextBox2.Text = "HKEY_LOCAL_MACHINE\z" & Path.GetFileNameWithoutExtension(OpenFileDialog1.FileName)
     End Sub
@@ -403,6 +419,7 @@ Public Class RegistryControlPanel
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
         ' Launch regedit on the loaded Hive
         Try
+            DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
             Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & TextBox2.Text & Quote & " /f").WaitForExit()
         Catch ex As Exception
 

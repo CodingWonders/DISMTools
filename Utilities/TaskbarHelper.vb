@@ -8,7 +8,7 @@ Public Class TaskbarHelper
             TaskbarManager.Instance.SetProgressValue(value, 100, handle)
             TaskbarManager.Instance.SetProgressState(state, handle)
         Catch ex As Exception
-            Debug.WriteLine("Could not set TBI. " & ex.Message)
+            DynaLog.LogMessage("Could not set TBI. Error message: " & ex.Message)
         End Try
     End Sub
 

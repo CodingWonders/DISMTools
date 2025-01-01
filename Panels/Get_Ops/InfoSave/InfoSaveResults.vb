@@ -17,6 +17,7 @@ Public Class InfoSaveResults
         '    stringToPrint = TextBox1.Text
         '    document.Print()
         'End If
+        DynaLog.LogMessage("Preparing to print report...")
         WebBrowser1.ShowPrintDialog()
     End Sub
 
@@ -108,7 +109,9 @@ Public Class InfoSaveResults
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         TextBox1.Clear()
+        DynaLog.LogMessage("Checking if the report exists...")
         If File.Exists(ImgInfoSaveDlg.SaveTarget) Then
+            DynaLog.LogMessage("The report exists. Reading and parsing to HTML...")
             TextBox1.Text = File.ReadAllText(ImgInfoSaveDlg.SaveTarget)
             TextBox1.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Regular)
 
@@ -141,8 +144,10 @@ Public Class InfoSaveResults
                                        "    </head>" & CrLf &
                                        "</html>" & CrLf
             Try
+                DynaLog.LogMessage("Parsing to HTML...")
                 Dim pipeline = New MarkdownPipelineBuilder().UseAdvancedExtensions().Build()
                 Dim result As String = Markdown.ToHtml(TextBox1.Text, pipeline)
+                DynaLog.LogMessage("Saving to prettier HTML report...")
                 File.WriteAllText(Application.StartupPath & "\report.html", prettyHTML & result)
                 If File.Exists(Application.StartupPath & "\report.html") Then
                     WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
@@ -150,6 +155,8 @@ Public Class InfoSaveResults
                 AddHandler document.PrintPage, AddressOf doc_PrintPage
                 BringToFront()
             Catch ex As Exception
+                DynaLog.LogMessage("Could not convert to HTML. Error message: " & ex.Message)
+                DynaLog.LogMessage("This could be an issue with Markdig.")
                 If MsgBox("Conversion to HTML has failed due to the following error: " & ex.Message & CrLf & CrLf & "Do you want to open this file in a text editor?", vbYesNo + vbCritical, "Conversion error") = MsgBoxResult.Yes Then
                     Process.Start(FilePath)
                     Close()
@@ -168,6 +175,7 @@ Public Class InfoSaveResults
 
     Private Sub InfoSaveResults_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If File.Exists(Application.StartupPath & "\report.html") Then
+            DynaLog.LogMessage("Attempting to delete temporary report...")
             Try
                 File.Delete(Application.StartupPath & "\report.html")
             Catch ex As Exception
@@ -178,6 +186,7 @@ Public Class InfoSaveResults
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
         If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("An external link has been clicked. Opening it in the default browser...")
             Process.Start(e.Url.AbsoluteUri)
             WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
         End If

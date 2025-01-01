@@ -5,6 +5,8 @@ Public Class ImgIndexSwitch
     Public indexNames(1024) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
+        DynaLog.LogMessage("Preparing to switch image indexes...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.SwitchSourceImg = MainForm.SourceImg
         ProgressPanel.SwitchTarget = MainForm.MountDir
@@ -195,6 +197,7 @@ Public Class ImgIndexSwitch
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
         Label5.Text = indexNames(NumericUpDown1.Value - 1)
         If Label5.Text = MainForm.imgMountedName Then
+            DynaLog.LogMessage("The index target is already mounted.")
             Label6.Visible = True
             OK_Button.Enabled = False
         Else

@@ -32,11 +32,14 @@ Public Class AddProvAppxPackage
     Dim StubPreferences() As String = New String(2) {"Do not configure stub preference", "Install application as a stub package", "Install application as a full package"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         AppxAdditionCount = ListView1.Items.Count
         AppxDependencyCount = ListBox1.Items.Count
         ProgressPanel.appxAdditionCount = AppxAdditionCount
+        DynaLog.LogMessage("Detecting AppX packages to add...")
         If ListView1.Items.Count = 0 Then
+            DynaLog.LogMessage("No items have been added to the queue.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -64,10 +67,12 @@ Public Class AddProvAppxPackage
             End Select
             Exit Sub
         Else
+            DynaLog.LogMessage("AppX packages to add to the queue: " & AppxAdditionCount)
             If AppxAdditionCount > 65535 Then
                 MsgBox("Right now, you can only specify less than 65535 AppX packages. This is a program limitation that will be gone in a future update.", vbOKOnly + vbCritical, "Add provisioned AppX packages")
                 Exit Sub
             Else
+                DynaLog.LogMessage("Adding AppX packages to queue...")
                 For x = 0 To AppxAdditionCount - 1
                     AppxPackages(x) = ListView1.Items(x).Text
                 Next
@@ -87,8 +92,11 @@ Public Class AddProvAppxPackage
                 Else
                     ProgressPanel.appxAdditionLastDependency = ""
                 End If
+                DynaLog.LogMessage("Detecting license file status...")
                 If CheckBox3.Checked Then
+                    DynaLog.LogMessage("A license file is expected to be used.")
                     If TextBox1.Text = "" Then
+                        DynaLog.LogMessage("No license file has been specified.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -116,6 +124,7 @@ Public Class AddProvAppxPackage
                         End Select
                         Exit Sub
                     ElseIf Not File.Exists(TextBox1.Text) Then
+                        DynaLog.LogMessage("The license file does not exist in the file system.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -143,15 +152,20 @@ Public Class AddProvAppxPackage
                         End Select
                         Exit Sub
                     Else
+                        DynaLog.LogMessage("The license file exists in the file system.")
                         ProgressPanel.appxAdditionUseLicenseFile = True
                         ProgressPanel.appxAdditionLicenseFile = TextBox1.Text
                     End If
                 Else
+                    DynaLog.LogMessage("A license file is not expected to be used.")
                     ProgressPanel.appxAdditionUseLicenseFile = False
                     ProgressPanel.appxAdditionLicenseFile = ""
                 End If
+                DynaLog.LogMessage("Detecting custom data file status...")
                 If CheckBox1.Checked Then
+                    DynaLog.LogMessage("A custom data file is expected to be used.")
                     If TextBox2.Text = "" Then
+                        DynaLog.LogMessage("No custom data file has been specified.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -179,6 +193,7 @@ Public Class AddProvAppxPackage
                         End Select
                         Exit Sub
                     ElseIf Not File.Exists(TextBox2.Text) Then
+                        DynaLog.LogMessage("The custom data file does not exist in the file system.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -206,23 +221,29 @@ Public Class AddProvAppxPackage
                         End Select
                         Exit Sub
                     Else
+                        DynaLog.LogMessage("The custom data file exists in the file system.")
                         ProgressPanel.appxAdditionUseCustomDataFile = True
                         ProgressPanel.appxAdditionCustomDataFile = TextBox2.Text
                     End If
                 Else
+                    DynaLog.LogMessage("A custom data file is not expected to be used.")
                     ProgressPanel.appxAdditionUseCustomDataFile = False
                     ProgressPanel.appxAdditionCustomDataFile = ""
                 End If
                 If CheckBox4.Checked Then
+                    DynaLog.LogMessage("A specific set of regions is expected to be used.")
                     ProgressPanel.appxAdditionUseAllRegions = True
                     ProgressPanel.appxAdditionRegions = "all"
                 Else
+                    DynaLog.LogMessage("A specific set of regions is not expected to be used.")
                     ProgressPanel.appxAdditionUseAllRegions = False
                     ProgressPanel.appxAdditionRegions = TextBox3.Text
                 End If
                 If CheckBox2.Checked And Not MainForm.OnlineManagement Then
+                    DynaLog.LogMessage("Changes will be committed to the Windows image after adding AppX packages.")
                     ProgressPanel.appxAdditionCommit = True
                 Else
+                    DynaLog.LogMessage("Changes will not be committed to the Windows image after adding AppX packages (user decided not to commit them or the active installation is being managed.)")
                     ProgressPanel.appxAdditionCommit = False
                 End If
             End If
@@ -683,18 +704,24 @@ Public Class AddProvAppxPackage
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
         Try
+            DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
             If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
                 (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+                DynaLog.LogMessage("All conditions met for AppX regions (image version >= 10.0.17134; DISM version >= 10.0.17134.)")
                 GroupBox3.Enabled = True
             Else
+                DynaLog.LogMessage("Not all or no conditions met for AppX regions.")
                 GroupBox3.Enabled = False
             End If
             If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
+                DynaLog.LogMessage("All conditions met for stub package preferences (image version >= 10.0; DISM version >= 10.0.)")
                 Panel2.Enabled = True
             Else
+                DynaLog.LogMessage("Not all or no conditions met for stub package preferences.")
                 Panel2.Enabled = False
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not detect conditions imposed by DISM version and Windows image. Error message: " & ex.Message)
             GroupBox3.Enabled = False
             Panel2.Enabled = False
         End Try
@@ -706,11 +733,13 @@ Public Class AddProvAppxPackage
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If UnpackedAppxFolderFBD.ShowDialog = Windows.Forms.DialogResult.OK And UnpackedAppxFolderFBD.SelectedPath <> "" Then
+            DynaLog.LogMessage("Selected folder for the scan operation: " & Quote & UnpackedAppxFolderFBD.SelectedPath & Quote)
             ScanAppxPackage(True, UnpackedAppxFolderFBD.SelectedPath)
         End If
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DynaLog.LogMessage("Clearing queue...")
         Packages.Clear()
         ListView1.Items.Clear()
         Button3.Enabled = False
@@ -722,6 +751,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        DynaLog.LogMessage("Removing item at index " & ListView1.FocusedItem.Index & "...")
         ListBox1.Items.Clear()
         Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Clear()
         Button4.Enabled = False
@@ -730,6 +760,7 @@ Public Class AddProvAppxPackage
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         If Not ListBox1.SelectedItem = "" Then
+            DynaLog.LogMessage("Removing dependency from dependency list...")
             'Dim dep As New AppxDependency()
             'dep.DependencyFile.Add(ListBox1.SelectedItem)
             Dim deps As New List(Of AppxDependency)
@@ -750,12 +781,17 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
+        DynaLog.LogMessage("Getting selected file names...")
+        DynaLog.LogMessage("Selected files: " & AppxFileOFD.FileNames.Count)
         If AppxFileOFD.FileNames.Count > 0 Then
             For Each AppxFile In AppxFileOFD.FileNames
+                DynaLog.LogMessage("Determining extension of file " & Quote & Path.GetFileName(AppxFile) & Quote & "...")
                 If Path.GetExtension(AppxFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                    DynaLog.LogMessage("Selected file is of APPINSTALLER format. Preparing to parse XML file and downloading main package...")
                     If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
                     AppInstallerDownloader.AppInstallerFile = AppxFile
                     If Not File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then AppInstallerDownloader.ShowDialog(Me)
+                    DynaLog.LogMessage("Detecting if main package exists and scanning it...")
                     If File.Exists(AppxFile.Replace(".appinstaller", ".appxbundle").Trim()) Then ScanAppxPackage(False, AppxFile.Replace(".appinstaller", ".appxbundle").Trim())
                     Continue For
                 End If
@@ -765,7 +801,9 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub AppxDependencyOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxDependencyOFD.FileOk
+        DynaLog.LogMessage("Checking if an AppX package is selected before adding specified dependency...")
         If ListView1.SelectedItems.Count = 1 Then
+            DynaLog.LogMessage("Specified dependency: " & Quote & Path.GetFileName(AppxDependencyOFD.FileName) & Quote)
             Dim dep As New AppxDependency()
             dep.DependencyFile = AppxDependencyOFD.FileName
             If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 And Not Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Contains(dep) Then
@@ -788,26 +826,34 @@ Public Class AddProvAppxPackage
 
     Private Sub LicenseFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LicenseFileOFD.FileOk
         If ListView1.SelectedItems.Count = 1 Then
+            DynaLog.LogMessage("Specified license file: " & Quote & LicenseFileOFD.FileName & Quote)
             TextBox1.Text = LicenseFileOFD.FileName
         End If
     End Sub
 
     Private Sub CustomDataFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles CustomDataFileOFD.FileOk
         If ListView1.SelectedItems.Count = 1 Then
+            DynaLog.LogMessage("Specified custom data file: " & Quote & CustomDataFileOFD.FileName & Quote)
             TextBox2.Text = CustomDataFileOFD.FileName
         End If
     End Sub
 
     ''' <summary>
-    ''' DISMTools AppX header scanner component: version 0.5.1
+    ''' DISMTools AppX header scanner component: version 0.6.1
     ''' </summary>
     ''' <param name="IsFolder">Determines whether the given value for "Package" is a folder</param>
     ''' <param name="Package">The name of the packed or unpacked AppX file. It may be a file containing the full structure, or a folder containing all AppX files</param>
     ''' <remarks>Scans the header of AppX packages to gather application name, publisher, and version information</remarks>
     Sub ScanAppxPackage(IsFolder As Boolean, Package As String)
+        DynaLog.LogMessage("Preparing to scan AppX packages...")
+        DynaLog.LogMessage("- Is the specified package unpacked? " & If(IsFolder, "Yes", "No"))
+        DynaLog.LogMessage("- Specified package: " & Quote & Path.GetFileName(Package) & Quote)
         ' Detect if the package specified is encrypted
+        DynaLog.LogMessage("- Extension of specified package: " & Path.GetExtension(Package))
         If Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+            DynaLog.LogMessage("Specified package is encrypted and the active installation is being managed.")
             If Not Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Specified package is a standard encrypted application. Running UnpEax to extract manifest and Store logo assets...")
                 Dim uEAppProc As New Process()
                 uEAppProc.StartInfo.FileName = Application.StartupPath & "\Tools\UnpEax\UnpEax.exe"
                 uEAppProc.StartInfo.Arguments = Quote & Package & Quote
@@ -817,7 +863,9 @@ Public Class AddProvAppxPackage
                 End If
                 uEAppProc.Start()
                 uEAppProc.WaitForExit()
+                DynaLog.LogMessage("UnpEax process finished with exit code " & Hex(uEAppProc.ExitCode))
                 If uEAppProc.ExitCode = 0 Then
+                    DynaLog.LogMessage("Getting information from manifest...")
                     If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
                     Directory.CreateDirectory(Application.StartupPath & "\appxscan")
                     Directory.CreateDirectory(Application.StartupPath & "\appxscan\Assets")
@@ -842,12 +890,14 @@ Public Class AddProvAppxPackage
                             Using tReader As TextReader = New StringReader(EIdScanner)
                                 Using reader As XmlReader = XmlReader.Create(tReader)
                                     Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    DynaLog.LogMessage(id.ToString())
                                     EcurrentAppxName = id.PackageName
                                     EcurrentAppxPublisher = id.PackagePublisher
                                     EcurrentAppxVersion = id.PackageVersion
                                     EcurrentAppxArchitecture = id.PackageArchitecture
                                 End Using
                             End Using
+                            DynaLog.LogMessage("Adding AppX package to queue...")
                             AppxNameList.Add(EcurrentAppxName)
                             AppxPublisherList.Add(EcurrentAppxPublisher)
                             AppxVersionList.Add(EcurrentAppxVersion)
@@ -932,10 +982,12 @@ Public Class AddProvAppxPackage
                     extPackage.StubPackageOption = StubPreference.NoPreference
                     If Not Packages.Contains(extPackage) Then Packages.Add(extPackage)
                     Button3.Enabled = True
+                    DynaLog.LogMessage("Getting Store logo asset...")
                     GetApplicationStoreLogoAssets("", False, False, Package, EcurrentAppxName)
                     Exit Sub
                 End If
             End If
+            DynaLog.LogMessage("Specified package is an encrypted bundle application.")
             ' Add the package right away
             Select Case MainForm.Language
                 Case 0
@@ -1013,6 +1065,7 @@ Public Class AddProvAppxPackage
             Button3.Enabled = True
             Exit Sub
         ElseIf Path.GetExtension(Package).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not MainForm.OnlineManagement Then
+            DynaLog.LogMessage("Specified package is encrypted and the active installation is not being managed.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -1053,7 +1106,9 @@ Public Class AddProvAppxPackage
         Dim IdScanner As String
         Dim StubSupported As Boolean = False
         If IsFolder Then
+            DynaLog.LogMessage("Specified package is a folder. Detecting contents in folder...")
             If File.Exists(Package & "\AppxMetadata\AppxBundleManifest.xml") Then
+                DynaLog.LogMessage("A bundle manifest has been detected. Treating as a bundle package...")
                 ' AppXBundle file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxMetadata\AppxBundleManifest.xml")
                 StubSupported = ScannerRTB.Text.Contains("IsStub=" & Quote & "true" & Quote)
@@ -1104,12 +1159,14 @@ Public Class AddProvAppxPackage
                         Using tReader As TextReader = New StringReader(IdScanner)
                             Using reader As XmlReader = XmlReader.Create(tReader)
                                 Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                DynaLog.LogMessage(id.ToString())
                                 currentAppxName = id.PackageName
                                 currentAppxPublisher = id.PackagePublisher
                                 currentAppxVersion = id.PackageVersion
                                 currentAppxArchitecture = id.PackageArchitecture
                             End Using
                         End Using
+                        DynaLog.LogMessage("Adding AppX package to queue...")
                         AppxNameList.Add(currentAppxName)
                         AppxPublisherList.Add(currentAppxPublisher)
                         AppxVersionList.Add(currentAppxVersion)
@@ -1120,6 +1177,7 @@ Public Class AddProvAppxPackage
                     End If
                 Next
             ElseIf File.Exists(Package & "\AppxManifest.xml") Then
+                DynaLog.LogMessage("A standard manifest has been detected. Treating as a standard package...")
                 ' AppX file
                 ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Package & "\AppxManifest.xml")
                 For x = 0 To ScannerRTB.Lines.Count - 1
@@ -1129,12 +1187,14 @@ Public Class AddProvAppxPackage
                         Using tReader As TextReader = New StringReader(IdScanner)
                             Using reader As XmlReader = XmlReader.Create(tReader)
                                 Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                DynaLog.LogMessage(id.ToString())
                                 currentAppxName = id.PackageName
                                 currentAppxPublisher = id.PackagePublisher
                                 currentAppxVersion = id.PackageVersion
                                 currentAppxArchitecture = id.PackageArchitecture
                             End Using
                         End Using
+                        DynaLog.LogMessage("Adding AppX package to queue...")
                         AppxNameList.Add(currentAppxName)
                         AppxPublisherList.Add(currentAppxPublisher)
                         AppxVersionList.Add(currentAppxVersion)
@@ -1145,6 +1205,7 @@ Public Class AddProvAppxPackage
                     End If
                 Next
             Else
+                DynaLog.LogMessage("Either no manifest or an unknown manifest has been detected. This is unknown.")
                 ' Unrecognized type
                 Select Case MainForm.Language
                     Case 0
@@ -1173,19 +1234,27 @@ Public Class AddProvAppxPackage
                 End Select
                 Exit Sub
             End If
+            DynaLog.LogMessage("Getting Store logo asset...")
             GetApplicationStoreLogoAssets(pkgName, True, False, Package, currentAppxName)
         Else
+            DynaLog.LogMessage("Specified package is not a folder. Beginning to scan package...")
             If Directory.Exists(Application.StartupPath & "\appxscan") Then Directory.Delete(Application.StartupPath & "\appxscan", True)
             Directory.CreateDirectory(Application.StartupPath & "\appxscan")
+            DynaLog.LogMessage("Extracting application manifest...")
             AppxScanner.StartInfo.FileName = Application.StartupPath & "\bin\utils\" & If(Environment.Is64BitOperatingSystem, "x64", "x86") & "\7z.exe"
             AppxScanner.StartInfo.Arguments = "e " & Quote & Package & Quote & " " & Quote & If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), "appxmetadata\appxbundlemanifest.xml", "appxmanifest.xml") & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
             AppxScanner.StartInfo.CreateNoWindow = True
             AppxScanner.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             AppxScanner.Start()
             AppxScanner.WaitForExit()
+            DynaLog.LogMessage("7-Zip process finished with exit code " & Hex(AppxScanner.ExitCode))
             If AppxScanner.ExitCode = 0 Then
+                DynaLog.LogMessage("Detecting application extension...")
                 If Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase) Then
+                    DynaLog.LogMessage("This is a bundle package.")
+                    DynaLog.LogMessage("Reading manifest...")
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxBundleManifest.xml")
+                    DynaLog.LogMessage("Getting stub package status...")
                     StubSupported = ScannerRTB.Text.Contains("IsStub=" & Quote & "true" & Quote)
                     IdScanner = ScannerRTB.Lines(If(ScannerRTB.Lines(2).EndsWith("<!--"), 10, 4))
                     Dim CharIndex As Integer = 0
@@ -1234,12 +1303,14 @@ Public Class AddProvAppxPackage
                             Using tReader As TextReader = New StringReader(IdScanner)
                                 Using reader As XmlReader = XmlReader.Create(tReader)
                                     Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    DynaLog.LogMessage(id.ToString())
                                     currentAppxName = id.PackageName
                                     currentAppxPublisher = id.PackagePublisher
                                     currentAppxVersion = id.PackageVersion
                                     currentAppxArchitecture = id.PackageArchitecture
                                 End Using
                             End Using
+                            DynaLog.LogMessage("Adding AppX package to queue...")
                             AppxNameList.Add(currentAppxName)
                             AppxPublisherList.Add(currentAppxPublisher)
                             AppxVersionList.Add(currentAppxVersion)
@@ -1250,6 +1321,8 @@ Public Class AddProvAppxPackage
                         End If
                     Next
                 Else
+                    DynaLog.LogMessage("This is a standard package.")
+                    DynaLog.LogMessage("Reading manifest...")
                     ScannerRTB.Text = My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\appxscan\AppxManifest.xml")
                     For x = 0 To ScannerRTB.Lines.Count - 1
                         If ScannerRTB.Lines(x).Contains("<Identity") Then
@@ -1258,12 +1331,14 @@ Public Class AddProvAppxPackage
                             Using tReader As TextReader = New StringReader(IdScanner)
                                 Using reader As XmlReader = XmlReader.Create(tReader)
                                     Dim id = CType(serializer.Deserialize(reader), AppxPackage)
+                                    DynaLog.LogMessage(id.ToString())
                                     currentAppxName = id.PackageName
                                     currentAppxPublisher = id.PackagePublisher
                                     currentAppxVersion = id.PackageVersion
                                     currentAppxArchitecture = id.PackageArchitecture
                                 End Using
                             End Using
+                            DynaLog.LogMessage("Adding AppX package to queue...")
                             AppxNameList.Add(currentAppxName)
                             AppxPublisherList.Add(currentAppxPublisher)
                             AppxVersionList.Add(currentAppxVersion)
@@ -1274,16 +1349,20 @@ Public Class AddProvAppxPackage
                         End If
                     Next
                 End If
+                DynaLog.LogMessage("Getting Store logo asset...")
                 GetApplicationStoreLogoAssets(pkgName, False, If(Path.GetExtension(Package).EndsWith("bundle", StringComparison.OrdinalIgnoreCase), True, False), Package, currentAppxName)
             Else
 
             End If
         End If
+        DynaLog.LogMessage("Detecting items in list...")
         ' Detect ListView items
         If ListView1.Items.Count > 0 Then
+            DynaLog.LogMessage("Getting similar items...")
             ' Iterate through the ListView items until we can find an entry with properties similar to those currently obtained
             For Each Item As ListViewItem In ListView1.Items
                 If Item.SubItems(2).Text = currentAppxName And Item.SubItems(3).Text = currentAppxPublisher And Item.SubItems(4).Text = currentAppxVersion And Packages(Item.Index).PackageArchitecture = currentAppxArchitecture Then
+                    DynaLog.LogMessage("The package has already been added. Cancelling process...")
                     ' Cancel everything
                     Select Case MainForm.Language
                         Case 0
@@ -1315,6 +1394,7 @@ Public Class AddProvAppxPackage
                     End If
                     Exit Sub
                 ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(3).Text = currentAppxPublisher Then
+                    DynaLog.LogMessage("The package is already present in the list but comes from a different developer/publisher.")
                     Dim msg As String = ""
                     Select Case MainForm.Language
                         Case 0
@@ -1342,6 +1422,7 @@ Public Class AddProvAppxPackage
                             msg = "Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco, ma proviene da uno sviluppatore o da un editore diverso." & CrLf & CrLf & "Si noti che le applicazioni ridistribuite da editori o sviluppatori di terze parti possono causare danni all'immagine di Windows." & CrLf & CrLf & "Si desidera sostituire la voce nell'elenco con il pacchetto specificato?"
                     End Select
                     If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
+                        DynaLog.LogMessage("Changing packages...")
                         ' Set properties
                         Item.SubItems(0).Text = Package
                         Select Case MainForm.Language
@@ -1385,6 +1466,7 @@ Public Class AddProvAppxPackage
                     End If
                     Exit Sub
                 ElseIf Item.SubItems(2).Text = currentAppxName And Not Item.SubItems(4).Text = currentAppxVersion Then
+                    DynaLog.LogMessage("The package is already present in the list but the specified one is newer.")
                     ' This is a rudimentary check which will run even if specifying an older version. It will be improved, so expect the following enhancements:
                     ' - Cast the version strings to version objects
                     ' - Compare the version objects part by part
@@ -1415,6 +1497,7 @@ Public Class AddProvAppxPackage
                             msg = "Il pacchetto che si desidera aggiungere è già stato aggiunto all'elenco, ma contiene una versione più recente." & CrLf & CrLf & "Si desidera sostituire la voce nell'elenco con il pacchetto aggiornato specificato?"
                     End Select
                     If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+                        DynaLog.LogMessage("Updating package to add...")
                         ' Set properties
                         Item.SubItems(0).Text = Package
                         Select Case MainForm.Language
@@ -1460,6 +1543,7 @@ Public Class AddProvAppxPackage
                 End If
             Next
         End If
+        DynaLog.LogMessage("Adding item to list...")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1550,25 +1634,38 @@ Public Class AddProvAppxPackage
     ''' <param name="AppxPackageName">The name of the AppX package, used for storing logo assets in an organized way</param>
     ''' <remarks>If the package processed is an APPXBUNDLE or MSIXBUNDLE package, this procedure will extract the asset contents from the package with the given name. Otherwise, it will directly extract them from the &quot;Assets&quot; folder</remarks>
     Sub GetApplicationStoreLogoAssets(PackageName As String, IsDirectory As Boolean, IsBundlePackage As Boolean, SourcePackage As String, AppxPackageName As String)
+        DynaLog.LogMessage("Attempting to get Store logo assets...")
+        DynaLog.LogMessage("- Package name: " & PackageName)
+        DynaLog.LogMessage("- Is it a directory? " & If(IsDirectory, "Yes", "No"))
+        DynaLog.LogMessage("- Is it a bundle package? " & If(IsBundlePackage, "Yes", "No"))
+        DynaLog.LogMessage("- Path to source package: " & Quote & SourcePackage & Quote)
+        DynaLog.LogMessage("- Package display name: " & AppxPackageName)
         ' The assets from the main package are enough for us. The current AppX XML schema also puts these in the Assets folder, so
         ' getting them should be a breeze
         Try
             If IsDirectory Then
+                DynaLog.LogMessage("Specified package is a folder. Detecting contents in folder...")
                 If File.Exists(SourcePackage & "\AppxMetadata\AppxBundleManifest.xml") Then
+                    DynaLog.LogMessage("A bundle manifest has been detected. Treating as a bundle package...")
                     ' APPXBUNDLE/MSIXBUNDLE
+                    DynaLog.LogMessage("Extracting main AppX package from bundle to grab assets...")
                     AppxScanner.StartInfo.Arguments = "x " & Quote & SourcePackage & "\" & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
                     AppxScanner.Start()
                     AppxScanner.WaitForExit()
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
+                    DynaLog.LogMessage("7-Zip process finished with exit code " & Hex(AppxScanner.ExitCode))
                     If AppxScanner.ExitCode = 0 Then
                         Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
                         If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
                             For Each AssetFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\appxscan\Assets", FileIO.SearchOption.SearchTopLevelOnly)
                                 If Path.GetFileNameWithoutExtension(AssetFile).StartsWith("small", StringComparison.OrdinalIgnoreCase) Then
+                                    DynaLog.LogMessage("Copying item " & Quote & Path.GetFileName(AssetFile) & Quote & " to Store logo asset cache...")
                                     File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                                 ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("store", StringComparison.OrdinalIgnoreCase) Then
+                                    DynaLog.LogMessage("Copying item " & Quote & Path.GetFileName(AssetFile) & Quote & " to Store logo asset cache...")
                                     File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                                 ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("large", StringComparison.OrdinalIgnoreCase) Then
+                                    DynaLog.LogMessage("Copying item " & Quote & Path.GetFileName(AssetFile) & Quote & " to Store logo asset cache...")
                                     File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                                 End If
                             Next
@@ -1576,20 +1673,25 @@ Public Class AddProvAppxPackage
                     End If
                     Directory.Delete(Application.StartupPath & "\appxscan", True)
                 ElseIf File.Exists(SourcePackage & "\AppxManifest.xml") Then
+                    DynaLog.LogMessage("A standard manifest has been detected. Treating as a standard package...")
                     ' APPX/MSIX
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
                     If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
                         For Each AssetFile In My.Computer.FileSystem.GetFiles(SourcePackage & "\Assets", FileIO.SearchOption.SearchTopLevelOnly)
                             If Path.GetFileNameWithoutExtension(AssetFile).StartsWith("small", StringComparison.OrdinalIgnoreCase) Then
+                                DynaLog.LogMessage("Copying item " & Quote & Path.GetFileName(AssetFile) & Quote & " to Store logo asset cache...")
                                 File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                             ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("store", StringComparison.OrdinalIgnoreCase) Then
+                                DynaLog.LogMessage("Copying item " & Quote & Path.GetFileName(AssetFile) & Quote & " to Store logo asset cache...")
                                 File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                             ElseIf Path.GetFileNameWithoutExtension(AssetFile).StartsWith("large", StringComparison.OrdinalIgnoreCase) Then
+                                DynaLog.LogMessage("Copying item " & Quote & Path.GetFileName(AssetFile) & Quote & " to Store logo asset cache...")
                                 File.Copy(AssetFile, Application.StartupPath & "\temp\storeassets\" & Path.GetFileName(AssetFile))
                             End If
                         Next
                     End If
                 Else
+                    DynaLog.LogMessage("Either no manifest or an unknown manifest has been detected. This is unknown.")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1617,42 +1719,55 @@ Public Class AddProvAppxPackage
                     End Select
                 End If
             Else
+                DynaLog.LogMessage("Specified package is not a folder. Beginning to scan package...")
                 If IsBundlePackage Then
+                    DynaLog.LogMessage("This is a bundle package.")
+                    DynaLog.LogMessage("Extracting main AppX package from bundle to grab assets...")
                     AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & PackageName & Quote & " -o" & Quote & Application.StartupPath & "\appxscan" & Quote
                     AppxScanner.Start()
                     AppxScanner.WaitForExit()
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
+                    DynaLog.LogMessage("7-Zip process finished with exit code " & Hex(AppxScanner.ExitCode))
                     If AppxScanner.ExitCode = 0 Then
                         Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
                         If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
                             ' Try extracting small, store and large assets
+                            DynaLog.LogMessage("Extracting small logo assets...")
                             AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
+                            DynaLog.LogMessage("Extracting store-sized logo assets...")
                             AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
+                            DynaLog.LogMessage("Extracting large logo assets...")
                             AppxScanner.StartInfo.Arguments = "e " & Quote & Application.StartupPath & "\appxscan\" & PackageName & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
                         End If
                     End If
                 Else
+                    DynaLog.LogMessage("This is a standard package.")
                     If Not Directory.Exists(Application.StartupPath & "\temp\storeassets") Then Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets").Attributes = FileAttributes.Hidden
                     Directory.CreateDirectory(Application.StartupPath & "\temp\storeassets\" & AppxPackageName)
                     If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & AppxPackageName).Count <= 0 Then
+                        DynaLog.LogMessage("Detecting if the standard package is encrypted...")
                         If Path.GetExtension(SourcePackage).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) Then
+                            DynaLog.LogMessage("Specified package is encrypted. Copying assets obtained with UnpEax to logo asset cache...")
                             For Each asset In Directory.GetFiles(Application.StartupPath & "\appxscan\Assets")
                                 File.Copy(asset, Application.StartupPath & "\temp\storeassets\" & AppxPackageName & "\" & Path.GetFileName(asset))
                             Next
                         Else
                             ' Try extracting small, store and large assets
+                            DynaLog.LogMessage("Extracting small logo assets...")
                             AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\small*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
+                            DynaLog.LogMessage("Extracting store-sized logo assets...")
                             AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\store*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
+                            DynaLog.LogMessage("Extracting large logo assets...")
                             AppxScanner.StartInfo.Arguments = "e " & Quote & SourcePackage & Quote & " " & Quote & "Assets\large*" & Quote & " -o" & Quote & Application.StartupPath & "\temp\storeassets\" & AppxPackageName & Quote
                             AppxScanner.Start()
                             AppxScanner.WaitForExit()
@@ -1661,6 +1776,7 @@ Public Class AddProvAppxPackage
                 End If
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get Store logo assets. Error message: " & ex.Message)
             Debug.WriteLine("Could not get store logo assets. Reason: " & ex.ToString())
         End Try
     End Sub
@@ -1736,6 +1852,11 @@ Public Class AddProvAppxPackage
         Catch ex As NullReferenceException
             Button9.Enabled = True
         End Try
+        Try
+            DynaLog.LogMessage("Getting properties of selected item. Index: " & ListView1.FocusedItem.Index)
+        Catch ex As Exception
+            ' Do Not Log
+        End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
@@ -1783,7 +1904,9 @@ Public Class AddProvAppxPackage
             End Try
         End If
         Try
+            DynaLog.LogMessage("Getting appropriate Store logo asset...")
             If Directory.Exists(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+                DynaLog.LogMessage("There are items in the Store logo asset cache folder. Grabbing item...")
                 PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
                 Dim asset As Image = Nothing
                 For Each StoreAsset In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
@@ -1791,16 +1914,19 @@ Public Class AddProvAppxPackage
                         asset = Image.FromFile(StoreAsset)
                         If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
                             If asset.Width <= 100 And asset.Height <= 100 Then      ' Determine if it is a "small" or "store" asset
+                                DynaLog.LogMessage("The dimension has been obtained and it fits the criteria (1:1 aspect ratio and physical dimensions over 100px.)")
                                 PictureBox2.Image = asset
                             End If
                         End If
                     End If
                 Next
             Else
+                DynaLog.LogMessage("There are no items in the Store logo asset cache folder. Grabbing item...")
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
                 PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get logo asset. Error message: " & ex.Message)
             PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
         End Try
@@ -1812,6 +1938,7 @@ Public Class AddProvAppxPackage
         ' Detect properties obtained by the AppxPackage Element
         Try
             If ListView1.SelectedItems.Count = 1 Then
+                DynaLog.LogMessage("There is 1 item selected. Grabbing properties...")
                 ListBox1.Items.Clear()
                 If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 Then
                     For Each Dependency As AppxDependency In Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies
@@ -1836,8 +1963,10 @@ Public Class AddProvAppxPackage
                 Else
                     CheckBox4.Checked = False
                 End If
+                DynaLog.LogMessage("Detecting conditions imposed by DISM and the Windows image for stub package preferences...")
                 If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10) And
                     Packages(ListView1.FocusedItem.Index).SupportsStub Then
+                    DynaLog.LogMessage("All requirements are met.")
                     Panel2.Enabled = True
                     Select Case Packages(ListView1.FocusedItem.Index).StubPackageOption
                         Case StubPreference.NoPreference
@@ -1848,6 +1977,7 @@ Public Class AddProvAppxPackage
                             ComboBox1.SelectedIndex = 2
                     End Select
                 Else
+                    DynaLog.LogMessage("Either none or not all requirements are met.")
                     Panel2.Enabled = False
                     ComboBox1.SelectedIndex = 0
                 End If
@@ -1900,6 +2030,7 @@ Public Class AddProvAppxPackage
                 Label7.Text = "Selezione multiple"
                 Label8.Text = "Visualizza le proprietà comuni di tutte le applicazioni selezionate"
         End Select
+        DynaLog.LogMessage("Detecting common properties with the Elements...")
         Label9.Visible = False
         PictureBox2.Visible = False
         ListBox1.Items.Clear()
@@ -2026,6 +2157,7 @@ Public Class AddProvAppxPackage
     Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
         If My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0 Then Exit Sub
         HidePopupForm()
+        DynaLog.LogMessage("Showing image...")
         With LogoAssetPopupForm
             .BackColor = BackColor
             .ForeColor = ForeColor
@@ -2067,16 +2199,21 @@ Public Class AddProvAppxPackage
                 .Dock = DockStyle.Fill
                 .SizeMode = PictureBoxSizeMode.Zoom
                 Try
+                    DynaLog.LogMessage("Getting appropriate Store logo asset...")
                     If Directory.Exists(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text) And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count > 0 Then
+                        DynaLog.LogMessage("There are items in the Store logo asset cache folder. Grabbing item...")
                         Dim asset As Image = Nothing
                         For Each StoreAsset In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text)
                             If Path.GetExtension(StoreAsset).EndsWith("png") Then
                                 asset = Image.FromFile(StoreAsset)
                                 If asset.Width / asset.Height = 1 Then      ' Determine if the image's aspect ratio is 1:1
                                     If asset.Width > 100 And asset.Width <= 200 And asset.Height > 100 And asset.Height <= 200 Then      ' Determine if it is a "large" asset
+                                        DynaLog.LogMessage("The dimension has been obtained and it fits the criteria (1:1 aspect ratio and physical dimensions over 200px.)")
                                         .Image = asset
                                         Exit For
                                     Else
+                                        DynaLog.LogMessage("The dimension has been obtained but does not fit some or all of the criteria specified (1:1 aspect ratio and physical dimensions over 200px.)")
+                                        DynaLog.LogMessage("Adjusting preview...")
                                         .SizeMode = PictureBoxSizeMode.CenterImage
                                         .Image = PictureBox2.Image
                                     End If
@@ -2162,13 +2299,17 @@ Public Class AddProvAppxPackage
     End Sub
 
     Function GetDownloadedPackageExtensionFromAppInstaller(PkgFile As String) As String
+        DynaLog.LogMessage("Getting downloaded package from the App Installer package...")
+        DynaLog.LogMessage("Package file: " & Quote & Path.GetFileName(PkgFile) & Quote)
         Dim appExtensions() As String = New String(7) {".appx", ".appxbundle", ".msix", ".msixbundle", ".eappx", ".eappxbundle", ".emsix", ".emsixbundle"}
         Try
             For Each appExtension In appExtensions
                 Dim targetFile As String = PkgFile.Replace(Path.GetExtension(PkgFile), appExtension)
+                DynaLog.LogMessage("Checking if file " & Quote & Path.GetFileName(targetFile) & Quote & " exists...")
                 If File.Exists(targetFile) Then Return appExtension
             Next
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get suitable item. Error message: " & ex.Message)
             Return Nothing
         End Try
         Return Nothing
@@ -2177,24 +2318,31 @@ Public Class AddProvAppxPackage
     Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         Cursor = Cursors.WaitCursor
+        DynaLog.LogMessage("Interpreting items to add to queue...")
         For Each PackageFile In PackageFiles
             If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("The item to add " & Quote & Path.GetFileName(PackageFile) & Quote & " is a regular AppX package.")
                 ScanAppxPackage(False, PackageFile)
             ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("The item to add " & Quote & Path.GetFileName(PackageFile) & Quote & " is an App Installer package.")
                 If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
                 AppInstallerDownloader.AppInstallerFile = PackageFile
                 If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then AppInstallerDownloader.ShowDialog(Me)
                 If File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
             ElseIf File.GetAttributes(PackageFile) = (FileAttributes.Directory Or FileAttributes.Archive) Then
+                DynaLog.LogMessage("The item to add is a directory. Getting contents...")
                 Dim msg As String = ""
                 ' Temporary support for directories
                 If File.Exists(PackageFile & "\AppxSignature.p7x") And File.Exists(PackageFile & "\AppxMetadata\AppxBundleManifest.xml") Or File.Exists(PackageFile & "\AppxManifest.xml") Then
+                    DynaLog.LogMessage("There are contents of an AppX package. We are dealing with an unpacked AppX package.")
+                    DynaLog.LogMessage("Scanning AppX package...")
                     ScanAppxPackage(True, PackageFile)
                 ElseIf My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.appx").Count > 0 Or My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.msix").Count > 0 Or
                     My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.appxbundle").Count > 0 Or My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchTopLevelOnly, "*.msixbundle").Count > 0 Then
+                    DynaLog.LogMessage("There are AppX packages. Asking user whether or not to scan folder recursively...")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2221,16 +2369,20 @@ Public Class AddProvAppxPackage
                             msg = "La seguente cartella:" & CrLf & Quote & PackageFile & Quote & CrLf & "contiene pacchetti di applicazioni. Si desidera elaborare anche questi?" & CrLf & CrLf & "NOTA: la scansione di questa cartella avverrà in modo ricorsivo, pertanto il completamento dell'operazione potrebbe richiedere più tempo"
                     End Select
                     If MsgBox(msg, vbYesNo + vbQuestion, Label1.Text) = MsgBoxResult.Yes Then
+                        DynaLog.LogMessage("The user has accepted the question.")
                         For Each AppPkg In My.Computer.FileSystem.GetFiles(PackageFile, FileIO.SearchOption.SearchAllSubDirectories)
                             If Path.GetExtension(AppPkg).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or
                                 Path.GetExtension(AppPkg).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(AppPkg).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Then
+                                DynaLog.LogMessage("Item " & Quote & Path.GetFileName(AppPkg) & Quote & " is an AppX package.")
                                 ScanAppxPackage(False, AppPkg)
                             ElseIf Path.GetExtension(AppPkg).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
+                                DynaLog.LogMessage("Item " & Quote & Path.GetFileName(AppPkg) & Quote & " is an App Installer package.")
                                 If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
                                 AppInstallerDownloader.AppInstallerFile = AppPkg
                                 If Not File.Exists(AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg))) Then AppInstallerDownloader.ShowDialog(Me)
                                 If File.Exists(AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg))) Then ScanAppxPackage(False, AppPkg.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(AppPkg)))
                             Else
+                                DynaLog.LogMessage("Item " & Quote & Path.GetFileName(AppPkg) & Quote & " is an unrecognized file.")
                                 Continue For
                             End If
                         Next
@@ -2239,6 +2391,7 @@ Public Class AddProvAppxPackage
                     End If
                 End If
             Else
+                DynaLog.LogMessage("Item " & Quote & Path.GetFileName(PackageFile) & Quote & " is an unrecognized file.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2291,6 +2444,8 @@ Public Class AddProvAppxPackage
                                                             Path.GetExtension(Dependency).EndsWith("msix", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("appxbundle", StringComparison.OrdinalIgnoreCase) Or _
                                                             Path.GetExtension(Dependency).EndsWith("msixbundle", StringComparison.OrdinalIgnoreCase)) Then
+                DynaLog.LogMessage("Item " & Quote & Path.GetFileName(Dependency) & Quote & " is not already present in the list and has a supported format.")
+                DynaLog.LogMessage("Adding dependency to dependency list and selected element in addition queue...")
                 Dim dep As New AppxDependency()
                 dep.DependencyFile = Dependency
                 If Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Count > 0 And Not Packages(ListView1.FocusedItem.Index).PackageSpecifiedDependencies.Contains(dep) Then
@@ -2323,6 +2478,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        DynaLog.LogMessage("Setting stub package preferences accordingly...")
         If ComboBox1.SelectedIndex = 0 Then
             If ListView1.SelectedItems.Count = 1 Then Packages(ListView1.FocusedItem.Index).StubPackageOption = StubPreference.NoPreference
         ElseIf ComboBox1.SelectedIndex = 1 Then
