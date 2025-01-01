@@ -45,9 +45,9 @@ Public Class AddPackageDlg
             ProgressPanel.pkgPreventIfPendingOnline = False
         End If
         If CheckBox3.Checked And Not MainForm.OnlineManagement Then
-            ProgressPanel.imgCommitAfterOps = True
+            ProgressPanel.pkgAdditionCommit = True
         Else
-            ProgressPanel.imgCommitAfterOps = False
+            ProgressPanel.pkgAdditionCommit = False
         End If
         If ProgressPanel.pkgAdditionOp = 1 Then
             DynaLog.LogMessage("A selective package addition operation will be started. Checking packages to add...")

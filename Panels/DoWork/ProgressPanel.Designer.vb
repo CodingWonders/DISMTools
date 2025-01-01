@@ -75,6 +75,7 @@ Partial Class ProgressPanel
         Me.Cancel_Button.TabIndex = 3
         Me.Cancel_Button.Text = "Cancel"
         Me.Cancel_Button.UseVisualStyleBackColor = True
+        Me.Cancel_Button.Visible = False
         '
         'CurrentPB
         '

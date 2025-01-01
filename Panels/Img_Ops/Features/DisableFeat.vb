@@ -60,9 +60,9 @@ Public Class DisableFeat
                 ProgressPanel.featDisablementParentPkg = ""
             End If
             If CheckBox2.Checked Then
-                ProgressPanel.featRemoveManifest = False
+                ProgressPanel.featDisablementRemoveManifest = False
             Else
-                ProgressPanel.featRemoveManifest = True
+                ProgressPanel.featDisablementRemoveManifest = True
             End If
         End If
         ProgressPanel.OperationNum = 31

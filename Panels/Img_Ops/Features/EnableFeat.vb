@@ -179,9 +179,9 @@ Public Class EnableFeat
                 ProgressPanel.featContactWindowsUpdate = True
             End If
             If CheckBox5.Checked And Not MainForm.OnlineManagement Then
-                ProgressPanel.featCommitAfterEnablement = True
+                ProgressPanel.featEnablementCommit = True
             Else
-                ProgressPanel.featCommitAfterEnablement = False
+                ProgressPanel.featEnablementCommit = False
             End If
         End If
         ProgressPanel.OperationNum = 30
