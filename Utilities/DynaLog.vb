@@ -23,6 +23,10 @@ Public Class DynaLog
     ''' <remarks>This can only be called by specific methods used by DISMTools</remarks>
     Public Shared Property UltimatelyEnabled As Boolean = True
 
+    ''' <summary>
+    ''' Checks the age of the active DynaLog log file
+    ''' </summary>
+    ''' <remarks>If a DynaLog log file is older than 2 weeks, it will be archived</remarks>
     Public Shared Sub CheckLogAge()
         LogMessage("Checking existing logs...", False)
         If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
@@ -79,8 +83,15 @@ Public Class DynaLog
         End If
     End Sub
 
+    ''' <summary>
+    ''' Logs a message with DynaLog to the log file
+    ''' </summary>
+    ''' <param name="message">The message to log. It cannot be empty</param>
+    ''' <param name="GetParentCaller">Determines whether or not to get the name of the caller that called a specific method that called DynaLog logging</param>
+    ''' <remarks></remarks>
     Public Shared Sub LogMessage(message As String, Optional GetParentCaller As Boolean = True)
         If Not LoggerEnabled Then Exit Sub
+        If message = "" Then Exit Sub
         Debug.WriteLine(message)
         Try
             ' DynaLog will NOT display logs for log file/folder creation - ONLY in debugger.
