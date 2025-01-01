@@ -3735,32 +3735,38 @@ Public Class MainForm
     ''' <returns>The function returns True when image is running Windows 8 or newer (Image >= 6.2)</returns>
     ''' <remarks>This is done to determine whether to scan for AppX packages</remarks>
     Function IsWindows8OrHigher(NTKeExe As String) As Boolean
-        DynaLog.LogMessage("Detecting ntoskrnl version...")
-        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-        DynaLog.LogMessage("Provided ntoskrnl version: " & KeFVI.ProductVersion)
-        Select Case KeFVI.ProductMajorPart
-            Case 6
-                Select Case KeFVI.ProductMinorPart
-                    Case 1
-                        DynaLog.LogMessage("Image is running a Windows version older than Windows 8")
-                        Return False
-                    Case Is >= 2
-                        Select Case KeFVI.ProductBuildPart
-                            Case Is >= 8102
-                                DynaLog.LogMessage("Image is running Windows Developer Preview or later")
-                                Return True
-                            Case Else
-                                DynaLog.LogMessage("Image is not running Windows Developer Preview or later")
-                                Return False
-                        End Select
-                End Select
-            Case 10
-                DynaLog.LogMessage("Image is running a Windows version newer than Windows 8")
-                Return True
-            Case Else
-                Return False
-        End Select
-        Return False
+        Try
+            If Not File.Exists(NTKeExe) Then Return False
+            DynaLog.LogMessage("Detecting ntoskrnl version...")
+            Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            DynaLog.LogMessage("Provided ntoskrnl version: " & KeFVI.ProductVersion)
+            Select Case KeFVI.ProductMajorPart
+                Case 6
+                    Select Case KeFVI.ProductMinorPart
+                        Case 1
+                            DynaLog.LogMessage("Image is running a Windows version older than Windows 8")
+                            Return False
+                        Case Is >= 2
+                            Select Case KeFVI.ProductBuildPart
+                                Case Is >= 8102
+                                    DynaLog.LogMessage("Image is running Windows Developer Preview or later")
+                                    Return True
+                                Case Else
+                                    DynaLog.LogMessage("Image is not running Windows Developer Preview or later")
+                                    Return False
+                            End Select
+                    End Select
+                Case 10
+                    DynaLog.LogMessage("Image is running a Windows version newer than Windows 8")
+                    Return True
+                Case Else
+                    Return False
+            End Select
+            Return False
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not detect ntoskrnl version. Error message: " & ex.Message)
+            Return False
+        End Try
     End Function
 
     ''' <summary>
@@ -3770,18 +3776,24 @@ Public Class MainForm
     ''' <returns>The function returns True when image is running Windows 10 or newer (Image = 10.0)</returns>
     ''' <remarks></remarks>
     Function IsWindows10OrHigher(NTKeExe As String) As Boolean
-        DynaLog.LogMessage("Detecting ntoskrnl version...")
-        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-        DynaLog.LogMessage("Provided ntoskrnl version: " & KeFVI.ProductVersion)
-        Select Case KeFVI.ProductMajorPart
-            Case Is <= 6
-                DynaLog.LogMessage("Image is running a Windows version older than Windows 10")
-                Return False
-            Case 10
-                DynaLog.LogMessage("Image is running Windows 10 or Windows 11")
-                Return True
-        End Select
-        Return False
+        Try
+            If Not File.Exists(NTKeExe) Then Return False
+            DynaLog.LogMessage("Detecting ntoskrnl version...")
+            Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            DynaLog.LogMessage("Provided ntoskrnl version: " & KeFVI.ProductVersion)
+            Select Case KeFVI.ProductMajorPart
+                Case Is <= 6
+                    DynaLog.LogMessage("Image is running a Windows version older than Windows 10")
+                    Return False
+                Case 10
+                    DynaLog.LogMessage("Image is running Windows 10 or Windows 11")
+                    Return True
+            End Select
+            Return False
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not detect ntoskrnl version. Error message: " & ex.Message)
+            Return False
+        End Try
     End Function
 
     Public Event APIExceptionThrown(errorEx As Exception, windowTitle As String)
