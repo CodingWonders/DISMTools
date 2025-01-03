@@ -1499,6 +1499,14 @@ function New-BootFiles
                         diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
                     }
                 }
+
+                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                    Write-Host "Deleting BCD entry..."
+                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    if ($entryGuid -ne "") {
+                        bcdedit /delete $entryGuid | Out-Host
+                    }
+                }
             }
             bootsect /nt60 W:
             bootsect /nt60 W: /mbr
