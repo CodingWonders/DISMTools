@@ -9903,6 +9903,11 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTProj()
+        DynaLog.LogMessage("Checking if project files exist...")
+        If Not File.Exists(projPath & "\settings\project.ini") Then
+            DynaLog.LogMessage("No project settings file exists. Exiting...")
+            Exit Sub
+        End If
         If ProjectValueLoadForm.RichTextBox1.Text = "" Then ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(projPath & "\settings\project.ini", UTF8)
         ' Clear Rich Text Boxes
         'ProjectValueLoadForm.RichTextBox2.Text = ""
@@ -10033,6 +10038,9 @@ Public Class MainForm
     ''' <remarks>The program, attending to the parameters shown above, will unload the project</remarks>
     Sub UnloadDTProj(IsBeingClosed As Boolean, SaveProject As Boolean, UnmountImg As Boolean)
         DynaLog.LogMessage("Preparing to unload project...")
+        DynaLog.LogMessage("- Is the program being closed? " & If(IsBeingClosed, "Yes", "No"))
+        DynaLog.LogMessage("- Will the project be saved? " & If(SaveProject, "Yes", "No"))
+        DynaLog.LogMessage("- Will the image be unmounted? " & If(UnmountImg, "Yes", "No"))
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are busy. Ask the user what they want to do")
             Dim msg As String = ""
@@ -10151,7 +10159,9 @@ Public Class MainForm
         End If
         If SaveProject And Not (OnlineManagement Or OfflineManagement) Then
             DynaLog.LogMessage("Saving project configuration...")
-            SaveDTProj()
+            If File.Exists(projPath & "\settings\project.ini") Then
+                SaveDTProj()
+            End If
         End If
         If UnmountImg Then
             DynaLog.LogMessage("The image will be unmounted...")
