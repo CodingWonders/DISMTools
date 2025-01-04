@@ -9384,6 +9384,11 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTProj()
+        DynaLog.LogMessage("Checking if project files exist...")
+        If Not File.Exists(projPath & "\settings\project.ini") Then
+            DynaLog.LogMessage("No project settings file exists. Exiting...")
+            Exit Sub
+        End If
         If ProjectValueLoadForm.RichTextBox1.Text = "" Then ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(projPath & "\settings\project.ini", UTF8)
         ' Clear Rich Text Boxes
         'ProjectValueLoadForm.RichTextBox2.Text = ""
@@ -9620,7 +9625,9 @@ Public Class MainForm
             Exit Sub
         End If
         If SaveProject And Not (OnlineManagement Or OfflineManagement) Then
-            SaveDTProj()
+            If File.Exists(projPath & "\settings\project.ini") Then
+                SaveDTProj()
+            End If
         End If
         If UnmountImg Then
             ProgressPanel.OperationNum = 21
