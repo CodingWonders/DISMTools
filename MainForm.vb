@@ -19120,6 +19120,12 @@ Public Class MainForm
 
     Sub LoadRecentsFromMenu(itemOrder As Integer)
         Dim itmOrder As Integer = 0
+        DynaLog.LogMessage("Items in recents list: " & RecentList.Count)
+        If RecentList.Count <= 0 Then
+            DynaLog.LogMessage("No items are present in the recents list. Exiting...")
+            MsgBox("No items are present in the Recents list.")
+            Exit Sub
+        End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
             If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
