@@ -5091,6 +5091,7 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & SystemEditor & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
                 Select Case ImgOperationMode
                     Case 0
@@ -5243,6 +5244,7 @@ Public Class MainForm
                     LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
                     LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
                     LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
+                    LogKey.SetValue("SystemEditor", SystemEditor, RegistryValueKind.ExpandString)
                     LogKey.Close()
                     DynaLog.LogMessage("Configuring image operation settings...")
                     Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
