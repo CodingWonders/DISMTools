@@ -246,6 +246,8 @@ Public Class MainForm
 
     Public ExpandedProgressPanel As Boolean      ' Determine whether to show the progress panel in its expanded form
 
+    Public SystemEditor As String               ' System editor specified by the user
+
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
@@ -1595,6 +1597,7 @@ Public Class MainForm
                 LogFile = LogKey.GetValue("LogFile").ToString().Replace(Quote, "").Trim()
                 LogLevel = CInt(LogKey.GetValue("LogLevel"))
                 AutoLogs = (CInt(LogKey.GetValue("AutoLogs")) = 1)
+                SystemEditor = LogKey.GetValue("SystemEditor").ToString().Replace(Quote, "").Trim()
                 LogKey.Close()
                 Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
                 QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
@@ -1718,6 +1721,9 @@ Public Class MainForm
                         ' Detect log file path. If file does not exist, create one
                         LogFile = line.Replace("LogFile=", "").Trim().Replace(Quote, "").Trim()
                         If LogFile.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then LogFile = LogFile.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
+                    ElseIf line.StartsWith("SystemEditor=", StringComparison.OrdinalIgnoreCase) Then
+                        SystemEditor = line.Replace("SystemEditor=", "").Trim().Replace(Quote, "").Trim()
+                        If SystemEditor.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then SystemEditor = SystemEditor.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
@@ -1927,51 +1933,7 @@ Public Class MainForm
             Case 1
                 StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
-        DynaLog.LogMessage("Program Settings:" & CrLf & _
-                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf & _
-                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf & _
-                           "ColorMode                  =    " & ColorMode & CrLf & _
-                           "Language                   =    " & Language & CrLf & _
-                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf & _
-                           "LogFontSi                  =    " & LogFontSize & CrLf & _
-                           "LogFontBold                =    " & LogFontIsBold & CrLf & _
-                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf & _
-                           "AllCaps                    =    " & AllCaps & CrLf & _
-                           "ColorSchemes               =    " & ColorSchemes & CrLf & _
-                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf & _
-                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf & _
-                           "LogLevel                   =    " & LogLevel & CrLf & _
-                           "AutoLogs                   =    " & AutoLogs & CrLf & _
-                           "ImgOperationMode           =    " & ImgOperationMode & CrLf & _
-                           "Quiet                      =    " & QuietOperations & CrLf & _
-                           "NoRestart                  =    " & SysNoRestart & CrLf & _
-                           "UseScratch                 =    " & UseScratch & CrLf & _
-                           "AutoScratch                =    " & AutoScrDir & CrLf & _
-                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf & _
-                           "EnglishOutput              =    " & EnglishOutput & CrLf & _
-                           "ReportView                 =    " & ReportView & CrLf & _
-                           "ShowNotification           =    " & NotificationShow & CrLf & _
-                           "NotifyFrequency            =    " & NotificationFrequency & CrLf & _
-                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf & _
-                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf & _
-                           "DetectAllDrivers           =    " & AllDrivers & CrLf & _
-                           "SkipFrameworks             =    " & SkipFrameworks & CrLf & _
-                           "RunAllProcs                =    " & RunAllProcs & CrLf & _
-                           "RemountImages              =    " & StartupRemount & CrLf & _
-                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf & _
-                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf & _
-                           "WndWidth                   =    " & WndWidth & CrLf & _
-                           "WndHeight                  =    " & WndHeight & CrLf & _
-                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf & _
-                           "WndLeft                    =    " & WndLeft & CrLf & _
-                           "WndTop                     =    " & WndTop & CrLf & _
-                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf & _
-                           "SkipQuestions              =    " & SkipQuestions & CrLf & _
-                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf & _
-                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf & _
-                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf & _
-                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf & _
-                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
+        ShowDTSettings()
         ' Test setting validity
         If Not File.Exists(DismExe) Then
             DynaLog.LogMessage("Specified DISM Executable not found. Falling back to default program and reporting invalid setting...")
@@ -2014,6 +1976,59 @@ Public Class MainForm
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Shows the DISMTools Settings with DynaLog
+    ''' </summary>
+    ''' <remarks></remarks>
+    Sub ShowDTSettings()
+        DynaLog.LogMessage("Program Settings:" & CrLf & _
+                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf & _
+                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf & _
+                           "ColorMode                  =    " & ColorMode & CrLf & _
+                           "Language                   =    " & Language & CrLf & _
+                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf & _
+                           "LogFontSi                  =    " & LogFontSize & CrLf & _
+                           "LogFontBold                =    " & LogFontIsBold & CrLf & _
+                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf & _
+                           "AllCaps                    =    " & AllCaps & CrLf & _
+                           "ColorSchemes               =    " & ColorSchemes & CrLf & _
+                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf & _
+                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf & _
+                           "LogLevel                   =    " & LogLevel & CrLf & _
+                           "AutoLogs                   =    " & AutoLogs & CrLf & _
+                           "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf & _
+                           "ImgOperationMode           =    " & ImgOperationMode & CrLf & _
+                           "Quiet                      =    " & QuietOperations & CrLf & _
+                           "NoRestart                  =    " & SysNoRestart & CrLf & _
+                           "UseScratch                 =    " & UseScratch & CrLf & _
+                           "AutoScratch                =    " & AutoScrDir & CrLf & _
+                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf & _
+                           "EnglishOutput              =    " & EnglishOutput & CrLf & _
+                           "ReportView                 =    " & ReportView & CrLf & _
+                           "ShowNotification           =    " & NotificationShow & CrLf & _
+                           "NotifyFrequency            =    " & NotificationFrequency & CrLf & _
+                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf & _
+                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf & _
+                           "DetectAllDrivers           =    " & AllDrivers & CrLf & _
+                           "SkipFrameworks             =    " & SkipFrameworks & CrLf & _
+                           "RunAllProcs                =    " & RunAllProcs & CrLf & _
+                           "RemountImages              =    " & StartupRemount & CrLf & _
+                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf & _
+                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf & _
+                           "WndWidth                   =    " & WndWidth & CrLf & _
+                           "WndHeight                  =    " & WndHeight & CrLf & _
+                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf & _
+                           "WndLeft                    =    " & WndLeft & CrLf & _
+                           "WndTop                     =    " & WndTop & CrLf & _
+                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf & _
+                           "SkipQuestions              =    " & SkipQuestions & CrLf & _
+                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf & _
+                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf & _
+                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf & _
+                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf & _
+                           "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
     End Sub
 
 #Region "Background Processes"
@@ -4868,6 +4883,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & "{common:WinDir}\system32\notepad.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
@@ -4939,6 +4955,7 @@ Public Class MainForm
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
         LogKey.SetValue("LogLevel", 3, RegistryValueKind.DWord)
         LogKey.SetValue("AutoLogs", 1, RegistryValueKind.DWord)
+        LogKey.SetValue("SystemEditor", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe" & Quote, RegistryValueKind.ExpandString)
         LogKey.Close()
         Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
         ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
@@ -4997,51 +5014,7 @@ Public Class MainForm
             Exit Sub
         Else
             DynaLog.LogMessage("Volatile mode not detected.")
-            DynaLog.LogMessage("Configured program settings:" & CrLf & _
-                               "DISMExe                    =    " & Quote & DismExe & Quote & CrLf & _
-                               "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf & _
-                               "ColorMode                  =    " & ColorMode & CrLf & _
-                               "Language                   =    " & Language & CrLf & _
-                               "LogFont                    =    " & Quote & LogFont & Quote & CrLf & _
-                               "LogFontSi                  =    " & LogFontSize & CrLf & _
-                               "LogFontBold                =    " & LogFontIsBold & CrLf & _
-                               "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf & _
-                               "AllCaps                    =    " & AllCaps & CrLf & _
-                               "ColorSchemes               =    " & ColorSchemes & CrLf & _
-                               "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf & _
-                               "LogFile                    =    " & Quote & LogFile & Quote & CrLf & _
-                               "LogLevel                   =    " & LogLevel & CrLf & _
-                               "AutoLogs                   =    " & AutoLogs & CrLf & _
-                               "ImgOperationMode           =    " & ImgOperationMode & CrLf & _
-                               "Quiet                      =    " & QuietOperations & CrLf & _
-                               "NoRestart                  =    " & SysNoRestart & CrLf & _
-                               "UseScratch                 =    " & UseScratch & CrLf & _
-                               "AutoScratch                =    " & AutoScrDir & CrLf & _
-                               "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf & _
-                               "EnglishOutput              =    " & EnglishOutput & CrLf & _
-                               "ReportView                 =    " & ReportView & CrLf & _
-                               "ShowNotification           =    " & NotificationShow & CrLf & _
-                               "NotifyFrequency            =    " & NotificationFrequency & CrLf & _
-                               "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf & _
-                               "SkipNonRemovable           =    " & SkipNonRemovable & CrLf & _
-                               "DetectAllDrivers           =    " & AllDrivers & CrLf & _
-                               "SkipFrameworks             =    " & SkipFrameworks & CrLf & _
-                               "RunAllProcs                =    " & RunAllProcs & CrLf & _
-                               "RemountImages              =    " & StartupRemount & CrLf & _
-                               "CheckForUpdates            =    " & StartupUpdateCheck & CrLf & _
-                               "AutoCleanMounts            =    " & AutoCleanMounts & CrLf & _
-                               "WndWidth                   =    " & WndWidth & CrLf & _
-                               "WndHeight                  =    " & WndHeight & CrLf & _
-                               "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf & _
-                               "WndLeft                    =    " & WndLeft & CrLf & _
-                               "WndTop                     =    " & WndTop & CrLf & _
-                               "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf & _
-                               "SkipQuestions              =    " & SkipQuestions & CrLf & _
-                               "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf & _
-                               "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf & _
-                               "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf & _
-                               "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf & _
-                               "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
+            ShowDTSettings()
             If SaveOnSettingsIni Then
                 DynaLog.LogMessage("Checking state of INI File...")
                 If File.Exists(Application.StartupPath & "\settings.ini") Then

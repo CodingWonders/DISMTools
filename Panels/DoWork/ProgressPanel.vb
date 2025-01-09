@@ -195,6 +195,9 @@ Public Class ProgressPanel
     Public ActionRunning As Boolean                         ' Detects whether an Action file is being run
     Public IsInValidationMode As Boolean                    ' Detects whether an Action file is being validated
 
+    Public SystemEditor As String                           ' System Editor to launch for logs. Backup file is provided below, in case the specified editor doesn't exist
+    Dim SystemEditorBackup As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "notepad.exe")
+
     Public Actions_ImageFile As String
     Public Actions_ImageIndex As Integer
 
@@ -7093,6 +7096,13 @@ Public Class ProgressPanel
         AutoScratch = MainForm.AutoScrDir
         ScratchDirPath = MainForm.ScratchDir
         EnglishOut = MainForm.EnglishOutput
+        SystemEditor = MainForm.SystemEditor
+        DynaLog.LogMessage("Provided system editor for logs: " & Quote & SystemEditor & Quote)
+        DynaLog.LogMessage("Checking if provided system editor exists...")
+        If Not File.Exists(SystemEditor) Then
+            DynaLog.LogMessage("Provided system editor does not exist. Defaulting to notepad...")
+            SystemEditor = SystemEditorBackup
+        End If
         DynaLog.LogMessage("Preparing scratch directory if program is configured to use default directories...")
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
         GatherInitialSwitches()
@@ -7294,14 +7304,14 @@ Public Class ProgressPanel
         Try
             DynaLog.LogMessage("Checking if log file exists and opening it in Notepad...")
             If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
+                Process.Start(SystemEditor, Application.StartupPath & "\logs\" & dateStr)
             ElseIf File.Exists(LogPath) Then
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
+                Process.Start(SystemEditor, LogPath)
             End If
         Catch ex As Exception
-            If Not File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe") Then
-                DynaLog.LogMessage("Notepad is not found on this system.")
-                LogView.AppendText(CrLf & "Notepad was not found")
+            If Not File.Exists(SystemEditor) Then
+                DynaLog.LogMessage("The system editor was not found on this system.")
+                LogView.AppendText(CrLf & "System editor was not found")
             ElseIf Not File.Exists(Application.StartupPath & "\logs\" & dateStr) Or Not File.Exists(LogPath) Then
                 DynaLog.LogMessage("The log file is not found on this system.")
                 LogView.AppendText(CrLf & "The log file was not found")
