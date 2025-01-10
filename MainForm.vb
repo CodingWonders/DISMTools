@@ -597,10 +597,10 @@ Public Class MainForm
         DynaLog.LogMessage("Components:")
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
         DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: (c) " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software")
-        DynaLog.LogMessage("  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC")
-        DynaLog.LogMessage("  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, 2024) & " CodingWonders Software")
-        DynaLog.LogMessage("  HotInstall: (c) " & GetCopyrightTimespan(2025, 2025) & " CodingWonders Software")
+        DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
+                           "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, 2024) & " CodingWonders Software" & CrLf &
+                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, 2025) & " CodingWonders Software")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -608,8 +608,8 @@ Public Class MainForm
         DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
         DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
         DynaLog.LogMessage("- DockPanelSuite: (c) " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
-        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov")
-        DynaLog.LogMessage("  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
+        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov" & CrLf &
+                           "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
         DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
         DynaLog.LogMessage("- UnattendGen: " &
                            "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
