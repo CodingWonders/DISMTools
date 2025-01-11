@@ -158,6 +158,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: expandsz; ValueName: "LogFile"; ValueData: "{win}\Logs\DISM\DISM.log"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "LogLevel"; ValueData: 3; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: expandsz; ValueName: "SystemEditor"; ValueData: "{win}\system32\notepad.exe"; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Output"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Output"; ValueType: dword; ValueName: "EnglishOutput"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist

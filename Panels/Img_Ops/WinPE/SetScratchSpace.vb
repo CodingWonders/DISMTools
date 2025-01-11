@@ -6,14 +6,19 @@ Public Class SetPEScratchSpace
 
     Sub GetScratchSpace()
         Using reg As New Process
+            DynaLog.LogMessage("Preparing to get Windows PE settings...")
+            DynaLog.LogMessage("Loading SYSTEM hive of WinPE image...")
             reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
             reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
             reg.StartInfo.CreateNoWindow = True
             reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             reg.Start()
             reg.WaitForExit()
+            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
             Try
+                DynaLog.LogMessage("Getting scratch space...")
                 Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
+                DynaLog.LogMessage("Scratch space: " & regKey.GetValue("WinPECacheThreshold", 0) & " MB")
                 If regKey.GetValue("WinPECacheThreshold", "").ToString() <> "" Then
                     If Not ComboBox1.Items.Contains(regKey.GetValue("WinPECacheThreshold", "").ToString()) Then
                         Label5.Visible = True
@@ -24,6 +29,7 @@ Public Class SetPEScratchSpace
             Catch ex As Exception
 
             End Try
+            DynaLog.LogMessage("Unloading hives...")
             ' Unload registry hives
             reg.StartInfo.Arguments = "unload HKLM\PE_SYS"
             reg.Start()
@@ -32,6 +38,7 @@ Public Class SetPEScratchSpace
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.peNewScratchSpace = ComboBox1.SelectedItem
         Me.DialogResult = System.Windows.Forms.DialogResult.OK

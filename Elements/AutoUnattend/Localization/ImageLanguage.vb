@@ -1,6 +1,7 @@
 ﻿Imports System.Xml.Serialization
 Imports System.Xml
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace Elements
 
@@ -25,15 +26,22 @@ Namespace Elements
         <XmlAttribute("DisplayName")>
         Public Property DisplayName As String
 
+        Public Overrides Function ToString() As String
+            Return "Language, with ID: " & Me.Id & "; Display name: " & Me.DisplayName
+        End Function
+
         Public Shared Function LoadItems(filePath As String) As List(Of ImageLanguage)
+            DynaLog.LogMessage("Preparing to load items from file " & Quote & filePath & Quote & "...")
             Dim langList As New List(Of ImageLanguage)
             Try
                 Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                    DynaLog.LogMessage("Creating XML reader...")
                     Dim xs As New XmlReaderSettings()
                     xs.IgnoreWhitespace = True
                     Using reader As XmlReader = XmlReader.Create(fs, xs)
                         While reader.Read()
                             If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "ImageLanguage" Then
+                                DynaLog.LogMessage("We are dealing with a component (XML node type is element and is " & Quote & "ImageLanguage" & Quote & "). Parsing...")
                                 Dim imgLang As New ImageLanguage()
                                 imgLang.Id = reader.GetAttribute("Id")
                                 imgLang.DisplayName = reader.GetAttribute("DisplayName")
@@ -42,8 +50,10 @@ Namespace Elements
                         End While
                     End Using
                 End Using
+                DynaLog.LogMessage("Language count: " & langList.Count)
                 Return langList
             Catch ex As Exception
+                DynaLog.LogMessage("Could not load items. Error message: " & ex.Message)
                 If Debugger.IsAttached Then Debugger.Break()
                 Return Nothing
             End Try

@@ -195,6 +195,9 @@ Public Class ProgressPanel
     Public ActionRunning As Boolean                         ' Detects whether an Action file is being run
     Public IsInValidationMode As Boolean                    ' Detects whether an Action file is being validated
 
+    Public SystemEditor As String                           ' System Editor to launch for logs. Backup file is provided below, in case the specified editor doesn't exist
+    Dim SystemEditorBackup As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "notepad.exe")
+
     Public Actions_ImageFile As String
     Public Actions_ImageIndex As Integer
 
@@ -332,8 +335,8 @@ Public Class ProgressPanel
     Public pkgIsAlreadyAdded As Boolean                     ' Using data from pkgInstallationState, determine whether package is installed
     Public pkgIgnoreApplicabilityChecks As Boolean          ' If option is checked, ignore applicability checks
     Public pkgPreventIfPendingOnline As Boolean             ' If option is checked, ignore package if online actions are required on the image
-    Public imgCommitAfterOps As Boolean                     ' If option is checked, commit image after operations are done
-    Public pkgAdditionOp As Integer                         ' 0: recursive operation; 1: selective operation
+    Public pkgAdditionCommit As Boolean                     ' If option is checked, commit image after operations are done
+    Public pkgAdditionOp As Integer                         ' 0: recursive operation; 1: selective operation; 2: Microsoft Update Manifest operation
     Public pkgCount As Integer                              ' Gather package count
     Public pkgCurrentNum As Integer                         ' Current package number
     Public pkgSuccessfulAdditions As Integer                ' Determine successful package additions
@@ -362,7 +365,7 @@ Public Class ProgressPanel
     Public featSource As String                             ' Feature source
     Public featParentIsEnabled As Boolean                   ' Determine whether all parent features need to be enabled
     Public featContactWindowsUpdate As Boolean              ' Determine whether to contact Windows Update (WU) for online images
-    Public featCommitAfterEnablement As Boolean             ' Determine whether to commit image after enabling features
+    Public featEnablementCommit As Boolean                  ' Determine whether to commit image after enabling features
     Public featEnablementCount As Integer                   ' Count number of features to enable
     Public featCanContactWU As Boolean                      ' Determine whether program can contact Windows Update
     Dim featSuccessfulEnablements As Integer                ' Successful feature enablement count
@@ -373,7 +376,7 @@ Public Class ProgressPanel
     Public featDisablementLastName As String                ' Last feature entry checked
     Public featDisablementParentPkgUsed As Boolean          ' Determine whether to specify the parent package name for the features
     Public featDisablementParentPkg As String               ' Parent package name to use when disabling features
-    Public featRemoveManifest As Boolean                    ' Remove feature without removing manifest
+    Public featDisablementRemoveManifest As Boolean         ' Remove feature without removing manifest
     Public featDisablementCount As Integer                  ' Count number of features to disable
     Dim featSuccessfulDisablements As Integer               ' Successful feature disablement count
     Dim featFailedDisablements As Integer                   ' Failed feature disablement count
@@ -579,56 +582,32 @@ Public Class ProgressPanel
     End Sub
 
     Sub GetTasks(opNum As Integer)
-        If opNum = 0 Then
-            taskCount = 1
-        ElseIf opNum = 1 Then
-            taskCount = 1
-        ElseIf opNum = 3 Then
-            taskCount = 1
-        ElseIf opNum = 6 Then
+        DynaLog.LogMessage("Getting number of tasks...")
+        DynaLog.LogMessage("Operation number: " & opNum)
+        If opNum = 6 Then
             If CaptureMountDestImg Then
                 taskCount = 3
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 7 Then
-            taskCount = 1
-        ElseIf opNum = 8 Then
-            taskCount = 1
         ElseIf opNum = 9 Then
             If imgIndexDeletionUnmount Then
                 taskCount = 2
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 10 Then
-            taskCount = 1
-        ElseIf opNum = 15 Then
-            taskCount = 1
-        ElseIf opNum = 18 Then
-            taskCount = 1
-        ElseIf opNum = 20 Then
-            taskCount = 1
-        ElseIf opNum = 21 Then
-            taskCount = 1
         ElseIf opNum = 26 Then
-            If imgCommitAfterOps Then
+            If pkgAdditionCommit Then
                 taskCount = 2
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 27 Then
-            taskCount = 1
         ElseIf opNum = 30 Then
-            If featCommitAfterEnablement Then
+            If featEnablementCommit Then
                 taskCount = 2
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 31 Then
-            taskCount = 1
-        ElseIf opNum = 32 Then
-            taskCount = 1
         ElseIf opNum = 33 Then
             If ppkgAdditionCommit Then
                 taskCount = 2
@@ -641,49 +620,24 @@ Public Class ProgressPanel
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 38 Then
-            taskCount = 1
-        ElseIf opNum = 60 Then
-            taskCount = 1
         ElseIf opNum = 64 Then
             If capAdditionCommit Then
                 taskCount = 2
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 68 Then
-            taskCount = 1
         ElseIf opNum = 75 Then
             If drvAdditionCommit Then
                 taskCount = 2
             Else
                 taskCount = 1
             End If
-        ElseIf opNum = 76 Then
-            taskCount = 1
-        ElseIf opNum = 77 Then
-            taskCount = 1
-        ElseIf opNum = 78 Then
-            taskCount = 1
-        ElseIf opNum = 79 Then
-            taskCount = 1
-        ElseIf opNum = 83 Then
-            taskCount = 1
-        ElseIf opNum = 84 Then
-            taskCount = 1
-        ElseIf opNum = 86 Then
-            taskCount = 1
-        ElseIf opNum = 87 Then
-            taskCount = 1
-        ElseIf opNum = 88 Then
-            taskCount = 1
-        ElseIf opNum = 991 Then
-            taskCount = 1
-        ElseIf opNum = 992 Then
-            taskCount = 1
         ElseIf opNum = 996 Then
             taskCount = 2
+        Else
+            taskCount = 1
         End If
+        DynaLog.LogMessage("Number of tasks: " & taskCount)
         AllPB.Maximum = taskCount * 100
         Select Case MainForm.Language
             Case 0
@@ -718,7 +672,9 @@ Public Class ProgressPanel
     ''' </summary>
     ''' <remarks>These settings can be configured at any time using the Options dialog</remarks>
     Sub GatherInitialSwitches()
+        DynaLog.LogMessage("Getting initial set of switches for DISM...")
         CommandArgs = "/logpath=" & Quote & If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath) & Quote & " /loglevel=" & LogLevel & If(UseScratchDir, If(AutoScratch, If(OnlineMgmt, " /scratchdir=" & Quote & Application.StartupPath & "\scratch" & Quote, " /scratchdir=" & Quote & projPath & "\scr_temp"), If(ScratchDirPath <> "", " /scratchdir=" & Quote & ScratchDirPath & Quote, "")), "") & If(EnglishOut, " /english", "")
+        DynaLog.LogMessage("Initial switches: " & CommandArgs)
         BckArgs = CommandArgs
     End Sub
 
@@ -729,6 +685,8 @@ Public Class ProgressPanel
     ''' <returns>This function returns a file name that can be used in log files, file-system friendly on both Unix and Windows</returns>
     ''' <remarks></remarks>
     Function GetCurrentDateAndTime(CurrentDate As Date) As String
+        DynaLog.LogMessage("Getting a suitable name for log files with current date...")
+        DynaLog.LogMessage("Current date: " & CurrentDate.ToString())
         dateStr = "DISMTools-" & CurrentDate.ToString()
         ' Make sure the file with the name is file-system friendly
         If dateStr.Contains("/") Or dateStr.Contains(":") Then
@@ -739,10 +697,13 @@ Public Class ProgressPanel
     End Function
 
     Sub RunTaskList(taskList As List(Of Integer))
+        DynaLog.LogMessage("Running items in task list...")
+        DynaLog.LogMessage("- Items in task list: " & taskList.Count)
         Dim successfulTasks As Integer = 0
         Dim failedTasks As Integer = 0
         Dim prevValue As Integer = 0
         For Each Task In taskList
+            DynaLog.LogMessage("Running task " & taskList.IndexOf(Task) + 1 & " of " & taskList.Count & " (operation number " & Task & ")...")
             RunOps(Task)
             AllPB.Value = prevValue + (AllPB.Maximum / taskList.Count)
             prevValue = AllPB.Value
@@ -772,26 +733,66 @@ Public Class ProgressPanel
                 Case 5
                     taskCountLbl.Text = "Attività: " & currentTCont & "/" & taskList.Count
             End Select
+            DynaLog.LogMessage("Determining if tasks are successful...")
             If IsSuccessful Then successfulTasks += 1 Else failedTasks += 1
         Next
-        If successfulTasks > failedTasks Then IsSuccessful = True Else IsSuccessful = False
+        DynaLog.LogMessage("Task summary:")
+        DynaLog.LogMessage("- Tasks that succeeded: " & successfulTasks)
+        DynaLog.LogMessage("- Tasks that failed: " & failedTasks)
+        DynaLog.LogMessage("Are overall tasks successful? " & If(successfulTasks >= failedTasks, "Yes", "No"))
+        IsSuccessful = (successfulTasks >= failedTasks)
+    End Sub
+
+    ''' <summary>
+    ''' Runs the specified process and returns an exit code
+    ''' </summary>
+    ''' <param name="FilePath">The path of the file to run</param>
+    ''' <param name="CommandArguments">The command-line arguments to pass to the file to run</param>
+    ''' <param name="WorkingDirectory">The directory the file is in. This is optional and can be set to fix issues with the file to open</param>
+    ''' <remarks>Any logging is done with DynaLog</remarks>
+    Sub RunProcess(FilePath As String, CommandArguments As String, Optional WorkingDirectory As String = "")
+        Try
+            DynaLog.LogMessage("Preparing to run process...")
+            DynaLog.LogMessage("- Process path: " & Quote & FilePath & Quote)
+            DynaLog.LogMessage("- Arguments: " & CommandArguments)
+            DynaLog.LogMessage("- Working directory: " & Quote & WorkingDirectory & Quote)
+            DISMProc.StartInfo.FileName = FilePath
+            DISMProc.StartInfo.Arguments = CommandArguments
+            If WorkingDirectory <> "" Then
+                DISMProc.StartInfo.WorkingDirectory = WorkingDirectory
+            End If
+            DISMProc.Start()
+            ' Process output redirection goes here
+            ' TODO: implement above
+            DISMProc.WaitForExit()
+            DynaLog.LogMessage("Process finished with exit code " & Hex(DISMProc.ExitCode))
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not run process. Error message: " & ex.Message)
+        End Try
     End Sub
 
     Sub RunOps(opNum As Integer)
+        DynaLog.LogMessage("Running operations...")
+        DynaLog.LogMessage("Operation number: " & opNum)
+        DynaLog.LogMessage("Setting DISM program and grabbing version information...")
         If DismProgram = "" Then DismProgram = MainForm.DismExe
         If Not File.Exists(DismProgram) Then DismProgram = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe"
         DismVersionChecker = FileVersionInfo.GetVersionInfo(DismProgram)
         CurrentPB.Value = 0
         PkgErrorText.RichTextBox1.Clear()
         FeatErrorText.RichTextBox1.Clear()
-        DismApi.Initialize(DismLogLevel.LogErrors)
         Dim OperationUseQuotes As Boolean
+        DynaLog.LogMessage("Mount directory to apply changes to: " & MountDir)
         Dim targetImage As String = ""
         If MountDir <> "" Then
             OperationUseQuotes = Not Path.GetPathRoot(MountDir) = MountDir
             targetImage = If(OperationUseQuotes, Quote & MountDir & Quote, MountDir)
+            DynaLog.LogMessage("Target image to pass to DISM command arguments: " & targetImage)
         End If
         If opNum = 0 Then
+            DynaLog.LogMessage("Creating a project...")
+            DynaLog.LogMessage("- Project name: " & Quote & projName & Quote)
+            DynaLog.LogMessage("- Project path: " & Quote & projPath & Quote)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -829,29 +830,37 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Creating project structure...")
             Try
+                DynaLog.LogMessage("Creating main project directory...")
                 Directory.CreateDirectory(projPath & "\" & projName)
                 CurrentPB.Value = 16.66
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
+                DynaLog.LogMessage("Creating project settings directory...")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "settings")
-                CurrentPB.Value = 33.33
+                CurrentPB.Value = 33.329999999999998
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
+                DynaLog.LogMessage("Creating mount directory...")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "mount")
                 CurrentPB.Value = 50
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
+                DynaLog.LogMessage("Creating scratch directory...")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "scr_temp")
+                DynaLog.LogMessage("Creating unattended answer file directory...")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "unattend_xml")
+                DynaLog.LogMessage("Creating reports directory...")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "reports")
+                DynaLog.LogMessage("Creating ADK deployment tools directory...")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\x86")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\amd64")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm")
                 Directory.CreateDirectory(projPath & "\" & projName & "\" & "DandI\arm64")
-                CurrentPB.Value = 66.66
+                CurrentPB.Value = 66.659999999999997
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
+                DynaLog.LogMessage("Writing project configuration...")
                 File.WriteAllText(projPath & "\" & projName & "\" & "settings\project.ini", _
                                   "[ProjOptions]" & CrLf & _
                                   "Name=" & Quote & projName & Quote & CrLf & _
@@ -880,9 +889,10 @@ Public Class ProgressPanel
                                   "ImageLang=N/A" & CrLf & CrLf & _
                                   "[Params]" & CrLf & _
                                   "ImageReadWrite=N/A", ASCII)
-                CurrentPB.Value = 83.33
+                CurrentPB.Value = 83.329999999999998
                 Thread.Sleep(125)
                 AllPB.Value = CurrentPB.Value
+                DynaLog.LogMessage("Writing DTProj file contents...")
                 File.WriteAllText(projPath & "\" & projName & "\" & projName & ".dtproj", _
                                   "# DISMTools project file. File version: 0.1" & CrLf & _
                                   "[Settings]" & CrLf & _
@@ -898,6 +908,7 @@ Public Class ProgressPanel
                 AllPB.Value = AllPB.Maximum
                 IsSuccessful = True
             Catch ex As Exception
+                DynaLog.LogMessage("Could not create the project. Error message: " & ex.Message)
                 LogView.AppendText(CrLf & "An error has occurred. Please read the details below: " & CrLf & ex.GetType().ToString() & ": " & Err.Description)
                 If IsDebugged Then
                     LogView.AppendText(CrLf & "Debugging information: " & ex.StackTrace)
@@ -905,9 +916,23 @@ Public Class ProgressPanel
                 IsSuccessful = False
             End Try
         ElseIf opNum = 1 Then
+            DynaLog.LogMessage("Appending mount directory to the target image...")
             ' This variable tells the program to use quotes when appending a mount directory in a drive.
             ' This is false when we want to append an entire drive.
             Dim AppendixUseQuotes As Boolean = Not Path.GetPathRoot(AppendixSourceDir) = AppendixSourceDir
+            DynaLog.LogMessage("Should quotes be used? " & If(AppendixUseQuotes, "Yes", "No"))
+            If Not AppendixUseQuotes Then DynaLog.LogMessage("An entire drive will be appended to the target image.")
+            DynaLog.LogMessage("- Source directory: " & Quote & AppendixSourceDir & Quote)
+            DynaLog.LogMessage("- Destination image: " & Quote & AppendixDestinationImage & Quote)
+            DynaLog.LogMessage("- Destination image name: " & Quote & AppendixName & Quote)
+            DynaLog.LogMessage("- Destination image description: " & Quote & AppendixDescription & Quote)
+            DynaLog.LogMessage("- WIMScript configuration list file: " & Quote & AppendixWimScriptConfig & Quote)
+            DynaLog.LogMessage("- Append with WIMBoot configuration? " & If(AppendixUseWimBoot, "Yes", "No"))
+            DynaLog.LogMessage("- Make image bootable? " & If(AppendixBootable, "Yes", "No"))
+            DynaLog.LogMessage("- Verify image integrity? " & If(AppendixVerify, "Yes", "No"))
+            DynaLog.LogMessage("- Check for file errors? " & If(AppendixCheckIntegrity, "Yes", "No"))
+            DynaLog.LogMessage("- Use reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No"))
+            DynaLog.LogMessage("- Capture extended attributes (EAs)? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -949,10 +974,13 @@ Public Class ProgressPanel
                                "- Destination image name: " & AppendixName & CrLf &
                                "- Destination image description: " & If(AppendixDescription = "", "(none specified)", AppendixDescription) & CrLf)
             If AppendixWimScriptConfig = "" Then
+                DynaLog.LogMessage("No configuration list file has been specified.")
                 LogView.AppendText("- Configuration list file: not specified" & CrLf)
             Else
+                DynaLog.LogMessage("A configuration list file has been specified. Checking if it exists...")
                 LogView.AppendText("- Configuration list file: " & Quote & AppendixWimScriptConfig & Quote & CrLf)
                 If Not File.Exists(AppendixWimScriptConfig) Then
+                    DynaLog.LogMessage("The configuration list file does not exist in the file system and will be skipped.")
                     LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
                 End If
             End If
@@ -962,7 +990,6 @@ Public Class ProgressPanel
                                "- Check for file errors? " & If(AppendixVerify, "Yes", "No") & CrLf &
                                "- Use the reparse point tag fix? " & If(AppendixReparsePt, "Yes", "No") & CrLf &
                                "- Capture extended attributes? " & If(AppendixCaptureExtendedAttribs, "Yes", "No"))
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -975,9 +1002,11 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /append-image /imagefile=" & Quote & AppendixDestinationImage & Quote & " /capturedir=" & If(AppendixUseQuotes, Quote, "") & AppendixSourceDir & If(AppendixUseQuotes, Quote, "") & " /name=" & Quote & AppendixName & Quote
             End Select
             If AppendixDescription <> "" Then
+                DynaLog.LogMessage("A description has been provided.")
                 CommandArgs &= " /description=" & Quote & AppendixDescription & Quote
             End If
             If AppendixWimScriptConfig <> "" AndAlso File.Exists(AppendixWimScriptConfig) Then
+                DynaLog.LogMessage("A configuration list file has been specified and exists in the file system.")
                 CommandArgs &= " /configfile=" & Quote & AppendixWimScriptConfig & Quote
             End If
             If AppendixBootable Then CommandArgs &= " /bootable"
@@ -986,9 +1015,7 @@ Public Class ProgressPanel
             If AppendixVerify Then CommandArgs &= " /verify"
             If Not AppendixReparsePt Then CommandArgs &= " /norpfix"
             If AppendixCaptureExtendedAttribs Then CommandArgs &= " /EA"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1024,6 +1051,19 @@ Public Class ProgressPanel
         ElseIf opNum = 3 Then
             ' My love with DISM came from this very YouTube video:
             ' https://www.youtube.com/watch?v=JxJ6a-PY1KA (Enderman - Manually installing Windows 10)
+            DynaLog.LogMessage("Applying specified Windows image to the specified application directory...")
+            DynaLog.LogMessage("- Image to apply: " & Quote & ApplicationSourceImg & Quote)
+            DynaLog.LogMessage("- Image index: " & ApplicationIndex)
+            DynaLog.LogMessage("- Application directory: " & Quote & If(ApplicationDestDrive <> "", ApplicationDestDrive, ApplicationDestDir) & Quote)
+            If ApplicationDestDrive <> "" Then DynaLog.LogMessage("  A drive has been specified")
+            DynaLog.LogMessage("- Verify image integrity? " & If(ApplicationCheckInt, "Yes", "No"))
+            DynaLog.LogMessage("- Check for file errors? " & If(ApplicationVerify, "Yes", "No"))
+            DynaLog.LogMessage("- Use reparse point tag fix? " & If(ApplicationReparsePt, "Yes", "No"))
+            DynaLog.LogMessage("- SWM name pattern: " & Quote & ApplicationSWMPattern & Quote)
+            DynaLog.LogMessage("- Validate image for Trusted Desktop? " & If(ApplicationValidateForTD, "Yes", "No (it may not be supported)"))
+            DynaLog.LogMessage("- Apply with WIMBoot configuration? " & If(ApplicationUseWimBoot, "Yes", "No"))
+            DynaLog.LogMessage("- Apply in compact mode? " & If(ApplicationCompactMode, "Yes", "No"))
+            DynaLog.LogMessage("- Apply extended attributes (EAs)? " & If(ApplicationUseExtAttr, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1059,11 +1099,10 @@ Public Class ProgressPanel
                     allTasks.Text = "Applicazione dell'immagine..."
                     currentTask.Text = "Applicazione dell'immagine specificata alla destinazione specificata..."
             End Select
-            LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf & _
-                               "- Source image file: " & ApplicationSourceImg & CrLf & _
-                               "- Index to apply: " & ApplicationIndex & CrLf & _
+            LogView.AppendText(CrLf & "Applying image..." & CrLf & "Options:" & CrLf &
+                               "- Source image file: " & ApplicationSourceImg & CrLf &
+                               "- Index to apply: " & ApplicationIndex & CrLf &
                                "- Target directory: " & ApplicationDestDir & CrLf)
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1134,9 +1173,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText("- Destination drive ID: " & ApplicationDestDrive & CrLf)
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1170,9 +1207,24 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 6 Then
+            DynaLog.LogMessage("Capturing mount directory to the target image...")
             ' This variable tells the program to use quotes when capturing a mount directory in a drive.
             ' This is false when we want to capture an entire drive.
             Dim UseQuotes As Boolean = Not Path.GetPathRoot(CaptureSourceDir) = CaptureSourceDir
+            DynaLog.LogMessage("Should quotes be used? " & If(UseQuotes, "Yes", "No"))
+            If Not UseQuotes Then DynaLog.LogMessage("An entire drive will be captured to the target image.")
+            DynaLog.LogMessage("- Source directory: " & Quote & CaptureSourceDir & Quote)
+            DynaLog.LogMessage("- Destination image: " & Quote & CaptureDestinationImage & Quote)
+            DynaLog.LogMessage("- Destination image name: " & Quote & CaptureName & Quote)
+            DynaLog.LogMessage("- Destination image description: " & Quote & CaptureDescription & Quote)
+            DynaLog.LogMessage("- WIMScript configuration list file: " & Quote & CaptureWimScriptConfig & Quote)
+            DynaLog.LogMessage("- Append with WIMBoot configuration? " & If(CaptureUseWimBoot, "Yes", "No"))
+            DynaLog.LogMessage("- Make image bootable? " & If(CaptureBootable, "Yes", "No"))
+            DynaLog.LogMessage("- Verify image integrity? " & If(CaptureVerify, "Yes", "No"))
+            DynaLog.LogMessage("- Check for file errors? " & If(CaptureCheckIntegrity, "Yes", "No"))
+            DynaLog.LogMessage("- Use reparse point tag fix? " & If(CaptureReparsePt, "Yes", "No"))
+            DynaLog.LogMessage("- Capture extended attributes (EAs)? " & If(CaptureExtendedAttributes, "Yes", "No"))
+            DynaLog.LogMessage("- Capture compression level type: " & CaptureCompressType)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1212,7 +1264,6 @@ Public Class ProgressPanel
                                "- Source directory: " & CaptureSourceDir & CrLf &
                                "- Destination image: " & CaptureDestinationImage & CrLf &
                                "- Captured image name: " & CaptureName & CrLf)
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1228,17 +1279,21 @@ Public Class ProgressPanel
             If CaptureDescription = "" Then
                 LogView.AppendText("- Captured image description: none specified" & CrLf)
             Else
+                DynaLog.LogMessage("A description has been provided.")
                 LogView.AppendText("- Captured image description: " & Quote & CaptureDescription & Quote & CrLf)
                 CommandArgs &= " /description=" & Quote & CaptureDescription & Quote
             End If
             If CaptureWimScriptConfig = "" Then
-                LogView.AppendText("- " & Quote & "WimScript.ini" & Quote & " configuration file: not specified" & CrLf)
+                DynaLog.LogMessage("No configuration list file has been specified.")
+                LogView.AppendText("- Configuration list file: not specified" & CrLf)
             Else
-                LogView.AppendText("- " & Quote & "WimScript.ini" & Quote & " configuration file: " & CaptureWimScriptConfig & CrLf)
+                DynaLog.LogMessage("A configuration list file has been specified. Checking if it exists...")
+                LogView.AppendText("- Configuration list file: " & CaptureWimScriptConfig & CrLf)
                 ' Possibly, the file may have been deleted after being specified. Determine whether it still exists
                 If File.Exists(CaptureWimScriptConfig) Then
                     CommandArgs &= " /configfile=" & Quote & CaptureWimScriptConfig & Quote
                 Else
+                    DynaLog.LogMessage("The configuration list file does not exist in the file system and will be skipped.")
                     LogView.AppendText("   WARNING: the configuration list file does not exist in the file system. Skipping file..." & CrLf)
                 End If
             End If
@@ -1289,9 +1344,7 @@ Public Class ProgressPanel
                 LogView.AppendText("- Capture extended attributes? No" & CrLf)
             End If
             LogView.AppendText(CrLf & "Capturing image...")
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1325,6 +1378,8 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 7 Then
+            DynaLog.LogMessage("Cleaning up mount points by deleting resources from old or corrupted images...")
+            DynaLog.LogMessage("This does not require any additional options and invokes an API call. This will take some time depending on your system performance.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1363,12 +1418,20 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Cleaning up mount points..." & CrLf & CrLf &
                                "This can take some time, depending on the drives connected to this system.")
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DynaLog.LogMessage("Cleaning up mount points...")
                 DismApi.CleanupMountpoints()
             Catch ex As DismException
+                DynaLog.LogMessage("Could not clean up mount points. Error message: " & ex.Message)
                 errCode = Hex(ex.ErrorCode)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DynaLog.LogMessage("Shutting down API...")
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
@@ -1408,6 +1471,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 8 Then
+            DynaLog.LogMessage("Saving changes to the Windows image...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1445,8 +1509,6 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Saving changes..." & CrLf & "Options:" & CrLf &
                                "- Mount directory: " & MountDir)
-
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1459,9 +1521,7 @@ Public Class ProgressPanel
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /commit-image /mountdir=" & Quote & MountDir & Quote
             End Select
             ' TODO: Add additional options later
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1495,7 +1555,10 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 9 Then
+            DynaLog.LogMessage("Preparing to remove volume images from the specified Windows image file...")
+            DynaLog.LogMessage("Will this operation require an unmount of the specified image? " & If(imgIndexDeletionUnmount, "Yes", "No"))
             If imgIndexDeletionUnmount Then
+                DynaLog.LogMessage("Preparing to unmount the Windows image...")
                 RunOps(21)
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
@@ -1560,8 +1623,9 @@ Public Class ProgressPanel
                     allTasks.Text = "Eliminazione delle immagini..."
                     currentTask.Text = "Preparazione alla rimozione delle immagini del volume..."
             End Select
-            LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf & _
-                               "Options:" & CrLf & _
+            DynaLog.LogMessage("Source image to remove indexes from: " & Quote & imgIndexDeletionSourceImg & Quote)
+            LogView.AppendText(CrLf & "Removing volume images from file..." & CrLf &
+                               "Options:" & CrLf &
                                "- Source image: " & imgIndexDeletionSourceImg & CrLf)
             If imgIndexDeletionIntCheck Then
                 LogView.AppendText("- Check image integrity? Yes")
@@ -1570,10 +1634,12 @@ Public Class ProgressPanel
             End If
             CurrentPB.Maximum = imgIndexDeletionCount
             ' Removing volume images
-            LogView.AppendText(CrLf & _
+            LogView.AppendText(CrLf &
                                "Removing volume images..." & CrLf)
             For x = 0 To Array.LastIndexOf(imgIndexDeletionNames, imgIndexDeletionLastName)
                 If x + 1 > CurrentPB.Maximum Then Exit For
+                DynaLog.LogMessage("Volume image to remove: " & Quote & imgIndexDeletionNames(x) & Quote)
+                DynaLog.LogMessage("Processing task...")
                 CurrentPB.Value = x + 1
                 Select Case Language
                     Case 0
@@ -1600,16 +1666,13 @@ Public Class ProgressPanel
                     Case 5
                         currentTask.Text = "Rimozione dell'immagine del volume " & Quote & imgIndexDeletionNames(x) & Quote & "..."
                 End Select
-                LogView.AppendText(CrLf & _
+                LogView.AppendText(CrLf &
                                    "- " & imgIndexDeletionNames(x) & "...")
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /delete-image /imagefile=" & Quote & imgIndexDeletionSourceImg & Quote & " /name=" & Quote & imgIndexDeletionNames(x) & Quote
                 If imgIndexDeletionIntCheck Then
                     CommandArgs &= " /checkintegrity"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     LogView.AppendText(" Error level : " & DISMProc.ExitCode)
                 Else
@@ -1620,6 +1683,20 @@ Public Class ProgressPanel
             AllPB.Value = 100
             GetErrorCode(False)
         ElseIf opNum = 10 Then
+            DynaLog.LogMessage("Exporting specified Windows image...")
+            DynaLog.LogMessage("- Source image to export: " & Quote & imgExportSourceImage & Quote)
+            DynaLog.LogMessage("- Source index to export: " & imgExportSourceIndex)
+            DynaLog.LogMessage("- Destination image file: " & Quote & imgExportDestinationImage & Quote)
+            DynaLog.LogMessage("- Will a custom name be used? " & If(imgExportDestinationUseCustomName, "Yes", "No"))
+            If imgExportDestinationUseCustomName Then
+                DynaLog.LogMessage("  The custom name for the destination image file will be " & Quote & imgExportDestinationName & Quote)
+            Else
+                DynaLog.LogMessage("  The name of the source index will be used by the destination image file")
+            End If
+            DynaLog.LogMessage("- Compression type: " & imgExportCompressType)
+            DynaLog.LogMessage("- Mark the image as bootable? " & If(imgExportMarkBootable, "Yes", "No"))
+            DynaLog.LogMessage("- Use WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No"))
+            DynaLog.LogMessage("- Check image integrity? " & If(imgExportCheckIntegrity, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1674,10 +1751,11 @@ Public Class ProgressPanel
                                "- Append image with WIMBoot configuration? " & If(imgExportUseWimBoot, "Yes", "No") & CrLf &
                                "- Check image integrity before exporting the image? " & If(imgExportCheckIntegrity, "Yes", "No"))
             ' Show information regarding SWM files
+            DynaLog.LogMessage("Extension of source image file: " & Path.GetExtension(imgExportSourceImage))
             If Path.GetExtension(imgExportSourceImage).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("We are dealing with SWM files. Showing why we mark all of them for export...")
                 LogView.AppendText(CrLf & CrLf & "NOTE: the source image contains an asterisk sign (*) in the file name to merge all SWM files")
             End If
-            DISMProc.StartInfo.FileName = DismProgram
             ' Configure basic command arguments
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
@@ -1707,9 +1785,7 @@ Public Class ProgressPanel
             If imgExportMarkBootable Then CommandArgs &= " /bootable"
             If imgExportUseWimBoot Then CommandArgs &= " /wimboot"
             If imgExportCheckIntegrity Then CommandArgs &= " /checkintegrity"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1742,9 +1818,14 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
-        ElseIf opNum = 11 Then
-            ' Operation handled by the image file information dialog - Redundant OpNum
         ElseIf opNum = 15 Then
+            DynaLog.LogMessage("Preparing to mount the Windows image...")
+            DynaLog.LogMessage("- Image file to mount: " & Quote & SourceImg & Quote)
+            DynaLog.LogMessage("- Image index to mount: " & ImgIndex)
+            DynaLog.LogMessage("- Location to mount image to: " & Quote & MountDir & Quote)
+            DynaLog.LogMessage("- Mount with read-only permissions? " & If(isReadOnly, "Yes", "No"))
+            DynaLog.LogMessage("- Optimize mount times? " & If(isOptimized, "Yes", "No"))
+            DynaLog.LogMessage("- Check image integrity? " & If(isIntegrityTested, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1784,7 +1865,6 @@ Public Class ProgressPanel
                                "- Image file: " & SourceImg & CrLf &
                                "- Image index: " & ImgIndex & CrLf &
                                "- Mount point: " & MountDir)
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1814,9 +1894,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Check image integrity? No")
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1850,6 +1928,9 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 18 Then
+            DynaLog.LogMessage("Reloading the servicing session of the mounted image...")
+            DynaLog.LogMessage("- Mount location of the image file we are interested in reloading: " & Quote & MountDir & Quote)
+            DynaLog.LogMessage("This invokes an API call. This process will take some time depending on your system performance and how big the Windows image is.")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1888,13 +1969,21 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Reloading servicing session..." & CrLf &
                                "- Mount directory: " & MountDir)
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(If(LogLevel = 1, DismLogLevel.LogErrors, If(LogLevel = 2, DismLogLevel.LogErrorsWarnings, If(LogLevel = 3, DismLogLevel.LogErrorsWarningsInfo, DismLogLevel.LogErrorsWarningsInfo))), If(AutoLogs, Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now), LogPath))
+                DynaLog.LogMessage("Remounting image...")
                 DismApi.RemountImage(MountDir)
             Catch ex As DismException
+                DynaLog.LogMessage("Could not remount Windows image. Error message: " & ex.Message)
                 errCode = Hex(ex.ErrorCode)
                 IsSuccessful = False
             Finally
-                DismApi.Shutdown()
+                Try
+                    DynaLog.LogMessage("Shutting down API...")
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
@@ -1934,6 +2023,11 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 20 Then
+            DynaLog.LogMessage("Splitting the Windows image...")
+            DynaLog.LogMessage("- Source image file to split: " & Quote & SWMSplitSourceFile & Quote)
+            DynaLog.LogMessage("- Maximum size of split images: " & SWMSplitFileSize & " MB")
+            DynaLog.LogMessage("- Destination of SWM files: " & Quote & SWMSplitTargetFile & Quote)
+            DynaLog.LogMessage("- Check image integrity? " & If(SWMSplitCheckIntegrity, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1976,7 +2070,6 @@ Public Class ProgressPanel
                                "- Check integrity before splitting this image? " & If(SWMSplitCheckIntegrity, "Yes", "No") & CrLf & CrLf & _
                                "Do note that, if the image contains a large file that can't fit within the maximum size, a SWM file may be larger than the rest, to accommodate it." & CrLf)
             ' Check the DISM version, as the Windows 7 version doesn't allow this action
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -1988,9 +2081,7 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs &= " /split-image /imagefile=" & Quote & SWMSplitSourceFile & Quote & " /swmfile=" & Quote & SWMSplitTargetFile & Quote & " /filesize=" & SWMSplitFileSize & If(SWMSplitCheckIntegrity, " /checkintegrity", "")
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -2004,6 +2095,13 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 21 Then
+            DynaLog.LogMessage("Unmounting the Windows image...")
+            DynaLog.LogMessage("- Mount directory of image to unmount: " & Quote & MountDir & Quote)
+            DynaLog.LogMessage("- Image index: " & UMountImgIndex)
+            DynaLog.LogMessage("- Unmount operation (may not reflect actual operation): " & UMountOp)
+            DynaLog.LogMessage("  - Check image integrity before committing changes? " & If(CheckImgIntegrity, "Yes", "No"))
+            DynaLog.LogMessage("  - Append changes to new index? " & If(SaveToNewIndex, "Yes", "No"))
+            DynaLog.LogMessage("- Will the program be closed? " & If(ProgramIsBeingClosed, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2039,21 +2137,18 @@ Public Class ProgressPanel
                     allTasks.Text = "Smontaggio immagine..."
                     currentTask.Text = "Smontaggio del file immagine..."
             End Select
-            If UMountLocalDir Then
-                LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
-                                   "- Mount directory: " & MountDir & CrLf &
-                                   "- Image index: " & UMountImgIndex)
-            Else
+            If Not UMountLocalDir Then
+                DynaLog.LogMessage("The image that was mounted in the project mount directory will not be unmounted. Using mountdir " & Quote & RandomMountDir & Quote & "...")
                 MountDir = RandomMountDir
-                LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
-                                   "- Mount directory: " & MountDir & CrLf &
-                                   "- Image index: " & UMountImgIndex)
             End If
+            LogView.AppendText(CrLf & "Unmounting image file from mount point..." & CrLf &
+                               "- Mount directory: " & MountDir & CrLf &
+                               "- Image index: " & UMountImgIndex)
             If ProgramIsBeingClosed Then
+                DynaLog.LogMessage("DISMTools will be closed. Proceeding to commit changes...")
                 LogView.AppendText(CrLf & "- Unmount operation: Commit")
                 ' Commit the image and unmount it
                 Try
-                    DISMProc.StartInfo.FileName = DismProgram
                     Select Case DismVersionChecker.ProductMajorPart
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
@@ -2065,13 +2160,11 @@ Public Class ProgressPanel
                         Case 10
                             CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /commit"
                     End Select
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                     If DISMProc.ExitCode = Decimal.ToInt32(-1052638964) Then
+                        DynaLog.LogMessage("An attempt was made to save changes to an image that was mounted with read-only permissions. Unmounting image whilst discarding changes...")
                         LogView.AppendText(CrLf & CrLf & "Saving changes to the image has failed. Discarding changes...")
                         ' It mostly came from a read-only source. Discard changes
-                        DISMProc.StartInfo.FileName = DismProgram
                         Select Case DismVersionChecker.ProductMajorPart
                             Case 6
                                 Select Case DismVersionChecker.ProductMinorPart
@@ -2083,9 +2176,7 @@ Public Class ProgressPanel
                             Case 10
                                 CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & MountDir & Quote & " /discard"
                         End Select
-                        DISMProc.StartInfo.Arguments = CommandArgs
-                        DISMProc.Start()
-                        DISMProc.WaitForExit()
+                        RunProcess(DismProgram, CommandArgs)
                     End If
                 Catch ex As Exception
                     File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat",
@@ -2127,8 +2218,8 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
                 End If
             Else
+                DynaLog.LogMessage("DISMTools will not be closed.")
                 Try
-                    DISMProc.StartInfo.FileName = DismProgram
                     Select Case DismVersionChecker.ProductMajorPart
                         Case 6
                             Select Case DismVersionChecker.ProductMinorPart
@@ -2173,9 +2264,7 @@ Public Class ProgressPanel
                             LogView.AppendText(CrLf & "- Append changes to new index? No")
                         End If
                     End If
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                 Catch ex As Exception
                     ' Let's try this before setting things up here
                 End Try
@@ -2213,6 +2302,12 @@ Public Class ProgressPanel
                 End If
             End If
         ElseIf opNum = 26 Then
+            DynaLog.LogMessage("Preparing to add packages...")
+            DynaLog.LogMessage("- Package addition source: " & Quote & pkgSource & Quote)
+            DynaLog.LogMessage("- Package addition operation: " & pkgAdditionOp)
+            DynaLog.LogMessage("- Ignore applicability checks? " & If(pkgIgnoreApplicabilityChecks, "Yes", "No"))
+            DynaLog.LogMessage("- Prevent addition if online operations are pending? " & If(pkgPreventIfPendingOnline, "Yes", "No"))
+            DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(pkgAdditionCommit, "Yes", "No"))
             ' Reset internal integers
             pkgCurrentNum = 0
             Select Case Language
@@ -2268,7 +2363,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Prevent package addition if online actions need to be performed? No")
             End If
-            If imgCommitAfterOps Then
+            If pkgAdditionCommit Then
                 LogView.AppendText(CrLf & "- Commit image after operations are done? Yes")
             Else
                 LogView.AppendText(CrLf & "- Commit image after operations are done? No")
@@ -2277,27 +2372,37 @@ Public Class ProgressPanel
             ' Perform package enumeration
             LogView.AppendText(CrLf & "Enumerating packages to add. Please wait...")
             If pkgAdditionOp = 0 Then
+                DynaLog.LogMessage("Addition operation is recursive addition. Getting total amount of packages in source folder...")
                 Try
+                    DynaLog.LogMessage("Getting CAB files (recursive operation)...")
                     For Each CabPkg In My.Computer.FileSystem.GetFiles(pkgSource, FileIO.SearchOption.SearchAllSubDirectories, "*.cab")
                         pkgCount += 1
                     Next
+                    DynaLog.LogMessage("Getting MSU files (recursive operation)...")
                     For Each MsuPkg In My.Computer.FileSystem.GetFiles(pkgSource, FileIO.SearchOption.SearchAllSubDirectories, "*.msu")
                         pkgCount += 1
                     Next
+                    DynaLog.LogMessage("Package count: " & pkgCount)
                     LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not get packages in all subdirectories. Error message: " & ex.Message)
                     LogView.AppendText(CrLf & "Exception " & ex.GetType().ToString() & " has occurred while enumerating packages. Enumerating packages in the top folder...")
+                    DynaLog.LogMessage("Getting CAB files...")
                     For Each CabPkg In My.Computer.FileSystem.GetFiles(pkgSource, FileIO.SearchOption.SearchTopLevelOnly, "*.cab")
                         pkgCount += 1
                     Next
+                    DynaLog.LogMessage("Getting MSU files...")
                     For Each MsuPkg In My.Computer.FileSystem.GetFiles(pkgSource, FileIO.SearchOption.SearchTopLevelOnly, "*.msu")
                         pkgCount += 1
                     Next
+                    DynaLog.LogMessage("Package count: " & pkgCount)
                     LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
                 End Try
             ElseIf pkgAdditionOp = 1 Then
+                DynaLog.LogMessage("Addition operation is selective addition. A package count has already been obtained from the queue.")
                 LogView.AppendText(CrLf & "Total number of packages: " & pkgCount)
             ElseIf pkgAdditionOp = 2 Then
+                DynaLog.LogMessage("Addition operation is Update Manifest addition. Only 1 package will be added.")
                 LogView.AppendText(CrLf & "Total number of packages: 1")
             End If
             Thread.Sleep(2000)      ' Sleep to prevent thrashing
@@ -2332,7 +2437,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf &
                                "Processing " & pkgCount & " packages..." & CrLf)
             If pkgAdditionOp = 0 Then
-                DISMProc.StartInfo.FileName = DismProgram
+                DynaLog.LogMessage("Addition operation is recursive addition. DISM will scan the package source for packages to add.")
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgSource & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
@@ -2340,9 +2445,7 @@ Public Class ProgressPanel
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2372,6 +2475,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
                 LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
             ElseIf pkgAdditionOp = 1 Then
+                DynaLog.LogMessage("Addition operation is selective addition. We are in control of the packages to add.")
                 CurrentPB.Maximum = pkgCount
                 For x = 0 To Array.LastIndexOf(pkgs, pkgLastCheckedPackageName)
                     If x + 1 > CurrentPB.Maximum Then Exit For
@@ -2406,12 +2510,17 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgCount)        ' You don't want to see "Package 0 of 407", right?
 
                     ' Get package information with the DISM API
+                    DynaLog.LogMessage("Getting information about package file " & Quote & Path.GetFileName(pkgs(x)) & Quote & "...")
                     Dim pkgIsApplicable As Boolean
                     Dim pkgIsInstalled As Boolean
                     Try
+                        DynaLog.LogMessage("Extension of package file: " & Path.GetExtension(pkgs(x)))
                         If Not Path.GetExtension(pkgs(x)).EndsWith("msu", StringComparison.OrdinalIgnoreCase) Then
+                            DynaLog.LogMessage("Initializing API...")
                             DismApi.Initialize(DismLogLevel.LogErrors)
+                            DynaLog.LogMessage("Opening image session...")
                             Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                                DynaLog.LogMessage("Getting package information...")
                                 Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgs(x))
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "- Package name: " & pkgInfo.PackageName & CrLf & _
@@ -2422,12 +2531,16 @@ Public Class ProgressPanel
                                 pkgIsApplicable = pkgInfo.Applicable
                                 If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then pkgIsInstalled = True Else pkgIsInstalled = False
                                 If pkgInfo.Applicable Then
+                                    DynaLog.LogMessage("The package can be added to the Windows image. Determining installation state of package...")
                                     If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                        DynaLog.LogMessage("The package has already been added at some point.")
                                         LogView.AppendText(CrLf & "Package is already added. Skipping installation of this package...")
                                         pkgFailedAdditions += 1
                                     End If
                                 Else
+                                    DynaLog.LogMessage("The package cannot be added to the Windows image as it is not applicable.")
                                     If Not pkgIgnoreApplicabilityChecks Then
+                                        DynaLog.LogMessage("Applicability checks are not ignored.")
                                         LogView.AppendText(CrLf & "Package is not applicable to this image. Skipping installation of this package...")
                                         If PkgErrorText.RichTextBox1.Text = "" Then
                                             PkgErrorText.RichTextBox1.AppendText("0x800F8023")
@@ -2445,6 +2558,8 @@ Public Class ProgressPanel
                             pkgIsInstalled = False
                         End If
                     Catch ex As Exception
+                        DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
+                        DynaLog.LogMessage("Logging immediate failure...")
                         LogView.AppendText(CrLf & ex.Message)
                         If PkgErrorText.RichTextBox1.Text = "" Then
                             PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
@@ -2454,11 +2569,16 @@ Public Class ProgressPanel
                         pkgFailedAdditions += 1
                         pkgIsApplicable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DynaLog.LogMessage("Shutting down API...")
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
+                    DynaLog.LogMessage("The package is applicable and has not been installed yet. Adding it...")
                     LogView.AppendText(CrLf & "Processing package...")
-                    DISMProc.StartInfo.FileName = DismProgram
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(x) & Quote
                     If pkgIgnoreApplicabilityChecks Then
                         CommandArgs &= " /ignorecheck"
@@ -2466,9 +2586,7 @@ Public Class ProgressPanel
                     If pkgPreventIfPendingOnline Then
                         CommandArgs &= " /preventpending"
                     End If
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                     LogView.AppendText(CrLf & "Getting error level...")
                     GetPkgErrorLevel()
                     LogView.AppendText(" Error level: " & errCode)
@@ -2484,6 +2602,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "- Package no. " & (x + 1) & ": " & PkgErrorText.RichTextBox1.Lines(x))
                 Next
             ElseIf pkgAdditionOp = 2 Then
+                DynaLog.LogMessage("Addition operation is Update Manifest addition.")
                 CurrentPB.Maximum = pkgCount
                 CommandArgs = BckArgs
                 Select Case Language
@@ -2514,7 +2633,6 @@ Public Class ProgressPanel
                 CurrentPB.Value = 1
                 LogView.AppendText(CrLf & "The package about to be added is a Microsoft Update Manifest (MUM) file.")
                 LogView.AppendText(CrLf & "Processing package...")
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-package /packagepath=" & Quote & pkgs(0) & Quote
                 If pkgIgnoreApplicabilityChecks Then
                     CommandArgs &= " /ignorecheck"
@@ -2522,9 +2640,7 @@ Public Class ProgressPanel
                 If pkgPreventIfPendingOnline Then
                     CommandArgs &= " /preventpending"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetPkgErrorLevel()
                 LogView.AppendText(" Error level: " & errCode)
@@ -2540,7 +2656,8 @@ Public Class ProgressPanel
                 Next
             End If
             Thread.Sleep(2000)
-            If imgCommitAfterOps Then
+            If pkgAdditionCommit Then
+                DynaLog.LogMessage("Preparing to save changes...")
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
                 Select Case Language
@@ -2580,9 +2697,13 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
             If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
+                DynaLog.LogMessage("A system restart is needed to fully apply some packages.")
                 LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 27 Then
+            DynaLog.LogMessage("Preparing to remove packages...")
+            DynaLog.LogMessage("- Package removal operation: " & pkgRemovalOp)
+            DynaLog.LogMessage("- Amount of packages to remove: " & pkgRemovalCount)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2651,6 +2772,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Maximum = pkgRemovalCount
             If pkgRemovalOp = 0 Then
+                DynaLog.LogMessage("Packages that are installed will be removed from the Windows image.")
                 For x = 0 To Array.LastIndexOf(pkgRemovalNames, pkgRemovalLastName)
                     If x + 1 > CurrentPB.Maximum Then Exit For
                     CommandArgs = BckArgs
@@ -2684,10 +2806,14 @@ Public Class ProgressPanel
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
 
+                    DynaLog.LogMessage("Getting information about package file " & Quote & pkgRemovalNames(x) & Quote & "...")
                     Dim pkgIsRemovable As Boolean
                     Try
+                        DynaLog.LogMessage("Initializing API...")
                         DismApi.Initialize(DismLogLevel.LogErrors)
+                        DynaLog.LogMessage("Opening image session...")
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            DynaLog.LogMessage("Getting package information...")
                             Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByName(imgSession, pkgRemovalNames(x))
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf)
@@ -2699,13 +2825,17 @@ Public Class ProgressPanel
                                 LogView.AppendText("- Package state: an install is pending" & CrLf)
                             End If
                             If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                DynaLog.LogMessage("This package is either installed or about to be installed, and can be removed.")
                                 pkgIsReadyForRemoval = True
                             Else
+                                DynaLog.LogMessage("This package is neither installed nor about to be installed, and cannot be removed.")
                                 pkgIsReadyForRemoval = False
                             End If
                         End Using
                         pkgIsRemovable = True
                     Catch ex As Exception
+                        DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
+                        DynaLog.LogMessage("Logging immediate failure...")
                         LogView.AppendText(CrLf & ex.Message)
                         If PkgErrorText.RichTextBox1.Text = "" Then
                             PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
@@ -2715,16 +2845,19 @@ Public Class ProgressPanel
                         pkgFailedRemovals += 1
                         pkgIsRemovable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DynaLog.LogMessage("Shutting down API...")
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
+                        DynaLog.LogMessage("The package can be removed.")
                         LogView.AppendText(CrLf & "Processing package removal...")
-                        DISMProc.StartInfo.FileName = DismProgram
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagename=" & pkgRemovalNames(x)
-                        DISMProc.StartInfo.Arguments = CommandArgs
-                        DISMProc.Start()
-                        DISMProc.WaitForExit()
+                        RunProcess(DismProgram, CommandArgs)
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -2732,7 +2865,6 @@ Public Class ProgressPanel
                         Else
                             pkgFailedRemovals += 1
                         End If
-                        'GetPkgErrorLevel()
                         If errCode.Length >= 8 Then
                             LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
                         Else
@@ -2752,12 +2884,15 @@ Public Class ProgressPanel
                             End If
                         End If
                     Else
+                        DynaLog.LogMessage("The package cannot be removed.")
                         LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
                         pkgFailedRemovals += 1
                         Continue For
                     End If
                 Next
             ElseIf pkgRemovalOp = 1 Then
+                DynaLog.LogMessage("Package files will be removed from the Windows image.")
+                DynaLog.LogMessage("It is likely that some specified packages may not be even installed in this image.")
                 For x = 0 To Array.LastIndexOf(pkgRemovalFiles, pkgRemovalLastFile)
                     If x + 1 > CurrentPB.Maximum Then Exit For
                     CommandArgs = BckArgs
@@ -2790,10 +2925,14 @@ Public Class ProgressPanel
                                        "Package " & (x + 1) & " of " & pkgRemovalCount)
                     CurrentPB.Value = x + 1
                     Directory.CreateDirectory(Application.StartupPath & "\tempinfo")
+                    DynaLog.LogMessage("Getting information about package file " & Quote & Path.GetFileName(pkgRemovalFiles(x)) & Quote & "...")
                     Dim pkgIsRemovable As Boolean
                     Try
+                        DynaLog.LogMessage("Initializing API...")
                         DismApi.Initialize(DismLogLevel.LogErrors)
+                        DynaLog.LogMessage("Opening image session...")
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            DynaLog.LogMessage("Getting package information...")
                             Dim pkgInfo As DismPackageInfo = DismApi.GetPackageInfoByPath(imgSession, pkgRemovalFiles(x))
                             LogView.AppendText(CrLf & CrLf & _
                                                "- Package name: " & pkgInfo.PackageName & CrLf)
@@ -2805,13 +2944,17 @@ Public Class ProgressPanel
                                 LogView.AppendText("- Package state: an install is pending" & CrLf)
                             End If
                             If pkgInfo.PackageState = DismPackageFeatureState.Installed Or pkgInfo.PackageState = DismPackageFeatureState.InstallPending Then
+                                DynaLog.LogMessage("This package is either installed or about to be installed, and can be removed.")
                                 pkgIsReadyForRemoval = True
                             Else
+                                DynaLog.LogMessage("This package is neither installed nor about to be installed, and cannot be removed.")
                                 pkgIsReadyForRemoval = False
                             End If
                         End Using
                         pkgIsRemovable = True
                     Catch ex As Exception
+                        DynaLog.LogMessage("Could not get package information. Error message: " & ex.Message)
+                        DynaLog.LogMessage("Logging immediate failure...")
                         LogView.AppendText(CrLf & ex.Message)
                         If PkgErrorText.RichTextBox1.Text = "" Then
                             PkgErrorText.RichTextBox1.AppendText(If(Hex(ex.HResult).Length >= 8, "0x" & Hex(ex.HResult), Hex(ex.HResult)))
@@ -2821,16 +2964,19 @@ Public Class ProgressPanel
                         pkgFailedRemovals += 1
                         pkgIsRemovable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DynaLog.LogMessage("Shutting down API...")
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
+                        DynaLog.LogMessage("The package can be removed.")
                         LogView.AppendText(CrLf & "Processing package removal...")
-                        DISMProc.StartInfo.FileName = DismProgram
                         CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-package /packagepath=" & pkgRemovalFiles(x)
-                        DISMProc.StartInfo.Arguments = CommandArgs
-                        DISMProc.Start()
-                        DISMProc.WaitForExit()
+                        RunProcess(DismProgram, CommandArgs)
                         LogView.AppendText(CrLf & "Getting error level...")
                         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                         If DISMProc.ExitCode = 0 Then
@@ -2838,7 +2984,6 @@ Public Class ProgressPanel
                         Else
                             pkgFailedRemovals += 1
                         End If
-                        'GetPkgErrorLevel()
                         If errCode.Length >= 8 Then
                             LogView.AppendText(CrLf & CrLf & " Error level : 0x" & errCode)
                         Else
@@ -2858,6 +3003,7 @@ Public Class ProgressPanel
                             End If
                         End If
                     Else
+                        DynaLog.LogMessage("The package cannot be removed.")
                         LogView.AppendText(CrLf & "This package can't be removed. Skipping removal of this package...")
                         pkgFailedRemovals += 1
                         Continue For
@@ -2878,9 +3024,18 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
             If PkgErrorText.RichTextBox1.Text.Contains("BC2") Then
+                DynaLog.LogMessage("A system restart is needed to fully remove some packages.")
                 LogView.AppendText(CrLf & "Some packages require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 30 Then
+            DynaLog.LogMessage("Preparing to enable features...")
+            DynaLog.LogMessage("- Will a parent package name be used? " & If(featisParentPkgNameUsed, "Yes", "No"))
+            DynaLog.LogMessage("- Parent package name: " & Quote & featParentPkgName & Quote)
+            DynaLog.LogMessage("- Has a source been specified? " & If(featisSourceSpecified, "Yes", "No"))
+            DynaLog.LogMessage("- Feature source: " & Quote & featSource & Quote)
+            DynaLog.LogMessage("- Will all parent features be enabled? " & If(featParentIsEnabled, "Yes", "No"))
+            DynaLog.LogMessage("- Contact Windows Update for feature enablement (only for active installations)? " & If(featContactWindowsUpdate, "Yes", "No"))
+            DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(featEnablementCommit, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2943,16 +3098,20 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Enable all parent features? No")
             End If
-            If featContactWindowsUpdate And OnlineMgmt Then
+            DynaLog.LogMessage("Boot mode of the host system: " & SystemInformation.BootMode)
+            If featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode <> BootMode.FailSafe Then
+                DynaLog.LogMessage("Host system is booted to normal mode or Safe Mode with networking.")
                 LogView.AppendText(CrLf & "- Contact Windows Update? Yes")
             ElseIf featContactWindowsUpdate And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe Then
+                DynaLog.LogMessage("Host system is booted to Safe Mode.")
                 LogView.AppendText(CrLf & "- Contact Windows Update? No, the system is in Safe Mode")
-            ElseIf featContactWindowsUpdate And OnlineMgmt = False Then
+            ElseIf featContactWindowsUpdate And Not OnlineMgmt Then
+                DynaLog.LogMessage("The active installation is not being managed.")
                 LogView.AppendText(CrLf & "- Contact Windows Update? No, this is not an online installation")
             Else
                 LogView.AppendText(CrLf & "- Contact Windows Update? No")
             End If
-            If featCommitAfterEnablement Then
+            If featEnablementCommit Then
                 LogView.AppendText(CrLf & "- Commit image after enabling features? Yes")
             Else
                 LogView.AppendText(CrLf & "- Commit image after enabling features? No")
@@ -2960,8 +3119,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf & "Enumerating features to enable...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of features to enable: " & featEnablementCount)
-            ' Get command ready
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3019,16 +3176,25 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featEnablementCount)
                 CurrentPB.Value = x + 1
+                DynaLog.LogMessage("Getting information about feature " & Quote & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & Quote & "...")
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Opening image session...")
                     Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        DynaLog.LogMessage("Getting feature information...")
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                         LogView.AppendText(CrLf & CrLf &
                                            "- Feature name: " & featInfo.FeatureName & CrLf &
                                            "- Feature description: " & featInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DynaLog.LogMessage("Shutting down API...")
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
@@ -3043,9 +3209,7 @@ Public Class ProgressPanel
                 If Not featContactWindowsUpdate And OnlineMgmt Then
                     CommandArgs &= " /limitaccess"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 GetFeatErrorLevel()
                 If errCode.Length >= 8 Then
@@ -3073,7 +3237,8 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & "- Feature no. " & (x + 1) & ": " & FeatErrorText.RichTextBox1.Lines(x))
             Next
             Thread.Sleep(2000)
-            If featCommitAfterEnablement Then
+            If featEnablementCommit Then
+                DynaLog.LogMessage("Preparing to save changes...")
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
                 Select Case Language
@@ -3111,9 +3276,14 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
             If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                DynaLog.LogMessage("A system restart is needed to fully apply some features.")
                 LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 31 Then
+            DynaLog.LogMessage("Preparing to disable features...")
+            DynaLog.LogMessage("- Will a parent package name be used? " & If(featDisablementParentPkgUsed, "Yes", "No"))
+            DynaLog.LogMessage("- Parent package name: " & Quote & featDisablementParentPkg & Quote)
+            DynaLog.LogMessage("- Remove feature manifest? " & If(featDisablementRemoveManifest, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3161,7 +3331,7 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Parent package name: " & Quote & featDisablementParentPkg & Quote)
             End If
-            If featRemoveManifest Then
+            If featDisablementRemoveManifest Then
                 LogView.AppendText(CrLf & "- Remove feature manifest? Yes")
             Else
                 LogView.AppendText(CrLf & "- Remove feature manifest? No")
@@ -3169,8 +3339,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & CrLf & "Enumerating features to disable...")
             Thread.Sleep(500)
             LogView.AppendText(CrLf & "Total number of features to disable: " & featDisablementCount)
-            ' Get command ready
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3228,9 +3396,13 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf &
                                    "Feature " & (x + 1) & " of " & featDisablementCount)
                 CurrentPB.Value = x + 1
+                DynaLog.LogMessage("Getting information about feature " & Quote & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim() & Quote & "...")
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Opening image session...")
                     Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        DynaLog.LogMessage("Getting feature information...")
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim())
                         LogView.AppendText(CrLf & CrLf &
                                            "- Feature name: " & featInfo.FeatureName & CrLf &
@@ -3238,20 +3410,22 @@ Public Class ProgressPanel
 
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DynaLog.LogMessage("Shutting down API...")
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
                     CommandArgs &= " /packagename=" & featParentPkgName
                 End If
-                If Not featRemoveManifest Then
+                If Not featDisablementRemoveManifest Then
                     CommandArgs &= " /remove"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
-                'GetFeatErrorLevel()
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
                     featSuccessfulDisablements += 1
@@ -3289,9 +3463,12 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
             If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                DynaLog.LogMessage("A system restart is needed to fully apply some features.")
                 LogView.AppendText(CrLf & "Some features require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 32 Then
+            DynaLog.LogMessage("Preparing to clean up the image...")
+            DynaLog.LogMessage("Cleanup task: " & CleanupTask)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3317,11 +3494,10 @@ Public Class ProgressPanel
                 Case 5
                     allTasks.Text = "Pulire l'immagine..."
             End Select
-            ' Initialize command
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /cleanup-image"
             Select Case CleanupTask
                 Case 0
+                    DynaLog.LogMessage("Reverting pending servicing actions to a last known good state...")
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3351,6 +3527,8 @@ Public Class ProgressPanel
                                        "Reverting pending servicing actions...")
                     CommandArgs &= " /revertpendingactions"
                 Case 1
+                    DynaLog.LogMessage("Cleaning up Service Pack backup files...")
+                    DynaLog.LogMessage("- Hide Service Packs from Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3382,6 +3560,9 @@ Public Class ProgressPanel
                                        "- Hide Service Packs from the Installed Updates list? " & If(CleanupHideSP, "Yes", "No"))
                     CommandArgs &= " /spsuperseded" & If(CleanupHideSP, " /hidesp", "")
                 Case 2
+                    DynaLog.LogMessage("Cleaning up component store...")
+                    DynaLog.LogMessage("- Reset superseded component base? " & If(ResetCompBase, "Yes", "No"))
+                    DynaLog.LogMessage("- Defer long operations? " & If(DeferCleanupOps, "Yes", "No"))
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3414,6 +3595,7 @@ Public Class ProgressPanel
                                        "- Defer long-running operations? " & If(DeferCleanupOps, "Yes", "No"))
                     CommandArgs &= " /startcomponentcleanup" & If(ResetCompBase, " /resetbase", "") & If(ResetCompBase And DeferCleanupOps, " /defer", "")
                 Case 3
+                    DynaLog.LogMessage("Analyzing component store...")
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3443,6 +3625,7 @@ Public Class ProgressPanel
                                        "Analyzing the component store...")
                     CommandArgs &= " /analyzecomponentstore"
                 Case 4
+                    DynaLog.LogMessage("Checking component store health...")
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3472,6 +3655,7 @@ Public Class ProgressPanel
                                        "Checking the component store health...")
                     CommandArgs &= " /checkhealth"
                 Case 5
+                    DynaLog.LogMessage("Scanning component store...")
                     Select Case Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3501,6 +3685,10 @@ Public Class ProgressPanel
                                        "Scanning the component store...")
                     CommandArgs &= " /scanhealth"
                 Case 6
+                    DynaLog.LogMessage("Repairing component store...")
+                    DynaLog.LogMessage("- Source: " & Quote & ComponentRepairSource & Quote)
+                    DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(LimitWUAccess, "Yes", "No"))
+                    DynaLog.LogMessage("Boot mode of host system: " & SystemInformation.BootMode)
                     ' The most known thing about DISM : dism /online /cleanup-image /restorehealth
                     Select Case Language
                         Case 0
@@ -3535,9 +3723,7 @@ Public Class ProgressPanel
                                        If(Not LimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", ""))
                     CommandArgs &= " /restorehealth" & If(UseCompRepairSource And File.Exists(ComponentRepairSource), " /source=" & Quote & ComponentRepairSource & Quote, "") & If(LimitWUAccess And OnlineMgmt, " /limitaccess", "")
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3571,6 +3757,10 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 33 Then
+            DynaLog.LogMessage("Preparing to add provisioning package to the Windows image...")
+            DynaLog.LogMessage("- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote)
+            DynaLog.LogMessage("- Catalog path: " & Quote & ppkgAdditionCatalogPath & Quote)
+            DynaLog.LogMessage("- Commit image after finishing? " & If(ppkgAdditionCommit, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3611,11 +3801,8 @@ Public Class ProgressPanel
                                "- Provisioning package: " & Quote & ppkgAdditionPackagePath & Quote & CrLf & _
                                "- Catalog file: " & If(ppkgAdditionCatalogPath = "", "none specified", Quote & ppkgAdditionCatalogPath & Quote) & CrLf & _
                                "- Commit image after adding provisioning package? " & If(ppkgAdditionCommit, "Yes", "No"))
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisioningpackage /packagepath=" & Quote & ppkgAdditionPackagePath & Quote & If(ppkgAdditionCatalogPath <> "" And File.Exists(ppkgAdditionCatalogPath), " /catalogpath=" & Quote & ppkgAdditionCatalogPath & Quote, "")
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -3628,6 +3815,7 @@ Public Class ProgressPanel
                 LogView.AppendText(" Error level : " & errCode)
             End If
             If ppkgAdditionCommit Then
+                DynaLog.LogMessage("Preparing to save changes...")
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
                 Select Case Language
@@ -3661,6 +3849,7 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 37 Then
+            DynaLog.LogMessage("Preparing to add provisioned AppX packages...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -3784,13 +3973,17 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & _
                                    "Package " & (x + 1) & " of " & appxAdditionCount)
                 CurrentPB.Value = x + 1
+                DynaLog.LogMessage("Information about the AppX package:")
+                DynaLog.LogMessage(appxAdditionPackageList(x).ToString())
                 LogView.AppendText(CrLf & _
                                    "- AppX package file: " & appxAdditionPackageList(x).PackageFile & CrLf & _
                                    "- Application name: " & appxAdditionPackageList(x).PackageName & CrLf & _
                                    "- Application publisher: " & appxAdditionPackageList(x).PackagePublisher & CrLf & _
                                    "- Application version: " & appxAdditionPackageList(x).PackageVersion & CrLf)
                 ' Detect if it is an encrypted application
+                DynaLog.LogMessage("Extension of AppX package: " & Path.GetExtension(appxAdditionPackageList(x).PackageFile))
                 If Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso OnlineMgmt Then
+                    DynaLog.LogMessage("The application is encrypted and the active installation is being managed. Adding package using PowerShell...")
                     ' Run PowerShell command. Support will be improved
                     LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Since the program is managing the active installation, a PowerShell command will be run." & CrLf)
                     Dim AppxAuxProc As New Process()
@@ -3830,12 +4023,12 @@ Public Class ProgressPanel
                     End If
                     Continue For
                 ElseIf Path.GetExtension(appxAdditionPackageList(x).PackageFile).Replace(".", "").Trim().StartsWith("e", StringComparison.OrdinalIgnoreCase) AndAlso Not OnlineMgmt Then
+                    DynaLog.LogMessage("The application is encrypted but the active installation is not being managed.")
                     ' Continue loop without installing application
                     LogView.AppendText(CrLf & "The application about to be added is an encrypted file. Encrypted packages can only be added to active installations. Skipping this package..." & CrLf)
                     Continue For
                 Else
-                    ' Initialize command
-                    DISMProc.StartInfo.FileName = DismProgram
+                    DynaLog.LogMessage("The application is not encrypted. Continuing addition...")
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
                     If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
                         CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
@@ -3843,8 +4036,10 @@ Public Class ProgressPanel
                         CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
                     End If
                     If appxAdditionPackageList(x).PackageLicenseFile <> "" And File.Exists(appxAdditionPackageList(x).PackageLicenseFile) Then
+                        DynaLog.LogMessage("A license file has been specified and it exists in the file system.")
                         CommandArgs &= " /licensepath=" & Quote & appxAdditionPackageList(x).PackageLicenseFile & Quote
                     Else
+                        DynaLog.LogMessage("Either no license file has been specified or it does not exist in the file system.")
                         If appxAdditionPackageList(x).PackageLicenseFile <> "" Then
                             LogView.AppendText(CrLf & _
                                                "Warning: the license file does not exist. Continuing without one..." & CrLf & _
@@ -3854,15 +4049,19 @@ Public Class ProgressPanel
                         CommandArgs &= " /skiplicense"
                     End If
                     ' Inform user that a package will be installed with dependencies
+                    DynaLog.LogMessage("Count of dependencies: " & appxAdditionPackageList(x).PackageSpecifiedDependencies.Count)
                     If appxAdditionPackageList(x).PackageSpecifiedDependencies.Count > 0 Then
                         LogView.AppendText("- The following dependency packages will be installed alongside this application:" & CrLf)
                     End If
                     ' Add dependencies
                     For Each Dependency As AppxDependency In appxAdditionPackageList(x).PackageSpecifiedDependencies
+                        DynaLog.LogMessage("Verifying if dependency " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & " exists...")
                         If File.Exists(Dependency.DependencyFile) Then
+                            DynaLog.LogMessage("The dependency exists in the file system.")
                             LogView.AppendText("    - Dependency: " & Quote & Path.GetFileName(Dependency.DependencyFile) & Quote & CrLf)
                             CommandArgs &= " /dependencypackagepath=" & Quote & Dependency.DependencyFile & Quote
                         Else
+                            DynaLog.LogMessage("The dependency does not exist in the file system.")
                             LogView.AppendText(CrLf & _
                                                "Warning: the dependency" & CrLf & _
                                                Quote & Dependency.DependencyFile & Quote & CrLf & _
@@ -3871,32 +4070,39 @@ Public Class ProgressPanel
                         End If
                     Next
                     If appxAdditionPackageList(x).PackageCustomDataFile <> "" And File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
+                        DynaLog.LogMessage("A custom data file has been specified and it exists in the file system.")
                         CommandArgs &= " /customdatapath=" & Quote & appxAdditionCustomDataFile & Quote
                     ElseIf appxAdditionPackageList(x).PackageCustomDataFile <> "" And Not File.Exists(appxAdditionPackageList(x).PackageCustomDataFile) Then
+                        DynaLog.LogMessage("A custom data file has been specified but it does not exist in the file system.")
                         LogView.AppendText(CrLf & _
                                            "Warning: the custom data file does not exist. Continuing without one...")
                     End If
                     If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart = 10 And FileVersionInfo.GetVersionInfo(DismProgram).ProductBuildPart >= 17134) And
                         (ImgVersion.Major = 10 And ImgVersion.Build >= 17134) Then
+                        DynaLog.LogMessage("All conditions are met for region configuration (DISM version >= 10.0.17134 ; Image version >= 10.0.17134). Configuring regions...")
                         If appxAdditionPackageList(x).PackageRegions = "" Then
+                            DynaLog.LogMessage("The application will be configured for all regions.")
                             CommandArgs &= " /region:all"
                         Else
+                            DynaLog.LogMessage("The application will be configured for specific regions.")
                             CommandArgs &= " /region:" & Quote & appxAdditionPackageList(x).PackageRegions & Quote
                         End If
                     End If
                     If (FileVersionInfo.GetVersionInfo(DismProgram).ProductMajorPart >= 10 And ImgVersion.Major >= 10) And appxAdditionPackageList(x).SupportsStub Then
+                        DynaLog.LogMessage("All conditions are met for stub package configuration (DISM version >= 10.0 ; Image version >= 10.0). Configuring stub package preferences...")
                         Select Case appxAdditionPackageList(x).StubPackageOption
                             Case StubPreference.NoPreference
+                                DynaLog.LogMessage("No preference has been set for the stub package.")
                                 ' Don't add stub package option flag
                             Case StubPreference.StubOnly
+                                DynaLog.LogMessage("The stub package will be installed.")
                                 CommandArgs &= " /stubpackageoption:installstub"
                             Case StubPreference.FullPackage
+                                DynaLog.LogMessage("The full package will be installed.")
                                 CommandArgs &= " /stubpackageoption:installfull"
                         End Select
                     End If
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                 End If
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
@@ -3935,6 +4141,7 @@ Public Class ProgressPanel
             Next
             Thread.Sleep(2000)
             If appxAdditionCommit Then
+                DynaLog.LogMessage("Preparing to save changes...")
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
                 Select Case Language
@@ -3972,6 +4179,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 38 Then
+            DynaLog.LogMessage("Preparing to remove AppX packages...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4073,18 +4281,22 @@ Public Class ProgressPanel
                                    "- Package name: " & appxRemovalPackages(x) & CrLf & _
                                    "- Display name: " & appxRemovalPkgNames(x))
                 ' Display whether an application is registered to a user
+                DynaLog.LogMessage("Checking if package " & Quote & appxRemovalPackages(x) & Quote & " is registered to a user...")
                 If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxRemovalPackages(x)) Then
                     If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxRemovalPackages(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                        DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & appxRemovalPackages(x) & Quote & " = 0. This app is not registered to a user")
                         ' Application is not registered to any user
                         LogView.AppendText(CrLf & _
                                            "- Application is registered to a user? No")
                     Else
+                        DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & appxRemovalPackages(x) & Quote & " > 0. This app is registered to users")
                         ' Application is registered to a user
                         LogView.AppendText(CrLf & _
                                            "- Application is registered to a user? Yes" & CrLf & _
                                            "  The removal of this application may require you to use PowerShell to completely remove it")
                     End If
                 Else
+                    DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & appxRemovalPackages(x) & Quote & " = 0. This app is not registered to a user")
                     ' Application is not registered to any user
                     LogView.AppendText(CrLf & _
                                        "- Application is registered to a user? No")
@@ -4092,11 +4304,8 @@ Public Class ProgressPanel
                 ' Initialize command. Its syntax is simple, so don't spend too much time determining options
                 LogView.AppendText(CrLf & CrLf & _
                                    "Processing package...")
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-provisionedappxpackage /packagename=" & appxRemovalPackages(x)
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -4140,6 +4349,8 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 60 Then
+            DynaLog.LogMessage("Preparing to set keyboard layered driver...")
+            DynaLog.LogMessage("Type of new keyboard layered driver: " & KeyboardLayeredDriverType)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4214,11 +4425,8 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the keyboard layered driver..." & CrLf & _
                                "- Current keyboard layered driver: " & currentLayout & CrLf & _
                                "- New keyboard layered driver: " & newLayout & CrLf)
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-layereddriver:" & KeyboardLayeredDriverType
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -4232,6 +4440,11 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 64 Then
+            DynaLog.LogMessage("Preparing to add capabilities...")
+            DynaLog.LogMessage("- Has a source been specified? " & If(capAdditionUseSource, "Yes", "No"))
+            DynaLog.LogMessage("- Capability source: " & Quote & capAdditionSource & Quote)
+            DynaLog.LogMessage("- Limit Windows Update access (only for active installations)? " & If(capAdditionLimitWUAccess, "Yes", "No"))
+            DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(capAdditionCommit, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4267,6 +4480,7 @@ Public Class ProgressPanel
                     allTasks.Text = "Aggiunta di capacità..."
                     currentTask.Text = "Preparazione all'aggiunta di capacità..."
             End Select
+            DynaLog.LogMessage("Boot mode of the host system: " & SystemInformation.BootMode)
             LogView.AppendText(CrLf & "Adding capabilities to mounted image..." & CrLf & _
                                "Options:" & CrLf & _
                                "- Use a source for capability addition? " & If(capAdditionUseSource, "Yes", "No") & CrLf & _
@@ -4274,6 +4488,7 @@ Public Class ProgressPanel
                                "- Limit access to Windows Update? " & If(capAdditionLimitWUAccess And OnlineMgmt, "Yes", If(capAdditionLimitWUAccess And Not OnlineMgmt, "No, this is not an online installation", "No")) & If(Not capAdditionLimitWUAccess And OnlineMgmt And SystemInformation.BootMode = BootMode.FailSafe, ", the system is in Safe Mode", "") & CrLf & _
                                "- Commit image after adding capabilities? " & If(capAdditionCommit, "Yes", "No") & CrLf)
             If capAdditionUseSource And Not Directory.Exists(capAdditionSource) Then
+                DynaLog.LogMessage("A source is expected to be used but it does not exist in the file system.")
                 LogView.AppendText(CrLf & _
                                    "Warning: the specified source does not exist in the file system, and it will be skipped")
             End If
@@ -4334,13 +4549,17 @@ Public Class ProgressPanel
                         currentTask.Text = "Aggiunta della capacità " & (x + 1) & " di " & capAdditionCount & "..."
                 End Select
                 CurrentPB.Value = x + 1
+                DynaLog.LogMessage("Getting information about capability " & Quote & capAdditionIds(x) & Quote & "...")
                 LogView.AppendText(CrLf & _
                                    "Capability " & (x + 1) & " of " & capAdditionCount)
                 ' Get capability information
                 ' Try opening the session. If API is not initialized, initialize it
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Opening image session...")
                     Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        DynaLog.LogMessage("Getting capability information...")
                         ' Get capability information
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capAdditionIds(x))
                         LogView.AppendText(CrLf & CrLf & _
@@ -4349,17 +4568,19 @@ Public Class ProgressPanel
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DynaLog.LogMessage("Shutting down API...")
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
                     CommandArgs &= " /source=" & Quote & capAdditionSource & Quote
                 End If
                 If capAdditionLimitWUAccess And OnlineMgmt Then CommandArgs &= " /limitaccess"
-                DISMProc.StartInfo.FileName = DismProgram
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4393,6 +4614,7 @@ Public Class ProgressPanel
             Next
             Thread.Sleep(2000)
             If capAdditionCommit Then
+                DynaLog.LogMessage("Preparing to save changes...")
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
                 Select Case Language
@@ -4428,9 +4650,11 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
             If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                DynaLog.LogMessage("A system restart is needed to fully apply some capabilities.")
                 LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 68 Then
+            DynaLog.LogMessage("Preparing to remove capabilities...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4523,12 +4747,16 @@ Public Class ProgressPanel
                     Case 5
                         currentTask.Text = "Rimozione della capacità " & (x + 1) & " di " & capRemovalCount & "..."
                 End Select
+                DynaLog.LogMessage("Getting information about capability " & Quote & capRemovalIds(x) & Quote & "...")
                 CurrentPB.Value = x + 1
                 LogView.AppendText(CrLf & _
                                    "Capability " & (x + 1) & " of " & capRemovalCount)
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Opening image session...")
                     Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                        DynaLog.LogMessage("Getting capability information...")
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capRemovalIds(x))
                         LogView.AppendText(CrLf & CrLf & _
                                            "- Capability identity: " & capInfo.Name & CrLf & _
@@ -4536,13 +4764,15 @@ Public Class ProgressPanel
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DynaLog.LogMessage("Shutting down API...")
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4581,9 +4811,13 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
             If FeatErrorText.RichTextBox1.Text.Contains("BC2") Then
+                DynaLog.LogMessage("A system restart is needed to fully remove some capabilities.")
                 LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
             End If
         ElseIf opNum = 75 Then
+            DynaLog.LogMessage("Preparing to add OS drivers...")
+            DynaLog.LogMessage("- Force installation of unsigned drivers? " & If(drvAdditionForceUnsigned, "Yes", "No"))
+            DynaLog.LogMessage("- Save changes to the Windows image after finishing? " & If(drvAdditionCommit, "Yes", "No"))
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4687,11 +4921,18 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & _
                                    "Driver " & (x + 1) & " of " & drvAdditionCount)
                 ' Get driver information
+                DynaLog.LogMessage("Checking file system attributes of driver...")
                 If Not File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory Then
+                    DynaLog.LogMessage("The driver is not a folder.")
+                    DynaLog.LogMessage("Getting information about driver file " & Quote & Path.GetFileName(drvAdditionPkgs(x)) & Quote & "...")
                     Try
+                        DynaLog.LogMessage("Initializing API...")
                         DismApi.Initialize(DismLogLevel.LogErrors)
+                        DynaLog.LogMessage("Opening image session...")
                         Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
+                            DynaLog.LogMessage("Getting driver information...")
                             Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvAdditionPkgs(x))
+                            DynaLog.LogMessage("Information collection count: " & drvInfoCollection.Count)
                             If drvInfoCollection.Count > 0 And drvInfoCollection.Count <= 10 Then
                                 For Each drvInfo As DismDriver In drvInfoCollection
                                     LogView.AppendText(CrLf & CrLf & _
@@ -4704,6 +4945,7 @@ Public Class ProgressPanel
                                                        "- Hardware architecture: " & Casters.CastDismArchitecture(drvInfo.Architecture))
                                 Next
                             ElseIf drvInfoCollection.Count > 10 Then
+                                DynaLog.LogMessage("The driver information contains more than 10 hardware targets.")
                                 LogView.AppendText(CrLf & CrLf & _
                                                    "This driver file targets more than 10 devices. To avoid creating log files large in size, we will not show information of this driver package, and will proceed anyway." & CrLf & _
                                                    "If you want to get information of this driver package, go to Commands > Drivers > Get driver information > I want to get information about driver files, and specify this driver file:" & CrLf & CrLf & _
@@ -4714,13 +4956,18 @@ Public Class ProgressPanel
                             End If
                         End Using
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DynaLog.LogMessage("Shutting down API...")
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                 Else
+                    DynaLog.LogMessage("The driver is a folder. It will be processed recursively.")
                     LogView.AppendText(CrLf & CrLf & _
                                        "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
                 End If
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
@@ -4729,9 +4976,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
                     CommandArgs &= " /recurse"
                 End If
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4765,6 +5010,7 @@ Public Class ProgressPanel
             Next
             Thread.Sleep(2000)
             If drvAdditionCommit Then
+                DynaLog.LogMessage("Preparing to save changes...")
                 AllPB.Value = AllPB.Maximum / taskCount
                 currentTCont += 1
                 Select Case Language
@@ -4800,6 +5046,7 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 76 Then
+            DynaLog.LogMessage("Preparing to remove OS drivers...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -4837,14 +5084,23 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Removing driver packages from mounted image..." & CrLf)
             ' Get all driver packages
+            DynaLog.LogMessage("Getting drivers of the Windows image... This can take some time, depending on the amount of drivers installed.")
             LogView.AppendText(CrLf & "Getting image drivers. This may take some time..." & CrLf)
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
+                DynaLog.LogMessage("Opening image session...")
                 Using imgSession As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(mntString))
                     drvCollection = DismApi.GetDrivers(imgSession, AllDrivers)
                 End Using
+                DynaLog.LogMessage("Information collection count: " & drvCollection.Count)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DynaLog.LogMessage("Shutting down API...")
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             Select Case Language
                 Case 0
@@ -4902,6 +5158,7 @@ Public Class ProgressPanel
                     Case 5
                         currentTask.Text = "Rimozione del driver " & (x + 1) & " di " & drvRemovalCount & "..."
                 End Select
+                DynaLog.LogMessage("Getting information about driver file " & Quote & Path.GetFileName(drvRemovalPkgs(x)) & Quote & "...")
                 CurrentPB.Value = x + 1
                 LogView.AppendText(CrLf & _
                                    "Driver " & (x + 1) & " of " & drvRemovalCount)
@@ -4921,10 +5178,12 @@ Public Class ProgressPanel
                                                    "- Is part of the Windows distribution? " & If(drv.InBox, "Yes", "No") & CrLf & _
                                                    "- Is critical to the boot process? " & If(drv.BootCritical, "Yes", "No"))
                                 If drv.InBox Then
+                                    DynaLog.LogMessage("This driver is part of the Windows distribution.")
                                     LogView.AppendText(CrLf & CrLf & _
                                                        "Warning: this driver package is part of the Windows distribution. Some areas may no longer work after this driver has been removed")
                                 End If
                                 If drv.BootCritical Then
+                                    DynaLog.LogMessage("This driver is critical to the boot process of the Windows image.")
                                     LogView.AppendText(CrLf & CrLf & _
                                                        "Warning: this driver package is critical to the boot process. The target image may no longer boot or work correctly after this driver has been removed")
                                 End If
@@ -4933,13 +5192,15 @@ Public Class ProgressPanel
                         Next
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DynaLog.LogMessage("Shutting down API...")
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
-                DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
                 If DISMProc.ExitCode = 0 Then
@@ -4978,6 +5239,8 @@ Public Class ProgressPanel
                 GetErrorCode(False)
             End If
         ElseIf opNum = 77 Then
+            DynaLog.LogMessage("Preparing to export image drivers...")
+            DynaLog.LogMessage("Export target: " & Quote & drvExportTarget & Quote)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5016,7 +5279,6 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf & _
                                "- Export target: " & Quote & drvExportTarget & Quote)
             ' Check the DISM version, as the Windows 7 version doesn't allow this action
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5028,9 +5290,7 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -5044,6 +5304,8 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 78 Then
+            DynaLog.LogMessage("Preparing to import image drivers...")
+            DynaLog.LogMessage("Source type: " & ImportSourceInt)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5116,17 +5378,17 @@ Public Class ProgressPanel
                     currentTask.Text = "Esportazione di driver di terze parti dall'origine di importazione dei driver..."
             End Select
             Try
+                DynaLog.LogMessage("Creating directory where drivers will be exported to...")
                 Directory.CreateDirectory(Application.StartupPath & "\export_temp")
             Catch ex As Exception
+                DynaLog.LogMessage("Could not create the driver export directory. Error message: " & ex.Message)
                 LogView.AppendText(CrLf & "The temporary folder could not be created. See below for reasons why:" & CrLf & CrLf & ex.ToString() & "-" & ex.Message)
             End Try
             If Directory.Exists(Application.StartupPath & "\export_temp") Then
+                DynaLog.LogMessage("Exporting drivers...")
                 LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
                 CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
-                DISMProc.StartInfo.FileName = DismProgram
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 LogView.AppendText(CrLf & "Getting error level...")
                 If Hex(DISMProc.ExitCode).Length < 8 Then
                     errCode = DISMProc.ExitCode
@@ -5139,6 +5401,7 @@ Public Class ProgressPanel
                     LogView.AppendText(" Error level : " & errCode)
                 End If
                 If DISMProc.ExitCode = 0 Then
+                    DynaLog.LogMessage("The previous operation succeeded. Adding the drivers...")
                     CurrentPB.Value = CurrentPB.Maximum / 2
                     AllPB.Value = AllPB.Maximum / 2
                     Select Case Language
@@ -5169,9 +5432,7 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
                     CommandArgs = BckArgs
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
-                    DISMProc.StartInfo.Arguments = CommandArgs
-                    DISMProc.Start()
-                    DISMProc.WaitForExit()
+                    RunProcess(DismProgram, CommandArgs)
                     If Hex(DISMProc.ExitCode).Length < 8 Then
                         errCode = DISMProc.ExitCode
                     Else
@@ -5186,12 +5447,16 @@ Public Class ProgressPanel
                 End If
                 LogView.AppendText(CrLf & "Deleting temporary export directory...")
                 Try
+                    DynaLog.LogMessage("Attempting to delete the driver export directory...")
                     Directory.Delete(Application.StartupPath & "\export_temp", True)
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not delete driver export directory. Error message: " & ex.Message)
                     LogView.AppendText(CrLf & "We couldn't delete the temporary export directory. You'll need to delete the " & Quote & "export_temp" & Quote & " directory manually.")
                 End Try
             End If
         ElseIf opNum = 79 Then
+            DynaLog.LogMessage("Preparing to apply unattended answer file...")
+            DynaLog.LogMessage("Answer file: " & Quote & Path.GetFileName(UnattendedFile) & Quote)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5229,13 +5494,26 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
                                "- Unattended answer file: " & UnattendedFile)
-
-            ' Initialize command
-            DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            Try
+                LogView.AppendText(CrLf & CrLf & "Creating directories and copying files...")
+                DynaLog.LogMessage("Copying unattended answer file to the Panther directory of the Windows image...")
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"), True)
+                DynaLog.LogMessage("Copying unattended answer file to the Sysprep directory of the Windows image...")
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"), True)
+                LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
+                GetErrorCode(True)
+                Exit Sub
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not copy unattended answer file to targets. Error message: " & ex.Message)
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
+                RunProcess(DismProgram, CommandArgs)
+            End Try
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5269,6 +5547,8 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 83 Then
+            DynaLog.LogMessage("Preparing to set the scratch space of the Windows PE image...")
+            DynaLog.LogMessage("Scratch space to set: " & peNewScratchSpace & " MB")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5307,10 +5587,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the Windows PE scratch space..." & CrLf & _
                                "- New scratch space amount: " & peNewScratchSpace & " MB")
             CommandArgs &= " /image=" & targetImage & " /set-scratchspace=" & peNewScratchSpace
-            DISMProc.StartInfo.FileName = DismProgram
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -5324,6 +5601,8 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 84 Then
+            DynaLog.LogMessage("Preparing to set the target path of the Windows PE image...")
+            DynaLog.LogMessage("Target path to set: " & Quote & peNewTargetPath & Quote)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5362,10 +5641,7 @@ Public Class ProgressPanel
             LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf & _
                                "- New target path: " & Quote & peNewTargetPath & Quote)
             CommandArgs &= " /image=" & targetImage & " /set-targetpath=" & peNewTargetPath
-            DISMProc.StartInfo.FileName = DismProgram
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DISMProc.ExitCode).Length < 8 Then
                 errCode = DISMProc.ExitCode
@@ -5379,6 +5655,7 @@ Public Class ProgressPanel
             End If
             GetErrorCode(False)
         ElseIf opNum = 86 Then
+            DynaLog.LogMessage("Preparing to initiate the OS rollback...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5415,11 +5692,8 @@ Public Class ProgressPanel
                     currentTask.Text = "Preparazione del ripristino del sistema operativo..."
             End Select
             LogView.AppendText(CrLf & "Preparing operating system rollback...")
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs = " /online /norestart /initiate-osuninstall"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5428,6 +5702,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 87 Then
+            DynaLog.LogMessage("Preparing to remove the OS rollback...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5464,11 +5739,8 @@ Public Class ProgressPanel
                     currentTask.Text = "Rimozione della possibilità di tornare a una vecchia installazione di Windows..."
             End Select
             LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= " /online /remove-osuninstall"
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5477,6 +5749,8 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 88 Then
+            DynaLog.LogMessage("Preparing to set the OS rollback window...")
+            DynaLog.LogMessage("New window: " & osUninstDayCount & " day(s)")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5514,11 +5788,8 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Setting the amount of days an uninstall can happen..." & CrLf &
                                "Number of days: " & osUninstDayCount)
-            DISMProc.StartInfo.FileName = DismProgram
             CommandArgs &= " /online /set-osuninstallwindow /value:" & osUninstDayCount
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Gathering error level...")
             GetErrorCode(False)
             If errCode.Length >= 8 Then
@@ -5527,6 +5798,11 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 991 Then
+            DynaLog.LogMessage("Preparing to convert the Windows image...")
+            DynaLog.LogMessage("- Source image file: " & Quote & imgSrcFile & Quote)
+            DynaLog.LogMessage("- Source image index: " & imgConversionIndex)
+            DynaLog.LogMessage("- Destination image file: " & Quote & imgDestFile & Quote)
+            DynaLog.LogMessage("- Conversion mode: " & imgConversionMode)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5576,7 +5852,6 @@ Public Class ProgressPanel
             End If
 
             ' Run commands
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5593,9 +5868,7 @@ Public Class ProgressPanel
             ElseIf imgConversionMode = 1 Then
                 CommandArgs &= " /compress:max"
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5629,6 +5902,10 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 992 Then
+            DynaLog.LogMessage("Preparing to merge SWM files...")
+            DynaLog.LogMessage("- Source image file: " & Quote & imgSwmSource & Quote)
+            DynaLog.LogMessage("- Source image index: " & imgMergerIndex)
+            DynaLog.LogMessage("- Destination image file: " & Quote & imgWimDestination & Quote)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5672,7 +5949,6 @@ Public Class ProgressPanel
                                "- Destination image file: " & imgWimDestination & CrLf)
 
             ' Run commands
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5684,9 +5960,7 @@ Public Class ProgressPanel
                 Case 10
                     CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /export-image /sourceimagefile=" & Quote & imgSwmSource & Quote & " /swmfile=" & Quote & Path.GetDirectoryName(imgSwmSource) & "\" & Path.GetFileNameWithoutExtension(imgSwmSource) & "*.swm" & Quote & " /sourceindex=" & imgMergerIndex & " /destinationimagefile=" & Quote & imgWimDestination & Quote & " /compress=max /checkintegrity"
             End Select
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5720,6 +5994,10 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
         ElseIf opNum = 996 Then
+            DynaLog.LogMessage("Preparing to switch image indexes...")
+            DynaLog.LogMessage("- Source image file: " & Quote & SwitchSourceImg & Quote)
+            DynaLog.LogMessage("- Source image index: " & SwitchSourceIndex)
+            DynaLog.LogMessage("- Target image index: " & SwitchTargetIndex)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5766,8 +6044,8 @@ Public Class ProgressPanel
             Else
                 LogView.AppendText(CrLf & "- Commit source index? No")
             End If
+            DynaLog.LogMessage("Unmounting source image whilst saving changes...")
             ' Run commands
-            DISMProc.StartInfo.FileName = DismProgram
             Select Case DismVersionChecker.ProductMajorPart
                 Case 6
                     Select Case DismVersionChecker.ProductMinorPart
@@ -5784,9 +6062,7 @@ Public Class ProgressPanel
             Else
                 CommandArgs &= " /discard"
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5820,6 +6096,7 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
             End If
             If Decimal.ToInt32(DISMProc.ExitCode) <> 0 Then
+                DynaLog.LogMessage("Could not save changes to the image. Unmounting image whilst discarding changes...")
                 LogView.AppendText(CrLf & CrLf & "Could not commit changes to the image. Discarding changes...")
                 Select Case Language
                     Case 0
@@ -5857,9 +6134,7 @@ Public Class ProgressPanel
                     Case 10
                         CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /unmount-image /mountdir=" & Quote & SwitchTarget & Quote & " /discard"
                 End Select
-                DISMProc.StartInfo.Arguments = CommandArgs
-                DISMProc.Start()
-                DISMProc.WaitForExit()
+                RunProcess(DismProgram, CommandArgs)
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5893,11 +6168,13 @@ Public Class ProgressPanel
                     LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
                 End If
                 If Decimal.ToInt32(DISMProc.ExitCode) <> 0 Then
+                    DynaLog.LogMessage("Could not unmount the image.")
                     Exit Sub
                 End If
             End If
             AllPB.Value = AllPB.Maximum / taskCount
             currentTCont += 1
+            DynaLog.LogMessage("Mounting Windows image...")
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5948,9 +6225,7 @@ Public Class ProgressPanel
             If SwitchMountAsReadOnly Then
                 CommandArgs &= " /readonly"
             End If
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
+            RunProcess(DismProgram, CommandArgs)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5993,8 +6268,10 @@ Public Class ProgressPanel
         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
         Select Case errCode
             Case 0
+                DynaLog.LogMessage("Package addition succeeded.")
                 pkgSuccessfulAdditions += 1
             Case Else
+                DynaLog.LogMessage("Package addition failed.")
                 pkgFailedAdditions += 1
         End Select
     End Sub
@@ -6003,59 +6280,70 @@ Public Class ProgressPanel
         errCode = Hex(Decimal.ToInt32(DISMProc.ExitCode))
         Select Case errCode
             Case 0
+                DynaLog.LogMessage("Feature enablement succeeded.")
                 featSuccessfulEnablements += 1
             Case Else
+                DynaLog.LogMessage("Feature enablement failed.")
                 featFailedEnablements += 1
         End Select
     End Sub
 
     Private Sub ProgressBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ProgressBW.DoWork
+        DynaLog.LogMessage("Detecting items in task list...")
+        DynaLog.LogMessage("Task list items: " & TaskList.Count)
         If TaskList.Count >= 2 Or (ActionRunning And TaskList.Count >= 1) Then
+            DynaLog.LogMessage("Running tasks in task list...")
             RunTaskList(TaskList)
         Else
+            DynaLog.LogMessage("Running task...")
             RunOps(OperationNum)
         End If
     End Sub
 
     Sub SaveLog(LogFile As String)
+        DynaLog.LogMessage("Saving contents of log to a file...")
+        DynaLog.LogMessage("- Log destination: " & Quote & LogFile & Quote)
+        DynaLog.LogMessage("Determining if log file exists...")
         If Not File.Exists(LogFile) Then
+            DynaLog.LogMessage("Log file does not exist. Attempting to create it...")
             ' Create file
             Try
                 File.WriteAllText(LogFile, String.Empty)
             Catch ex As Exception
+                DynaLog.LogMessage("Could not create log file. Error message: " & ex.Message)
                 LogView.AppendText(CrLf & _
-                                   "Warning: the contents of the log window could not be saved to the log file. Reason: " & CrLf & ex.ToString())
+                                   "Warning: the contents of the log window could not be saved to the log file. Reason: " & ex.Message)
                 Exit Sub
             End Try
         End If
-        Dim logWindowReader As New RichTextBox() With {
-            .Text = My.Computer.FileSystem.ReadAllText(LogFile, ASCII)
-        }
-        If logWindowReader.Text <> "" Then
-            logWindowReader.AppendText(CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================")
+        Dim FileLength As Integer = 0
+        FileLength = New FileInfo(LogFile).Length
+        DynaLog.LogMessage("Size of log file in bytes: " & FileLength)
+        If FileLength <> 0 Then
+            File.AppendAllText(LogFile, CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================", ASCII)
         Else
-            logWindowReader.AppendText("======================== DISMTools Log File ========================" & CrLf & _
-                                       "This is an automatically generated log file created by DISMTools." & CrLf & _
-                                       "This file can be viewed at any time to view successful and/or" & CrLf & _
-                                       "failed tasks." & CrLf & CrLf & _
-                                       "This log file is updated every time an operation is performed." & CrLf & _
-                                       "However, it does not contain the actual DISM log file, which is" & CrLf & _
-                                       "also automatically generated each time DISM is run from this" & CrLf & _
-                                       "program. These log files are named: " & CrLf & _
-                                       "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf & _
-                                       "====================================================================")
+            File.AppendAllText(LogFile, "======================== DISMTools Log File ========================" & CrLf & _
+                                        "This is an automatically generated log file created by DISMTools." & CrLf & _
+                                        "This file can be viewed at any time to view successful and/or" & CrLf & _
+                                        "failed tasks." & CrLf & CrLf & _
+                                        "This log file is updated every time an operation is performed." & CrLf & _
+                                        "However, it does not contain the actual DISM log file, which is" & CrLf & _
+                                        "also automatically generated each time DISM is run from this" & CrLf & _
+                                        "program. These log files are named: " & CrLf & _
+                                        "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf & _
+                                        "====================================================================", ASCII)
         End If
-        logWindowReader.AppendText(CrLf & LogView.Text)
-        File.WriteAllText(LogFile, logWindowReader.Text, ASCII)
+        File.AppendAllText(LogFile, CrLf & LogView.Text, ASCII)
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
         If Not ActionRunning Then TaskList.Clear()
         If IsSuccessful Then
+            DynaLog.LogMessage("Tasks have been successful.")
             If OperationNum = 9 Then LogView.AppendText(CrLf & _
                                "The volume images have been deleted. If you want to remount this image into a DISMTools project, choose the " & Quote & "Mount image" & Quote & " option, or use this command if you want to mount it elsewhere:" & CrLf & _
                                "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
-            'Visible = False
+            DynaLog.LogMessage("Saving operation logs...")
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
             Try
                 CurrentPB.Value = 100
@@ -6069,9 +6357,11 @@ Public Class ProgressPanel
                 Thread.Sleep(2000)
             End If
             If OperationNum = 0 Then
+                DynaLog.LogMessage("Loading project...")
                 MainForm.LoadDTProj(projPath & "\" & projName & "\" & projName & ".dtproj", projName, True, False)
             ElseIf OperationNum = 6 Then
                 If CaptureMountDestImg Then
+                    DynaLog.LogMessage("The captured Windows image has been mounted in the project.")
                     MainForm.SourceImg = SourceImg
                     MainForm.ImgIndex = ImgIndex
                     MainForm.MountDir = MountDir
@@ -6083,12 +6373,15 @@ Public Class ProgressPanel
                     MainForm.SaveDTProj()
                 End If
             ElseIf OperationNum = 8 Then
+                DynaLog.LogMessage("Changes have been successfully saved to the Windows image. Saving project...")
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 9 Then
                 If imgIndexDeletionUnmount Then
+                    DynaLog.LogMessage("Refreshing mounted image lists...")
                     ' Detect mounted images if the program needed to unmount the source image
                     MainForm.DetectMountedImages(False)
                     If UMountLocalDir Then
+                        DynaLog.LogMessage("Updating project properties...")
                         MainForm.UpdateProjProperties(False, False)
                         MainForm.MountDir = "N/A"
                         ' This is a crucial change, so save things immediately
@@ -6100,10 +6393,12 @@ Public Class ProgressPanel
                     End If
                 End If
             ElseIf OperationNum = 15 Then
+                DynaLog.LogMessage("Updating project configuration and running background processes...")
                 MainForm.SourceImg = SourceImg
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
                 MainForm.bwBackgroundProcessAction = 0
+                MainForm.bwAllBackgroundProcesses = True
                 MainForm.bwGetImageInfo = True
                 MainForm.bwGetAdvImgInfo = True
                 MainForm.DetectMountedImages(False)
@@ -6115,9 +6410,11 @@ Public Class ProgressPanel
                 ' This is a crucial change, so save things immediately
                 MainForm.SaveDTProj()
             ElseIf OperationNum = 18 Then
+                DynaLog.LogMessage("Refreshing mounted image lists and updating project configuration...")
                 MainForm.DetectMountedImages(False)
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
                     MainForm.bwBackgroundProcessAction = 0
+                    MainForm.bwAllBackgroundProcesses = True
                     MainForm.bwGetImageInfo = True
                     MainForm.bwGetAdvImgInfo = True
                     If remountisReadOnly Then
@@ -6129,9 +6426,9 @@ Public Class ProgressPanel
                 End If
             ElseIf OperationNum = 20 Then
                 MainForm.DetectMountedImages(False)
-
             ElseIf OperationNum = 21 Then
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Or RandomMountDir = MainForm.MountDir Then
+                    DynaLog.LogMessage("Updating project configuration and saving project...")
                     MainForm.bwBackgroundProcessAction = 0
                     MainForm.bwGetImageInfo = True
                     MainForm.bwGetAdvImgInfo = True
@@ -6144,8 +6441,10 @@ Public Class ProgressPanel
                         MainForm.imgCommitOperation = -1    ' Let program close on later occassions
                     End If
                 End If
+                DynaLog.LogMessage("Refreshing mounted image lists...")
                 MainForm.DetectMountedImages(False)
             ElseIf OperationNum = 26 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 MainForm.UpdateProjProperties(True, False)
@@ -6172,10 +6471,12 @@ Public Class ProgressPanel
                 'AddPackageReport.ProgressBar1.Value = AddPackageReport.pkgSuccessFailureRatio
                 AddPackageReport.Show()
             ElseIf OperationNum = 27 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then MainForm.bwBackgroundProcessAction = 1
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 30 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6184,6 +6485,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 31 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6192,9 +6494,11 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 33 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 37 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6203,6 +6507,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 38 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6211,6 +6516,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 64 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6219,6 +6525,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 68 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6227,6 +6534,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 75 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6235,6 +6543,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 76 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6243,6 +6552,7 @@ Public Class ProgressPanel
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
             ElseIf OperationNum = 78 Then
+                DynaLog.LogMessage("Updating project configuration and saving project...")
                 If Not MainForm.RunAllProcs Then
                     MainForm.bwGetImageInfo = False
                     MainForm.bwGetAdvImgInfo = False
@@ -6250,13 +6560,19 @@ Public Class ProgressPanel
                 End If
                 If Not MainForm.OnlineManagement And Not MainForm.OfflineManagement Then MainForm.SaveDTProj()
                 MainForm.UpdateProjProperties(True, False)
+            ElseIf OperationNum = 79 Then
+                DynaLog.LogMessage("Saving project...")
+                MainForm.SaveDTProj()
             ElseIf OperationNum = 991 Then
+                DynaLog.LogMessage("Conversion succeeded.")
                 Visible = False
                 ImgConversionSuccessDialog.ShowDialog(MainForm)
                 If ImgConversionSuccessDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                    DynaLog.LogMessage("Opening image file location in File Explorer...")
                     Process.Start("\Windows\explorer.exe", "/select," & Quote & imgDestFile & Quote)
                 End If
             ElseIf OperationNum = 996 Then
+                DynaLog.LogMessage("Updating mounted image lists, updating project configuration and saving project...")
                 MainForm.DetectMountedImages(False)
                 MainForm.ImgIndex = SwitchTargetIndex
                 MainForm.imgMountedName = SwitchTargetIndexName
@@ -6337,6 +6653,8 @@ Public Class ProgressPanel
             MainForm.WatcherTimer.Enabled = True
             Close()
         Else
+            DynaLog.LogMessage("Tasks have not been successful.")
+            Cancel_Button.Visible = True
             MainForm.ToolStripButton4.Visible = False
             Select Case MainForm.Language
                 Case 0
@@ -6405,6 +6723,7 @@ Public Class ProgressPanel
             End Select
             LinkLabel1.Visible = True
             ' Add details for error codes
+            DynaLog.LogMessage("Error code: " & errCode)
             If errCode = "C1420126" Then
                 ' An image that was selected for mounting is already mounted
                 LogView.AppendText(CrLf & "The specified image is already mounted. This command works for " & Quote & "orphaned" & Quote & " images")
@@ -6466,7 +6785,9 @@ Public Class ProgressPanel
                 ' There are pending image operations
                 LogView.AppendText(CrLf & "The operation could not be performed because this image has pending online operations. Applying and booting up the image might fix this issue.")
             ElseIf errCode = "BC2" Then
+                DynaLog.LogMessage("The task has succeded but requires a restart...")
                 If OperationNum = 86 Then
+                    DynaLog.LogMessage("Rollback initiated. Restarting system automatically in 10 seconds...")
                     LogView.AppendText(CrLf & "The rollback process has started. Your system needs to be restarted in order to continue. It will restart automatically in 10 seconds. Make sure you have saved your work.")
                     Dim restartProc As New Process()
                     restartProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\shutdown.exe"
@@ -6532,6 +6853,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        DynaLog.LogMessage("Preparing to start image operations...")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -6667,8 +6989,12 @@ Public Class ProgressPanel
         CurrentPB.Value = 0
         AllPB.Value = 0
         If LogView.Text <> "" Then LogView.Clear()
+        ' It does not have any purpose when doing tasks yet
+        Cancel_Button.Visible = False
         ' If running, cancel background processes
+        DynaLog.LogMessage("Detecting if background processes are busy...")
         If MainForm.ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are running. Cancelling them...")
             ' Make form visible sooner. We may have to set more things up here,
             ' but we'll see
             Visible = True
@@ -6678,20 +7004,25 @@ Public Class ProgressPanel
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
+            ' TODO: Grab items remaining to finish the background processes
         End If
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
+        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        MainForm.MountedImageDetectorBW.CancelAsync()
+        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         MainForm.WatcherTimer.Enabled = False
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Setting mount directory target for operations...")
+        DynaLog.LogMessage("Images mounted in this system: " & MainForm.MountedImageMountDirs.Count)
         If MainForm.MountedImageMountDirs.Count > 0 Then
             ' Go through all mounted images to determine which one to get info from with the DISM API,
             ' if a project has been loaded and if that project has a mounted image
@@ -6707,6 +7038,7 @@ Public Class ProgressPanel
         DismProgram = MainForm.DismExe
         If MountDir = "" Then MountDir = MainForm.MountDir
         DISMProc.StartInfo.CreateNoWindow = False
+        DynaLog.LogMessage("Setting log font settings...")
         Try
             If MainForm.LogFontIsBold Then
                 LogView.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, FontStyle.Bold)
@@ -6750,8 +7082,10 @@ Public Class ProgressPanel
         MainForm.ToolStripButton4.Visible = True
         Control.CheckForIllegalCrossThreadCalls = False
         LinkLabel1.Visible = False
+        DynaLog.LogMessage("Detecting presence of directory in which operation logs are stored...")
         If Not Directory.Exists(Application.StartupPath & "\logs") Then Directory.CreateDirectory(Application.StartupPath & "\logs")
         ' Detect settings
+        DynaLog.LogMessage("Configuring settings...")
         OnlineMgmt = MainForm.OnlineManagement
         AutoLogs = MainForm.AutoLogs
         LogPath = MainForm.LogFile
@@ -6762,6 +7096,14 @@ Public Class ProgressPanel
         AutoScratch = MainForm.AutoScrDir
         ScratchDirPath = MainForm.ScratchDir
         EnglishOut = MainForm.EnglishOutput
+        SystemEditor = MainForm.SystemEditor
+        DynaLog.LogMessage("Provided system editor for logs: " & Quote & SystemEditor & Quote)
+        DynaLog.LogMessage("Checking if provided system editor exists...")
+        If Not File.Exists(SystemEditor) Then
+            DynaLog.LogMessage("Provided system editor does not exist. Defaulting to notepad...")
+            SystemEditor = SystemEditorBackup
+        End If
+        DynaLog.LogMessage("Preparing scratch directory if program is configured to use default directories...")
         If UseScratchDir And AutoScratch And OnlineMgmt And Not Directory.Exists(Application.StartupPath & "\scratch") Then Directory.CreateDirectory(Application.StartupPath & "\scratch")
         GatherInitialSwitches()
         If ActionRunning Then
@@ -6794,7 +7136,12 @@ Public Class ProgressPanel
             InitializeActionRuntime(IsInValidationMode)
             ReadActionFile(ActionFile)
         Else
+            DynaLog.LogMessage("Detecting tasks in task list...")
+            If TaskList IsNot Nothing AndAlso TaskList.Count > 0 Then
+                DynaLog.LogMessage("Task count in task list: " & TaskList.Count)
+            End If
             If TaskList.Count >= 2 Then
+                DynaLog.LogMessage("More than 2 tasks will be made.")
                 AllPB.Maximum = TaskList.Count * 100
                 Select Case MainForm.Language
                     Case 0
@@ -6823,19 +7170,25 @@ Public Class ProgressPanel
                 End Select
                 OperationNum = 1000
             Else
+                DynaLog.LogMessage("Getting the tasks of the specified operation...")
                 GetTasks(OperationNum)
             End If
         End If
         taskCountLbl.Visible = True
+        DynaLog.LogMessage("Getting state of image registry control panel...")
         If RegistryControlPanel.Visible Then
+            DynaLog.LogMessage("Image registry control panel is open. Attempting to close...")
             RegistryControlPanel.Close()
             If RegistryControlPanel.Visible Then
+                DynaLog.LogMessage("Second check determined the image registry control panel is still open. Cannot continue performing tasks until it's closed")
                 LogView.AppendText(CrLf & "The image registry hives need to be unloaded before continuing to perform the task.")
             End If
         End If
         If Not RegistryControlPanel.Visible Then
+            DynaLog.LogMessage("The image registry control panel is no longer open. Performing tasks...")
             ProgressBW.RunWorkerAsync()
         Else
+            DynaLog.LogMessage("The image registry control panel is still open.")
             Visible = True
             Application.DoEvents()
             Thread.Sleep(2000)
@@ -6949,15 +7302,18 @@ Public Class ProgressPanel
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         Try
+            DynaLog.LogMessage("Checking if log file exists and opening it in Notepad...")
             If File.Exists(Application.StartupPath & "\logs\" & dateStr) Then
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", Application.StartupPath & "\logs\" & dateStr)
+                Process.Start(SystemEditor, Application.StartupPath & "\logs\" & dateStr)
             ElseIf File.Exists(LogPath) Then
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe", LogPath)
+                Process.Start(SystemEditor, LogPath)
             End If
         Catch ex As Exception
-            If Not File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe") Then
-                LogView.AppendText(CrLf & "Notepad was not found")
+            If Not File.Exists(SystemEditor) Then
+                DynaLog.LogMessage("The system editor was not found on this system.")
+                LogView.AppendText(CrLf & "System editor was not found")
             ElseIf Not File.Exists(Application.StartupPath & "\logs\" & dateStr) Or Not File.Exists(LogPath) Then
+                DynaLog.LogMessage("The log file is not found on this system.")
                 LogView.AppendText(CrLf & "The log file was not found")
             End If
         End Try

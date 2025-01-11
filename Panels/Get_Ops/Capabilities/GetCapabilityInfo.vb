@@ -198,7 +198,9 @@ Public Class GetCapabilityInfoDlg
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
+        DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
+        DynaLog.LogMessage("Getting capabilities...")
         For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
             ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
         Next
@@ -206,10 +208,13 @@ Public Class GetCapabilityInfoDlg
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        DynaLog.LogMessage("Selected items: " & ListView1.SelectedItems.Count)
         Try
             If ListView1.SelectedItems.Count = 1 Then
                 ' Background processes need to have completed before showing information
+                DynaLog.LogMessage("Checking if background processes are busy...")
                 If MainForm.ImgBW.IsBusy Then
+                    DynaLog.LogMessage("Background processes are busy. Stopping them...")
                     Dim msg As String = ""
                     Select Case MainForm.Language
                         Case 0
@@ -267,7 +272,9 @@ Public Class GetCapabilityInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                DynaLog.LogMessage("Checking if mounted image detector is busy...")
                 If MainForm.MountedImageDetectorBW.IsBusy Then
+                    DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                     MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                     MainForm.MountedImageDetectorBW.CancelAsync()
                     While MainForm.MountedImageDetectorBW.IsBusy
@@ -275,7 +282,9 @@ Public Class GetCapabilityInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                DynaLog.LogMessage("Checking if image status watchers are busy...")
                 MainForm.WatcherTimer.Enabled = False
+                DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
                 If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
                 While MainForm.WatcherBW.IsBusy
                     Application.DoEvents()
@@ -308,7 +317,9 @@ Public Class GetCapabilityInfoDlg
                 End Select
                 Application.DoEvents()
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Creating session...")
                     Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                         Select Case MainForm.Language
                             Case 0
@@ -335,6 +346,7 @@ Public Class GetCapabilityInfoDlg
                             Case 5
                                 Label2.Text = "Ottenere informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
+                        DynaLog.LogMessage("Capability to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
                         Application.DoEvents()
                         Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
                         Label23.Text = capInfo.Name
@@ -382,6 +394,7 @@ Public Class GetCapabilityInfoDlg
                     Panel4.Visible = False
                     Panel7.Visible = True
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not get capability information. Error message: " & ex.Message)
                     Dim msg As String = ""
                     Select Case MainForm.Language
                         Case 0
@@ -410,7 +423,12 @@ Public Class GetCapabilityInfoDlg
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally
-                    DismApi.Shutdown()
+                    DynaLog.LogMessage("Shutting down API...")
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 Select Case MainForm.Language
                     Case 0
@@ -450,12 +468,14 @@ Public Class GetCapabilityInfoDlg
     End Sub
 
     Private Sub GetCapabilityInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        DynaLog.LogMessage("Restarting mounted image detector...")
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving capability information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
             ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
@@ -472,8 +492,10 @@ Public Class GetCapabilityInfoDlg
     End Sub
 
     Sub SearchCapabilities(sQuery As String, Optional capState As String = "")
+        DynaLog.LogMessage("Search query: " & sQuery)
         Dim expectedCapabilityState As DismPackageFeatureState = DismPackageFeatureState.NotPresent
         If capState <> "" Then
+            DynaLog.LogMessage("Capability state query is not nothing (" & Quote & capState & Quote & ")")
             Select Case capState.ToLower()
                 Case "notpresent"
                     expectedCapabilityState = DismPackageFeatureState.NotPresent
@@ -518,6 +540,7 @@ Public Class GetCapabilityInfoDlg
                 SearchCapabilities(SearchBox1.Text)
             End If
         Else
+            DynaLog.LogMessage("No search query has been specified. Showing all items...")
             For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
             Next

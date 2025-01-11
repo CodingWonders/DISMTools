@@ -1,6 +1,7 @@
 ﻿Imports System.Xml.Serialization
 Imports System.Xml
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace Elements
 
@@ -52,15 +53,22 @@ Namespace Elements
         <XmlAttribute("GeoLocation")>
         Public Property GeoLoc As String
 
+        Public Overrides Function ToString() As String
+            Return "User locale, with ID: " & Me.Id & "; Display name: " & Me.DisplayName & "; Language Code: " & Me.LCID & "; Keyboard identifier: " & Me.KeybId & "; GeoID: " & Me.GeoLoc
+        End Function
+
         Public Shared Function LoadItems(filePath As String) As List(Of UserLocale)
+            DynaLog.LogMessage("Preparing to load items from file " & Quote & filePath & Quote & "...")
             Dim localeList As New List(Of UserLocale)
             Try
                 Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                    DynaLog.LogMessage("Creating XML reader...")
                     Dim xs As New XmlReaderSettings()
                     xs.IgnoreWhitespace = True
                     Using reader As XmlReader = XmlReader.Create(fs, xs)
                         While reader.Read()
                             If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "UserLocale" Then
+                                DynaLog.LogMessage("We are dealing with a component (XML node type is element and is " & Quote & "UserLocale" & Quote & "). Parsing...")
                                 Dim locale As New UserLocale()
                                 locale.Id = reader.GetAttribute("Id")
                                 locale.DisplayName = reader.GetAttribute("DisplayName")
@@ -72,8 +80,10 @@ Namespace Elements
                         End While
                     End Using
                 End Using
+                DynaLog.LogMessage("Locale count: " & localeList.Count)
                 Return localeList
             Catch ex As Exception
+                DynaLog.LogMessage("Could not load items. Error message: " & ex.Message)
                 If Debugger.IsAttached Then Debugger.Break()
                 Return Nothing
             End Try

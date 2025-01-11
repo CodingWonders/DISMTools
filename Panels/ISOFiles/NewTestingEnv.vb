@@ -229,6 +229,7 @@ Public Class NewTestingEnv
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Target location of testing environment files: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             TextBox3.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub
@@ -274,12 +275,17 @@ Public Class NewTestingEnv
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         BackgroundWorker1.ReportProgress(0)
+        DynaLog.LogMessage("Starting PE Helper...")
+        DynaLog.LogMessage("- Task: generate testing environment")
+        DynaLog.LogMessage("- Architecture: " & ComboBox1.SelectedItem)
+        DynaLog.LogMessage("- Destination folder for testing environment: " & Quote & TextBox3.Text & Quote)
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
         ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartDevelopment -testArch " & ComboBox1.SelectedItem & " -targetPath " & Quote & TextBox3.Text & Quote
         ISOCreator.Start()
         ISOCreator.WaitForExit()
+        DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
         success = (ISOCreator.ExitCode = 0)
         BackgroundWorker1.ReportProgress(100)
     End Sub
@@ -298,6 +304,8 @@ Public Class NewTestingEnv
     End Sub
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
+        DynaLog.LogMessage("The PE Helper has finished.")
+        DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0

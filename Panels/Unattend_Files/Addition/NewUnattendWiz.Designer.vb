@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode40 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode41 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode42 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode43 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode44 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode45 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode46 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode47 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode48 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode49 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode50 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode51 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode52 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -123,8 +123,8 @@ Partial Class NewUnattendWiz
         Me.VirtualMachineHeader = New System.Windows.Forms.Label()
         Me.AccountLockoutPanel = New System.Windows.Forms.Panel()
         Me.Label44 = New System.Windows.Forms.Label()
-        Me.EnabledAccountLockdownPanel = New System.Windows.Forms.Panel()
-        Me.AccountLockdownParametersPanel = New System.Windows.Forms.Panel()
+        Me.EnabledAccountLockoutPanel = New System.Windows.Forms.Panel()
+        Me.AccountLockoutParametersPanel = New System.Windows.Forms.Panel()
         Me.NumericUpDown8 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown7 = New System.Windows.Forms.NumericUpDown()
         Me.NumericUpDown6 = New System.Windows.Forms.NumericUpDown()
@@ -319,6 +319,8 @@ Partial Class NewUnattendWiz
         Me.EditorModeOFD = New System.Windows.Forms.OpenFileDialog()
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+        Me.Label62 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -349,8 +351,8 @@ Partial Class NewUnattendWiz
         Me.VirtualMachinePanel.SuspendLayout()
         Me.VMProviderPanel.SuspendLayout()
         Me.AccountLockoutPanel.SuspendLayout()
-        Me.EnabledAccountLockdownPanel.SuspendLayout()
-        Me.AccountLockdownParametersPanel.SuspendLayout()
+        Me.EnabledAccountLockoutPanel.SuspendLayout()
+        Me.AccountLockoutParametersPanel.SuspendLayout()
         CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown7, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -436,33 +438,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode1.Name = "Nodo0"
-        TreeNode1.Text = "Welcome"
-        TreeNode2.Name = "Nodo1"
-        TreeNode2.Text = "Regional Configuration"
-        TreeNode3.Name = "Nodo2"
-        TreeNode3.Text = "Basic System Configuration"
-        TreeNode4.Name = "Nodo3"
-        TreeNode4.Text = "Time Zone"
-        TreeNode5.Name = "Nodo4"
-        TreeNode5.Text = "Disk Configuration"
-        TreeNode6.Name = "Nodo5"
-        TreeNode6.Text = "Product Key"
-        TreeNode7.Name = "Nodo6"
-        TreeNode7.Text = "User Accounts"
-        TreeNode8.Name = "Nodo9"
-        TreeNode8.Text = "Virtual Machine Support"
-        TreeNode9.Name = "Nodo10"
-        TreeNode9.Text = "Wireless Networking"
-        TreeNode10.Name = "Nodo11"
-        TreeNode10.Text = "System Telemetry"
-        TreeNode11.Name = "Nodo12"
-        TreeNode11.Text = "Post-Installation Scripts"
-        TreeNode12.Name = "Nodo13"
-        TreeNode12.Text = "Component Settings"
-        TreeNode13.Name = "Nodo14"
-        TreeNode13.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
+        TreeNode40.Name = "Nodo0"
+        TreeNode40.Text = "Welcome"
+        TreeNode41.Name = "Nodo1"
+        TreeNode41.Text = "Regional Configuration"
+        TreeNode42.Name = "Nodo2"
+        TreeNode42.Text = "Basic System Configuration"
+        TreeNode43.Name = "Nodo3"
+        TreeNode43.Text = "Time Zone"
+        TreeNode44.Name = "Nodo4"
+        TreeNode44.Text = "Disk Configuration"
+        TreeNode45.Name = "Nodo5"
+        TreeNode45.Text = "Product Key"
+        TreeNode46.Name = "Nodo6"
+        TreeNode46.Text = "User Accounts"
+        TreeNode47.Name = "Nodo9"
+        TreeNode47.Text = "Virtual Machine Support"
+        TreeNode48.Name = "Nodo10"
+        TreeNode48.Text = "Wireless Networking"
+        TreeNode49.Name = "Nodo11"
+        TreeNode49.Text = "System Telemetry"
+        TreeNode50.Name = "Nodo12"
+        TreeNode50.Text = "Post-Installation Scripts"
+        TreeNode51.Name = "Nodo13"
+        TreeNode51.Text = "Component Settings"
+        TreeNode52.Name = "Nodo14"
+        TreeNode52.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode40, TreeNode41, TreeNode42, TreeNode43, TreeNode44, TreeNode45, TreeNode46, TreeNode47, TreeNode48, TreeNode49, TreeNode50, TreeNode51, TreeNode52})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -1384,7 +1386,7 @@ Partial Class NewUnattendWiz
         'AccountLockoutPanel
         '
         Me.AccountLockoutPanel.Controls.Add(Me.Label44)
-        Me.AccountLockoutPanel.Controls.Add(Me.EnabledAccountLockdownPanel)
+        Me.AccountLockoutPanel.Controls.Add(Me.EnabledAccountLockoutPanel)
         Me.AccountLockoutPanel.Controls.Add(Me.CheckBox13)
         Me.AccountLockoutPanel.Controls.Add(Me.AccountLockdownHeader)
         Me.AccountLockoutPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -1404,35 +1406,35 @@ Partial Class NewUnattendWiz
         Me.Label44.Text = "Checking this option will make the target installation more vulnerable to brute-f" & _
     "orce attacks"
         '
-        'EnabledAccountLockdownPanel
+        'EnabledAccountLockoutPanel
         '
-        Me.EnabledAccountLockdownPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.EnabledAccountLockoutPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.EnabledAccountLockdownPanel.Controls.Add(Me.AccountLockdownParametersPanel)
-        Me.EnabledAccountLockdownPanel.Controls.Add(Me.RadioButton22)
-        Me.EnabledAccountLockdownPanel.Controls.Add(Me.RadioButton21)
-        Me.EnabledAccountLockdownPanel.Location = New System.Drawing.Point(57, 65)
-        Me.EnabledAccountLockdownPanel.Name = "EnabledAccountLockdownPanel"
-        Me.EnabledAccountLockdownPanel.Size = New System.Drawing.Size(906, 318)
-        Me.EnabledAccountLockdownPanel.TabIndex = 12
+        Me.EnabledAccountLockoutPanel.Controls.Add(Me.AccountLockoutParametersPanel)
+        Me.EnabledAccountLockoutPanel.Controls.Add(Me.RadioButton22)
+        Me.EnabledAccountLockoutPanel.Controls.Add(Me.RadioButton21)
+        Me.EnabledAccountLockoutPanel.Location = New System.Drawing.Point(57, 65)
+        Me.EnabledAccountLockoutPanel.Name = "EnabledAccountLockoutPanel"
+        Me.EnabledAccountLockoutPanel.Size = New System.Drawing.Size(906, 318)
+        Me.EnabledAccountLockoutPanel.TabIndex = 12
         '
-        'AccountLockdownParametersPanel
+        'AccountLockoutParametersPanel
         '
-        Me.AccountLockdownParametersPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.AccountLockoutParametersPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown8)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown7)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.NumericUpDown6)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label43)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label42)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label41)
-        Me.AccountLockdownParametersPanel.Controls.Add(Me.Label40)
-        Me.AccountLockdownParametersPanel.Enabled = False
-        Me.AccountLockdownParametersPanel.Location = New System.Drawing.Point(27, 54)
-        Me.AccountLockdownParametersPanel.Name = "AccountLockdownParametersPanel"
-        Me.AccountLockdownParametersPanel.Size = New System.Drawing.Size(858, 139)
-        Me.AccountLockdownParametersPanel.TabIndex = 10
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.NumericUpDown8)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.NumericUpDown7)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.NumericUpDown6)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label43)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label42)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label41)
+        Me.AccountLockoutParametersPanel.Controls.Add(Me.Label40)
+        Me.AccountLockoutParametersPanel.Enabled = False
+        Me.AccountLockoutParametersPanel.Location = New System.Drawing.Point(27, 54)
+        Me.AccountLockoutParametersPanel.Name = "AccountLockoutParametersPanel"
+        Me.AccountLockoutParametersPanel.Size = New System.Drawing.Size(858, 139)
+        Me.AccountLockoutParametersPanel.TabIndex = 10
         '
         'NumericUpDown8
         '
@@ -2261,7 +2263,7 @@ Partial Class NewUnattendWiz
         Me.ComboBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox6.FormattingEnabled = True
-        Me.ComboBox6.Items.AddRange(New Object() {"Education", "Education N", "Home", "Home N", "Home Single Language", "Pro", "Pro Education", "Pro Education N", "Pro for Workstations", "Pro N", "Pro N for Workstations", "Enterprise"})
+        Me.ComboBox6.Items.AddRange(New Object() {"Education", "Education N", "Home", "Home N", "Home Single Language", "Pro", "Pro Education", "Pro Education N", "Pro for Workstations", "Pro N", "Pro N for Workstations", "Enterprise", "Enterprise N"})
         Me.ComboBox6.Location = New System.Drawing.Point(262, 8)
         Me.ComboBox6.Name = "ComboBox6"
         Me.ComboBox6.Size = New System.Drawing.Size(583, 21)
@@ -2843,7 +2845,9 @@ Partial Class NewUnattendWiz
         '
         'SysConfigPanel
         '
+        Me.SysConfigPanel.Controls.Add(Me.CheckBox19)
         Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
+        Me.SysConfigPanel.Controls.Add(Me.Label62)
         Me.SysConfigPanel.Controls.Add(Me.Label15)
         Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
         Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
@@ -3340,7 +3344,7 @@ Partial Class NewUnattendWiz
         Me.FontSizeTSCB.Items.AddRange(New Object() {"8", "9", "10", "11", "12", "14", "16", "18", "20", "24", "28", "36", "48", "72", "96"})
         Me.FontSizeTSCB.Name = "FontSizeTSCB"
         Me.FontSizeTSCB.Size = New System.Drawing.Size(75, 28)
-        Me.FontSizeTSCB.Text = "10"
+        Me.FontSizeTSCB.Text = "11"
         '
         'ToolStripSeparator5
         '
@@ -3543,6 +3547,27 @@ Partial Class NewUnattendWiz
         '
         Me.EditorModeSFD.Filter = "Answer files|*.xml"
         '
+        'CheckBox19
+        '
+        Me.CheckBox19.AutoSize = True
+        Me.CheckBox19.Location = New System.Drawing.Point(55, 466)
+        Me.CheckBox19.Name = "CheckBox19"
+        Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
+        Me.CheckBox19.TabIndex = 9
+        Me.CheckBox19.Text = "Use a configuration set or distribution share"
+        Me.CheckBox19.UseVisualStyleBackColor = True
+        '
+        'Label62
+        '
+        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label62.AutoEllipsis = True
+        Me.Label62.Location = New System.Drawing.Point(71, 489)
+        Me.Label62.Name = "Label62"
+        Me.Label62.Size = New System.Drawing.Size(872, 33)
+        Me.Label62.TabIndex = 1
+        Me.Label62.Text = resources.GetString("Label62.Text")
+        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3605,10 +3630,10 @@ Partial Class NewUnattendWiz
         Me.VMProviderPanel.PerformLayout()
         Me.AccountLockoutPanel.ResumeLayout(False)
         Me.AccountLockoutPanel.PerformLayout()
-        Me.EnabledAccountLockdownPanel.ResumeLayout(False)
-        Me.EnabledAccountLockdownPanel.PerformLayout()
-        Me.AccountLockdownParametersPanel.ResumeLayout(False)
-        Me.AccountLockdownParametersPanel.PerformLayout()
+        Me.EnabledAccountLockoutPanel.ResumeLayout(False)
+        Me.EnabledAccountLockoutPanel.PerformLayout()
+        Me.AccountLockoutParametersPanel.ResumeLayout(False)
+        Me.AccountLockoutParametersPanel.PerformLayout()
         CType(Me.NumericUpDown8, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown7, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.NumericUpDown6, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3874,8 +3899,8 @@ Partial Class NewUnattendWiz
     Friend WithEvents PWExpirationHeader As System.Windows.Forms.Label
     Friend WithEvents AccountLockoutPanel As System.Windows.Forms.Panel
     Friend WithEvents Label44 As System.Windows.Forms.Label
-    Friend WithEvents EnabledAccountLockdownPanel As System.Windows.Forms.Panel
-    Friend WithEvents AccountLockdownParametersPanel As System.Windows.Forms.Panel
+    Friend WithEvents EnabledAccountLockoutPanel As System.Windows.Forms.Panel
+    Friend WithEvents AccountLockoutParametersPanel As System.Windows.Forms.Panel
     Friend WithEvents NumericUpDown8 As System.Windows.Forms.NumericUpDown
     Friend WithEvents NumericUpDown7 As System.Windows.Forms.NumericUpDown
     Friend WithEvents NumericUpDown6 As System.Windows.Forms.NumericUpDown
@@ -3971,4 +3996,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents CheckBox18 As System.Windows.Forms.CheckBox
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents CNameTTip As System.Windows.Forms.ToolTip
+    Friend WithEvents CheckBox19 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label62 As System.Windows.Forms.Label
 End Class

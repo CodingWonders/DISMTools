@@ -1,4 +1,5 @@
 ﻿Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace Elements
 
@@ -13,6 +14,10 @@ Namespace Elements
 
         <XmlAttribute("Description")>
         Public Property VideoDesc As String
+
+        Public Overrides Function ToString() As String
+            Return "YouTube video with ID: " & Me.YT_ID & "; CW-specified video name: " & Quote & Me.VideoName & Quote & "; CW-specified video desc: " & Quote & Me.VideoDesc & Quote
+        End Function
 
     End Class
 

@@ -75,6 +75,7 @@ Public Class PleaseWaitDialog
         End If
         Refresh()
         If ProgressPanel.OperationNum = 0 Then
+            DynaLog.LogMessage("Extracting values from project settings...")
             ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(NewProj.TextBox2.Text & "\" & NewProj.TextBox1.Text & "\" & "settings\project.ini", ASCII)
             ProjectValueLoadForm.RichTextBox2.Text = ProjectValueLoadForm.RichTextBox1.Lines(1).ToString().Replace("Name=", "").Trim().Replace(Quote, "").Trim()
             ProjectValueLoadForm.RichTextBox3.Text = ProjectValueLoadForm.RichTextBox1.Lines(2).ToString().Replace("Location=", "").Trim().Replace(Quote, "").Trim()
@@ -105,6 +106,7 @@ Public Class PleaseWaitDialog
                 ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox22.Text)).ToString().Replace(" +00:00", "").Trim()
                 ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox23.Text)).ToString().Replace(" +00:00", "").Trim()
             Catch ex As Exception
+                DynaLog.LogMessage("Could not perform UNIX Epoch conversion. Error message: " & ex.Message)
                 ProjectValueLoadForm.EpochRTB2.Text = "Not available"
                 ProjectValueLoadForm.EpochRTB3.Text = "Not available"
             End Try
@@ -123,6 +125,7 @@ Public Class PleaseWaitDialog
                 MainForm.IsImageMounted = False
             End If
         ElseIf ProgressPanel.OperationNum = 990 Then
+            DynaLog.LogMessage("Extracting values from project settings...")
             ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(MainForm.projPath & "\" & "settings\project.ini", ASCII)
             ProjectValueLoadForm.RichTextBox2.Text = ProjectValueLoadForm.RichTextBox1.Lines(1).ToString().Replace("Name=", "").Trim().Replace(Quote, "").Trim()
             ProjectValueLoadForm.RichTextBox3.Text = ProjectValueLoadForm.RichTextBox1.Lines(2).ToString().Replace("Location=", "").Trim().Replace(Quote, "").Trim()
@@ -153,6 +156,7 @@ Public Class PleaseWaitDialog
                 ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox22.Text)).ToString().Replace(" +00:00", "").Trim()
                 ProjectValueLoadForm.EpochRTB3.Text = DateTimeOffset.FromUnixTimeSeconds(CInt(ProjectValueLoadForm.RichTextBox23.Text)).ToString().Replace(" +00:00", "").Trim()
             Catch ex As Exception
+                DynaLog.LogMessage("Could not perform UNIX Epoch conversion. Error message: " & ex.Message)
                 ProjectValueLoadForm.EpochRTB2.Text = "Not available"
                 ProjectValueLoadForm.EpochRTB3.Text = "Not available"
             End Try
@@ -181,12 +185,14 @@ Public Class PleaseWaitDialog
             Visible = False
             BGProcsBusyDialog.ShowDialog(MainForm)
         ElseIf ProgressPanel.OperationNum = 995 Then
+            DynaLog.LogMessage("Waiting until mounted image detector has stopped...")
             If MainForm.MountedImageDetectorBW.CancellationPending Then
                 While MainForm.MountedImageDetectorBW.IsBusy
                     Application.DoEvents()
                     Thread.Sleep(100)
                 End While
             End If
+            DynaLog.LogMessage("Getting image file information...")
             Dim imgInfoCollection As DismImageInfoCollection = Nothing
             Try
                 imgInfoCollection = DismApi.GetImageInfo(indexesSourceImg)

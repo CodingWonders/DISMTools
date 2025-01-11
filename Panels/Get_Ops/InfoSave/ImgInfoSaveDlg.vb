@@ -2546,6 +2546,9 @@ Public Class ImgInfoSaveDlg
 
         If OfflineMode Then SourceImage = ImgMountDir
 
+        ' Disable logger to avoid degraded performance
+        DynaLog.DisableLogging()
+
         ' Begin performing operations
         Select Case SaveTask
             Case 0
@@ -2618,6 +2621,9 @@ Public Class ImgInfoSaveDlg
         End Select
         ReportChanges(saveMsg, ProgressBar1.Maximum)
         TaskbarHelper.SetIndicatorState(ProgressBar1.Maximum, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
+
+        ' Enable the logger again
+        DynaLog.EnableLogging()
 
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)

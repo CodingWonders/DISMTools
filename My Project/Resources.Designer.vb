@@ -1969,20 +1969,12 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes:
-        '''
-        '''- Fixed some visual issues in the testing environment creator
-        '''
-        '''-- New features:
-        '''
-        '''- The unattended answer file features have seen several improvements:
-        '''  - UnattendGen has been updated to the latest version. This now requires .NET 9 to function
-        '''  - Duplicate user account detection has been added
-        '''  - User validation errors are more meaningful
-        '''  - Invalid characters are automatically trimmed from user names
-        '''  - Account checks have been added to block [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
+        '''- Fixed an issue where Windows 8 and 10 detection functions for background processes would sometimes throw exceptions (#206, thanks @arielsil for spotting)
+        '''- Fixed an issue where background processes would sometimes not start after mounting a Windows image, causing you to reload the projects (#208, #210, thanks @novice55 for spotting)
+        '''- Fixed an issue where the pro [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

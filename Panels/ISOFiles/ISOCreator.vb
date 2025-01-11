@@ -370,12 +370,16 @@ Public Class ISOCreator
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Source image file to test: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
     End Sub
 
     Sub GetImageInfo(ImageFile As String)
+        DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
+        DynaLog.LogMessage("Checking if mounted image detector is busy...")
         ListView1.Items.Clear()
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
             MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
@@ -383,25 +387,33 @@ Public Class ISOCreator
                 Thread.Sleep(500)
             End While
         End If
+        DynaLog.LogMessage("Checking if image status watchers are busy...")
         MainForm.WatcherTimer.Enabled = False
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
         Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
-            For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                ListView1.Items.Add(New ListViewItem(New String() {
-                                                     (ImageInfoCollection.IndexOf(ImageInfo) + 1),
-                                                     ImageInfo.ImageName,
-                                                     ImageInfo.ImageDescription,
-                                                     ImageInfo.ProductVersion.ToString(),
-                                                     Casters.CastDismArchitecture(ImageInfo.Architecture)
-                                                 }))
-            Next
+            DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
+            If ImageInfoCollection.Count > 0 Then
+                DynaLog.LogMessage("This file has images. Updating lists...")
+                For Each ImageInfo As DismImageInfo In ImageInfoCollection
+                    ListView1.Items.Add(New ListViewItem(New String() {
+                                                         (ImageInfoCollection.IndexOf(ImageInfo) + 1),
+                                                         ImageInfo.ImageName,
+                                                         ImageInfo.ImageDescription,
+                                                         ImageInfo.ProductVersion.ToString(),
+                                                         Casters.CastDismArchitecture(ImageInfo.Architecture)
+                                                     }))
+                Next
+            End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -430,20 +442,26 @@ Public Class ISOCreator
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
+            DynaLog.LogMessage("Shutting down API...")
             Try
                 DismApi.Shutdown()
             Catch ex As Exception
                 ' Don't do anything
             End Try
         End Try
+        DynaLog.LogMessage("This process has finished.")
         Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        DynaLog.LogMessage("Specified destination: " & Quote & SaveFileDialog1.FileName & Quote)
         TextBox3.Text = SaveFileDialog1.FileName
     End Sub
 
     Private Sub OK_Button_Click(sender As Object, e As EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Checking provided information...")
+        DynaLog.LogMessage("- Source image to add to ISO file: " & Quote & TextBox1.Text & Quote)
+        DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
         If TextBox1.Text = "" OrElse Not File.Exists(TextBox1.Text) Then
             Select Case MainForm.Language
                 Case 0
@@ -574,12 +592,19 @@ Public Class ISOCreator
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         BackgroundWorker1.ReportProgress(0)
+        DynaLog.LogMessage("Starting PE Helper...")
+        DynaLog.LogMessage("- Task: generate ISO")
+        DynaLog.LogMessage("- Architecture: " & ComboBox1.SelectedItem)
+        DynaLog.LogMessage("- Image file to test: " & Quote & TextBox1.Text & Quote)
+        DynaLog.LogMessage("- Unattended answer file to try: " & Quote & TextBox4.Text & Quote)
+        DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
         ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote
         ISOCreator.Start()
         ISOCreator.WaitForExit()
+        DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
         success = (ISOCreator.ExitCode = 0)
         BackgroundWorker1.ReportProgress(100)
     End Sub
@@ -600,6 +625,8 @@ Public Class ISOCreator
     End Sub
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
+        DynaLog.LogMessage("The PE Helper has finished.")
+        DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0
@@ -636,6 +663,7 @@ Public Class ISOCreator
 
     Private Sub ISOCreator_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If BackgroundWorker1.IsBusy Then
+            DynaLog.LogMessage("The PE Helper is busy. Cancelling exit...")
             e.Cancel = True
             Beep()
         End If
@@ -644,12 +672,14 @@ Public Class ISOCreator
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         PopupImageManager.Location = Button2.PointToScreen(Point.Empty)
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            DynaLog.LogMessage("Selected image: " & PopupImageManager.selectedImgFile)
             TextBox1.Text = PopupImageManager.selectedImgFile
         End If
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("The specified file exists. Getting information...")
             GetImageInfo(TextBox1.Text)
         End If
     End Sub
@@ -699,6 +729,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+        DynaLog.LogMessage("Unattended answer file to test: " & Quote & OpenFileDialog2.FileName & Quote)
         TextBox4.Text = OpenFileDialog2.FileName
     End Sub
 

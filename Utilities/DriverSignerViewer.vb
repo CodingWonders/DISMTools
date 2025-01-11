@@ -33,6 +33,7 @@ Namespace Utilities
         End Structure
 
         Public Shared Function GetSignerInfo(drvPath As String) As String
+            DynaLog.LogMessage("Preparing to get driver signer information...")
             Const ERROR_AUTHENTICODE_TRUSTED_PUBLISHER As Integer = CInt(&HE0000241)
             Const ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED As Integer = CInt(&HE0000242)
 
@@ -44,8 +45,10 @@ Namespace Utilities
                 (Marshal.GetLastWin32Error() = ERROR_AUTHENTICODE_TRUSTED_PUBLISHER OrElse
                  Marshal.GetLastWin32Error() = ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED) AndAlso
              Not String.IsNullOrEmpty(signerInfo.DigitalSigner) Then
+                DynaLog.LogMessage("Driver signer information could be obtained successfully. Signer name: " & signerInfo.DigitalSigner)
                 Return signerInfo.DigitalSigner
             Else
+                DynaLog.LogMessage("Driver signer information could not be obtained.")
                 Return String.Empty
             End If
 

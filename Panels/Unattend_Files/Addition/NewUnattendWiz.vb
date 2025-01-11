@@ -16,7 +16,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24122"
+    Dim UnattendGenReleaseTag As String = "2511"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -33,6 +33,7 @@ Public Class NewUnattendWiz
     Dim SelectedArchitecture As New DismProcessorArchitecture()
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
+    Dim UseConfigSet As Boolean
 
     ' Time Zone Panel
     Dim TimeOffsets As New List(Of TimeOffset)
@@ -55,7 +56,7 @@ Public Class NewUnattendWiz
     Dim AutoLogon As New AutoLogonSettings()
     Dim PasswordObfuscate As Boolean
     Dim SelectedExpirationSettings As New PasswordExpirationSettings()
-    Dim SelectedLockdownSettings As New AccountLockdownSettings()
+    Dim SelectedLockoutSettings As New AccountLockoutSettings()
 
     ' Virtual Machine Panel
     Dim VirtualMachineSupported As Boolean
@@ -84,7 +85,7 @@ Public Class NewUnattendWiz
     Dim DefaultOffset As New TimeOffset()
     Dim DefaultDiskConfiguration As New DiskConfiguration()
     Dim DefaultExpirationSettings As New PasswordExpirationSettings()
-    Dim DefaultLockdownSettings As New AccountLockdownSettings()
+    Dim DefaultLockoutSettings As New AccountLockoutSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
     Dim DefaultSystemComponents As New List(Of Component)
@@ -105,10 +106,15 @@ Public Class NewUnattendWiz
     ''' <param name="fntSize">The size of the font used in the Scintilla editor</param>
     ''' <remarks></remarks>
     Sub InitScintilla(fntName As String, fntSize As Integer)
+        DynaLog.LogMessage("Initializing the Scintilla Editor...")
+        DynaLog.LogMessage("- Font name: " & fntName)
+        DynaLog.LogMessage("- Font size: " & fntSize)
         ' Initialize Scintilla editor
+        DynaLog.LogMessage("Resetting styles...")
         Scintilla1.StyleResetDefault()
         Scintilla2.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
+        DynaLog.LogMessage("Setting colors for selection...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
@@ -122,6 +128,7 @@ Public Class NewUnattendWiz
         Scintilla2.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
+        DynaLog.LogMessage("Setting colors for styles...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla1.Styles(Style.Default).ForeColor = Color.White
@@ -141,6 +148,7 @@ Public Class NewUnattendWiz
         Scintilla2.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
+        DynaLog.LogMessage("Setting colors for XML lexer...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
@@ -176,6 +184,7 @@ Public Class NewUnattendWiz
         Scintilla1.LexerName = "xml"
 
         ' Set line number margin properties
+        DynaLog.LogMessage("Setting colors for line margin...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
@@ -197,6 +206,7 @@ Public Class NewUnattendWiz
         Margin.Mask = 0
 
         ' Initialize code folding
+        DynaLog.LogMessage("Setting code folding...")
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
@@ -207,6 +217,7 @@ Public Class NewUnattendWiz
         Scintilla2.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
+        DynaLog.LogMessage("Seting bookmark margins...")
         Dim Bookmarks = Scintilla1.Margins(2)
         Bookmarks.Width = 20
         Bookmarks.Sensitive = True
@@ -229,11 +240,13 @@ Public Class NewUnattendWiz
         Marker.SetAlpha(100)
 
         ' Set editor caret settings
+        DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
         Scintilla2.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
+        DynaLog.LogMessage("Setting margins for code folding...")
         Scintilla1.Margins(3).Type = MarginType.Symbol
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
@@ -244,6 +257,7 @@ Public Class NewUnattendWiz
         Scintilla2.Margins(3).Width = 1
 
         ' Set colors for all folding markers
+        DynaLog.LogMessage("Setting colors for folding markers...")
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
@@ -252,6 +266,7 @@ Public Class NewUnattendWiz
         Next
 
         ' Folding marker configuration
+        DynaLog.LogMessage("Setting folding marker...")
         Scintilla1.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
         Scintilla1.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
         Scintilla1.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
@@ -268,11 +283,15 @@ Public Class NewUnattendWiz
         Scintilla2.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
+        DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+
+        DynaLog.LogMessage("Scintilla editor initialization complete.")
     End Sub
 
     Function NewKeyVar(key As String) As ProductKey
+        DynaLog.LogMessage("Creating key object with product key " & Quote & key & Quote & "...")
         Dim pKey As New ProductKey()
         pKey.Valid = True
         pKey.Key = key
@@ -280,6 +299,8 @@ Public Class NewUnattendWiz
     End Function
 
     Sub SetDefaultSettings()
+        DynaLog.LogMessage("Setting default configuration...")
+        DynaLog.LogMessage("Setting default regional settings and time offsets...")
         DefaultLanguage.Id = "en-US"
         DefaultLanguage.DisplayName = "English"
         DefaultLocale.Id = "en-US"
@@ -294,6 +315,7 @@ Public Class NewUnattendWiz
         DefaultGeoId.DisplayName = "United States"
         DefaultOffset.Id = "UTC"
         DefaultOffset.DisplayName = "(UTC) Coordinated Universal Time"
+        DynaLog.LogMessage("Setting default disk configuration...")
         DefaultDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0
         DefaultDiskConfiguration.PartStyle = PartitionStyle.GPT
         DefaultDiskConfiguration.ESPSize = 300
@@ -305,6 +327,7 @@ Public Class NewUnattendWiz
         DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = 0
         DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = 3
 
+        DynaLog.LogMessage("Adding generic product keys...")
         GenericKeys.Add(NewKeyVar("YNMGQ-8RYV3-4PGQ3-C8XTP-7CFBY"))     ' Education
         GenericKeys.Add(NewKeyVar("84NGF-MHBT6-FXBX8-QWJK7-DRR8H"))     ' Education N
         GenericKeys.Add(NewKeyVar("YTMG3-N6DKC-DKB77-7M9GH-8HVX7"))     ' Home
@@ -317,20 +340,26 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
         GenericKeys.Add(NewKeyVar("XGVPP-NMH47-7TTHJ-W3FW7-8HV2C"))     ' Enterprise
+        GenericKeys.Add(NewKeyVar("WGGHN-J84D6-QYCPR-T7PJ7-X766F"))     ' Enterprise N
 
+        DynaLog.LogMessage("Adding default users. 1 Admin and 4 unused Users...")
         UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
         For i = 1 To 4
             UserAccountsList.Add(New User(False, "", "", UserGroup.Users))
         Next
 
+        DynaLog.LogMessage("Setting default password expiration configuration...")
         DefaultExpirationSettings.Mode = PasswordExpirationMode.NIST_Unlimited
         DefaultExpirationSettings.Days = 42
-        DefaultLockdownSettings.Enabled = True
-        DefaultLockdownSettings.DefaultPolicy = True
-        DefaultLockdownSettings.TimedLockdownSettings.FailedAttempts = 10
-        DefaultLockdownSettings.TimedLockdownSettings.Timeframe = 10
-        DefaultLockdownSettings.TimedLockdownSettings.AutoUnlockTime = 10
+        DynaLog.LogMessage("Setting default Account Lockout configuration...")
+        DefaultLockoutSettings.Enabled = True
+        DefaultLockoutSettings.DefaultPolicy = True
+        DefaultLockoutSettings.TimedLockoutSettings.FailedAttempts = 10
+        DefaultLockoutSettings.TimedLockoutSettings.Timeframe = 10
+        DefaultLockoutSettings.TimedLockoutSettings.AutoUnlockTime = 10
+        DynaLog.LogMessage("Setting default VM configuration...")
         DefaultVMSettings.Provider = VMProvider.VirtIO_Guest_Tools
+        DynaLog.LogMessage("Setting default wireless configuration...")
         DefaultNetworkConfiguration.SSID = ""
         DefaultNetworkConfiguration.ConnectWithoutBroadcast = False
         DefaultNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK
@@ -345,33 +374,47 @@ Public Class NewUnattendWiz
         SelectedDiskConfiguration = DefaultDiskConfiguration
         SelectedKey = GenericKeys(5)
         SelectedExpirationSettings = DefaultExpirationSettings
-        SelectedLockdownSettings = DefaultLockdownSettings
+        SelectedLockoutSettings = DefaultLockoutSettings
         SelectedVMSettings = DefaultVMSettings
         SelectedNetworkConfiguration = DefaultNetworkConfiguration
 
     End Sub
 
     Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
+        DynaLog.LogMessage("Detecting installed .NET Core-based runtimes...")
+        DynaLog.LogMessage("- .NET SDK version: " & SDKVersion)
+        DynaLog.LogMessage("- .NET Runtime version: " & RuntimeVersion)
+        DynaLog.LogMessage("Checking if UnattendGen is present...")
         If Not Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen")) Then
+            DynaLog.LogMessage("UnattendGen is not present. This copy of DISMTools is not complete.")
             DotNetRuntimeSupported = False
             Exit Sub
         End If
+        DynaLog.LogMessage("Checking if self-contained UnattendGen is present...")
         If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
+            DynaLog.LogMessage("Self-contained UnattendGen is present.")
             ' Self-contained version detected
             DotNetRuntimeSupported = True
             PreferSelfContained = True
             Exit Sub
         End If
+        DynaLog.LogMessage("Detecting if .NET installations have been made...")
+        DynaLog.LogMessage("Do not be confused. This is not .NET Framework.")
         If Not Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet")) Then
+            DynaLog.LogMessage("No installations have been made.")
             DotNetRuntimeSupported = False
             Exit Sub
         End If
+        DynaLog.LogMessage("Checking .NET SDK installations...")
         If Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\sdk", SDKVersion)) Then
+            DynaLog.LogMessage("A compatible .NET SDK installation has been detected.")
             ' .NET SDK exists, skip further checks
             DotNetRuntimeSupported = True
             Exit Sub
         End If
+        DynaLog.LogMessage("Checking .NET Runtime installations...")
         If My.Computer.FileSystem.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Count > 0 Then
+            DynaLog.LogMessage("A compatible .NET Runtime installation has been detected.")
             ' .NET Runtime exists, skip further checks
             DotNetRuntimeSupported = True
             Exit Sub
@@ -490,6 +533,9 @@ Public Class NewUnattendWiz
         DefaultContents = Scintilla1.Text
 
         SetDefaultSettings()
+
+        DynaLog.DisableLogging()
+
         ' System language
         If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
             ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
@@ -561,13 +607,19 @@ Public Class NewUnattendWiz
         ' Set default auth tech to WPA2
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
 
+        DynaLog.EnableLogging()
+
         ' Detect .NET runtimes/SDKs
         DetectDotNetRuntime("9.0.100", "9.0")
         If Not DotNetRuntimeSupported Then
+            DynaLog.LogMessage("Detections have concluded with no recognized .NET Core-based installations. The included copy of UnattendGen cannot be used.")
+            DynaLog.LogMessage("Asking user whether or not to download self-contained UnattendGen...")
             If MsgBox("This wizard requires the .NET 9 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+                DynaLog.LogMessage("Proceeding to download self-contained UnattendGen...")
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
             Else
+                DynaLog.LogMessage("No downloads will be performed.")
                 Close()
             End If
         Else
@@ -575,15 +627,19 @@ Public Class NewUnattendWiz
         End If
 
         ' Detect presence of Windows SIM
+        DynaLog.LogMessage("Checking if Windows System Image Manager (SIM) is present on the host system...")
         If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
                                     "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            DynaLog.LogMessage("Windows SIM is present on the host system.")
             LinkLabel6.Enabled = True
         Else
+            DynaLog.LogMessage("Windows SIM is not present on the host system. This can be installed with the default options of the ADK installer.")
             LinkLabel6.Enabled = False
         End If
     End Sub
 
     Sub ReloadSettings()
+        DynaLog.LogMessage("Restoring original wizard settings for a new answer file...")
         ' Restore regional configuration
         ComboBox1.SelectedItem = DefaultLanguage.DisplayName
         ComboBox2.SelectedItem = DefaultLocale.DisplayName
@@ -597,6 +653,7 @@ Public Class NewUnattendWiz
         CheckBox2.Checked = False
         CheckBox3.Checked = True
         TextBox1.Text = ""
+        CheckBox19.Checked = False
         ' Restore time zone
         ComboBox5.SelectedItem = DefaultOffset.DisplayName
         RadioButton1.Checked = True
@@ -680,6 +737,8 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
+        DynaLog.LogMessage("Changing current page of the wizard...")
+        DynaLog.LogMessage("New page to load: " & NewPage.ToString())
         If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
             If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
         ElseIf NewPage > CurrentWizardPage.WizardPage AndAlso NewPage = UnattendedWizardPage.Page.ReviewPage Then
@@ -749,10 +808,13 @@ Public Class NewUnattendWiz
 
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
+            DynaLog.LogMessage("Configuring save dialog initial location depending on whether or not a project is loaded...")
             ' Detect if a project has been loaded
             If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+                DynaLog.LogMessage("A project has been loaded and we are not managing any Windows installation.")
                 SaveFileDialog1.InitialDirectory = Path.Combine(MainForm.projPath, "unattend_xml")
             Else
+                DynaLog.LogMessage("Either no project has been loaded or we are managing a Windows installation.")
                 SaveFileDialog1.InitialDirectory = ""
             End If
             SaveFileDialog1.FileName = "autounattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
@@ -764,48 +826,65 @@ Public Class NewUnattendWiz
     End Sub
 
     Function VerifyOptionsInPage(WizardPage As UnattendedWizardPage.Page) As Boolean
+        DynaLog.LogMessage("Verifying user options before moving on to next page...")
+        DynaLog.LogMessage("Page in which we need to verify user settings: " & WizardPage.ToString())
         Select Case WizardPage
             Case UnattendedWizardPage.Page.SysConfigPage
+                DynaLog.LogMessage("Checking selected architectures...")
                 If ListBox1.SelectedItems.Count = 0 Then
+                    DynaLog.LogMessage("No architectures have been selected.")
                     MessageBox.Show("Please select an architecture and try again", "Validation error")
                     Return False
                 End If
                 If Not PCName.DefaultName Then
+                    DynaLog.LogMessage("Checking computer name...")
                     Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
                     If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
+                        DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
                         MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
                         Return False
                     End If
                 End If
             Case UnattendedWizardPage.Page.DiskConfigPage
+                DynaLog.LogMessage("Checking DiskPart script configuration (if the answer file will use it)...")
                 If Not DiskConfigurationInteractive AndAlso SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart AndAlso Scintilla2.Text = "" Then
+                    DynaLog.LogMessage("No script has been specified.")
                     MessageBox.Show("Please enter the contents of the DiskPart script and try again. You can also use a script file", "DiskPart Script error")
                     Return False
                 End If
             Case UnattendedWizardPage.Page.ProductKeyPage
                 If Not GenericChosen Then
+                    DynaLog.LogMessage("Checking user-specified product key...")
                     If TextBox3.Text = "" Then
+                        DynaLog.LogMessage("No product key has been specified.")
                         MessageBox.Show("Please type a product key and try again", "Product Key error")
                         Return False
                     ElseIf TextBox3.Text <> "" And TextBox3.Text.Length <> 29 Then
+                        DynaLog.LogMessage("Not all characters of the product key have been typed. Expected length: 29; Current length: " & TextBox3.Text.Length)
                         MessageBox.Show("Please type all of the product key and try again", "Product Key error")
                         Return False
                     ElseIf TextBox3.Text <> "" And TextBox3.Text.Length = 29 Then
+                        DynaLog.LogMessage("Validating product key...")
                         Dim pKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox3.Text)
                         If Not pKey.Valid Then
+                            DynaLog.LogMessage("Previously run regex match did not return results. This product key is bad.")
                             MessageBox.Show("The product key entered:" & CrLf & CrLf & TextBox3.Text & CrLf & CrLf & "is ill-formed. Please type it again", "Product Key error")
                             Return False
                         End If
                     End If
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
+                DynaLog.LogMessage("Validating user accounts...")
                 Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList, PCName)
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
+                    DynaLog.LogMessage("Validation has failed due to the reasons that appear above this line.")
                     MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
                 Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">"}
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
+                    DynaLog.LogMessage("Checking account names and groups...")
+                    DynaLog.LogMessage("This process will trim any invalid characters from user accounts automatically.")
                     Dim AtLeastOneAdmin As Boolean = False
                     If UserAccountsList.Count > 0 Then
                         For Each UserAccount As User In UserAccountsList
@@ -817,12 +896,16 @@ Public Class NewUnattendWiz
                         Next
                     End If
                     If Not AtLeastOneAdmin Then
+                        DynaLog.LogMessage("No users have been detected as part of the Administrators group. All users are part of the Users group.")
+                        DynaLog.LogMessage("At least one user must be part of the Administrators group.")
                         MessageBox.Show("At least one account must be part of the Administrators user group. Please configure the user groups accordingly and try again", "User Accounts error")
                         Return False
                     End If
                 End If
             Case UnattendedWizardPage.Page.NetworkConnectionsPage
+                DynaLog.LogMessage("Validating wireless settings if they have been specified...")
                 If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
+                    DynaLog.LogMessage("Wireless setting validation has failed.")
                     MessageBox.Show("There is a problem with the specified wireless settings. Make sure that you have specified a network name and try again", "Wireless Networks error")
                     Return False
                 End If
@@ -831,6 +914,7 @@ Public Class NewUnattendWiz
     End Function
 
     Sub ShowSettingOverview()
+        DynaLog.LogMessage("Showing overview of settings...")
         TextBox13.Clear()
         ' Display settings in the following order:
         TextBox13.Text = "Current configurations for the unattended answer file:" & CrLf
@@ -848,7 +932,8 @@ Public Class NewUnattendWiz
                              "- Windows 11 Settings:" & CrLf &
                              "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
                              "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
-                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf)
+                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf &
+                             "- Will a configuration set or distribution share be used? " & If(UseConfigSet, "Yes", "No") & CrLf)
         ' 3. -- TIME ZONE
         TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
         If Not TimeOffsetInteractive Then
@@ -911,11 +996,11 @@ Public Class NewUnattendWiz
                 TextBox13.AppendText("    - Expiration period: " & SelectedExpirationSettings.Days & " days" & CrLf)
             End If
         End If
-        TextBox13.AppendText("Account Lockout policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
-        If SelectedLockdownSettings.Enabled Then
-            TextBox13.AppendText("- Account Lockout policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
-            If Not SelectedLockdownSettings.DefaultPolicy Then
-                TextBox13.AppendText("    - After " & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & " failed attempts within " & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & " minutes, unlock account after " & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & " minutes" & CrLf)
+        TextBox13.AppendText("Account Lockout policy status: " & If(SelectedLockoutSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
+        If SelectedLockoutSettings.Enabled Then
+            TextBox13.AppendText("- Account Lockout policies: " & If(SelectedLockoutSettings.DefaultPolicy, "default", "custom") & CrLf)
+            If Not SelectedLockoutSettings.DefaultPolicy Then
+                TextBox13.AppendText("    - After " & SelectedLockoutSettings.TimedLockoutSettings.FailedAttempts & " failed attempts within " & SelectedLockoutSettings.TimedLockoutSettings.Timeframe & " minutes, unlock account after " & SelectedLockoutSettings.TimedLockoutSettings.AutoUnlockTime & " minutes" & CrLf)
             End If
         End If
         ' 7. -- VIRTUAL MACHINE SUPPORT
@@ -1159,6 +1244,7 @@ Public Class NewUnattendWiz
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         Try
             If New StackFrame(6).GetMethod().Name = "ReloadSettings" Then
+                DynaLog.LogMessage("The text box contents have been cleared by the setting reload method. Skipping checks...")
                 Exit Sub
             End If
         Catch ex As Exception
@@ -1423,25 +1509,25 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub CheckBox13_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox13.CheckedChanged
-        SelectedLockdownSettings.Enabled = CheckBox13.Checked
-        EnabledAccountLockdownPanel.Enabled = Not CheckBox13.Checked
+        SelectedLockoutSettings.Enabled = CheckBox13.Checked
+        EnabledAccountLockoutPanel.Enabled = Not CheckBox13.Checked
     End Sub
 
     Private Sub RadioButton21_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton21.CheckedChanged
-        SelectedLockdownSettings.DefaultPolicy = RadioButton21.Checked
-        AccountLockdownParametersPanel.Enabled = Not RadioButton21.Checked
+        SelectedLockoutSettings.DefaultPolicy = RadioButton21.Checked
+        AccountLockoutParametersPanel.Enabled = Not RadioButton21.Checked
     End Sub
 
     Private Sub NumericUpDown6_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown6.ValueChanged
-        SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts = NumericUpDown6.Value
+        SelectedLockoutSettings.TimedLockoutSettings.FailedAttempts = NumericUpDown6.Value
     End Sub
 
     Private Sub NumericUpDown7_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown7.ValueChanged
-        SelectedLockdownSettings.TimedLockdownSettings.Timeframe = NumericUpDown7.Value
+        SelectedLockoutSettings.TimedLockoutSettings.Timeframe = NumericUpDown7.Value
     End Sub
 
     Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
-        SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
+        SelectedLockoutSettings.TimedLockoutSettings.AutoUnlockTime = NumericUpDown8.Value
         NumericUpDown7.Maximum = NumericUpDown8.Value
     End Sub
 
@@ -1498,6 +1584,8 @@ Public Class NewUnattendWiz
     End Sub
 
     Function EditionIDFromDisplayName(displayName As String) As String
+        DynaLog.LogMessage("Grabbing target Edition ID from specified display name...")
+        DynaLog.LogMessage("Display name of edition: " & displayName)
         Select Case displayName
             Case "Home"
                 Return "home"
@@ -1523,43 +1611,58 @@ Public Class NewUnattendWiz
                 Return "pro_workstations_n"
             Case "Enterprise"
                 Return "enterprise"
+            Case "Enterprise N"
+                Return "enterprise_n"
         End Select
         Return ""
     End Function
 
     Private Sub UnattendGeneratorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGeneratorBW.DoWork
+        DynaLog.LogMessage("Preparing file generation...")
         ReportMessage("Preparing to generate file...", 0)
+        DynaLog.LogMessage("Checking save target...")
+        DynaLog.LogMessage("Save target: " & Quote & SaveTarget & Quote)
         If SaveTarget = "" Then
+            DynaLog.LogMessage("No save target has been specified. Cancelling...")
             e.Cancel = True
             Exit Sub
         End If
         ReportMessage("Preparing to generate file...", 0)
         Dim UnattendGen As New Process()
         ' Get most appropriate binary of UnattendGen
+        DynaLog.LogMessage("Getting the most appropriate UnattendGen executable...")
         If Environment.Is64BitOperatingSystem Then
+            DynaLog.LogMessage("This operating system is a 64-bit OS")
             If PreferSelfContained Then
+                DynaLog.LogMessage("The self-contained package will be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64")
             Else
+                DynaLog.LogMessage("The self-contained package will not be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64")
             End If
         Else
+            DynaLog.LogMessage("This operating system is a 32-bit OS")
             If PreferSelfContained Then
+                DynaLog.LogMessage("The self-contained package will be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86")
             Else
+                DynaLog.LogMessage("The self-contained package will not be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
             End If
         End If
         UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
         If Debugger.IsAttached Then
+            DynaLog.LogMessage("A debugger has been attached. Telling UnattendGen to show debug output...")
             UnattendGen.StartInfo.Arguments &= " /debug"
         End If
         Try
             ' Save settings to appropriate XML files
             ReportMessage("Saving user settings...", 2)
+            DynaLog.LogMessage("Saving regional settings...")
             Dim regSetContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                 "<root>" & CrLf &
                 "   <ImageLanguage Id=" & Quote & SelectedLanguage.Id & Quote & " DisplayName=" & Quote & SelectedLanguage.DisplayName & Quote & "/>" & CrLf &
@@ -1571,6 +1674,7 @@ Public Class NewUnattendWiz
             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
             UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
             ReportMessage("Saving user settings...", 4)
+            DynaLog.LogMessage("Saving architecture settings...")
             Select Case SelectedArchitecture
                 Case DismProcessorArchitecture.Intel
                     UnattendGen.StartInfo.Arguments &= " /architecture=x86"
@@ -1580,6 +1684,7 @@ Public Class NewUnattendWiz
                     UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
             End Select
             ReportMessage("Saving user settings...", 6)
+            DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
                 UnattendGen.StartInfo.Arguments &= " /LabConfig"
             End If
@@ -1587,18 +1692,28 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " /BypassNRO"
             End If
             ReportMessage("Saving user settings...", 8)
+            DynaLog.LogMessage("Saving computer settings...")
             If Not PCName.DefaultName Then
                 UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
             End If
+            DynaLog.LogMessage("Saving configuration set/distribution share settings...")
+            If UseConfigSet Then
+                UnattendGen.StartInfo.Arguments &= " /ConfigSet"
+            End If
             ReportMessage("Saving user settings...", 10)
+            DynaLog.LogMessage("Saving time zone settings...")
             If TimeOffsetInteractive Then
                 UnattendGen.StartInfo.Arguments &= " /tzImplicit"
             End If
             ReportMessage("Saving user settings...", 12)
+            DynaLog.LogMessage("Saving disk configuration...")
             If DiskConfigurationInteractive Then
+                DynaLog.LogMessage("Disks will be configured interactively.")
                 UnattendGen.StartInfo.Arguments &= " /partmode=interactive"
             Else
+                DynaLog.LogMessage("Disks will be configured in an unattended manner.")
                 If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
+                    DynaLog.LogMessage("Disk 0 will be configured automatically.")
                     UnattendGen.StartInfo.Arguments &= " /partmode=unattended"
                     Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
@@ -1606,6 +1721,7 @@ Public Class NewUnattendWiz
                         "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
                 ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
+                    DynaLog.LogMessage("Disks will be configured with a DiskPart script.")
                     UnattendGen.StartInfo.Arguments &= " /partmode=custom"
                     Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
@@ -1616,7 +1732,9 @@ Public Class NewUnattendWiz
                 End If
             End If
             ReportMessage("Saving user settings...", 14)
+            DynaLog.LogMessage("Saving edition settings...")
             If GenericChosen Then
+                DynaLog.LogMessage("A generic product key has been chosen.")
                 UnattendGen.StartInfo.Arguments &= " /generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
@@ -1624,20 +1742,24 @@ Public Class NewUnattendWiz
                     "</root>"
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
             Else
+                DynaLog.LogMessage("A custom product key has been chosen.")
                 UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
             End If
             If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
                 ReportMessage("Saving user settings...", 16)
+                DynaLog.LogMessage("Saving user accounts...")
                 UnattendGen.StartInfo.Arguments &= " /customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
                 If UserAccountsList.Count > 0 Then
                     For Each account As User In UserAccountsList
+                        DynaLog.LogMessage("Saving information of account " & Quote & account.Name & Quote & " to file...")
                         customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
                     Next
                     customUserContents &= "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
                     If AutoLogon.EnableAutoLogon Then
+                        DynaLog.LogMessage("Automatic logon will be used. Saving auto-logon settings.")
                         If AutoLogon.LogonMode = AutoLogonMode.FirstAdmin Then
                             UnattendGen.StartInfo.Arguments &= " /autologon=firstadmin"
                         ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
@@ -1650,40 +1772,45 @@ Public Class NewUnattendWiz
                         End If
                     End If
                     If PasswordObfuscate Then
+                        DynaLog.LogMessage("Passwords will be encoded with Base64.")
                         UnattendGen.StartInfo.Arguments &= " /b64obscure"
                     End If
                 Else
                     UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
                 End If
             ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
+                DynaLog.LogMessage("A Microsoft account is expected to be used in the target installation.")
                 ReportMessage("Saving user settings...", 16)
                 UnattendGen.StartInfo.Arguments &= " /msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
                 ReportMessage("Saving user settings...", 18)
+                DynaLog.LogMessage("Saving password expiration settings...")
                 UnattendGen.StartInfo.Arguments &= " /pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
             End If
             ReportMessage("Saving user settings...", 20)
-            If SelectedLockdownSettings.Enabled Then
+            DynaLog.LogMessage("Saving Account Lockout settings...")
+            If SelectedLockoutSettings.Enabled Then
                 UnattendGen.StartInfo.Arguments &= " /lockout=yes"
-                Dim lockdownContents As String = ""
-                If SelectedLockdownSettings.DefaultPolicy Then
-                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                Dim lockoutContents As String = ""
+                If SelectedLockoutSettings.DefaultPolicy Then
+                    lockoutContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <AccountLockout FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
                         "</root>"
                 Else
-                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    lockoutContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <AccountLockout FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
+                        "   <AccountLockout FailedAttempts=" & Quote & SelectedLockoutSettings.TimedLockoutSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockoutSettings.TimedLockoutSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockoutSettings.TimedLockoutSettings.AutoUnlockTime & Quote & " />" & CrLf &
                         "</root>"
                 End If
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockdownContents, UTF8)
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockoutContents, UTF8)
             Else
                 UnattendGen.StartInfo.Arguments &= " /lockout=no"
             End If
             If VirtualMachineSupported Then
                 ReportMessage("Saving user settings...", 22)
+                DynaLog.LogMessage("Saving VM provider settings...")
                 Select Case SelectedVMSettings.Provider
                     Case VMProvider.VirtualBox_GAs
                         UnattendGen.StartInfo.Arguments &= " /vm=vbox_gas"
@@ -1695,6 +1822,7 @@ Public Class NewUnattendWiz
             End If
             If Not NetworkConfigInteractive Then
                 ReportMessage("Saving user settings...", 24)
+                DynaLog.LogMessage("Saving wireless settings...")
                 If NetworkConfigManualSkip Then
                     UnattendGen.StartInfo.Arguments &= " /wifi=no"
                 Else
@@ -1708,6 +1836,7 @@ Public Class NewUnattendWiz
             End If
             If Not SystemTelemetryInteractive Then
                 ReportMessage("Saving user settings...", 24.5)
+                DynaLog.LogMessage("Saving system telemetry settings...")
                 If SelectedTelemetrySettings.Enabled Then
                     UnattendGen.StartInfo.Arguments &= " /telem=yes"
                 Else
@@ -1716,6 +1845,7 @@ Public Class NewUnattendWiz
             End If
             If FinalComponents.Count > 0 Then
                 ReportMessage("Saving user settings...", 24.75)
+                DynaLog.LogMessage("Saving custom components...")
                 UnattendGen.StartInfo.Arguments &= " /customcomponents"
                 Dim customComponentContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
@@ -1733,24 +1863,29 @@ Public Class NewUnattendWiz
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "components.xml"), customComponentContents, UTF8)
             End If
             ReportMessage("Generating unattended answer file...", 25)
+            DynaLog.LogMessage("Starting UnattendGen...")
             UnattendGen.Start()
             UnattendGen.WaitForExit()
+            DynaLog.LogMessage("UnattendGen finished with exit code " & Hex(UnattendGen.ExitCode))
             ReportMessage("Generating unattended answer file...", 50)
             ReportMessage("Deleting temporary files...", 75)
             If File.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp")) Then
+                DynaLog.LogMessage("Deleting temporary DiskPart scripts...")
                 File.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"))
             End If
+            DynaLog.LogMessage("Deleting temporary XML files...")
             For Each xmlFile In My.Computer.FileSystem.GetFiles(UnattendGen.StartInfo.WorkingDirectory, FileIO.SearchOption.SearchTopLevelOnly, "*.xml")
                 If File.Exists(xmlFile) Then File.Delete(xmlFile)
             Next
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested:" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
                 e.Cancel = True
             End If
             ReportMessage("Generation has completed", 100)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not generate the answer file. Error message: " & ex.Message)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error: " & ex.Message)
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested:" & CrLf & CrLf & "Error: " & ex.Message)
                 e.Cancel = True
             End If
         End Try
@@ -1792,6 +1927,7 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
         If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+            DynaLog.LogMessage("Proceeding to apply unattended answer file...")
             ApplyUnattendFile.TextBox1.Text = SaveTarget
             WindowState = FormWindowState.Minimized
             ApplyUnattendFile.ShowDialog(MainForm)
@@ -1850,9 +1986,11 @@ Public Class NewUnattendWiz
         Try
             ' Download UnattendGen and run it
             If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
+                DynaLog.LogMessage("Creating self-contained package directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
             End If
             Using UnattClient As New WebClient()
+                DynaLog.LogMessage("Downloading UnattendGen installer from the UnattendGen repository...")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
                 Dim contents As String = ""
                 Try
@@ -1861,10 +1999,12 @@ Public Class NewUnattendWiz
                     Throw ex
                 End Try
                 If contents <> "" Then
+                    DynaLog.LogMessage("Writing contents to file...")
                     File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
                 End If
             End Using
             If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                DynaLog.LogMessage("Installing self-contained UnattendGen...")
                 ' Run installer
                 Dim UAProc As New Process()
                 UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
@@ -1872,18 +2012,21 @@ Public Class NewUnattendWiz
                 UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & UnattendGenReleaseTag & Quote
                 UAProc.Start()
                 UAProc.WaitForExit()
+                DynaLog.LogMessage("UnattendGen installer finished with exit code " & Hex(UAProc.ExitCode))
                 If UAProc.ExitCode <> 0 Then
                     Throw New System.ComponentModel.Win32Exception(UAProc.ExitCode)
                 End If
             End If
             If File.Exists(Application.StartupPath & "\setup.ps1") Then
                 Try
+                    DynaLog.LogMessage("Attempting to delete temporary installer...")
                     File.Delete(Application.StartupPath & "\setup.ps1")
                 Catch ex As Exception
                     ' Don't delete it
                 End Try
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not download and install self-contained UnattendGen. Error message: " & ex.Message)
             Throw ex
         End Try
     End Sub
@@ -1916,8 +2059,11 @@ Public Class NewUnattendWiz
 
     Private Sub EditorModeOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeOFD.FileOk
         Try
+            DynaLog.LogMessage("Loading contents of file in editor...")
+            DynaLog.LogMessage("File to load: " & Quote & EditorModeOFD.FileName & Quote)
             Scintilla1.Text = File.ReadAllText(EditorModeOFD.FileName)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
             MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
         End Try
     End Sub
@@ -1928,8 +2074,11 @@ Public Class NewUnattendWiz
 
     Private Sub EditorModeSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeSFD.FileOk
         Try
+            DynaLog.LogMessage("Saving contents of editor to file...")
+            DynaLog.LogMessage("Destination: " & Quote & EditorModeSFD.FileName & Quote)
             File.WriteAllText(EditorModeSFD.FileName, Scintilla1.Text, UTF8)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not save file. Error message: " & ex.Message)
             MsgBox("Could not save file: " & ex.Message, vbOKOnly + vbCritical, Text)
         End Try
     End Sub
@@ -1986,6 +2135,10 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub ConfigureComponent(componentName As String, componentPass As String, componentPassEnabled As Boolean)
+        DynaLog.LogMessage("Configuring system component...")
+        DynaLog.LogMessage("- Component name: " & componentName)
+        DynaLog.LogMessage("- Component pass: " & componentPass)
+        DynaLog.LogMessage("- New state: " & If(componentPassEnabled, "enabled", "disabled"))
         If String.IsNullOrWhiteSpace(componentName) Then Exit Sub
         If String.IsNullOrWhiteSpace(componentPass) Then Exit Sub
         Dim componentNames As New List(Of String)
@@ -2002,20 +2155,23 @@ Public Class NewUnattendWiz
         Next
         ' Determine if the passed component ID "componentName" exists in the grabbed components
         If componentNames.Contains(componentName) Then
+            DynaLog.LogMessage("The specified component exists in the component list.")
             Dim placementIndex As Integer = componentNames.IndexOf(componentName)
             ' Grab pass to configure and configure it
             If Not knownPasses.ContainsKey(componentPass) Then
+                DynaLog.LogMessage("The specified pass does not exist in the pass list.")
                 MsgBox("The component pass " & componentPass & " does not exist in the pass list", vbOKOnly + vbCritical, Text)
                 Exit Sub
             End If
             Dim editedPass As Pass = SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass)
             If editedPass IsNot Nothing Then
                 editedPass.Enabled = componentPassEnabled
-                Debug.WriteLine("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
+                DynaLog.LogMessage("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
             Else
-
+                DynaLog.LogMessage("Could not edit the specified pass.")
             End If
         Else
+            DynaLog.LogMessage("The specified component does not exist in the component list.")
             MsgBox("The component " & componentName & " does not exist in the component list", vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
@@ -2120,14 +2276,18 @@ Public Class NewUnattendWiz
     Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
         If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
                                     "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            DynaLog.LogMessage("Starting Windows SIM...")
             Process.Start(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)), "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe"), Quote & SaveTarget & Quote)
         End If
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
         Try
+            DynaLog.LogMessage("Loading contents of file in editor...")
+            DynaLog.LogMessage("File to load: " & Quote & SaveTarget & Quote)
             Scintilla1.Text = File.ReadAllText(SaveTarget)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
             MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
             Exit Sub
         End Try
@@ -2149,10 +2309,15 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DynaLog.LogMessage("Grabbing computer name...")
         TextBox1.Text = My.Computer.Name
     End Sub
 
     Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
         CNameTTip.Show("Uses the name of your computer as the computer name of the unattended answer file." & CrLf & "Only use this if the system you want to target is this one", sender)
+    End Sub
+
+    Private Sub CheckBox19_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox19.CheckedChanged
+        UseConfigSet = CheckBox19.Checked
     End Sub
 End Class

@@ -12,17 +12,21 @@ Public Class ImgMount
     Dim IsReqField1Valid As Boolean
     Dim IsReqField2Valid As Boolean
     Dim IsReqField3Valid As Boolean
-    Dim IndexOperationMode As Integer       ' 0: Get-ImageInfo (Win8+); 1: Get-WimInfo (Win7)
     Dim DismVerChecker As FileVersionInfo
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Checking if the mount directory exists...")
         If Not Directory.Exists(TextBox2.Text) Then
+            DynaLog.LogMessage("The mount directory does not exist. Asking the user whether or not to create it...")
             MountOpDirCreationDialog.ShowDialog()
             If MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
                 Try
+                    DynaLog.LogMessage("The user wants the mount directory to be created. Attempting to create it...")
                     Directory.CreateDirectory(TextBox2.Text)
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not create the mount directory. Error message: " & ex.Message)
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -51,6 +55,7 @@ Public Class ImgMount
                     Exit Sub
                 End Try
             ElseIf MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.No Then
+                DynaLog.LogMessage("The user does not want the mount directory to be created.")
                 Exit Sub
             End If
         End If
@@ -424,18 +429,9 @@ Public Class ImgMount
         TextBox2.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         DismVerChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
-        Select Case DismVerChecker.ProductMajorPart
-            Case 6
-                Select Case DismVerChecker.ProductMinorPart
-                    Case 1
-                        IndexOperationMode = 1
-                        FileSpecDialog.Filter = "WIM files|*.wim"
-                    Case Is >= 2
-                        IndexOperationMode = 0
-                End Select
-            Case 10
-                IndexOperationMode = 0
-        End Select
+        If DismVerChecker.ProductMajorPart = 6 And DismVerChecker.ProductMinorPart = 1 Then
+            FileSpecDialog.Filter = "WIM files|*.wim"
+        End If
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -632,47 +628,79 @@ Public Class ImgMount
     End Sub
 
     Sub GetIndexes(ImgFile As String)
-        Try
-            If MainForm.MountedImageDetectorBW.IsBusy Then
-                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                MainForm.MountedImageDetectorBW.CancelAsync()
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            MainForm.WatcherTimer.Enabled = False
-            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-            While MainForm.WatcherBW.IsBusy
+        DynaLog.LogMessage("Image file to get information about: " & Quote & ImgFile & Quote)
+        DynaLog.LogMessage("Checking if mounted image detector is busy...")
+        If MainForm.MountedImageDetectorBW.IsBusy Then
+            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
+            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
+            MainForm.MountedImageDetectorBW.CancelAsync()
+            While MainForm.MountedImageDetectorBW.IsBusy
                 Application.DoEvents()
-                Thread.Sleep(100)
+                Thread.Sleep(500)
             End While
-            ListView1.Items.Clear()
+        End If
+        DynaLog.LogMessage("Checking if image status watchers are busy...")
+        MainForm.WatcherTimer.Enabled = False
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
+        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
+        While MainForm.WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        ListView1.Items.Clear()
+        Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(ImgFile)
+            DynaLog.LogMessage("Information collection count: " & imgInfoCollection.Count)
             NumericUpDown1.Maximum = imgInfoCollection.Count
-            For Each imgInfo As DismImageInfo In imgInfoCollection
-                ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
-            Next
-            DismApi.Shutdown()
-        Catch ex As AccessViolationException
-            If IndexOperationMode = 0 Then
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-imageinfo /imagefile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
-            ElseIf IndexOperationMode = 1 Then
-                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _
-                                  "@echo off" & CrLf & _
-                                  "dism /English /get-wiminfo /wimfile=" & ImgFile & " | find /c " & Quote & "Index" & Quote & " > .\indexcount", ASCII)
+            If imgInfoCollection.Count > 0 Then
+                DynaLog.LogMessage("This file has images. Updating list...")
+                For Each imgInfo As DismImageInfo In imgInfoCollection
+                    ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
+                Next
             End If
-            Process.Start(Application.StartupPath & "\bin\exthelpers\temp.bat").WaitForExit()
-            MainForm.imgIndexCount = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\indexcount"))
-            NumericUpDown1.Maximum = MainForm.imgIndexCount
-            File.Delete(Application.StartupPath & "\indexcount")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "ESN"
+                            msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "FRA"
+                            msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "PTB", "PTG"
+                            msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                        Case "ITA"
+                            msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                    End Select
+                Case 1
+                    msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 2
+                    msg = "No pudimos obtener información de este archivo de imagen. Razón:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 3
+                    msg = "Impossible de recueillir des informations sur ce fichier de l'image. Raison :" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 4
+                    msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                Case 5
+                    msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+            End Select
+            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+        Finally
+            Try
+                DynaLog.LogMessage("Shutting down API...")
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 
     Sub GetFields()
+        DynaLog.LogMessage("Checking fields...")
         IsReqField3Valid = True
         If TextBox1.Text = "" Then
             If ProgressPanel.OperationNum = 15 Then
@@ -708,8 +736,10 @@ Public Class ImgMount
             End If
         End If
         If IsReqField1Valid And IsReqField2Valid And IsReqField3Valid Then
+            DynaLog.LogMessage("All fields are valid.")
             OK_Button.Enabled = True
         Else
+            DynaLog.LogMessage("None or not all fields are valid.")
             OK_Button.Enabled = False
         End If
     End Sub
@@ -717,6 +747,7 @@ Public Class ImgMount
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         GetFields()
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+            DynaLog.LogMessage("The Windows image is already mounted.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -752,6 +783,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        DynaLog.LogMessage("Setting mount directory to be the one provided by the project...")
         If ProgressPanel.OperationNum = 0 Then
             If ProgressPanel.projPath = "" Then
                 TextBox2.Text = MainForm.projPath & "\mount"
@@ -774,6 +806,7 @@ Public Class ImgMount
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Beginning conversion from ESD to WIM...")
             IsReqField1Valid = False
             ImgWim2Esd.TextBox1.Text = TextBox1.Text
             ImgWim2Esd.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
@@ -781,10 +814,12 @@ Public Class ImgMount
             ImgWim2Esd.ShowDialog(MainForm)
             Show()
             If ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgWim2Esd.TextBox2.Text) Then
+                DynaLog.LogMessage("Conversion has been carried over successfully. Using newly created WIM file...")
                 TextBox1.Text = ImgWim2Esd.TextBox2.Text
                 Button3.Visible = False
                 Label4.Visible = False
             ElseIf ImgWim2Esd.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                DynaLog.LogMessage("No conversion has been made.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -812,6 +847,7 @@ Public Class ImgMount
                 End Select
             End If
         ElseIf Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Beginning merger of SWM files...")
             IsReqField1Valid = False
             ImgSwmToWim.TextBox1.Text = TextBox1.Text
             ImgSwmToWim.TextBox2.Text = TextBox1.Text.Replace(Path.GetExtension(TextBox1.Text), ".wim").Trim()
@@ -819,10 +855,12 @@ Public Class ImgMount
             ImgSwmToWim.ShowDialog(MainForm)
             Show()
             If ImgSwmToWim.DialogResult = Windows.Forms.DialogResult.OK And File.Exists(ImgSwmToWim.TextBox2.Text) Then
+                DynaLog.LogMessage("Merger has been carried over successfully. Using newly created WIM file...")
                 TextBox1.Text = ImgSwmToWim.TextBox2.Text
                 Button3.Visible = False
                 Label4.Visible = False
             ElseIf ImgSwmToWim.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                DynaLog.LogMessage("No merger has been made.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

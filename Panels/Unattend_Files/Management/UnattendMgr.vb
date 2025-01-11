@@ -25,21 +25,29 @@ Public Class UnattendMgr
     End Sub
 
     Sub ScanForUnattendFiles(folderPath As String)
+        DynaLog.LogMessage("Preparing to scan specified folder...")
+        DynaLog.LogMessage("- Specified folder for scan process: " & Quote & folderPath & Quote)
         Dim UnattendFiles() As String
         Dim errorMsg As String = ""
         ListView1.Items.Clear()
         Try
+            DynaLog.LogMessage("Checking if the folder exists...")
             If Directory.Exists(folderPath) Then
+                DynaLog.LogMessage("The folder exists. Checking absolute path...")
                 If folderPath.Contains("unattend_xml") Then
+                    DynaLog.LogMessage("The folder is part of a DISMTools project.")
                     UnattendFiles = Directory.GetFiles(folderPath, "*.xml", SearchOption.AllDirectories)
                 Else
                     If Directory.Exists(Path.Combine(folderPath, "unattend_xml")) Then
+                        DynaLog.LogMessage("The folder is a DISMTools project folder that contains the unattended answer file collection.")
                         UnattendFiles = Directory.GetFiles(Path.Combine(folderPath, "unattend_xml"), "*.xml", SearchOption.AllDirectories)
                     Else
+                        DynaLog.LogMessage("This folder is a regular directory.")
                         UnattendFiles = Directory.GetFiles(folderPath, "*.xml", SearchOption.AllDirectories)
                     End If
                 End If
             Else
+                DynaLog.LogMessage("The folder does not exist.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -68,10 +76,12 @@ Public Class UnattendMgr
                 Throw New Exception(errorMsg)
             End If
             If UnattendFiles.Length > 0 Then
+                DynaLog.LogMessage("Unattended answer files have been detected. Showing...")
                 For Each xmlFile In UnattendFiles
                     ListView1.Items.Add(New ListViewItem(New String() {Path.GetFileName(xmlFile), File.GetCreationTime(xmlFile), File.GetLastWriteTime(xmlFile), File.GetLastAccessTime(xmlFile)}))
                 Next
             Else
+                DynaLog.LogMessage("No unattended answer files have been detected.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -110,14 +120,17 @@ Public Class UnattendMgr
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Opening selected answer file...")
         Process.Start(Path.Combine(TextBox1.Text, ListView1.FocusedItem.SubItems(0).Text))
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DynaLog.LogMessage("Opening location of the selected answer file...")
         Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\explorer.exe", "/select," & Quote & Path.Combine(TextBox1.Text, ListView1.FocusedItem.SubItems(0).Text) & Quote)
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        DynaLog.LogMessage("Preparing to apply the selected answer file...")
         ApplyUnattendFile.TextBox1.Text = Path.Combine(TextBox1.Text, ListView1.FocusedItem.SubItems(0).Text)
         WindowState = FormWindowState.Minimized
         ApplyUnattendFile.ShowDialog(MainForm)

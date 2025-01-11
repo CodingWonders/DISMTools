@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class RemPackage
 
@@ -8,14 +9,19 @@ Public Class RemPackage
     Public pkgRemovalFiles(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         ProgressPanel.pkgRemovalSource = TextBox1.Text
+        DynaLog.LogMessage("Detecting packages to remove...")
         If RadioButton1.Checked Then
+            DynaLog.LogMessage("A selective removal of package files will be done.")
+            DynaLog.LogMessage("The selected items may not be even installed, but this is the least of our concerns.")
             pkgRemovalCount = CheckedListBox1.CheckedItems.Count
             ProgressPanel.pkgRemovalOp = 0
             ProgressPanel.pkgRemovalCount = pkgRemovalCount
             If CheckedListBox1.CheckedItems.Count <= 0 Then
+                DynaLog.LogMessage("No items have been added to the queue.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -61,10 +67,12 @@ Public Class RemPackage
                 ProgressPanel.pkgRemovalLastName = CheckedListBox1.CheckedItems(pkgRemovalCount - 1).ToString()
             End If
         Else
+            DynaLog.LogMessage("A selective removal of installed packages will be done.")
             pkgRemovalCount = CheckedListBox2.CheckedItems.Count
             ProgressPanel.pkgRemovalOp = 1
             ProgressPanel.pkgRemovalCount = pkgRemovalCount
-            If CheckedListBox2.CheckedItems.Count < 0 Then
+            If CheckedListBox2.CheckedItems.Count <= 0 Then
+                DynaLog.LogMessage("No items have been added to the queue.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -306,12 +314,16 @@ Public Class RemPackage
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        DynaLog.LogMessage("Scanning folder for possible packages...")
+        DynaLog.LogMessage("- Folder to scan: " & Quote & TextBox1.Text & Quote)
         Try
+            DynaLog.LogMessage("Getting CAB files in directory (recursive operation)...")
             For Each cabFile In My.Computer.FileSystem.GetFiles(TextBox1.Text, FileIO.SearchOption.SearchAllSubDirectories, "*.cab")
                 CheckedListBox2.Items.Add(cabFile)
             Next
         Catch ex As Exception
             Try
+                DynaLog.LogMessage("Getting CAB files in directory...")
                 For Each cabFile In My.Computer.FileSystem.GetFiles(TextBox1.Text, FileIO.SearchOption.SearchTopLevelOnly, "*.cab")
                     CheckedListBox2.Items.Add(cabFile)
                 Next
@@ -320,6 +332,7 @@ Public Class RemPackage
             End Try
         End Try
         If CheckedListBox2.Items.Count <= 0 Then
+            DynaLog.LogMessage("There are no items in the selected folder.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

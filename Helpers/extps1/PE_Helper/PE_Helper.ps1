@@ -205,6 +205,19 @@ function Start-PEGeneration
                 {
                     Write-Host "Temporary files haven't been deleted successfully"
                 }
+                # Detect if HotInstall is present in the working directory and copy it to the ISO file
+                if (Test-Path -Path "$((Get-Location).Path)\files\HotInstall.zip" -PathType Leaf) {
+                    Write-Host "HotInstall has been detected. Adding to ISO file to allow installations from full Windows environments..."
+                    Expand-Archive -Path "$((Get-Location).Path)\files\HotInstall.zip" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -ErrorAction SilentlyContinue
+                    if ($?)
+                    {
+                        Write-Host "HotInstall has been copied successfully."
+                    }
+                    else
+                    {
+                        Write-Host "HotInstall could not be copied."
+                    }
+                }
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
                 Write-Host "Creating ISO file..."
@@ -1447,6 +1460,14 @@ function New-BootFiles
                         diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
                     }
                 }
+
+                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                    Write-Host "Deleting BCD entry..."
+                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    if ($entryGuid -ne "") {
+                        bcdedit /delete $entryGuid | Out-Host
+                    }
+                }
             }
             bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
         }
@@ -1476,6 +1497,14 @@ function New-BootFiles
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                         $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
                         diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                    }
+                }
+
+                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                    Write-Host "Deleting BCD entry..."
+                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    if ($entryGuid -ne "") {
+                        bcdedit /delete $entryGuid | Out-Host
                     }
                 }
             }

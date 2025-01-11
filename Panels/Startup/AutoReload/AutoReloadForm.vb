@@ -17,16 +17,21 @@ Public Class AutoReloadForm
     Dim MountStatus As New List(Of DismMountStatus)
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
+        DynaLog.LogMessage("Preparing to remount any orphaned Windows images...")
+        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Initializing API...")
         DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         Dim MountedImages As DismMountedImageInfoCollection = DismApi.GetMountedImages()
+        DynaLog.LogMessage("Information collection count: " & MountedImages.Count)
         ImgCount = MountedImages.Count
         If MountedImages.Count > 0 Then
+            DynaLog.LogMessage("Images have been mounted on this system. Storing information...")
             For Each imageinfo As DismMountedImageInfo In MountedImages
                 ImgFiles.Add(imageinfo.ImageFilePath)
                 MountDirs.Add(imageinfo.MountPath)
@@ -38,7 +43,9 @@ Public Class AutoReloadForm
         DismApi.Shutdown()
         BackgroundWorker1.ReportProgress(0)
         If MountDirs.Count > 0 Then
+            DynaLog.LogMessage("Reloading the servicing sessions of any orphaned Windows images...")
             Try
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 For x = 0 To Array.LastIndexOf(MountDirs.ToArray(), MountDirs.ToArray().Last)
                     fileMsg = ImgFiles(x)
@@ -56,23 +63,33 @@ Public Class AutoReloadForm
                             message = "Ricarica dell'immagine montata... (riuscita: " & SuccessfulReloads & ", failed: " & FailedReloads & ", saltato: " & SkippedReloads & ")"
                     End Select
                     BackgroundWorker1.ReportProgress((x / ImgCount) * 100)
+                    DynaLog.LogMessage("Checking mount status of image file " & Quote & fileMsg & Quote & "...")
                     Try
                         If MountStatus(x) = DismMountStatus.NeedsRemount Then
+                            DynaLog.LogMessage("The image needs to be remounted. Remounting...")
                             DismApi.RemountImage(MountDirs(x))
                             SuccessfulReloads += 1
                         Else
+                            DynaLog.LogMessage("The image is fine. Skipping...")
                             SkippedReloads += 1
                         End If
                     Catch ex As Exception
+                        DynaLog.LogMessage("Could not remount the image. Error message: " & ex.Message)
                         FailedReloads += 1
                     End Try
                 Next
             Catch ex As Exception
-                Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
+                DynaLog.LogMessage("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
             Finally
-                DismApi.Shutdown()
+                Try
+                    DynaLog.LogMessage("Shutting down API...")
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
         End If
+        DynaLog.LogMessage("This process has completed.")
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"
                 message = "This process has completed"
