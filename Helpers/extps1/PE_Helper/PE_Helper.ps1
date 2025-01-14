@@ -907,7 +907,11 @@ function Get-Disks
     }
 
     # Show additional tools
-    Write-Host "- To load drivers, type `"DIM`" and press ENTER`n"
+    Write-Host "- To load drivers, type `"DIM`" and press ENTER"
+    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+        Write-Host "- To get a look at what disks are applicable for operating system installation, type DSCR"
+    }
+    Write-Host ""
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"
     $destDrive = -1
@@ -935,6 +939,15 @@ function Get-Disks
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
+                }
+                Get-Disks
+            }
+            "DSCR" {
+                if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+                    notepad X:\HotInstall\DSCReport.txt
+                } else {
+                    Write-Host "Either no report has been created or the installation has not been started with HotInstall."
+                    Start-Sleep -Seconds 3
                 }
                 Get-Disks
             }
