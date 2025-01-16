@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode40 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode41 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode42 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode43 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode44 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode45 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode46 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode47 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode48 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode49 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode50 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode51 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode52 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -88,6 +88,18 @@ Partial Class NewUnattendWiz
         Me.Label52 = New System.Windows.Forms.Label()
         Me.ComponentHeader = New System.Windows.Forms.Label()
         Me.PostInstallPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
+        Me.ScriptEditorContainerPanel = New System.Windows.Forms.Panel()
+        Me.ScriptEditorPanel = New System.Windows.Forms.Panel()
+        Me.Scintilla3 = New ScintillaNET.Scintilla()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button4 = New System.Windows.Forms.Button()
+        Me.ScriptStagePanel = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.StageEditorDescriptionLabel = New System.Windows.Forms.Label()
+        Me.StageLink1 = New System.Windows.Forms.LinkLabel()
+        Me.StageLink2 = New System.Windows.Forms.LinkLabel()
+        Me.StageLink3 = New System.Windows.Forms.LinkLabel()
         Me.Label51 = New System.Windows.Forms.Label()
         Me.PostInstallHeader = New System.Windows.Forms.Label()
         Me.SystemTelemetryPanel = New System.Windows.Forms.Panel()
@@ -251,7 +263,9 @@ Partial Class NewUnattendWiz
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.TimeZoneHeader = New System.Windows.Forms.Label()
         Me.SysConfigPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Label62 = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.ComputerNamePanel = New System.Windows.Forms.Panel()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -319,8 +333,7 @@ Partial Class NewUnattendWiz
         Me.EditorModeOFD = New System.Windows.Forms.OpenFileDialog()
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
-        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
-        Me.Label62 = New System.Windows.Forms.Label()
+        Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -343,6 +356,11 @@ Partial Class NewUnattendWiz
         Me.PassConfigurationPanel.SuspendLayout()
         Me.NoComponentSelectedPanel.SuspendLayout()
         Me.PostInstallPanel.SuspendLayout()
+        Me.ScriptEditorContainerPanel.SuspendLayout()
+        Me.ScriptEditorPanel.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.ScriptStagePanel.SuspendLayout()
+        Me.FlowLayoutPanel1.SuspendLayout()
         Me.SystemTelemetryPanel.SuspendLayout()
         Me.TelemetryOptionsPanel.SuspendLayout()
         Me.NetworkConnectionPanel.SuspendLayout()
@@ -438,33 +456,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode40.Name = "Nodo0"
-        TreeNode40.Text = "Welcome"
-        TreeNode41.Name = "Nodo1"
-        TreeNode41.Text = "Regional Configuration"
-        TreeNode42.Name = "Nodo2"
-        TreeNode42.Text = "Basic System Configuration"
-        TreeNode43.Name = "Nodo3"
-        TreeNode43.Text = "Time Zone"
-        TreeNode44.Name = "Nodo4"
-        TreeNode44.Text = "Disk Configuration"
-        TreeNode45.Name = "Nodo5"
-        TreeNode45.Text = "Product Key"
-        TreeNode46.Name = "Nodo6"
-        TreeNode46.Text = "User Accounts"
-        TreeNode47.Name = "Nodo9"
-        TreeNode47.Text = "Virtual Machine Support"
-        TreeNode48.Name = "Nodo10"
-        TreeNode48.Text = "Wireless Networking"
-        TreeNode49.Name = "Nodo11"
-        TreeNode49.Text = "System Telemetry"
-        TreeNode50.Name = "Nodo12"
-        TreeNode50.Text = "Post-Installation Scripts"
-        TreeNode51.Name = "Nodo13"
-        TreeNode51.Text = "Component Settings"
-        TreeNode52.Name = "Nodo14"
-        TreeNode52.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode40, TreeNode41, TreeNode42, TreeNode43, TreeNode44, TreeNode45, TreeNode46, TreeNode47, TreeNode48, TreeNode49, TreeNode50, TreeNode51, TreeNode52})
+        TreeNode1.Name = "Nodo0"
+        TreeNode1.Text = "Welcome"
+        TreeNode2.Name = "Nodo1"
+        TreeNode2.Text = "Regional Configuration"
+        TreeNode3.Name = "Nodo2"
+        TreeNode3.Text = "Basic System Configuration"
+        TreeNode4.Name = "Nodo3"
+        TreeNode4.Text = "Time Zone"
+        TreeNode5.Name = "Nodo4"
+        TreeNode5.Text = "Disk Configuration"
+        TreeNode6.Name = "Nodo5"
+        TreeNode6.Text = "Product Key"
+        TreeNode7.Name = "Nodo6"
+        TreeNode7.Text = "User Accounts"
+        TreeNode8.Name = "Nodo9"
+        TreeNode8.Text = "Virtual Machine Support"
+        TreeNode9.Name = "Nodo10"
+        TreeNode9.Text = "Wireless Networking"
+        TreeNode10.Name = "Nodo11"
+        TreeNode10.Text = "System Telemetry"
+        TreeNode11.Name = "Nodo12"
+        TreeNode11.Text = "Post-Installation Scripts"
+        TreeNode12.Name = "Nodo13"
+        TreeNode12.Text = "Component Settings"
+        TreeNode13.Name = "Nodo14"
+        TreeNode13.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -1009,6 +1027,8 @@ Partial Class NewUnattendWiz
         '
         'PostInstallPanel
         '
+        Me.PostInstallPanel.Controls.Add(Me.CheckBox20)
+        Me.PostInstallPanel.Controls.Add(Me.ScriptEditorContainerPanel)
         Me.PostInstallPanel.Controls.Add(Me.Label51)
         Me.PostInstallPanel.Controls.Add(Me.PostInstallHeader)
         Me.PostInstallPanel.Dock = System.Windows.Forms.DockStyle.Fill
@@ -1017,14 +1037,154 @@ Partial Class NewUnattendWiz
         Me.PostInstallPanel.Size = New System.Drawing.Size(1008, 569)
         Me.PostInstallPanel.TabIndex = 12
         '
+        'CheckBox20
+        '
+        Me.CheckBox20.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox20.AutoSize = True
+        Me.CheckBox20.Location = New System.Drawing.Point(36, 516)
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Size = New System.Drawing.Size(270, 17)
+        Me.CheckBox20.TabIndex = 13
+        Me.CheckBox20.Text = "Restart Windows Explorer after running the scripts"
+        Me.CheckBox20.UseVisualStyleBackColor = True
+        '
+        'ScriptEditorContainerPanel
+        '
+        Me.ScriptEditorContainerPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ScriptEditorContainerPanel.Controls.Add(Me.ScriptEditorPanel)
+        Me.ScriptEditorContainerPanel.Controls.Add(Me.ScriptStagePanel)
+        Me.ScriptEditorContainerPanel.Location = New System.Drawing.Point(36, 160)
+        Me.ScriptEditorContainerPanel.Name = "ScriptEditorContainerPanel"
+        Me.ScriptEditorContainerPanel.Size = New System.Drawing.Size(936, 349)
+        Me.ScriptEditorContainerPanel.TabIndex = 12
+        '
+        'ScriptEditorPanel
+        '
+        Me.ScriptEditorPanel.Controls.Add(Me.Scintilla3)
+        Me.ScriptEditorPanel.Controls.Add(Me.Panel1)
+        Me.ScriptEditorPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ScriptEditorPanel.Location = New System.Drawing.Point(256, 0)
+        Me.ScriptEditorPanel.Name = "ScriptEditorPanel"
+        Me.ScriptEditorPanel.Size = New System.Drawing.Size(680, 349)
+        Me.ScriptEditorPanel.TabIndex = 1
+        '
+        'Scintilla3
+        '
+        Me.Scintilla3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Scintilla3.IndentationGuides = ScintillaNET.IndentView.LookBoth
+        Me.Scintilla3.LexerName = ""
+        Me.Scintilla3.Location = New System.Drawing.Point(0, 0)
+        Me.Scintilla3.Name = "Scintilla3"
+        Me.Scintilla3.Size = New System.Drawing.Size(680, 317)
+        Me.Scintilla3.TabIndex = 4
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Button4)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(0, 317)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(680, 32)
+        Me.Panel1.TabIndex = 5
+        '
+        'Button4
+        '
+        Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(565, 3)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(110, 23)
+        Me.Button4.TabIndex = 0
+        Me.Button4.Text = "Open script..."
+        Me.Button4.UseVisualStyleBackColor = True
+        '
+        'ScriptStagePanel
+        '
+        Me.ScriptStagePanel.Controls.Add(Me.FlowLayoutPanel1)
+        Me.ScriptStagePanel.Dock = System.Windows.Forms.DockStyle.Left
+        Me.ScriptStagePanel.Location = New System.Drawing.Point(0, 0)
+        Me.ScriptStagePanel.Name = "ScriptStagePanel"
+        Me.ScriptStagePanel.Size = New System.Drawing.Size(256, 349)
+        Me.ScriptStagePanel.TabIndex = 0
+        '
+        'FlowLayoutPanel1
+        '
+        Me.FlowLayoutPanel1.Controls.Add(Me.StageEditorDescriptionLabel)
+        Me.FlowLayoutPanel1.Controls.Add(Me.StageLink1)
+        Me.FlowLayoutPanel1.Controls.Add(Me.StageLink2)
+        Me.FlowLayoutPanel1.Controls.Add(Me.StageLink3)
+        Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(256, 349)
+        Me.FlowLayoutPanel1.TabIndex = 0
+        '
+        'StageEditorDescriptionLabel
+        '
+        Me.StageEditorDescriptionLabel.AutoSize = True
+        Me.StageEditorDescriptionLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StageEditorDescriptionLabel.Location = New System.Drawing.Point(3, 0)
+        Me.StageEditorDescriptionLabel.Name = "StageEditorDescriptionLabel"
+        Me.StageEditorDescriptionLabel.Padding = New System.Windows.Forms.Padding(8, 12, 0, 0)
+        Me.StageEditorDescriptionLabel.Size = New System.Drawing.Size(226, 42)
+        Me.StageEditorDescriptionLabel.TabIndex = 3
+        Me.StageEditorDescriptionLabel.Text = "To configure a script to run at a specific stage, click the stage:"
+        '
+        'StageLink1
+        '
+        Me.StageLink1.AutoSize = True
+        Me.StageLink1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StageLink1.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline
+        Me.StageLink1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.StageLink1.Location = New System.Drawing.Point(3, 42)
+        Me.StageLink1.Name = "StageLink1"
+        Me.StageLink1.Padding = New System.Windows.Forms.Padding(8, 12, 0, 0)
+        Me.StageLink1.Size = New System.Drawing.Size(166, 27)
+        Me.StageLink1.TabIndex = 0
+        Me.StageLink1.TabStop = True
+        Me.StageLink1.Text = "During system configuration"
+        '
+        'StageLink2
+        '
+        Me.StageLink2.AutoSize = True
+        Me.StageLink2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StageLink2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.StageLink2.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.StageLink2.Location = New System.Drawing.Point(3, 69)
+        Me.StageLink2.Name = "StageLink2"
+        Me.StageLink2.Padding = New System.Windows.Forms.Padding(8, 12, 0, 0)
+        Me.StageLink2.Size = New System.Drawing.Size(156, 27)
+        Me.StageLink2.TabIndex = 1
+        Me.StageLink2.TabStop = True
+        Me.StageLink2.Text = "When the first user logs on"
+        '
+        'StageLink3
+        '
+        Me.StageLink3.AutoSize = True
+        Me.StageLink3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.StageLink3.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.StageLink3.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.StageLink3.Location = New System.Drawing.Point(3, 96)
+        Me.StageLink3.Name = "StageLink3"
+        Me.StageLink3.Padding = New System.Windows.Forms.Padding(8, 12, 0, 0)
+        Me.StageLink3.Size = New System.Drawing.Size(216, 27)
+        Me.StageLink3.TabIndex = 2
+        Me.StageLink3.TabStop = True
+        Me.StageLink3.Text = "When all users log on for the first time"
+        '
         'Label51
         '
-        Me.Label51.AutoSize = True
-        Me.Label51.Location = New System.Drawing.Point(107, 156)
+        Me.Label51.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label51.AutoEllipsis = True
+        Me.Label51.Location = New System.Drawing.Point(52, 67)
         Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(279, 13)
+        Me.Label51.Size = New System.Drawing.Size(912, 69)
         Me.Label51.TabIndex = 11
-        Me.Label51.Text = "This action will be added in the future. You can continue."
+        Me.Label51.Text = resources.GetString("Label51.Text")
         '
         'PostInstallHeader
         '
@@ -2862,6 +3022,16 @@ Partial Class NewUnattendWiz
         Me.SysConfigPanel.Size = New System.Drawing.Size(1008, 569)
         Me.SysConfigPanel.TabIndex = 2
         '
+        'CheckBox19
+        '
+        Me.CheckBox19.AutoSize = True
+        Me.CheckBox19.Location = New System.Drawing.Point(55, 466)
+        Me.CheckBox19.Name = "CheckBox19"
+        Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
+        Me.CheckBox19.TabIndex = 9
+        Me.CheckBox19.Text = "Use a configuration set or distribution share"
+        Me.CheckBox19.UseVisualStyleBackColor = True
+        '
         'CheckBox3
         '
         Me.CheckBox3.AutoSize = True
@@ -2873,6 +3043,17 @@ Partial Class NewUnattendWiz
         Me.CheckBox3.TabIndex = 8
         Me.CheckBox3.Text = "Let Windows set a random computer name"
         Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'Label62
+        '
+        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label62.AutoEllipsis = True
+        Me.Label62.Location = New System.Drawing.Point(71, 489)
+        Me.Label62.Name = "Label62"
+        Me.Label62.Size = New System.Drawing.Size(872, 33)
+        Me.Label62.TabIndex = 1
+        Me.Label62.Text = resources.GetString("Label62.Text")
         '
         'Label15
         '
@@ -3547,26 +3728,10 @@ Partial Class NewUnattendWiz
         '
         Me.EditorModeSFD.Filter = "Answer files|*.xml"
         '
-        'CheckBox19
+        'ScriptEditorOFD
         '
-        Me.CheckBox19.AutoSize = True
-        Me.CheckBox19.Location = New System.Drawing.Point(55, 466)
-        Me.CheckBox19.Name = "CheckBox19"
-        Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
-        Me.CheckBox19.TabIndex = 9
-        Me.CheckBox19.Text = "Use a configuration set or distribution share"
-        Me.CheckBox19.UseVisualStyleBackColor = True
-        '
-        'Label62
-        '
-        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label62.AutoEllipsis = True
-        Me.Label62.Location = New System.Drawing.Point(71, 489)
-        Me.Label62.Name = "Label62"
-        Me.Label62.Size = New System.Drawing.Size(872, 33)
-        Me.Label62.TabIndex = 1
-        Me.Label62.Text = resources.GetString("Label62.Text")
+        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1"
+        Me.ScriptEditorOFD.Title = "Open script"
         '
         'NewUnattendWiz
         '
@@ -3614,6 +3779,12 @@ Partial Class NewUnattendWiz
         Me.NoComponentSelectedPanel.ResumeLayout(False)
         Me.PostInstallPanel.ResumeLayout(False)
         Me.PostInstallPanel.PerformLayout()
+        Me.ScriptEditorContainerPanel.ResumeLayout(False)
+        Me.ScriptEditorPanel.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.ScriptStagePanel.ResumeLayout(False)
+        Me.FlowLayoutPanel1.ResumeLayout(False)
+        Me.FlowLayoutPanel1.PerformLayout()
         Me.SystemTelemetryPanel.ResumeLayout(False)
         Me.SystemTelemetryPanel.PerformLayout()
         Me.TelemetryOptionsPanel.ResumeLayout(False)
@@ -3998,4 +4169,17 @@ Partial Class NewUnattendWiz
     Friend WithEvents CNameTTip As System.Windows.Forms.ToolTip
     Friend WithEvents CheckBox19 As System.Windows.Forms.CheckBox
     Friend WithEvents Label62 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
+    Friend WithEvents ScriptEditorContainerPanel As System.Windows.Forms.Panel
+    Friend WithEvents ScriptEditorPanel As System.Windows.Forms.Panel
+    Friend WithEvents Scintilla3 As ScintillaNET.Scintilla
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents ScriptStagePanel As System.Windows.Forms.Panel
+    Friend WithEvents FlowLayoutPanel1 As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents StageEditorDescriptionLabel As System.Windows.Forms.Label
+    Friend WithEvents StageLink1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents StageLink2 As System.Windows.Forms.LinkLabel
+    Friend WithEvents StageLink3 As System.Windows.Forms.LinkLabel
+    Friend WithEvents ScriptEditorOFD As System.Windows.Forms.OpenFileDialog
 End Class
