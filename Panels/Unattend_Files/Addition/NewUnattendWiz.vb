@@ -931,6 +931,9 @@ Public Class NewUnattendWiz
 
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
+            ' Save post-install scripts
+            DynaLog.LogMessage("Saving post-install script configuration...")
+            SaveConfiguredScript(CurrentlyEditedStage, Scintilla3.Text)
             DynaLog.LogMessage("Configuring save dialog initial location depending on whether or not a project is loaded...")
             ' Detect if a project has been loaded
             If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
