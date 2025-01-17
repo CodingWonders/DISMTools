@@ -198,6 +198,7 @@ Public Class Options
         MainForm.StartupUpdateCheck = CheckBox13.Checked
         MainForm.AutoCleanMounts = CheckBox22.Checked
         MainForm.AutoLogs = CheckBox10.Checked
+        MainForm.SystemEditor = TextBox5.Text
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
@@ -1572,6 +1573,8 @@ Public Class Options
             TextBox3.ForeColor = Color.White
             TextBox4.BackColor = Color.FromArgb(31, 31, 31)
             TextBox4.ForeColor = Color.White
+            TextBox5.BackColor = Color.FromArgb(31, 31, 31)
+            TextBox5.ForeColor = Color.White
             LogPreview.BackColor = Color.FromArgb(31, 31, 31)
             LogPreview.ForeColor = Color.White
             ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
@@ -1604,6 +1607,8 @@ Public Class Options
             TextBox3.ForeColor = Color.Black
             TextBox4.BackColor = Color.FromArgb(238, 238, 242)
             TextBox4.ForeColor = Color.Black
+            TextBox5.BackColor = Color.FromArgb(238, 238, 242)
+            TextBox5.ForeColor = Color.Black
             LogPreview.BackColor = Color.FromArgb(238, 238, 242)
             LogPreview.ForeColor = Color.Black
             ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
@@ -1786,6 +1791,8 @@ Public Class Options
         End Select
         GetRootSpace(TextBox3.Text)
         CheckBox10.Checked = MainForm.AutoLogs
+        CheckBox20.Checked = Not MainForm.EnableDynaLog
+        TextBox5.Text = MainForm.SystemEditor
         CheckBox12.Checked = MainForm.StartupRemount
         CheckBox13.Checked = MainForm.StartupUpdateCheck
         CheckBox9.Checked = MainForm.AllCaps
@@ -3175,5 +3182,23 @@ Public Class Options
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
         DynaLog.LogMessage("Toggling progress panel state preview...")
         ProgressPanelPic.Image = If(CheckBox7.Checked, My.Resources.progresspanel_logview_shown, My.Resources.progresspanel_logview_hidden)
+    End Sub
+
+    Private Sub CheckBox20_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox20.CheckedChanged
+        If CheckBox20.Checked Then
+            DynaLog.DisableLogging()
+            MainForm.EnableDynaLog = False
+        Else
+            MainForm.EnableDynaLog = True
+            DynaLog.EnableLogging()
+        End If
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        EditorOFD.ShowDialog()
+    End Sub
+
+    Private Sub EditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorOFD.FileOk
+        TextBox5.Text = EditorOFD.FileName
     End Sub
 End Class

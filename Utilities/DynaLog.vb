@@ -16,14 +16,6 @@ Public Class DynaLog
     Public Shared Property LoggerEnabled As Boolean = True
 
     ''' <summary>
-    ''' Determines whether the logger is permanently enabled or disabled
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks>This can only be called by specific methods used by DISMTools</remarks>
-    Public Shared Property UltimatelyEnabled As Boolean = True
-
-    ''' <summary>
     ''' Checks the age of the active DynaLog log file
     ''' </summary>
     ''' <remarks>If a DynaLog log file is older than 2 weeks, it will be archived</remarks>
@@ -65,20 +57,15 @@ Public Class DynaLog
     End Sub
 
     Public Shared Sub DisableLogging()
-        LogMessage("Logger has been temporarily disabled by caller " & New StackFrame(1).GetMethod().Name)
+        LogMessage("Logger has been temporarily disabled by caller " & New StackFrame(1).GetMethod().Name, False)
         LoggerEnabled = False
     End Sub
 
-    Public Shared Sub EnableLogging(Optional UltimateEnable As Boolean = False)
-        If UltimatelyEnabled Then
+    Public Shared Sub EnableLogging()
+        If MainForm.EnableDynaLog Then
             LoggerEnabled = True
-            LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name)
+            LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name, False)
         Else
-            If UltimateEnable Then
-                UltimatelyEnabled = True
-                EnableLogging()
-                Exit Sub
-            End If
             Debug.WriteLine("The logger has been ultimately disabled and cannot be enabled with this method. Use the Ultimate switch to bypass.")
         End If
     End Sub

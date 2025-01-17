@@ -248,6 +248,8 @@ Public Class MainForm
 
     Public SystemEditor As String               ' System editor specified by the user
 
+    Public EnableDynaLog As Boolean = True             ' Determine whether to enable DynaLog logging
+
     Dim FeedContents As New SyndicationFeed()
     Dim FeedLinks As New List(Of Uri)
     Dim FeedEx As Exception
@@ -1598,6 +1600,7 @@ Public Class MainForm
                 LogLevel = CInt(LogKey.GetValue("LogLevel"))
                 AutoLogs = (CInt(LogKey.GetValue("AutoLogs")) = 1)
                 SystemEditor = LogKey.GetValue("SystemEditor").ToString().Replace(Quote, "").Trim()
+                EnableDynaLog = (CInt(LogKey.GetValue("EnableDynaLog")) = 1)
                 LogKey.Close()
                 Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
                 QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
@@ -1784,9 +1787,14 @@ Public Class MainForm
                     LogLevel = 4
                 End If
                 If DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=0") Then
-                    AutoLogs = 0
+                    AutoLogs = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("AutoLogs=1") Then
-                    AutoLogs = 1
+                    AutoLogs = True
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("EnableDynaLog=0") Then
+                    EnableDynaLog = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("EnableDynaLog=1") Then
+                    EnableDynaLog = True
                 End If
                 ' Detect image operation mode: 0 - Offline mode (mounted Windows image)
                 '                              1 - Online mode
@@ -1934,6 +1942,10 @@ Public Class MainForm
                 StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
         End Select
         ShowDTSettings()
+        If Not EnableDynaLog Then
+            DynaLog.LogMessage("DynaLog Logger will be ultimately disabled")
+            DynaLog.DisableLogging()
+        End If
         ' Test setting validity
         If Not File.Exists(DismExe) Then
             DynaLog.LogMessage("Specified DISM Executable not found. Falling back to default program and reporting invalid setting...")
@@ -1999,6 +2011,7 @@ Public Class MainForm
                            "LogLevel                   =    " & LogLevel & CrLf & _
                            "AutoLogs                   =    " & AutoLogs & CrLf & _
                            "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf & _
+                           "EnableDynaLog              =    " & EnableDynaLog & CrLf & _
                            "ImgOperationMode           =    " & ImgOperationMode & CrLf & _
                            "Quiet                      =    " & QuietOperations & CrLf & _
                            "NoRestart                  =    " & SysNoRestart & CrLf & _
@@ -4884,6 +4897,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & "{common:WinDir}\system32\notepad.exe" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
@@ -4956,6 +4970,7 @@ Public Class MainForm
         LogKey.SetValue("LogLevel", 3, RegistryValueKind.DWord)
         LogKey.SetValue("AutoLogs", 1, RegistryValueKind.DWord)
         LogKey.SetValue("SystemEditor", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\notepad.exe" & Quote, RegistryValueKind.ExpandString)
+        LogKey.SetValue("EnableDynaLog", 1, RegistryValueKind.DWord)
         LogKey.Close()
         Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
         ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
@@ -5092,6 +5107,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoLogs=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "SystemEditor=" & Quote & SystemEditor & Quote)
+                If EnableDynaLog Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "EnableDynaLog=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ImgOps]" & CrLf)
                 Select Case ImgOperationMode
                     Case 0
@@ -5245,6 +5265,7 @@ Public Class MainForm
                     LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
                     LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
                     LogKey.SetValue("SystemEditor", SystemEditor, RegistryValueKind.ExpandString)
+                    LogKey.SetValue("EnableDynaLog", If(EnableDynaLog, 1, 0), RegistryValueKind.DWord)
                     LogKey.Close()
                     DynaLog.LogMessage("Configuring image operation settings...")
                     Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
@@ -12438,6 +12459,11 @@ Public Class MainForm
         If Not VolatileMode Then
             DynaLog.LogMessage("DISMTools is not in volatile mode. Saving settings...")
             SaveDTSettings()
+        End If
+        If Not EnableDynaLog Then
+            ' Settings have already been saved. Re-enable DynaLog for ending
+            EnableDynaLog = True
+            DynaLog.EnableLogging()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
