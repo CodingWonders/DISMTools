@@ -41,6 +41,7 @@ Public Class DynaLog
 
     Public Shared Sub EndLogging()
         LogMessage("DynaLog Logger has stopped logging program operations...", False)
+        LogMessage("========================================================", False)
     End Sub
 
     Public Shared Sub LogMessage(message As String, Optional GetParentCaller As Boolean = True)
@@ -48,15 +49,15 @@ Public Class DynaLog
         Try
             ' DynaLog will NOT display logs for log file/folder creation - ONLY in debugger.
             If Not Directory.Exists(Application.StartupPath & "\logs") Then
+                Debug.WriteLine("Creating log directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\logs")
             End If
-            Dim Contents As String = ""
+            Dim FileLength As String = ""
             If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
-                Contents = File.ReadAllText(Application.StartupPath & "\logs\DT_DynaLog.log")
+                FileLength = New FileInfo(Application.StartupPath & "\logs\DT_DynaLog.log").Length
             End If
             Dim MessageLine As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] " & message
-            Contents &= If(Contents <> "", CrLf, "") & MessageLine
-            File.WriteAllText(Application.StartupPath & "\logs\DT_DynaLog.log", Contents)
+            File.AppendAllText(Application.StartupPath & "\logs\DT_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
         Catch ex As Exception
             Debug.WriteLine("DynaLog logging could not log this operation. Error:" & CrLf & CrLf & ex.ToString())
         End Try
