@@ -990,7 +990,11 @@ Public Class GetPkgInfoDlg
                             Label5.Text = "Pronto"
                     End Select
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
             Else
                 Panel4.Visible = False
@@ -1223,7 +1227,11 @@ Public Class GetPkgInfoDlg
             Catch DISMEx As DismException
                 MsgBox(DISMEx.Message & " (HRESULT " & Hex(DISMEx.HResult) & ")", vbOKOnly + vbCritical, Label1.Text)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
         Catch ex As Exception
             ' Cancel it

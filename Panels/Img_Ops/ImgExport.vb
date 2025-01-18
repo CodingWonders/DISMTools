@@ -526,7 +526,11 @@ Public Class ImgExport
             Catch ex As Exception
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             If File.Exists(TextBox1.Text) And Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
                 CheckBox1.Checked = True

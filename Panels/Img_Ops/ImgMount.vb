@@ -654,7 +654,11 @@ Public Class ImgMount
             For Each imgInfo As DismImageInfo In imgInfoCollection
                 ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
             Next
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         Catch ex As AccessViolationException
             If IndexOperationMode = 0 Then
                 File.WriteAllText(Application.StartupPath & "\bin\exthelpers\temp.bat", _

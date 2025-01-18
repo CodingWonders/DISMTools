@@ -383,7 +383,11 @@ Public Class ProjProperties
         Catch ex As Exception
             Exit Try
         End Try
-        DismApi.Shutdown()
+        Try
+            DismApi.Shutdown()
+        Catch ex As Exception
+
+        End Try
         ' The DISM API part is over. Switch to regular DISM.exe mode for missing details
         Try     ' Try getting image properties
             If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then

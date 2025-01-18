@@ -447,7 +447,11 @@ Public Class GetFeatureInfoDlg
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 Select Case MainForm.Language
                     Case 0
