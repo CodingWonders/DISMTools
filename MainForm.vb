@@ -3473,32 +3473,37 @@ Public Class MainForm
     ''' <remarks>This is done to determine whether to scan for AppX packages</remarks>
     Function IsWindows8OrHigher(NTKeExe As String) As Boolean
         Debug.WriteLine("[IsWindows8OrHigher] Running function...")
-        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-        Select Case KeFVI.ProductMajorPart
-            Case 6
-                Select Case KeFVI.ProductMinorPart
-                    Case 1
-                        Debug.WriteLine("[IsWindows8OrHigher] 6.1 >= 6.2 -> False" & CrLf & _
-                                        "                     Image is running a Windows version older than Windows 8")
-                        Return False
-                    Case Is >= 2
-                        Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True")
-                        Select Case KeFVI.ProductBuildPart
-                            Case Is >= 8102
-                                Debug.WriteLine("                     Image is running Windows Developer Preview or later")
-                                Return True
-                            Case Else
-                                Debug.WriteLine("                     Image is not running Windows Developer Preview or later")
-                                Return False
-                        End Select
-                End Select
-            Case 10
-                Debug.WriteLine("[IsWindows8OrHigher] " & KeFVI.ProductMajorPart & "." & KeFVI.ProductMinorPart & " >= 6.2 -> True" & CrLf & _
-                                "                     Image is running a Windows version newer than Windows 8")
-                Return True
-            Case Else
-                Return False
-        End Select
+        Try
+            Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            Select Case KeFVI.ProductMajorPart
+                Case 6
+                    Select Case KeFVI.ProductMinorPart
+                        Case 1
+                            Debug.WriteLine("[IsWindows8OrHigher] 6.1 >= 6.2 -> False" & CrLf & _
+                                            "                     Image is running a Windows version older than Windows 8")
+                            Return False
+                        Case Is >= 2
+                            Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True")
+                            Select Case KeFVI.ProductBuildPart
+                                Case Is >= 8102
+                                    Debug.WriteLine("                     Image is running Windows Developer Preview or later")
+                                    Return True
+                                Case Else
+                                    Debug.WriteLine("                     Image is not running Windows Developer Preview or later")
+                                    Return False
+                            End Select
+                    End Select
+                Case 10
+                    Debug.WriteLine("[IsWindows8OrHigher] " & KeFVI.ProductMajorPart & "." & KeFVI.ProductMinorPart & " >= 6.2 -> True" & CrLf & _
+                                    "                     Image is running a Windows version newer than Windows 8")
+                    Return True
+                Case Else
+                    Return False
+            End Select
+        Catch ex As Exception
+            Debug.WriteLine("Could not detect ntoskrnl version. Error message: " & ex.Message)
+            Return False
+        End Try
         Return False
     End Function
 
@@ -3509,17 +3514,22 @@ Public Class MainForm
     ''' <returns>The function returns True when image is running Windows 10 or newer (Image = 10.0)</returns>
     ''' <remarks></remarks>
     Function IsWindows10OrHigher(NTKeExe As String) As Boolean
-        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-        Select Case KeFVI.ProductMajorPart
-            Case Is <= 6
-                Debug.WriteLine("[IsWindows10OrHigher] 6.x == 10.0 => False" & CrLf & _
-                                "                      Image is running a Windows version older than Windows 10")
-                Return False
-            Case 10
-                Debug.WriteLine("[IsWindows10OrHigher] 10.0 == 10.0 => True" & CrLf & _
-                                "                      Image is running Windows 10 or Windows 11")
-                Return True
-        End Select
+        Try
+            Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            Select Case KeFVI.ProductMajorPart
+                Case Is <= 6
+                    Debug.WriteLine("[IsWindows10OrHigher] 6.x == 10.0 => False" & CrLf & _
+                                    "                      Image is running a Windows version older than Windows 10")
+                    Return False
+                Case 10
+                    Debug.WriteLine("[IsWindows10OrHigher] 10.0 == 10.0 => True" & CrLf & _
+                                    "                      Image is running Windows 10 or Windows 11")
+                    Return True
+            End Select
+        Catch ex As Exception
+            Debug.WriteLine("Could not detect ntoskrnl version. Error message: " & ex.Message)
+            Return False
+        End Try
         Return False
     End Function
 
