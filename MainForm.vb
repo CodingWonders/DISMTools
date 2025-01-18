@@ -18029,9 +18029,8 @@ Public Class MainForm
                 BackgroundProcessesButton.PerformClick()
                 Focus()
             End If
-        ElseIf e.KeyCode = Keys.R And e.Alt Then
+        ElseIf e.KeyCode = Keys.U And e.Alt Then
             If Not ImgBW.IsBusy Then
-                DynaLog.LogMessage("Triggering background processes...")
                 ImgBW.RunWorkerAsync()
             End If
         End If
