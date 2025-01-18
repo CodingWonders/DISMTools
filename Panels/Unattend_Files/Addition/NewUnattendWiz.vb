@@ -1382,7 +1382,9 @@ Public Class NewUnattendWiz
         PCName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
         PCName.DefaultName = defVal
         If Not PCName.Valid AndAlso PCName.ErrorMessage <> "" Then
-            MessageBox.Show(PCName.ErrorMessage, "Computer name error")
+            Label63.Visible = True
+        Else
+            Label63.Visible = False
         End If
     End Sub
 
