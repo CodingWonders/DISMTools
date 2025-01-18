@@ -5229,45 +5229,58 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
                                "- Unattended answer file: " & UnattendedFile)
-
-            ' Initialize command
-            DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta del livello di errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta del livello di errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
-            End If
+            Try
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"))
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"))
+                LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
+                GetErrorCode(True)
+                Exit Sub
+            Catch ex As Exception
+                ' Initialize command
+                DISMProc.StartInfo.FileName = DismProgram
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                currentTask.Text = "Gathering error level..."
+                            Case "ESN"
+                                currentTask.Text = "Recopilando nivel de error..."
+                            Case "FRA"
+                                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                            Case "PTB", "PTG"
+                                currentTask.Text = "A recolher o nível de erro..."
+                            Case "ITA"
+                                currentTask.Text = "Raccolta del livello di errore..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Gathering error level..."
+                    Case 2
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case 3
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case 4
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case 5
+                        currentTask.Text = "Raccolta del livello di errore..."
+                End Select
+                LogView.AppendText(CrLf & "Gathering error level...")
+                GetErrorCode(False)
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+                End If
+            End Try
         ElseIf opNum = 83 Then
             Select Case Language
                 Case 0
