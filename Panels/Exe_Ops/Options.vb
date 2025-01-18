@@ -3201,4 +3201,8 @@ Public Class Options
     Private Sub EditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorOFD.FileOk
         TextBox5.Text = EditorOFD.FileName
     End Sub
+
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe"), "/select," & Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
+    End Sub
 End Class
