@@ -410,6 +410,21 @@ Public Class ImgCapture
         Else
             CheckBox8.Enabled = True
         End If
+        Try
+            ' WIMBoot is only compatible with Windows 8.1
+            DynaLog.LogMessage("Detecting if the Windows image that is being serviced supports WIMBoot...")
+            If MainForm.imgVersionInfo IsNot Nothing And MainForm.imgVersionInfo.Build = 9600 Then
+                ' We are dealing with Windows 8.1
+                DynaLog.LogMessage("The image that is being serviced contains Windows 8.1. It supports WIMBoot.")
+                CheckBox6.Enabled = True
+            Else
+                DynaLog.LogMessage("The image that is being serviced does not contain Windows 8.1. It does not support WIMBoot.")
+                CheckBox6.Enabled = False
+            End If
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not detect WIMBoot compatibility. Error Message: " & ex.Message)
+            CheckBox6.Enabled = False
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

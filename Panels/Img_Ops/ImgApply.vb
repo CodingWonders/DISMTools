@@ -670,9 +670,17 @@ Public Class ImgApply
                 Else
                     CheckBox5.Enabled = False
                 End If
+                If ImageVersions(ComboBox1.SelectedIndex).Build = 9600 Then
+                    DynaLog.LogMessage("The image that is being serviced contains Windows 8.1. It supports WIMBoot.")
+                    CheckBox6.Enabled = True
+                Else
+                    DynaLog.LogMessage("The image that is being serviced does not contain Windows 8.1. It does not support WIMBoot.")
+                    CheckBox6.Enabled = False
+                End If
             End If
         Catch ex As Exception
             CheckBox5.Enabled = False
+            CheckBox6.Enabled = False
         End Try
     End Sub
 End Class
