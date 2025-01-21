@@ -1135,6 +1135,7 @@ function Get-WimIndexes
         $wimPath = "$((Get-Location).Path)sources\install.wim"
     }
     (Get-WindowsImage -ImagePath "$wimPath" | Format-Table ImageIndex, ImageName) | Out-Host
+    Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
@@ -1145,8 +1146,27 @@ function Get-WimIndexes
     }
     catch
     {
-        Write-Host "Please specify an index and try again.`n"
-        Get-WimIndexes
+        if ($idx -eq "INFO") {
+            # Get the information, save it to a text file, and go back to the choices
+            # We could have used a more visual way, but I fear that it won't be supported by the WinPE .NET Framework
+            try
+            {
+                (Get-WindowsImage -ImagePath "$wimPath") | Out-File "X:\imageinfo.txt" -Force -Encoding UTF8
+                if (Test-Path "X:\imageinfo.txt" -PathType Leaf)
+                {
+                    notepad "X:\imageinfo.txt"
+                }
+                Get-WimIndexes
+            }
+            catch
+            {
+                Write-Host "Could not get additional information."
+                Get-WimIndexes
+            }
+        } else {
+            Write-Host "Please specify an index and try again.`n"
+            Get-WimIndexes
+        }
     }
 }
 
