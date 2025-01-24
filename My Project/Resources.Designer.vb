@@ -1969,20 +1969,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''-- Bugfixes:
-        '''
-        '''- Fixed some visual issues in the testing environment creator
-        '''
-        '''-- New features:
-        '''
-        '''- The unattended answer file features have seen several improvements:
-        '''  - UnattendGen has been updated to the latest version. This now requires .NET 9 to function
-        '''  - Duplicate user account detection has been added
-        '''  - User validation errors are more meaningful
-        '''  - Invalid characters are automatically trimmed from user names
-        '''  - Account checks have been added to block [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.6_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

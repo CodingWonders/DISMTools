@@ -256,7 +256,11 @@ Public Class DriverFileInfoDlg
         Catch ex As Exception
             MsgBox(ex.Message & " (HRESULT: " & ex.HResult & ")", vbOKOnly + vbCritical, Text)
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             BackColor = Color.FromArgb(31, 31, 31)

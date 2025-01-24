@@ -940,7 +940,11 @@ Public Class MainForm
                 End Try
             Next
         End If
-        DismApi.Shutdown()
+        Try
+            DismApi.Shutdown()
+        Catch ex As Exception
+
+        End Try
         MountedImageImgVersions = MountedImageImgVersionList.ToArray()
     End Sub
 
@@ -3473,32 +3477,37 @@ Public Class MainForm
     ''' <remarks>This is done to determine whether to scan for AppX packages</remarks>
     Function IsWindows8OrHigher(NTKeExe As String) As Boolean
         Debug.WriteLine("[IsWindows8OrHigher] Running function...")
-        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-        Select Case KeFVI.ProductMajorPart
-            Case 6
-                Select Case KeFVI.ProductMinorPart
-                    Case 1
-                        Debug.WriteLine("[IsWindows8OrHigher] 6.1 >= 6.2 -> False" & CrLf & _
-                                        "                     Image is running a Windows version older than Windows 8")
-                        Return False
-                    Case Is >= 2
-                        Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True")
-                        Select Case KeFVI.ProductBuildPart
-                            Case Is >= 8102
-                                Debug.WriteLine("                     Image is running Windows Developer Preview or later")
-                                Return True
-                            Case Else
-                                Debug.WriteLine("                     Image is not running Windows Developer Preview or later")
-                                Return False
-                        End Select
-                End Select
-            Case 10
-                Debug.WriteLine("[IsWindows8OrHigher] " & KeFVI.ProductMajorPart & "." & KeFVI.ProductMinorPart & " >= 6.2 -> True" & CrLf & _
-                                "                     Image is running a Windows version newer than Windows 8")
-                Return True
-            Case Else
-                Return False
-        End Select
+        Try
+            Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            Select Case KeFVI.ProductMajorPart
+                Case 6
+                    Select Case KeFVI.ProductMinorPart
+                        Case 1
+                            Debug.WriteLine("[IsWindows8OrHigher] 6.1 >= 6.2 -> False" & CrLf & _
+                                            "                     Image is running a Windows version older than Windows 8")
+                            Return False
+                        Case Is >= 2
+                            Debug.WriteLine("[IsWindows8OrHigher] 6.2 >= 6.2 -> True")
+                            Select Case KeFVI.ProductBuildPart
+                                Case Is >= 8102
+                                    Debug.WriteLine("                     Image is running Windows Developer Preview or later")
+                                    Return True
+                                Case Else
+                                    Debug.WriteLine("                     Image is not running Windows Developer Preview or later")
+                                    Return False
+                            End Select
+                    End Select
+                Case 10
+                    Debug.WriteLine("[IsWindows8OrHigher] " & KeFVI.ProductMajorPart & "." & KeFVI.ProductMinorPart & " >= 6.2 -> True" & CrLf & _
+                                    "                     Image is running a Windows version newer than Windows 8")
+                    Return True
+                Case Else
+                    Return False
+            End Select
+        Catch ex As Exception
+            Debug.WriteLine("Could not detect ntoskrnl version. Error message: " & ex.Message)
+            Return False
+        End Try
         Return False
     End Function
 
@@ -3509,17 +3518,22 @@ Public Class MainForm
     ''' <returns>The function returns True when image is running Windows 10 or newer (Image = 10.0)</returns>
     ''' <remarks></remarks>
     Function IsWindows10OrHigher(NTKeExe As String) As Boolean
-        Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
-        Select Case KeFVI.ProductMajorPart
-            Case Is <= 6
-                Debug.WriteLine("[IsWindows10OrHigher] 6.x == 10.0 => False" & CrLf & _
-                                "                      Image is running a Windows version older than Windows 10")
-                Return False
-            Case 10
-                Debug.WriteLine("[IsWindows10OrHigher] 10.0 == 10.0 => True" & CrLf & _
-                                "                      Image is running Windows 10 or Windows 11")
-                Return True
-        End Select
+        Try
+            Dim KeFVI As FileVersionInfo = FileVersionInfo.GetVersionInfo(NTKeExe)
+            Select Case KeFVI.ProductMajorPart
+                Case Is <= 6
+                    Debug.WriteLine("[IsWindows10OrHigher] 6.x == 10.0 => False" & CrLf & _
+                                    "                      Image is running a Windows version older than Windows 10")
+                    Return False
+                Case 10
+                    Debug.WriteLine("[IsWindows10OrHigher] 10.0 == 10.0 => True" & CrLf & _
+                                    "                      Image is running Windows 10 or Windows 11")
+                    Return True
+            End Select
+        Catch ex As Exception
+            Debug.WriteLine("Could not detect ntoskrnl version. Error message: " & ex.Message)
+            Return False
+        End Try
         Return False
     End Function
 
@@ -3635,42 +3649,15 @@ Public Class MainForm
             Catch ex As DismException
                 ThrowAPIException(ex)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CompletedTasks(0) = True
             PendingTasks(0) = False
             Exit Sub
-            'Try
-
-            '    'If session IsNot Nothing Then
-            '    '    Dim imgPackageNameList As New List(Of String)
-            '    '    Dim imgPackageStateList As New List(Of String)
-            '    '    Dim imgPackageRelTypeList As New List(Of String)
-            '    '    Dim imgPackageInstTimeList As New List(Of String)
-            '    '    Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
-            '    '    For Each package As DismPackage In PackageCollection
-            '    '        If ImgBW.CancellationPending Then
-            '    '            If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '    '            Exit Sub
-            '    '        End If
-            '    '        imgPackageNameList.Add(package.PackageName)
-            '    '        imgPackageStateList.Add(package.PackageState)
-            '    '        imgPackageRelTypeList.Add(package.ReleaseType)
-            '    '        imgPackageInstTimeList.Add(package.InstallTime.ToString())
-            '    '    Next
-            '    '    imgPackageNames = imgPackageNameList.ToArray()
-            '    '    imgPackageState = imgPackageStateList.ToArray()
-            '    '    imgPackageRelType = imgPackageRelTypeList.ToArray()
-            '    '    imgPackageInstTime = imgPackageInstTimeList.ToArray()
-            '    '    Exit Sub
-            '    'Else
-            '    '    Throw New Exception("No valid DISM sesion has been provided")
-            '    'End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            '    ' Run backup function
-            '    Exit Try
-            'End Try
         End If
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
@@ -3800,22 +3787,15 @@ Public Class MainForm
             Catch ex As DismException
                 ThrowAPIException(ex)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CompletedTasks(1) = True
             PendingTasks(1) = False
             Exit Sub
-            'Try
-            '    If session IsNot Nothing Then
-
-            '        Exit Sub
-            '    Else
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            '    Exit Try
-            'End Try
         End If
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
@@ -3986,7 +3966,11 @@ Public Class MainForm
             Catch ex As DismException
                 ThrowAPIException(ex)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CompletedTasks(2) = True
             PendingTasks(2) = False
@@ -4223,51 +4207,15 @@ Public Class MainForm
             Catch ex As DismException
                 ThrowAPIException(ex)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CompletedTasks(3) = True
             PendingTasks(3) = False
             Exit Sub
-            'Try
-
-            '    If session IsNot Nothing Then
-            '        Dim imgCapabilityNameList As New List(Of String)
-            '        Dim imgCapabilityStateList As New List(Of String)
-            '        Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
-            '        For Each capability As DismCapability In CapabilityCollection
-            '            If ImgBW.CancellationPending Then
-            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '                Exit Sub
-            '            End If
-            '            imgCapabilityNameList.Add(capability.Name)
-            '            Select Case capability.State
-            '                Case DismPackageFeatureState.NotPresent
-            '                    imgCapabilityStateList.Add("Not present")
-            '                Case DismPackageFeatureState.UninstallPending
-            '                    imgCapabilityStateList.Add("Uninstall pending")
-            '                Case DismPackageFeatureState.Staged
-            '                    imgCapabilityStateList.Add("Uninstalled")
-            '                Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-            '                    imgCapabilityStateList.Add("Removed")
-            '                Case DismPackageFeatureState.Installed
-            '                    imgCapabilityStateList.Add("Installed")
-            '                Case DismPackageFeatureState.InstallPending
-            '                    imgCapabilityStateList.Add("Install Pending")
-            '                Case DismPackageFeatureState.Superseded
-            '                    imgCapabilityStateList.Add("Superseded")
-            '                Case DismPackageFeatureState.PartiallyInstalled
-            '                    imgCapabilityStateList.Add("Partially Installed")
-            '            End Select
-            '        Next
-            '        imgCapabilityIds = imgCapabilityNameList.ToArray()
-            '        imgCapabilityState = imgCapabilityStateList.ToArray()
-            '        Exit Sub
-            '    Else
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            'End Try
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
         ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
@@ -4392,7 +4340,11 @@ Public Class MainForm
             Catch ex As DismException
                 ThrowAPIException(ex)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CompletedTasks(4) = True
             PendingTasks(4) = False
@@ -4892,87 +4844,93 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
-                ' Tell settings file to use this method
-                Dim SettingRtb As New RichTextBox() With {
-                    .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
-                }
-                SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
-                File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
-                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
-                Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
-                Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
-                PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
-                PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
-                PrgKey.SetValue("Volatile", If(VolatileMode, 1, 0), RegistryValueKind.DWord)
-                PrgKey.Close()
-                Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
-                PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
-                PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
-                PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
-                PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
-                PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
-                PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
-                PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
-                PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
-                PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
-                PersKey.Close()
-                Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
-                LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
-                LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
-                LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
-                LogKey.Close()
-                Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
-                ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
-                ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
-                ImgOpKey.Close()
-                Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
-                ScrDirKey.SetValue("UseScratch", If(UseScratch, 1, 0), RegistryValueKind.DWord)
-                ScrDirKey.SetValue("AutoScratch", If(AutoScrDir, 1, 0), RegistryValueKind.DWord)
-                ScrDirKey.SetValue("ScratchDirLocation", ScratchDir, RegistryValueKind.ExpandString)
-                ScrDirKey.Close()
-                Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
-                OutKey.SetValue("EnglishOutput", If(EnglishOutput, 1, 0), RegistryValueKind.DWord)
-                OutKey.SetValue("ReportView", ReportView, RegistryValueKind.DWord)
-                OutKey.Close()
-                Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
-                BGKey.SetValue("ShowNotification", If(NotificationShow, 1, 0), RegistryValueKind.DWord)
-                BGKey.SetValue("NotifyFrequency", NotificationFrequency, RegistryValueKind.DWord)
-                BGKey.Close()
-                Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
-                AdvBGKey.SetValue("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0), RegistryValueKind.DWord)
-                AdvBGKey.SetValue("SkipNonRemovable", If(SkipNonRemovable, 1, 0), RegistryValueKind.DWord)
-                AdvBGKey.SetValue("DetectAllDrivers", If(AllDrivers, 1, 0), RegistryValueKind.DWord)
-                AdvBGKey.SetValue("SkipFrameworks", If(SkipFrameworks, 1, 0), RegistryValueKind.DWord)
-                AdvBGKey.SetValue("RunAllProcs", If(RunAllProcs, 1, 0), RegistryValueKind.DWord)
-                AdvBGKey.Close()
-                Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
-                StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
-                StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
-                StartupKey.Close()
-                Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Shutdown")
-                ShutdownKey.SetValue("AutoCleanMounts", If(AutoCleanMounts, 1, 0), RegistryValueKind.DWord)
-                ShutdownKey.Close()
-                Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
-                WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
-                WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
-                If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
-                    WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
-                Else
-                    WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
-                End If
-                WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
-                WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
-                WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
-                WndKey.Close()
-                Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
-                InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
-                InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
-                InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
-                InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
-                InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
-                InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
-                InfoSaverKey.Close()
-                Key.Close()
+                Try
+                    ' Tell settings file to use this method
+                    Dim SettingRtb As New RichTextBox() With {
+                        .Text = File.ReadAllText(Application.StartupPath & "\settings.ini", UTF8)
+                    }
+                    SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
+                    File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
+                    Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                    Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
+                    Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
+                    PrgKey.SetValue("DismExe", Quote & DismExe & Quote, RegistryValueKind.ExpandString)
+                    PrgKey.SetValue("SaveOnSettingsIni", If(SaveOnSettingsIni, 1, 0), RegistryValueKind.DWord)
+                    PrgKey.SetValue("Volatile", If(VolatileMode, 1, 0), RegistryValueKind.DWord)
+                    PrgKey.Close()
+                    Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
+                    PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
+                    PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
+                    PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
+                    PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
+                    PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
+                    PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
+                    PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
+                    PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
+                    PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
+                    PersKey.Close()
+                    Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
+                    LogKey.SetValue("LogFile", LogFile, RegistryValueKind.ExpandString)
+                    LogKey.SetValue("LogLevel", LogLevel, RegistryValueKind.DWord)
+                    LogKey.SetValue("AutoLogs", If(AutoLogs, 1, 0), RegistryValueKind.DWord)
+                    LogKey.Close()
+                    Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
+                    ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
+                    ImgOpKey.Close()
+                    Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
+                    ScrDirKey.SetValue("UseScratch", If(UseScratch, 1, 0), RegistryValueKind.DWord)
+                    ScrDirKey.SetValue("AutoScratch", If(AutoScrDir, 1, 0), RegistryValueKind.DWord)
+                    ScrDirKey.SetValue("ScratchDirLocation", ScratchDir, RegistryValueKind.ExpandString)
+                    ScrDirKey.Close()
+                    Dim OutKey As RegistryKey = Key.CreateSubKey("Output")
+                    OutKey.SetValue("EnglishOutput", If(EnglishOutput, 1, 0), RegistryValueKind.DWord)
+                    OutKey.SetValue("ReportView", ReportView, RegistryValueKind.DWord)
+                    OutKey.Close()
+                    Dim BGKey As RegistryKey = Key.CreateSubKey("BgProcesses")
+                    BGKey.SetValue("ShowNotification", If(NotificationShow, 1, 0), RegistryValueKind.DWord)
+                    BGKey.SetValue("NotifyFrequency", NotificationFrequency, RegistryValueKind.DWord)
+                    BGKey.Close()
+                    Dim AdvBGKey As RegistryKey = Key.CreateSubKey("AdvBgProcesses")
+                    AdvBGKey.SetValue("EnhancedAppxGetter", If(ExtAppxGetter, 1, 0), RegistryValueKind.DWord)
+                    AdvBGKey.SetValue("SkipNonRemovable", If(SkipNonRemovable, 1, 0), RegistryValueKind.DWord)
+                    AdvBGKey.SetValue("DetectAllDrivers", If(AllDrivers, 1, 0), RegistryValueKind.DWord)
+                    AdvBGKey.SetValue("SkipFrameworks", If(SkipFrameworks, 1, 0), RegistryValueKind.DWord)
+                    AdvBGKey.SetValue("RunAllProcs", If(RunAllProcs, 1, 0), RegistryValueKind.DWord)
+                    AdvBGKey.Close()
+                    Dim StartupKey As RegistryKey = Key.CreateSubKey("Startup")
+                    StartupKey.SetValue("RemountImages", If(StartupRemount, 1, 0), RegistryValueKind.DWord)
+                    StartupKey.SetValue("CheckForUpdates", If(StartupUpdateCheck, 1, 0), RegistryValueKind.DWord)
+                    StartupKey.Close()
+                    Dim ShutdownKey As RegistryKey = Key.CreateSubKey("Shutdown")
+                    ShutdownKey.SetValue("AutoCleanMounts", If(AutoCleanMounts, 1, 0), RegistryValueKind.DWord)
+                    ShutdownKey.Close()
+                    Dim WndKey As RegistryKey = Key.CreateSubKey("WndParams")
+                    WndKey.SetValue("WndWidth", WndWidth, RegistryValueKind.DWord)
+                    WndKey.SetValue("WndHeight", WndHeight, RegistryValueKind.DWord)
+                    If Location = New Point((Screen.FromControl(Me).WorkingArea.Width - Width) / 2, (Screen.FromControl(Me).WorkingArea.Height - Height) / 2) Then
+                        WndKey.SetValue("WndCenter", 1, RegistryValueKind.DWord)
+                    Else
+                        WndKey.SetValue("WndCenter", 0, RegistryValueKind.DWord)
+                    End If
+                    WndKey.SetValue("WndLeft", WndLeft, RegistryValueKind.DWord)
+                    WndKey.SetValue("WndTop", WndTop, RegistryValueKind.DWord)
+                    WndKey.SetValue("WndMaximized", If(WindowState = FormWindowState.Maximized, 1, 0), RegistryValueKind.DWord)
+                    WndKey.Close()
+                    Dim InfoSaverKey As RegistryKey = Key.CreateSubKey("InfoSaver")
+                    InfoSaverKey.SetValue("SkipQuestions", If(SkipQuestions, 1, 0), RegistryValueKind.DWord)
+                    InfoSaverKey.SetValue("Pkg_CompleteInfo", If(AutoCompleteInfo(0), 1, 0), RegistryValueKind.DWord)
+                    InfoSaverKey.SetValue("Feat_CompleteInfo", If(AutoCompleteInfo(1), 1, 0), RegistryValueKind.DWord)
+                    InfoSaverKey.SetValue("AppX_CompleteInfo", If(AutoCompleteInfo(2), 1, 0), RegistryValueKind.DWord)
+                    InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
+                    InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
+                    InfoSaverKey.Close()
+                    Key.Close()
+                Catch ex As Exception
+                    ' Fallback to INI method and force save
+                    SaveOnSettingsIni = True
+                    SaveDTSettings()
+                End Try
             End If
         End If
 
@@ -9426,6 +9384,11 @@ Public Class MainForm
     End Sub
 
     Sub SaveDTProj()
+        DynaLog.LogMessage("Checking if project files exist...")
+        If Not File.Exists(projPath & "\settings\project.ini") Then
+            DynaLog.LogMessage("No project settings file exists. Exiting...")
+            Exit Sub
+        End If
         If ProjectValueLoadForm.RichTextBox1.Text = "" Then ProjectValueLoadForm.RichTextBox1.Text = File.ReadAllText(projPath & "\settings\project.ini", UTF8)
         ' Clear Rich Text Boxes
         'ProjectValueLoadForm.RichTextBox2.Text = ""
@@ -9662,7 +9625,9 @@ Public Class MainForm
             Exit Sub
         End If
         If SaveProject And Not (OnlineManagement Or OfflineManagement) Then
-            SaveDTProj()
+            If File.Exists(projPath & "\settings\project.ini") Then
+                SaveDTProj()
+            End If
         End If
         If UnmountImg Then
             ProgressPanel.OperationNum = 21
@@ -10364,8 +10329,14 @@ Public Class MainForm
             RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         End If
         If SkipBGProcs Then Exit Sub
+        DynaLog.LogMessage("Checking if background processes are busy...")
         ' Set image properties
-        If Not ImgBW.IsBusy Then ImgBW.RunWorkerAsync()
+        If Not ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are not busy. Starting them...")
+            ImgBW.RunWorkerAsync()
+        Else
+            DynaLog.LogMessage("Background processes are busy.")
+        End If
     End Sub
 
     Sub UpdateImgProps()
@@ -18017,6 +17988,10 @@ Public Class MainForm
                 BackgroundProcessesButton.PerformClick()
                 Focus()
             End If
+        ElseIf e.KeyCode = Keys.U And e.Alt Then
+            If Not ImgBW.IsBusy Then
+                ImgBW.RunWorkerAsync()
+            End If
         End If
     End Sub
 
@@ -18082,6 +18057,12 @@ Public Class MainForm
 
     Sub LoadRecentsFromMenu(itemOrder As Integer)
         Dim itmOrder As Integer = 0
+        DynaLog.LogMessage("Items in recents list: " & RecentList.Count)
+        If RecentList.Count <= 0 Then
+            DynaLog.LogMessage("No items are present in the recents list. Exiting...")
+            MsgBox("No items are present in the Recents list.")
+            Exit Sub
+        End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
             If ImgBW.IsBusy Then Exit Sub

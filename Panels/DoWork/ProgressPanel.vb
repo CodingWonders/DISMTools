@@ -1368,7 +1368,11 @@ Public Class ProgressPanel
             Catch ex As DismException
                 errCode = Hex(ex.ErrorCode)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
@@ -1894,7 +1898,11 @@ Public Class ProgressPanel
                 errCode = Hex(ex.ErrorCode)
                 IsSuccessful = False
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             CurrentPB.Value = 50
             AllPB.Value = CurrentPB.Value
@@ -2454,7 +2462,11 @@ Public Class ProgressPanel
                         pkgFailedAdditions += 1
                         pkgIsApplicable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsApplicable Or pkgIsInstalled Then Continue For
                     LogView.AppendText(CrLf & "Processing package...")
@@ -2715,7 +2727,11 @@ Public Class ProgressPanel
                         pkgFailedRemovals += 1
                         pkgIsRemovable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
@@ -2821,7 +2837,11 @@ Public Class ProgressPanel
                         pkgFailedRemovals += 1
                         pkgIsRemovable = False
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                     If Not pkgIsRemovable Then Continue For
                     If pkgIsReadyForRemoval Then
@@ -3028,7 +3048,11 @@ Public Class ProgressPanel
                                            "- Feature description: " & featInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /enable-feature /featurename=" & featEnablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featisParentPkgNameUsed And featParentPkgName <> "" Then
@@ -3238,7 +3262,11 @@ Public Class ProgressPanel
 
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /disable-feature /featurename=" & featDisablementNames(x).Replace("ListViewItem: ", "").Trim().Replace("{", "").Trim().Replace("}", "").Trim()
                 If featDisablementParentPkgUsed And featDisablementParentPkg <> "" Then
@@ -4349,7 +4377,11 @@ Public Class ProgressPanel
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /add-capability /capabilityname=" & capAdditionIds(x)
                 If capAdditionUseSource And Directory.Exists(capAdditionSource) Then
@@ -4536,7 +4568,11 @@ Public Class ProgressPanel
                                            "- Capability description: " & capInfo.Description & CrLf)
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /remove-capability /capabilityname=" & capRemovalIds(x)
@@ -4714,7 +4750,11 @@ Public Class ProgressPanel
                             End If
                         End Using
                     Finally
-                        DismApi.Shutdown()
+                        Try
+                            DismApi.Shutdown()
+                        Catch ex As Exception
+
+                        End Try
                     End Try
                 Else
                     LogView.AppendText(CrLf & CrLf & _
@@ -4844,7 +4884,11 @@ Public Class ProgressPanel
                     drvCollection = DismApi.GetDrivers(imgSession, AllDrivers)
                 End Using
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             Select Case Language
                 Case 0
@@ -4933,7 +4977,11 @@ Public Class ProgressPanel
                         Next
                     End Using
                 Finally
-                    DismApi.Shutdown()
+                    Try
+                        DismApi.Shutdown()
+                    Catch ex As Exception
+
+                    End Try
                 End Try
                 DISMProc.StartInfo.FileName = DismProgram
                 CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-driver /driver=" & Quote & drvRemovalPkgs(x) & Quote
@@ -5229,45 +5277,58 @@ Public Class ProgressPanel
             End Select
             LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf & _
                                "- Unattended answer file: " & UnattendedFile)
-
-            ' Initialize command
-            DISMProc.StartInfo.FileName = DismProgram
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
-            DISMProc.StartInfo.Arguments = CommandArgs
-            DISMProc.Start()
-            DISMProc.WaitForExit()
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            currentTask.Text = "Gathering error level..."
-                        Case "ESN"
-                            currentTask.Text = "Recopilando nivel de error..."
-                        Case "FRA"
-                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                        Case "PTB", "PTG"
-                            currentTask.Text = "A recolher o nível de erro..."
-                        Case "ITA"
-                            currentTask.Text = "Raccolta del livello di errore..."
-                    End Select
-                Case 1
-                    currentTask.Text = "Gathering error level..."
-                Case 2
-                    currentTask.Text = "Recopilando nivel de error..."
-                Case 3
-                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                Case 4
-                    currentTask.Text = "A recolher o nível de erro..."
-                Case 5
-                    currentTask.Text = "Raccolta del livello di errore..."
-            End Select
-            LogView.AppendText(CrLf & "Gathering error level...")
-            GetErrorCode(False)
-            If errCode.Length >= 8 Then
-                LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
-            Else
-                LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
-            End If
+            Try
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "Panther")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "Panther"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "Panther", "unattend.xml"))
+                If Not Directory.Exists(Path.Combine(MountDir, "Windows", "system32", "Sysprep")) Then
+                    Directory.CreateDirectory(Path.Combine(MountDir, "Windows", "system32", "Sysprep"))
+                End If
+                File.Copy(UnattendedFile, Path.Combine(MountDir, "Windows", "system32", "sysprep", "unattend.xml"))
+                LogView.AppendText(CrLf & "The unattended answer file has been successfully copied.")
+                GetErrorCode(True)
+                Exit Sub
+            Catch ex As Exception
+                ' Initialize command
+                DISMProc.StartInfo.FileName = DismProgram
+                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /apply-unattend=" & Quote & UnattendedFile & Quote
+                DISMProc.StartInfo.Arguments = CommandArgs
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                currentTask.Text = "Gathering error level..."
+                            Case "ESN"
+                                currentTask.Text = "Recopilando nivel de error..."
+                            Case "FRA"
+                                currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                            Case "PTB", "PTG"
+                                currentTask.Text = "A recolher o nível de erro..."
+                            Case "ITA"
+                                currentTask.Text = "Raccolta del livello di errore..."
+                        End Select
+                    Case 1
+                        currentTask.Text = "Gathering error level..."
+                    Case 2
+                        currentTask.Text = "Recopilando nivel de error..."
+                    Case 3
+                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                    Case 4
+                        currentTask.Text = "A recolher o nível de erro..."
+                    Case 5
+                        currentTask.Text = "Raccolta del livello di errore..."
+                End Select
+                LogView.AppendText(CrLf & "Gathering error level...")
+                GetErrorCode(False)
+                If errCode.Length >= 8 Then
+                    LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
+                Else
+                    LogView.AppendText(CrLf & CrLf & "    Error level : " & errCode)
+                End If
+            End Try
         ElseIf opNum = 83 Then
             Select Case Language
                 Case 0
@@ -6104,6 +6165,7 @@ Public Class ProgressPanel
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
                 MainForm.bwBackgroundProcessAction = 0
+                MainForm.bwAllBackgroundProcesses = True
                 MainForm.bwGetImageInfo = True
                 MainForm.bwGetAdvImgInfo = True
                 MainForm.DetectMountedImages(False)

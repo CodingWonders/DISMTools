@@ -489,6 +489,21 @@ Public Class ImgExport
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        Try
+            ' WIMBoot is only compatible with Windows 8.1
+            DynaLog.LogMessage("Detecting if the Windows image that is being serviced supports WIMBoot...")
+            If MainForm.imgVersionInfo IsNot Nothing And MainForm.imgVersionInfo.Build = 9600 Then
+                ' We are dealing with Windows 8.1
+                DynaLog.LogMessage("The image that is being serviced contains Windows 8.1. It supports WIMBoot.")
+                CheckBox4.Enabled = True
+            Else
+                DynaLog.LogMessage("The image that is being serviced does not contain Windows 8.1. It does not support WIMBoot.")
+                CheckBox4.Enabled = False
+            End If
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not detect WIMBoot compatibility. Error Message: " & ex.Message)
+            CheckBox4.Enabled = False
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -526,7 +541,11 @@ Public Class ImgExport
             Catch ex As Exception
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
             If File.Exists(TextBox1.Text) And Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
                 CheckBox1.Checked = True

@@ -35,7 +35,11 @@ Public Class AutoReloadForm
             fileMsg = ImgFiles(0)
             mntMsg = MountDirs(0)
         End If
-        DismApi.Shutdown()
+        Try
+            DismApi.Shutdown()
+        Catch ex As Exception
+
+        End Try
         BackgroundWorker1.ReportProgress(0)
         If MountDirs.Count > 0 Then
             Try
@@ -70,7 +74,11 @@ Public Class AutoReloadForm
             Catch ex As Exception
                 Debug.WriteLine("Could not remount all orphaned images. Reason:" & CrLf & ex.ToString())
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
         End If
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

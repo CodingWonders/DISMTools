@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("The connected place for Windows system administration.")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("DISMTools")> 
-<Assembly: AssemblyCopyright("© 2022-2024 CodingWonders Software")> 
+<Assembly: AssemblyCopyright("© 2022-2025 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.6.0.24122")> 
-<Assembly: AssemblyFileVersion("0.6.0.24122")> 
+<Assembly: AssemblyVersion("0.6.0.2512")> 
+<Assembly: AssemblyFileVersion("0.6.0.2512")> 

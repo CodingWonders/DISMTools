@@ -383,7 +383,11 @@ Public Class ImgIndexDelete
             Next
         End If
         OK_Button.Enabled = True
-        DismApi.Shutdown()
+        Try
+            DismApi.Shutdown()
+        Catch ex As Exception
+
+        End Try
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()

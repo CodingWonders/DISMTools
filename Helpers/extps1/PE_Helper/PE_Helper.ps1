@@ -8,7 +8,7 @@
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024 CodingWonders Software                       |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2025 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -72,7 +72,7 @@ function Start-PEGeneration
     $architecture = [PE_Arch]::($arch)
     $version = "0.6"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
@@ -204,6 +204,19 @@ function Start-PEGeneration
                 else
                 {
                     Write-Host "Temporary files haven't been deleted successfully"
+                }
+                # Detect if HotInstall is present in the working directory and copy it to the ISO file
+                if (Test-Path -Path "$((Get-Location).Path)\files\HotInstall.zip" -PathType Leaf) {
+                    Write-Host "HotInstall has been detected. Adding to ISO file to allow installations from full Windows environments..."
+                    Expand-Archive -Path "$((Get-Location).Path)\files\HotInstall.zip" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -ErrorAction SilentlyContinue
+                    if ($?)
+                    {
+                        Write-Host "HotInstall has been copied successfully."
+                    }
+                    else
+                    {
+                        Write-Host "HotInstall could not be copied."
+                    }
                 }
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
@@ -894,7 +907,11 @@ function Get-Disks
     }
 
     # Show additional tools
-    Write-Host "- To load drivers, type `"DIM`" and press ENTER`n"
+    Write-Host "- To load drivers, type `"DIM`" and press ENTER"
+    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+        Write-Host "- To get a look at what disks are applicable for operating system installation, type DSCR"
+    }
+    Write-Host ""
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"
     $destDrive = -1
@@ -922,6 +939,15 @@ function Get-Disks
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
+                }
+                Get-Disks
+            }
+            "DSCR" {
+                if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+                    notepad X:\HotInstall\DSCReport.txt
+                } else {
+                    Write-Host "Either no report has been created or the installation has not been started with HotInstall."
+                    Start-Sleep -Seconds 3
                 }
                 Get-Disks
             }
@@ -1109,6 +1135,7 @@ function Get-WimIndexes
         $wimPath = "$((Get-Location).Path)sources\install.wim"
     }
     (Get-WindowsImage -ImagePath "$wimPath" | Format-Table ImageIndex, ImageName) | Out-Host
+    Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
@@ -1119,8 +1146,27 @@ function Get-WimIndexes
     }
     catch
     {
-        Write-Host "Please specify an index and try again.`n"
-        Get-WimIndexes
+        if ($idx -eq "INFO") {
+            # Get the information, save it to a text file, and go back to the choices
+            # We could have used a more visual way, but I fear that it won't be supported by the WinPE .NET Framework
+            try
+            {
+                (Get-WindowsImage -ImagePath "$wimPath") | Out-File "X:\imageinfo.txt" -Force -Encoding UTF8
+                if (Test-Path "X:\imageinfo.txt" -PathType Leaf)
+                {
+                    notepad "X:\imageinfo.txt"
+                }
+                Get-WimIndexes
+            }
+            catch
+            {
+                Write-Host "Could not get additional information."
+                Get-WimIndexes
+            }
+        } else {
+            Write-Host "Please specify an index and try again.`n"
+            Get-WimIndexes
+        }
     }
 }
 
@@ -1447,6 +1493,14 @@ function New-BootFiles
                         diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
                     }
                 }
+
+                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                    Write-Host "Deleting BCD entry..."
+                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    if ($entryGuid -ne "") {
+                        bcdedit /delete $entryGuid | Out-Host
+                    }
+                }
             }
             bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
         }
@@ -1476,6 +1530,14 @@ function New-BootFiles
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                         $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
                         diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                    }
+                }
+
+                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                    Write-Host "Deleting BCD entry..."
+                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    if ($entryGuid -ne "") {
+                        bcdedit /delete $entryGuid | Out-Host
                     }
                 }
             }
@@ -1518,7 +1580,7 @@ function Start-ProjectDevelopment {
     $version = "0.6"
     $ESVer = "0.6"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
@@ -1725,7 +1787,7 @@ elseif ($cmd -eq "Help")
 {
     # Show help documentation
     Write-Host "DISMTools - Preinstallation Environment Helper"
-    Write-Host "(c) 2024. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software"
     Write-Host "-----------------------------------------------------------`n"
 
     Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"

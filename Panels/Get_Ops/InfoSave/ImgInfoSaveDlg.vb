@@ -156,7 +156,11 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 
@@ -484,7 +488,11 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 
@@ -621,9 +629,12 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            DismApi.Shutdown()
-        End Try
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
 
+            End Try
+        End Try
     End Sub
 
     Sub GetFeatureInformation()
@@ -863,7 +874,11 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 
@@ -1611,7 +1626,11 @@ Public Class ImgInfoSaveDlg
                             "- Exception message: " & ex.Message & CrLf & _
                             "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
         End If
     End Sub
@@ -1838,7 +1857,11 @@ Public Class ImgInfoSaveDlg
                             "- Exception message: " & ex.Message & CrLf & _
                             "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
             Finally
-                DismApi.Shutdown()
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
             End Try
         End If
     End Sub
@@ -2094,7 +2117,11 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 
@@ -2210,7 +2237,11 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            DismApi.Shutdown()
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+
+            End Try
         End Try
     End Sub
 

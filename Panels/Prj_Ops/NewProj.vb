@@ -129,8 +129,13 @@ Public Class NewProj
         ProgressPanel.OperationNum = 0
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         If MainForm.isProjectLoaded Then
-            If MainForm.OnlineManagement Then MainForm.EndOnlineManagement() Else MainForm.UnloadDTProj(False, True, False)
-            If MainForm.OfflineManagement Then MainForm.EndOfflineManagement() Else MainForm.UnloadDTProj(False, True, False)
+            If MainForm.OnlineManagement Then
+                MainForm.EndOnlineManagement()
+            ElseIf MainForm.OfflineManagement Then
+                MainForm.EndOfflineManagement()
+            Else
+                MainForm.UnloadDTProj(False, True, False)
+            End If
             If MainForm.ImgBW.IsBusy Then Exit Sub
         End If
         ProgressPanel.projName = TextBox1.Text
