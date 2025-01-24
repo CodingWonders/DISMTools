@@ -929,24 +929,17 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
-- Fixed an issue where Windows 8 and 10 detection functions for background processes would sometimes throw exceptions (#206, thanks @arielsil for spotting)
-- Fixed an issue where background processes would sometimes not start after mounting a Windows image, causing you to reload the projects (#208, #210, thanks @novice55 for spotting)
-- Fixed an issue where the program would throw an exception when creating a new project from within the online and/or offline installation management modes (#209, thanks @webber3242 for spotting)
-- Fixed an issue where the program would throw an exception when using keyboard combinations to access items in the recent projects list if there were no items
+- Fixed an issue where feature disablement would not be possible due to a DynaLog logger issue
+- WIMBoot options are no longer enabled if the Windows image being serviced does not contain Windows 8.1 (#211, thanks @arielsil and @dede333)
 
 New features:
 
-- DynaLog has been applied to the whole codebase
+- HotInstall has been updated to the latest version
+- You can now view a bit more information when specifying the image index for your Windows image by typing "INFO"
 - UnattendGen has been updated to the latest version
-- You can now tell the unattended answer file to use a configuration set or distribution share
-- Applying unattended answer files from within DISMTools is faster now
-- The PE Helper now supports initiating OS installations from within full Windows environments, thanks to HotInstall
-- The following components have been updated to their latest versions:
-  - ManagedDism -&gt; 3.3.0
-  - Markdig -&gt; 0.40.0
-  - Scintilla.NET -&gt; 5.6.5
-- You can now press Alt + U to restart background processes on demand
-- Operation logs can now be opened with the editor of your choosing if the operations have failed</value>
+- You can now configure post-installation scripts for your unattended answer files
+- When you change the computer name to an empty value, you won't be annoyed to put a computer name as much
+- DynaLog logging can now be disabled on demand, and you can now configure the editor to open operation logs from within the Options dialog
+- DISM output is now redirected to the progress panel</value>
   </data>
 </root>
