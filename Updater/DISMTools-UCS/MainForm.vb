@@ -346,6 +346,11 @@ Public Class MainForm
     End Sub
 
     Private Sub UpdaterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UpdaterBW.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MsgBox(e.Error.ToString() & CrLf & CrLf & "Your current version of DISMTools may no longer work correctly if you continue using it. It is recommended that you download the latest version manually and extract/install it manually." & CrLf & CrLf & "Do not worry. Your settings are kept intact.", vbOKOnly + vbExclamation, Text)
+            ' Stop process launch
+            Exit Sub
+        End If
         If CheckBox1.Checked Then
             Process.Start(Application.StartupPath & "\DISMTools.exe", If(needsMigration, "/migrate", ""))
             Environment.Exit(0)
