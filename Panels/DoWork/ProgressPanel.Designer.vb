@@ -31,18 +31,29 @@ Partial Class ProgressPanel
         Me.currentTask = New System.Windows.Forms.Label()
         Me.allTasks = New System.Windows.Forms.Label()
         Me.taskCountLbl = New System.Windows.Forms.Label()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.LogTextContainer = New System.Windows.Forms.Panel()
+        Me.DISM_OpLogs = New System.Windows.Forms.Panel()
+        Me.DT_OpLogs = New System.Windows.Forms.Panel()
         Me.LogView = New System.Windows.Forms.TextBox()
         Me.LogButton = New System.Windows.Forms.Button()
         Me.ProgressBW = New System.ComponentModel.BackgroundWorker()
         Me.BodyPanel = New System.Windows.Forms.Panel()
+        Me.LogContainerPanel = New System.Windows.Forms.Panel()
+        Me.LogSidePanel = New System.Windows.Forms.Panel()
+        Me.LogSwitchers = New System.Windows.Forms.FlowLayoutPanel()
+        Me.LogSwitcher1 = New System.Windows.Forms.LinkLabel()
+        Me.LogSwitcher2 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.DISMProc = New System.Diagnostics.Process()
-        Me.GroupBox1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.DISM_LogView = New DISMTools.ConsoleControl()
+        Me.LogTextContainer.SuspendLayout()
+        Me.DISM_OpLogs.SuspendLayout()
+        Me.DT_OpLogs.SuspendLayout()
         Me.BodyPanel.SuspendLayout()
+        Me.LogContainerPanel.SuspendLayout()
+        Me.LogSidePanel.SuspendLayout()
+        Me.LogSwitchers.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -119,24 +130,34 @@ Partial Class ProgressPanel
         Me.taskCountLbl.Text = "Tasks: {currentTCont} of {taskCount}"
         Me.taskCountLbl.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
-        'GroupBox1
+        'LogTextContainer
         '
-        Me.GroupBox1.Controls.Add(Me.Panel1)
-        Me.GroupBox1.Location = New System.Drawing.Point(58, 242)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(696, 153)
-        Me.GroupBox1.TabIndex = 6
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Log"
+        Me.LogTextContainer.Controls.Add(Me.DISM_OpLogs)
+        Me.LogTextContainer.Controls.Add(Me.DT_OpLogs)
+        Me.LogTextContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LogTextContainer.Location = New System.Drawing.Point(97, 0)
+        Me.LogTextContainer.Name = "LogTextContainer"
+        Me.LogTextContainer.Size = New System.Drawing.Size(599, 161)
+        Me.LogTextContainer.TabIndex = 0
         '
-        'Panel1
+        'DISM_OpLogs
         '
-        Me.Panel1.Controls.Add(Me.LogView)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(3, 17)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(690, 133)
-        Me.Panel1.TabIndex = 0
+        Me.DISM_OpLogs.Controls.Add(Me.DISM_LogView)
+        Me.DISM_OpLogs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DISM_OpLogs.Location = New System.Drawing.Point(0, 0)
+        Me.DISM_OpLogs.Name = "DISM_OpLogs"
+        Me.DISM_OpLogs.Size = New System.Drawing.Size(599, 161)
+        Me.DISM_OpLogs.TabIndex = 4
+        Me.DISM_OpLogs.Visible = False
+        '
+        'DT_OpLogs
+        '
+        Me.DT_OpLogs.Controls.Add(Me.LogView)
+        Me.DT_OpLogs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DT_OpLogs.Location = New System.Drawing.Point(0, 0)
+        Me.DT_OpLogs.Name = "DT_OpLogs"
+        Me.DT_OpLogs.Size = New System.Drawing.Size(599, 161)
+        Me.DT_OpLogs.TabIndex = 3
         '
         'LogView
         '
@@ -148,7 +169,7 @@ Partial Class ProgressPanel
         Me.LogView.Name = "LogView"
         Me.LogView.ReadOnly = True
         Me.LogView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.LogView.Size = New System.Drawing.Size(690, 133)
+        Me.LogView.Size = New System.Drawing.Size(599, 161)
         Me.LogView.TabIndex = 2
         '
         'LogButton
@@ -171,6 +192,7 @@ Partial Class ProgressPanel
         '
         Me.BodyPanel.BackColor = System.Drawing.Color.White
         Me.BodyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.BodyPanel.Controls.Add(Me.LogContainerPanel)
         Me.BodyPanel.Controls.Add(Me.LinkLabel1)
         Me.BodyPanel.Controls.Add(Me.PictureBox1)
         Me.BodyPanel.Controls.Add(Me.Label1)
@@ -182,12 +204,65 @@ Partial Class ProgressPanel
         Me.BodyPanel.Controls.Add(Me.currentTask)
         Me.BodyPanel.Controls.Add(Me.allTasks)
         Me.BodyPanel.Controls.Add(Me.taskCountLbl)
-        Me.BodyPanel.Controls.Add(Me.GroupBox1)
         Me.BodyPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.BodyPanel.Location = New System.Drawing.Point(0, 0)
         Me.BodyPanel.Name = "BodyPanel"
         Me.BodyPanel.Size = New System.Drawing.Size(800, 240)
         Me.BodyPanel.TabIndex = 7
+        '
+        'LogContainerPanel
+        '
+        Me.LogContainerPanel.Controls.Add(Me.LogTextContainer)
+        Me.LogContainerPanel.Controls.Add(Me.LogSidePanel)
+        Me.LogContainerPanel.Location = New System.Drawing.Point(58, 240)
+        Me.LogContainerPanel.Name = "LogContainerPanel"
+        Me.LogContainerPanel.Size = New System.Drawing.Size(696, 161)
+        Me.LogContainerPanel.TabIndex = 8
+        '
+        'LogSidePanel
+        '
+        Me.LogSidePanel.Controls.Add(Me.LogSwitchers)
+        Me.LogSidePanel.Dock = System.Windows.Forms.DockStyle.Left
+        Me.LogSidePanel.Location = New System.Drawing.Point(0, 0)
+        Me.LogSidePanel.Name = "LogSidePanel"
+        Me.LogSidePanel.Size = New System.Drawing.Size(97, 161)
+        Me.LogSidePanel.TabIndex = 0
+        '
+        'LogSwitchers
+        '
+        Me.LogSwitchers.Controls.Add(Me.LogSwitcher1)
+        Me.LogSwitchers.Controls.Add(Me.LogSwitcher2)
+        Me.LogSwitchers.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LogSwitchers.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.LogSwitchers.Location = New System.Drawing.Point(0, 0)
+        Me.LogSwitchers.Name = "LogSwitchers"
+        Me.LogSwitchers.Size = New System.Drawing.Size(97, 161)
+        Me.LogSwitchers.TabIndex = 0
+        '
+        'LogSwitcher1
+        '
+        Me.LogSwitcher1.AutoSize = True
+        Me.LogSwitcher1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LogSwitcher1.Location = New System.Drawing.Point(3, 0)
+        Me.LogSwitcher1.Name = "LogSwitcher1"
+        Me.LogSwitcher1.Padding = New System.Windows.Forms.Padding(4, 4, 0, 0)
+        Me.LogSwitcher1.Size = New System.Drawing.Size(84, 17)
+        Me.LogSwitcher1.TabIndex = 0
+        Me.LogSwitcher1.TabStop = True
+        Me.LogSwitcher1.Text = "Operation Logs"
+        '
+        'LogSwitcher2
+        '
+        Me.LogSwitcher2.AutoSize = True
+        Me.LogSwitcher2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.LogSwitcher2.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LogSwitcher2.Location = New System.Drawing.Point(3, 17)
+        Me.LogSwitcher2.Name = "LogSwitcher2"
+        Me.LogSwitcher2.Padding = New System.Windows.Forms.Padding(4, 4, 0, 0)
+        Me.LogSwitcher2.Size = New System.Drawing.Size(71, 17)
+        Me.LogSwitcher2.TabIndex = 1
+        Me.LogSwitcher2.TabStop = True
+        Me.LogSwitcher2.Text = "DISM output"
         '
         'LinkLabel1
         '
@@ -215,13 +290,26 @@ Partial Class ProgressPanel
         'DISMProc
         '
         Me.DISMProc.EnableRaisingEvents = True
+        Me.DISMProc.StartInfo.CreateNoWindow = True
         Me.DISMProc.StartInfo.Domain = ""
         Me.DISMProc.StartInfo.LoadUserProfile = False
         Me.DISMProc.StartInfo.Password = Nothing
+        Me.DISMProc.StartInfo.RedirectStandardError = True
+        Me.DISMProc.StartInfo.RedirectStandardOutput = True
         Me.DISMProc.StartInfo.StandardErrorEncoding = Nothing
         Me.DISMProc.StartInfo.StandardOutputEncoding = Nothing
         Me.DISMProc.StartInfo.UserName = ""
+        Me.DISMProc.StartInfo.UseShellExecute = False
+        Me.DISMProc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
         Me.DISMProc.SynchronizingObject = Me
+        '
+        'DISM_LogView
+        '
+        Me.DISM_LogView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DISM_LogView.Location = New System.Drawing.Point(0, 0)
+        Me.DISM_LogView.Name = "DISM_LogView"
+        Me.DISM_LogView.Size = New System.Drawing.Size(599, 161)
+        Me.DISM_LogView.TabIndex = 0
         '
         'ProgressPanel
         '
@@ -236,11 +324,16 @@ Partial Class ProgressPanel
         Me.Name = "ProgressPanel"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Progress"
-        Me.GroupBox1.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
+        Me.LogTextContainer.ResumeLayout(False)
+        Me.DISM_OpLogs.ResumeLayout(False)
+        Me.DT_OpLogs.ResumeLayout(False)
+        Me.DT_OpLogs.PerformLayout()
         Me.BodyPanel.ResumeLayout(False)
         Me.BodyPanel.PerformLayout()
+        Me.LogContainerPanel.ResumeLayout(False)
+        Me.LogSidePanel.ResumeLayout(False)
+        Me.LogSwitchers.ResumeLayout(False)
+        Me.LogSwitchers.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -254,12 +347,19 @@ Partial Class ProgressPanel
     Friend WithEvents currentTask As System.Windows.Forms.Label
     Friend WithEvents allTasks As System.Windows.Forms.Label
     Friend WithEvents taskCountLbl As System.Windows.Forms.Label
-    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents LogTextContainer As System.Windows.Forms.Panel
     Friend WithEvents LogButton As System.Windows.Forms.Button
     Friend WithEvents ProgressBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents LogView As System.Windows.Forms.TextBox
     Friend WithEvents BodyPanel As System.Windows.Forms.Panel
     Friend WithEvents DISMProc As System.Diagnostics.Process
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LogContainerPanel As System.Windows.Forms.Panel
+    Friend WithEvents LogSidePanel As System.Windows.Forms.Panel
+    Friend WithEvents LogSwitchers As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents LogSwitcher1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents LogSwitcher2 As System.Windows.Forms.LinkLabel
+    Friend WithEvents DISM_OpLogs As System.Windows.Forms.Panel
+    Friend WithEvents DT_OpLogs As System.Windows.Forms.Panel
+    Friend WithEvents DISM_LogView As DISMTools.ConsoleControl
 End Class

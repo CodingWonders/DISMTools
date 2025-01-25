@@ -907,7 +907,11 @@ function Get-Disks
     }
 
     # Show additional tools
-    Write-Host "- To load drivers, type `"DIM`" and press ENTER`n"
+    Write-Host "- To load drivers, type `"DIM`" and press ENTER"
+    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+        Write-Host "- To get a look at what disks are applicable for operating system installation, type DSCR"
+    }
+    Write-Host ""
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"
     $destDrive = -1
@@ -935,6 +939,15 @@ function Get-Disks
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
+                }
+                Get-Disks
+            }
+            "DSCR" {
+                if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+                    notepad X:\HotInstall\DSCReport.txt
+                } else {
+                    Write-Host "Either no report has been created or the installation has not been started with HotInstall."
+                    Start-Sleep -Seconds 3
                 }
                 Get-Disks
             }
@@ -1122,6 +1135,7 @@ function Get-WimIndexes
         $wimPath = "$((Get-Location).Path)sources\install.wim"
     }
     (Get-WindowsImage -ImagePath "$wimPath" | Format-Table ImageIndex, ImageName) | Out-Host
+    Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
@@ -1132,8 +1146,27 @@ function Get-WimIndexes
     }
     catch
     {
-        Write-Host "Please specify an index and try again.`n"
-        Get-WimIndexes
+        if ($idx -eq "INFO") {
+            # Get the information, save it to a text file, and go back to the choices
+            # We could have used a more visual way, but I fear that it won't be supported by the WinPE .NET Framework
+            try
+            {
+                (Get-WindowsImage -ImagePath "$wimPath") | Out-File "X:\imageinfo.txt" -Force -Encoding UTF8
+                if (Test-Path "X:\imageinfo.txt" -PathType Leaf)
+                {
+                    notepad "X:\imageinfo.txt"
+                }
+                Get-WimIndexes
+            }
+            catch
+            {
+                Write-Host "Could not get additional information."
+                Get-WimIndexes
+            }
+        } else {
+            Write-Host "Please specify an index and try again.`n"
+            Get-WimIndexes
+        }
     }
 }
 

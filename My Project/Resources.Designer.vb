@@ -1971,10 +1971,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
-        '''- Fixed an issue where Windows 8 and 10 detection functions for background processes would sometimes throw exceptions (#206, thanks @arielsil for spotting)
-        '''- Fixed an issue where background processes would sometimes not start after mounting a Windows image, causing you to reload the projects (#208, #210, thanks @novice55 for spotting)
-        '''- Fixed an issue where the pro [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where feature disablement would not be possible due to a DynaLog logger issue
+        '''- WIMBoot options are no longer enabled if the Windows image being serviced does not contain Windows 8.1 (#211, thanks @arielsil and @dede333)
+        '''
+        '''New features:
+        '''
+        '''- HotInstall has been updated to the latest version
+        '''- You can now view a bit more information when specifying the image index for your Windows image by typing &quot;INFO&quot;
+        '''- UnattendGen has been updated to the latest version
+        '''- You can now conf [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

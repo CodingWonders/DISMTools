@@ -241,6 +241,7 @@
     <Compile Include="Elements\AutoUnattend\Localization\UserLocale.vb" />
     <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
     <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
+    <Compile Include="Elements\AutoUnattend\Scripts\PostInstallScript.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
@@ -853,6 +854,12 @@
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserControls\ConsoleControl.Designer.vb">
+      <DependentUpon>ConsoleControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ConsoleControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
@@ -1165,6 +1172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ConsoleControl.resx">
+      <DependentUpon>ConsoleControl.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
