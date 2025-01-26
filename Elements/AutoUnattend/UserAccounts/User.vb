@@ -88,7 +88,7 @@ Namespace Elements
                 Return New UserValidationResults(False, "Either no users have been specified, or a program error occurred.")
             End If
             Dim errorReason As String = ""
-            Dim ExistingUsers() As String = New String(5) {"administrator", "guest", "defaultaccount", "system", "network service", "local service"}
+            Dim ExistingUsers() As String = New String(6) {"administrator", "guest", "defaultaccount", "system", "network service", "local service", "none"}
             ' Assume it's true by default
             Dim FullyValid As Boolean = True
             For Each listedUser As User In userList
