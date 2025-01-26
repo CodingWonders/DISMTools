@@ -1140,7 +1140,12 @@ function Get-WimIndexes
     try
     {
         $index = [int]$idx
+        $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
         # return $index
+        if (($index -lt 1) -or ($index -gt $imageCount)) {
+            Write-Host "An invalid index has been specified."
+            throw
+        }
         $wimFile = [TargetImage]::new($index, $wimPath)
         return $wimFile
     }
