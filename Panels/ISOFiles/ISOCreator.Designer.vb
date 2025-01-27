@@ -38,11 +38,11 @@ Partial Class ISOCreator
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
@@ -65,7 +65,6 @@ Partial Class ISOCreator
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -136,7 +135,6 @@ Partial Class ISOCreator
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
         Me.GroupBox1.Controls.Add(Me.Panel1)
-        Me.GroupBox1.Controls.Add(Me.Label5)
         Me.GroupBox1.Controls.Add(Me.Button2)
         Me.GroupBox1.Controls.Add(Me.Button3)
         Me.GroupBox1.Controls.Add(Me.Button1)
@@ -162,7 +160,7 @@ Partial Class ISOCreator
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(24, 73)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(932, 102)
+        Me.ListView1.Size = New System.Drawing.Size(932, 115)
         Me.ListView1.TabIndex = 10
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -224,6 +222,17 @@ Partial Class ISOCreator
         Me.TextBox4.Size = New System.Drawing.Size(671, 21)
         Me.TextBox4.TabIndex = 1
         '
+        'CheckBox2
+        '
+        Me.CheckBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(24, 310)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(133, 17)
+        Me.CheckBox2.TabIndex = 8
+        Me.CheckBox2.Text = "Copy to Ventoy drives"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
         'CheckBox1
         '
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -265,16 +274,6 @@ Partial Class ISOCreator
         Me.Label6.Size = New System.Drawing.Size(105, 13)
         Me.Label6.TabIndex = 6
         Me.Label6.Text = "Architecture:"
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(24, 178)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(132, 13)
-        Me.Label5.TabIndex = 4
-        Me.Label5.Text = "Environment architecture:"
         '
         'Button2
         '
@@ -492,17 +491,6 @@ Partial Class ISOCreator
         '
         Me.OpenFileDialog2.Filter = "Answer files|*.xml"
         '
-        'CheckBox2
-        '
-        Me.CheckBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(24, 310)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(133, 17)
-        Me.CheckBox2.TabIndex = 8
-        Me.CheckBox2.Text = "Copy to Ventoy drives"
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        '
         'ISOCreator
         '
         Me.AcceptButton = Me.OK_Button
@@ -547,7 +535,6 @@ Partial Class ISOCreator
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
-    Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button

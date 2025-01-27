@@ -25,7 +25,6 @@ Public Class ISOCreator
                                       "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                         Label3.Text = "Once you're ready, click the Create button."
                         Label4.Text = "Image file to add to ISO file:"
-                        Label5.Text = "Environment architecture:"
                         Label6.Text = "Architecture:"
                         Label7.Text = "Target ISO location:"
                         Label8.Text = progressMessages(0)
@@ -56,7 +55,6 @@ Public Class ISOCreator
                                       "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                         Label3.Text = "Cuando esté listo, haga clic en Crear."
                         Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                        Label5.Text = "Arquitectura del entorno:"
                         Label6.Text = "Arquitectura:"
                         Label7.Text = "Ubicación del archivo ISO de destino:"
                         Label8.Text = progressMessages(0)
@@ -87,7 +85,6 @@ Public Class ISOCreator
                                       "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                         Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                         Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                        Label5.Text = "Architecture de l'environnement :"
                         Label6.Text = "Architecture :"
                         Label7.Text = "Emplacement ISO cible :"
                         Label8.Text = progressMessages(0)
@@ -118,7 +115,6 @@ Public Class ISOCreator
                                       "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                         Label3.Text = "Quando estiver pronto, clique no botão Criar."
                         Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                        Label5.Text = "Arquitetura do entorno:"
                         Label6.Text = "Arquitetura:"
                         Label7.Text = "Localização ISO de destino:"
                         Label8.Text = progressMessages(0)
@@ -149,7 +145,6 @@ Public Class ISOCreator
                                       "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                         Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                         Label4.Text = "File immagine da aggiungere al file ISO:"
-                        Label5.Text = "Architettura dell'ambiente:"
                         Label6.Text = "Architettura:"
                         Label7.Text = "Posizione ISO di destinazione:"
                         Label8.Text = progressMessages(0)
@@ -181,7 +176,6 @@ Public Class ISOCreator
                               "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                 Label3.Text = "Once you're ready, click the Create button."
                 Label4.Text = "Image file to add to ISO file:"
-                Label5.Text = "Environment architecture:"
                 Label6.Text = "Architecture:"
                 Label7.Text = "Target ISO location:"
                 Label8.Text = progressMessages(0)
@@ -212,7 +206,6 @@ Public Class ISOCreator
                               "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                 Label3.Text = "Cuando esté listo, haga clic en Crear."
                 Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                Label5.Text = "Arquitectura del entorno:"
                 Label6.Text = "Arquitectura:"
                 Label7.Text = "Ubicación del archivo ISO de destino:"
                 Label8.Text = progressMessages(0)
@@ -243,7 +236,6 @@ Public Class ISOCreator
                               "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                 Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                 Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                Label5.Text = "Architecture de l'environnement :"
                 Label6.Text = "Architecture :"
                 Label7.Text = "Emplacement ISO cible :"
                 Label8.Text = progressMessages(0)
@@ -274,7 +266,6 @@ Public Class ISOCreator
                               "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                 Label3.Text = "Quando estiver pronto, clique no botão Criar."
                 Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                Label5.Text = "Arquitetura do entorno:"
                 Label6.Text = "Arquitetura:"
                 Label7.Text = "Localização ISO de destino:"
                 Label8.Text = progressMessages(0)
@@ -305,7 +296,6 @@ Public Class ISOCreator
                               "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                 Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                 Label4.Text = "File immagine da aggiungere al file ISO:"
-                Label5.Text = "Architettura dell'ambiente:"
                 Label6.Text = "Architettura:"
                 Label7.Text = "Posizione ISO di destinazione:"
                 Label8.Text = progressMessages(0)
