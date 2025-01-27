@@ -34,6 +34,7 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -238,6 +239,40 @@ function Start-PEGeneration
                 }
                 Write-Host "The ISO file has been successfully created on the location you specified"
                 Start-Sleep -Seconds 5
+                if ($copyToVentoy -eq "true")
+                {
+                    Write-Host "Please insert a Ventoy drive and press ENTER. To create Ventoy drives, follow the guide over at https://www.ventoy.net/en/doc_start.html"
+                    Read-Host | Out-Null
+                    $volumes = Get-Volume
+                    if (($?) -and ($volumes.Count -gt 0))
+                    {
+                        foreach ($volume in $volumes)
+                        {
+                            if ($volume -and $volume.FileSystemLabel -ieq "ventoy")
+                            {
+                                try
+                                {
+                                    $destinationDrive = "$($volume.DriveLetter):\"
+                                    Write-Host "-------------------------------------------------------------------------------------"
+                                    Write-Host "  The ISO file is being copied to the Ventoy drive. This can take several minutes,   "
+                                    Write-Host "  depending on the speed of the target drive and your computer. Do not close this    "
+                                    Write-Host "  window -- it will be closed automatically after the process completes.             "
+                                    Write-Host "                                                                                     "
+                                    Write-Host "  Ventoy drive the ISO file will be copied to: `"$destinationDrive`"                 "
+                                    Write-Host "-------------------------------------------------------------------------------------"
+                                    $isoPathName = [IO.Path]::GetFileName("$isoPath")
+                                    Copy-Item -Path "$isoPath" -Destination "$destinationDrive$isoPathName" -Force -Recurse -Container
+                                    Write-Host "The ISO file has been successfully copied."
+                                }
+                                catch
+                                {
+                                    Write-Host "Could not copy the ISO file to the Ventoy drive. You will have to do this manually."
+                                }
+                                Start-Sleep -Seconds 1
+                            }
+                        }
+                    }
+                }
                 exit 0
             }
             else

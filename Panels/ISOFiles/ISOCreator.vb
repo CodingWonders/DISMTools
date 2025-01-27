@@ -45,6 +45,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Image Version"
                         ColumnHeader5.Text = "Image Architecture"
                         CheckBox1.Text = "Unattended answer file:"
+                        CheckBox2.Text = "Copy to Ventoy drives"
                     Case "ESN"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -75,6 +76,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versión"
                         ColumnHeader5.Text = "Arquitectura"
                         CheckBox1.Text = "Archivo de respuesta:"
+                        CheckBox2.Text = "Copiar a discos Ventoy"
                     Case "FRA"
                         progressMessages(0) = "Statut"
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -105,6 +107,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Version"
                         ColumnHeader5.Text = "Architecture"
                         CheckBox1.Text = "Fichier de réponse :"
+                        CheckBox2.Text = "Copier sur les lecteurs Ventoy"
                     Case "PTB", "PTG"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -135,6 +138,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versão"
                         ColumnHeader5.Text = "Arquitetura"
                         CheckBox1.Text = "Ficheiro de resposta:"
+                        CheckBox2.Text = "Copiar para unidades Ventoy"
                     Case "ITA"
                         progressMessages(0) = "Stato"
                         progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -165,6 +169,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versione"
                         ColumnHeader5.Text = "Architettura"
                         CheckBox1.Text = "File di risposta:"
+                        CheckBox2.Text = "Copia su unità Ventoy"
                 End Select
             Case 1
                 progressMessages(0) = "Status"
@@ -196,6 +201,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Image Version"
                 ColumnHeader5.Text = "Image Architecture"
                 CheckBox1.Text = "Unattended answer file:"
+                CheckBox2.Text = "Copy to Ventoy drives"
             Case 2
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -226,6 +232,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versión"
                 ColumnHeader5.Text = "Arquitectura"
                 CheckBox1.Text = "Archivo de respuesta:"
+                CheckBox2.Text = "Copiar a discos Ventoy"
             Case 3
                 progressMessages(0) = "Statut"
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -256,6 +263,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Version"
                 ColumnHeader5.Text = "Architecture"
                 CheckBox1.Text = "Fichier de réponse :"
+                CheckBox2.Text = "Copier sur les lecteurs Ventoy"
             Case 4
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -286,6 +294,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versão"
                 ColumnHeader5.Text = "Arquitetura"
                 CheckBox1.Text = "Ficheiro de resposta:"
+                CheckBox2.Text = "Copiar para unidades Ventoy"
             Case 5
                 progressMessages(0) = "Stato"
                 progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -316,6 +325,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versione"
                 ColumnHeader5.Text = "Architettura"
                 CheckBox1.Text = "File di risposta:"
+                CheckBox2.Text = "Copia su unità Ventoy"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -598,10 +608,11 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Image file to test: " & Quote & TextBox1.Text & Quote)
         DynaLog.LogMessage("- Unattended answer file to try: " & Quote & TextBox4.Text & Quote)
         DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
+        DynaLog.LogMessage("- Copy the ISO file to Ventoy drives afterwards? " & If(CheckBox2.Checked, "Yes", "No"))
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
