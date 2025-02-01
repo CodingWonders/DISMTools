@@ -835,9 +835,12 @@ function Start-OSApplication
         $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
         foreach ($driver in $drivers)
         {
+            $drvCount = $drivers.Count
+            $curDrvIndex = $drivers.IndexOf($driver)
             if (Test-Path -Path "$driver" -PathType Leaf)
             {
                 Write-Host "Adding driver `"$driver`"...        " -NoNewline
+                Write-Progress -Activity "Adding drivers..." -Status "Adding driver `"$driver`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                 if ((Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false) -eq $true)
                 {
                     Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
