@@ -6986,6 +6986,14 @@ Public Class ProgressPanel
             LogView.ForeColor = Color.White
             DISM_LogView.RichTextBox1.BackColor = Color.FromArgb(37, 37, 38)
             DISM_LogView.RichTextBox1.ForeColor = Color.White
+            LogSwitcherPic1.Image = My.Resources.options_logs_dark
+            LogSwitcherPic2.Image = My.Resources.options_output_dark
+            LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.DarkGray
+            LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.DimGray
+            LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.DarkGray
+            LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.DimGray
+            LogSwitcherPic1.FlatAppearance.BorderColor = Color.White
+            LogSwitcherPic2.FlatAppearance.BorderColor = Color.White
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             BodyPanel.BackColor = Color.FromArgb(246, 246, 246)
             BodyPanel.ForeColor = Color.Black
@@ -6993,6 +7001,14 @@ Public Class ProgressPanel
             LogView.ForeColor = Color.Black
             DISM_LogView.RichTextBox1.BackColor = Color.FromArgb(246, 246, 246)
             DISM_LogView.RichTextBox1.ForeColor = Color.Black
+            LogSwitcherPic1.Image = My.Resources.options_logs_light
+            LogSwitcherPic2.Image = My.Resources.options_output_light
+            LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+            LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.Gray
+            LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+            LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.Gray
+            LogSwitcherPic1.FlatAppearance.BorderColor = Color.Black
+            LogSwitcherPic2.FlatAppearance.BorderColor = Color.Black
         End If
         CurrentPB.Value = 0
         AllPB.Value = 0
@@ -7370,26 +7386,30 @@ Public Class ProgressPanel
     Sub SwitchLogContext(Context As Integer)
         DynaLog.LogMessage("Switching operation log context...")
         DynaLog.LogMessage("- New Context: " & Context)
-        Select Case Context
-            Case 0
-                LogSwitcher1.LinkBehavior = LinkBehavior.AlwaysUnderline
-                LogSwitcher2.LinkBehavior = LinkBehavior.HoverUnderline
-                NativeMethods.SendMessage(LogView.Handle, &H115, 7, IntPtr.Zero)
-            Case 1
-                LogSwitcher1.LinkBehavior = LinkBehavior.HoverUnderline
-                LogSwitcher2.LinkBehavior = LinkBehavior.AlwaysUnderline
-            Case Else
-                Exit Sub
-        End Select
+        If Context = 0 Then
+            NativeMethods.SendMessage(LogView.Handle, &H115, 7, IntPtr.Zero)
+        End If
+        LogSwitcherPic1.FlatAppearance.BorderSize = If(Context = 0, 1, 0)
+        LogSwitcherPic2.FlatAppearance.BorderSize = If(Context = 1, 1, 0)
         DT_OpLogs.Visible = (Context = 0)
         DISM_OpLogs.Visible = (Context = 1)
     End Sub
 
-    Private Sub LogSwitcher1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LogSwitcher1.LinkClicked
+    Private Sub LogSwitcher1_LinkClicked(sender As Object, e As EventArgs) Handles LogSwitcherPic1.Click
         SwitchLogContext(0)
     End Sub
 
-    Private Sub LogSwitcher2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LogSwitcher2.LinkClicked
+    Private Sub LogSwitcher2_LinkClicked(sender As Object, e As EventArgs) Handles LogSwitcherPic2.Click
         SwitchLogContext(1)
+    End Sub
+
+    Private Sub LogSwitcherPic1_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic1.MouseHover
+        Dim olcToolTip As New ToolTip()
+        olcToolTip.SetToolTip(sender, "Operation Logs")
+    End Sub
+
+    Private Sub LogSwitcherPic2_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic2.MouseHover
+        Dim olcToolTip As New ToolTip()
+        olcToolTip.SetToolTip(sender, "DISM Output")
     End Sub
 End Class
