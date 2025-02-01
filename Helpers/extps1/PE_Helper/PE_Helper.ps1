@@ -851,7 +851,7 @@ function Start-OSApplication
                 }
             }
         }
-        Write-Progress -Completed
+        Write-Progress -Activity "Adding drivers..." -Completed
         # Perform serviceability tests one more time
         if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
     }
