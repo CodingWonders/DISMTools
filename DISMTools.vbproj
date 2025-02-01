@@ -1530,6 +1530,7 @@
     <Content Include="Tools\UnattendGen\win-x86\UnattendGen.pdb" />
     <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.dll" />
     <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnpEax-Bin\UnpEax.exe" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
