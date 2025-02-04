@@ -10,6 +10,7 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
+    Dim architectures() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -359,6 +360,55 @@ Public Class ISOCreator
         Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
         Graphics.FromImage(bm).Clear(ListView1.BackColor)
         ListView1.BackgroundImage = bm
+
+        ' Declare path constant for Windows ADK
+        Dim ADKPath As String = Path.Combine(If(Environment.Is64BitOperatingSystem,
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)), "Windows Kits", "10",
+                                                "Assessment and Deployment Kit")
+        ' Check ADK status
+        If Not Directory.Exists(ADKPath) Then
+            DynaLog.LogMessage("ADK installation directory " & Quote & ADKPath & Quote & " is not found in this system. Either it has not been installed or it has been installed somewhere else.")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                        Case "ESN"
+                            Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                        Case "FRA"
+                            Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                        Case "PTB", "PTG"
+                            Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                        Case "ITA"
+                            Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+                    End Select
+                Case 1
+                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                Case 2
+                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                Case 3
+                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                Case 4
+                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                Case 5
+                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+            End Select
+            Close()
+        End If
+
+        ' Restore combobox architecture items
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange(architectures)
+        ' Remove architectures incompatible with the system ADK
+        For Each architecture In architectures
+            Dim WimPath As String = Path.Combine(ADKPath, "Windows Preinstallation Environment", architecture, "en-us", "winpe.wim")
+            DynaLog.LogMessage("Testing if architecture " & architecture & " is supported by the ADK installed in this system...")
+            If Not File.Exists(WimPath) Then
+                DynaLog.LogMessage("- Windows PE WIM " & Quote & WimPath & Quote & " is not present. Removing architecture option...")
+                ComboBox1.Items.Remove(architecture)
+            End If
+        Next
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
