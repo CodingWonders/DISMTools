@@ -35,6 +35,7 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [string]$bootex = "false",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -222,7 +223,7 @@ function Start-PEGeneration
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
                 Write-Host "Creating ISO file..."
-                if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath) -eq $false)
+                if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath -bootex $bootex) -eq $false)
                 {
                     Write-Host "The ISO file has not been created successfully."
                     Write-Host "Deleting temporary files..."
@@ -334,7 +335,7 @@ function Copy-PEFiles
         {
             Set-Item -Path "env:OSCDImgRoot" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
-        # ADK 10.0.26100.2454 and later copype's call the DISM executable to grab the boot managers signed with the "Windows UEFI CA 2023" certificate.
+        # ADK 10.1.26100.2454 and later copype's call the DISM executable to grab the boot binaries signed with the "Windows UEFI CA 2023" certificate.
         # This relies on yet another environment variable created by DandISetEnv.bat. Create it for our caller for copype to work. This should not matter
         # on older assessment and deployment kits, since they use this variable for nothing.
         #
@@ -652,12 +653,17 @@ function New-WinPEIso
             The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
         .PARAMETER isoLocation
             The path of the target ISO file
+        .PARAMETER bootex
+            Determines whether or not to copy the EFI boot binaries signed with the "Windows UEFI CA 2023" certificate
         .EXAMPLE
             New-WinPEIso -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -isoLocation "C:\PreInstEnv.iso"
+        .EXAMPLE
+            New-WinPEIso -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -isoLocation "C:\PreInstEnv.iso" -bootex "true"
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$peToolsPath,
-        [Parameter(Mandatory = $true, Position = 1)] [string]$isoLocation
+        [Parameter(Mandatory = $true, Position = 1)] [string]$isoLocation,
+        [Parameter(Position = 2)] [string]$bootex = "false"
     )
     try
     {
@@ -674,8 +680,8 @@ function New-WinPEIso
         {
             Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
-        # Detect whether files are in fwfiles or bootbins - ADK 10.0.26100.2454 and later put boot files in bootbins,
-        # not in fwfiles. All of this to add support for the bootmgr binaries signed with this certificate - I'm starting to
+        # Detect whether files are in fwfiles or bootbins - ADK 10.1.26100.2454 and later put boot files in bootbins,
+        # not in fwfiles. All of this to add support for the boot binaries signed with this certificate - I'm starting to
         # hate Microsoft's approach to security
         $paths = [List[string]]::new()
         $paths.Add("bootbins")
@@ -689,15 +695,28 @@ function New-WinPEIso
                 break
             }
         }
+        # Determine status of signed boot managers. This is only the case when the folder is bootbins
+        $efiVars = "#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\<EFIFILE_REPLACE>`""
+        if ($finalPath -eq "bootbins")
+        {
+            if (($bootex -eq "true") -and (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\efisys_EX.bin" -PathType Leaf))
+            {
+                $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys_EX.bin").Trim()
+            }
+            else
+            {
+                $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys.bin").Trim()
+            }
+        }
         if (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com" -PathType Leaf)
         {
             Write-Host "Generating ISO file with BIOS and UEFI compatibility..."
-            $bootData = "2#p0,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com`"#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\efisys.bin`""
+            $bootData = "2#p0,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com`"$($efiVars)"
         }
         else
         {
             Write-Host "Generating ISO file with UEFI compatibility..."
-            $bootData = "1#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\efisys.bin`""
+            $bootData = "1$($efiVars)"
         }
         $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
         if ($oscdimgProc.ExitCode -eq 0)

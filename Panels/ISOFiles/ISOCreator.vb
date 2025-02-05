@@ -649,10 +649,11 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Unattended answer file to try: " & Quote & TextBox4.Text & Quote)
         DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
         DynaLog.LogMessage("- Copy the ISO file to Ventoy drives afterwards? " & If(CheckBox2.Checked, "Yes", "No"))
+        DynaLog.LogMessage("- Use boot binaries signed with Windows UEFI CA 2023? " & If(CheckBox3.Checked, "Yes", "No"))
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false")
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
@@ -790,6 +791,16 @@ Public Class ISOCreator
             Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
             Graphics.FromImage(bm).Clear(ListView1.BackColor)
             ListView1.BackgroundImage = bm
+        End If
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        Dim uefiCA2023_Message As String = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
+            "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
+            "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
+            "If you have any doubts, we recommend that you leave this option unchecked."
+        If CheckBox3.Checked Then
+            MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, "Windows UEFI CA 2023 information")
         End If
     End Sub
 End Class

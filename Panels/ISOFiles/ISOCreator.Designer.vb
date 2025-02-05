@@ -65,6 +65,7 @@ Partial Class ISOCreator
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -143,6 +144,7 @@ Partial Class ISOCreator
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Button4)
+        Me.GroupBox1.Controls.Add(Me.CheckBox3)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 116)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(982, 340)
@@ -160,7 +162,7 @@ Partial Class ISOCreator
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(24, 73)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(932, 115)
+        Me.ListView1.Size = New System.Drawing.Size(932, 93)
         Me.ListView1.TabIndex = 10
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -197,7 +199,7 @@ Partial Class ISOCreator
         Me.Panel2.Controls.Add(Me.Button5)
         Me.Panel2.Controls.Add(Me.TextBox4)
         Me.Panel2.Enabled = False
-        Me.Panel2.Location = New System.Drawing.Point(194, 229)
+        Me.Panel2.Location = New System.Drawing.Point(194, 207)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(762, 33)
         Me.Panel2.TabIndex = 9
@@ -226,7 +228,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(24, 310)
+        Me.CheckBox2.Location = New System.Drawing.Point(24, 288)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(133, 17)
         Me.CheckBox2.TabIndex = 8
@@ -237,7 +239,7 @@ Partial Class ISOCreator
         '
         Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox1.AutoEllipsis = True
-        Me.CheckBox1.Location = New System.Drawing.Point(24, 236)
+        Me.CheckBox1.Location = New System.Drawing.Point(24, 214)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(164, 17)
         Me.CheckBox1.TabIndex = 8
@@ -250,7 +252,7 @@ Partial Class ISOCreator
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.ComboBox1)
         Me.Panel1.Controls.Add(Me.Label6)
-        Me.Panel1.Location = New System.Drawing.Point(24, 194)
+        Me.Panel1.Location = New System.Drawing.Point(24, 172)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(925, 31)
         Me.Panel1.TabIndex = 7
@@ -290,7 +292,7 @@ Partial Class ISOCreator
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(878, 282)
+        Me.Button3.Location = New System.Drawing.Point(878, 260)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 2
@@ -312,7 +314,7 @@ Partial Class ISOCreator
         '
         Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox3.Location = New System.Drawing.Point(24, 283)
+        Me.TextBox3.Location = New System.Drawing.Point(24, 261)
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.Size = New System.Drawing.Size(848, 21)
         Me.TextBox3.TabIndex = 1
@@ -330,7 +332,7 @@ Partial Class ISOCreator
         '
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(21, 266)
+        Me.Label7.Location = New System.Drawing.Point(21, 244)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(104, 13)
         Me.Label7.TabIndex = 0
@@ -491,6 +493,17 @@ Partial Class ISOCreator
         '
         Me.OpenFileDialog2.Filter = "Answer files|*.xml"
         '
+        'CheckBox3
+        '
+        Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(24, 310)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(175, 17)
+        Me.CheckBox3.TabIndex = 8
+        Me.CheckBox3.Text = "Use newly-signed boot binaries"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
         'ISOCreator
         '
         Me.AcceptButton = Me.OK_Button
@@ -568,4 +581,5 @@ Partial Class ISOCreator
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
 End Class
