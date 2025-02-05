@@ -334,6 +334,13 @@ function Copy-PEFiles
         {
             Set-Item -Path "env:OSCDImgRoot" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
+        # ADK 10.0.26100.2454 and later copype's call the DISM executable to grab the boot managers signed with the "Windows UEFI CA 2023" certificate.
+        # This relies on yet another environment variable created by DandISetEnv.bat. Create it for our caller for copype to work. This should not matter
+        # on older assessment and deployment kits, since they use this variable for nothing.
+        #
+        # CopyPE sets this variable to its version of DISM. We'll use the system DISM. Basically, all dism executables mount images with readonly
+        # privileges.
+        Set-Item -Path "env:DISMRoot" -Value "$env:SYSTEMROOT\system32"
         $copype = Start-Process -FilePath "$peToolsPath\copype.cmd" -ArgumentList "$architecture `"$targetDir`"" -Wait -PassThru -NoNewWindow
         if ($copype.ExitCode -eq 0)
         {
@@ -667,15 +674,30 @@ function New-WinPEIso
         {
             Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
-        if (Test-Path "$((Get-Location).Path)\ISOTEMP\fwfiles\etfsboot.com" -PathType Leaf)
+        # Detect whether files are in fwfiles or bootbins - ADK 10.0.26100.2454 and later put boot files in bootbins,
+        # not in fwfiles. All of this to add support for the bootmgr binaries signed with this certificate - I'm starting to
+        # hate Microsoft's approach to security
+        $paths = [List[string]]::new()
+        $paths.Add("bootbins")
+        $paths.Add("fwfiles")
+        $finalPath = ""
+        foreach ($path in $paths)
+        {
+            if (Test-Path "$((Get-Location).Path)\ISOTEMP\$path")
+            {
+                $finalPath = $path
+                break
+            }
+        }
+        if (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com" -PathType Leaf)
         {
             Write-Host "Generating ISO file with BIOS and UEFI compatibility..."
-            $bootData = "2#p0,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\etfsboot.com`"#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\efisys.bin`""
+            $bootData = "2#p0,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com`"#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\efisys.bin`""
         }
         else
         {
             Write-Host "Generating ISO file with UEFI compatibility..."
-            $bootData = "1#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\efisys.bin`""
+            $bootData = "1#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\efisys.bin`""
         }
         $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
         if ($oscdimgProc.ExitCode -eq 0)
