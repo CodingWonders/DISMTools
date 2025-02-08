@@ -10,6 +10,7 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
+    Dim architectures() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -25,7 +26,6 @@ Public Class ISOCreator
                                       "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                         Label3.Text = "Once you're ready, click the Create button."
                         Label4.Text = "Image file to add to ISO file:"
-                        Label5.Text = "Environment architecture:"
                         Label6.Text = "Architecture:"
                         Label7.Text = "Target ISO location:"
                         Label8.Text = progressMessages(0)
@@ -45,6 +45,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Image Version"
                         ColumnHeader5.Text = "Image Architecture"
                         CheckBox1.Text = "Unattended answer file:"
+                        CheckBox2.Text = "Copy to Ventoy drives"
                     Case "ESN"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -55,7 +56,6 @@ Public Class ISOCreator
                                       "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                         Label3.Text = "Cuando esté listo, haga clic en Crear."
                         Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                        Label5.Text = "Arquitectura del entorno:"
                         Label6.Text = "Arquitectura:"
                         Label7.Text = "Ubicación del archivo ISO de destino:"
                         Label8.Text = progressMessages(0)
@@ -75,6 +75,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versión"
                         ColumnHeader5.Text = "Arquitectura"
                         CheckBox1.Text = "Archivo de respuesta:"
+                        CheckBox2.Text = "Copiar a discos Ventoy"
                     Case "FRA"
                         progressMessages(0) = "Statut"
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -85,7 +86,6 @@ Public Class ISOCreator
                                       "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                         Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                         Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                        Label5.Text = "Architecture de l'environnement :"
                         Label6.Text = "Architecture :"
                         Label7.Text = "Emplacement ISO cible :"
                         Label8.Text = progressMessages(0)
@@ -105,6 +105,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Version"
                         ColumnHeader5.Text = "Architecture"
                         CheckBox1.Text = "Fichier de réponse :"
+                        CheckBox2.Text = "Copier sur les lecteurs Ventoy"
                     Case "PTB", "PTG"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -115,7 +116,6 @@ Public Class ISOCreator
                                       "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                         Label3.Text = "Quando estiver pronto, clique no botão Criar."
                         Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                        Label5.Text = "Arquitetura do entorno:"
                         Label6.Text = "Arquitetura:"
                         Label7.Text = "Localização ISO de destino:"
                         Label8.Text = progressMessages(0)
@@ -135,6 +135,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versão"
                         ColumnHeader5.Text = "Arquitetura"
                         CheckBox1.Text = "Ficheiro de resposta:"
+                        CheckBox2.Text = "Copiar para unidades Ventoy"
                     Case "ITA"
                         progressMessages(0) = "Stato"
                         progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -145,7 +146,6 @@ Public Class ISOCreator
                                       "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                         Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                         Label4.Text = "File immagine da aggiungere al file ISO:"
-                        Label5.Text = "Architettura dell'ambiente:"
                         Label6.Text = "Architettura:"
                         Label7.Text = "Posizione ISO di destinazione:"
                         Label8.Text = progressMessages(0)
@@ -165,6 +165,7 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versione"
                         ColumnHeader5.Text = "Architettura"
                         CheckBox1.Text = "File di risposta:"
+                        CheckBox2.Text = "Copia su unità Ventoy"
                 End Select
             Case 1
                 progressMessages(0) = "Status"
@@ -176,7 +177,6 @@ Public Class ISOCreator
                               "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                 Label3.Text = "Once you're ready, click the Create button."
                 Label4.Text = "Image file to add to ISO file:"
-                Label5.Text = "Environment architecture:"
                 Label6.Text = "Architecture:"
                 Label7.Text = "Target ISO location:"
                 Label8.Text = progressMessages(0)
@@ -196,6 +196,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Image Version"
                 ColumnHeader5.Text = "Image Architecture"
                 CheckBox1.Text = "Unattended answer file:"
+                CheckBox2.Text = "Copy to Ventoy drives"
             Case 2
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -206,7 +207,6 @@ Public Class ISOCreator
                               "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                 Label3.Text = "Cuando esté listo, haga clic en Crear."
                 Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                Label5.Text = "Arquitectura del entorno:"
                 Label6.Text = "Arquitectura:"
                 Label7.Text = "Ubicación del archivo ISO de destino:"
                 Label8.Text = progressMessages(0)
@@ -226,6 +226,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versión"
                 ColumnHeader5.Text = "Arquitectura"
                 CheckBox1.Text = "Archivo de respuesta:"
+                CheckBox2.Text = "Copiar a discos Ventoy"
             Case 3
                 progressMessages(0) = "Statut"
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -236,7 +237,6 @@ Public Class ISOCreator
                               "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                 Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                 Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                Label5.Text = "Architecture de l'environnement :"
                 Label6.Text = "Architecture :"
                 Label7.Text = "Emplacement ISO cible :"
                 Label8.Text = progressMessages(0)
@@ -256,6 +256,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Version"
                 ColumnHeader5.Text = "Architecture"
                 CheckBox1.Text = "Fichier de réponse :"
+                CheckBox2.Text = "Copier sur les lecteurs Ventoy"
             Case 4
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -266,7 +267,6 @@ Public Class ISOCreator
                               "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                 Label3.Text = "Quando estiver pronto, clique no botão Criar."
                 Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                Label5.Text = "Arquitetura do entorno:"
                 Label6.Text = "Arquitetura:"
                 Label7.Text = "Localização ISO de destino:"
                 Label8.Text = progressMessages(0)
@@ -286,6 +286,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versão"
                 ColumnHeader5.Text = "Arquitetura"
                 CheckBox1.Text = "Ficheiro de resposta:"
+                CheckBox2.Text = "Copiar para unidades Ventoy"
             Case 5
                 progressMessages(0) = "Stato"
                 progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -296,7 +297,6 @@ Public Class ISOCreator
                               "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                 Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                 Label4.Text = "File immagine da aggiungere al file ISO:"
-                Label5.Text = "Architettura dell'ambiente:"
                 Label6.Text = "Architettura:"
                 Label7.Text = "Posizione ISO di destinazione:"
                 Label8.Text = progressMessages(0)
@@ -316,6 +316,7 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versione"
                 ColumnHeader5.Text = "Architettura"
                 CheckBox1.Text = "File di risposta:"
+                CheckBox2.Text = "Copia su unità Ventoy"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -359,6 +360,55 @@ Public Class ISOCreator
         Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
         Graphics.FromImage(bm).Clear(ListView1.BackColor)
         ListView1.BackgroundImage = bm
+
+        ' Declare path constant for Windows ADK
+        Dim ADKPath As String = Path.Combine(If(Environment.Is64BitOperatingSystem,
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)), "Windows Kits", "10",
+                                                "Assessment and Deployment Kit")
+        ' Check ADK status
+        If Not Directory.Exists(ADKPath) Then
+            DynaLog.LogMessage("ADK installation directory " & Quote & ADKPath & Quote & " is not found in this system. Either it has not been installed or it has been installed somewhere else.")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                        Case "ESN"
+                            Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                        Case "FRA"
+                            Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                        Case "PTB", "PTG"
+                            Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                        Case "ITA"
+                            Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+                    End Select
+                Case 1
+                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                Case 2
+                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                Case 3
+                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                Case 4
+                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                Case 5
+                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+            End Select
+            Close()
+        End If
+
+        ' Restore combobox architecture items
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange(architectures)
+        ' Remove architectures incompatible with the system ADK
+        For Each architecture In architectures
+            Dim WimPath As String = Path.Combine(ADKPath, "Windows Preinstallation Environment", architecture, "en-us", "winpe.wim")
+            DynaLog.LogMessage("Testing if architecture " & architecture & " is supported by the ADK installed in this system...")
+            If Not File.Exists(WimPath) Then
+                DynaLog.LogMessage("- Windows PE WIM " & Quote & WimPath & Quote & " is not present. Removing architecture option...")
+                ComboBox1.Items.Remove(architecture)
+            End If
+        Next
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -598,10 +648,12 @@ Public Class ISOCreator
         DynaLog.LogMessage("- Image file to test: " & Quote & TextBox1.Text & Quote)
         DynaLog.LogMessage("- Unattended answer file to try: " & Quote & TextBox4.Text & Quote)
         DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
+        DynaLog.LogMessage("- Copy the ISO file to Ventoy drives afterwards? " & If(CheckBox2.Checked, "Yes", "No"))
+        DynaLog.LogMessage("- Use boot binaries signed with Windows UEFI CA 2023? " & If(CheckBox3.Checked, "Yes", "No"))
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
@@ -739,6 +791,16 @@ Public Class ISOCreator
             Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
             Graphics.FromImage(bm).Clear(ListView1.BackColor)
             ListView1.BackgroundImage = bm
+        End If
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        Dim uefiCA2023_Message As String = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
+            "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
+            "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
+            "If you have any doubts, we recommend that you leave this option unchecked."
+        If CheckBox3.Checked Then
+            MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, "Windows UEFI CA 2023 information")
         End If
     End Sub
 End Class

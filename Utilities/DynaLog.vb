@@ -86,7 +86,7 @@ Public Class DynaLog
                 Debug.WriteLine("Creating log directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\logs")
             End If
-            Dim FileLength As Integer = 0
+            Dim FileLength As Long = 0
             If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
                 FileLength = New FileInfo(Application.StartupPath & "\logs\DT_DynaLog.log").Length
             End If

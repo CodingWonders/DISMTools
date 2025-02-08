@@ -1971,15 +1971,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where feature disablement would not be possible due to a DynaLog logger issue
-        '''- WIMBoot options are no longer enabled if the Windows image being serviced does not contain Windows 8.1 (#211, thanks @arielsil and @dede333)
+        '''- The PE Helper now detects whether the selected index is invalid
+        '''- Fixed a visual issue in the image index switch dialog
         '''
         '''New features:
         '''
         '''- HotInstall has been updated to the latest version
-        '''- You can now view a bit more information when specifying the image index for your Windows image by typing &quot;INFO&quot;
-        '''- UnattendGen has been updated to the latest version
-        '''- You can now conf [resto de la cadena truncado]&quot;;.
+        '''- You can now copy your ISO files to Ventoy drives
+        '''- When installing the drivers specified in the Driver Installation Module, you will now see a progress indicator
+        '''- The ISO creator now detects the architectures that are supported by the Assessment and Deployment Kit installed on your computer
+        '''- Com [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

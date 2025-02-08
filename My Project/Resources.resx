@@ -929,17 +929,22 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where feature disablement would not be possible due to a DynaLog logger issue
-- WIMBoot options are no longer enabled if the Windows image being serviced does not contain Windows 8.1 (#211, thanks @arielsil and @dede333)
+- The PE Helper now detects whether the selected index is invalid
+- Fixed a visual issue in the image index switch dialog
 
 New features:
 
 - HotInstall has been updated to the latest version
-- You can now view a bit more information when specifying the image index for your Windows image by typing "INFO"
+- You can now copy your ISO files to Ventoy drives
+- When installing the drivers specified in the Driver Installation Module, you will now see a progress indicator
+- The ISO creator now detects the architectures that are supported by the Assessment and Deployment Kit installed on your computer
+- Compatibility has been improved for the latest Windows ADKs (starting from version 10.1.26100.2454 - December 2024 update):
+  - ISO creation will finish successfully now
+  - You can now create ISO files with boot binaries signed with the "Windows UEFI CA 2023" certificate:
 - UnattendGen has been updated to the latest version
-- You can now configure post-installation scripts for your unattended answer files
-- When you change the computer name to an empty value, you won't be annoyed to put a computer name as much
-- DynaLog logging can now be disabled on demand, and you can now configure the editor to open operation logs from within the Options dialog
-- DISM output is now redirected to the progress panel</value>
+- User accounts with "None" names are now blocked
+- Log switchers in the progress panel are more visually appealing now
+- CODE: DynaLog now uses 64-bit long types for file content detection
+- Scintilla.NET has been updated to version 5.6.6</value>
   </data>
 </root>

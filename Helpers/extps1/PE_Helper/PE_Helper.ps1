@@ -34,6 +34,8 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 2)] [string]$imgFile,
     [Parameter(ParameterSetName = 'StartPEGen', Mandatory = $true, Position = 3)] [string]$isoPath,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [string]$bootex = "false",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -221,7 +223,7 @@ function Start-PEGeneration
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
                 Write-Host "Creating ISO file..."
-                if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath) -eq $false)
+                if ((New-WinPEIso -peToolsPath $peToolsPath -isoLocation $isoPath -bootex $bootex) -eq $false)
                 {
                     Write-Host "The ISO file has not been created successfully."
                     Write-Host "Deleting temporary files..."
@@ -238,6 +240,40 @@ function Start-PEGeneration
                 }
                 Write-Host "The ISO file has been successfully created on the location you specified"
                 Start-Sleep -Seconds 5
+                if ($copyToVentoy -eq "true")
+                {
+                    Write-Host "Please insert a Ventoy drive and press ENTER. To create Ventoy drives, follow the guide over at https://www.ventoy.net/en/doc_start.html"
+                    Read-Host | Out-Null
+                    $volumes = Get-Volume
+                    if (($?) -and ($volumes.Count -gt 0))
+                    {
+                        foreach ($volume in $volumes)
+                        {
+                            if ($volume -and $volume.FileSystemLabel -ieq "ventoy")
+                            {
+                                try
+                                {
+                                    $destinationDrive = "$($volume.DriveLetter):\"
+                                    Write-Host "-------------------------------------------------------------------------------------"
+                                    Write-Host "  The ISO file is being copied to the Ventoy drive. This can take several minutes,   "
+                                    Write-Host "  depending on the speed of the target drive and your computer. Do not close this    "
+                                    Write-Host "  window -- it will be closed automatically after the process completes.             "
+                                    Write-Host "                                                                                     "
+                                    Write-Host "  Ventoy drive the ISO file will be copied to: `"$destinationDrive`"                 "
+                                    Write-Host "-------------------------------------------------------------------------------------"
+                                    $isoPathName = [IO.Path]::GetFileName("$isoPath")
+                                    Copy-Item -Path "$isoPath" -Destination "$destinationDrive$isoPathName" -Force -Recurse -Container
+                                    Write-Host "The ISO file has been successfully copied."
+                                }
+                                catch
+                                {
+                                    Write-Host "Could not copy the ISO file to the Ventoy drive. You will have to do this manually."
+                                }
+                                Start-Sleep -Seconds 1
+                            }
+                        }
+                    }
+                }
                 exit 0
             }
             else
@@ -299,6 +335,13 @@ function Copy-PEFiles
         {
             Set-Item -Path "env:OSCDImgRoot" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
+        # ADK 10.1.26100.2454 and later copype's call the DISM executable to grab the boot binaries signed with the "Windows UEFI CA 2023" certificate.
+        # This relies on yet another environment variable created by DandISetEnv.bat. Create it for our caller for copype to work. This should not matter
+        # on older assessment and deployment kits, since they use this variable for nothing.
+        #
+        # CopyPE sets this variable to its version of DISM. We'll use the system DISM. Basically, all dism executables mount images with readonly
+        # privileges.
+        Set-Item -Path "env:DISMRoot" -Value "$env:SYSTEMROOT\system32"
         $copype = Start-Process -FilePath "$peToolsPath\copype.cmd" -ArgumentList "$architecture `"$targetDir`"" -Wait -PassThru -NoNewWindow
         if ($copype.ExitCode -eq 0)
         {
@@ -610,12 +653,17 @@ function New-WinPEIso
             The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
         .PARAMETER isoLocation
             The path of the target ISO file
+        .PARAMETER bootex
+            Determines whether or not to copy the EFI boot binaries signed with the "Windows UEFI CA 2023" certificate
         .EXAMPLE
             New-WinPEIso -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -isoLocation "C:\PreInstEnv.iso"
+        .EXAMPLE
+            New-WinPEIso -peToolsPath "C:\Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools" -isoLocation "C:\PreInstEnv.iso" -bootex "true"
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$peToolsPath,
-        [Parameter(Mandatory = $true, Position = 1)] [string]$isoLocation
+        [Parameter(Mandatory = $true, Position = 1)] [string]$isoLocation,
+        [Parameter(Position = 2)] [string]$bootex = "false"
     )
     try
     {
@@ -632,15 +680,43 @@ function New-WinPEIso
         {
             Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
         }
-        if (Test-Path "$((Get-Location).Path)\ISOTEMP\fwfiles\etfsboot.com" -PathType Leaf)
+        # Detect whether files are in fwfiles or bootbins - ADK 10.1.26100.2454 and later put boot files in bootbins,
+        # not in fwfiles. All of this to add support for the boot binaries signed with this certificate - I'm starting to
+        # hate Microsoft's approach to security
+        $paths = [List[string]]::new()
+        $paths.Add("bootbins")
+        $paths.Add("fwfiles")
+        $finalPath = ""
+        foreach ($path in $paths)
+        {
+            if (Test-Path "$((Get-Location).Path)\ISOTEMP\$path")
+            {
+                $finalPath = $path
+                break
+            }
+        }
+        # Determine status of signed boot managers. This is only the case when the folder is bootbins
+        $efiVars = "#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\<EFIFILE_REPLACE>`""
+        if ($finalPath -eq "bootbins")
+        {
+            if (($bootex -eq "true") -and (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\efisys_EX.bin" -PathType Leaf))
+            {
+                $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys_EX.bin").Trim()
+            }
+            else
+            {
+                $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys.bin").Trim()
+            }
+        }
+        if (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com" -PathType Leaf)
         {
             Write-Host "Generating ISO file with BIOS and UEFI compatibility..."
-            $bootData = "2#p0,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\etfsboot.com`"#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\efisys.bin`""
+            $bootData = "2#p0,e,b`"$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com`"$($efiVars)"
         }
         else
         {
             Write-Host "Generating ISO file with UEFI compatibility..."
-            $bootData = "1#pEF,e,b`"$((Get-Location).Path)\ISOTEMP\fwfiles\efisys.bin`""
+            $bootData = "1$($efiVars)"
         }
         $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
         if ($oscdimgProc.ExitCode -eq 0)
@@ -800,9 +876,12 @@ function Start-OSApplication
         $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
         foreach ($driver in $drivers)
         {
+            $drvCount = $drivers.Count
+            $curDrvIndex = $drivers.IndexOf($driver)
             if (Test-Path -Path "$driver" -PathType Leaf)
             {
                 Write-Host "Adding driver `"$driver`"...        " -NoNewline
+                Write-Progress -Activity "Adding drivers..." -Status "Adding driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($driver))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                 if ((Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false) -eq $true)
                 {
                     Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
@@ -813,6 +892,7 @@ function Start-OSApplication
                 }
             }
         }
+        Write-Progress -Activity "Adding drivers..." -Completed
         # Perform serviceability tests one more time
         if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
     }
@@ -1140,7 +1220,12 @@ function Get-WimIndexes
     try
     {
         $index = [int]$idx
+        $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
         # return $index
+        if (($index -lt 1) -or ($index -gt $imageCount)) {
+            Write-Host "An invalid index has been specified."
+            throw
+        }
         $wimFile = [TargetImage]::new($index, $wimPath)
         return $wimFile
     }

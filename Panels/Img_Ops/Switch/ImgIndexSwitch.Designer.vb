@@ -162,10 +162,10 @@ Partial Class ImgIndexSwitch
         '
         'Label5
         '
-        Me.Label5.AutoSize = True
+        Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(217, 73)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(49, 13)
+        Me.Label5.Size = New System.Drawing.Size(312, 13)
         Me.Label5.TabIndex = 0
         Me.Label5.Text = "<index>"
         '
