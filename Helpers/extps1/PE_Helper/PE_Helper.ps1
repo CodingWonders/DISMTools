@@ -708,6 +708,10 @@ function New-WinPEIso
                 $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys.bin").Trim()
             }
         }
+        else
+        {
+            $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys.bin").Trim()
+        }
         if (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com" -PathType Leaf)
         {
             Write-Host "Generating ISO file with BIOS and UEFI compatibility..."
