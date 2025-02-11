@@ -585,7 +585,7 @@ Public Class MainForm
     End Function
 
     Function GetCopyrightTimespan(ByVal start As Integer, ByVal current As Integer) As String
-        If current = start Then
+        If current <= start Then
             Return current.ToString()
         Else
             Return start.ToString() & "-" & current.ToString()
