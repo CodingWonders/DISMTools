@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode27 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode28 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode29 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode30 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode31 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode32 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode33 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode34 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode35 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode36 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode37 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode38 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode39 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,6 +49,25 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.SysConfigPanel = New System.Windows.Forms.Panel()
+        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
+        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
+        Me.Label62 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.ComputerNamePanel = New System.Windows.Forms.Panel()
+        Me.Button3 = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label63 = New System.Windows.Forms.Label()
+        Me.WinSVSettingsPanel = New System.Windows.Forms.Panel()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.SysConfigHeader = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
@@ -262,24 +281,6 @@ Partial Class NewUnattendWiz
         Me.RadioButton4 = New System.Windows.Forms.RadioButton()
         Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.TimeZoneHeader = New System.Windows.Forms.Label()
-        Me.SysConfigPanel = New System.Windows.Forms.Panel()
-        Me.CheckBox19 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.Label62 = New System.Windows.Forms.Label()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.ComputerNamePanel = New System.Windows.Forms.Panel()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.WinSVSettingsPanel = New System.Windows.Forms.Panel()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.SysConfigHeader = New System.Windows.Forms.Label()
         Me.RegionalSettingsPanel = New System.Windows.Forms.Panel()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.RegionalSettings = New System.Windows.Forms.Panel()
@@ -334,7 +335,6 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.Label63 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -344,6 +344,9 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.SysConfigPanel.SuspendLayout()
+        Me.ComputerNamePanel.SuspendLayout()
+        Me.WinSVSettingsPanel.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
@@ -409,9 +412,6 @@ Partial Class NewUnattendWiz
         CType(Me.NumericUpDown3, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TimeZonePanel.SuspendLayout()
         Me.TimeZoneSettings.SuspendLayout()
-        Me.SysConfigPanel.SuspendLayout()
-        Me.ComputerNamePanel.SuspendLayout()
-        Me.WinSVSettingsPanel.SuspendLayout()
         Me.RegionalSettingsPanel.SuspendLayout()
         Me.RegionalSettings.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -457,33 +457,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode27.Name = "Nodo0"
-        TreeNode27.Text = "Welcome"
-        TreeNode28.Name = "Nodo1"
-        TreeNode28.Text = "Regional Configuration"
-        TreeNode29.Name = "Nodo2"
-        TreeNode29.Text = "Basic System Configuration"
-        TreeNode30.Name = "Nodo3"
-        TreeNode30.Text = "Time Zone"
-        TreeNode31.Name = "Nodo4"
-        TreeNode31.Text = "Disk Configuration"
-        TreeNode32.Name = "Nodo5"
-        TreeNode32.Text = "Product Key"
-        TreeNode33.Name = "Nodo6"
-        TreeNode33.Text = "User Accounts"
-        TreeNode34.Name = "Nodo9"
-        TreeNode34.Text = "Virtual Machine Support"
-        TreeNode35.Name = "Nodo10"
-        TreeNode35.Text = "Wireless Networking"
-        TreeNode36.Name = "Nodo11"
-        TreeNode36.Text = "System Telemetry"
-        TreeNode37.Name = "Nodo12"
-        TreeNode37.Text = "Post-Installation Scripts"
-        TreeNode38.Name = "Nodo13"
-        TreeNode38.Text = "Component Settings"
-        TreeNode39.Name = "Nodo14"
-        TreeNode39.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode27, TreeNode28, TreeNode29, TreeNode30, TreeNode31, TreeNode32, TreeNode33, TreeNode34, TreeNode35, TreeNode36, TreeNode37, TreeNode38, TreeNode39})
+        TreeNode14.Name = "Nodo0"
+        TreeNode14.Text = "Welcome"
+        TreeNode15.Name = "Nodo1"
+        TreeNode15.Text = "Regional Configuration"
+        TreeNode16.Name = "Nodo2"
+        TreeNode16.Text = "Basic System Configuration"
+        TreeNode17.Name = "Nodo3"
+        TreeNode17.Text = "Time Zone"
+        TreeNode18.Name = "Nodo4"
+        TreeNode18.Text = "Disk Configuration"
+        TreeNode19.Name = "Nodo5"
+        TreeNode19.Text = "Product Key"
+        TreeNode20.Name = "Nodo6"
+        TreeNode20.Text = "User Accounts"
+        TreeNode21.Name = "Nodo9"
+        TreeNode21.Text = "Virtual Machine Support"
+        TreeNode22.Name = "Nodo10"
+        TreeNode22.Text = "Wireless Networking"
+        TreeNode23.Name = "Nodo11"
+        TreeNode23.Text = "System Telemetry"
+        TreeNode24.Name = "Nodo12"
+        TreeNode24.Text = "Post-Installation Scripts"
+        TreeNode25.Name = "Nodo13"
+        TreeNode25.Text = "Component Settings"
+        TreeNode26.Name = "Nodo14"
+        TreeNode26.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -595,6 +595,221 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(1008, 569)
         Me.StepsContainer.TabIndex = 1
+        '
+        'SysConfigPanel
+        '
+        Me.SysConfigPanel.Controls.Add(Me.CheckedListBox1)
+        Me.SysConfigPanel.Controls.Add(Me.CheckBox19)
+        Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
+        Me.SysConfigPanel.Controls.Add(Me.Label62)
+        Me.SysConfigPanel.Controls.Add(Me.Label15)
+        Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
+        Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
+        Me.SysConfigPanel.Controls.Add(Me.Label13)
+        Me.SysConfigPanel.Controls.Add(Me.Label12)
+        Me.SysConfigPanel.Controls.Add(Me.Label11)
+        Me.SysConfigPanel.Controls.Add(Me.SysConfigHeader)
+        Me.SysConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SysConfigPanel.Location = New System.Drawing.Point(0, 0)
+        Me.SysConfigPanel.Name = "SysConfigPanel"
+        Me.SysConfigPanel.Size = New System.Drawing.Size(1008, 569)
+        Me.SysConfigPanel.TabIndex = 2
+        '
+        'CheckedListBox1
+        '
+        Me.CheckedListBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBox1.FormattingEnabled = True
+        Me.CheckedListBox1.Items.AddRange(New Object() {"x86 (Desktop 32-Bit)", "x64 (Desktop 64-Bit)", "ARM64 (Windows on ARM)"})
+        Me.CheckedListBox1.Location = New System.Drawing.Point(182, 82)
+        Me.CheckedListBox1.Name = "CheckedListBox1"
+        Me.CheckedListBox1.Size = New System.Drawing.Size(761, 68)
+        Me.CheckedListBox1.TabIndex = 10
+        '
+        'CheckBox19
+        '
+        Me.CheckBox19.AutoSize = True
+        Me.CheckBox19.Location = New System.Drawing.Point(55, 466)
+        Me.CheckBox19.Name = "CheckBox19"
+        Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
+        Me.CheckBox19.TabIndex = 9
+        Me.CheckBox19.Text = "Use a configuration set or distribution share"
+        Me.CheckBox19.UseVisualStyleBackColor = True
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Checked = True
+        Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox3.Location = New System.Drawing.Point(55, 339)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(230, 17)
+        Me.CheckBox3.TabIndex = 8
+        Me.CheckBox3.Text = "Let Windows set a random computer name"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
+        'Label62
+        '
+        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label62.AutoEllipsis = True
+        Me.Label62.Location = New System.Drawing.Point(71, 489)
+        Me.Label62.Name = "Label62"
+        Me.Label62.Size = New System.Drawing.Size(872, 33)
+        Me.Label62.TabIndex = 1
+        Me.Label62.Text = resources.GetString("Label62.Text")
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Location = New System.Drawing.Point(71, 430)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(872, 18)
+        Me.Label15.TabIndex = 1
+        Me.Label15.Text = "You can set a different computer name at any time in the system settings"
+        '
+        'ComputerNamePanel
+        '
+        Me.ComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComputerNamePanel.Controls.Add(Me.Button3)
+        Me.ComputerNamePanel.Controls.Add(Me.TextBox1)
+        Me.ComputerNamePanel.Controls.Add(Me.Label16)
+        Me.ComputerNamePanel.Controls.Add(Me.Label63)
+        Me.ComputerNamePanel.Enabled = False
+        Me.ComputerNamePanel.Location = New System.Drawing.Point(61, 362)
+        Me.ComputerNamePanel.Name = "ComputerNamePanel"
+        Me.ComputerNamePanel.Size = New System.Drawing.Size(882, 60)
+        Me.ComputerNamePanel.TabIndex = 7
+        '
+        'Button3
+        '
+        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button3.Location = New System.Drawing.Point(726, 8)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(152, 23)
+        Me.Button3.TabIndex = 3
+        Me.Button3.Text = "Get computer name"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox1.Location = New System.Drawing.Point(124, 9)
+        Me.TextBox1.MaxLength = 15
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(596, 21)
+        Me.TextBox1.TabIndex = 2
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(10, 12)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(87, 13)
+        Me.Label16.TabIndex = 1
+        Me.Label16.Text = "Computer name:"
+        '
+        'Label63
+        '
+        Me.Label63.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label63.AutoEllipsis = True
+        Me.Label63.ForeColor = System.Drawing.Color.Red
+        Me.Label63.Location = New System.Drawing.Point(124, 35)
+        Me.Label63.Name = "Label63"
+        Me.Label63.Size = New System.Drawing.Size(596, 18)
+        Me.Label63.TabIndex = 1
+        Me.Label63.Text = "Please type a computer name"
+        Me.Label63.Visible = False
+        '
+        'WinSVSettingsPanel
+        '
+        Me.WinSVSettingsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.WinSVSettingsPanel.Controls.Add(Me.Label14)
+        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox2)
+        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox1)
+        Me.WinSVSettingsPanel.Location = New System.Drawing.Point(182, 196)
+        Me.WinSVSettingsPanel.Name = "WinSVSettingsPanel"
+        Me.WinSVSettingsPanel.Size = New System.Drawing.Size(761, 131)
+        Me.WinSVSettingsPanel.TabIndex = 7
+        '
+        'Label14
+        '
+        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(28, 54)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(720, 70)
+        Me.Label14.TabIndex = 1
+        Me.Label14.Text = "Check this option only if the target system does not have any network capabilitie" & _
+    "s. You can configure local users in the User Accounts section"
+        '
+        'CheckBox2
+        '
+        Me.CheckBox2.AutoSize = True
+        Me.CheckBox2.Location = New System.Drawing.Point(12, 34)
+        Me.CheckBox2.Name = "CheckBox2"
+        Me.CheckBox2.Size = New System.Drawing.Size(215, 17)
+        Me.CheckBox2.TabIndex = 0
+        Me.CheckBox2.Text = "Bypass Mandatory Network Connection"
+        Me.CheckBox2.UseVisualStyleBackColor = True
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(12, 11)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(167, 17)
+        Me.CheckBox1.TabIndex = 0
+        Me.CheckBox1.Text = "Bypass System Requirements"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(52, 208)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(110, 13)
+        Me.Label13.TabIndex = 6
+        Me.Label13.Text = "Windows 11 settings:"
+        '
+        'Label12
+        '
+        Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Location = New System.Drawing.Point(182, 158)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(761, 32)
+        Me.Label12.TabIndex = 5
+        Me.Label12.Text = "Please select the system architecture that is supported by the target Windows ima" & _
+    "ge to apply"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(52, 84)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(119, 13)
+        Me.Label11.TabIndex = 3
+        Me.Label11.Text = "Processor architecture:"
+        '
+        'SysConfigHeader
+        '
+        Me.SysConfigHeader.AutoEllipsis = True
+        Me.SysConfigHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.SysConfigHeader.Location = New System.Drawing.Point(16, 17)
+        Me.SysConfigHeader.Name = "SysConfigHeader"
+        Me.SysConfigHeader.Size = New System.Drawing.Size(708, 51)
+        Me.SysConfigHeader.TabIndex = 2
+        Me.SysConfigHeader.Text = "Configure basic system settings"
         '
         'FinishPanel
         '
@@ -3004,208 +3219,6 @@ Partial Class NewUnattendWiz
         Me.TimeZoneHeader.TabIndex = 3
         Me.TimeZoneHeader.Text = "Configure time zone settings"
         '
-        'SysConfigPanel
-        '
-        Me.SysConfigPanel.Controls.Add(Me.CheckBox19)
-        Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
-        Me.SysConfigPanel.Controls.Add(Me.Label62)
-        Me.SysConfigPanel.Controls.Add(Me.Label15)
-        Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
-        Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
-        Me.SysConfigPanel.Controls.Add(Me.Label13)
-        Me.SysConfigPanel.Controls.Add(Me.Label12)
-        Me.SysConfigPanel.Controls.Add(Me.ListBox1)
-        Me.SysConfigPanel.Controls.Add(Me.Label11)
-        Me.SysConfigPanel.Controls.Add(Me.SysConfigHeader)
-        Me.SysConfigPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SysConfigPanel.Location = New System.Drawing.Point(0, 0)
-        Me.SysConfigPanel.Name = "SysConfigPanel"
-        Me.SysConfigPanel.Size = New System.Drawing.Size(1008, 569)
-        Me.SysConfigPanel.TabIndex = 2
-        '
-        'CheckBox19
-        '
-        Me.CheckBox19.AutoSize = True
-        Me.CheckBox19.Location = New System.Drawing.Point(55, 466)
-        Me.CheckBox19.Name = "CheckBox19"
-        Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
-        Me.CheckBox19.TabIndex = 9
-        Me.CheckBox19.Text = "Use a configuration set or distribution share"
-        Me.CheckBox19.UseVisualStyleBackColor = True
-        '
-        'CheckBox3
-        '
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Checked = True
-        Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox3.Location = New System.Drawing.Point(55, 339)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(230, 17)
-        Me.CheckBox3.TabIndex = 8
-        Me.CheckBox3.Text = "Let Windows set a random computer name"
-        Me.CheckBox3.UseVisualStyleBackColor = True
-        '
-        'Label62
-        '
-        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label62.AutoEllipsis = True
-        Me.Label62.Location = New System.Drawing.Point(71, 489)
-        Me.Label62.Name = "Label62"
-        Me.Label62.Size = New System.Drawing.Size(872, 33)
-        Me.Label62.TabIndex = 1
-        Me.Label62.Text = resources.GetString("Label62.Text")
-        '
-        'Label15
-        '
-        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Location = New System.Drawing.Point(71, 430)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(872, 18)
-        Me.Label15.TabIndex = 1
-        Me.Label15.Text = "You can set a different computer name at any time in the system settings"
-        '
-        'ComputerNamePanel
-        '
-        Me.ComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComputerNamePanel.Controls.Add(Me.Button3)
-        Me.ComputerNamePanel.Controls.Add(Me.TextBox1)
-        Me.ComputerNamePanel.Controls.Add(Me.Label16)
-        Me.ComputerNamePanel.Controls.Add(Me.Label63)
-        Me.ComputerNamePanel.Enabled = False
-        Me.ComputerNamePanel.Location = New System.Drawing.Point(61, 362)
-        Me.ComputerNamePanel.Name = "ComputerNamePanel"
-        Me.ComputerNamePanel.Size = New System.Drawing.Size(882, 60)
-        Me.ComputerNamePanel.TabIndex = 7
-        '
-        'Button3
-        '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(726, 8)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(152, 23)
-        Me.Button3.TabIndex = 3
-        Me.Button3.Text = "Get computer name"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(124, 9)
-        Me.TextBox1.MaxLength = 15
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(596, 21)
-        Me.TextBox1.TabIndex = 2
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(10, 12)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(87, 13)
-        Me.Label16.TabIndex = 1
-        Me.Label16.Text = "Computer name:"
-        '
-        'WinSVSettingsPanel
-        '
-        Me.WinSVSettingsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.WinSVSettingsPanel.Controls.Add(Me.Label14)
-        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox2)
-        Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox1)
-        Me.WinSVSettingsPanel.Location = New System.Drawing.Point(182, 196)
-        Me.WinSVSettingsPanel.Name = "WinSVSettingsPanel"
-        Me.WinSVSettingsPanel.Size = New System.Drawing.Size(761, 131)
-        Me.WinSVSettingsPanel.TabIndex = 7
-        '
-        'Label14
-        '
-        Me.Label14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(28, 54)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(720, 70)
-        Me.Label14.TabIndex = 1
-        Me.Label14.Text = "Check this option only if the target system does not have any network capabilitie" & _
-    "s. You can configure local users in the User Accounts section"
-        '
-        'CheckBox2
-        '
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Location = New System.Drawing.Point(12, 34)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(215, 17)
-        Me.CheckBox2.TabIndex = 0
-        Me.CheckBox2.Text = "Bypass Mandatory Network Connection"
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(12, 11)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(167, 17)
-        Me.CheckBox1.TabIndex = 0
-        Me.CheckBox1.Text = "Bypass System Requirements"
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(52, 208)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(110, 13)
-        Me.Label13.TabIndex = 6
-        Me.Label13.Text = "Windows 11 settings:"
-        '
-        'Label12
-        '
-        Me.Label12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(182, 158)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(761, 32)
-        Me.Label12.TabIndex = 5
-        Me.Label12.Text = "Please select the system architecture that is supported by the target Windows ima" & _
-    "ge to apply"
-        '
-        'ListBox1
-        '
-        Me.ListBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Items.AddRange(New Object() {"x86 (Desktop 32-Bit)", "x64 (Desktop 64-Bit)", "ARM64 (Windows on ARM)"})
-        Me.ListBox1.Location = New System.Drawing.Point(182, 82)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(761, 69)
-        Me.ListBox1.TabIndex = 4
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(52, 84)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(119, 13)
-        Me.Label11.TabIndex = 3
-        Me.Label11.Text = "Processor architecture:"
-        '
-        'SysConfigHeader
-        '
-        Me.SysConfigHeader.AutoEllipsis = True
-        Me.SysConfigHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.SysConfigHeader.Location = New System.Drawing.Point(16, 17)
-        Me.SysConfigHeader.Name = "SysConfigHeader"
-        Me.SysConfigHeader.Size = New System.Drawing.Size(708, 51)
-        Me.SysConfigHeader.TabIndex = 2
-        Me.SysConfigHeader.Text = "Configure basic system settings"
-        '
         'RegionalSettingsPanel
         '
         Me.RegionalSettingsPanel.Controls.Add(Me.Label10)
@@ -3735,19 +3748,6 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1"
         Me.ScriptEditorOFD.Title = "Open script"
         '
-        'Label63
-        '
-        Me.Label63.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label63.AutoEllipsis = True
-        Me.Label63.ForeColor = System.Drawing.Color.Red
-        Me.Label63.Location = New System.Drawing.Point(124, 35)
-        Me.Label63.Name = "Label63"
-        Me.Label63.Size = New System.Drawing.Size(596, 18)
-        Me.Label63.TabIndex = 1
-        Me.Label63.Text = "Please type a computer name"
-        Me.Label63.Visible = False
-        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3775,6 +3775,12 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.SysConfigPanel.ResumeLayout(False)
+        Me.SysConfigPanel.PerformLayout()
+        Me.ComputerNamePanel.ResumeLayout(False)
+        Me.ComputerNamePanel.PerformLayout()
+        Me.WinSVSettingsPanel.ResumeLayout(False)
+        Me.WinSVSettingsPanel.PerformLayout()
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.UnattendProgressPanel.ResumeLayout(False)
@@ -3878,12 +3884,6 @@ Partial Class NewUnattendWiz
         Me.TimeZonePanel.PerformLayout()
         Me.TimeZoneSettings.ResumeLayout(False)
         Me.TimeZoneSettings.PerformLayout()
-        Me.SysConfigPanel.ResumeLayout(False)
-        Me.SysConfigPanel.PerformLayout()
-        Me.ComputerNamePanel.ResumeLayout(False)
-        Me.ComputerNamePanel.PerformLayout()
-        Me.WinSVSettingsPanel.ResumeLayout(False)
-        Me.WinSVSettingsPanel.PerformLayout()
         Me.RegionalSettingsPanel.ResumeLayout(False)
         Me.RegionalSettingsPanel.PerformLayout()
         Me.RegionalSettings.ResumeLayout(False)
@@ -3966,7 +3966,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents Label12 As System.Windows.Forms.Label
-    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents SysConfigHeader As System.Windows.Forms.Label
     Friend WithEvents TimeZonePanel As System.Windows.Forms.Panel
@@ -4198,4 +4197,5 @@ Partial Class NewUnattendWiz
     Friend WithEvents StageLink3 As System.Windows.Forms.LinkLabel
     Friend WithEvents ScriptEditorOFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents Label63 As System.Windows.Forms.Label
+    Friend WithEvents CheckedListBox1 As System.Windows.Forms.CheckedListBox
 End Class

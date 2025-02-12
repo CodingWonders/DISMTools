@@ -30,7 +30,7 @@ Public Class NewUnattendWiz
     Dim SelectedGeoId As New GeoId()
 
     ' System Configuration Page
-    Dim SelectedArchitecture As New DismProcessorArchitecture()
+    Dim SelectedArchitectures As New Dictionary(Of DismProcessorArchitecture, Boolean)
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
     Dim UseConfigSet As Boolean
@@ -561,7 +561,7 @@ Public Class NewUnattendWiz
         ComboBox11.BackColor = BackColor
         ComboBox12.BackColor = BackColor
         ComboBox13.BackColor = BackColor
-        ListBox1.BackColor = BackColor
+        CheckedListBox1.BackColor = BackColor
         ListBox2.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
@@ -602,7 +602,7 @@ Public Class NewUnattendWiz
         ComboBox11.ForeColor = ForeColor
         ComboBox12.ForeColor = ForeColor
         ComboBox13.ForeColor = ForeColor
-        ListBox1.ForeColor = ForeColor
+        CheckedListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
@@ -713,7 +713,7 @@ Public Class NewUnattendWiz
                 Next
             End If
         End If
-        ListBox1.SelectedIndex = 1
+        CheckedListBox1.SelectedIndex = 1
         ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
         TimeZonePageTimer.Enabled = True
@@ -754,6 +754,19 @@ Public Class NewUnattendWiz
             LinkLabel6.Enabled = False
         End If
 
+        CheckedListBox1.SetItemChecked(0, False)
+
+        ' Preconfigure the keys
+        DynaLog.LogMessage("Preconfiguring the system architectures...")
+        SelectedArchitectures = New Dictionary(Of DismProcessorArchitecture, Boolean)
+        SelectedArchitectures.Add(DismProcessorArchitecture.Intel, False)
+        SelectedArchitectures.Add(DismProcessorArchitecture.AMD64, True)
+        SelectedArchitectures.Add(DismProcessorArchitecture.ARM64, False)
+
+        CheckedListBox1.SetItemChecked(0, False)
+        CheckedListBox1.SetItemChecked(1, True)
+        CheckedListBox1.SetItemChecked(2, False)
+
         LoadConfiguredScript(0)
     End Sub
 
@@ -765,7 +778,7 @@ Public Class NewUnattendWiz
         ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
         ComboBox4.SelectedItem = DefaultGeoId.DisplayName
         ' Restore basic system configuration
-        ListBox1.SelectedIndex = 1
+        CheckedListBox1.SelectedIndex = 1
         Win11Config.LabConfig_BypassRequirements = False
         Win11Config.OOBE_BypassNRO = False
         CheckBox1.Checked = False
@@ -850,6 +863,12 @@ Public Class NewUnattendWiz
         ' Restore variables
         UserAccountsList.Clear()
         SetDefaultSettings()
+
+        ' Reconfigure the keys
+        DynaLog.LogMessage("Reconfiguring the system architectures...")
+        CheckedListBox1.SetItemChecked(0, False)
+        CheckedListBox1.SetItemChecked(1, True)
+        CheckedListBox1.SetItemChecked(2, False)
 
         LoadConfiguredScript(0)
     End Sub
@@ -957,7 +976,7 @@ Public Class NewUnattendWiz
         Select Case WizardPage
             Case UnattendedWizardPage.Page.SysConfigPage
                 DynaLog.LogMessage("Checking selected architectures...")
-                If ListBox1.SelectedItems.Count = 0 Then
+                If CheckedListBox1.CheckedItems.Count = 0 Then
                     DynaLog.LogMessage("No architectures have been selected.")
                     MessageBox.Show("Please select an architecture and try again", "Validation error")
                     Return False
@@ -1039,6 +1058,19 @@ Public Class NewUnattendWiz
         Return True
     End Function
 
+    Function ShowArchitectures(Architectures As Dictionary(Of DismProcessorArchitecture, Boolean)) As String
+        Dim architectureList As New List(Of String)
+
+        If Architectures IsNot Nothing Then
+            For Each Architecture As DismProcessorArchitecture In Architectures.Keys
+                If Architectures(Architecture) Then
+                    architectureList.Add(Utilities.Casters.CastDismArchitecture(Architecture))
+                End If
+            Next
+        End If
+        Return String.Join("; ", architectureList.ToArray())
+    End Function
+
     Sub ShowSettingOverview()
         DynaLog.LogMessage("Showing overview of settings...")
         TextBox13.Clear()
@@ -1054,7 +1086,7 @@ Public Class NewUnattendWiz
         End If
         ' 2. -- BASIC SYSTEM CONFIGURATION
         TextBox13.AppendText("Basic system configuration: " & CrLf &
-                             "- Processor architecture: " & Utilities.Casters.CastDismArchitecture(SelectedArchitecture) & CrLf &
+                             "- Processor architectures: " & ShowArchitectures(SelectedArchitectures) & CrLf &
                              "- Windows 11 Settings:" & CrLf &
                              "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
                              "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
@@ -1339,19 +1371,6 @@ Public Class NewUnattendWiz
 
     Private Sub ComboBox4_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox4.SelectedIndexChanged
         SelectedGeoId = GeoIds(ComboBox4.SelectedIndex)
-    End Sub
-
-    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Select Case ListBox1.SelectedIndex
-            Case 0
-                SelectedArchitecture = DismProcessorArchitecture.Intel
-            Case 1
-                SelectedArchitecture = DismProcessorArchitecture.AMD64
-            Case 2
-                SelectedArchitecture = DismProcessorArchitecture.ARM64
-        End Select
-        ' Disable Windows 11 settings for x86
-        WinSVSettingsPanel.Enabled = Not (SelectedArchitecture = DismProcessorArchitecture.Intel)
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
@@ -1803,14 +1822,24 @@ Public Class NewUnattendWiz
             UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
             ReportMessage("Saving user settings...", 4)
             DynaLog.LogMessage("Saving architecture settings...")
-            Select Case SelectedArchitecture
-                Case DismProcessorArchitecture.Intel
-                    UnattendGen.StartInfo.Arguments &= " /architecture=x86"
-                Case DismProcessorArchitecture.AMD64
-                    UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
-                Case DismProcessorArchitecture.ARM64
-                    UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
-            End Select
+            ' Build architecture string for UnattendGen
+            Dim Architectures As New List(Of String)
+            Dim ArchitectureString As String = ""
+            For Each Architecture In SelectedArchitectures.Keys
+                If SelectedArchitectures(Architecture) Then
+                    Architectures.Add(Utilities.Casters.CastDismArchitecture(Architecture).ToLower())
+                End If
+            Next
+            ArchitectureString = String.Join(",", Architectures.ToArray())
+            UnattendGen.StartInfo.Arguments &= " /architecture=" & ArchitectureString
+            'Select Case SelectedArchitectures
+            '    Case DismProcessorArchitecture.Intel
+            '        UnattendGen.StartInfo.Arguments &= " /architecture=x86"
+            '    Case DismProcessorArchitecture.AMD64
+            '        UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
+            '    Case DismProcessorArchitecture.ARM64
+            '        UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
+            'End Select
             ReportMessage("Saving user settings...", 6)
             DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
@@ -2572,5 +2601,27 @@ Public Class NewUnattendWiz
 
     Private Sub CheckBox20_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox20.CheckedChanged
         ScriptsRestartExplorer = CheckBox20.Checked
+    End Sub
+
+    Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck
+        DynaLog.LogMessage("Changing state of selected architectures...")
+        Dim changedIndex As Integer = e.Index
+        Dim newValueIsChecked As Boolean = (e.NewValue = CheckState.Checked)
+        DynaLog.LogMessage("Index that changed: " & changedIndex)
+        DynaLog.LogMessage("Will the answer file target the architecture in the dictionary? " & newValueIsChecked)
+
+        Select Case changedIndex
+            Case 0
+                SelectedArchitectures(DismProcessorArchitecture.Intel) = newValueIsChecked
+            Case 1
+                SelectedArchitectures(DismProcessorArchitecture.AMD64) = newValueIsChecked
+            Case 2
+                SelectedArchitectures(DismProcessorArchitecture.ARM64) = newValueIsChecked
+        End Select
+
+        ' Disable Windows 11 settings for x86 (if and only if x86 is selected)
+        WinSVSettingsPanel.Enabled = Not (SelectedArchitectures(DismProcessorArchitecture.Intel) AndAlso
+                                          Not SelectedArchitectures(DismProcessorArchitecture.AMD64) AndAlso
+                                          Not SelectedArchitectures(DismProcessorArchitecture.ARM64))
     End Sub
 End Class
