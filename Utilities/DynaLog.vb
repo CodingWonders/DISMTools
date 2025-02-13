@@ -77,8 +77,12 @@ Public Class DynaLog
     ''' <param name="GetParentCaller">Determines whether or not to get the name of the caller that called a specific method that called DynaLog logging</param>
     ''' <remarks></remarks>
     Public Shared Sub LogMessage(message As String, Optional GetParentCaller As Boolean = True)
-        If Not LoggerEnabled Then Exit Sub
-        If message = "" Then Exit Sub
+        If Not LoggerEnabled OrElse message = "" Then
+            Debug.WriteLine("Logger Enabled? " & If(LoggerEnabled, "Yes", "No"))
+            Debug.WriteLine("Message: " & Quote & message & Quote)
+            Debug.WriteLine("Either the logger is not enabled or the message is empty. Message cannot be logged.")
+            Exit Sub
+        End If
         Debug.WriteLine(message)
         Try
             ' DynaLog will NOT display logs for log file/folder creation - ONLY in debugger.
