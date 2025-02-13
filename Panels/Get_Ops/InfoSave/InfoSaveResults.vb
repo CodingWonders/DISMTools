@@ -159,8 +159,8 @@ Public Class InfoSaveResults
                 DynaLog.LogMessage("This could be an issue with Markdig.")
                 If MsgBox("Conversion to HTML has failed due to the following error: " & ex.Message & CrLf & CrLf & "Do you want to open this file in a text editor?", vbYesNo + vbCritical, "Conversion error") = MsgBoxResult.Yes Then
                     Process.Start(FilePath)
-                    Close()
                 End If
+                Close()
             End Try
         Else
             Close()
