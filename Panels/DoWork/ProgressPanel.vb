@@ -7404,12 +7404,64 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub LogSwitcherPic1_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic1.MouseHover
+        Dim olcText As String = ""
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        olcText = "Operation Logs"
+                    Case "ESN"
+                        olcText = "Registros de operación"
+                    Case "FRA"
+                        olcText = "Journal des opérations"
+                    Case "PTB", "PTG"
+                        olcText = "Registos de operações"
+                    Case "ITA"
+                        olcText = "Registri delle operazioni"
+                End Select
+            Case 1
+                olcText = "Operation Logs"
+            Case 2
+                olcText = "Registros de operación"
+            Case 3
+                olcText = "Journal des opérations"
+            Case 4
+                olcText = "Registos de operações"
+            Case 5
+                olcText = "Registri delle operazioni"
+        End Select
         Dim olcToolTip As New ToolTip()
-        olcToolTip.SetToolTip(sender, "Operation Logs")
+        olcToolTip.SetToolTip(sender, olcText)
     End Sub
 
     Private Sub LogSwitcherPic2_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic2.MouseHover
+        Dim olcText As String = ""
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        olcText = "DISM Output"
+                    Case "ESN"
+                        olcText = "Salida de DISM"
+                    Case "FRA"
+                        olcText = "Sortie DISM"
+                    Case "PTB", "PTG"
+                        olcText = "Saída DISM"
+                    Case "ITA"
+                        olcText = "Uscita DISM"
+                End Select
+            Case 1
+                olcText = "DISM Output"
+            Case 2
+                olcText = "Salida de DISM"
+            Case 3
+                olcText = "Sortie DISM"
+            Case 4
+                olcText = "Saída DISM"
+            Case 5
+                olcText = "Uscita DISM"
+        End Select
         Dim olcToolTip As New ToolTip()
-        olcToolTip.SetToolTip(sender, "DISM Output")
+        olcToolTip.SetToolTip(sender, olcText)
     End Sub
 End Class
