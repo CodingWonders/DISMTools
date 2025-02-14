@@ -6,6 +6,7 @@ Imports ScintillaNET
 Imports DISMTools.Elements
 Imports Microsoft.Dism
 Imports System.Net
+Imports System.Text.RegularExpressions
 
 Public Class NewUnattendWiz
 
@@ -2623,5 +2624,9 @@ Public Class NewUnattendWiz
         WinSVSettingsPanel.Enabled = Not (SelectedArchitectures(DismProcessorArchitecture.Intel) AndAlso
                                           Not SelectedArchitectures(DismProcessorArchitecture.AMD64) AndAlso
                                           Not SelectedArchitectures(DismProcessorArchitecture.ARM64))
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        Scintilla1.Text = Regex.Replace(Scintilla1.Text, Tab, "    ")
     End Sub
 End Class
