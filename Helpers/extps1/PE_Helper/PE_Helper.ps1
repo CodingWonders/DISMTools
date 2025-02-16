@@ -878,25 +878,44 @@ function Start-OSApplication
         Write-Host "Adding drivers to the target image..."
         # Add drivers that were previously added to the Windows PE using the DIM
         $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        $drvCount = $drivers.Count
+        $successfulInstallations = 0
+        $failedInstallations = 0
+        $failedDrivers = [List[string]]::new()
         foreach ($driver in $drivers)
         {
-            $drvCount = $drivers.Count
             $curDrvIndex = $drivers.IndexOf($driver)
             if (Test-Path -Path "$driver" -PathType Leaf)
             {
-                Write-Host "Adding driver `"$driver`"...        " -NoNewline
                 Write-Progress -Activity "Adding drivers..." -Status "Adding driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($driver))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                 if ((Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false) -eq $true)
                 {
-                    Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+                    $successfulInstallations++
                 }
                 else
                 {
-                    Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+                    $failedInstallations++
+                    # Add the driver to the failed list, so we can display it later
+                    $failedDrivers.Add("$driver")
                 }
             }
         }
         Write-Progress -Activity "Adding drivers..." -Completed
+        # Show results
+        Write-Host "==================================================================="
+        Write-Host "Driver installation summary:"
+        Write-Host "- Successful driver installations: $successfulInstallations"
+        Write-Host "- Failed driver installations: $failedInstallations"
+        Write-Host "==================================================================="
+        if ($failedDrivers.Count -gt 0)
+        {
+            Write-Host "  Drivers that could not be installed:"
+            foreach ($failedDriver in $failedDrivers)
+            {
+                Write-Host "  - `"$failedDriver`""
+            }
+        }
+        Write-Host "The installer will attempt to perform serviceability tests one more time. Hold on for a bit, this will not take long..."
         # Perform serviceability tests one more time
         if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
     }
