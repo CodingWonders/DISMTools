@@ -124,6 +124,40 @@ function Start-PEGeneration
                     Read-Host | Out-Null
                     exit 1
                 }
+                if ((Test-Path "$((Get-Location).Path)\peUpdates") -and ((Get-ChildItem "$((Get-Location).Path)\peUpdates").Count -gt 0))
+                {
+                    Write-Host "Applying Windows PE updates..."
+                    $updates = Get-ChildItem "$((Get-Location).Path)\peUpdates"
+                    $successfulUpdates = 0
+                    $failedUpdates = 0
+                    if ($updates.Count -gt 0)
+                    {
+                        foreach ($update in $updates)
+                        {
+                            $curPkgIndex = $updates.IndexOf($update)
+                            if (Test-Path "$update" -PathType Leaf)
+                            {
+                                Write-Progress -Activity "Adding updates..." -Status "Adding package $($curPkgIndex + 1) of $($updates.Count)" -PercentComplete (($curPkgIndex / $updates.Count) * 100)
+                                if ((Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath "$update") -eq $true)
+                                {
+                                    $successfulUpdates++
+                                }
+                                else
+                                {
+                                    $failedUpdates++
+                                }
+                            }
+                        }
+                        Write-Progress -Activity "Adding updates..." -Completed
+                        Write-Host "==================================================================="
+                        Write-Host "Update installation summary:"
+                        Write-Host "- Successful update installations: $successfulUpdates"
+                        Write-Host "- Failed update installations: $failedUpdates"
+                        Write-Host "==================================================================="
+                    }
+                    Write-Host "Saving changes..."
+                    Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
+                }
                 Write-Host "Copying Windows PE optional components. Please wait..."
                 if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
