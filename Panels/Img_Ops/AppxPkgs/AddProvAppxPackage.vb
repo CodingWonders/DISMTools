@@ -2332,7 +2332,7 @@ Public Class AddProvAppxPackage
                 AppInstallerDownloader.AppInstallerFile = PackageFile
                 If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then AppInstallerDownloader.ShowDialog(Me)
                 If File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
-            ElseIf File.GetAttributes(PackageFile) = (FileAttributes.Directory Or FileAttributes.Archive) Then
+            ElseIf (File.GetAttributes(PackageFile) And FileAttributes.Directory) = FileAttributes.Directory Then
                 DynaLog.LogMessage("The item to add is a directory. Getting contents...")
                 Dim msg As String = ""
                 ' Temporary support for directories

@@ -4940,7 +4940,7 @@ Public Class ProgressPanel
                                    "Driver " & (x + 1) & " of " & drvAdditionCount)
                 ' Get driver information
                 DynaLog.LogMessage("Checking file system attributes of driver...")
-                If Not File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory Then
+                If Not (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory Then
                     DynaLog.LogMessage("The driver is not a folder.")
                     DynaLog.LogMessage("Getting information about driver file " & Quote & Path.GetFileName(drvAdditionPkgs(x)) & Quote & "...")
                     Try
@@ -4990,7 +4990,7 @@ Public Class ProgressPanel
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
                 End If
-                If File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
+                If (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
                     LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
                     CommandArgs &= " /recurse"
                 End If

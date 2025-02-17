@@ -531,8 +531,8 @@ Public Class AddDrivers
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each PkgFile In PackageFiles
             DynaLog.LogMessage("Item: " & Quote & PkgFile & Quote)
-            If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
-            If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
+            If Not (File.GetAttributes(PkgFile) And FileAttributes.Directory) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
+            If (File.GetAttributes(PkgFile) And FileAttributes.Directory) = FileAttributes.Directory Then
                 DynaLog.LogMessage("The specified item is a folder. Asking user...")
                 Dim msg As String = ""
                 Select Case MainForm.Language
