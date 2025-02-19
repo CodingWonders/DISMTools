@@ -88,11 +88,11 @@ function Start-PEGeneration
             $peToolsPath = ""
             if ([Environment]::Is64BitOperatingSystem)
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
             }
             else
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files"
             }
             if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
             {
@@ -906,7 +906,7 @@ function Start-OSApplication
             Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
         }
     }
-    $driverPath = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))DT_InstDrvs.txt"
+    $driverPath = "$env:SYSTEMDRIVE\DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
     {
         Write-Host "Adding drivers to the target image..."
@@ -969,9 +969,9 @@ function Start-OSApplication
 
         if ($supportedArchitectures.Contains($systemArchitecture))
         {
-            if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe")
+            if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe")
             {
-                Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe" -Wait
+                Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe" -Wait
             }
         }
 
@@ -1045,7 +1045,7 @@ function Get-Disks
 
     # Show additional tools
     Write-Host "- To load drivers, type `"DIM`" and press ENTER"
-    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt" -PathType Leaf) {
         Write-Host "- To get a look at what disks are applicable for operating system installation, type DSCR"
     }
     Write-Host ""
@@ -1070,18 +1070,18 @@ function Get-Disks
 
                 if ($supportedArchitectures.Contains($systemArchitecture))
                 {
-                    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe")
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
                         Clear-Host
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
-                        Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
+                        Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
                 }
                 Get-Disks
             }
             "DSCR" {
-                if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
-                    notepad X:\HotInstall\DSCReport.txt
+                if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt" -PathType Leaf) {
+                    notepad "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt"
                 } else {
                     Write-Host "Either no report has been created or the installation has not been started with HotInstall."
                     Start-Sleep -Seconds 3
@@ -1116,9 +1116,9 @@ function Get-Partitions
     exit
 '@
     $partLister = $partLister.Replace("<REPLACEME>", $driveNum).Trim()
-    $partLister | Out-File -FilePath "X:\files\diskpart\dp_listpart.dp" -Force -Encoding utf8
+    $partLister | Out-File -FilePath "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" -Force -Encoding utf8
     $part = -1
-    diskpart /s "X:\files\diskpart\dp_listpart.dp" | Out-Host
+    diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" | Out-Host
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
@@ -1736,11 +1736,11 @@ function Start-ProjectDevelopment {
             $peToolsPath = ""
             if ([Environment]::Is64BitOperatingSystem)
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
             }
             else
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files"
             }
             if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
             {
