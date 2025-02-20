@@ -19127,6 +19127,10 @@ Public Class MainForm
             MsgBox("No items are present in the Recents list.")
             Exit Sub
         End If
+        If (itemOrder + 1) > RecentList.Count Then
+            DynaLog.LogMessage("Item with index " & itemOrder & " is not yet declared in the Recents list. Exiting...")
+            Exit Sub
+        End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then
             DynaLog.LogMessage("Selected item is not bogus and exists. Loading project...")
             If isProjectLoaded Then UnloadDTProj(False, If(OnlineManagement Or OfflineManagement, False, True), False)
