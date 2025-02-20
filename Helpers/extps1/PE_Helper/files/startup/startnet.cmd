@@ -48,7 +48,9 @@ if %debug% lss 2 (
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
+	echo - To start the Driver Installation Module in case you need to load drivers, type "StartDim" and press ENTER
 	echo.
 	doskey StartInstall=powershell -file "\StartInstall.ps1"
+	doskey StartDim=cmd /c "\dimstart.bat"
 	exit /b
 )
