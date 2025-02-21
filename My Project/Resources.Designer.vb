@@ -1971,16 +1971,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The PE Helper now detects whether the selected index is invalid
-        '''- Fixed a visual issue in the image index switch dialog
+        '''- Fixed an issue where the PE Helper would not create ISO files if you had a version of the Windows ADK earlier than 10.1.26100.2454
+        '''- AppX package counts in image information reports are more reasonable now on Windows 8 hosts
+        '''- Fixed an issue where folder attributes for AppX package addition and driver addition were not being detected correctly (#220, thanks @InnerBrat for spotting)
+        '''- Fixed an additional issue regarding the Recents list
         '''
         '''New features:
         '''
-        '''- HotInstall has been updated to the latest version
-        '''- You can now copy your ISO files to Ventoy drives
-        '''- When installing the drivers specified in the Driver Installation Module, you will now see a progress indicator
-        '''- The ISO creator now detects the architectures that are supported by the Assessment and Deployment Kit installed on your computer
-        '''- Com [resto de la cadena truncado]&quot;;.
+        '''- HotInstall has been updated to t [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
