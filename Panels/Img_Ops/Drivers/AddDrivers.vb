@@ -28,7 +28,7 @@ Public Class AddDrivers
                 ProgressPanel.drvAdditionPkgs(x) = drvPkgs(x)
             Next
             For x = 0 To drvPkgCount - 1
-                If File.GetAttributes(ListView1.Items(x).SubItems(0).Text) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
+                If (File.GetAttributes(ListView1.Items(x).SubItems(0).Text) And FileAttributes.Directory) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
                     drvRecursiveList.Add(ListView1.Items(x).SubItems(0).Text)
                 End If
             Next

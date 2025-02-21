@@ -4048,7 +4048,7 @@ Public Class ProgressPanel
                 Else
                     DynaLog.LogMessage("The application is not encrypted. Continuing addition...")
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
-                    If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
+                    If (File.GetAttributes(appxAdditionPackageList(x).PackageFile) And FileAttributes.Directory) = FileAttributes.Directory Then
                         CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
                     Else
                         CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
