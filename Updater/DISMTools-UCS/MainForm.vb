@@ -492,8 +492,8 @@ Public Class MainForm
         DirCopy(Application.StartupPath & "\tools", Application.StartupPath & "\old\tools", True, False)
         DirCopy(Application.StartupPath & "\runtimes", Application.StartupPath & "\old\runtimes", True, False)
         DirCopy(Application.StartupPath & "\videos", Application.StartupPath & "\old\videos", True, False)
-        File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE")
-        File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe")
+        File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE", True)
+        File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe", True)
         CopiedFiles += 2
         Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
     End Sub
