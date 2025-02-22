@@ -88,11 +88,11 @@ function Start-PEGeneration
             $peToolsPath = ""
             if ([Environment]::Is64BitOperatingSystem)
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
             }
             else
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files"
             }
             if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
             {
@@ -123,6 +123,40 @@ function Start-PEGeneration
                     Write-Host "`nPress ENTER to exit"
                     Read-Host | Out-Null
                     exit 1
+                }
+                if ((Test-Path "$((Get-Location).Path)\peUpdates") -and ((Get-ChildItem "$((Get-Location).Path)\peUpdates").Count -gt 0))
+                {
+                    Write-Host "Applying Windows PE updates..."
+                    $updates = Get-ChildItem "$((Get-Location).Path)\peUpdates"
+                    $successfulUpdates = 0
+                    $failedUpdates = 0
+                    if ($updates.Count -gt 0)
+                    {
+                        foreach ($update in $updates)
+                        {
+                            $curPkgIndex = $updates.IndexOf($update)
+                            if (Test-Path "$update" -PathType Leaf)
+                            {
+                                Write-Progress -Activity "Adding updates..." -Status "Adding package $($curPkgIndex + 1) of $($updates.Count)" -PercentComplete (($curPkgIndex / $updates.Count) * 100)
+                                if ((Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath "$update") -eq $true)
+                                {
+                                    $successfulUpdates++
+                                }
+                                else
+                                {
+                                    $failedUpdates++
+                                }
+                            }
+                        }
+                        Write-Progress -Activity "Adding updates..." -Completed
+                        Write-Host "==================================================================="
+                        Write-Host "Update installation summary:"
+                        Write-Host "- Successful update installations: $successfulUpdates"
+                        Write-Host "- Failed update installations: $failedUpdates"
+                        Write-Host "==================================================================="
+                    }
+                    Write-Host "Saving changes..."
+                    Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 }
                 Write-Host "Copying Windows PE optional components. Please wait..."
                 if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
@@ -554,6 +588,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat"
             Write-Host "Startup commands changed"
         }
         catch
@@ -707,6 +742,10 @@ function New-WinPEIso
             {
                 $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys.bin").Trim()
             }
+        }
+        else
+        {
+            $efiVars = $efiVars.Replace("<EFIFILE_REPLACE>", "efisys.bin").Trim()
         }
         if (Test-Path "$((Get-Location).Path)\ISOTEMP\$finalPath\etfsboot.com" -PathType Leaf)
         {
@@ -868,31 +907,50 @@ function Start-OSApplication
             Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
         }
     }
-    $driverPath = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))DT_InstDrvs.txt"
+    $driverPath = "$env:SYSTEMDRIVE\DT_InstDrvs.txt"
     if ((Test-Path "$($driveLetter):\`$DISMTOOLS.~LS") -and ($serviceableArchitecture) -and (Test-Path -Path $driverPath -PathType Leaf))
     {
         Write-Host "Adding drivers to the target image..."
         # Add drivers that were previously added to the Windows PE using the DIM
         $drivers = (Get-Content -Path $driverPath | Where-Object { $_.Trim() -ne "" })
+        $drvCount = $drivers.Count
+        $successfulInstallations = 0
+        $failedInstallations = 0
+        $failedDrivers = [List[string]]::new()
         foreach ($driver in $drivers)
         {
-            $drvCount = $drivers.Count
             $curDrvIndex = $drivers.IndexOf($driver)
             if (Test-Path -Path "$driver" -PathType Leaf)
             {
-                Write-Host "Adding driver `"$driver`"...        " -NoNewline
                 Write-Progress -Activity "Adding drivers..." -Status "Adding driver $($curDrvIndex + 1) of $($drvCount): `"$([IO.Path]::GetFileName($driver))`"..." -PercentComplete (($curDrvIndex / $drvCount) * 100)
                 if ((Start-DismCommand -Verb Add-Driver -ImagePath "$($driveLetter):\" -DriverAdditionFile "$driver" -DriverAdditionRecurse $false) -eq $true)
                 {
-                    Write-Host "SUCCESS" -ForegroundColor White -BackgroundColor DarkGreen
+                    $successfulInstallations++
                 }
                 else
                 {
-                    Write-Host "FAILURE" -ForegroundColor Black -BackgroundColor DarkRed
+                    $failedInstallations++
+                    # Add the driver to the failed list, so we can display it later
+                    $failedDrivers.Add("$driver")
                 }
             }
         }
         Write-Progress -Activity "Adding drivers..." -Completed
+        # Show results
+        Write-Host "==================================================================="
+        Write-Host "Driver installation summary:"
+        Write-Host "- Successful driver installations: $successfulInstallations"
+        Write-Host "- Failed driver installations: $failedInstallations"
+        Write-Host "==================================================================="
+        if ($failedDrivers.Count -gt 0)
+        {
+            Write-Host "  Drivers that could not be installed:"
+            foreach ($failedDriver in $failedDrivers)
+            {
+                Write-Host "  - `"$failedDriver`""
+            }
+        }
+        Write-Host "The installer will attempt to perform serviceability tests one more time. Hold on for a bit, this will not take long..."
         # Perform serviceability tests one more time
         if ($serviceableArchitecture) { Set-Serviceability -ImagePath "$($driveLetter):\" } else { Write-Host "Serviceability tests will not be run: the image architecture and the PE architecture are different." }
     }
@@ -912,9 +970,9 @@ function Start-OSApplication
 
         if ($supportedArchitectures.Contains($systemArchitecture))
         {
-            if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe")
+            if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe")
             {
-                Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe" -Wait
+                Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe" -Wait
             }
         }
 
@@ -988,7 +1046,7 @@ function Get-Disks
 
     # Show additional tools
     Write-Host "- To load drivers, type `"DIM`" and press ENTER"
-    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
+    if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt" -PathType Leaf) {
         Write-Host "- To get a look at what disks are applicable for operating system installation, type DSCR"
     }
     Write-Host ""
@@ -1013,18 +1071,18 @@ function Get-Disks
 
                 if ($supportedArchitectures.Contains($systemArchitecture))
                 {
-                    if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe")
+                    if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
                         Clear-Host
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
-                        Start-Process -FilePath "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
+                        Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
                 }
                 Get-Disks
             }
             "DSCR" {
-                if (Test-Path -Path "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))HotInstall\DSCReport.txt" -PathType Leaf) {
-                    notepad X:\HotInstall\DSCReport.txt
+                if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt" -PathType Leaf) {
+                    notepad "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt"
                 } else {
                     Write-Host "Either no report has been created or the installation has not been started with HotInstall."
                     Start-Sleep -Seconds 3
@@ -1059,9 +1117,9 @@ function Get-Partitions
     exit
 '@
     $partLister = $partLister.Replace("<REPLACEME>", $driveNum).Trim()
-    $partLister | Out-File -FilePath "X:\files\diskpart\dp_listpart.dp" -Force -Encoding utf8
+    $partLister | Out-File -FilePath "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" -Force -Encoding utf8
     $part = -1
-    diskpart /s "X:\files\diskpart\dp_listpart.dp" | Out-Host
+    diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" | Out-Host
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
@@ -1663,7 +1721,7 @@ function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
     $version = "0.6.1"
-    $ESVer = "0.6"
+    $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2025. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
@@ -1679,11 +1737,11 @@ function Start-ProjectDevelopment {
             $peToolsPath = ""
             if ([Environment]::Is64BitOperatingSystem)
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files (x86)"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
             }
             else
             {
-                $progFiles = "$([IO.Path]::GetPathRoot([Environment]::GetFolderPath([Environment+SpecialFolder]::Windows)))Program Files"
+                $progFiles = "$env:SYSTEMDRIVE\Program Files"
             }
             if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
             {

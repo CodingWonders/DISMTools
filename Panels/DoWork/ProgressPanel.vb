@@ -4048,7 +4048,7 @@ Public Class ProgressPanel
                 Else
                     DynaLog.LogMessage("The application is not encrypted. Continuing addition...")
                     CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-provisionedappxpackage "
-                    If File.GetAttributes(appxAdditionPackageList(x).PackageFile) = FileAttributes.Directory Then
+                    If (File.GetAttributes(appxAdditionPackageList(x).PackageFile) And FileAttributes.Directory) = FileAttributes.Directory Then
                         CommandArgs &= "/folderpath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
                     Else
                         CommandArgs &= "/packagepath=" & Quote & appxAdditionPackageList(x).PackageFile & Quote
@@ -4940,7 +4940,7 @@ Public Class ProgressPanel
                                    "Driver " & (x + 1) & " of " & drvAdditionCount)
                 ' Get driver information
                 DynaLog.LogMessage("Checking file system attributes of driver...")
-                If Not File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory Then
+                If Not (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory Then
                     DynaLog.LogMessage("The driver is not a folder.")
                     DynaLog.LogMessage("Getting information about driver file " & Quote & Path.GetFileName(drvAdditionPkgs(x)) & Quote & "...")
                     Try
@@ -4990,7 +4990,7 @@ Public Class ProgressPanel
                 If drvAdditionForceUnsigned Then
                     CommandArgs &= " /forceunsigned"
                 End If
-                If File.GetAttributes(drvAdditionPkgs(x)) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
+                If (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
                     LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
                     CommandArgs &= " /recurse"
                 End If
@@ -7404,12 +7404,64 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub LogSwitcherPic1_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic1.MouseHover
+        Dim olcText As String = ""
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        olcText = "Operation Logs"
+                    Case "ESN"
+                        olcText = "Registros de operación"
+                    Case "FRA"
+                        olcText = "Journal des opérations"
+                    Case "PTB", "PTG"
+                        olcText = "Registos de operações"
+                    Case "ITA"
+                        olcText = "Registri delle operazioni"
+                End Select
+            Case 1
+                olcText = "Operation Logs"
+            Case 2
+                olcText = "Registros de operación"
+            Case 3
+                olcText = "Journal des opérations"
+            Case 4
+                olcText = "Registos de operações"
+            Case 5
+                olcText = "Registri delle operazioni"
+        End Select
         Dim olcToolTip As New ToolTip()
-        olcToolTip.SetToolTip(sender, "Operation Logs")
+        olcToolTip.SetToolTip(sender, olcText)
     End Sub
 
     Private Sub LogSwitcherPic2_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic2.MouseHover
+        Dim olcText As String = ""
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        olcText = "DISM Output"
+                    Case "ESN"
+                        olcText = "Salida de DISM"
+                    Case "FRA"
+                        olcText = "Sortie DISM"
+                    Case "PTB", "PTG"
+                        olcText = "Saída DISM"
+                    Case "ITA"
+                        olcText = "Uscita DISM"
+                End Select
+            Case 1
+                olcText = "DISM Output"
+            Case 2
+                olcText = "Salida de DISM"
+            Case 3
+                olcText = "Sortie DISM"
+            Case 4
+                olcText = "Saída DISM"
+            Case 5
+                olcText = "Uscita DISM"
+        End Select
         Dim olcToolTip As New ToolTip()
-        olcToolTip.SetToolTip(sender, "DISM Output")
+        olcToolTip.SetToolTip(sender, olcText)
     End Sub
 End Class

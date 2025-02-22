@@ -950,7 +950,7 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= CrLf & "**Information summary for " & MainForm.imgAppxPackageNames.Count - 1 & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
+                    Contents &= CrLf & "**Information summary for " & MainForm.imgAppxPackageNames.Count - 65537 & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                         If x = MainForm.imgAppxPackageNames.Count - 1 Or MainForm.imgAppxPackageNames(x) Is Nothing Then Continue For
                         Select Case MainForm.Language
@@ -1080,7 +1080,7 @@ Public Class ImgInfoSaveDlg
                         For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
                             pkgNames.Add(pkg.PackageName)
                         Next
-                        Contents &= CrLf & "**Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 1, pkgNames.Count) & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
+                        Contents &= CrLf & "**Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 65537, pkgNames.Count) & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

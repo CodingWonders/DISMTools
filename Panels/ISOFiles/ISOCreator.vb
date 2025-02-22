@@ -409,6 +409,11 @@ Public Class ISOCreator
                 ComboBox1.Items.Remove(architecture)
             End If
         Next
+        ' If we are left with no architectures, add them back
+        If ComboBox1.Items.Count = 0 Then
+            DynaLog.LogMessage("For some reason we excluded all of them. This could be because of incorrect detections. Adding back...")
+            ComboBox1.Items.AddRange(architectures)
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

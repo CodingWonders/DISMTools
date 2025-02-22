@@ -28,7 +28,7 @@ Public Class AddDrivers
                 ProgressPanel.drvAdditionPkgs(x) = drvPkgs(x)
             Next
             For x = 0 To drvPkgCount - 1
-                If File.GetAttributes(ListView1.Items(x).SubItems(0).Text) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
+                If (File.GetAttributes(ListView1.Items(x).SubItems(0).Text) And FileAttributes.Directory) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
                     drvRecursiveList.Add(ListView1.Items(x).SubItems(0).Text)
                 End If
             Next
@@ -531,8 +531,8 @@ Public Class AddDrivers
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each PkgFile In PackageFiles
             DynaLog.LogMessage("Item: " & Quote & PkgFile & Quote)
-            If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
-            If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
+            If Not (File.GetAttributes(PkgFile) And FileAttributes.Directory) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
+            If (File.GetAttributes(PkgFile) And FileAttributes.Directory) = FileAttributes.Directory Then
                 DynaLog.LogMessage("The specified item is a folder. Asking user...")
                 Dim msg As String = ""
                 Select Case MainForm.Language

@@ -585,7 +585,7 @@ Public Class MainForm
     End Function
 
     Function GetCopyrightTimespan(ByVal start As Integer, ByVal current As Integer) As String
-        If current = start Then
+        If current <= start Then
             Return current.ToString()
         Else
             Return start.ToString() & "-" & current.ToString()
@@ -19125,6 +19125,10 @@ Public Class MainForm
         If RecentList.Count <= 0 Then
             DynaLog.LogMessage("No items are present in the recents list. Exiting...")
             MsgBox("No items are present in the Recents list.")
+            Exit Sub
+        End If
+        If (itemOrder + 1) > RecentList.Count Then
+            DynaLog.LogMessage("Item with index " & itemOrder & " is not yet declared in the Recents list. Exiting...")
             Exit Sub
         End If
         If RecentList(itemOrder).ProjPath <> "" And File.Exists(RecentList(itemOrder).ProjPath) Then

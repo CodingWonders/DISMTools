@@ -929,22 +929,21 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The PE Helper now detects whether the selected index is invalid
-- Fixed a visual issue in the image index switch dialog
+- Fixed an issue where the PE Helper would not create ISO files if you had a version of the Windows ADK earlier than 10.1.26100.2454
+- AppX package counts in image information reports are more reasonable now on Windows 8 hosts
+- Fixed an issue where folder attributes for AppX package addition and driver addition were not being detected correctly (#220, thanks @InnerBrat for spotting)
+- Fixed an additional issue regarding the Recents list
 
 New features:
 
-- HotInstall has been updated to the latest version
-- You can now copy your ISO files to Ventoy drives
-- When installing the drivers specified in the Driver Installation Module, you will now see a progress indicator
-- The ISO creator now detects the architectures that are supported by the Assessment and Deployment Kit installed on your computer
-- Compatibility has been improved for the latest Windows ADKs (starting from version 10.1.26100.2454 - December 2024 update):
-  - ISO creation will finish successfully now
-  - You can now create ISO files with boot binaries signed with the "Windows UEFI CA 2023" certificate:
+- HotInstall has been updated to the latest version, with a localized Disk Space Checker, and support for exporting system drivers if you wish
+- When installing drivers specified in the Driver Installation Module (DIM), you will now see a different output consisting of a summary
+- The Extensibility Suite has had some improvements:
+  - Support has been added for ADK 10.1.26100.2454
+  - An alias ("StartDim") has been added, letting you launch the Driver Installation Module more easily
 - UnattendGen has been updated to the latest version
-- User accounts with "None" names are now blocked
-- Log switchers in the progress panel are more visually appealing now
-- CODE: DynaLog now uses 64-bit long types for file content detection
-- Scintilla.NET has been updated to version 5.6.6</value>
+- You can now target multiple processor architectures with your answer file
+- You can now normalize the spacing of your unattended answer file to make it consistent
+- Progress panel log switcher buttons are now localized</value>
   </data>
 </root>
