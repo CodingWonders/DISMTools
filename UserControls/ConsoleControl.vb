@@ -24,6 +24,8 @@ Public Class ConsoleControl
 
     Public Function StartProcess(executablePath As String, arguments As String) As Integer
         proc = New Process()
+        proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        proc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
         proc.StartInfo.FileName = executablePath
         proc.StartInfo.Arguments = arguments
         proc.StartInfo.CreateNoWindow = True
