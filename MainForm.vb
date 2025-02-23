@@ -1684,6 +1684,8 @@ Public Class MainForm
                         SaveOnSettingsIni = False
                         LoadDTSettings(0)
                         Exit Sub
+                    Else
+                        SaveOnSettingsIni = True
                     End If
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=1") Then
                     SaveOnSettingsIni = True
