@@ -1556,7 +1556,7 @@ Public Class MainForm
         End Property
     End Class
 
-    Sub LoadDTSettings(LoadMode As Integer)
+    Sub LoadDTSettings(LoadMode As Integer, Optional ForceINILoad As Boolean = False)
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
         DynaLog.LogMessage("Preparing to get settings (Load Mode: " & LoadMode & ")...")
@@ -1659,7 +1659,7 @@ Public Class MainForm
                 ChangeLangs(Language)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not grab settings from registry: " & ex.Message & ". Loading from INI File...")
-                LoadDTSettings(1)
+                LoadDTSettings(1, True)
                 Exit Sub
             End Try
         ElseIf LoadMode = 1 Then
@@ -1679,9 +1679,12 @@ Public Class MainForm
                 DismExe = DTSettingForm.RichTextBox1.Lines(3).Replace("DismExe=", "").Trim().Replace(Quote, "").Trim()
                 If DismExe.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then DismExe = DismExe.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                 If DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=0") And Not File.Exists(Application.StartupPath & "\portable") Then
-                    SaveOnSettingsIni = False
-                    LoadDTSettings(0)
-                    Exit Sub
+                    If Not ForceINILoad Then
+                        DynaLog.LogMessage("We are not forcing load with INI. Proceeding to load from registry...")
+                        SaveOnSettingsIni = False
+                        LoadDTSettings(0)
+                        Exit Sub
+                    End If
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("SaveOnSettingsIni=1") Then
                     SaveOnSettingsIni = True
                 End If
