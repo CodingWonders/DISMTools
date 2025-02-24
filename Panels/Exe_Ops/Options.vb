@@ -472,6 +472,16 @@ Public Class Options
                         RadioButton5.Text = "Modern"
                         RadioButton6.Text = "Classic"
                         ScratchFBD.Description = "Specify the scratch directory the program should use:"
+                        Label62.Text = "DynaLog logging provides a method for saving diagnostic logs that can be used to help fix program issues, in case you encounter them. You can disable the logger using the toggle below, but it's not recommended." & CrLf & CrLf &
+                            "Disable logging only if it causes a performance overhead on your computer. Clicking the toggle will apply this setting automatically."
+                        Label63.Text = "By default, operation logs are opened with Notepad in the event of an operation error. However, if you want to open them with a different program, specify it below:"
+                        Label64.Text = "DynaLog logging control"
+                        Label65.Text = "Editor to open log files with:"
+                        Label66.Text = "System Editor"
+                        Button5.Text = "Browse..."
+                        EditorOFD.Title = "Specify the editor to use"
+                        LinkLabel3.Text = "Show me where these logs are stored"
+                        CheckBox20.Text = "Disable DynaLog logging"
                     Case "ESN"
                         Text = "Opciones"
                         Label1.Text = Text
@@ -572,6 +582,16 @@ Public Class Options
                         RadioButton5.Text = "Moderno"
                         RadioButton6.Text = "Clásico"
                         ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
+                        Label62.Text = "DynaLog proporciona un método para guardar registros de diagnóstico que pueden ser utilizados para ayudar a solucionar problemas del programa, en caso de que los encuentre. Puede desactivar el registro usando el interruptor de abajo, pero no es recomendable." & CrLf & CrLf &
+                            "Desactive el registro solo si causa una sobrecarga de rendimiento en su equipo. Hacer clic en el interruptor aplicará esta configuración automáticamente."
+                        Label63.Text = "Por defecto, los registros de operación se abren con el Bloc de notas en caso de un error de operación. Sin embargo, si desea abrirlos con un programa diferente, especifíquelo a continuación:"
+                        Label64.Text = "Control de registro de DynaLog"
+                        Label65.Text = "Editor con el que se abrirán archivos de registro:"
+                        Label66.Text = "Editor del sistema"
+                        Button5.Text = "Examinar..."
+                        EditorOFD.Title = "Especifique el editor a usar"
+                        LinkLabel3.Text = "Muéstrame dónde se guardan estos registros"
+                        CheckBox20.Text = "Desactivar el registro de DynaLog"
                     Case "FRA"
                         Text = "Paramètres"
                         Label1.Text = Text
@@ -672,6 +692,16 @@ Public Class Options
                         RadioButton5.Text = "Moderne"
                         RadioButton6.Text = "Classique"
                         ScratchFBD.Description = "Indiquez le répertoire temporaire que le programme doit utiliser :"
+                        Label62.Text = "L'enregistrement DynaLog permet de sauvegarder des journaux de diagnostic qui peuvent être utilisés pour aider à résoudre des problèmes de programme, au cas où vous en rencontreriez. Vous pouvez désactiver l'enregistreur en utilisant la bascule ci-dessous, mais ce n'est pas recommandé." & CrLf & CrLf &
+                            "Désactivez la journalisation uniquement si elle entraîne une surcharge de performance sur votre ordinateur. En cliquant sur la bascule, vous appliquerez automatiquement ce paramètre."
+                        Label63.Text = "Par défaut, les journaux d'opération sont ouverts avec le Bloc-notes en cas d'erreur d'opération. Cependant, si vous souhaitez les ouvrir avec un autre programme, indiquez-le ci-dessous :"
+                        Label64.Text = "Contrôle d'enregistrement DynaLog"
+                        Label65.Text = "Editeur pour ouvrir les fichiers journaux avec :"
+                        Label66.Text = "Editeur système"
+                        Button5.Text = "Parcourir..."
+                        EditorOFD.Title = "Spécifier l'éditeur à utiliser"
+                        LinkLabel3.Text = "Montrez-moi où ces journaux sont stockés"
+                        CheckBox20.Text = "Désactiver la journalisation DynaLog"
                     Case "PTB", "PTG"
                         Text = "Opções"
                         Label1.Text = Text
@@ -772,6 +802,16 @@ Public Class Options
                         RadioButton5.Text = "Moderna"
                         RadioButton6.Text = "Clássico"
                         ScratchFBD.Description = "Especificar o diretório de rascunho que o programa deve utilizar:"
+                        Label62.Text = "O registo DynaLog fornece um método para guardar registos de diagnóstico que podem ser utilizados para ajudar a corrigir problemas do programa, caso os encontre. Pode desativar o registo utilizando o botão abaixo, mas não é recomendado." & CrLf & CrLf &
+                            "Desactive o registo apenas se este causar uma sobrecarga de desempenho no seu computador. Se clicar no botão de alternância, esta definição será aplicada automaticamente."
+                        Label63.Text = "Por predefinição, os registos de operações são abertos com o Bloco de Notas em caso de erro de operação. No entanto, se pretender abri-los com um programa diferente, especifique-o abaixo:"
+                        Label64.Text = "Controlo de registo DynaLog"
+                        Label65.Text = "Editor para abrir ficheiros de registo com:"
+                        Label66.Text = "Editor do sistema"
+                        Button5.Text = "Procurar..."
+                        EditorOFD.Title = "Especificar o editor a utilizar"
+                        LinkLabel3.Text = "Mostre-me onde estes registos estão armazenados"
+                        CheckBox20.Text = "Desativar o registo DynaLog"
                     Case "ITA"
                         Text = "Opzioni"
                         Label1.Text = Text
@@ -872,6 +912,16 @@ Public Class Options
                         RadioButton5.Text = "Moderno"
                         RadioButton6.Text = "Classic"
                         ScratchFBD.Description = "Specifica la directory di scratch che il programma deve utilizzare:"
+                        Label62.Text = "La registrazione DynaLog fornisce un metodo per salvare i registri diagnostici che possono essere utilizzati per risolvere i problemi del programma, nel caso in cui si verifichino. È possibile disattivare il logger utilizzando la levetta sottostante, ma non è consigliabile." & CrLf & CrLf &
+                            "Disattivare il logging solo se causa un sovraccarico di prestazioni sul computer. Facendo clic sulla levetta, questa impostazione verrà applicata automaticamente."
+                        Label63.Text = "Per impostazione predefinita, i registri delle operazioni vengono aperti con il Blocco note in caso di errore. Tuttavia, se si desidera aprirli con un altro programma, specificarlo di seguito:"
+                        Label64.Text = "Controllo di registrazione DynaLog"
+                        Label65.Text = "Editor con cui aprire i file di log:"
+                        Label66.Text = "Editor di sistema"
+                        Button5.Text = "Sfoglia..."
+                        EditorOFD.Title = "Specificare l'editor da usare"
+                        LinkLabel3.Text = "Mostrami dove sono archiviati i registri"
+                        CheckBox20.Text = "Disabilita la registrazione di DynaLog"
                 End Select
             Case 1
                 Text = "Options"
@@ -973,6 +1023,16 @@ Public Class Options
                 RadioButton5.Text = "Modern"
                 RadioButton6.Text = "Classic"
                 ScratchFBD.Description = "Specify the scratch directory the program should use:"
+                Label62.Text = "DynaLog logging provides a method for saving diagnostic logs that can be used to help fix program issues, in case you encounter them. You can disable the logger using the toggle below, but it's not recommended." & CrLf & CrLf &
+                            "Disable logging only if it causes a performance overhead on your computer. Clicking the toggle will apply this setting automatically."
+                Label63.Text = "By default, operation logs are opened with Notepad in the event of an operation error. However, if you want to open them with a different program, specify it below:"
+                Label64.Text = "DynaLog logging control"
+                Label65.Text = "Editor to open log files with:"
+                Label66.Text = "System Editor"
+                Button5.Text = "Browse..."
+                EditorOFD.Title = "Specify the editor to use"
+                LinkLabel3.Text = "Show me where these logs are stored"
+                CheckBox20.Text = "Disable DynaLog logging"
             Case 2
                 Text = "Opciones"
                 Label1.Text = Text
@@ -1073,6 +1133,16 @@ Public Class Options
                 RadioButton5.Text = "Moderno"
                 RadioButton6.Text = "Clásico"
                 ScratchFBD.Description = "Especifique el directorio temporal que debería usar el programa:"
+                Label62.Text = "DynaLog proporciona un método para guardar registros de diagnóstico que pueden ser utilizados para ayudar a solucionar problemas del programa, en caso de que los encuentre. Puede desactivar el registro usando el interruptor de abajo, pero no es recomendable." & CrLf & CrLf &
+                    "Desactive el registro solo si causa una sobrecarga de rendimiento en su equipo. Hacer clic en el interruptor aplicará esta configuración automáticamente."
+                Label63.Text = "Por defecto, los registros de operación se abren con el Bloc de notas en caso de un error de operación. Sin embargo, si desea abrirlos con un programa diferente, especifíquelo a continuación:"
+                Label64.Text = "Control de registro de DynaLog"
+                Label65.Text = "Editor con el que se abrirán archivos de registro:"
+                Label66.Text = "Editor del sistema"
+                Button5.Text = "Examinar..."
+                EditorOFD.Title = "Especifique el editor a usar"
+                LinkLabel3.Text = "Muéstrame dónde se guardan estos registros"
+                CheckBox20.Text = "Desactivar el registro de DynaLog"
             Case 3
                 Text = "Paramètres"
                 Label1.Text = Text
@@ -1173,6 +1243,16 @@ Public Class Options
                 RadioButton5.Text = "Moderne"
                 RadioButton6.Text = "Classique"
                 ScratchFBD.Description = "Indiquez le répertoire temporaire que le programme doit utiliser :"
+                Label62.Text = "L'enregistrement DynaLog permet de sauvegarder des journaux de diagnostic qui peuvent être utilisés pour aider à résoudre des problèmes de programme, au cas où vous en rencontreriez. Vous pouvez désactiver l'enregistreur en utilisant la bascule ci-dessous, mais ce n'est pas recommandé." & CrLf & CrLf &
+                            "Désactivez la journalisation uniquement si elle entraîne une surcharge de performance sur votre ordinateur. En cliquant sur la bascule, vous appliquerez automatiquement ce paramètre."
+                Label63.Text = "Par défaut, les journaux d'opération sont ouverts avec le Bloc-notes en cas d'erreur d'opération. Cependant, si vous souhaitez les ouvrir avec un autre programme, indiquez-le ci-dessous :"
+                Label64.Text = "Contrôle d'enregistrement DynaLog"
+                Label65.Text = "Editeur pour ouvrir les fichiers journaux avec :"
+                Label66.Text = "Editeur système"
+                Button5.Text = "Parcourir..."
+                EditorOFD.Title = "Spécifier l'éditeur à utiliser"
+                LinkLabel3.Text = "Montrez-moi où ces journaux sont stockés"
+                CheckBox20.Text = "Désactiver la journalisation DynaLog"
             Case 4
                 Text = "Opções"
                 Label1.Text = Text
@@ -1273,6 +1353,16 @@ Public Class Options
                 RadioButton5.Text = "Moderna"
                 RadioButton6.Text = "Clássico"
                 ScratchFBD.Description = "Especificar o diretório de rascunho que o programa deve utilizar:"
+                Label62.Text = "O registo DynaLog fornece um método para guardar registos de diagnóstico que podem ser utilizados para ajudar a corrigir problemas do programa, caso os encontre. Pode desativar o registo utilizando o botão abaixo, mas não é recomendado." & CrLf & CrLf &
+                            "Desactive o registo apenas se este causar uma sobrecarga de desempenho no seu computador. Se clicar no botão de alternância, esta definição será aplicada automaticamente."
+                Label63.Text = "Por predefinição, os registos de operações são abertos com o Bloco de Notas em caso de erro de operação. No entanto, se pretender abri-los com um programa diferente, especifique-o abaixo:"
+                Label64.Text = "Controlo de registo DynaLog"
+                Label65.Text = "Editor para abrir ficheiros de registo com:"
+                Label66.Text = "Editor do sistema"
+                Button5.Text = "Procurar..."
+                EditorOFD.Title = "Especificar o editor a utilizar"
+                LinkLabel3.Text = "Mostre-me onde estes registos estão armazenados"
+                CheckBox20.Text = "Desativar o registo DynaLog"
             Case 5
                 Text = "Opzioni"
                 Label1.Text = Text
@@ -1373,6 +1463,16 @@ Public Class Options
                 RadioButton5.Text = "Moderno"
                 RadioButton6.Text = "Classic"
                 ScratchFBD.Description = "Specifica la directory di scratch che il programma deve utilizzare:"
+                Label62.Text = "La registrazione DynaLog fornisce un metodo per salvare i registri diagnostici che possono essere utilizzati per risolvere i problemi del programma, nel caso in cui si verifichino. È possibile disattivare il logger utilizzando la levetta sottostante, ma non è consigliabile." & CrLf & CrLf &
+                            "Disattivare il logging solo se causa un sovraccarico di prestazioni sul computer. Facendo clic sulla levetta, questa impostazione verrà applicata automaticamente."
+                Label63.Text = "Per impostazione predefinita, i registri delle operazioni vengono aperti con il Blocco note in caso di errore. Tuttavia, se si desidera aprirli con un altro programma, specificarlo di seguito:"
+                Label64.Text = "Controllo di registrazione DynaLog"
+                Label65.Text = "Editor con cui aprire i file di log:"
+                Label66.Text = "Editor di sistema"
+                Button5.Text = "Sfoglia..."
+                EditorOFD.Title = "Specificare l'editor da usare"
+                LinkLabel3.Text = "Mostrami dove sono archiviati i registri"
+                CheckBox20.Text = "Disabilita la registrazione di DynaLog"
         End Select
         Select Case MainForm.Language
             Case 0
