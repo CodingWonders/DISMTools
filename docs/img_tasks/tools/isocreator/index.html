@@ -21,6 +21,8 @@
       <script src="../../../js/html5shiv.min.js"></script>
     <![endif]-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/powershell.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cmd.min.js"></script>
       <script>hljs.highlightAll();</script> 
 </head>
 
@@ -52,7 +54,7 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
-              <ul class="current">
+              <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../online_inst_mgmt/">Online installation management mode</a>
@@ -163,13 +165,58 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Windows PE servicing</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../winpe/set_targetpath.md">Setting the target path</a>
-                </li>
-                <li class="toctree-l2"><a class="" href="../../winpe/set_scratchspace.md">Setting the scratch space</a>
-                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../mimgmgr/">Mounted image manager</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../wim2esd/">Image conversion</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../swm2wim/">SWM file merger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">ISO creation tools</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#starting-installation">Starting installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#starting-from-a-full-windows-environment">Starting from a full Windows environment</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#continuing-the-installation">Continuing the installation</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#selecting-the-disk-and-partition">Selecting the disk and partition</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#choosing-the-index-of-the-windows-image">Choosing the index of the Windows image</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#driver-installation-module">Driver Installation Module</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#usage_1">Usage</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#practical-use-computers-with-third-party-disk-controllers">Practical use: computers with third-party disk controllers</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#serviceability-tests">Serviceability tests</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#extensibility-suite">Extensibility Suite</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#usage_2">Usage</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../regcpl/">Image registry control panel</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" >Unattended answer files</a>
     <ul>
@@ -180,55 +227,6 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_create/">Unattended answer file creator</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_apply/">Applying unattended answer files</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" >Tools</a>
-    <ul class="current">
-                <li class="toctree-l2"><a class="reference internal" href="../mimgmgr/">Mounted image manager</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../wim2esd/">Image conversion</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../swm2wim/">SWM file merger</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
-                </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="#">ISO creation tools</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#the-preinstallation-environment-pe-helper">The Preinstallation Environment (PE) Helper</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#driver-installation-module">Driver Installation Module</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#extensibility-suite">Extensibility Suite</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
-    </li>
-    </ul>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../regcpl/">Image registry control panel</a>
-                </li>
-    </ul>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Command-line tools</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="" href="../../../cli_tools/cli_tools.md">Overview</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" >Command Console</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../../cli_tools/cmd_console.md">Overview</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" >Tools</a>
-    <ul>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/cmdhelp.md">Command help</a>
-                </li>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/extappx.md">Extended AppX package getter</a>
-                </li>
-    </ul>
                 </li>
     </ul>
                   </li>
@@ -247,7 +245,6 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Image tasks</li>
           <li class="breadcrumb-item">Tools</li>
       <li class="breadcrumb-item active">ISO creation tools</li>
     <li class="wy-breadcrumbs-aside">
@@ -274,40 +271,102 @@
 <li>(Optional, new in DISMTools 0.5.1) <strong>Choose an unattended answer file to apply</strong></li>
 <li><strong>Choose the target location of the ISO file.</strong> If the target image exists, you will be asked if you want to replace it when clicking Create</li>
 </ol>
+<p>With DISMTools 0.6.1 and later, you can also specify 2 options:</p>
+<ul>
+<li><strong>Copy to Ventoy drives</strong> lets you take advantage of your <a href="https://ventoy.net/en">Ventoy</a> drives for operating system installation. After the ISO is generated, it will be copied automatically to all Ventoy drives you have plugged into your computer</li>
+<li><strong>Use newly-signed boot binaries</strong> will make the ISO files that you create ship with EFI boot binaries signed with the <em>Windows UEFI CA 2023</em> code-signing certificate. This is not checked by default because of reasons that are mentioned later in this document</li>
+</ul>
 <p>This process can take between 5 to 10 minutes, depending on the size of the Windows image and the speed of your computer's disk drive.</p>
-<h3 id="the-preinstallation-environment-pe-helper">The Preinstallation Environment (PE) Helper</h3>
-<p>All ISO creation and OS installation procedures are performed by a script known as the <strong>Preinstallation Environment (PE) Helper</strong>. This has 2 modes: environment generation and OS installation.</p>
-<h4 id="environment-generation">Environment generation</h4>
-<p>The PE Helper will do the following during this phase:</p>
+<h2 id="starting-installation">Starting installation</h2>
+<p>You can start the installation of your operating system in 2 ways:</p>
+<ul>
+<li>By booting to installation media, or</li>
+<li>By starting the installation from within a full Windows environment (DISMTools 0.6.1 and later)</li>
+</ul>
+<h3 id="starting-from-a-full-windows-environment">Starting from a full Windows environment</h3>
+<p>DISMTools 0.6.1 and later come with a program that prepares your computer for OS installation. This is called <em>HotInstall</em>, and the process of computer preparation is as follows:</p>
+<p><strong>NOTE:</strong> HotInstall does not support Ventoy drives, due to the way they work</p>
 <ol>
-<li>Copy PE files to a temporary directory in the program files directory</li>
-<li>Mount the Windows PE image</li>
-<li>Copy operating system packages to the temporary directory</li>
-<li>Add the following packages: .NET Framework (<code>WinPE-NetFx</code>), WMI support (<code>WinPE-WMI</code>), PowerShell (<code>WinPE-PowerShell</code>) and Deployment Image Servicing and Management (DISM) cmdlets (<code>WinPE-DismCmdlets</code>)</li>
-<li>Perform the following customizations: set up a custom wallpaper, configure startup and command prompt settings and scratch space</li>
-<li>Save changes and unmount the WinPE image</li>
-<li>Copy the source image file to test</li>
-<li>Copy scripts, including the PE Helper</li>
-<li>Create the ISO file</li>
+<li>
+<p>Start <code>setup.exe</code> in the root of the DVD or USB drive. If you see a notification when inserting the installation media, you can also click on it to start the installer, effectively taking advantage of AutoRun:</p>
+<p><img alt="HotInstall start" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_dvdstart.png" /></p>
+</li>
+<li>
+<p>Accept the disclaimers and click Next:</p>
+<p><img alt="HotInstall disclaimer" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_disclaimers.png" /></p>
+</li>
+<li>
+<p>Review that the ISO file contains the installation image you want to test, and click Next. On this screen, you can also export all your third-party drivers to a folder, in case you need them later:</p>
+<p><img alt="HotInstall image review" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_review_image_info.png" /></p>
+</li>
+<li>
+<p>Wait for your computer to be prepared for installation. This process will take some time, depending on your computer's performance:</p>
+<p><img alt="HotInstall progress" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_progress.png" /></p>
+</li>
 </ol>
-<h4 id="os-installation">OS installation</h4>
-<p>During OS installation, the PE helper will do the following:</p>
-<ol>
-<li>Ask you what disk and partition will be used for OS installation</li>
-<li>Write disk configuration tailored to the system configuration (BIOS/UEFI)</li>
-<li>Ask you the index of the source image to apply</li>
-<li>Apply the source image</li>
-<li>Run serviceability tests</li>
-<li>Create boot files tailored to the system configuration (BIOS/UEFI)</li>
-<li>Reboot your system</li>
-</ol>
+<p>After restarting your computer, choose "DISMTools Operating System Installation" (if it is not selected by default) and press Enter. The first stage of the installation will start:</p>
 <p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/DISMTools_PE.png" />
+    <img src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_bootmgr.png" />
 </p>
 
-<h4 id="serviceability-tests">Serviceability tests</h4>
-<p>Serviceability tests are performed during OS installation to make sure that the image that has been applied is valid. They are only run if the architectures of the PE and the image are the same, and must pass in order to successfully complete the installation of the operating system.</p>
-<p>If these tests fail, you may need to repair the component store of your Windows image.</p>
+<h3 id="continuing-the-installation">Continuing the installation</h3>
+<p>Whether you've started the installation with HotInstall or by booting to installation media, the installation process will be the same. The Preinstallation Environment Helper will guide you through the installation process, which includes:</p>
+<ol>
+<li>Selecting the disk and partition where the operating system will be installed</li>
+<li>Choosing the index of the Windows image to apply</li>
+<li>Applying the Windows image</li>
+<li>Running serviceability tests</li>
+<li>Creating boot files</li>
+<li>Rebooting your system</li>
+</ol>
+<p>Let's go over these steps in more detail:</p>
+<h4 id="selecting-the-disk-and-partition">Selecting the disk and partition</h4>
+<p>The PE Helper will get the disks that are available on your computer:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_disk_chooser.png" />
+</p>
+
+<p>On this screen, you can also stop for a moment to take actions if something does not look right with the disk listing, or if you want to see what disks have enough free space for the installation of your Windows image:</p>
+<ul>
+<li>If you don't see the disk you want to use, it could be because your computer uses a third-party disk controller. If that is the case, type <code>DIM</code> and press Enter to open the Driver Installation Module. More information on how to use this tool can be found later in this document</li>
+<li>(<strong>Only for installations started with HotInstall</strong>) If you want to see the free space on your disks, type <code>DSCR</code> and press Enter. This will show you the Disk Space Checker report generated by HotInstall:</li>
+</ul>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_dscr.png" />
+</p>
+
+<p>After selecting the disk, you will be asked to select the partition where the operating system will be installed. You can choose to clean all the partitions of your disk, or you can choose to format a specific partition:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_part_chooser.png" />
+</p>
+
+<p><strong>IMPORTANT:</strong> all actions past this point are irreversible. Make sure that you have backed up your data, and that you have selected the correct disk, before proceeding.</p>
+<h4 id="choosing-the-index-of-the-windows-image">Choosing the index of the Windows image</h4>
+<p>After selecting the disk and partition, you will be asked to choose the index of the Windows image that you want to apply. The PE Helper will show you basic index information, including the name you have given to the image:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_image_chooser.png" />
+</p>
+
+<p>You can also see a bit more information about the image by typing <code>INFO</code> and pressing Enter:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/DT_PE_ImageInfo.png" />
+</p>
+
+<p>After choosing the index, the PE Helper will apply the image to the selected disk or partition, will run serviceability tests, and will create boot files.</p>
+<p>After everything is done, your computer will restart automatically in 10 seconds:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_comp_restart.png" />
+</p>
+
+<p>From this point, you can remove the installation media and let your computer finish operating system configuration.</p>
+<h4 id="windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</h4>
+<p>The Windows UEFI CA 2023 certificate is now used to sign new EFI boot binaries. This is present in versions 10.1.26100.2454 and later of the Windows ADK as an option for ISO file creation.</p>
+<p>Some computers may not boot correctly using these new EFI boot binaries, and compatibility may depend on whether or not a device that uses UEFI contains this certificate. You can check if your computer contains this certificate by running the following PowerShell command as an administrator:</p>
+<pre><code class="language-powershell">[System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes) -match 'Windows UEFI CA 2023'
+</code></pre>
+<p>If the command returns <code>True</code>, your computer has this certificate. Otherwise, you may need updates to add support for this certificate. If you have doubts regarding the compatibility of your computer with this certificate, it is recommended to leave the option unchecked.</p>
+<p>MBR systems are not affected by this change.</p>
+<p>You can learn more here: <a href="https://techcommunity.microsoft.com/blog/windows-itpro-blog/revoking-vulnerable-windows-boot-managers/4121735">Revoking vulnerable Windows boot managers</a></p>
 <h3 id="driver-installation-module">Driver Installation Module</h3>
 <p>The <strong>Driver Installation Module</strong> (DIM) is a quick and easy way of adding device drivers to booted Windows Preinstallation Environments:</p>
 <p align="center">
@@ -362,6 +421,9 @@
 </ol>
 <!-- And, yes, I know how to make screenshots -->
 
+<h4 id="serviceability-tests">Serviceability tests</h4>
+<p>Serviceability tests are performed during OS installation to make sure that the image that has been applied is valid. They are only run if the architectures of the PE and the image are the same, and must pass in order to successfully complete the installation of the operating system.</p>
+<p>If these tests fail, you may need to repair the component store of your Windows image.</p>
 <h3 id="extensibility-suite">Extensibility Suite</h3>
 <p>The Extensibility Suite lets you expand the DISMTools Preinstallation Environment even further by letting you modify its functionality and add applications. You can add to the Preinstallation Environment applications that you may find useful, or applications that you have worked on.</p>
 <p><em>This task is available in DISMTools 0.5.1 and later.</em></p>

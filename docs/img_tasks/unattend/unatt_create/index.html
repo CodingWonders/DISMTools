@@ -21,6 +21,8 @@
       <script src="../../../js/html5shiv.min.js"></script>
     <![endif]-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/powershell.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cmd.min.js"></script>
       <script>hljs.highlightAll();</script> 
 </head>
 
@@ -52,7 +54,7 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
-              <ul class="current">
+              <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../online_inst_mgmt/">Online installation management mode</a>
@@ -163,13 +165,20 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Windows PE servicing</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../winpe/set_targetpath.md">Setting the target path</a>
-                </li>
-                <li class="toctree-l2"><a class="" href="../../winpe/set_scratchspace.md">Setting the scratch space</a>
-                </li>
-    </ul>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/mimgmgr/">Mounted image manager</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/wim2esd/">Image conversion</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/regcpl/">Image registry control panel</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" >Unattended answer files</a>
     <ul class="current">
@@ -197,41 +206,6 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Tools</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/mimgmgr/">Mounted image manager</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/wim2esd/">Image conversion</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/swm2wim/">SWM file merger</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/configlisteditor/">DISM Configuration List Editor</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/isocreator/">ISO creation tools</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../tools/regcpl/">Image registry control panel</a>
-                </li>
-    </ul>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Command-line tools</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="" href="../../../cli_tools/cli_tools.md">Overview</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" >Command Console</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../../cli_tools/cmd_console.md">Overview</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" >Tools</a>
-    <ul>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/cmdhelp.md">Command help</a>
-                </li>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/extappx.md">Extended AppX package getter</a>
-                </li>
-    </ul>
-                </li>
-    </ul>
-                  </li>
               </ul>
       </div>
     </div>
@@ -247,7 +221,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Image tasks</li>
+          <li class="breadcrumb-item">Tools</li>
           <li class="breadcrumb-item">Unattended answer files</li>
       <li class="breadcrumb-item active">Unattended answer file creator</li>
     <li class="wy-breadcrumbs-aside">
@@ -270,10 +244,124 @@
 <h3 id="express-mode">Express mode</h3>
 <p>The express mode is useful for those who have never created answer files before or don't want to use text editors. Simply follow the steps of the wizard, and you will have your file in no time.</p>
 <p>If you have a project loaded, DISMTools will let you save your unattended answer files to the unattended answer file folder of your project without you having to change directories. You can obviously save these files anywhere.</p>
+<p>If you would like to learn more about the steps in this wizard, keep reading.</p>
+<h4 id="wizard-steps">Wizard Steps</h4>
+<p>In the <strong>Regional Configuration</strong> page, you can set the language, system locale, keyboard layout and home location of the target system. Set these to values that suit your needs. Or, you can set them during the configuration of the applied operating system:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_regional_settings.png" />
+</p>
+
+<p>In the <strong>System Configuration</strong> page, you can set the computer name, the architectures that you wish to target with your answer file, and other settings:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_system_configuration.png" />
+</p>
+
+<p>Additional options include:</p>
+<ul>
+<li><strong>Using a configuration set or distribution share</strong>: a configuration set can be used to preload applications and drivers into the target image. You can create these sets with the Windows System Image Manager. Make sure that there is a configuration set on the ISO file to which you are copying the answer file</li>
+<li><strong>Windows 11 settings</strong>: these help you bypass the system requirements and network connection setup. Configure the latter if the target system does not have network capabilities. If you are looking to bypass this to be able to create local accounts, you can create the user accounts from this wizard as well</li>
+</ul>
+<p>In the <strong>Time Zone</strong> page, you can set the time zone of the target system:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_timezone.png" />
+</p>
+
+<p>In the <strong>Disk Configuration</strong> page, you can set the disk configuration of the target system. You can let Setup give you the control over the disk configuration, or you can partition the first disk. You can also automate the entire disk configuration process by specifying DiskPart scripts:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_disk_config.png" />
+</p>
+
+<p>In the <strong>Product Key</strong> page, you can set the product key of the target system. You can choose from a generic product key tailored to the image edition, or you can type a custom product key:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_product_key.png" />
+</p>
+
+<p>Notes:</p>
+<ul>
+<li>If you want to use a generic product key, choose the one tailored to your edition. Generic product keys are only meant for operating system installation, and will not activate the system</li>
+<li>If you want to use a custom product key, make sure that it is valid and that it is for the edition of the image. DISMTools will only check if the syntax of the product key is correct, but will not check if the product key is valid for installation or activation</li>
+</ul>
+<p>In the <strong>User Accounts</strong> page, you can create the local user accounts of the target system. You can create up to 5 accounts, and you can set the password of each account:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_user_accounts.png" />
+</p>
+
+<p>From here, you can also enable auto-logon settings for the target system. But, if you don't want to use local accounts, or want the operating system to ask you, you can skip this step.</p>
+<p>You can also configure password expiration settings for the target system, but it is not recommended to do so, according to the <a href="https://pages.nist.gov/800-63-FAQ/#q-b05">National Institute of Standards and Technology (NIST)</a>:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_user_accounts_pw_expiry.png" />
+</p>
+
+<p>Finally, you can configure Account Lockout policies for the target system, or disable them. The latter is not recommended, as it can make the system more vulnerable to brute-force attacks:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_user_accounts_lockout.png" />
+</p>
+
+<p>Notes:</p>
+<ul>
+<li>At least one account must be part of the Administrators group</li>
+</ul>
+<p>In the <strong>Virtual Machine Support</strong> page, you can specify whether or not you want to install the integration features of your virtual machine provider (eg. VirtualBox Guest Additions or VMware Tools):</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_vm_support.png" />
+</p>
+
+<p>In the <strong>Network Configuration</strong> page, you can specify whether the target system will connect to a wireless network:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_network_config.png" />
+</p>
+
+<p>Notes:</p>
+<ul>
+<li>The authentication technology must be supported by both the wireless router and the network adapter of the target system. Make sure that the system contains a wireless adapter first</li>
+<li>If you don't want to set up a wireless network connection, or if the target system does not contain a wireless adapter, choose <em>Skip configuration</em></li>
+</ul>
+<p>In the <strong>System Telemetry</strong> page, you can specify whether or not you want to send information to Microsoft and third-parties:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_telemetry.png" />
+</p>
+
+<p>Notes:</p>
+<ul>
+<li>Choosing <em>Disable telemetry</em> will <strong>not</strong> disable all sources of data collection. You will have to perform additional modifications to your Windows image in order to further reduce data collection</li>
+</ul>
+<p>In the <strong>Post-Installation Scripts</strong> page, you can configure additional scripts in PowerShell that will be run during Windows installation, or when accounts log on for the first time:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts.png" />
+</p>
+
+<p>You can either write the post-installation scripts from scratch, or import existing ones.</p>
+<p>Notes:</p>
+<ul>
+<li>Support for Batch scripts will be added in a future update</li>
+<li>After scripts are done, you can restart Windows Explorer in case you have applied personalization changes, for example, via the Registry</li>
+</ul>
+<p>In the <strong>Component Settings</strong> page, you can specify placeholders for additional components that you want to add to your answer file for specific passes. You will have to fill them in manually after the answer file is generated:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_components.png" />
+</p>
+
+<p>Notes:</p>
+<ul>
+<li>You can learn more about the components <a href="https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/components-b-unattend">here</a></li>
+<li>You can fill in the placeholders in the Editor mode, or in the Windows System Image Manager</li>
+<li>If you don't want to configure components, simply skip this step</li>
+</ul>
+<p>Finally, before creating the answer file, you can review the settings that you have configured in the wizard. If you want to change any settings, you can go back to the respective pages:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/steps/unatt_creator_review.png" />
+</p>
+
+<p>After creating the answer file, you can create another one, open the file location, apply it, or edit it with the Editor mode or the Windows System Image Manager.</p>
 <h3 id="editor-mode">Editor mode</h3>
 <p>The editor mode lets you perform advanced customizations to your unattended answer file to add more things, like additional components or rules. You can operate the editor mode using the buttons in the toolbar.</p>
 <p align="center">
     <img src="../../../res/img_tasks/unattend/unatt_creator/unatt_creator_editor.png" />
+</p>
+
+<p>DISMTools 0.6.1 adds the ability to normalize the spacing of the answer file to make it consistent:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/unatt_creator_editor_normalize.gif" />
 </p>
 
 <h2 id="requirements">Requirements</h2>
