@@ -465,7 +465,7 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
                         LinkLabel2.Text = "Learn more about background processes"
                         LogSFD.Title = "Specify the location of the log file"
-                        RadioButton1.Text = "DISMTools 0.5 Color Scheme (Green)"
+                        RadioButton1.Text = "DISMTools 0.5+ Color Scheme (Green)"
                         RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
                         RadioButton3.Text = "Use the project or program scratch directory"
                         RadioButton4.Text = "Use the specified scratch directory"
@@ -575,7 +575,7 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
                         LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                         LogSFD.Title = "Especifique la ubicación del archivo de registro"
-                        RadioButton1.Text = "Esquema de color de DISMTools 0.5 (Verde)"
+                        RadioButton1.Text = "Esquema de color de DISMTools 0.5+ (Verde)"
                         RadioButton2.Text = "Esquema de color de DISMTools 0.1.1-0.4.2 (Azul)"
                         RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                         RadioButton4.Text = "Utilizar el directorio temporal especificado"
@@ -685,7 +685,7 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(122, 126)
                         LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
                         LogSFD.Title = "Spécifier l'emplacement du fichier journal"
-                        RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5 (vert)"
+                        RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5+ (vert)"
                         RadioButton2.Text = "Schéma de couleurs de DISMTools 0.1.1-0.4.2 (bleu)"
                         RadioButton3.Text = "Utiliser le répertoire temporaire du projet ou du programme"
                         RadioButton4.Text = "Utiliser le répertoire temporaire spécifié"
@@ -795,7 +795,7 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(107, 118)
                         LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                         LogSFD.Title = "Especificar a localização do ficheiro de registo"
-                        RadioButton1.Text = "Esquema de cores do DISMTools 0.5 (verde)"
+                        RadioButton1.Text = "Esquema de cores do DISMTools 0.5+ (verde)"
                         RadioButton2.Text = "Esquema de cores do DISMTools 0.1.1-0.4.2 (azul)"
                         RadioButton3.Text = "Utilizar o diretório de rascunho do projeto ou do programa"
                         RadioButton4.Text = "Utilizar o diretório de rascunho especificado"
@@ -905,7 +905,7 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(92, 100)
                         LinkLabel2.Text = "Ulteriori informazioni sui processi in background"
                         LogSFD.Title = "Specificare la posizione del file di log"
-                        RadioButton1.Text = "Schema di colore DISMTools 0.5 (verde)"
+                        RadioButton1.Text = "Schema di colore DISMTools 0.5+ (verde)"
                         RadioButton2.Text = "Schema di colori DISMTools 0.1.1-0.4.2 (blu)"
                         RadioButton3.Text = "Utilizza la cartella temporanea del progetto o del programma"
                         RadioButton4.Text = "Utilizza la cartella temporanea specificata"
@@ -1016,7 +1016,7 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
                 LinkLabel2.Text = "Learn more about background processes"
                 LogSFD.Title = "Specify the location of the log file"
-                RadioButton1.Text = "DISMTools 0.5 Color Scheme (Green)"
+                RadioButton1.Text = "DISMTools 0.5+ Color Scheme (Green)"
                 RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
                 RadioButton3.Text = "Use the project or program scratch directory"
                 RadioButton4.Text = "Use the specified scratch directory"
@@ -1126,7 +1126,7 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
                 LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                 LogSFD.Title = "Especifique la ubicación del archivo de registro"
-                RadioButton1.Text = "Esquema de color de DISMTools 0.5 (Verde)"
+                RadioButton1.Text = "Esquema de color de DISMTools 0.5+ (Verde)"
                 RadioButton2.Text = "Esquema de color de DISMTools 0.1.1-0.4.2 (Azul)"
                 RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                 RadioButton4.Text = "Utilizar el directorio temporal especificado"
@@ -1236,7 +1236,7 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(122, 126)
                 LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
                 LogSFD.Title = "Spécifier l'emplacement du fichier journal"
-                RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5 (vert)"
+                RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5+ (vert)"
                 RadioButton2.Text = "Schéma de couleurs de DISMTools 0.1.1-0.4.2 (bleu)"
                 RadioButton3.Text = "Utiliser le répertoire temporaire du projet ou du programme"
                 RadioButton4.Text = "Utiliser le répertoire temporaire spécifié"
@@ -1346,7 +1346,7 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(107, 118)
                 LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                 LogSFD.Title = "Especificar a localização do ficheiro de registo"
-                RadioButton1.Text = "Esquema de cores do DISMTools 0.5 (verde)"
+                RadioButton1.Text = "Esquema de cores do DISMTools 0.5+ (verde)"
                 RadioButton2.Text = "Esquema de cores do DISMTools 0.1.1-0.4.2 (azul)"
                 RadioButton3.Text = "Utilizar o diretório de rascunho do projeto ou do programa"
                 RadioButton4.Text = "Utilizar o diretório de rascunho especificado"
@@ -1456,7 +1456,7 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(92, 100)
                 LinkLabel2.Text = "Ulteriori informazioni sui processi in background"
                 LogSFD.Title = "Specificare la posizione del file di log"
-                RadioButton1.Text = "Schema di colore DISMTools 0.5 (verde)"
+                RadioButton1.Text = "Schema di colore DISMTools 0.5+ (verde)"
                 RadioButton2.Text = "Schema di colori DISMTools 0.1.1-0.4.2 (blu)"
                 RadioButton3.Text = "Utilizza la cartella temporanea del progetto o del programma"
                 RadioButton4.Text = "Utilizza la cartella temporanea specificata"
