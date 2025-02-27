@@ -18,3 +18,14 @@ If you have run into an internal error (program exception), we would like to lea
 **How did it happen?** What steps did you perform in order to experience this problem?
 
 <!-- Steps -->
+
+### Attaching DynaLog event logs
+---
+
+DISMTools 0.6.1 and later use DynaLog as a means to write diagnostic information to a log file that you can send to the developers. The log is stored in `<program directory>\Logs`:
+
+- If you are using an installed copy, go to `\Program Files\DISMTools\<Stable or Preview>\logs`
+- If you are using a portable copy, go to `<startup location>\logs`
+
+The file in question is `DT_DynaLog.log`. Attach this log by dropping it below:
+

@@ -50,13 +50,9 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">What's new</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#see-image-information-reports-in-a-prettier-way">See image information reports in a prettier way</a>
+    <li class="toctree-l2"><a class="reference internal" href="#start-installations-from-full-operating-environments-and-more-preinstallation-environment-goodies">Start installations from full operating environments, and more Preinstallation Environment goodies</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#get-information-about-the-features-and-capabilities-you-want">Get information about the features and capabilities you want</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#manage-image-registry-hives-more-easily">Manage image registry hives more easily</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#improved-unattended-answer-file-features">Improved unattended answer file features</a>
+    <li class="toctree-l2"><a class="reference internal" href="#new-features-for-your-unattended-answer-files">New features for your unattended answer files</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#overall-refinements">Overall refinements</a>
     </li>
@@ -175,13 +171,20 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Windows PE servicing</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../img_tasks/winpe/set_targetpath.md">Setting the target path</a>
-                </li>
-                <li class="toctree-l2"><a class="" href="../../img_tasks/winpe/set_scratchspace.md">Setting the scratch space</a>
-                </li>
-    </ul>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/mimgmgr/">Mounted image manager</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/wim2esd/">Image conversion</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/swm2wim/">SWM file merger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/configlisteditor/">DISM Configuration List Editor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/isocreator/">ISO creation tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/regcpl/">Image registry control panel</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" >Unattended answer files</a>
     <ul>
@@ -192,41 +195,6 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/unattend/unatt_create/">Unattended answer file creator</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/unattend/unatt_apply/">Applying unattended answer files</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" >Tools</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/mimgmgr/">Mounted image manager</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/wim2esd/">Image conversion</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/swm2wim/">SWM file merger</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/configlisteditor/">DISM Configuration List Editor</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/isocreator/">ISO creation tools</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/regcpl/">Image registry control panel</a>
-                </li>
-    </ul>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Command-line tools</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="" href="../../cli_tools/cli_tools.md">Overview</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" >Command Console</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../cli_tools/cmd_console.md">Overview</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" >Tools</a>
-    <ul>
-                <li class="toctree-l3"><a class="" href="../../cli_tools/cmdhelp.md">Command help</a>
-                </li>
-                <li class="toctree-l3"><a class="" href="../../cli_tools/extappx.md">Extended AppX package getter</a>
-                </li>
-    </ul>
                 </li>
     </ul>
                   </li>
@@ -257,37 +225,40 @@
                 <h1 id="release-highlights">Release highlights</h1>
 <p>This new version of DISMTools comes with new features that enhance image management and servicing tasks. Here are some of its key changes.</p>
 <p>If you want to take a look at everything that has changed though, check out the <a href="https://github.com/CodingWonders/DISMTools/releases/latest">release notes page</a> for more information.</p>
-<h2 id="see-image-information-reports-in-a-prettier-way">See image information reports in a prettier way</h2>
-<p>When saving the information of a Windows image, you will now see prettier results due to the reports now being saved as Markdown files and, with the inclusion of <a href="https://www.github.com/xoofx/Markdig">Markdig</a>, results can be shown in Web view.</p>
-<p><strong>See more with less scrolling</strong>, with the use of tables for the properties of any elements you may be interested in getting information about.</p>
+<h2 id="start-installations-from-full-operating-environments-and-more-preinstallation-environment-goodies">Start installations from full operating environments, and more Preinstallation Environment goodies</h2>
+<p>DISMTools 0.6.1 features a new way to start the installation of your customized image with a technology called <em>HotInstall</em>. This installer configures the boot entries of your computer to automatically boot to the DISMTools Preinstallation Environment, from which you can perform image application and disk configuration.</p>
 <p align="center">
-    <img src="../../res/whats_new/WhatsNew_1.png" />
+    <img src="../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_progress.png" />
 </p>
 
-<p><strong>Print beautiful information and read more at once</strong>. The printing functionalities now print the contents of the Web view, allowing you to have the same output as the HTML page:</p>
+<p>The Preinstallation Environment Helper has also been improved, adding support for the latest Windows ADKs, the ability to create disc images with <a href="https://techcommunity.microsoft.com/blog/windows-itpro-blog/revoking-vulnerable-windows-boot-managers/4121735">boot binaries signed with new certificates</a>, and the ability to get more information about your Windows image:</p>
+<p align="center">
+    <img src="../../res/img_tasks/tools/isocreator/DT_PE_ImageInfo.png" />
+</p>
+
+<p>The ISO creator lets you copy your disc images to Ventoy drives as well:</p>
+<p align="center">
+    <img src="../../res/img_tasks/tools/isocreator/isocreator_vtoy.png" />
+</p>
+
+<p><a href="../../img_tasks/tools/isocreator">Learn more about the new ISO creation features</a></p>
+<h2 id="new-features-for-your-unattended-answer-files">New features for your unattended answer files</h2>
+<p>The unattended answer file features now let you configure post-installation scripts in PowerShell. You can write your own code, or you can open an existing script.</p>
 <p align="center">
     <img src="../../res/whats_new/WhatsNew_2.png" />
 </p>
 
-<p><strong>View the Markdown source</strong>. If you prefer to look at what forms the Markdown report, you can switch to the source view by clicking "Display content in Web view"</p>
-<p><a href="../../img_tasks/info/infodlgs/#saving-image-information">Learn how to make the most of image information reports</a></p>
-<h2 id="get-information-about-the-features-and-capabilities-you-want">Get information about the features and capabilities you want</h2>
-<p>DISMTools 0.6 lets you get information about a set of features and capabilities filtered by their state. For example, to get Client features that are enabled, type <code>Client state:enabled</code>. To get the features that are disabled, type <code>state:disabled</code> in your search query.</p>
+<p>You can also <strong>normalize the spacing</strong> of unattended answer files to make it consistent:</p>
 <p align="center">
-    <img src="../../res/img_tasks/info/feat_info_state_filter.gif" />
+    <img src="../../res/img_tasks/unattend/unatt_creator/unatt_creator_editor_normalize.gif" />
 </p>
 
-<p><a href="../../img_tasks/info/infodlgs/#searching-through-this-information">Learn more</a></p>
-<h2 id="manage-image-registry-hives-more-easily">Manage image registry hives more easily</h2>
-<p>DISMTools 0.6 introduces an easy-to-use control panel for the registry hives of the image or offline installation you are managing. You can use this control panel to load one or more hives from our default set (<code>SOFTWARE</code>, <code>SYSTEM</code>, <code>DEFAULT</code> and <code>NTUSER.DAT</code>), or any other hive in the image. When you close this control panel, all loaded hives will be automatically unloaded for you, so you don't have to unload them manually.</p>
+<p>Your unattended answer files can also target multiple processor architectures. For example, you can create an answer file that works on regular computers and ARM-based Copilot+ PCs:</p>
 <p align="center">
-    <img src="../../res/whats_new/WhatsNew_3.png" />
+    <img src="../../res/whats_new/WhatsNew_4.png" />
 </p>
 
-<p><a href="../../img_tasks/tools/regcpl">Learn more</a></p>
-<h2 id="improved-unattended-answer-file-features">Improved unattended answer file features</h2>
-<p>The unattended answer file features have seen slight improvements as well. Now, you can configure placeholders for additional components automatically, without having to resort to manual additions of such components to the passes of your unattended answer files. And, after creating the answer file, you can quickly begin editing it further on both the Editor mode and the Windows System Image Manager (SIM), which is part of the Assessment and Deployment Kit.</p>
-<p>There are some minor improvements to the overall features too.</p>
+<p><a href="../../img_tasks/unattend/unatt_create">Learn more about the new unattended answer file features</a></p>
 <h2 id="overall-refinements">Overall refinements</h2>
 <p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, more items have received translations, the program is more reliable, and components have been updated to their latest versions.</p>
 <!-- Room for more features -->
@@ -295,13 +266,13 @@
 <h1 id="thanks-to-the-contributors">Thanks to the contributors</h1>
 <p>The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:</p>
 <ul>
-<li><a href="https://forums.mydigitallife.net/members/david-retzloff.1567430/">David Retzloff</a> for spotting issues with the unattended answer file features,</li>
-<li><a href="https://github.com/Procstas">Procstas</a> for spotting issues with some actions of the project tree view,</li>
-<li><a href="https://github.com/l33m4n">l33m4n</a> for spotting issues with the configuration of some settings, and</li>
-<li><a href="https://github.com/bovirus">bovirus</a> for spotting and fixing issues with the installer</li>
+<li><a href="https://github.com/Dretreyt">Dretreyt</a> for spotting issues with setting save functionality,</li>
+<li><a href="https://github.com/arielsil">arielsil</a> for spotting issues with some background processes functions and some tasks,</li>
+<li><a href="https://github.com/novice55">novice55</a> for spotting issues with background processes,</li>
+<li><a href="https://github.com/webber3242">webber3242</a> for spotting issues with project creation,</li>
+<li><a href="https://github.com/Dede333">Dede333</a> for helping spot WIMBoot issues with non-Windows 8.1 images, and</li>
+<li><a href="https://github.com/InnerBrat">InnerBrat</a> for spotting folder attribute detection issues</li>
 </ul>
-<!-- The third one is temporary depending on whether or not the issues had been fixed by the time of the release of 0.6 -->
-
 <p>If you want to appear in this list, you can report issues or suggestions in any channel you prefer (via the <a href="https://forums.mydigitallife.net/threads/dismtools.87263/">MDL forum thread</a>, via the <a href="https://github.com/CodingWonders/DISMTools">GitHub repository</a>, or via any announcements on the <a href="https://reddit.com/r/DISMTools">DISMTools subreddit</a> or on the <a href="https://reddit.com/r/Windows">Windows</a>, <a href="https://reddit.com/r/Windows11">Windows11</a> and <a href="https://reddit.com/r/Windows10">Windows10</a> subreddits (as comments)) or submit new code changes (read the <a href="https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md">contribution guidelines</a> for more information).</p>
               
             </div>

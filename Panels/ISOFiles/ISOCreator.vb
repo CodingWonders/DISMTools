@@ -46,6 +46,7 @@ Public Class ISOCreator
                         ColumnHeader5.Text = "Image Architecture"
                         CheckBox1.Text = "Unattended answer file:"
                         CheckBox2.Text = "Copy to Ventoy drives"
+                        CheckBox3.Text = "Use newly-signed boot binaries"
                     Case "ESN"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -76,6 +77,7 @@ Public Class ISOCreator
                         ColumnHeader5.Text = "Arquitectura"
                         CheckBox1.Text = "Archivo de respuesta:"
                         CheckBox2.Text = "Copiar a discos Ventoy"
+                        CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
                     Case "FRA"
                         progressMessages(0) = "Statut"
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -106,6 +108,7 @@ Public Class ISOCreator
                         ColumnHeader5.Text = "Architecture"
                         CheckBox1.Text = "Fichier de réponse :"
                         CheckBox2.Text = "Copier sur les lecteurs Ventoy"
+                        CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
                     Case "PTB", "PTG"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -136,6 +139,7 @@ Public Class ISOCreator
                         ColumnHeader5.Text = "Arquitetura"
                         CheckBox1.Text = "Ficheiro de resposta:"
                         CheckBox2.Text = "Copiar para unidades Ventoy"
+                        CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
                     Case "ITA"
                         progressMessages(0) = "Stato"
                         progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -166,6 +170,7 @@ Public Class ISOCreator
                         ColumnHeader5.Text = "Architettura"
                         CheckBox1.Text = "File di risposta:"
                         CheckBox2.Text = "Copia su unità Ventoy"
+                        CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
                 End Select
             Case 1
                 progressMessages(0) = "Status"
@@ -197,6 +202,7 @@ Public Class ISOCreator
                 ColumnHeader5.Text = "Image Architecture"
                 CheckBox1.Text = "Unattended answer file:"
                 CheckBox2.Text = "Copy to Ventoy drives"
+                CheckBox3.Text = "Use newly-signed boot binaries"
             Case 2
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -227,6 +233,7 @@ Public Class ISOCreator
                 ColumnHeader5.Text = "Arquitectura"
                 CheckBox1.Text = "Archivo de respuesta:"
                 CheckBox2.Text = "Copiar a discos Ventoy"
+                CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
             Case 3
                 progressMessages(0) = "Statut"
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -257,6 +264,7 @@ Public Class ISOCreator
                 ColumnHeader5.Text = "Architecture"
                 CheckBox1.Text = "Fichier de réponse :"
                 CheckBox2.Text = "Copier sur les lecteurs Ventoy"
+                CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
             Case 4
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -287,6 +295,7 @@ Public Class ISOCreator
                 ColumnHeader5.Text = "Arquitetura"
                 CheckBox1.Text = "Ficheiro de resposta:"
                 CheckBox2.Text = "Copiar para unidades Ventoy"
+                CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
             Case 5
                 progressMessages(0) = "Stato"
                 progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -317,6 +326,7 @@ Public Class ISOCreator
                 ColumnHeader5.Text = "Architettura"
                 CheckBox1.Text = "File di risposta:"
                 CheckBox2.Text = "Copia su unità Ventoy"
+                CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -800,12 +810,75 @@ Public Class ISOCreator
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
-        Dim uefiCA2023_Message As String = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
-            "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
-            "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
-            "If you have any doubts, we recommend that you leave this option unchecked."
+        Dim uefiCA2023_Message As String = ""
+        Dim uefiCA2023_Title As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        uefiCA2023_Message = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
+                            "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
+                            "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
+                            "If you have any doubts, we recommend that you leave this option unchecked."
+                        uefiCA2023_Title = "Windows UEFI CA 2023 information"
+                    Case "ESN"
+                        uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
+                            "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
+                            "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
+                            "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
+                        uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
+                    Case "FRA"
+                        uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                            "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
+                            "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
+                            "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
+                        uefiCA2023_Title = "Informations Windows UEFI CA 2023"
+                    Case "PTB", "PTG"
+                        uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                            "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
+                            "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
+                            "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
+                        uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
+                    Case "ITA"
+                        uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                            "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
+                            "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
+                            "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
+                        uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
+                End Select
+            Case 1
+                uefiCA2023_Message = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
+                    "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
+                    "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
+                    "If you have any doubts, we recommend that you leave this option unchecked."
+                uefiCA2023_Title = "Windows UEFI CA 2023 information"
+            Case 2
+                uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
+                    "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
+                    "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
+                    "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
+                uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
+            Case 3
+                uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                    "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
+                    "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
+                    "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
+                uefiCA2023_Title = "Informations Windows UEFI CA 2023"
+            Case 4
+                uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                    "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
+                    "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
+                    "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
+                uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
+            Case 5
+                uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                    "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
+                    "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
+                    "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
+                uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
+        End Select
         If CheckBox3.Checked Then
-            MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, "Windows UEFI CA 2023 information")
+            MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, uefiCA2023_Title)
         End If
     End Sub
 End Class
