@@ -1969,16 +1969,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''- Fixed an issue where the PE Helper would not create ISO files if you had a version of the Windows ADK earlier than 10.1.26100.2454
-        '''- AppX package counts in image information reports are more reasonable now on Windows 8 hosts
-        '''- Fixed an issue where folder attributes for AppX package addition and driver addition were not being detected correctly (#220, thanks @InnerBrat for spotting)
-        '''- Fixed an additional issue regarding the Recents list
+        '''-- Bugfixes
         '''
-        '''New features:
+        '''- Non-English redirected DISM output is now shown correctly
         '''
-        '''- HotInstall has been updated to t [resto de la cadena truncado]&quot;;.
+        '''-- New features
+        '''
+        '''- The testing environment creator now detects the architectures compatible with the ADK
+        '''- Remaining options that were introduced in preview versions are now localized
+        '''- Help documentation has been updated
+        '''
+        '''Overall changes:
+        '''
+        '''-- Bugfixes
+        '''
+        '''- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
+        '''- Fi [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
