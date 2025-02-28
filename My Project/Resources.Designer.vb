@@ -1969,9 +1969,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.6_upd1.
+        '''-- Bugfixes
+        '''
+        '''- Non-English redirected DISM output is now shown correctly
+        '''
+        '''-- New features
+        '''
+        '''- The testing environment creator now detects the architectures compatible with the ADK
+        '''- Remaining options that were introduced in preview versions are now localized
+        '''- Help documentation has been updated
+        '''
+        '''Overall changes:
+        '''
+        '''-- Bugfixes
+        '''
+        '''- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
+        '''- Fi [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

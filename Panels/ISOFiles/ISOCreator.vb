@@ -10,6 +10,7 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
+    Dim architectures() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -25,7 +26,6 @@ Public Class ISOCreator
                                       "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                         Label3.Text = "Once you're ready, click the Create button."
                         Label4.Text = "Image file to add to ISO file:"
-                        Label5.Text = "Environment architecture:"
                         Label6.Text = "Architecture:"
                         Label7.Text = "Target ISO location:"
                         Label8.Text = progressMessages(0)
@@ -45,6 +45,8 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Image Version"
                         ColumnHeader5.Text = "Image Architecture"
                         CheckBox1.Text = "Unattended answer file:"
+                        CheckBox2.Text = "Copy to Ventoy drives"
+                        CheckBox3.Text = "Use newly-signed boot binaries"
                     Case "ESN"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -55,7 +57,6 @@ Public Class ISOCreator
                                       "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                         Label3.Text = "Cuando esté listo, haga clic en Crear."
                         Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                        Label5.Text = "Arquitectura del entorno:"
                         Label6.Text = "Arquitectura:"
                         Label7.Text = "Ubicación del archivo ISO de destino:"
                         Label8.Text = progressMessages(0)
@@ -75,6 +76,8 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versión"
                         ColumnHeader5.Text = "Arquitectura"
                         CheckBox1.Text = "Archivo de respuesta:"
+                        CheckBox2.Text = "Copiar a discos Ventoy"
+                        CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
                     Case "FRA"
                         progressMessages(0) = "Statut"
                         progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -85,7 +88,6 @@ Public Class ISOCreator
                                       "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                         Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                         Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                        Label5.Text = "Architecture de l'environnement :"
                         Label6.Text = "Architecture :"
                         Label7.Text = "Emplacement ISO cible :"
                         Label8.Text = progressMessages(0)
@@ -105,6 +107,8 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Version"
                         ColumnHeader5.Text = "Architecture"
                         CheckBox1.Text = "Fichier de réponse :"
+                        CheckBox2.Text = "Copier sur les lecteurs Ventoy"
+                        CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
                     Case "PTB", "PTG"
                         progressMessages(0) = "Estado"
                         progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -115,7 +119,6 @@ Public Class ISOCreator
                                       "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                         Label3.Text = "Quando estiver pronto, clique no botão Criar."
                         Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                        Label5.Text = "Arquitetura do entorno:"
                         Label6.Text = "Arquitetura:"
                         Label7.Text = "Localização ISO de destino:"
                         Label8.Text = progressMessages(0)
@@ -135,6 +138,8 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versão"
                         ColumnHeader5.Text = "Arquitetura"
                         CheckBox1.Text = "Ficheiro de resposta:"
+                        CheckBox2.Text = "Copiar para unidades Ventoy"
+                        CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
                     Case "ITA"
                         progressMessages(0) = "Stato"
                         progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -145,7 +150,6 @@ Public Class ISOCreator
                                       "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                         Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                         Label4.Text = "File immagine da aggiungere al file ISO:"
-                        Label5.Text = "Architettura dell'ambiente:"
                         Label6.Text = "Architettura:"
                         Label7.Text = "Posizione ISO di destinazione:"
                         Label8.Text = progressMessages(0)
@@ -165,6 +169,8 @@ Public Class ISOCreator
                         ColumnHeader4.Text = "Versione"
                         ColumnHeader5.Text = "Architettura"
                         CheckBox1.Text = "File di risposta:"
+                        CheckBox2.Text = "Copia su unità Ventoy"
+                        CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
                 End Select
             Case 1
                 progressMessages(0) = "Status"
@@ -176,7 +182,6 @@ Public Class ISOCreator
                               "A custom Preinstallation Environment (PE) will be created. This environment will automatically perform disk configuration and apply the image you specify here."
                 Label3.Text = "Once you're ready, click the Create button."
                 Label4.Text = "Image file to add to ISO file:"
-                Label5.Text = "Environment architecture:"
                 Label6.Text = "Architecture:"
                 Label7.Text = "Target ISO location:"
                 Label8.Text = progressMessages(0)
@@ -196,6 +201,8 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Image Version"
                 ColumnHeader5.Text = "Image Architecture"
                 CheckBox1.Text = "Unattended answer file:"
+                CheckBox2.Text = "Copy to Ventoy drives"
+                CheckBox3.Text = "Use newly-signed boot binaries"
             Case 2
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "Creando archivo ISO. Esto puede llevar algo de tiempo. Espere..."
@@ -206,7 +213,6 @@ Public Class ISOCreator
                               "Un Entorno de Preinstalación (PE) personalizado será creado. Este entorno realizará configuración del disco automáticamente y aplicará la imagen que especifique aquí."
                 Label3.Text = "Cuando esté listo, haga clic en Crear."
                 Label4.Text = "Archivo de imagen a añadir al archivo ISO:"
-                Label5.Text = "Arquitectura del entorno:"
                 Label6.Text = "Arquitectura:"
                 Label7.Text = "Ubicación del archivo ISO de destino:"
                 Label8.Text = progressMessages(0)
@@ -226,6 +232,8 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versión"
                 ColumnHeader5.Text = "Arquitectura"
                 CheckBox1.Text = "Archivo de respuesta:"
+                CheckBox2.Text = "Copiar a discos Ventoy"
+                CheckBox3.Text = "Utilizar archivos de arranque firmados con nuevos certificados"
             Case 3
                 progressMessages(0) = "Statut"
                 progressMessages(1) = "Création du fichier ISO en cours. Cela peut prendre un certain temps. Veuillez patienter..."
@@ -236,7 +244,6 @@ Public Class ISOCreator
                               "Un environnement de préinstallation (PE) personnalisé sera créé. Cet environnement effectuera automatiquement la configuration du disque et appliquera l'image que vous spécifiez ici."
                 Label3.Text = "Lorsque vous êtes prêt, cliquez sur le bouton Créer."
                 Label4.Text = "Fichier image à ajouter au fichier ISO :"
-                Label5.Text = "Architecture de l'environnement :"
                 Label6.Text = "Architecture :"
                 Label7.Text = "Emplacement ISO cible :"
                 Label8.Text = progressMessages(0)
@@ -256,6 +263,8 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Version"
                 ColumnHeader5.Text = "Architecture"
                 CheckBox1.Text = "Fichier de réponse :"
+                CheckBox2.Text = "Copier sur les lecteurs Ventoy"
+                CheckBox3.Text = "Utiliser des binaires de démarrage nouvellement signés"
             Case 4
                 progressMessages(0) = "Estado"
                 progressMessages(1) = "A criar ficheiro ISO. Isto pode demorar algum tempo. Por favor, aguarde..."
@@ -266,7 +275,6 @@ Public Class ISOCreator
                               "Será criado um ambiente de pré-instalação (PE) personalizado. Este ambiente irá efetuar automaticamente a configuração do disco e aplicar a imagem que especificar aqui."
                 Label3.Text = "Quando estiver pronto, clique no botão Criar."
                 Label4.Text = "Ficheiro de imagem a adicionar ao ficheiro ISO:"
-                Label5.Text = "Arquitetura do entorno:"
                 Label6.Text = "Arquitetura:"
                 Label7.Text = "Localização ISO de destino:"
                 Label8.Text = progressMessages(0)
@@ -286,6 +294,8 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versão"
                 ColumnHeader5.Text = "Arquitetura"
                 CheckBox1.Text = "Ficheiro de resposta:"
+                CheckBox2.Text = "Copiar para unidades Ventoy"
+                CheckBox3.Text = "Utilizar binários de arranque com assinatura recente"
             Case 5
                 progressMessages(0) = "Stato"
                 progressMessages(1) = "Creazione del file ISO. L'operazione può richiedere del tempo. Attendere..."
@@ -296,7 +306,6 @@ Public Class ISOCreator
                               "Verrà creato un ambiente di preinstallazione (PE) personalizzato. Questo ambiente eseguirà automaticamente la configurazione del disco e applicherà l'immagine specificata qui."
                 Label3.Text = "Una volta pronti, fare clic sul pulsante Crea"
                 Label4.Text = "File immagine da aggiungere al file ISO:"
-                Label5.Text = "Architettura dell'ambiente:"
                 Label6.Text = "Architettura:"
                 Label7.Text = "Posizione ISO di destinazione:"
                 Label8.Text = progressMessages(0)
@@ -316,6 +325,8 @@ Public Class ISOCreator
                 ColumnHeader4.Text = "Versione"
                 ColumnHeader5.Text = "Architettura"
                 CheckBox1.Text = "File di risposta:"
+                CheckBox2.Text = "Copia su unità Ventoy"
+                CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
         End Select
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Win10Title.BackColor = Color.FromArgb(48, 48, 48)
@@ -359,6 +370,60 @@ Public Class ISOCreator
         Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
         Graphics.FromImage(bm).Clear(ListView1.BackColor)
         ListView1.BackgroundImage = bm
+
+        ' Declare path constant for Windows ADK
+        Dim ADKPath As String = Path.Combine(If(Environment.Is64BitOperatingSystem,
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                                                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)), "Windows Kits", "10",
+                                                "Assessment and Deployment Kit")
+        ' Check ADK status
+        If Not Directory.Exists(ADKPath) Then
+            DynaLog.LogMessage("ADK installation directory " & Quote & ADKPath & Quote & " is not found in this system. Either it has not been installed or it has been installed somewhere else.")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                        Case "ESN"
+                            Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                        Case "FRA"
+                            Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                        Case "PTB", "PTG"
+                            Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                        Case "ITA"
+                            Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+                    End Select
+                Case 1
+                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                Case 2
+                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                Case 3
+                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                Case 4
+                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                Case 5
+                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+            End Select
+            Close()
+        End If
+
+        ' Restore combobox architecture items
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange(architectures)
+        ' Remove architectures incompatible with the system ADK
+        For Each architecture In architectures
+            Dim WimPath As String = Path.Combine(ADKPath, "Windows Preinstallation Environment", architecture, "en-us", "winpe.wim")
+            DynaLog.LogMessage("Testing if architecture " & architecture & " is supported by the ADK installed in this system...")
+            If Not File.Exists(WimPath) Then
+                DynaLog.LogMessage("- Windows PE WIM " & Quote & WimPath & Quote & " is not present. Removing architecture option...")
+                ComboBox1.Items.Remove(architecture)
+            End If
+        Next
+        ' If we are left with no architectures, add them back
+        If ComboBox1.Items.Count = 0 Then
+            DynaLog.LogMessage("For some reason we excluded all of them. This could be because of incorrect detections. Adding back...")
+            ComboBox1.Items.AddRange(architectures)
+        End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -370,12 +435,16 @@ Public Class ISOCreator
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Source image file to test: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
     End Sub
 
     Sub GetImageInfo(ImageFile As String)
+        DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
+        DynaLog.LogMessage("Checking if mounted image detector is busy...")
         ListView1.Items.Clear()
         If MainForm.MountedImageDetectorBW.IsBusy Then
+            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
             MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
             MainForm.MountedImageDetectorBW.CancelAsync()
             While MainForm.MountedImageDetectorBW.IsBusy
@@ -383,25 +452,33 @@ Public Class ISOCreator
                 Thread.Sleep(500)
             End While
         End If
+        DynaLog.LogMessage("Checking if image status watchers are busy...")
         MainForm.WatcherTimer.Enabled = False
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(100)
         End While
         Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             ImageInfoCollection = DismApi.GetImageInfo(ImageFile)
-            For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                ListView1.Items.Add(New ListViewItem(New String() {
-                                                     (ImageInfoCollection.IndexOf(ImageInfo) + 1),
-                                                     ImageInfo.ImageName,
-                                                     ImageInfo.ImageDescription,
-                                                     ImageInfo.ProductVersion.ToString(),
-                                                     Casters.CastDismArchitecture(ImageInfo.Architecture)
-                                                 }))
-            Next
+            DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
+            If ImageInfoCollection.Count > 0 Then
+                DynaLog.LogMessage("This file has images. Updating lists...")
+                For Each ImageInfo As DismImageInfo In ImageInfoCollection
+                    ListView1.Items.Add(New ListViewItem(New String() {
+                                                         (ImageInfoCollection.IndexOf(ImageInfo) + 1),
+                                                         ImageInfo.ImageName,
+                                                         ImageInfo.ImageDescription,
+                                                         ImageInfo.ProductVersion.ToString(),
+                                                         Casters.CastDismArchitecture(ImageInfo.Architecture)
+                                                     }))
+                Next
+            End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -430,20 +507,26 @@ Public Class ISOCreator
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
+            DynaLog.LogMessage("Shutting down API...")
             Try
                 DismApi.Shutdown()
             Catch ex As Exception
                 ' Don't do anything
             End Try
         End Try
+        DynaLog.LogMessage("This process has finished.")
         Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        DynaLog.LogMessage("Specified destination: " & Quote & SaveFileDialog1.FileName & Quote)
         TextBox3.Text = SaveFileDialog1.FileName
     End Sub
 
     Private Sub OK_Button_Click(sender As Object, e As EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Checking provided information...")
+        DynaLog.LogMessage("- Source image to add to ISO file: " & Quote & TextBox1.Text & Quote)
+        DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
         If TextBox1.Text = "" OrElse Not File.Exists(TextBox1.Text) Then
             Select Case MainForm.Language
                 Case 0
@@ -574,12 +657,21 @@ Public Class ISOCreator
 
     Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
         BackgroundWorker1.ReportProgress(0)
+        DynaLog.LogMessage("Starting PE Helper...")
+        DynaLog.LogMessage("- Task: generate ISO")
+        DynaLog.LogMessage("- Architecture: " & ComboBox1.SelectedItem)
+        DynaLog.LogMessage("- Image file to test: " & Quote & TextBox1.Text & Quote)
+        DynaLog.LogMessage("- Unattended answer file to try: " & Quote & TextBox4.Text & Quote)
+        DynaLog.LogMessage("- Destination ISO file: " & Quote & TextBox3.Text & Quote)
+        DynaLog.LogMessage("- Copy the ISO file to Ventoy drives afterwards? " & If(CheckBox2.Checked, "Yes", "No"))
+        DynaLog.LogMessage("- Use boot binaries signed with Windows UEFI CA 2023? " & If(CheckBox3.Checked, "Yes", "No"))
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
+        DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
         success = (ISOCreator.ExitCode = 0)
         BackgroundWorker1.ReportProgress(100)
     End Sub
@@ -600,6 +692,8 @@ Public Class ISOCreator
     End Sub
 
     Private Sub BackgroundWorker1_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorker1.RunWorkerCompleted
+        DynaLog.LogMessage("The PE Helper has finished.")
+        DynaLog.LogMessage("- Did it succeed? " & If(success, "Yes", "No"))
         Dim msg As String = ""
         Select Case MainForm.Language
             Case 0
@@ -636,6 +730,7 @@ Public Class ISOCreator
 
     Private Sub ISOCreator_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If BackgroundWorker1.IsBusy Then
+            DynaLog.LogMessage("The PE Helper is busy. Cancelling exit...")
             e.Cancel = True
             Beep()
         End If
@@ -644,12 +739,14 @@ Public Class ISOCreator
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         PopupImageManager.Location = Button2.PointToScreen(Point.Empty)
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            DynaLog.LogMessage("Selected image: " & PopupImageManager.selectedImgFile)
             TextBox1.Text = PopupImageManager.selectedImgFile
         End If
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("The specified file exists. Getting information...")
             GetImageInfo(TextBox1.Text)
         End If
     End Sub
@@ -699,6 +796,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+        DynaLog.LogMessage("Unattended answer file to test: " & Quote & OpenFileDialog2.FileName & Quote)
         TextBox4.Text = OpenFileDialog2.FileName
     End Sub
 
@@ -708,6 +806,79 @@ Public Class ISOCreator
             Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
             Graphics.FromImage(bm).Clear(ListView1.BackColor)
             ListView1.BackgroundImage = bm
+        End If
+    End Sub
+
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+        Dim uefiCA2023_Message As String = ""
+        Dim uefiCA2023_Title As String = ""
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        uefiCA2023_Message = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
+                            "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
+                            "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
+                            "If you have any doubts, we recommend that you leave this option unchecked."
+                        uefiCA2023_Title = "Windows UEFI CA 2023 information"
+                    Case "ESN"
+                        uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
+                            "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
+                            "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
+                            "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
+                        uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
+                    Case "FRA"
+                        uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                            "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
+                            "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
+                            "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
+                        uefiCA2023_Title = "Informations Windows UEFI CA 2023"
+                    Case "PTB", "PTG"
+                        uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                            "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
+                            "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
+                            "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
+                        uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
+                    Case "ITA"
+                        uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                            "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
+                            "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
+                            "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
+                        uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
+                End Select
+            Case 1
+                uefiCA2023_Message = "This option will create ISO files that contain EFI boot binaries that are signed with the " & Quote & "Windows UEFI CA 2023" & Quote & " certificate." & CrLf & CrLf &
+                    "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
+                    "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
+                    "If you have any doubts, we recommend that you leave this option unchecked."
+                uefiCA2023_Title = "Windows UEFI CA 2023 information"
+            Case 2
+                uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
+                    "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
+                    "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
+                    "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
+                uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
+            Case 3
+                uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                    "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
+                    "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
+                    "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
+                uefiCA2023_Title = "Informations Windows UEFI CA 2023"
+            Case 4
+                uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                    "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
+                    "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
+                    "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
+                uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
+            Case 5
+                uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
+                    "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
+                    "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
+                    "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
+                uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
+        End Select
+        If CheckBox3.Checked Then
+            MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, uefiCA2023_Title)
         End If
     End Sub
 End Class

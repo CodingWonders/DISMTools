@@ -7,6 +7,11 @@ Public Class OfflineInstDriveLister
     Dim DIList As New List(Of DriveInfo)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        Try
+            DynaLog.LogMessage("Selected drive: " & ListView1.FocusedItem.SubItems(0).Text)
+        Catch ex As Exception
+
+        End Try
         MainForm.drivePath = ListView1.FocusedItem.SubItems(0).Text
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
         Me.Close()
@@ -172,6 +177,7 @@ Public Class OfflineInstDriveLister
         End If
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
+        DynaLog.LogMessage("Getting disks...")
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().ToList()
@@ -202,18 +208,23 @@ Public Class OfflineInstDriveLister
             For x = 0 To DIList.Count - 1
                 If DIList(x).Name = ListView1.FocusedItem.SubItems(0).Text Then
                     If DIList(x).DriveFormat <> "NTFS" Then
+                        DynaLog.LogMessage("The selected drive is not formatted with NTFS.")
                         OK_Button.Enabled = False
                     End If
                     If Casters.CastDriveType(DIList(x).DriveType) <> "Fixed" Then
+                        DynaLog.LogMessage("The selected drive is not a fixed (non-removable) drive.")
                         OK_Button.Enabled = False
                     End If
                     If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
+                        DynaLog.LogMessage("The selected drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
                         OK_Button.Enabled = False
                     Else
+                        DynaLog.LogMessage("The selected drive contains ntoskrnl. Checking version...")
                         ' Don't support Windows Vista (incl. betas) or anything older than Vista
                         Dim sysVer As FileVersionInfo = FileVersionInfo.GetVersionInfo(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe")
                         If sysVer.ProductMajorPart < 6 Or _
                            (sysVer.ProductMajorPart = 6 And sysVer.ProductMinorPart = 0) Then
+                            DynaLog.LogMessage("The specified drive contains Windows Vista or an earlier version of Windows.")
                             OK_Button.Enabled = False
                         End If
                     End If

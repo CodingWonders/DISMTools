@@ -5,9 +5,14 @@ Public Class AddListEntryDlg
     Public IsForExclusionList As Boolean
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        If TextBox1.Text = "" Then Exit Sub
+        DynaLog.LogMessage("Typed Path: " & TextBox1.Text)
+        DynaLog.LogMessage("Checking if item is going to be in the exclusion list...")
         If IsForExclusionList Then
+            DynaLog.LogMessage("Item is for exclusion list. Checking validity of paths...")
             ' Check if entry contains wildcard characters and if it begins with a \
             If TextBox1.Text.Contains("*") And TextBox1.Text.StartsWith("\") Then
+                DynaLog.LogMessage("Item starts with a backslash and has a wildcard character. This is not valid.")
                 MsgBox("The entry can't start with a backslash if it contains wildcard characters", vbOKOnly + vbExclamation, Text)
                 Exit Sub
             End If

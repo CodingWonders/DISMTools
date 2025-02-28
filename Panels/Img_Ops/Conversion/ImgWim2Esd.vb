@@ -33,6 +33,7 @@ Public Class ImgWim2Esd
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
         TextBox1.Text = OpenFileDialog1.FileName
+        DynaLog.LogMessage("Source image file to convert: " & OpenFileDialog1.FileName)
         If OpenFileDialog1.FileName.EndsWith("wim", StringComparison.OrdinalIgnoreCase) Then
             ComboBox1.SelectedIndex = 1
         ElseIf OpenFileDialog1.FileName.EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
@@ -308,7 +309,10 @@ Public Class ImgWim2Esd
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("Getting image file information...")
+            DynaLog.LogMessage("Detecting if the mounted image detector is busy...")
             If MainForm.MountedImageDetectorBW.IsBusy Then
+                DynaLog.LogMessage("Stopping mounted image detector...")
                 MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                 MainForm.MountedImageDetectorBW.CancelAsync()
                 While MainForm.MountedImageDetectorBW.IsBusy
@@ -316,6 +320,7 @@ Public Class ImgWim2Esd
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Stopping image status watchers if they are active...")
             MainForm.WatcherTimer.Enabled = False
             If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
             While MainForm.WatcherBW.IsBusy
@@ -324,15 +329,18 @@ Public Class ImgWim2Esd
             End While
             Try
                 ListView1.Items.Clear()
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(TextBox1.Text)
                 NumericUpDown1.Maximum = imgInfoCollection.Count
+                DynaLog.LogMessage("Information collection count: " & imgInfoCollection.Count)
                 For Each imgInfo As DismImageInfo In imgInfoCollection
                     ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
                 Next
             Catch ex As Exception
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
             Finally
+                DynaLog.LogMessage("Shutting down API...")
                 Try
                     DismApi.Shutdown()
                 Catch ex As Exception

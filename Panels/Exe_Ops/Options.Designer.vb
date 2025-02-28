@@ -171,6 +171,21 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
+        Me.Options_Logs = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Panel19 = New System.Windows.Forms.Panel()
+        Me.Panel24 = New System.Windows.Forms.Panel()
+        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
+        Me.CheckBox20 = New System.Windows.Forms.CheckBox()
+        Me.Label64 = New System.Windows.Forms.Label()
+        Me.Label62 = New System.Windows.Forms.Label()
+        Me.Panel25 = New System.Windows.Forms.Panel()
+        Me.Button5 = New System.Windows.Forms.Button()
+        Me.TextBox5 = New System.Windows.Forms.TextBox()
+        Me.Label66 = New System.Windows.Forms.Label()
+        Me.Label65 = New System.Windows.Forms.Label()
+        Me.Label63 = New System.Windows.Forms.Label()
         Me.Options_Program = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel14 = New System.Windows.Forms.Panel()
@@ -196,10 +211,6 @@ Partial Class Options
         Me.Label61 = New System.Windows.Forms.Label()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.ProgressPanelPic = New System.Windows.Forms.PictureBox()
-        Me.Options_Logs = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.Panel19 = New System.Windows.Forms.Panel()
         Me.Options_ImgOps = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -229,6 +240,7 @@ Partial Class Options
         Me.Panel23 = New System.Windows.Forms.Panel()
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
+        Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -279,6 +291,12 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
+        Me.Options_Logs.SuspendLayout()
+        Me.FlowLayoutPanel4.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.Panel19.SuspendLayout()
+        Me.Panel24.SuspendLayout()
+        Me.Panel25.SuspendLayout()
         Me.Options_Program.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.Panel14.SuspendLayout()
@@ -294,10 +312,6 @@ Partial Class Options
         CType(Me.StatusBar_Idle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel22.SuspendLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Options_Logs.SuspendLayout()
-        Me.FlowLayoutPanel4.SuspendLayout()
-        Me.Panel5.SuspendLayout()
-        Me.Panel19.SuspendLayout()
         Me.Options_ImgOps.SuspendLayout()
         Me.FlowLayoutPanel5.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -1026,11 +1040,13 @@ Partial Class Options
         '
         'Panel1
         '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.Label16)
         Me.Panel1.Controls.Add(Me.Label15)
         Me.Panel1.Location = New System.Drawing.Point(78, 47)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(631, 74)
+        Me.Panel1.Size = New System.Drawing.Size(610, 74)
         Me.Panel1.TabIndex = 9
         '
         'Label16
@@ -1038,7 +1054,7 @@ Partial Class Options
         Me.Label16.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label16.Location = New System.Drawing.Point(18, 28)
         Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(596, 33)
+        Me.Label16.Size = New System.Drawing.Size(577, 33)
         Me.Label16.TabIndex = 0
         Me.Label16.Text = "The log file should display errors, warnings and information messages after perfo" & _
     "rming an image operation."
@@ -1068,18 +1084,21 @@ Partial Class Options
         '
         'Label13
         '
+        Me.Label13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label13.Location = New System.Drawing.Point(40, 70)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(685, 33)
+        Me.Label13.Size = New System.Drawing.Size(664, 33)
         Me.Label13.TabIndex = 7
         Me.Label13.Text = "When performing image operations in the command line, specify the ""/LogPath"" argu" & _
     "ment to save the image operation log to the target log file."
         '
         'Button3
         '
+        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(650, 40)
+        Me.Button3.Location = New System.Drawing.Point(629, 40)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(75, 23)
         Me.Button3.TabIndex = 5
@@ -1088,10 +1107,12 @@ Partial Class Options
         '
         'TextBox2
         '
+        Me.TextBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox2.Enabled = False
         Me.TextBox2.Location = New System.Drawing.Point(166, 40)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(478, 23)
+        Me.TextBox2.Size = New System.Drawing.Size(457, 23)
         Me.TextBox2.TabIndex = 4
         '
         'Label14
@@ -1847,9 +1868,9 @@ Partial Class Options
         '
         'ValueContainer
         '
+        Me.ValueContainer.Controls.Add(Me.Options_Logs)
         Me.ValueContainer.Controls.Add(Me.Options_Program)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
-        Me.ValueContainer.Controls.Add(Me.Options_Logs)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_Scratch)
         Me.ValueContainer.Controls.Add(Me.Options_Output)
@@ -1864,6 +1885,180 @@ Partial Class Options
         Me.ValueContainer.Name = "ValueContainer"
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
+        '
+        'Options_Logs
+        '
+        Me.Options_Logs.Controls.Add(Me.FlowLayoutPanel4)
+        Me.Options_Logs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_Logs.Location = New System.Drawing.Point(0, 0)
+        Me.Options_Logs.Name = "Options_Logs"
+        Me.Options_Logs.Size = New System.Drawing.Size(748, 465)
+        Me.Options_Logs.TabIndex = 2
+        Me.Options_Logs.Visible = False
+        '
+        'FlowLayoutPanel4
+        '
+        Me.FlowLayoutPanel4.AutoScroll = True
+        Me.FlowLayoutPanel4.Controls.Add(Me.Panel5)
+        Me.FlowLayoutPanel4.Controls.Add(Me.Panel19)
+        Me.FlowLayoutPanel4.Controls.Add(Me.Panel24)
+        Me.FlowLayoutPanel4.Controls.Add(Me.Panel25)
+        Me.FlowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel4.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel4.Name = "FlowLayoutPanel4"
+        Me.FlowLayoutPanel4.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel4.TabIndex = 0
+        '
+        'Panel5
+        '
+        Me.Panel5.Controls.Add(Me.CheckBox10)
+        Me.Panel5.Controls.Add(Me.PictureBox4)
+        Me.Panel5.Controls.Add(Me.Label13)
+        Me.Panel5.Controls.Add(Me.Label12)
+        Me.Panel5.Controls.Add(Me.Button3)
+        Me.Panel5.Controls.Add(Me.TextBox2)
+        Me.Panel5.Location = New System.Drawing.Point(0, 0)
+        Me.Panel5.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(727, 120)
+        Me.Panel5.TabIndex = 0
+        '
+        'Panel19
+        '
+        Me.Panel19.Controls.Add(Me.Panel1)
+        Me.Panel19.Controls.Add(Me.Label14)
+        Me.Panel19.Controls.Add(Me.TrackBar1)
+        Me.Panel19.Location = New System.Drawing.Point(0, 120)
+        Me.Panel19.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel19.Name = "Panel19"
+        Me.Panel19.Size = New System.Drawing.Size(727, 134)
+        Me.Panel19.TabIndex = 1
+        '
+        'Panel24
+        '
+        Me.Panel24.Controls.Add(Me.LinkLabel3)
+        Me.Panel24.Controls.Add(Me.CheckBox20)
+        Me.Panel24.Controls.Add(Me.Label64)
+        Me.Panel24.Controls.Add(Me.Label62)
+        Me.Panel24.Location = New System.Drawing.Point(0, 254)
+        Me.Panel24.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel24.Name = "Panel24"
+        Me.Panel24.Size = New System.Drawing.Size(727, 251)
+        Me.Panel24.TabIndex = 2
+        '
+        'LinkLabel3
+        '
+        Me.LinkLabel3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel3.AutoSize = True
+        Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel3.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel3.Location = New System.Drawing.Point(18, 206)
+        Me.LinkLabel3.Name = "LinkLabel3"
+        Me.LinkLabel3.Size = New System.Drawing.Size(202, 15)
+        Me.LinkLabel3.TabIndex = 9
+        Me.LinkLabel3.TabStop = True
+        Me.LinkLabel3.Text = "Show me where these logs are stored"
+        '
+        'CheckBox20
+        '
+        Me.CheckBox20.Anchor = System.Windows.Forms.AnchorStyles.Bottom
+        Me.CheckBox20.Appearance = System.Windows.Forms.Appearance.Button
+        Me.CheckBox20.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox20.Location = New System.Drawing.Point(246, 173)
+        Me.CheckBox20.Name = "CheckBox20"
+        Me.CheckBox20.Size = New System.Drawing.Size(234, 25)
+        Me.CheckBox20.TabIndex = 8
+        Me.CheckBox20.Text = "Disable DynaLog logging"
+        Me.CheckBox20.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.CheckBox20.UseVisualStyleBackColor = True
+        '
+        'Label64
+        '
+        Me.Label64.AutoSize = True
+        Me.Label64.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.Label64.Location = New System.Drawing.Point(15, 18)
+        Me.Label64.Name = "Label64"
+        Me.Label64.Size = New System.Drawing.Size(142, 15)
+        Me.Label64.TabIndex = 3
+        Me.Label64.Text = "DynaLog logging control"
+        '
+        'Label62
+        '
+        Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label62.AutoEllipsis = True
+        Me.Label62.Location = New System.Drawing.Point(15, 43)
+        Me.Label62.Name = "Label62"
+        Me.Label62.Size = New System.Drawing.Size(686, 122)
+        Me.Label62.TabIndex = 7
+        Me.Label62.Text = resources.GetString("Label62.Text")
+        '
+        'Panel25
+        '
+        Me.Panel25.Controls.Add(Me.Button5)
+        Me.Panel25.Controls.Add(Me.TextBox5)
+        Me.Panel25.Controls.Add(Me.Label66)
+        Me.Panel25.Controls.Add(Me.Label65)
+        Me.Panel25.Controls.Add(Me.Label63)
+        Me.Panel25.Location = New System.Drawing.Point(0, 505)
+        Me.Panel25.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel25.Name = "Panel25"
+        Me.Panel25.Size = New System.Drawing.Size(727, 151)
+        Me.Panel25.TabIndex = 3
+        '
+        'Button5
+        '
+        Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button5.Location = New System.Drawing.Point(629, 109)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 9
+        Me.Button5.Text = "Browse..."
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'TextBox5
+        '
+        Me.TextBox5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox5.Location = New System.Drawing.Point(18, 109)
+        Me.TextBox5.Name = "TextBox5"
+        Me.TextBox5.Size = New System.Drawing.Size(605, 23)
+        Me.TextBox5.TabIndex = 8
+        '
+        'Label66
+        '
+        Me.Label66.AutoSize = True
+        Me.Label66.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold)
+        Me.Label66.Location = New System.Drawing.Point(15, 18)
+        Me.Label66.Name = "Label66"
+        Me.Label66.Size = New System.Drawing.Size(84, 15)
+        Me.Label66.TabIndex = 3
+        Me.Label66.Text = "System Editor"
+        '
+        'Label65
+        '
+        Me.Label65.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label65.AutoSize = True
+        Me.Label65.Location = New System.Drawing.Point(15, 84)
+        Me.Label65.Name = "Label65"
+        Me.Label65.Size = New System.Drawing.Size(155, 15)
+        Me.Label65.TabIndex = 7
+        Me.Label65.Text = "Editor to open log files with:"
+        '
+        'Label63
+        '
+        Me.Label63.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label63.AutoEllipsis = True
+        Me.Label63.Location = New System.Drawing.Point(15, 43)
+        Me.Label63.Name = "Label63"
+        Me.Label63.Size = New System.Drawing.Size(686, 34)
+        Me.Label63.TabIndex = 7
+        Me.Label63.Text = "By default, operation logs are opened with Notepad in the event of an operation e" & _
+    "rror. However, if you want to open them with a different program, specify it bel" & _
+    "ow:"
         '
         'Options_Program
         '
@@ -2150,52 +2345,6 @@ Partial Class Options
         Me.ProgressPanelPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ProgressPanelPic.TabIndex = 7
         Me.ProgressPanelPic.TabStop = False
-        '
-        'Options_Logs
-        '
-        Me.Options_Logs.Controls.Add(Me.FlowLayoutPanel4)
-        Me.Options_Logs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_Logs.Location = New System.Drawing.Point(0, 0)
-        Me.Options_Logs.Name = "Options_Logs"
-        Me.Options_Logs.Size = New System.Drawing.Size(748, 465)
-        Me.Options_Logs.TabIndex = 2
-        Me.Options_Logs.Visible = False
-        '
-        'FlowLayoutPanel4
-        '
-        Me.FlowLayoutPanel4.AutoScroll = True
-        Me.FlowLayoutPanel4.Controls.Add(Me.Panel5)
-        Me.FlowLayoutPanel4.Controls.Add(Me.Panel19)
-        Me.FlowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel4.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel4.Name = "FlowLayoutPanel4"
-        Me.FlowLayoutPanel4.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel4.TabIndex = 0
-        '
-        'Panel5
-        '
-        Me.Panel5.Controls.Add(Me.CheckBox10)
-        Me.Panel5.Controls.Add(Me.PictureBox4)
-        Me.Panel5.Controls.Add(Me.Label13)
-        Me.Panel5.Controls.Add(Me.Label12)
-        Me.Panel5.Controls.Add(Me.Button3)
-        Me.Panel5.Controls.Add(Me.TextBox2)
-        Me.Panel5.Location = New System.Drawing.Point(0, 0)
-        Me.Panel5.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel5.Name = "Panel5"
-        Me.Panel5.Size = New System.Drawing.Size(748, 120)
-        Me.Panel5.TabIndex = 0
-        '
-        'Panel19
-        '
-        Me.Panel19.Controls.Add(Me.Panel1)
-        Me.Panel19.Controls.Add(Me.Label14)
-        Me.Panel19.Controls.Add(Me.TrackBar1)
-        Me.Panel19.Location = New System.Drawing.Point(0, 120)
-        Me.Panel19.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel19.Name = "Panel19"
-        Me.Panel19.Size = New System.Drawing.Size(748, 134)
-        Me.Panel19.TabIndex = 1
         '
         'Options_ImgOps
         '
@@ -2517,6 +2666,11 @@ Partial Class Options
         Me.CheckBox22.Text = "Automatically clean up mount points (launches a separate process)"
         Me.CheckBox22.UseVisualStyleBackColor = True
         '
+        'EditorOFD
+        '
+        Me.EditorOFD.Filter = "Programs|*.exe"
+        Me.EditorOFD.Title = "Specify the editor to use"
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -2602,6 +2756,16 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
+        Me.Options_Logs.ResumeLayout(False)
+        Me.FlowLayoutPanel4.ResumeLayout(False)
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        Me.Panel19.ResumeLayout(False)
+        Me.Panel19.PerformLayout()
+        Me.Panel24.ResumeLayout(False)
+        Me.Panel24.PerformLayout()
+        Me.Panel25.ResumeLayout(False)
+        Me.Panel25.PerformLayout()
         Me.Options_Program.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.Panel14.ResumeLayout(False)
@@ -2624,12 +2788,6 @@ Partial Class Options
         Me.Panel22.ResumeLayout(False)
         Me.Panel22.PerformLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Options_Logs.ResumeLayout(False)
-        Me.FlowLayoutPanel4.ResumeLayout(False)
-        Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
-        Me.Panel19.ResumeLayout(False)
-        Me.Panel19.PerformLayout()
         Me.Options_ImgOps.ResumeLayout(False)
         Me.FlowLayoutPanel5.ResumeLayout(False)
         Me.Panel6.ResumeLayout(False)
@@ -2874,5 +3032,17 @@ Partial Class Options
     Friend WithEvents CheckBox7 As System.Windows.Forms.CheckBox
     Friend WithEvents ProgressPanelPic As System.Windows.Forms.PictureBox
     Friend WithEvents Label61 As System.Windows.Forms.Label
+    Friend WithEvents Panel24 As System.Windows.Forms.Panel
+    Friend WithEvents LinkLabel3 As System.Windows.Forms.LinkLabel
+    Friend WithEvents CheckBox20 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label64 As System.Windows.Forms.Label
+    Friend WithEvents Label62 As System.Windows.Forms.Label
+    Friend WithEvents Panel25 As System.Windows.Forms.Panel
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents TextBox5 As System.Windows.Forms.TextBox
+    Friend WithEvents Label66 As System.Windows.Forms.Label
+    Friend WithEvents Label65 As System.Windows.Forms.Label
+    Friend WithEvents Label63 As System.Windows.Forms.Label
+    Friend WithEvents EditorOFD As System.Windows.Forms.OpenFileDialog
 
 End Class

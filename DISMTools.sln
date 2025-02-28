@@ -2,9 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DISMTools", "DISMTools.vbproj", "{042ED465-C910-407A-93D1-736639FF0EA5}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5330BC3F-1BFF-4200-8872-3A2236F814AB} = {5330BC3F-1BFF-4200-8872-3A2236F814AB}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{283DDE96-80B1-4AE2-9146-943E95039252}"
 	ProjectSection(SolutionItems) = preProject

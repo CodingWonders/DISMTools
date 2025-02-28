@@ -204,7 +204,9 @@ Public Class GetFeatureInfoDlg
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
+        DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
+        DynaLog.LogMessage("Getting features...")
         For Each InstalledFeature As DismFeature In InstalledFeatureInfo
             ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
         Next
@@ -212,10 +214,13 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        DynaLog.LogMessage("Selected items: " & ListView1.SelectedItems.Count)
         Try
             If ListView1.SelectedItems.Count = 1 Then
                 ' Background processes need to have completed before showing information
+                DynaLog.LogMessage("Checking if background processes are busy...")
                 If MainForm.ImgBW.IsBusy Then
+                    DynaLog.LogMessage("Background processes are busy. Stopping them...")
                     Dim msg As String = ""
                     Select Case MainForm.Language
                         Case 0
@@ -273,7 +278,9 @@ Public Class GetFeatureInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                DynaLog.LogMessage("Checking if mounted image detector is busy...")
                 If MainForm.MountedImageDetectorBW.IsBusy Then
+                    DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                     MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                     MainForm.MountedImageDetectorBW.CancelAsync()
                     While MainForm.MountedImageDetectorBW.IsBusy
@@ -281,7 +288,9 @@ Public Class GetFeatureInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
+                DynaLog.LogMessage("Checking if image status watchers are busy...")
                 MainForm.WatcherTimer.Enabled = False
+                DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
                 If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
                 While MainForm.WatcherBW.IsBusy
                     Application.DoEvents()
@@ -317,7 +326,9 @@ Public Class GetFeatureInfoDlg
                 End Select
                 Application.DoEvents()
                 Try
+                    DynaLog.LogMessage("Initializing API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
+                    DynaLog.LogMessage("Creating session...")
                     Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                         Select Case MainForm.Language
                             Case 0
@@ -344,6 +355,7 @@ Public Class GetFeatureInfoDlg
                             Case 5
                                 Label2.Text = "Ottenere informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
+                        DynaLog.LogMessage("Feature to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
                         Application.DoEvents()
                         Dim featInfo As DismFeatureInfo = DismApi.GetFeatureInfo(imgSession, ListView1.FocusedItem.SubItems(0).Text)
                         Label23.Text = featInfo.FeatureName
@@ -352,7 +364,9 @@ Public Class GetFeatureInfoDlg
                         Label32.Text = Casters.CastDismRestartType(featInfo.RestartRequired, True)
                         Label40.Text = Casters.CastDismFeatureState(featInfo.FeatureState, True)
                         Dim cProps As DismCustomPropertyCollection = featInfo.CustomProperties
+                        DynaLog.LogMessage("Custom property count: " & cProps.Count)
                         If cProps.Count > 0 Then
+                            DynaLog.LogMessage("This feature has custom properties.")
                             Label42.Visible = False
                             CPropViewer.Visible = True
                             Dim cPropContents As String = ""
@@ -386,6 +400,7 @@ Public Class GetFeatureInfoDlg
                                     cPropValue.Text = "Selezionare o espandere un elemento."
                             End Select
                         Else
+                            DynaLog.LogMessage("This feature does not have custom properties.")
                             Select Case MainForm.Language
                                 Case 0
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -419,6 +434,7 @@ Public Class GetFeatureInfoDlg
                     Panel4.Visible = False
                     Panel7.Visible = True
                 Catch ex As Exception
+                    DynaLog.LogMessage("Could not get feature information. Error message: " & ex.Message)
                     Dim msg As String = ""
                     Select Case MainForm.Language
                         Case 0
@@ -447,6 +463,7 @@ Public Class GetFeatureInfoDlg
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally
+                    DynaLog.LogMessage("Shutting down API...")
                     Try
                         DismApi.Shutdown()
                     Catch ex As Exception
@@ -491,6 +508,7 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)
+        DynaLog.LogMessage("Populating items in custom property tree view...")
         Dim lines As String() = input.Split(New String() {Environment.NewLine}, StringSplitOptions.None)
         For Each line As String In lines
             ' Split the line at the last colon to get the path and value
@@ -532,6 +550,7 @@ Public Class GetFeatureInfoDlg
         cPropName.Text = cPropPathView.SelectedNode.Text
         Dim selectedNode As TreeNode = cPropPathView.SelectedNode
         If selectedNode IsNot Nothing AndAlso selectedNode.Tag IsNot Nothing Then
+            DynaLog.LogMessage("Value of selected custom property: " & selectedNode.Tag.ToString())
             cPropValue.Text = selectedNode.Tag.ToString()
         Else
             Select Case MainForm.Language
@@ -563,12 +582,14 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub GetFeatureInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        DynaLog.LogMessage("Restarting mounted image detector...")
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         MainForm.WatcherTimer.Enabled = True
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving feature information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
             ImgInfoSaveDlg.ImgMountDir = If(Not MainForm.OnlineManagement, MainForm.MountDir, "")
@@ -585,8 +606,10 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Sub SearchFeatures(sQuery As String, Optional featureState As String = "")
+        DynaLog.LogMessage("Search query: " & sQuery)
         Dim expectedFeatureState As DismPackageFeatureState = DismPackageFeatureState.NotPresent
         If featureState <> "" Then
+            DynaLog.LogMessage("Feature state query is not nothing (" & Quote & featureState & Quote & ")")
             Select Case featureState.ToLower()
                 Case "notpresent"
                     expectedFeatureState = DismPackageFeatureState.NotPresent
@@ -631,6 +654,7 @@ Public Class GetFeatureInfoDlg
                 SearchFeatures(SearchBox1.Text)
             End If
         Else
+            DynaLog.LogMessage("No search query has been specified. Showing all items...")
             For Each InstalledFeature As DismFeature In InstalledFeatureInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
             Next

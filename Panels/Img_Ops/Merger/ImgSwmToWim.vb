@@ -2,10 +2,12 @@
 Imports System.IO
 Imports Microsoft.Dism
 Imports System.Threading
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ImgSwmToWim
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.imgSwmSource = TextBox1.Text
         ProgressPanel.imgMergerIndex = NumericUpDown1.Value
@@ -265,7 +267,10 @@ Public Class ImgSwmToWim
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("Getting and displaying information of specified image file...")
+            DynaLog.LogMessage("Image file to get information about: " & Quote & TextBox1.Text & Quote)
             If MainForm.MountedImageDetectorBW.IsBusy Then
+                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                 MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                 MainForm.MountedImageDetectorBW.CancelAsync()
                 While MainForm.MountedImageDetectorBW.IsBusy
@@ -273,29 +278,37 @@ Public Class ImgSwmToWim
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Checking if image status watchers are busy...")
             MainForm.WatcherTimer.Enabled = False
+            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
             If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
             While MainForm.WatcherBW.IsBusy
                 Application.DoEvents()
                 Thread.Sleep(100)
             End While
             Try
+                DynaLog.LogMessage("Getting information about the image file...")
                 ListView1.Items.Clear()
+                DynaLog.LogMessage("Initializing API...")
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(TextBox1.Text)
+                DynaLog.LogMessage("Information collection count: " & imgInfoCollection.Count)
                 NumericUpDown1.Maximum = imgInfoCollection.Count
                 For Each imgInfo As DismImageInfo In imgInfoCollection
                     ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
                 Next
             Catch ex As Exception
+                DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
             Finally
+                DynaLog.LogMessage("Shutting down API...")
                 Try
                     DismApi.Shutdown()
                 Catch ex As Exception
-
+                    ' Don't do anything
                 End Try
             End Try
+            DynaLog.LogMessage("This process has finished.")
         End If
     End Sub
 End Class

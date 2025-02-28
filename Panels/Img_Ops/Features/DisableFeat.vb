@@ -6,11 +6,14 @@ Public Class DisableFeat
     Public featDisablementNames(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.MountDir = MainForm.MountDir
         featDisablementCount = ListView1.CheckedItems.Count
         ProgressPanel.featDisablementCount = featDisablementCount
+        DynaLog.LogMessage("Detecting features to disable...")
         If ListView1.CheckedItems.Count <= 0 Then
+            DynaLog.LogMessage("No items have been added to the queue.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -57,9 +60,9 @@ Public Class DisableFeat
                 ProgressPanel.featDisablementParentPkg = ""
             End If
             If CheckBox2.Checked Then
-                ProgressPanel.featRemoveManifest = False
+                ProgressPanel.featDisablementRemoveManifest = False
             Else
-                ProgressPanel.featRemoveManifest = True
+                ProgressPanel.featDisablementRemoveManifest = True
             End If
         End If
         ProgressPanel.OperationNum = 31
@@ -274,6 +277,7 @@ Public Class DisableFeat
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         PkgParentNameLookupDlg.pkgSource = MainForm.MountDir
+        PkgParentNameLookupDlg.OriginatedFrom = "disablement"
         PkgParentNameLookupDlg.ShowDialog(Me)
     End Sub
 End Class

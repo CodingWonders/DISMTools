@@ -6,6 +6,8 @@ Public Class SetLayeredDriverDialog
     Dim CurrentKeyboardDriver As KeyboardDrivers.LayeredKeyboardDriver
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
+        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.currentKeybLayeredDriverType = CurrentKeyboardDriver
         ProgressPanel.KeyboardLayeredDriverType = (ComboBox1.SelectedIndex + 1)
         ProgressPanel.OperationNum = 60
@@ -137,6 +139,8 @@ Public Class SetLayeredDriverDialog
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+
+        DynaLog.LogMessage("Getting currently installed keyboard layered driver in the Windows image...")
 
         ' Get keyboard driver
         CurrentKeyboardDriver = KeyboardDrivers.GetKeyboardDriver(MainForm.MountDir, MainForm.OnlineManagement)

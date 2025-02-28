@@ -104,8 +104,8 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=5.6.5.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.5.6.5\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=5.6.6.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.5.6.6\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -241,11 +241,12 @@
     <Compile Include="Elements\AutoUnattend\Localization\UserLocale.vb" />
     <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
     <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
+    <Compile Include="Elements\AutoUnattend\Scripts\PostInstallScript.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
     <Compile Include="Elements\AutoUnattend\UnattendedWizardPage.vb" />
-    <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockdownSettings.vb" />
+    <Compile Include="Elements\AutoUnattend\UserAccounts\AccountLockoutSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\AutoLogonSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
@@ -853,6 +854,12 @@
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UserControls\ConsoleControl.Designer.vb">
+      <DependentUpon>ConsoleControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ConsoleControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
@@ -1166,6 +1173,9 @@
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ConsoleControl.resx">
+      <DependentUpon>ConsoleControl.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
@@ -1202,6 +1212,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\mImgMgr.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\dim_start\dimstart.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
@@ -1520,6 +1533,7 @@
     <Content Include="Tools\UnattendGen\win-x86\UnattendGen.pdb" />
     <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.dll" />
     <Content Include="Tools\UnattendGen\win-x86\UnattendGenerator.pdb" />
+    <Content Include="Tools\UnpEax-Bin\UnpEax.exe" />
     <None Include="Resources\actions\validation.png" />
     <None Include="Resources\setting_migration.ico" />
     <None Include="Resources\secprogress_classic.png" />
@@ -1910,9 +1924,9 @@ copy /y "$(SolutionDir)Tools\DT_IEConfig.reg" "DT_IEConfig.reg"
 :: Copy registry file for ADK installations
 copy /y "$(SolutionDir)Tools\DT_WinADK.reg" "DT_WinADK.reg"
 
-IF EXIST "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" (
+IF EXIST "$(SolutionDir)Tools\UnpEax-Bin\UnpEax.exe" (
 	md "Tools\UnpEax"
-	copy /y "$(SolutionDir)Tools\UnpEax\bin\Debug\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
+	copy /y "$(SolutionDir)Tools\UnpEax-Bin\UnpEax.exe" "Tools\UnpEax\UnpEax.exe"
 )
 
 :: Copy UnattendGen
@@ -1991,12 +2005,12 @@ IF EXIST tools (
 
 IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Scintilla5.NET.5.6.5\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.5\build\scintilla5.net.targets')" />
+  <Import Project="packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.5\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.5\build\scintilla5.net.targets'))" />
+    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

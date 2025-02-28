@@ -295,6 +295,7 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        DynaLog.LogMessage("Preparing to load the selected image in loaded project...")
         Dim useAlternateMethod As Boolean = False
         If MainForm.isProjectLoaded Then
             For x = 0 To ListView1.Columns.Count - 1
@@ -331,13 +332,17 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Checking status of the selected mount image...")
         If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 1 Then
+            DynaLog.LogMessage("The selected image needs to be remounted.")
             ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
             ProgressPanel.OperationNum = 18
             ProgressPanel.ShowDialog()
             Button2.Enabled = False
         ElseIf MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 2 Then
+            DynaLog.LogMessage("The selected image needs to be repaired.")
             Visible = False
             ImgCleanup.ComboBox1.SelectedIndex = 6
             ImgCleanup.ShowDialog(MainForm)
@@ -346,9 +351,12 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        DynaLog.LogMessage("Determining if changes can be written to the selected Windows image...")
         If MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 0 Then
+            DynaLog.LogMessage("The image has been mounted with read-write permissions.")
             MainForm.ImgUMountPopupCMS.Show(sender, New Point(24, Button1.Height * 0.75))
         ElseIf MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 1 Then
+            DynaLog.LogMessage("The image has been mounted with read-only permissions. No tasks other than unmounting whilst discarding changes can be made.")
             ' Unmount the image discarding changes
             If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
             ProgressPanel.OperationNum = 21
@@ -377,6 +385,7 @@ Public Class MountedImgMgr
     Private Sub DetectorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles DetectorBW.ProgressChanged
         If DetectorBW.CancellationPending Then Exit Sub
         If MainForm.MountedImageImgFiles.Count <= 0 Then
+            DynaLog.LogMessage("There are no images mounted. Clearing lists...")
             ListView1.Items.Clear()
             Exit Sub
         End If
@@ -384,6 +393,7 @@ Public Class MountedImgMgr
             For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
                 If ignoreRepeats Then
                     If ListView1.Items.Count <> MainForm.MountedImageImgFiles.Count Then
+                        DynaLog.LogMessage("There is a different amount of images mounted now. Forcing refresh of lists...")
                         ListView1.Items.Clear()
                         PopupImageManager.ListView1.Items.Clear()
                         ignoreRepeats = False
@@ -483,12 +493,15 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        DynaLog.LogMessage("Preparing to remove volume images from selected image file...")
+        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         MainForm.WatcherTimer.Enabled = False
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
@@ -501,11 +514,13 @@ Public Class MountedImgMgr
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         If MainForm.MountedImageMountDirs.Count > 0 Then
+            DynaLog.LogMessage("Enabling write permissions on the selected image...")
             MainForm.EnableWritePermissions(ListView1.FocusedItem.SubItems(0).Text, CInt(ListView1.FocusedItem.SubItems(1).Text), ListView1.FocusedItem.SubItems(2).Text)
         End If
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        DynaLog.LogMessage("Showing special tasks...")
         MainForm.ImgSpecialToolsCMS.Show(sender, New Point(8, Button7.Height * 0.75))
     End Sub
 End Class

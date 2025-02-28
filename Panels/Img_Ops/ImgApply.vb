@@ -11,8 +11,10 @@ Public Class ImgApply
     Dim ImageEditions As New List(Of String)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If TextBox1.Text = "" Or Not File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("Either no image file has been specified or it does not exist in the file system.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -495,12 +497,14 @@ Public Class ImgApply
     End Sub
 
     Sub GetIndexes(ImgFile As String)
+        DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
         If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
         While MainForm.MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Threading.Thread.Sleep(100)
         End While
+        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
         MainForm.WatcherTimer.Enabled = False
         If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
         While MainForm.WatcherBW.IsBusy
@@ -512,14 +516,20 @@ Public Class ImgApply
         ImageVersions.Clear()
         ImageEditions.Clear()
         Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             imgInfo = DismApi.GetImageInfo(TextBox1.Text)
-            For Each imageInfo In imgInfo
-                ComboBox1.Items.Add(imageInfo.ImageIndex & " (" & imageInfo.ImageName & ")")
-                ImageVersions.Add(imageInfo.ProductVersion)
-                ImageEditions.Add(imageInfo.EditionId)
-            Next
+            DynaLog.LogMessage("Information collection count: " & imgInfo.Count)
+            If imgInfo.Count > 0 Then
+                DynaLog.LogMessage("Getting indexes and names...")
+                For Each imageInfo In imgInfo
+                    ComboBox1.Items.Add(imageInfo.ImageIndex & " (" & imageInfo.ImageName & ")")
+                    ImageVersions.Add(imageInfo.ProductVersion)
+                    ImageEditions.Add(imageInfo.EditionId)
+                Next
+            End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -549,6 +559,7 @@ Public Class ImgApply
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
             Try
+                DynaLog.LogMessage("Shutting down API...")
                 DismApi.Shutdown()
             Catch ex As DismException
                 ' Don't do anything
@@ -584,8 +595,11 @@ Public Class ImgApply
     End Sub
 
     Sub ScanSwmPattern(PatternName As String)
+        DynaLog.LogMessage("Preparing to scan files with the specified pattern...")
+        DynaLog.LogMessage("- Scan pattern: " & PatternName)
         ListBox1.Items.Clear()
         If TextBox1.Text = "" Or PatternName = "" Then
+            DynaLog.LogMessage("Either no source image file has been specified or no pattern has been specified.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -624,11 +638,13 @@ Public Class ImgApply
             Beep()
             Exit Sub
         End If
+        DynaLog.LogMessage("Scanning SWM files with given pattern...")
         For Each swmFile In My.Computer.FileSystem.GetFiles(Path.GetDirectoryName(TextBox1.Text), FileIO.SearchOption.SearchTopLevelOnly, "*.swm")
             If Path.GetFileNameWithoutExtension(swmFile).StartsWith(PatternName) Then
                 ListBox1.Items.Add(Path.GetFileName(swmFile))
             End If
         Next
+        DynaLog.LogMessage("Pattern search results: " & ListBox1.Items.Count)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -664,10 +680,13 @@ Public Class ImgApply
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
         Try
             If (ImageVersions.Count > 0) AndAlso (ImageEditions.Count > 0) Then
+                DynaLog.LogMessage("Comparing Edition ID and version of selected image...")
                 ' Windows PE 4.0 (based on Windows 8 - NT 6.2.9200)
                 If ImageEditions(ComboBox1.SelectedIndex).Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) AndAlso ImageVersions(ComboBox1.SelectedIndex) >= New Version(6, 2, 9200, 0) Then
+                    DynaLog.LogMessage("This is a Windows PE 4+ image. Trusted Desktop validation can be carried out.")
                     CheckBox5.Enabled = True
                 Else
+                    DynaLog.LogMessage("This is not a Windows PE 4+ image. Trusted Desktop validation cannot be carried out.")
                     CheckBox5.Enabled = False
                 End If
                 If ImageVersions(ComboBox1.SelectedIndex).Build = 9600 Then
@@ -679,6 +698,7 @@ Public Class ImgApply
                 End If
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
             CheckBox5.Enabled = False
             CheckBox6.Enabled = False
         End Try

@@ -2,6 +2,7 @@
 Imports Microsoft.Dism
 Imports System.IO
 Imports System.Threading
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ImgExport
 
@@ -9,15 +10,21 @@ Public Class ImgExport
     Dim originalFileFilters As String = "WIM files|*.wim|ESD files|*.esd"
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Checking source image...")
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("A source image has been specified and exists in the file system.")
+            DynaLog.LogMessage("Extension of source image file: " & Path.GetExtension(TextBox1.Text))
             If Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("A split WIM (SWM) file has been detected. Tweaking export source...")
                 ProgressPanel.imgExportSourceImage = TextBox1.Text.Replace(Path.GetFileNameWithoutExtension(TextBox1.Text), _
                                                                            Path.GetFileNameWithoutExtension(TextBox1.Text) & "*")
             Else
                 ProgressPanel.imgExportSourceImage = TextBox1.Text
             End If
         Else
+            DynaLog.LogMessage("Either no source image has been specified or it does not exist in the file system.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -48,8 +55,10 @@ Public Class ImgExport
             Exit Sub
         End If
         If TextBox2.Text <> "" Then
+            DynaLog.LogMessage("A destination image has been specified.")
             ProgressPanel.imgExportDestinationImage = TextBox2.Text
         Else
+            DynaLog.LogMessage("A destination image has not been specified.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -82,9 +91,11 @@ Public Class ImgExport
         ProgressPanel.imgExportSourceIndex = NumericUpDown1.Value
         ProgressPanel.imgExportDestinationUseCustomName = CheckBox2.Checked
         If CheckBox2.Checked Then
+            DynaLog.LogMessage("A custom name is expected to be used for the destination image. Checking name...")
             If TextBox3.Text <> "" Then
                 ProgressPanel.imgExportDestinationName = TextBox3.Text
             Else
+                DynaLog.LogMessage("No name has been specified. Falling back to using the default name of the source Windows image to export...")
                 ProgressPanel.imgExportDestinationName = ""
                 ProgressPanel.imgExportDestinationUseCustomName = False
             End If
@@ -106,10 +117,12 @@ Public Class ImgExport
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        DynaLog.LogMessage("Export target: " & Quote & SaveFileDialog1.FileName & Quote)
         TextBox2.Text = SaveFileDialog1.FileName
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Source image: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
     End Sub
 
@@ -516,7 +529,10 @@ Public Class ImgExport
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("An image file has been specified and it exists in the file system. Getting information...")
+            DynaLog.LogMessage("Checking if mounted image detector is busy...")
             If MainForm.MountedImageDetectorBW.IsBusy Then
+                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                 MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                 MainForm.MountedImageDetectorBW.CancelAsync()
                 While MainForm.MountedImageDetectorBW.IsBusy
@@ -524,7 +540,9 @@ Public Class ImgExport
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Checking if image status watchers are busy...")
             MainForm.WatcherTimer.Enabled = False
+            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
             If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
             While MainForm.WatcherBW.IsBusy
                 Application.DoEvents()
@@ -539,9 +557,11 @@ Public Class ImgExport
                     ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
                 Next
             Catch ex As Exception
+                DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)
             Finally
                 Try
+                    DynaLog.LogMessage("Shutting down API...")
                     DismApi.Shutdown()
                 Catch ex As Exception
 
@@ -595,8 +615,11 @@ Public Class ImgExport
     End Sub
 
     Sub ScanSwmPattern(PatternName As String)
+        DynaLog.LogMessage("Preparing to scan files with the specified pattern...")
+        DynaLog.LogMessage("- Scan pattern: " & PatternName)
         ListBox1.Items.Clear()
         If TextBox1.Text = "" Or PatternName = "" Then
+            DynaLog.LogMessage("Either no source image file has been specified or no pattern has been specified.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -635,11 +658,13 @@ Public Class ImgExport
             Beep()
             Exit Sub
         End If
+        DynaLog.LogMessage("Scanning SWM files with given pattern...")
         For Each swmFile In My.Computer.FileSystem.GetFiles(Path.GetDirectoryName(TextBox1.Text), FileIO.SearchOption.SearchTopLevelOnly, "*.swm")
             If Path.GetFileNameWithoutExtension(swmFile).StartsWith(PatternName) Then
                 ListBox1.Items.Add(Path.GetFileName(swmFile))
             End If
         Next
+        DynaLog.LogMessage("Pattern search results: " & ListBox1.Items.Count)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

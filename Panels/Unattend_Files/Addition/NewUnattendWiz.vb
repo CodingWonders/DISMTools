@@ -6,6 +6,7 @@ Imports ScintillaNET
 Imports DISMTools.Elements
 Imports Microsoft.Dism
 Imports System.Net
+Imports System.Text.RegularExpressions
 
 Public Class NewUnattendWiz
 
@@ -16,7 +17,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "24122"
+    Dim UnattendGenReleaseTag As String = "2522"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -30,9 +31,10 @@ Public Class NewUnattendWiz
     Dim SelectedGeoId As New GeoId()
 
     ' System Configuration Page
-    Dim SelectedArchitecture As New DismProcessorArchitecture()
+    Dim SelectedArchitectures As New Dictionary(Of DismProcessorArchitecture, Boolean)
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
+    Dim UseConfigSet As Boolean
 
     ' Time Zone Panel
     Dim TimeOffsets As New List(Of TimeOffset)
@@ -55,7 +57,7 @@ Public Class NewUnattendWiz
     Dim AutoLogon As New AutoLogonSettings()
     Dim PasswordObfuscate As Boolean
     Dim SelectedExpirationSettings As New PasswordExpirationSettings()
-    Dim SelectedLockdownSettings As New AccountLockdownSettings()
+    Dim SelectedLockoutSettings As New AccountLockoutSettings()
 
     ' Virtual Machine Panel
     Dim VirtualMachineSupported As Boolean
@@ -70,11 +72,14 @@ Public Class NewUnattendWiz
     Dim SystemTelemetryInteractive As Boolean
     Dim SelectedTelemetrySettings As New SystemTelemetry()
 
+    ' Scripts Panel
+    Dim ConfiguredScripts As New List(Of PostInstallScript)
+    Dim CurrentlyEditedStage As Integer = 0
+    Dim ScriptsRestartExplorer As Boolean
+
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
     Dim FinalComponents As New List(Of Component)
-
-    ' Space for more pages
 
     ' Default Settings
     Dim DefaultLanguage As New ImageLanguage()
@@ -84,9 +89,10 @@ Public Class NewUnattendWiz
     Dim DefaultOffset As New TimeOffset()
     Dim DefaultDiskConfiguration As New DiskConfiguration()
     Dim DefaultExpirationSettings As New PasswordExpirationSettings()
-    Dim DefaultLockdownSettings As New AccountLockdownSettings()
+    Dim DefaultLockoutSettings As New AccountLockoutSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
+    Dim DefaultPostInstallScripts As New List(Of PostInstallScript)
     Dim DefaultSystemComponents As New List(Of Component)
 
     ' Progress info
@@ -105,23 +111,34 @@ Public Class NewUnattendWiz
     ''' <param name="fntSize">The size of the font used in the Scintilla editor</param>
     ''' <remarks></remarks>
     Sub InitScintilla(fntName As String, fntSize As Integer)
+        DynaLog.LogMessage("Initializing the Scintilla Editor...")
+        DynaLog.LogMessage("- Font name: " & fntName)
+        DynaLog.LogMessage("- Font size: " & fntSize)
         ' Initialize Scintilla editor
+        DynaLog.LogMessage("Resetting styles...")
         Scintilla1.StyleResetDefault()
         Scintilla2.StyleResetDefault()
+        Scintilla3.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
+        DynaLog.LogMessage("Setting colors for selection...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
+            Scintilla3.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
+            Scintilla3.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
         Scintilla2.Styles(Style.Default).Font = fntName
         Scintilla2.Styles(Style.Default).Size = fntSize
+        Scintilla3.Styles(Style.Default).Font = fntName
+        Scintilla3.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
+        DynaLog.LogMessage("Setting colors for styles...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla1.Styles(Style.Default).ForeColor = Color.White
@@ -129,6 +146,9 @@ Public Class NewUnattendWiz
             Scintilla2.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla2.Styles(Style.Default).ForeColor = Color.White
             Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla3.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla3.Styles(Style.Default).ForeColor = Color.White
+            Scintilla3.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.Default).BackColor = Color.White
             Scintilla1.Styles(Style.Default).ForeColor = Color.Black
@@ -136,11 +156,16 @@ Public Class NewUnattendWiz
             Scintilla2.Styles(Style.Default).BackColor = Color.White
             Scintilla2.Styles(Style.Default).ForeColor = Color.Black
             Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
+            Scintilla3.Styles(Style.Default).BackColor = Color.White
+            Scintilla3.Styles(Style.Default).ForeColor = Color.Black
+            Scintilla3.Styles(Style.LineNumber).BackColor = Color.White
         End If
         Scintilla1.StyleClearAll()
         Scintilla2.StyleClearAll()
+        Scintilla3.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
+        DynaLog.LogMessage("Setting colors for XML and PowerShell lexers...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
@@ -156,6 +181,23 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
             Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
+            Scintilla3.Styles(Style.PowerShell.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.PowerShell.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla3.Styles(Style.PowerShell.String).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.PowerShell.Character).ForeColor = Color.FromArgb(220, 163, 163)
+            Scintilla3.Styles(Style.PowerShell.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla3.Styles(Style.PowerShell.Variable).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.PowerShell.Operator).ForeColor = Color.FromArgb(159, 157, 109)
+            Scintilla3.Styles(Style.PowerShell.Identifier).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.PowerShell.Keyword).ForeColor = Color.FromArgb(223, 196, 125)
+            Scintilla3.Styles(Style.PowerShell.Cmdlet).ForeColor = Color.FromArgb(255, 207, 175)
+            Scintilla3.Styles(Style.PowerShell.Alias).ForeColor = Color.FromArgb(206, 223, 153)
+            Scintilla3.Styles(Style.PowerShell.Function).ForeColor = Color.FromArgb(255, 207, 175)
+            Scintilla3.Styles(Style.PowerShell.User1).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.PowerShell.CommentStream).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla3.Styles(Style.PowerShell.HereString).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.PowerShell.HereCharacter).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.PowerShell.CommentDocKeyword).ForeColor = Color.FromArgb(127, 159, 127)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
@@ -171,42 +213,75 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.Black
+            Scintilla3.Styles(Style.PowerShell.Default).ForeColor = Color.Black
+            Scintilla3.Styles(Style.PowerShell.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla3.Styles(Style.PowerShell.String).ForeColor = Color.FromArgb(128, 128, 128)
+            Scintilla3.Styles(Style.PowerShell.Character).ForeColor = Color.FromArgb(128, 128, 128)
+            Scintilla3.Styles(Style.PowerShell.Number).ForeColor = Color.FromArgb(255, 128, 0)
+            Scintilla3.Styles(Style.PowerShell.Variable).ForeColor = Color.Black
+            Scintilla3.Styles(Style.PowerShell.Operator).ForeColor = Color.FromArgb(0, 0, 128)
+            Scintilla3.Styles(Style.PowerShell.Identifier).ForeColor = Color.Black
+            Scintilla3.Styles(Style.PowerShell.Keyword).ForeColor = Color.FromArgb(0, 0, 255)
+            Scintilla3.Styles(Style.PowerShell.Cmdlet).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla3.Styles(Style.PowerShell.Alias).ForeColor = Color.FromArgb(0, 128, 255)
+            Scintilla3.Styles(Style.PowerShell.Function).ForeColor = Color.FromArgb(196, 0, 98)
+            Scintilla3.Styles(Style.PowerShell.User1).ForeColor = Color.FromArgb(128, 0, 0)
+            Scintilla3.Styles(Style.PowerShell.CommentStream).ForeColor = Color.FromArgb(0, 128, 128)
+            Scintilla3.Styles(Style.PowerShell.HereString).ForeColor = Color.FromArgb(128, 128, 128)
+            Scintilla3.Styles(Style.PowerShell.HereCharacter).ForeColor = Color.FromArgb(128, 128, 128)
+            Scintilla3.Styles(Style.PowerShell.CommentDocKeyword).ForeColor = Color.FromArgb(0, 128, 128)
         End If
         ' Set lexer
         Scintilla1.LexerName = "xml"
+        Scintilla3.LexerName = "powershell"
 
         ' Set line number margin properties
+        DynaLog.LogMessage("Setting colors for line margin...")
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
             Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
+            Scintilla3.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
             Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
+            Scintilla3.Styles(Style.LineNumber).BackColor = Color.White
         End If
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Scintilla3.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
-        Margin.Width = 30
+        Margin.Width = 48
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
         Margin.Mask = 0
         Margin = Scintilla2.Margins(1)
-        Margin.Width = 30
+        Margin.Width = 48
+        Margin.Type = MarginType.Number
+        Margin.Sensitive = True
+        Margin.Mask = 0
+        Margin = Scintilla3.Margins(1)
+        Margin.Width = 48
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
         Margin.Mask = 0
 
         ' Initialize code folding
+        DynaLog.LogMessage("Setting code folding...")
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
         Scintilla1.SetProperty("fold", "1")
         Scintilla1.SetProperty("fold.compact", "1")
-        Scintilla2.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
-        Scintilla2.SetFoldMarginColor(True, Scintilla1.Styles(Style.Default).BackColor)
+        Scintilla2.SetFoldMarginColor(True, Scintilla2.Styles(Style.Default).BackColor)
+        Scintilla2.SetFoldMarginColor(True, Scintilla2.Styles(Style.Default).BackColor)
         Scintilla2.SetProperty("fold", "1")
         Scintilla2.SetProperty("fold.compact", "1")
+        Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
+        Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
+        Scintilla3.SetProperty("fold", "1")
+        Scintilla3.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
+        DynaLog.LogMessage("Seting bookmark margins...")
         Dim Bookmarks = Scintilla1.Margins(2)
         Bookmarks.Width = 20
         Bookmarks.Sensitive = True
@@ -227,13 +302,26 @@ Public Class NewUnattendWiz
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
+        Bookmarks = Scintilla3.Margins(2)
+        Bookmarks.Width = 20
+        Bookmarks.Sensitive = True
+        Bookmarks.Type = MarginType.Symbol
+        Bookmarks.Mask = (1 << 2)
+        Marker = Scintilla3.Markers(2)
+        Marker.Symbol = MarkerSymbol.Circle
+        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
+        Marker.SetForeColor(Color.Black)
+        Marker.SetAlpha(100)
 
         ' Set editor caret settings
+        DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
         Scintilla2.CaretForeColor = ForeColor
+        Scintilla3.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
+        DynaLog.LogMessage("Setting margins for code folding...")
         Scintilla1.Margins(3).Type = MarginType.Symbol
         Scintilla1.Margins(3).Mask = Marker.MaskFolders
         Scintilla1.Margins(3).Sensitive = True
@@ -242,16 +330,24 @@ Public Class NewUnattendWiz
         Scintilla2.Margins(3).Mask = Marker.MaskFolders
         Scintilla2.Margins(3).Sensitive = True
         Scintilla2.Margins(3).Width = 1
+        Scintilla3.Margins(3).Type = MarginType.Symbol
+        Scintilla3.Margins(3).Mask = Marker.MaskFolders
+        Scintilla3.Margins(3).Sensitive = True
+        Scintilla3.Margins(3).Width = 1
 
         ' Set colors for all folding markers
+        DynaLog.LogMessage("Setting colors for folding markers...")
         For x = 25 To 31
             Scintilla1.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla1.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla2.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
+            Scintilla3.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
+            Scintilla3.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
         Next
 
         ' Folding marker configuration
+        DynaLog.LogMessage("Setting folding marker...")
         Scintilla1.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
         Scintilla1.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
         Scintilla1.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
@@ -266,13 +362,49 @@ Public Class NewUnattendWiz
         Scintilla2.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla2.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla2.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
+        Scintilla3.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
+        Scintilla3.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
+        Scintilla3.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
+        Scintilla3.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
+        Scintilla3.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
+        Scintilla3.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
+        Scintilla3.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
+        DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+        Scintilla3.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+
+        ' Add Keywords
+        DynaLog.LogMessage("Adding keywords to editors...")
+        AddScintillaKeywords("powershell", 0, "begin break catch class continue data do dynamicparam else elseif end enum exit filter finally for foreach function hidden if in inlinescript parallel param process return sequence static switch throw trap try until using while workflow")
+        AddScintillaKeywords("powershell", 1, "add-appprovisionedsharedpackagecontainer add-appsharedpackagecontainer add-appvclientconnectiongroup add-appvclientpackage add-appvpublishingserver add-appxpackage add-appxprovisionedpackage add-appxvolume add-bitsfile add-certificateenrollmentpolicyserver add-computer add-content add-history add-jobtrigger add-kdsrootkey add-localgroupmember add-member add-pssnapin add-signerrule add-type add-windowscapability add-windowsdriver add-windowsimage add-windowspackage checkpoint-computer clear-content clear-eventlog clear-history clear-item clear-itemproperty clear-kdscache clear-recyclebin clear-tpm clear-uevappxpackage clear-uevconfiguration clear-variable clear-windowscorruptmountpoint compare-object complete-bitstransfer complete-dtcdiagnostictransaction complete-transaction confirm-securebootuefi connect-pssession connect-wsman convert-path convert-string convertfrom-cipolicy convertfrom-csv convertfrom-json convertfrom-securestring convertfrom-string convertfrom-stringdata convertto-csv convertto-html convertto-json convertto-processmitigationpolicy convertto-securestring convertto-tpmownerauth convertto-xml copy-bcdentry copy-item copy-itemproperty copy-userinternationalsettingstosystem debug-job debug-process debug-runspace disable-appbackgroundtaskdiagnosticlog disable-appv disable-appvclientconnectiongroup disable-bcdelementbootdebug disable-bcdelementbootems disable-bcdelementdebug disable-bcdelementems disable-bcdelementeventlogging disable-bcdelementhypervisordebug disable-computerrestore disable-jobtrigger disable-localuser disable-psbreakpoint disable-psremoting disable-pssessionconfiguration disable-runspacedebug disable-scheduledjob disable-tlsciphersuite disable-tlsecccurve disable-tlssessionticketkey disable-tpmautoprovisioning disable-uev disable-uevappxpackage disable-uevtemplate disable-wsmancredssp disable-windowserrorreporting disable-windowsoptionalfeature disconnect-pssession disconnect-wsman dismount-appxvolume dismount-windowsimage edit-cipolicyrule enable-appbackgroundtaskdiagnosticlog enable-appv enable-appvclientconnectiongroup enable-bcdelementbootdebug enable-bcdelementbootems enable-bcdelementdebug enable-bcdelementems enable-bcdelementeventlogging enable-bcdelementhypervisordebug enable-computerrestore enable-jobtrigger enable-localuser enable-psbreakpoint enable-psremoting enable-pssessionconfiguration enable-runspacedebug enable-scheduledjob enable-tlsciphersuite enable-tlsecccurve enable-tlssessionticketkey enable-tpmautoprovisioning enable-uev enable-uevappxpackage enable-uevtemplate enable-wsmancredssp enable-windowserrorreporting enable-windowsoptionalfeature enter-pshostprocess enter-pssession exit-pshostprocess exit-pssession expand-windowscustomdataimage expand-windowsimage export-alias export-bcdstore export-binarymilog export-certificate export-clixml export-console export-counter export-csv export-formatdata export-modulemember export-pssession export-pfxcertificate export-provisioningpackage export-startlayout export-startlayoutedgeassets export-tlssessionticketkey export-trace export-uevconfiguration export-uevpackage export-windowscapabilitysource export-windowsdriver export-windowsimage find-package find-packageprovider foreach-object format-custom format-list format-securebootuefi format-table format-wide get-acl get-alias get-applockerfileinformation get-applockerpolicy get-appprovisionedsharedpackagecontainer get-appsharedpackagecontainer get-appvclientapplication get-appvclientconfiguration get-appvclientconnectiongroup get-appvclientmode get-appvclientpackage get-appvpublishingserver get-appvstatus get-appxdefaultvolume get-appxpackage get-appxpackageautoupdatesettings get-appxpackagemanifest get-appxprovisionedpackage get-appxvolume get-authenticodesignature get-bcdentry get-bcdentrydebugsettings get-bcdentryhypervisorsettings get-bcdstore get-bitstransfer get-cipolicy get-cipolicyidinfo get-cipolicyinfo get-certificate get-certificateautoenrollmentpolicy get-certificateenrollmentpolicyserver get-certificatenotificationtask get-childitem get-cimassociatedinstance get-cimclass get-ciminstance get-cimsession get-clipboard get-cmsmessage get-command get-computerinfo get-computerrestorepoint get-content get-controlpanelitem get-counter get-credential get-culture get-dapolicychange get-date get-deliveryoptimizationlog get-deliveryoptimizationloganalysis get-event get-eventlog get-eventsubscriber get-executionpolicy get-formatdata get-help get-history get-host get-hotfix get-installedlanguage get-item get-itemproperty get-itempropertyvalue get-job get-jobtrigger get-kdsconfiguration get-kdsrootkey get-localgroup get-localgroupmember get-localuser get-location get-member get-module get-nonremovableappspolicy get-psbreakpoint get-pscallstack get-psdrive get-pshostprocessinfo get-psprovider get-psreadlinekeyhandler get-psreadlineoption get-pssession get-pssessioncapability get-pssessionconfiguration get-pssnapin get-package get-packageprovider get-packagesource get-pfxcertificate get-pfxdata get-pmemdedicatedmemory get-pmemdisk get-pmemphysicaldevice get-pmemunusedregion get-process get-processmitigation get-provisioningpackage get-random get-runspace get-runspacedebug get-scheduledjob get-scheduledjoboption get-securebootpolicy get-securebootuefi get-service get-systemdriver get-systempreferreduilanguage get-timezone get-tlsciphersuite get-tlsecccurve get-tpm get-tpmendorsementkeyinfo get-tpmsupportedfeature get-tracesource get-transaction get-troubleshootingpack get-trustedprovisioningcertificate get-typedata get-uiculture get-uevappxpackage get-uevconfiguration get-uevstatus get-uevtemplate get-uevtemplateprogram get-unique get-variable get-wimbootentry get-wsmancredssp get-wsmaninstance get-wheamemorypolicy get-winacceptlanguagefromlanguagelistoptout get-winculturefromlanguagelistoptout get-windefaultinputmethodoverride get-winevent get-winhomelocation get-winlanguagebaroption get-winsystemlocale get-winuilanguageoverride get-winuserlanguagelist get-windowscapability get-windowsdeveloperlicense get-windowsdriver get-windowsedition get-windowserrorreporting get-windowsimage get-windowsimagecontent get-windowsoptionalfeature get-windowspackage get-windowsreservedstoragestate get-windowssearchsetting get-wmiobject group-object import-alias import-bcdstore import-binarymilog import-certificate import-clixml import-counter import-csv import-localizeddata import-module import-pssession import-packageprovider import-pfxcertificate import-startlayout import-tpmownerauth import-uevconfiguration initialize-pmemphysicaldevice initialize-tpm install-language install-package install-packageprovider install-provisioningpackage install-trustedprovisioningcertificate invoke-cimmethod invoke-command invoke-commandindesktoppackage invoke-dscresource invoke-expression invoke-history invoke-item invoke-restmethod invoke-troubleshootingpack invoke-wsmanaction invoke-webrequest invoke-wmimethod join-dtcdiagnosticresourcemanager join-path limit-eventlog measure-command measure-object merge-cipolicy mount-appvclientconnectiongroup mount-appvclientpackage mount-appxvolume mount-windowsimage move-appxpackage move-item move-itemproperty new-alias new-applockerpolicy new-bcdentry new-bcdstore new-cipolicy new-cipolicyrule new-certificatenotificationtask new-ciminstance new-cimsession new-cimsessionoption new-dtcdiagnostictransaction new-event new-eventlog new-filecatalog new-item new-itemproperty new-jobtrigger new-localgroup new-localuser new-module new-modulemanifest new-netipsecauthproposal new-netipsecmainmodecryptoproposal new-netipsecquickmodecryptoproposal new-object new-psdrive new-psrolecapabilityfile new-pssession new-pssessionconfigurationfile new-pssessionoption new-pstransportoption new-psworkflowexecutionoption new-pmemdedicatedmemory new-pmemdisk new-provisioningrepro new-scheduledjoboption new-selfsignedcertificate new-service new-timespan new-tlssessionticketkey new-variable new-wsmaninstance new-wsmansessionoption new-webserviceproxy new-winevent new-winuserlanguagelist new-windowscustomimage new-windowsimage optimize-appxprovisionedpackages optimize-windowsimage out-default out-file out-gridview out-host out-null out-printer out-string pop-location protect-cmsmessage publish-appvclientpackage publish-dscconfiguration push-location read-host receive-dtcdiagnostictransaction receive-job receive-pssession register-argumentcompleter register-cimindicationevent register-engineevent register-objectevent register-pssessionconfiguration register-packagesource register-scheduledjob register-uevtemplate register-wmievent remove-appprovisionedsharedpackagecontainer remove-appsharedpackagecontainer remove-appvclientconnectiongroup remove-appvclientpackage remove-appvpublishingserver remove-appxpackage remove-appxpackageautoupdatesettings remove-appxprovisionedpackage remove-appxvolume remove-bcdelement remove-bcdentry remove-bitstransfer remove-cipolicyrule remove-certificateenrollmentpolicyserver remove-certificatenotificationtask remove-ciminstance remove-cimsession remove-computer remove-event remove-eventlog remove-item remove-itemproperty remove-job remove-jobtrigger remove-localgroup remove-localgroupmember remove-localuser remove-module remove-psbreakpoint remove-psdrive remove-psreadlinekeyhandler remove-pssession remove-pssnapin remove-pmemdedicatedmemory remove-pmemdisk remove-typedata remove-variable remove-wsmaninstance remove-windowscapability remove-windowsdriver remove-windowsimage remove-windowspackage remove-wmiobject rename-computer rename-item rename-itemproperty rename-localgroup rename-localuser repair-appvclientconnectiongroup repair-appvclientpackage repair-uevtemplateindex repair-windowsimage reset-appsharedpackagecontainer reset-appxpackage reset-computermachinepassword resolve-dnsname resolve-path restart-computer restart-service restore-computer restore-uevbackup restore-uevusersetting resume-bitstransfer resume-job resume-provisioningsession resume-service save-help save-package save-windowsimage select-object select-string select-xml send-appvclientreport send-dtcdiagnostictransaction send-mailmessage set-acl set-alias set-appbackgroundtaskresourcepolicy set-applockerpolicy set-appxprovisioneddatafile set-appvclientconfiguration set-appvclientmode set-appvclientpackage set-appvpublishingserver set-appxdefaultvolume set-appxpackageautoupdatesettings set-authenticodesignature set-bcdbootdefault set-bcdbootdisplayorder set-bcdbootsequence set-bcdboottimeout set-bcdboottoolsdisplayorder set-bcddebugsettings set-bcdelement set-bcdhypervisorsettings set-bitstransfer set-cipolicyidinfo set-cipolicysetting set-cipolicyversion set-certificateautoenrollmentpolicy set-ciminstance set-clipboard set-content set-culture set-date set-dsclocalconfigurationmanager set-executionpolicy set-hvcioptions set-item set-itemproperty set-jobtrigger set-kdsconfiguration set-localgroup set-localuser set-location set-nonremovableappspolicy set-psbreakpoint set-psdebug set-psreadlinekeyhandler set-psreadlineoption set-pssessionconfiguration set-packagesource set-processmitigation set-ruleoption set-scheduledjob set-scheduledjoboption set-securebootuefi set-service set-strictmode set-systempreferreduilanguage set-timezone set-tpmownerauth set-tracesource set-uevconfiguration set-uevtemplateprofile set-variable set-wsmaninstance set-wsmanquickconfig set-wheamemorypolicy set-winacceptlanguagefromlanguagelistoptout set-winculturefromlanguagelistoptout set-windefaultinputmethodoverride set-winhomelocation set-winlanguagebaroption set-winsystemlocale set-winuilanguageoverride set-winuserlanguagelist set-windowsedition set-windowsproductkey set-windowsreservedstoragestate set-windowssearchsetting set-wmiinstance show-command show-controlpanelitem show-eventlog show-windowsdeveloperlicenseregistration sort-object split-path split-windowsimage start-bitstransfer start-dscconfiguration start-dtcdiagnosticresourcemanager start-job start-osuninstall start-process start-service start-sleep start-transaction start-transcript stop-appvclientconnectiongroup stop-appvclientpackage stop-computer stop-dtcdiagnosticresourcemanager stop-job stop-process stop-service stop-transcript suspend-bitstransfer suspend-job suspend-service switch-certificate sync-appvpublishingserver tee-object test-applockerpolicy test-certificate test-computersecurechannel test-connection test-dscconfiguration test-filecatalog test-kdsrootkey test-modulemanifest test-pssessionconfigurationfile test-path test-uevtemplate test-wsman trace-command unblock-file unblock-tpm undo-dtcdiagnostictransaction undo-transaction uninstall-language uninstall-package uninstall-provisioningpackage uninstall-trustedprovisioningcertificate unprotect-cmsmessage unpublish-appvclientpackage unregister-event unregister-pssessionconfiguration unregister-packagesource unregister-scheduledjob unregister-uevtemplate unregister-windowsdeveloperlicense update-dscconfiguration update-formatdata update-help update-list update-typedata update-uevtemplate update-wimbootentry use-transaction use-windowsunattend wait-debugger wait-event wait-job wait-process where-object write-debug write-error write-eventlog write-host write-information write-output write-progress write-verbose write-warning")
+        AddScintillaKeywords("powershell", 2, "% ? add-apppackage add-apppackagevolume add-appprovisionedpackage add-provisionedapppackage add-provisionedappsharedpackagecontainer add-provisionedappxpackage add-provisioningpackage add-trustedprovisioningcertificate apply-windowsunattend cfs disable-physicaldiskindication disable-storagediagnosticlog dismount-apppackagevolume enable-physicaldiskindication enable-storagediagnosticlog flush-volume get-apppackage get-apppackageautoupdatesettings get-apppackagedefaultvolume get-apppackagelasterror get-apppackagelog get-apppackagemanifest get-apppackagevolume get-appprovisionedpackage get-disksnv get-language get-physicaldisksnv get-preferredlanguage get-provisionedapppackage get-provisionedappsharedpackagecontainer get-provisionedappxpackage get-storageenclosuresnv get-systemlanguage initialize-volume mount-apppackagevolume move-apppackage move-smbclient optimize-appprovisionedpackages optimize-provisionedapppackages optimize-provisionedappxpackages remove-apppackage remove-apppackageautoupdatesettings remove-apppackagevolume remove-appprovisionedpackage remove-etwtracesession remove-provisionedapppackage remove-provisionedappsharedpackagecontainer remove-provisionedappxpackage remove-provisioningpackage remove-trustedprovisioningcertificate reset-apppackage set-apppackageautoupdatesettings set-apppackagedefaultvolume set-apppackageprovisioneddatafile set-autologgerconfig set-etwtracesession set-preferredlanguage set-provisionedapppackagedatafile set-provisionedappxdatafile set-systemlanguage tnc write-filesystemcache ac algm asnp blsmba cat cd chdir clc clear clhy cli clp cls clv cnsn compare copy cp cpi cpp cssmbo cssmbse curl cvpa dbp del diff dir dlu dnsn dsmbd ebp echo elu epal epcsv epsn erase esmbd etsn exsn fc fhx fimo fl foreach ft fw gal gbp gc gcai gcb gcfg gcfgs gci gcim gcls gcm gcms gcs gdr ghy gi gin gip gjb gl glcm glg glgm glu gm gmo gp gps gpv group grsmba gsmba gsmbb gsmbc gsmbcc gsmbcn gsmbd gsmbgm gsmbm gsmbmc gsmbo gsmbs gsmbsc gsmbscm gsmbscp gsmbse gsmbsn gsmbt gsmbw gsn gsnp gsv gtz gu gv gwmi h history icim icm iex ihy ii inmo ipal ipcsv ipmo ipsn irm ise iwmi iwr kill lp ls man md measure mi mount move mp msmbw mv nal ncim ncms ncso ndr ni nlg nlu nmo npssc nsmbgm nsmbm nsmbs nsmbscm nsmbt nsn nv nwsn ogv oh pbcfg popd ps pumo pushd pwd r rbp rcie rcim rcjb rcms rcsn rd rdr ren ri rjb rksmba rlg rlgm rlu rm rmdir rmo rni rnlg rnlu rnp rp rsmbb rsmbc rsmbcc rsmbgm rsmbm rsmbs rsmbsc rsmbscm rsmbt rsn rsnp rtcfg rujb rv rvpa rwmi sacfg sajb sal saps sasv sbp sc scb scim select set shcm si sl slcm sleep slg sls slu sort sp spjb spps spsv ssmbb ssmbcc ssmbp ssmbs ssmbsc ssmbscm start stz sujb sv swmi tcfg tee trcm type udsmbmc ulsmba upcfg upmo wget where wjb write")
+        AddScintillaKeywords("powershell", 3, "a: add-bcdatacacheextension add-bitlockerkeyprotector add-dnsclientdohserveraddress add-dnsclientnrptrule add-dtcclustertmmapping add-etwtraceprovider add-initiatoridtomaskingset add-mppreference add-neteventnetworkadapter add-neteventpacketcaptureprovider add-neteventprovider add-neteventvfpprovider add-neteventvmnetworkadapter add-neteventvmswitch add-neteventvmswitchprovider add-neteventwfpcaptureprovider add-netiphttpscertbinding add-netlbfoteammember add-netlbfoteamnic add-netnatexternaladdress add-netnatstaticmapping add-netswitchteammember add-odbcdsn add-partitionaccesspath add-physicaldisk add-printer add-printerdriver add-printerport add-storagefaultdomain add-targetporttomaskingset add-vmdirectvirtualdisk add-virtualdisktomaskingset add-vpnconnection add-vpnconnectionroute add-vpnconnectiontriggerapplication add-vpnconnectiontriggerdnsconfiguration add-vpnconnectiontriggertrustednetwork afterall aftereach assert-mockcalled assert-verifiablemocks b: backup-bitlockerkeyprotector backuptoaad-bitlockerkeyprotector beforeall beforeeach block-fileshareaccess block-smbshareaccess c: clear-assignedaccess clear-bccache clear-bitlockerautounlock clear-disk clear-dnsclientcache clear-filestoragetier clear-host clear-pcsvdevicelog clear-storagebusdisk clear-storagediagnosticinfo close-smbopenfile close-smbsession compress-archive configuration connect-iscsitarget connect-virtualdisk context convertfrom-sddlstring copy-netfirewallrule copy-netipsecmainmodecryptoset copy-netipsecmainmoderule copy-netipsecphase1authset copy-netipsecphase2authset copy-netipsecquickmodecryptoset copy-netipsecrule d: debug-fileshare debug-mmappprelaunch debug-storagesubsystem debug-volume delete-deliveryoptimizationcache describe disable-bc disable-bcdowngrading disable-bcserveonbattery disable-bitlocker disable-bitlockerautounlock disable-damanualentrypointselection disable-deliveryoptimizationverboselogs disable-dscdebug disable-mmagent disable-netadapter disable-netadapterbinding disable-netadapterchecksumoffload disable-netadapterencapsulatedpackettaskoffload disable-netadapteripsecoffload disable-netadapterlso disable-netadapterpacketdirect disable-netadapterpowermanagement disable-netadapterqos disable-netadapterrdma disable-netadapterrsc disable-netadapterrss disable-netadaptersriov disable-netadapteruso disable-netadaptervmq disable-netdnstransitionconfiguration disable-netfirewallrule disable-netiphttpsprofile disable-netipsecmainmoderule disable-netipsecrule disable-netnattransitionconfiguration disable-networkswitchethernetport disable-networkswitchfeature disable-networkswitchvlan disable-odbcperfcounter disable-pstrace disable-pswsmancombinedtrace disable-physicaldiskidentification disable-pnpdevice disable-scheduledtask disable-smbdelegation disable-storagebuscache disable-storagebusdisk disable-storagedatacollection disable-storageenclosureidentification disable-storageenclosurepower disable-storagehighavailability disable-storagemaintenancemode disable-wsmantrace disable-wdacbidtrace disconnect-iscsitarget disconnect-virtualdisk dismount-diskimage e: enable-bcdistributed enable-bcdowngrading enable-bchostedclient enable-bchostedserver enable-bclocal enable-bcserveonbattery enable-bitlocker enable-bitlockerautounlock enable-damanualentrypointselection enable-deliveryoptimizationverboselogs enable-dscdebug enable-mmagent enable-netadapter enable-netadapterbinding enable-netadapterchecksumoffload enable-netadapterencapsulatedpackettaskoffload enable-netadapteripsecoffload enable-netadapterlso enable-netadapterpacketdirect enable-netadapterpowermanagement enable-netadapterqos enable-netadapterrdma enable-netadapterrsc enable-netadapterrss enable-netadaptersriov enable-netadapteruso enable-netadaptervmq enable-netdnstransitionconfiguration enable-netfirewallrule enable-netiphttpsprofile enable-netipsecmainmoderule enable-netipsecrule enable-netnattransitionconfiguration enable-networkswitchethernetport enable-networkswitchfeature enable-networkswitchvlan enable-odbcperfcounter enable-pstrace enable-pswsmancombinedtrace enable-physicaldiskidentification enable-pnpdevice enable-scheduledtask enable-smbdelegation enable-storagebuscache enable-storagebusdisk enable-storagedatacollection enable-storageenclosureidentification enable-storageenclosurepower enable-storagehighavailability enable-storagemaintenancemode enable-wsmantrace enable-wdacbidtrace expand-archive export-bccachepackage export-bcsecretkey export-odataendpointproxy export-scheduledtask export-winhttpproxy f: find-command find-dscresource find-module find-netipsecrule find-netroute find-rolecapability find-script flush-etwtracesession format-hex format-volume g: get-appbackgroundtask get-appvvirtualprocess get-appxlasterror get-appxlog get-assignedaccess get-autologgerconfig get-bcclientconfiguration get-bccontentserverconfiguration get-bcdatacache get-bcdatacacheextension get-bchashcache get-bchostedcacheserverconfiguration get-bcnetworkconfiguration get-bcstatus get-bitlockervolume get-clusteredscheduledtask get-daclientexperienceconfiguration get-daconnectionstatus get-daentrypointtableitem get-doconfig get-dodownloadmode get-dopercentagemaxbackgroundbandwidth get-dopercentagemaxforegroundbandwidth get-dedupproperties get-deliveryoptimizationperfsnap get-deliveryoptimizationperfsnapthismonth get-deliveryoptimizationstatus get-disk get-diskimage get-diskstoragenodeview get-dnsclient get-dnsclientcache get-dnsclientdohserveraddress get-dnsclientglobalsetting get-dnsclientnrptglobal get-dnsclientnrptpolicy get-dnsclientnrptrule get-dnsclientserveraddress get-dscconfiguration get-dscconfigurationstatus get-dsclocalconfigurationmanager get-dscresource get-dtc get-dtcadvancedhostsetting get-dtcadvancedsetting get-dtcclusterdefault get-dtcclustertmmapping get-dtcdefault get-dtclog get-dtcnetworksetting get-dtctransaction get-dtctransactionsstatistics get-dtctransactionstracesession get-dtctransactionstracesetting get-etwtraceprovider get-etwtracesession get-filehash get-fileintegrity get-fileshare get-fileshareaccesscontrolentry get-filestoragetier get-initiatorid get-initiatorport get-installedmodule get-installedscript get-iscsiconnection get-iscsisession get-iscsitarget get-iscsitargetportal get-isesnippet get-logproperties get-mmagent get-maskingset get-mockdynamicparameters get-mpcomputerstatus get-mpperformancereport get-mppreference get-mpthreat get-mpthreatcatalog get-mpthreatdetection get-ncsipolicyconfiguration get-net6to4configuration get-netadapter get-netadapteradvancedproperty get-netadapterbinding get-netadapterchecksumoffload get-netadapterdatapathconfiguration get-netadapterencapsulatedpackettaskoffload get-netadapterhardwareinfo get-netadapteripsecoffload get-netadapterlso get-netadapterpacketdirect get-netadapterpowermanagement get-netadapterqos get-netadapterrdma get-netadapterrsc get-netadapterrss get-netadaptersriov get-netadaptersriovvf get-netadapterstatistics get-netadapteruso get-netadaptervmqqueue get-netadaptervport get-netadaptervmq get-netcompartment get-netconnectionprofile get-netdnstransitionconfiguration get-netdnstransitionmonitoring get-neteventnetworkadapter get-neteventpacketcaptureprovider get-neteventprovider get-neteventsession get-neteventvfpprovider get-neteventvmnetworkadapter get-neteventvmswitch get-neteventvmswitchprovider get-neteventwfpcaptureprovider get-netfirewalladdressfilter get-netfirewallapplicationfilter get-netfirewalldynamickeywordaddress get-netfirewallinterfacefilter get-netfirewallinterfacetypefilter get-netfirewallportfilter get-netfirewallprofile get-netfirewallrule get-netfirewallsecurityfilter get-netfirewallservicefilter get-netfirewallsetting get-netipaddress get-netipconfiguration get-netiphttpsconfiguration get-netiphttpsstate get-netipinterface get-netipsecdospsetting get-netipsecmainmodecryptoset get-netipsecmainmoderule get-netipsecmainmodesa get-netipsecphase1authset get-netipsecphase2authset get-netipsecquickmodecryptoset get-netipsecquickmodesa get-netipsecrule get-netipv4protocol get-netipv6protocol get-netisatapconfiguration get-netlbfoteam get-netlbfoteammember get-netlbfoteamnic get-netnat get-netnatexternaladdress get-netnatglobal get-netnatsession get-netnatstaticmapping get-netnattransitionconfiguration get-netnattransitionmonitoring get-netneighbor get-netoffloadglobalsetting get-netprefixpolicy get-netqospolicy get-netroute get-netswitchteam get-netswitchteammember get-nettcpconnection get-nettcpsetting get-netteredoconfiguration get-netteredostate get-nettransportfilter get-netudpendpoint get-netudpsetting get-netview get-networkswitchethernetport get-networkswitchfeature get-networkswitchglobaldata get-networkswitchvlan get-odbcdriver get-odbcdsn get-odbcperfcounter get-offloaddatatransfersetting get-operationvalidation get-psrepository get-partition get-partitionsupportedsize get-pcsvdevice get-pcsvdevicelog get-physicaldisk get-physicaldiskstoragenodeview get-physicalextent get-physicalextentassociation get-pnpdevice get-pnpdeviceproperty get-printconfiguration get-printjob get-printer get-printerdriver get-printerport get-printerproperty get-resiliencysetting get-scheduledtask get-scheduledtaskinfo get-smbbandwidthlimit get-smbclientconfiguration get-smbclientnetworkinterface get-smbconnection get-smbdelegation get-smbglobalmapping get-smbmapping get-smbmultichannelconnection get-smbmultichannelconstraint get-smbopenfile get-smbservercertprops get-smbservercertificatemapping get-smbserverconfiguration get-smbservernetworkinterface get-smbsession get-smbshare get-smbshareaccess get-smbwitnessclient get-startapps get-storageadvancedproperty get-storagebusbinding get-storagebuscache get-storagebusclientdevice get-storagebusdisk get-storagebustargetcachestore get-storagebustargetcachestoresinstance get-storagebustargetdevice get-storagebustargetdeviceinstance get-storagechassis get-storagedatacollection get-storagediagnosticinfo get-storageenclosure get-storageenclosurestoragenodeview get-storageenclosurevendordata get-storageextendedstatus get-storagefaultdomain get-storagefileserver get-storagefirmwareinformation get-storagehealthaction get-storagehealthreport get-storagehealthsetting get-storagehistory get-storagejob get-storagenode get-storagepool get-storageprovider get-storagerack get-storagereliabilitycounter get-storagescaleunit get-storagesetting get-storagesite get-storagesubsystem get-storagetier get-storagetiersupportedsize get-supportedclustersizes get-supportedfilesystems get-targetport get-targetportal get-testdriveitem get-vmdirectvirtualdisk get-verb get-virtualdisk get-virtualdisksupportedsize get-volume get-volumecorruptioncount get-volumescrubpolicy get-vpnconnection get-vpnconnectiontrigger get-wdacbidtrace get-windowsupdatelog get-winhttpproxy grant-fileshareaccess grant-smbshareaccess h: hide-virtualdisk i: import-bccachepackage import-bcsecretkey import-isesnippet import-powershelldatafile import-winhttpproxy importsystemmodules in inmodulescope initialize-disk install-dtc install-module install-script invoke-asworkflow invoke-mock invoke-operationvalidation invoke-pester it j: k: l: lock-bitlocker m: mock mount-diskimage move-smbwitnessclient n: new-autologgerconfig new-daentrypointtableitem new-dscchecksum new-eapconfiguration new-etwtracesession new-fileshare new-fixture new-guid new-iscsitargetportal new-isesnippet new-maskingset new-mpperformancerecording new-netadapteradvancedproperty new-neteventsession new-netfirewalldynamickeywordaddress new-netfirewallrule new-netipaddress new-netiphttpsconfiguration new-netipsecdospsetting new-netipsecmainmodecryptoset new-netipsecmainmoderule new-netipsecphase1authset new-netipsecphase2authset new-netipsecquickmodecryptoset new-netipsecrule new-netlbfoteam new-netnat new-netnattransitionconfiguration new-netneighbor new-netqospolicy new-netroute new-netswitchteam new-nettransportfilter new-networkswitchvlan new-psworkflowsession new-partition new-pesteroption new-scheduledtask new-scheduledtaskaction new-scheduledtaskprincipal new-scheduledtasksettingsset new-scheduledtasktrigger new-scriptfileinfo new-smbglobalmapping new-smbmapping new-smbmultichannelconstraint new-smbservercertificatemapping new-smbshare new-storagebusbinding new-storagebuscachestore new-storagefileserver new-storagepool new-storagesubsystemvirtualdisk new-storagetier new-temporaryfile new-virtualdisk new-virtualdiskclone new-virtualdisksnapshot new-volume new-vpnserveraddress o: open-netgpo optimize-storagepool optimize-volume p: psconsolehostreadline pause publish-bcfilecontent publish-bcwebcontent publish-module publish-script q: r: read-printernfctag register-clusteredscheduledtask register-dnsclient register-iscsisession register-psrepository register-scheduledtask register-storagesubsystem remove-autologgerconfig remove-bcdatacacheextension remove-bitlockerkeyprotector remove-daentrypointtableitem remove-dnsclientdohserveraddress remove-dnsclientnrptrule remove-dscconfigurationdocument remove-dtcclustertmmapping remove-etwtraceprovider remove-fileshare remove-initiatorid remove-initiatoridfrommaskingset remove-iscsitargetportal remove-maskingset remove-mppreference remove-mpthreat remove-netadapteradvancedproperty remove-neteventnetworkadapter remove-neteventpacketcaptureprovider remove-neteventprovider remove-neteventsession remove-neteventvfpprovider remove-neteventvmnetworkadapter remove-neteventvmswitch remove-neteventvmswitchprovider remove-neteventwfpcaptureprovider remove-netfirewalldynamickeywordaddress remove-netfirewallrule remove-netipaddress remove-netiphttpscertbinding remove-netiphttpsconfiguration remove-netipsecdospsetting remove-netipsecmainmodecryptoset remove-netipsecmainmoderule remove-netipsecmainmodesa remove-netipsecphase1authset remove-netipsecphase2authset remove-netipsecquickmodecryptoset remove-netipsecquickmodesa remove-netipsecrule remove-netlbfoteam remove-netlbfoteammember remove-netlbfoteamnic remove-netnat remove-netnatexternaladdress remove-netnatstaticmapping remove-netnattransitionconfiguration remove-netneighbor remove-netqospolicy remove-netroute remove-netswitchteam remove-netswitchteammember remove-nettransportfilter remove-networkswitchethernetportipaddress remove-networkswitchvlan remove-odbcdsn remove-partition remove-partitionaccesspath remove-physicaldisk remove-printjob remove-printer remove-printerdriver remove-printerport remove-smbbandwidthlimit remove-smbcomponent remove-smbglobalmapping remove-smbmapping remove-smbmultichannelconstraint remove-smbservercertificatemapping remove-smbshare remove-storagebusbinding remove-storagefaultdomain remove-storagefileserver remove-storagehealthintent remove-storagehealthsetting remove-storagepool remove-storagetier remove-targetportfrommaskingset remove-vmdirectvirtualdisk remove-virtualdisk remove-virtualdiskfrommaskingset remove-vpnconnection remove-vpnconnectionroute remove-vpnconnectiontriggerapplication remove-vpnconnectiontriggerdnsconfiguration remove-vpnconnectiontriggertrustednetwork rename-daentrypointtableitem rename-maskingset rename-netadapter rename-netfirewallrule rename-netiphttpsconfiguration rename-netipsecmainmodecryptoset rename-netipsecmainmoderule rename-netipsecphase1authset rename-netipsecphase2authset rename-netipsecquickmodecryptoset rename-netipsecrule rename-netlbfoteam rename-netswitchteam rename-printer repair-fileintegrity repair-virtualdisk repair-volume reset-bc reset-daclientexperienceconfiguration reset-daentrypointtableitem reset-dtclog reset-ncsipolicyconfiguration reset-net6to4configuration reset-netadapteradvancedproperty reset-netdnstransitionconfiguration reset-netiphttpsconfiguration reset-netisatapconfiguration reset-netteredoconfiguration reset-physicaldisk reset-smbclientconfiguration reset-smbserverconfiguration reset-storagereliabilitycounter reset-winhttpproxy resize-partition resize-storagetier resize-virtualdisk restart-netadapter restart-pcsvdevice restart-printjob restore-dscconfiguration restore-networkswitchconfiguration resume-bitlocker resume-printjob resume-storagebusdisk revoke-fileshareaccess revoke-smbshareaccess s: safegetcommand save-etwtracesession save-module save-netgpo save-networkswitchconfiguration save-script save-storagedatacollection send-etwtracesession set-assignedaccess set-bcauthentication set-bccache set-bcdatacacheentrymaxage set-bcminsmblatency set-bcsecretkey set-clusteredscheduledtask set-daclientexperienceconfiguration set-daentrypointtableitem set-dodownloadmode set-domaxbackgroundbandwidth set-domaxforegroundbandwidth set-dopercentagemaxbackgroundbandwidth set-dopercentagemaxforegroundbandwidth set-deliveryoptimizationstatus set-disk set-dnsclient set-dnsclientdohserveraddress set-dnsclientglobalsetting set-dnsclientnrptglobal set-dnsclientnrptrule set-dnsclientserveraddress set-dtcadvancedhostsetting set-dtcadvancedsetting set-dtcclusterdefault set-dtcclustertmmapping set-dtcdefault set-dtclog set-dtcnetworksetting set-dtctransaction set-dtctransactionstracesession set-dtctransactionstracesetting set-dynamicparametervariables set-etwtraceprovider set-fileintegrity set-fileshare set-filestoragetier set-initiatorport set-iscsichapsecret set-logproperties set-mmagent set-mppreference set-ncsipolicyconfiguration set-net6to4configuration set-netadapter set-netadapteradvancedproperty set-netadapterbinding set-netadapterchecksumoffload set-netadapterdatapathconfiguration set-netadapterencapsulatedpackettaskoffload set-netadapteripsecoffload set-netadapterlso set-netadapterpacketdirect set-netadapterpowermanagement set-netadapterqos set-netadapterrdma set-netadapterrsc set-netadapterrss set-netadaptersriov set-netadapteruso set-netadaptervmq set-netconnectionprofile set-netdnstransitionconfiguration set-neteventpacketcaptureprovider set-neteventprovider set-neteventsession set-neteventvfpprovider set-neteventvmswitchprovider set-neteventwfpcaptureprovider set-netfirewalladdressfilter set-netfirewallapplicationfilter set-netfirewallinterfacefilter set-netfirewallinterfacetypefilter set-netfirewallportfilter set-netfirewallprofile set-netfirewallrule set-netfirewallsecurityfilter set-netfirewallservicefilter set-netfirewallsetting set-netipaddress set-netiphttpsconfiguration set-netipinterface set-netipsecdospsetting set-netipsecmainmodecryptoset set-netipsecmainmoderule set-netipsecphase1authset set-netipsecphase2authset set-netipsecquickmodecryptoset set-netipsecrule set-netipv4protocol set-netipv6protocol set-netisatapconfiguration set-netlbfoteam set-netlbfoteammember set-netlbfoteamnic set-netnat set-netnatglobal set-netnattransitionconfiguration set-netneighbor set-netoffloadglobalsetting set-netqospolicy set-netroute set-nettcpsetting set-netteredoconfiguration set-netudpsetting set-networkswitchethernetportipaddress set-networkswitchportmode set-networkswitchportproperty set-networkswitchvlanproperty set-odbcdriver set-odbcdsn set-psrepository set-partition set-pcsvdevicebootconfiguration set-pcsvdevicenetworkconfiguration set-pcsvdeviceuserpassword set-physicaldisk set-printconfiguration set-printer set-printerproperty set-resiliencysetting set-scheduledtask set-smbbandwidthlimit set-smbclientconfiguration set-smbpathacl set-smbservercertificatemapping set-smbserverconfiguration set-smbshare set-storagebuscache set-storagebusprofile set-storagefileserver set-storagehealthsetting set-storagepool set-storageprovider set-storagesetting set-storagesubsystem set-storagetier set-testinconclusive set-virtualdisk set-volume set-volumescrubpolicy set-vpnconnection set-vpnconnectionipsecconfiguration set-vpnconnectionproxy set-vpnconnectiontriggerdnsconfiguration set-vpnconnectiontriggertrustednetwork set-winhttpproxy setup should show-netfirewallrule show-netipsecrule show-storagehistory show-virtualdisk start-appbackgroundtask start-appvvirtualprocess start-autologgerconfig start-dtc start-dtctransactionstracesession start-etwtracesession start-mprollback start-mpscan start-mpwdoscan start-neteventsession start-pcsvdevice start-scheduledtask start-storagediagnosticlog start-trace stop-dscconfiguration stop-dtc stop-dtctransactionstracesession stop-etwtracesession stop-neteventsession stop-pcsvdevice stop-scheduledtask stop-storagediagnosticlog stop-storagejob stop-trace suspend-bitlocker suspend-printjob suspend-storagebusdisk sync-netipsecrule t: tabexpansion2 test-dtc test-netconnection test-scriptfileinfo u: unblock-fileshareaccess unblock-smbshareaccess uninstall-dtc uninstall-module uninstall-script unlock-bitlocker unregister-appbackgroundtask unregister-clusteredscheduledtask unregister-iscsisession unregister-psrepository unregister-scheduledtask unregister-storagesubsystem update-autologgerconfig update-disk update-etwtracesession update-hoststoragecache update-iscsitarget update-iscsitargetportal update-module update-modulemanifest update-mpsignature update-netfirewalldynamickeywordaddress update-netipsecrule update-script update-scriptfileinfo update-smbmultichannelconnection update-storagebuscache update-storagefirmware update-storagepool update-storageprovidercache v: w: write-dtctransactionstracesession write-printernfctag write-volumecache x: y: z: cd.. cd\ help mkdir more oss prompt")
+        AddScintillaKeywords("powershell", 4, "component description example externalhelp forwardhelpcategory forwardhelptargetname functionality inputs link notes outputs parameter remotehelprunspace role synopsis")
+
+        DynaLog.LogMessage("Scintilla editor initialization complete.")
+    End Sub
+
+    Sub AddScintillaKeywords(Language As String, Index As Integer, KeywordSet As String)
+        DynaLog.LogMessage("Setting the keywords for the appropriate Scintilla control...")
+        DynaLog.LogMessage("- Language: " & Language)
+        DynaLog.LogMessage("- Index: " & Index)
+        DynaLog.LogMessage("- Keyword Set: " & KeywordSet & CrLf)
+        If Language <> "" Then
+            DynaLog.LogMessage("Language is not nothing. Proceeding to add keywords...")
+            Select Case Language
+                Case "powershell"
+                    Scintilla3.SetKeywords(Index, KeywordSet)
+                Case "xml"
+                    Scintilla1.SetKeywords(Index, KeywordSet)
+            End Select
+        End If
     End Sub
 
     Function NewKeyVar(key As String) As ProductKey
+        DynaLog.LogMessage("Creating key object with product key " & Quote & key & Quote & "...")
         Dim pKey As New ProductKey()
         pKey.Valid = True
         pKey.Key = key
@@ -280,6 +412,8 @@ Public Class NewUnattendWiz
     End Function
 
     Sub SetDefaultSettings()
+        DynaLog.LogMessage("Setting default configuration...")
+        DynaLog.LogMessage("Setting default regional settings and time offsets...")
         DefaultLanguage.Id = "en-US"
         DefaultLanguage.DisplayName = "English"
         DefaultLocale.Id = "en-US"
@@ -294,6 +428,7 @@ Public Class NewUnattendWiz
         DefaultGeoId.DisplayName = "United States"
         DefaultOffset.Id = "UTC"
         DefaultOffset.DisplayName = "(UTC) Coordinated Universal Time"
+        DynaLog.LogMessage("Setting default disk configuration...")
         DefaultDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0
         DefaultDiskConfiguration.PartStyle = PartitionStyle.GPT
         DefaultDiskConfiguration.ESPSize = 300
@@ -305,6 +440,7 @@ Public Class NewUnattendWiz
         DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum = 0
         DefaultDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum = 3
 
+        DynaLog.LogMessage("Adding generic product keys...")
         GenericKeys.Add(NewKeyVar("YNMGQ-8RYV3-4PGQ3-C8XTP-7CFBY"))     ' Education
         GenericKeys.Add(NewKeyVar("84NGF-MHBT6-FXBX8-QWJK7-DRR8H"))     ' Education N
         GenericKeys.Add(NewKeyVar("YTMG3-N6DKC-DKB77-7M9GH-8HVX7"))     ' Home
@@ -317,24 +453,34 @@ Public Class NewUnattendWiz
         GenericKeys.Add(NewKeyVar("2B87N-8KFHP-DKV6R-Y2C8J-PKCKT"))     ' Pro N
         GenericKeys.Add(NewKeyVar("WYPNQ-8C467-V2W6J-TX4WX-WT2RQ"))     ' Pro N for Workstations
         GenericKeys.Add(NewKeyVar("XGVPP-NMH47-7TTHJ-W3FW7-8HV2C"))     ' Enterprise
+        GenericKeys.Add(NewKeyVar("WGGHN-J84D6-QYCPR-T7PJ7-X766F"))     ' Enterprise N
 
+        DynaLog.LogMessage("Adding default users. 1 Admin and 4 unused Users...")
         UserAccountsList.Add(New User(True, "Admin", "", UserGroup.Administrators))
         For i = 1 To 4
             UserAccountsList.Add(New User(False, "", "", UserGroup.Users))
         Next
 
+        DynaLog.LogMessage("Setting default password expiration configuration...")
         DefaultExpirationSettings.Mode = PasswordExpirationMode.NIST_Unlimited
         DefaultExpirationSettings.Days = 42
-        DefaultLockdownSettings.Enabled = True
-        DefaultLockdownSettings.DefaultPolicy = True
-        DefaultLockdownSettings.TimedLockdownSettings.FailedAttempts = 10
-        DefaultLockdownSettings.TimedLockdownSettings.Timeframe = 10
-        DefaultLockdownSettings.TimedLockdownSettings.AutoUnlockTime = 10
+        DynaLog.LogMessage("Setting default Account Lockout configuration...")
+        DefaultLockoutSettings.Enabled = True
+        DefaultLockoutSettings.DefaultPolicy = True
+        DefaultLockoutSettings.TimedLockoutSettings.FailedAttempts = 10
+        DefaultLockoutSettings.TimedLockoutSettings.Timeframe = 10
+        DefaultLockoutSettings.TimedLockoutSettings.AutoUnlockTime = 10
+        DynaLog.LogMessage("Setting default VM configuration...")
         DefaultVMSettings.Provider = VMProvider.VirtIO_Guest_Tools
+        DynaLog.LogMessage("Setting default wireless configuration...")
         DefaultNetworkConfiguration.SSID = ""
         DefaultNetworkConfiguration.ConnectWithoutBroadcast = False
         DefaultNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK
         DefaultNetworkConfiguration.Password = ""
+        DynaLog.LogMessage("Setting default post-install scripts...")
+        DefaultPostInstallScripts.Add(New PostInstallScript("# Write your code here", PostInstallScript.Stage.Specialize))
+        DefaultPostInstallScripts.Add(New PostInstallScript("# Write your code here", PostInstallScript.Stage.FirstRun))
+        DefaultPostInstallScripts.Add(New PostInstallScript("# Write your code here", PostInstallScript.Stage.UserFirstLogon))
 
 
         SelectedLanguage = DefaultLanguage
@@ -345,33 +491,48 @@ Public Class NewUnattendWiz
         SelectedDiskConfiguration = DefaultDiskConfiguration
         SelectedKey = GenericKeys(5)
         SelectedExpirationSettings = DefaultExpirationSettings
-        SelectedLockdownSettings = DefaultLockdownSettings
+        SelectedLockoutSettings = DefaultLockoutSettings
         SelectedVMSettings = DefaultVMSettings
         SelectedNetworkConfiguration = DefaultNetworkConfiguration
+        ConfiguredScripts = DefaultPostInstallScripts
 
     End Sub
 
     Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
+        DynaLog.LogMessage("Detecting installed .NET Core-based runtimes...")
+        DynaLog.LogMessage("- .NET SDK version: " & SDKVersion)
+        DynaLog.LogMessage("- .NET Runtime version: " & RuntimeVersion)
+        DynaLog.LogMessage("Checking if UnattendGen is present...")
         If Not Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen")) Then
+            DynaLog.LogMessage("UnattendGen is not present. This copy of DISMTools is not complete.")
             DotNetRuntimeSupported = False
             Exit Sub
         End If
+        DynaLog.LogMessage("Checking if self-contained UnattendGen is present...")
         If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
+            DynaLog.LogMessage("Self-contained UnattendGen is present.")
             ' Self-contained version detected
             DotNetRuntimeSupported = True
             PreferSelfContained = True
             Exit Sub
         End If
+        DynaLog.LogMessage("Detecting if .NET installations have been made...")
+        DynaLog.LogMessage("Do not be confused. This is not .NET Framework.")
         If Not Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet")) Then
+            DynaLog.LogMessage("No installations have been made.")
             DotNetRuntimeSupported = False
             Exit Sub
         End If
+        DynaLog.LogMessage("Checking .NET SDK installations...")
         If Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\sdk", SDKVersion)) Then
+            DynaLog.LogMessage("A compatible .NET SDK installation has been detected.")
             ' .NET SDK exists, skip further checks
             DotNetRuntimeSupported = True
             Exit Sub
         End If
+        DynaLog.LogMessage("Checking .NET Runtime installations...")
         If My.Computer.FileSystem.GetDirectories(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "dotnet\shared\Microsoft.NETCore.App"), FileIO.SearchOption.SearchTopLevelOnly, RuntimeVersion & "*").Count > 0 Then
+            DynaLog.LogMessage("A compatible .NET Runtime installation has been detected.")
             ' .NET Runtime exists, skip further checks
             DotNetRuntimeSupported = True
             Exit Sub
@@ -401,7 +562,7 @@ Public Class NewUnattendWiz
         ComboBox11.BackColor = BackColor
         ComboBox12.BackColor = BackColor
         ComboBox13.BackColor = BackColor
-        ListBox1.BackColor = BackColor
+        CheckedListBox1.BackColor = BackColor
         ListBox2.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
@@ -442,7 +603,7 @@ Public Class NewUnattendWiz
         ComboBox11.ForeColor = ForeColor
         ComboBox12.ForeColor = ForeColor
         ComboBox13.ForeColor = ForeColor
-        ListBox1.ForeColor = ForeColor
+        CheckedListBox1.ForeColor = ForeColor
         ListBox2.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
@@ -490,6 +651,9 @@ Public Class NewUnattendWiz
         DefaultContents = Scintilla1.Text
 
         SetDefaultSettings()
+
+        DynaLog.DisableLogging()
+
         ' System language
         If File.Exists(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml") Then
             ImageLanguages = ImageLanguage.LoadItems(Application.StartupPath & "\AutoUnattend\ImageLanguage.xml")
@@ -550,7 +714,7 @@ Public Class NewUnattendWiz
                 Next
             End If
         End If
-        ListBox1.SelectedIndex = 1
+        CheckedListBox1.SelectedIndex = 1
         ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
         TimeZonePageTimer.Enabled = True
@@ -561,13 +725,19 @@ Public Class NewUnattendWiz
         ' Set default auth tech to WPA2
         If ComboBox13.SelectedItem = Nothing Then ComboBox13.SelectedItem = "WPA2-PSK"
 
+        DynaLog.EnableLogging()
+
         ' Detect .NET runtimes/SDKs
         DetectDotNetRuntime("9.0.100", "9.0")
         If Not DotNetRuntimeSupported Then
+            DynaLog.LogMessage("Detections have concluded with no recognized .NET Core-based installations. The included copy of UnattendGen cannot be used.")
+            DynaLog.LogMessage("Asking user whether or not to download self-contained UnattendGen...")
             If MsgBox("This wizard requires the .NET 9 Runtime to be installed to use the built-in version of the generator program. You can download it from:" & CrLf & CrLf & "dotnet.microsoft.com" & CrLf & CrLf & "If you don't want to download .NET, you can download the self-contained version of the generator program. Downloading it will take some time, depending on your network connection speed." & CrLf & CrLf & "Do you want to use the self-contained version?", vbYesNo + vbQuestion, ".NET Runtime missing") = Windows.Forms.DialogResult.Yes Then
+                DynaLog.LogMessage("Proceeding to download self-contained UnattendGen...")
                 ExpressPanelFooter.Enabled = False
                 UnattendGenBW.RunWorkerAsync()
             Else
+                DynaLog.LogMessage("No downloads will be performed.")
                 Close()
             End If
         Else
@@ -575,28 +745,48 @@ Public Class NewUnattendWiz
         End If
 
         ' Detect presence of Windows SIM
+        DynaLog.LogMessage("Checking if Windows System Image Manager (SIM) is present on the host system...")
         If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
                                     "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            DynaLog.LogMessage("Windows SIM is present on the host system.")
             LinkLabel6.Enabled = True
         Else
+            DynaLog.LogMessage("Windows SIM is not present on the host system. This can be installed with the default options of the ADK installer.")
             LinkLabel6.Enabled = False
         End If
+
+        CheckedListBox1.SetItemChecked(0, False)
+
+        ' Preconfigure the keys
+        DynaLog.LogMessage("Preconfiguring the system architectures...")
+        SelectedArchitectures = New Dictionary(Of DismProcessorArchitecture, Boolean)
+        SelectedArchitectures.Add(DismProcessorArchitecture.Intel, False)
+        SelectedArchitectures.Add(DismProcessorArchitecture.AMD64, True)
+        SelectedArchitectures.Add(DismProcessorArchitecture.ARM64, False)
+
+        CheckedListBox1.SetItemChecked(0, False)
+        CheckedListBox1.SetItemChecked(1, True)
+        CheckedListBox1.SetItemChecked(2, False)
+
+        LoadConfiguredScript(0)
     End Sub
 
     Sub ReloadSettings()
+        DynaLog.LogMessage("Restoring original wizard settings for a new answer file...")
         ' Restore regional configuration
         ComboBox1.SelectedItem = DefaultLanguage.DisplayName
         ComboBox2.SelectedItem = DefaultLocale.DisplayName
         ComboBox3.SelectedItem = DefaultKeybIdentifier.DisplayName
         ComboBox4.SelectedItem = DefaultGeoId.DisplayName
         ' Restore basic system configuration
-        ListBox1.SelectedIndex = 1
+        CheckedListBox1.SelectedIndex = 1
         Win11Config.LabConfig_BypassRequirements = False
         Win11Config.OOBE_BypassNRO = False
         CheckBox1.Checked = False
         CheckBox2.Checked = False
         CheckBox3.Checked = True
         TextBox1.Text = ""
+        CheckBox19.Checked = False
         ' Restore time zone
         ComboBox5.SelectedItem = DefaultOffset.DisplayName
         RadioButton1.Checked = True
@@ -666,12 +856,22 @@ Public Class NewUnattendWiz
         ' Restore system telemetry
         CheckBox16.Checked = False
         RadioButton26.Checked = True
+        ' Restore default script settings
+        CheckBox20.Checked = False
         ' Restore default selections for components
         SystemComponents = DefaultSystemComponents
 
         ' Restore variables
         UserAccountsList.Clear()
         SetDefaultSettings()
+
+        ' Reconfigure the keys
+        DynaLog.LogMessage("Reconfiguring the system architectures...")
+        CheckedListBox1.SetItemChecked(0, False)
+        CheckedListBox1.SetItemChecked(1, True)
+        CheckedListBox1.SetItemChecked(2, False)
+
+        LoadConfiguredScript(0)
     End Sub
 
     Sub SelectTreeNode(NodeIndex As Integer)
@@ -680,6 +880,8 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub ChangePage(NewPage As UnattendedWizardPage.Page)
+        DynaLog.LogMessage("Changing current page of the wizard...")
+        DynaLog.LogMessage("New page to load: " & NewPage.ToString())
         If NewPage > CurrentWizardPage.WizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.WizardPage) Then
             If Not VerifyOptionsInPage(CurrentWizardPage.WizardPage) Then Exit Sub
         ElseIf NewPage > CurrentWizardPage.WizardPage AndAlso NewPage = UnattendedWizardPage.Page.ReviewPage Then
@@ -749,10 +951,16 @@ Public Class NewUnattendWiz
 
         ExpressPanelFooter.Enabled = Not (CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage)
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
+            ' Save post-install scripts
+            DynaLog.LogMessage("Saving post-install script configuration...")
+            SaveConfiguredScript(CurrentlyEditedStage, Scintilla3.Text)
+            DynaLog.LogMessage("Configuring save dialog initial location depending on whether or not a project is loaded...")
             ' Detect if a project has been loaded
             If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+                DynaLog.LogMessage("A project has been loaded and we are not managing any Windows installation.")
                 SaveFileDialog1.InitialDirectory = Path.Combine(MainForm.projPath, "unattend_xml")
             Else
+                DynaLog.LogMessage("Either no project has been loaded or we are managing a Windows installation.")
                 SaveFileDialog1.InitialDirectory = ""
             End If
             SaveFileDialog1.FileName = "autounattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
@@ -764,48 +972,65 @@ Public Class NewUnattendWiz
     End Sub
 
     Function VerifyOptionsInPage(WizardPage As UnattendedWizardPage.Page) As Boolean
+        DynaLog.LogMessage("Verifying user options before moving on to next page...")
+        DynaLog.LogMessage("Page in which we need to verify user settings: " & WizardPage.ToString())
         Select Case WizardPage
             Case UnattendedWizardPage.Page.SysConfigPage
-                If ListBox1.SelectedItems.Count = 0 Then
+                DynaLog.LogMessage("Checking selected architectures...")
+                If CheckedListBox1.CheckedItems.Count = 0 Then
+                    DynaLog.LogMessage("No architectures have been selected.")
                     MessageBox.Show("Please select an architecture and try again", "Validation error")
                     Return False
                 End If
                 If Not PCName.DefaultName Then
+                    DynaLog.LogMessage("Checking computer name...")
                     Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
                     If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
+                        DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
                         MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
                         Return False
                     End If
                 End If
             Case UnattendedWizardPage.Page.DiskConfigPage
+                DynaLog.LogMessage("Checking DiskPart script configuration (if the answer file will use it)...")
                 If Not DiskConfigurationInteractive AndAlso SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart AndAlso Scintilla2.Text = "" Then
+                    DynaLog.LogMessage("No script has been specified.")
                     MessageBox.Show("Please enter the contents of the DiskPart script and try again. You can also use a script file", "DiskPart Script error")
                     Return False
                 End If
             Case UnattendedWizardPage.Page.ProductKeyPage
                 If Not GenericChosen Then
+                    DynaLog.LogMessage("Checking user-specified product key...")
                     If TextBox3.Text = "" Then
+                        DynaLog.LogMessage("No product key has been specified.")
                         MessageBox.Show("Please type a product key and try again", "Product Key error")
                         Return False
                     ElseIf TextBox3.Text <> "" And TextBox3.Text.Length <> 29 Then
+                        DynaLog.LogMessage("Not all characters of the product key have been typed. Expected length: 29; Current length: " & TextBox3.Text.Length)
                         MessageBox.Show("Please type all of the product key and try again", "Product Key error")
                         Return False
                     ElseIf TextBox3.Text <> "" And TextBox3.Text.Length = 29 Then
+                        DynaLog.LogMessage("Validating product key...")
                         Dim pKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox3.Text)
                         If Not pKey.Valid Then
+                            DynaLog.LogMessage("Previously run regex match did not return results. This product key is bad.")
                             MessageBox.Show("The product key entered:" & CrLf & CrLf & TextBox3.Text & CrLf & CrLf & "is ill-formed. Please type it again", "Product Key error")
                             Return False
                         End If
                     End If
                 End If
             Case UnattendedWizardPage.Page.UserAccountsPage
+                DynaLog.LogMessage("Validating user accounts...")
                 Dim validationResults As UserValidationResults = UserValidator.ValidateUsers(UserAccountsList, PCName)
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive AndAlso Not validationResults.IsValid Then
+                    DynaLog.LogMessage("Validation has failed due to the reasons that appear above this line.")
                     MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
                 Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">"}
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
+                    DynaLog.LogMessage("Checking account names and groups...")
+                    DynaLog.LogMessage("This process will trim any invalid characters from user accounts automatically.")
                     Dim AtLeastOneAdmin As Boolean = False
                     If UserAccountsList.Count > 0 Then
                         For Each UserAccount As User In UserAccountsList
@@ -817,12 +1042,16 @@ Public Class NewUnattendWiz
                         Next
                     End If
                     If Not AtLeastOneAdmin Then
+                        DynaLog.LogMessage("No users have been detected as part of the Administrators group. All users are part of the Users group.")
+                        DynaLog.LogMessage("At least one user must be part of the Administrators group.")
                         MessageBox.Show("At least one account must be part of the Administrators user group. Please configure the user groups accordingly and try again", "User Accounts error")
                         Return False
                     End If
                 End If
             Case UnattendedWizardPage.Page.NetworkConnectionsPage
+                DynaLog.LogMessage("Validating wireless settings if they have been specified...")
                 If Not NetworkConfigInteractive AndAlso Not NetworkConfigManualSkip AndAlso Not WirelessValidator.ValidateWiFi(SelectedNetworkConfiguration) Then
+                    DynaLog.LogMessage("Wireless setting validation has failed.")
                     MessageBox.Show("There is a problem with the specified wireless settings. Make sure that you have specified a network name and try again", "Wireless Networks error")
                     Return False
                 End If
@@ -830,7 +1059,21 @@ Public Class NewUnattendWiz
         Return True
     End Function
 
+    Function ShowArchitectures(Architectures As Dictionary(Of DismProcessorArchitecture, Boolean)) As String
+        Dim architectureList As New List(Of String)
+
+        If Architectures IsNot Nothing Then
+            For Each Architecture As DismProcessorArchitecture In Architectures.Keys
+                If Architectures(Architecture) Then
+                    architectureList.Add(Utilities.Casters.CastDismArchitecture(Architecture))
+                End If
+            Next
+        End If
+        Return String.Join("; ", architectureList.ToArray())
+    End Function
+
     Sub ShowSettingOverview()
+        DynaLog.LogMessage("Showing overview of settings...")
         TextBox13.Clear()
         ' Display settings in the following order:
         TextBox13.Text = "Current configurations for the unattended answer file:" & CrLf
@@ -844,11 +1087,12 @@ Public Class NewUnattendWiz
         End If
         ' 2. -- BASIC SYSTEM CONFIGURATION
         TextBox13.AppendText("Basic system configuration: " & CrLf &
-                             "- Processor architecture: " & Utilities.Casters.CastDismArchitecture(SelectedArchitecture) & CrLf &
+                             "- Processor architectures: " & ShowArchitectures(SelectedArchitectures) & CrLf &
                              "- Windows 11 Settings:" & CrLf &
                              "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
                              "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
-                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf)
+                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf &
+                             "- Will a configuration set or distribution share be used? " & If(UseConfigSet, "Yes", "No") & CrLf)
         ' 3. -- TIME ZONE
         TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
         If Not TimeOffsetInteractive Then
@@ -911,11 +1155,11 @@ Public Class NewUnattendWiz
                 TextBox13.AppendText("    - Expiration period: " & SelectedExpirationSettings.Days & " days" & CrLf)
             End If
         End If
-        TextBox13.AppendText("Account Lockout policy status: " & If(SelectedLockdownSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
-        If SelectedLockdownSettings.Enabled Then
-            TextBox13.AppendText("- Account Lockout policies: " & If(SelectedLockdownSettings.DefaultPolicy, "default", "custom") & CrLf)
-            If Not SelectedLockdownSettings.DefaultPolicy Then
-                TextBox13.AppendText("    - After " & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & " failed attempts within " & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & " minutes, unlock account after " & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & " minutes" & CrLf)
+        TextBox13.AppendText("Account Lockout policy status: " & If(SelectedLockoutSettings.Enabled, "enabled" & CrLf, "disabled" & CrLf))
+        If SelectedLockoutSettings.Enabled Then
+            TextBox13.AppendText("- Account Lockout policies: " & If(SelectedLockoutSettings.DefaultPolicy, "default", "custom") & CrLf)
+            If Not SelectedLockoutSettings.DefaultPolicy Then
+                TextBox13.AppendText("    - After " & SelectedLockoutSettings.TimedLockoutSettings.FailedAttempts & " failed attempts within " & SelectedLockoutSettings.TimedLockoutSettings.Timeframe & " minutes, unlock account after " & SelectedLockoutSettings.TimedLockoutSettings.AutoUnlockTime & " minutes" & CrLf)
             End If
         End If
         ' 7. -- VIRTUAL MACHINE SUPPORT
@@ -1130,19 +1374,6 @@ Public Class NewUnattendWiz
         SelectedGeoId = GeoIds(ComboBox4.SelectedIndex)
     End Sub
 
-    Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
-        Select Case ListBox1.SelectedIndex
-            Case 0
-                SelectedArchitecture = DismProcessorArchitecture.Intel
-            Case 1
-                SelectedArchitecture = DismProcessorArchitecture.AMD64
-            Case 2
-                SelectedArchitecture = DismProcessorArchitecture.ARM64
-        End Select
-        ' Disable Windows 11 settings for x86
-        WinSVSettingsPanel.Enabled = Not (SelectedArchitecture = DismProcessorArchitecture.Intel)
-    End Sub
-
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
         PCName.DefaultName = CheckBox3.Checked
         ComputerNamePanel.Enabled = Not CheckBox3.Checked
@@ -1159,6 +1390,7 @@ Public Class NewUnattendWiz
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         Try
             If New StackFrame(6).GetMethod().Name = "ReloadSettings" Then
+                DynaLog.LogMessage("The text box contents have been cleared by the setting reload method. Skipping checks...")
                 Exit Sub
             End If
         Catch ex As Exception
@@ -1170,7 +1402,9 @@ Public Class NewUnattendWiz
         PCName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
         PCName.DefaultName = defVal
         If Not PCName.Valid AndAlso PCName.ErrorMessage <> "" Then
-            MessageBox.Show(PCName.ErrorMessage, "Computer name error")
+            Label63.Visible = True
+        Else
+            Label63.Visible = False
         End If
     End Sub
 
@@ -1423,25 +1657,25 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub CheckBox13_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox13.CheckedChanged
-        SelectedLockdownSettings.Enabled = CheckBox13.Checked
-        EnabledAccountLockdownPanel.Enabled = Not CheckBox13.Checked
+        SelectedLockoutSettings.Enabled = CheckBox13.Checked
+        EnabledAccountLockoutPanel.Enabled = Not CheckBox13.Checked
     End Sub
 
     Private Sub RadioButton21_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton21.CheckedChanged
-        SelectedLockdownSettings.DefaultPolicy = RadioButton21.Checked
-        AccountLockdownParametersPanel.Enabled = Not RadioButton21.Checked
+        SelectedLockoutSettings.DefaultPolicy = RadioButton21.Checked
+        AccountLockoutParametersPanel.Enabled = Not RadioButton21.Checked
     End Sub
 
     Private Sub NumericUpDown6_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown6.ValueChanged
-        SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts = NumericUpDown6.Value
+        SelectedLockoutSettings.TimedLockoutSettings.FailedAttempts = NumericUpDown6.Value
     End Sub
 
     Private Sub NumericUpDown7_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown7.ValueChanged
-        SelectedLockdownSettings.TimedLockdownSettings.Timeframe = NumericUpDown7.Value
+        SelectedLockoutSettings.TimedLockoutSettings.Timeframe = NumericUpDown7.Value
     End Sub
 
     Private Sub NumericUpDown8_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown8.ValueChanged
-        SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime = NumericUpDown8.Value
+        SelectedLockoutSettings.TimedLockoutSettings.AutoUnlockTime = NumericUpDown8.Value
         NumericUpDown7.Maximum = NumericUpDown8.Value
     End Sub
 
@@ -1498,6 +1732,8 @@ Public Class NewUnattendWiz
     End Sub
 
     Function EditionIDFromDisplayName(displayName As String) As String
+        DynaLog.LogMessage("Grabbing target Edition ID from specified display name...")
+        DynaLog.LogMessage("Display name of edition: " & displayName)
         Select Case displayName
             Case "Home"
                 Return "home"
@@ -1523,43 +1759,58 @@ Public Class NewUnattendWiz
                 Return "pro_workstations_n"
             Case "Enterprise"
                 Return "enterprise"
+            Case "Enterprise N"
+                Return "enterprise_n"
         End Select
         Return ""
     End Function
 
     Private Sub UnattendGeneratorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles UnattendGeneratorBW.DoWork
+        DynaLog.LogMessage("Preparing file generation...")
         ReportMessage("Preparing to generate file...", 0)
+        DynaLog.LogMessage("Checking save target...")
+        DynaLog.LogMessage("Save target: " & Quote & SaveTarget & Quote)
         If SaveTarget = "" Then
+            DynaLog.LogMessage("No save target has been specified. Cancelling...")
             e.Cancel = True
             Exit Sub
         End If
         ReportMessage("Preparing to generate file...", 0)
         Dim UnattendGen As New Process()
         ' Get most appropriate binary of UnattendGen
+        DynaLog.LogMessage("Getting the most appropriate UnattendGen executable...")
         If Environment.Is64BitOperatingSystem Then
+            DynaLog.LogMessage("This operating system is a 64-bit OS")
             If PreferSelfContained Then
+                DynaLog.LogMessage("The self-contained package will be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\amd64")
             Else
+                DynaLog.LogMessage("The self-contained package will not be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x64")
             End If
         Else
+            DynaLog.LogMessage("This operating system is a 32-bit OS")
             If PreferSelfContained Then
+                DynaLog.LogMessage("The self-contained package will be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained\x86")
             Else
+                DynaLog.LogMessage("The self-contained package will not be used.")
                 UnattendGen.StartInfo.FileName = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86\unattendgen.exe")
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
             End If
         End If
         UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
         If Debugger.IsAttached Then
+            DynaLog.LogMessage("A debugger has been attached. Telling UnattendGen to show debug output...")
             UnattendGen.StartInfo.Arguments &= " /debug"
         End If
         Try
             ' Save settings to appropriate XML files
             ReportMessage("Saving user settings...", 2)
+            DynaLog.LogMessage("Saving regional settings...")
             Dim regSetContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                 "<root>" & CrLf &
                 "   <ImageLanguage Id=" & Quote & SelectedLanguage.Id & Quote & " DisplayName=" & Quote & SelectedLanguage.DisplayName & Quote & "/>" & CrLf &
@@ -1571,15 +1822,27 @@ Public Class NewUnattendWiz
             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
             UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
             ReportMessage("Saving user settings...", 4)
-            Select Case SelectedArchitecture
-                Case DismProcessorArchitecture.Intel
-                    UnattendGen.StartInfo.Arguments &= " /architecture=x86"
-                Case DismProcessorArchitecture.AMD64
-                    UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
-                Case DismProcessorArchitecture.ARM64
-                    UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
-            End Select
+            DynaLog.LogMessage("Saving architecture settings...")
+            ' Build architecture string for UnattendGen
+            Dim Architectures As New List(Of String)
+            Dim ArchitectureString As String = ""
+            For Each Architecture In SelectedArchitectures.Keys
+                If SelectedArchitectures(Architecture) Then
+                    Architectures.Add(Utilities.Casters.CastDismArchitecture(Architecture).ToLower())
+                End If
+            Next
+            ArchitectureString = String.Join(",", Architectures.ToArray())
+            UnattendGen.StartInfo.Arguments &= " /architecture=" & ArchitectureString
+            'Select Case SelectedArchitectures
+            '    Case DismProcessorArchitecture.Intel
+            '        UnattendGen.StartInfo.Arguments &= " /architecture=x86"
+            '    Case DismProcessorArchitecture.AMD64
+            '        UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
+            '    Case DismProcessorArchitecture.ARM64
+            '        UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
+            'End Select
             ReportMessage("Saving user settings...", 6)
+            DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
                 UnattendGen.StartInfo.Arguments &= " /LabConfig"
             End If
@@ -1587,18 +1850,28 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.Arguments &= " /BypassNRO"
             End If
             ReportMessage("Saving user settings...", 8)
+            DynaLog.LogMessage("Saving computer settings...")
             If Not PCName.DefaultName Then
                 UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
             End If
+            DynaLog.LogMessage("Saving configuration set/distribution share settings...")
+            If UseConfigSet Then
+                UnattendGen.StartInfo.Arguments &= " /ConfigSet"
+            End If
             ReportMessage("Saving user settings...", 10)
+            DynaLog.LogMessage("Saving time zone settings...")
             If TimeOffsetInteractive Then
                 UnattendGen.StartInfo.Arguments &= " /tzImplicit"
             End If
             ReportMessage("Saving user settings...", 12)
+            DynaLog.LogMessage("Saving disk configuration...")
             If DiskConfigurationInteractive Then
+                DynaLog.LogMessage("Disks will be configured interactively.")
                 UnattendGen.StartInfo.Arguments &= " /partmode=interactive"
             Else
+                DynaLog.LogMessage("Disks will be configured in an unattended manner.")
                 If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
+                    DynaLog.LogMessage("Disk 0 will be configured automatically.")
                     UnattendGen.StartInfo.Arguments &= " /partmode=unattended"
                     Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
@@ -1606,6 +1879,7 @@ Public Class NewUnattendWiz
                         "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
                 ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
+                    DynaLog.LogMessage("Disks will be configured with a DiskPart script.")
                     UnattendGen.StartInfo.Arguments &= " /partmode=custom"
                     Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
@@ -1616,7 +1890,9 @@ Public Class NewUnattendWiz
                 End If
             End If
             ReportMessage("Saving user settings...", 14)
+            DynaLog.LogMessage("Saving edition settings...")
             If GenericChosen Then
+                DynaLog.LogMessage("A generic product key has been chosen.")
                 UnattendGen.StartInfo.Arguments &= " /generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
@@ -1624,20 +1900,24 @@ Public Class NewUnattendWiz
                     "</root>"
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
             Else
+                DynaLog.LogMessage("A custom product key has been chosen.")
                 UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
             End If
             If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
                 ReportMessage("Saving user settings...", 16)
+                DynaLog.LogMessage("Saving user accounts...")
                 UnattendGen.StartInfo.Arguments &= " /customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
                 If UserAccountsList.Count > 0 Then
                     For Each account As User In UserAccountsList
+                        DynaLog.LogMessage("Saving information of account " & Quote & account.Name & Quote & " to file...")
                         customUserContents &= "   <UserAccount Enabled=" & Quote & If(account.Enabled, "1", "0") & Quote & " Name=" & Quote & If(account.Name.Contains("&"), account.Name.Replace("&", "&amp;").Trim(), account.Name) & Quote & " Password=" & Quote & If(account.Password.Contains("&"), account.Password.Replace("&", "&amp;").Trim(), account.Password) & Quote & " Group=" & Quote & If(account.Group = UserGroup.Administrators, "Admins", "Users") & Quote & " />" & CrLf
                     Next
                     customUserContents &= "</root>"
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "userAccounts.xml"), customUserContents, UTF8)
                     If AutoLogon.EnableAutoLogon Then
+                        DynaLog.LogMessage("Automatic logon will be used. Saving auto-logon settings.")
                         If AutoLogon.LogonMode = AutoLogonMode.FirstAdmin Then
                             UnattendGen.StartInfo.Arguments &= " /autologon=firstadmin"
                         ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
@@ -1650,40 +1930,45 @@ Public Class NewUnattendWiz
                         End If
                     End If
                     If PasswordObfuscate Then
+                        DynaLog.LogMessage("Passwords will be encoded with Base64.")
                         UnattendGen.StartInfo.Arguments &= " /b64obscure"
                     End If
                 Else
                     UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
                 End If
             ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
+                DynaLog.LogMessage("A Microsoft account is expected to be used in the target installation.")
                 ReportMessage("Saving user settings...", 16)
                 UnattendGen.StartInfo.Arguments &= " /msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
                 ReportMessage("Saving user settings...", 18)
+                DynaLog.LogMessage("Saving password expiration settings...")
                 UnattendGen.StartInfo.Arguments &= " /pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
             End If
             ReportMessage("Saving user settings...", 20)
-            If SelectedLockdownSettings.Enabled Then
+            DynaLog.LogMessage("Saving Account Lockout settings...")
+            If SelectedLockoutSettings.Enabled Then
                 UnattendGen.StartInfo.Arguments &= " /lockout=yes"
-                Dim lockdownContents As String = ""
-                If SelectedLockdownSettings.DefaultPolicy Then
-                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                Dim lockoutContents As String = ""
+                If SelectedLockoutSettings.DefaultPolicy Then
+                    lockoutContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <AccountLockout FailedAttempts=" & Quote & 10 & Quote & " Timeframe=" & Quote & 10 & Quote & " AutoUnlock=" & Quote & 10 & Quote & " />" & CrLf &
                         "</root>"
                 Else
-                    lockdownContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    lockoutContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
-                        "   <AccountLockout FailedAttempts=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockdownSettings.TimedLockdownSettings.AutoUnlockTime & Quote & " />" & CrLf &
+                        "   <AccountLockout FailedAttempts=" & Quote & SelectedLockoutSettings.TimedLockoutSettings.FailedAttempts & Quote & " Timeframe=" & Quote & SelectedLockoutSettings.TimedLockoutSettings.Timeframe & Quote & " AutoUnlock=" & Quote & SelectedLockoutSettings.TimedLockoutSettings.AutoUnlockTime & Quote & " />" & CrLf &
                         "</root>"
                 End If
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockdownContents, UTF8)
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockoutContents, UTF8)
             Else
                 UnattendGen.StartInfo.Arguments &= " /lockout=no"
             End If
             If VirtualMachineSupported Then
                 ReportMessage("Saving user settings...", 22)
+                DynaLog.LogMessage("Saving VM provider settings...")
                 Select Case SelectedVMSettings.Provider
                     Case VMProvider.VirtualBox_GAs
                         UnattendGen.StartInfo.Arguments &= " /vm=vbox_gas"
@@ -1695,6 +1980,7 @@ Public Class NewUnattendWiz
             End If
             If Not NetworkConfigInteractive Then
                 ReportMessage("Saving user settings...", 24)
+                DynaLog.LogMessage("Saving wireless settings...")
                 If NetworkConfigManualSkip Then
                     UnattendGen.StartInfo.Arguments &= " /wifi=no"
                 Else
@@ -1708,14 +1994,55 @@ Public Class NewUnattendWiz
             End If
             If Not SystemTelemetryInteractive Then
                 ReportMessage("Saving user settings...", 24.5)
+                DynaLog.LogMessage("Saving system telemetry settings...")
                 If SelectedTelemetrySettings.Enabled Then
                     UnattendGen.StartInfo.Arguments &= " /telem=yes"
                 Else
                     UnattendGen.StartInfo.Arguments &= " /telem=no"
                 End If
             End If
+            If ConfiguredScripts.Count > 0 Then
+                ReportMessage("Saving user settings...", 24.625)
+                DynaLog.LogMessage("Checking if scripts directory exists...")
+                If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts")) Then
+                    DynaLog.LogMessage("Scripts directory does not exist. Attempting to create it...")
+                    Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts"))
+                End If
+                DynaLog.LogMessage("Saving post-installation scripts...")
+                For Each ConfiguredScript As PostInstallScript In ConfiguredScripts
+                    DynaLog.LogMessage(ConfiguredScript.ToString())
+                    DynaLog.LogMessage("Saving contents to script directory...")
+                    Dim destinationFileName As String = ""
+                    Select Case ConfiguredScript.ScriptStage
+                        Case PostInstallScript.Stage.Specialize
+                            destinationFileName = "specialize.ps1"
+                        Case PostInstallScript.Stage.FirstRun
+                            destinationFileName = "firstrun.ps1"
+                        Case PostInstallScript.Stage.UserFirstLogon
+                            destinationFileName = "userfirstlogon.ps1"
+                    End Select
+                    Dim destinationFilePath As String = Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", destinationFileName)
+                    DynaLog.LogMessage("Saving post-installation script to " & Quote & destinationFilePath & Quote & "...")
+                    File.WriteAllText(destinationFilePath, ConfiguredScript.ScriptContents, UTF8)
+                Next
+                DynaLog.LogMessage("Scripts were saved. Referencing them...")
+                UnattendGen.StartInfo.Arguments &= " /customscripts"
+                Dim postInstallScriptContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                    "<root>" & CrLf &
+                    "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\specialize.ps1" & Quote & " Stage=" & Quote & "System" & Quote & " />" & CrLf &
+                    "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\firstrun.ps1" & Quote & " Stage=" & Quote & "FirstLogon" & Quote & " />" & CrLf &
+                    "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\userfirstlogon.ps1" & Quote & " Stage=" & Quote & "FirstTimeUserLogon" & Quote & " />" & CrLf &
+                    "</root>"
+                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "scripts.xml"), postInstallScriptContents, UTF8)
+                DynaLog.LogMessage("Checking if Windows Explorer will be restarted after running scripts...")
+                If ScriptsRestartExplorer Then
+                    DynaLog.LogMessage("Explorer will be restarted.")
+                    UnattendGen.StartInfo.Arguments &= " /restartexplorer"
+                End If
+            End If
             If FinalComponents.Count > 0 Then
                 ReportMessage("Saving user settings...", 24.75)
+                DynaLog.LogMessage("Saving custom components...")
                 UnattendGen.StartInfo.Arguments &= " /customcomponents"
                 Dim customComponentContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
@@ -1733,24 +2060,31 @@ Public Class NewUnattendWiz
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "components.xml"), customComponentContents, UTF8)
             End If
             ReportMessage("Generating unattended answer file...", 25)
+            DynaLog.LogMessage("Starting UnattendGen...")
             UnattendGen.Start()
             UnattendGen.WaitForExit()
+            DynaLog.LogMessage("UnattendGen finished with exit code " & Hex(UnattendGen.ExitCode))
             ReportMessage("Generating unattended answer file...", 50)
             ReportMessage("Deleting temporary files...", 75)
             If File.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp")) Then
+                DynaLog.LogMessage("Deleting temporary DiskPart scripts...")
                 File.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp"))
             End If
+            DynaLog.LogMessage("Deleting temporary XML files...")
             For Each xmlFile In My.Computer.FileSystem.GetFiles(UnattendGen.StartInfo.WorkingDirectory, FileIO.SearchOption.SearchTopLevelOnly, "*.xml")
                 If File.Exists(xmlFile) Then File.Delete(xmlFile)
             Next
+            DynaLog.LogMessage("Deleting temporary scripts...")
+            Directory.Delete(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts"), True)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested:" & CrLf & CrLf & "Error code: " & Hex(UnattendGen.ExitCode))
                 e.Cancel = True
             End If
             ReportMessage("Generation has completed", 100)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not generate the answer file. Error message: " & ex.Message)
             If UnattendGen.ExitCode <> 0 Then
-                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested" & CrLf & CrLf & "Error: " & ex.Message)
+                MessageBox.Show("The unattended answer file generator could not generate the file. Here is the error code if you are interested:" & CrLf & CrLf & "Error: " & ex.Message)
                 e.Cancel = True
             End If
         End Try
@@ -1792,6 +2126,7 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
         If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
+            DynaLog.LogMessage("Proceeding to apply unattended answer file...")
             ApplyUnattendFile.TextBox1.Text = SaveTarget
             WindowState = FormWindowState.Minimized
             ApplyUnattendFile.ShowDialog(MainForm)
@@ -1850,9 +2185,11 @@ Public Class NewUnattendWiz
         Try
             ' Download UnattendGen and run it
             If Not Directory.Exists(Application.StartupPath & "\Tools\UnattendGen\SelfContained") Then
+                DynaLog.LogMessage("Creating self-contained package directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\Tools\UnattendGen\SelfContained")
             End If
             Using UnattClient As New WebClient()
+                DynaLog.LogMessage("Downloading UnattendGen installer from the UnattendGen repository...")
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
                 Dim contents As String = ""
                 Try
@@ -1861,10 +2198,12 @@ Public Class NewUnattendWiz
                     Throw ex
                 End Try
                 If contents <> "" Then
+                    DynaLog.LogMessage("Writing contents to file...")
                     File.WriteAllText(Application.StartupPath & "\setup.ps1", contents, UTF8)
                 End If
             End Using
             If File.Exists(Application.StartupPath & "\setup.ps1") Then
+                DynaLog.LogMessage("Installing self-contained UnattendGen...")
                 ' Run installer
                 Dim UAProc As New Process()
                 UAProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
@@ -1872,18 +2211,21 @@ Public Class NewUnattendWiz
                 UAProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\setup.ps1" & Quote & " -tag " & Quote & "DT_" & UnattendGenReleaseTag & Quote
                 UAProc.Start()
                 UAProc.WaitForExit()
+                DynaLog.LogMessage("UnattendGen installer finished with exit code " & Hex(UAProc.ExitCode))
                 If UAProc.ExitCode <> 0 Then
                     Throw New System.ComponentModel.Win32Exception(UAProc.ExitCode)
                 End If
             End If
             If File.Exists(Application.StartupPath & "\setup.ps1") Then
                 Try
+                    DynaLog.LogMessage("Attempting to delete temporary installer...")
                     File.Delete(Application.StartupPath & "\setup.ps1")
                 Catch ex As Exception
                     ' Don't delete it
                 End Try
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not download and install self-contained UnattendGen. Error message: " & ex.Message)
             Throw ex
         End Try
     End Sub
@@ -1916,8 +2258,11 @@ Public Class NewUnattendWiz
 
     Private Sub EditorModeOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeOFD.FileOk
         Try
+            DynaLog.LogMessage("Loading contents of file in editor...")
+            DynaLog.LogMessage("File to load: " & Quote & EditorModeOFD.FileName & Quote)
             Scintilla1.Text = File.ReadAllText(EditorModeOFD.FileName)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
             MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
         End Try
     End Sub
@@ -1928,8 +2273,11 @@ Public Class NewUnattendWiz
 
     Private Sub EditorModeSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeSFD.FileOk
         Try
+            DynaLog.LogMessage("Saving contents of editor to file...")
+            DynaLog.LogMessage("Destination: " & Quote & EditorModeSFD.FileName & Quote)
             File.WriteAllText(EditorModeSFD.FileName, Scintilla1.Text, UTF8)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not save file. Error message: " & ex.Message)
             MsgBox("Could not save file: " & ex.Message, vbOKOnly + vbCritical, Text)
         End Try
     End Sub
@@ -1986,6 +2334,10 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub ConfigureComponent(componentName As String, componentPass As String, componentPassEnabled As Boolean)
+        DynaLog.LogMessage("Configuring system component...")
+        DynaLog.LogMessage("- Component name: " & componentName)
+        DynaLog.LogMessage("- Component pass: " & componentPass)
+        DynaLog.LogMessage("- New state: " & If(componentPassEnabled, "enabled", "disabled"))
         If String.IsNullOrWhiteSpace(componentName) Then Exit Sub
         If String.IsNullOrWhiteSpace(componentPass) Then Exit Sub
         Dim componentNames As New List(Of String)
@@ -2002,20 +2354,23 @@ Public Class NewUnattendWiz
         Next
         ' Determine if the passed component ID "componentName" exists in the grabbed components
         If componentNames.Contains(componentName) Then
+            DynaLog.LogMessage("The specified component exists in the component list.")
             Dim placementIndex As Integer = componentNames.IndexOf(componentName)
             ' Grab pass to configure and configure it
             If Not knownPasses.ContainsKey(componentPass) Then
+                DynaLog.LogMessage("The specified pass does not exist in the pass list.")
                 MsgBox("The component pass " & componentPass & " does not exist in the pass list", vbOKOnly + vbCritical, Text)
                 Exit Sub
             End If
             Dim editedPass As Pass = SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass)
             If editedPass IsNot Nothing Then
                 editedPass.Enabled = componentPassEnabled
-                Debug.WriteLine("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
+                DynaLog.LogMessage("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
             Else
-
+                DynaLog.LogMessage("Could not edit the specified pass.")
             End If
         Else
+            DynaLog.LogMessage("The specified component does not exist in the component list.")
             MsgBox("The component " & componentName & " does not exist in the component list", vbOKOnly + vbCritical, Text)
             Exit Sub
         End If
@@ -2120,14 +2475,18 @@ Public Class NewUnattendWiz
     Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
         If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
                                     "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe")) Then
+            DynaLog.LogMessage("Starting Windows SIM...")
             Process.Start(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)), "Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\WSIM\x86\imgmgr.exe"), Quote & SaveTarget & Quote)
         End If
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
         Try
+            DynaLog.LogMessage("Loading contents of file in editor...")
+            DynaLog.LogMessage("File to load: " & Quote & SaveTarget & Quote)
             Scintilla1.Text = File.ReadAllText(SaveTarget)
         Catch ex As Exception
+            DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
             MsgBox("Could not open file: " & ex.Message, vbOKOnly + vbCritical, Text)
             Exit Sub
         End Try
@@ -2149,10 +2508,125 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        DynaLog.LogMessage("Grabbing computer name...")
         TextBox1.Text = My.Computer.Name
     End Sub
 
     Private Sub Button3_MouseHover(sender As Object, e As EventArgs) Handles Button3.MouseHover
         CNameTTip.Show("Uses the name of your computer as the computer name of the unattended answer file." & CrLf & "Only use this if the system you want to target is this one", sender)
+    End Sub
+
+    Private Sub CheckBox19_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox19.CheckedChanged
+        UseConfigSet = CheckBox19.Checked
+    End Sub
+
+    Sub LoadConfiguredScript(Stage As Integer)
+        DynaLog.LogMessage("Loading script contents...")
+        DynaLog.LogMessage("- Stage Number: " & Stage)
+        DynaLog.LogMessage("Determining status of stage number...")
+        If Stage > ConfiguredScripts.Count - 1 Then
+            DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
+            Exit Sub
+        End If
+        DynaLog.LogMessage("Stage Number is fine. Loading contents...")
+        Scintilla3.Text = ConfiguredScripts(Stage).ScriptContents
+    End Sub
+
+    Sub SaveConfiguredScript(Stage As Integer, Contents As String)
+        DynaLog.LogMessage("Saving script contents...")
+        DynaLog.LogMessage("- Stage Number: " & Stage)
+        DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
+        DynaLog.LogMessage("Determining status of stage number...")
+        If Stage > ConfiguredScripts.Count - 1 Then
+            DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
+            Exit Sub
+        End If
+        DynaLog.LogMessage("Stage Number is fine. Saving contents...")
+        ConfiguredScripts(Stage).ScriptContents = Contents
+    End Sub
+
+    Sub SwitchStages(NewStage As Integer)
+        DynaLog.LogMessage("Switching stages...")
+        DynaLog.LogMessage("- Current stage: " & CurrentlyEditedStage)
+        DynaLog.LogMessage("- New Stage to change to: " & NewStage)
+        If CurrentlyEditedStage = NewStage Then
+            DynaLog.LogMessage("The same stage has been changed to")
+            Exit Sub
+        End If
+        DynaLog.LogMessage("Saving contents of script to scripts in current stage...")
+        SaveConfiguredScript(CurrentlyEditedStage, Scintilla3.Text)
+        DynaLog.LogMessage("Loading contents of script from scripts in new stage...")
+        LoadConfiguredScript(NewStage)
+        DynaLog.LogMessage("Configuring stages...")
+        CurrentlyEditedStage = NewStage
+    End Sub
+
+    Private Sub StageLink1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles StageLink1.LinkClicked
+        SwitchStages(0)
+        StageLink1.LinkBehavior = LinkBehavior.AlwaysUnderline
+        StageLink2.LinkBehavior = LinkBehavior.HoverUnderline
+        StageLink3.LinkBehavior = LinkBehavior.HoverUnderline
+    End Sub
+
+    Private Sub StageLink2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles StageLink2.LinkClicked
+        SwitchStages(1)
+        StageLink1.LinkBehavior = LinkBehavior.HoverUnderline
+        StageLink2.LinkBehavior = LinkBehavior.AlwaysUnderline
+        StageLink3.LinkBehavior = LinkBehavior.HoverUnderline
+    End Sub
+
+    Private Sub StageLink3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles StageLink3.LinkClicked
+        SwitchStages(2)
+        StageLink1.LinkBehavior = LinkBehavior.HoverUnderline
+        StageLink2.LinkBehavior = LinkBehavior.HoverUnderline
+        StageLink3.LinkBehavior = LinkBehavior.AlwaysUnderline
+    End Sub
+
+    Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
+        ScriptEditorOFD.ShowDialog()
+    End Sub
+
+    Private Sub ScriptEditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptEditorOFD.FileOk
+        DynaLog.LogMessage("Opening contents of script...")
+        DynaLog.LogMessage("- Script to open: " & Quote & ScriptEditorOFD.FileName & Quote)
+        DynaLog.LogMessage("Checking if file exists...")
+        If File.Exists(ScriptEditorOFD.FileName) Then
+            DynaLog.LogMessage("File exists. Attempting to read...")
+            Try
+                Scintilla3.Text = File.ReadAllText(ScriptEditorOFD.FileName)
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
+            End Try
+        End If
+    End Sub
+
+    Private Sub CheckBox20_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox20.CheckedChanged
+        ScriptsRestartExplorer = CheckBox20.Checked
+    End Sub
+
+    Private Sub CheckedListBox1_ItemCheck(sender As Object, e As ItemCheckEventArgs) Handles CheckedListBox1.ItemCheck
+        DynaLog.LogMessage("Changing state of selected architectures...")
+        Dim changedIndex As Integer = e.Index
+        Dim newValueIsChecked As Boolean = (e.NewValue = CheckState.Checked)
+        DynaLog.LogMessage("Index that changed: " & changedIndex)
+        DynaLog.LogMessage("Will the answer file target the architecture in the dictionary? " & newValueIsChecked)
+
+        Select Case changedIndex
+            Case 0
+                SelectedArchitectures(DismProcessorArchitecture.Intel) = newValueIsChecked
+            Case 1
+                SelectedArchitectures(DismProcessorArchitecture.AMD64) = newValueIsChecked
+            Case 2
+                SelectedArchitectures(DismProcessorArchitecture.ARM64) = newValueIsChecked
+        End Select
+
+        ' Disable Windows 11 settings for x86 (if and only if x86 is selected)
+        WinSVSettingsPanel.Enabled = Not (SelectedArchitectures(DismProcessorArchitecture.Intel) AndAlso
+                                          Not SelectedArchitectures(DismProcessorArchitecture.AMD64) AndAlso
+                                          Not SelectedArchitectures(DismProcessorArchitecture.ARM64))
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        Scintilla1.Text = Regex.Replace(Scintilla1.Text, Tab, "    ")
     End Sub
 End Class

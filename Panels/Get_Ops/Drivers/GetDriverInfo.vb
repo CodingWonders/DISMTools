@@ -499,9 +499,11 @@ Public Class GetDriverInfo
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        DynaLog.LogMessage("Updating items in list...")
         InstalledDriverList.Clear()
         SearchedDriverList.Clear()
         ListView1.Items.Clear()
+        DynaLog.LogMessage("Getting installed drivers...")
         If InstalledDriverInfo.Count > 0 Then
             For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
                 InstalledDriverList.Add(DriverPackage)
@@ -510,7 +512,7 @@ Public Class GetDriverInfo
         End If
 
         ' Detect if the "Detect all drivers" option is checked and act accordingly
-        Panel6.Visible = MainForm.AllDrivers = False
+        Panel6.Visible = Not MainForm.AllDrivers
 
         ' Forcefully hide that panel if the driver packages panel is visible
         If IsInDrvPkgs Then Panel6.Visible = False
@@ -545,7 +547,7 @@ Public Class GetDriverInfo
         InfoFromDrvPackagesPanel.Visible = False
 
         ' Detect if the "Detect all drivers" option is checked and act accordingly
-        Panel6.Visible = MainForm.AllDrivers = False
+        Panel6.Visible = Not MainForm.AllDrivers
 
         Label5.Visible = False
         IsInDrvPkgs = False
@@ -571,10 +573,13 @@ Public Class GetDriverInfo
     End Sub
 
     Sub GetDriverInformation()
+        DynaLog.LogMessage("Clearing information lists...")
         DriverInfoList.Clear()
         Try
             ' Background processes need to have completed before showing information
+            DynaLog.LogMessage("Checking if background processes are busy...")
             If MainForm.ImgBW.IsBusy Then
+                DynaLog.LogMessage("Background processes are busy. Stopping them...")
                 Dim msg As String = ""
                 Select Case MainForm.Language
                     Case 0
@@ -632,7 +637,9 @@ Public Class GetDriverInfo
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Checking if mounted image detector is busy...")
             If MainForm.MountedImageDetectorBW.IsBusy Then
+                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
                 MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
                 MainForm.MountedImageDetectorBW.CancelAsync()
                 While MainForm.MountedImageDetectorBW.IsBusy
@@ -640,7 +647,9 @@ Public Class GetDriverInfo
                     Thread.Sleep(500)
                 End While
             End If
+            DynaLog.LogMessage("Checking if image status watchers are busy...")
             MainForm.WatcherTimer.Enabled = False
+            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
             If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
             While MainForm.WatcherBW.IsBusy
                 Application.DoEvents()
@@ -672,10 +681,14 @@ Public Class GetDriverInfo
                     Label5.Text = "Preparazione per ottenere le informazioni del driver..."
             End Select
             Application.DoEvents()
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
+            DynaLog.LogMessage("Creating session...")
             Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
                 For Each drvFile In ListBox1.Items
+                    DynaLog.LogMessage("Driver file to get information about: " & Quote & Path.GetFileName(drvFile) & Quote)
                     If File.Exists(drvFile) Then
+                        DynaLog.LogMessage("Driver file exists.")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -703,19 +716,23 @@ Public Class GetDriverInfo
                         End Select
                         Application.DoEvents()
                         Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvFile)
+                        DynaLog.LogMessage("Information collection count: " & drvInfoCollection.Count)
                         If drvInfoCollection.Count > 0 Then DriverInfoList.Add(drvInfoCollection)
                     End If
                 Next
             End Using
         Catch ex As Exception
+            DynaLog.LogMessage("Could not get driver information. Error message: " & ex.Message)
             ' Cancel it
         Finally
+            DynaLog.LogMessage("Shutting down API...")
             Try
                 DismApi.Shutdown()
             Catch ex As Exception
 
             End Try
         End Try
+        DynaLog.LogMessage("This process has finished.")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -744,9 +761,13 @@ Public Class GetDriverInfo
     End Sub
 
     Sub DisplayDriverInformation(HWTarget As Integer)
+        DynaLog.LogMessage("Displaying driver information of a specific hardware target...")
+        DynaLog.LogMessage("Selected Hardware Target: " & HWTarget)
         Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
+        DynaLog.LogMessage("Driver collection has " & CurrentDriverCollection.Count & " hardware target(s) available.")
         For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
             If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget - 1 Then
+                DynaLog.LogMessage("We have the appropriate hardware target. Displaying information...")
                 Label9.Text = DriverPackageInfo.HardwareDescription
                 Label11.Text = DriverPackageInfo.HardwareId
                 Label14.Text = DriverPackageInfo.CompatibleIds
@@ -754,6 +775,7 @@ Public Class GetDriverInfo
                 Label18.Text = DriverPackageInfo.ManufacturerName
                 Label19.Text = Casters.CastDismArchitecture(DriverPackageInfo.Architecture, True)
                 If Label14.Text = "" Then
+                    DynaLog.LogMessage("There are no Compatible IDs declared by the device manufacturer (" & Quote & DriverPackageInfo.ManufacturerName & Quote & ")")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -781,6 +803,7 @@ Public Class GetDriverInfo
                     End Select
                 End If
                 If Label15.Text = "" Then
+                    DynaLog.LogMessage("There are no Exclude IDs declared by the device manufacturer (" & Quote & DriverPackageInfo.ManufacturerName & Quote & ")")
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -813,14 +836,17 @@ Public Class GetDriverInfo
     End Sub
 
     Sub DisplayHardwareTargetOverview()
+        DynaLog.LogMessage("Selected items in list box: " & ListBox1.SelectedItems.Count)
         ' This function is called when the user clicks on the "Jump to target" button
         If ListBox1.SelectedItems.Count <> 1 Then
             ' Don't continue
             Exit Sub
         Else
+            DynaLog.LogMessage("There is only 1 item selected.")
             JumpTo = -1
             ComboBox1.Text = ""
             Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
+            DynaLog.LogMessage("Showing " & CurrentDriverCollection.Count & " entry/ies...")
             For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
                 ComboBox1.Items.Add(CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1 & " - " & DriverPackageInfo.HardwareDescription & " (" & DriverPackageInfo.HardwareId & ")")
             Next
@@ -846,6 +872,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub GetDriverInfo_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        DynaLog.LogMessage("Restarting mounted image detector...")
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         MainForm.WatcherTimer.Enabled = True
     End Sub
@@ -853,6 +880,7 @@ Public Class GetDriverInfo
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
         Try
             If ListBox1.SelectedItems.Count = 1 Then
+                DynaLog.LogMessage("Amount of hardware targets of selected driver file: " & DriverInfoList(ListBox1.SelectedIndex).Count)
                 JumpToPanel.Visible = False
                 NoDrvPanel.Visible = False
                 DrvPackageInfoPanel.Visible = True
@@ -940,6 +968,7 @@ Public Class GetDriverInfo
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         If CurrentHWTarget > 1 Then
+            DynaLog.LogMessage("Switching to the previous hardware target...")
             DisplayDriverInformation(CurrentHWTarget - 1)
             CurrentHWTarget -= 1
             Select Case MainForm.Language
@@ -974,6 +1003,7 @@ Public Class GetDriverInfo
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         If CurrentHWTarget < DriverInfoList(ListBox1.SelectedIndex).Count Then
+            DynaLog.LogMessage("Switching to the next hardware target...")
             DisplayDriverInformation(CurrentHWTarget + 1)
             CurrentHWTarget += 1
             Select Case MainForm.Language
@@ -1132,6 +1162,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        DynaLog.LogMessage("Showing hardware target overview...")
         JumpToPanel.Visible = True
         Button4.Enabled = True
         Button5.Enabled = True
@@ -1148,8 +1179,10 @@ Public Class GetDriverInfo
                 If SearchBox1.Text = "" Then
                     drv = InstalledDriverList(ListView1.FocusedItem.Index)
                 Else
+                    DynaLog.LogMessage("A search query has been made.")
                     drv = SearchedDriverList(ListView1.FocusedItem.Index)
                 End If
+                DynaLog.LogMessage("Getting information about driver " & Quote & Path.GetFileName(drv.OriginalFileName) & Quote & "...")
                 Label23.Text = drv.PublishedName
                 Label25.Text = Path.GetFileName(drv.OriginalFileName)
                 Select Case MainForm.Language
@@ -1195,9 +1228,11 @@ Public Class GetDriverInfo
                 Label42.Text = drv.ClassGuid
                 Label44.Text = Casters.CastDismSignatureStatus(drv.DriverSignature, True)
                 Label46.Text = drv.CatalogFile
+                DynaLog.LogMessage("Getting driver signer...")
                 Dim signer As String = DriverSignerViewer.GetSignerInfo(drv.OriginalFileName)
                 If Not (signer Is Nothing OrElse signer = "") Then
-                    Debug.WriteLine("Driver file: {0} ; Signer: {1}", Path.GetFileName(drv.OriginalFileName), signer)
+                    DynaLog.LogMessage("Driver signer information has been obtained.")
+                    DynaLog.LogMessage(String.Format("Driver file: {0} ; Signer: {1}", Quote & Path.GetFileName(drv.OriginalFileName) & Quote, signer))
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1246,6 +1281,7 @@ Public Class GetDriverInfo
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
         If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Saving installed device driver information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
@@ -1273,6 +1309,8 @@ Public Class GetDriverInfo
     End Sub
 
     Sub SearchDrivers(sQuery As String, OriginalNames As Boolean)
+        DynaLog.LogMessage("Search query: " & sQuery)
+        DynaLog.LogMessage("Will original file names be searched instead of published names? " & If(OriginalNames, "Yes", "No"))
         If InstalledDriverInfo.Count > 0 Then
             For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
                 If OriginalNames Then
@@ -1296,6 +1334,7 @@ Public Class GetDriverInfo
         If SearchBox1.Text <> "" Then
             SearchDrivers(SearchBox1.Text, SearchBox1.Text.StartsWith("og:", StringComparison.OrdinalIgnoreCase))
         Else
+            DynaLog.LogMessage("No search query has been specified. Showing all items...")
             For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
             Next

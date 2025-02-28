@@ -9,62 +9,85 @@ Public Class ImportDrivers
     Dim ImportSources() As String = New String(2) {"Windows image", "Online installation", "Offline installation"}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         If ImportSourceInt < 0 Then Exit Sub
         Dim msg As String = ""
         If ComboBox1.SelectedItem = "" Then
+            DynaLog.LogMessage("No source has been selected.")
             msg = "Choose an action and try again"
             MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
             Exit Sub
         Else
+            DynaLog.LogMessage("A source has been selected. Verifying inputs...")
             If ListView1.SelectedItems.Count = 1 Then
                 If DIList(ListView1.FocusedItem.Index).Name = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then ImportSourceInt = 1
             End If
+            DynaLog.LogMessage("Import source flag: " & ImportSourceInt)
             Select Case ImportSourceInt
                 Case 0
+                    DynaLog.LogMessage("Validating import source...")
                     If TextBox1.Text <> "" Then
+                        DynaLog.LogMessage("An import source has been specified.")
+                        DynaLog.LogMessage("Source: " & TextBox1.Text)
                         If TextBox1.Text = MainForm.MountDir Then
+                            DynaLog.LogMessage("The import source is the same as the import target.")
                             msg = "The import target can't be specified as the import source. Choose a different source and try again"
                             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                             Exit Sub
                         End If
                     Else
+                        DynaLog.LogMessage("No import source has been specified.")
                         msg = "No import source has been specified. Specify a source and try again"
                         MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                         Exit Sub
                     End If
                 Case 2
+                    DynaLog.LogMessage("Validating import source...")
+                    DynaLog.LogMessage("Source: " & TextBox2.Text)
                     If TextBox2.Text <> "" Then
+                        DynaLog.LogMessage("An import source has been specified.")
+                        DynaLog.LogMessage("Checking drive letter...")
                         If TextBox2.Text = DIList(ListView1.FocusedItem.Index).Name Then
+                            DynaLog.LogMessage("The import source is the same as the import target.")
                             msg = "The import target can't be specified as the import source. Choose a different source and try again"
                             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                             Exit Sub
                         End If
+                        DynaLog.LogMessage("Checking drive format...")
                         If DIList(ListView1.FocusedItem.Index).DriveFormat <> "NTFS" Then
+                            DynaLog.LogMessage("The source is not formatted with NTFS.")
                             msg = "The import source needs to be a drive formatted with NTFS. Choose a different source and try again"
                             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                             Exit Sub
                         End If
+                        DynaLog.LogMessage("Checking drive type...")
                         If Casters.CastDriveType(DIList(ListView1.FocusedItem.Index).DriveType) <> "Fixed" Then
+                            DynaLog.LogMessage("The source is not a fixed (non-removable) drive.")
                             msg = "The import source needs to be a fixed drive. Choose a different source and try again"
                             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                             Exit Sub
                         End If
+                        DynaLog.LogMessage("Checking Windows installation in the drive...")
                         If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
+                            DynaLog.LogMessage("The source drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
                             msg = "The import source doesn't contain a Windows installation. Choose a different source and try again"
                             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                             Exit Sub
                         Else
+                            DynaLog.LogMessage("The source drive contains ntoskrnl. Checking version...")
                             ' Don't support Windows Vista (incl. betas) or anything older than Vista
                             Dim sysVer As FileVersionInfo = FileVersionInfo.GetVersionInfo(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe")
                             If sysVer.ProductMajorPart < 6 Or _
                                (sysVer.ProductMajorPart = 6 And sysVer.ProductMinorPart = 0) Then
+                                DynaLog.LogMessage("The import source contains Windows Vista or an earlier version of Windows.")
                                 msg = "The import source has an installation of Windows Vista or an earlier version of Windows. Choose a different source and try again"
                                 MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                                 Exit Sub
                             End If
                         End If
                     Else
+                        DynaLog.LogMessage("No import source has been specified.")
                         msg = "No import source has been specified. Specify a source and try again"
                         MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                         Exit Sub
@@ -379,6 +402,7 @@ Public Class ImportDrivers
         TextBox2.ForeColor = ForeColor
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
+        DynaLog.LogMessage("Getting disks...")
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().ToList()
@@ -444,6 +468,7 @@ Public Class ImportDrivers
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
         If PopupImageManager.ShowDialog() = DialogResult.OK Then
+            DynaLog.LogMessage("Information will be obtained from the popup mounted image manager...")
             TextBox1.Text = PopupImageManager.selectedMntDir
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
             Label10.Text = PopupImageManager.selectedImgFile
@@ -452,6 +477,7 @@ Public Class ImportDrivers
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        DynaLog.LogMessage("Refreshing disk listings...")
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().ToList()
@@ -464,6 +490,7 @@ Public Class ImportDrivers
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
         If ListView1.SelectedItems.Count > 0 Then
+            DynaLog.LogMessage("Checking selected item...")
             For x = 0 To DIList.Count - 1
                 If DIList(x).Name = ListView1.FocusedItem.SubItems(0).Text Then
                     TextBox2.Text = DIList(x).Name

@@ -156,11 +156,7 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-
-            End Try
+            DismApi.Shutdown()
         End Try
     End Sub
 
@@ -488,11 +484,7 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-
-            End Try
+            DismApi.Shutdown()
         End Try
     End Sub
 
@@ -629,12 +621,9 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-
-            End Try
+            DismApi.Shutdown()
         End Try
+
     End Sub
 
     Sub GetFeatureInformation()
@@ -874,11 +863,7 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-
-            End Try
+            DismApi.Shutdown()
         End Try
     End Sub
 
@@ -965,7 +950,7 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= CrLf & "**Information summary for " & MainForm.imgAppxPackageNames.Count - 1 & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
+                    Contents &= CrLf & "**Information summary for " & MainForm.imgAppxPackageNames.Count - 65537 & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                         If x = MainForm.imgAppxPackageNames.Count - 1 Or MainForm.imgAppxPackageNames(x) Is Nothing Then Continue For
                         Select Case MainForm.Language
@@ -1095,7 +1080,7 @@ Public Class ImgInfoSaveDlg
                         For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
                             pkgNames.Add(pkg.PackageName)
                         Next
-                        Contents &= CrLf & "**Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 1, pkgNames.Count) & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
+                        Contents &= CrLf & "**Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 65537, pkgNames.Count) & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1626,11 +1611,7 @@ Public Class ImgInfoSaveDlg
                             "- Exception message: " & ex.Message & CrLf & _
                             "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
             Finally
-                Try
-                    DismApi.Shutdown()
-                Catch ex As Exception
-
-                End Try
+                DismApi.Shutdown()
             End Try
         End If
     End Sub
@@ -1857,11 +1838,7 @@ Public Class ImgInfoSaveDlg
                             "- Exception message: " & ex.Message & CrLf & _
                             "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
             Finally
-                Try
-                    DismApi.Shutdown()
-                Catch ex As Exception
-
-                End Try
+                DismApi.Shutdown()
             End Try
         End If
     End Sub
@@ -2117,11 +2094,7 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-
-            End Try
+            DismApi.Shutdown()
         End Try
     End Sub
 
@@ -2237,11 +2210,7 @@ Public Class ImgInfoSaveDlg
                         "- Exception message: " & ex.Message & CrLf & _
                         "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
         Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-
-            End Try
+            DismApi.Shutdown()
         End Try
     End Sub
 
@@ -2577,6 +2546,9 @@ Public Class ImgInfoSaveDlg
 
         If OfflineMode Then SourceImage = ImgMountDir
 
+        ' Disable logger to avoid degraded performance
+        DynaLog.DisableLogging()
+
         ' Begin performing operations
         Select Case SaveTask
             Case 0
@@ -2649,6 +2621,9 @@ Public Class ImgInfoSaveDlg
         End Select
         ReportChanges(saveMsg, ProgressBar1.Maximum)
         TaskbarHelper.SetIndicatorState(ProgressBar1.Maximum, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
+
+        ' Enable the logger again
+        DynaLog.EnableLogging()
 
         ' Save the file
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)

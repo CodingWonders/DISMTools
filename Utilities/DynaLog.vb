@@ -4,9 +4,21 @@ Imports Microsoft.VisualBasic.ControlChars
 ''' <summary>
 ''' Dynamic Logging (DynaLog) Logger Class
 ''' </summary>
-''' <remarks>Primitive form in 0.6. Will be fully used in future versions</remarks>
+''' <remarks></remarks>
 Public Class DynaLog
 
+    ''' <summary>
+    ''' Determines whether the logger is temporarily enabled or disabled
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>This can be called by any function/method</remarks>
+    Public Shared Property LoggerEnabled As Boolean = True
+
+    ''' <summary>
+    ''' Checks the age of the active DynaLog log file
+    ''' </summary>
+    ''' <remarks>If a DynaLog log file is older than 2 weeks, it will be archived</remarks>
     Public Shared Sub CheckLogAge()
         LogMessage("Checking existing logs...", False)
         If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
@@ -44,7 +56,33 @@ Public Class DynaLog
         LogMessage("========================================================", False)
     End Sub
 
+    Public Shared Sub DisableLogging()
+        LogMessage("Logger has been temporarily disabled by caller " & New StackFrame(1).GetMethod().Name, False)
+        LoggerEnabled = False
+    End Sub
+
+    Public Shared Sub EnableLogging()
+        If MainForm.EnableDynaLog Then
+            LoggerEnabled = True
+            LogMessage("Logger has been enabled again by caller " & New StackFrame(1).GetMethod().Name, False)
+        Else
+            Debug.WriteLine("The logger has been ultimately disabled and cannot be enabled with this method. Use the Ultimate switch to bypass.")
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Logs a message with DynaLog to the log file
+    ''' </summary>
+    ''' <param name="message">The message to log. It cannot be empty</param>
+    ''' <param name="GetParentCaller">Determines whether or not to get the name of the caller that called a specific method that called DynaLog logging</param>
+    ''' <remarks></remarks>
     Public Shared Sub LogMessage(message As String, Optional GetParentCaller As Boolean = True)
+        If Not LoggerEnabled OrElse message = "" Then
+            Debug.WriteLine("Logger Enabled? " & If(LoggerEnabled, "Yes", "No"))
+            Debug.WriteLine("Message: " & Quote & message & Quote)
+            Debug.WriteLine("Either the logger is not enabled or the message is empty. Message cannot be logged.")
+            Exit Sub
+        End If
         Debug.WriteLine(message)
         Try
             ' DynaLog will NOT display logs for log file/folder creation - ONLY in debugger.
@@ -52,11 +90,12 @@ Public Class DynaLog
                 Debug.WriteLine("Creating log directory...")
                 Directory.CreateDirectory(Application.StartupPath & "\logs")
             End If
-            Dim FileLength As String = ""
+            Dim FileLength As Long = 0
             If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
                 FileLength = New FileInfo(Application.StartupPath & "\logs\DT_DynaLog.log").Length
             End If
-            Dim MessageLine As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] " & message
+            Dim MessagePrefix As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] "
+            Dim MessageLine As String = MessagePrefix & message.Replace(CrLf, CrLf & MessagePrefix).Trim()
             File.AppendAllText(Application.StartupPath & "\logs\DT_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
         Catch ex As Exception
             Debug.WriteLine("DynaLog logging could not log this operation. Error:" & CrLf & CrLf & ex.ToString())

@@ -22,6 +22,7 @@ Public Class SqlServerProjectErrorDlg
         ' Check versions of Visual Studio
         Dim x As Integer = 0
         Dim LastArrEntry As String = ""
+        DynaLog.LogMessage("Detecting installed programs...")
         ' Perform check for versions prior to VS2022
         If Environment.Is64BitOperatingSystem Then
             If File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) & "\Microsoft Visual Studio 8.0\Common7\IDE\devenv.exe") Then

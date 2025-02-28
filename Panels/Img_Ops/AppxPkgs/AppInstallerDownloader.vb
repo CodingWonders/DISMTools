@@ -146,7 +146,9 @@ Public Class AppInstallerDownloader
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
         Language = MainForm.Language
         Visible = True
+        DynaLog.LogMessage("App Installer file passed: " & Quote & Path.GetFileName(AppInstallerFile) & Quote)
         If AppInstallerFile IsNot Nothing And File.Exists(AppInstallerFile) Then
+            DynaLog.LogMessage("App Installer file exists. Parsing XML information...")
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
             ' Create a reader and get the URL information, since .appinstaller files are XML
             Try
@@ -158,10 +160,12 @@ Public Class AppInstallerDownloader
                         ' Go through each line and find the URL
                         For x = 0 To reader.Lines.Count - 1
                             If reader.Lines(x).Contains("MainBundle") Then
+                                DynaLog.LogMessage("Line " & x + 1 & " contains main package information. Parsing...")
                                 Dim serializer As New XmlSerializer(GetType(AppInstallers))
                                 Using tReader As TextReader = New StringReader(reader.Lines(x))
                                     Dim propertyLine As String = ""
                                     If Not reader.Lines(x).EndsWith(" />") Then
+                                        DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
                                         Dim Properties As New List(Of String)
                                         Properties.Add(If(reader.Lines(x).EndsWith("MainBundle"), reader.Lines(x).Replace(" ", "").Trim(), reader.Lines(x)))
                                         Properties.Add(reader.Lines(x + 1).Replace(" ", "").Trim())
@@ -172,6 +176,7 @@ Public Class AppInstallerDownloader
                                         Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallers)
                                         AppInstallerUri = id.MainBundleUri
                                     Else
+                                        DynaLog.LogMessage("Line ends with XML tag end.")
                                         Using ContentReader As XmlReader = XmlReader.Create(tReader)
                                             Dim id = CType(serializer.Deserialize(ContentReader), AppInstallers)
                                             AppInstallerUri = id.MainBundleUri
@@ -184,8 +189,11 @@ Public Class AppInstallerDownloader
                     End If
                 End If
 
+                DynaLog.LogMessage("URL of main package: " & Quote & AppInstallerUri & Quote)
+
                 ' Detect if a URL has been detected and download it
                 If AppInstallerUri <> "" Then
+                    DynaLog.LogMessage("We have a link. Beginning download...")
                     downUriLbl.Text = AppInstallerUri
                     Cancel_Button.Enabled = True
                     Label3.Visible = False
@@ -241,6 +249,7 @@ Public Class AppInstallerDownloader
 
     Private Sub WebClient_DownloadFileCompleted(sender As Object, e As AsyncCompletedEventArgs)
         If Not e.Cancelled AndAlso e.Error IsNot Nothing Then
+            DynaLog.LogMessage("An error has occurred and was not caused by user cancellation. Error message: " & e.Error.Message)
             Dim msg As String = ""
             Select Case Language
                 Case 0
@@ -269,10 +278,13 @@ Public Class AppInstallerDownloader
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, "DISMTools")
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
+                DynaLog.LogMessage("Deleting incomplete download...")
                 File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
             End If
         ElseIf e.Cancelled Then
+            DynaLog.LogMessage("The download has been cancelled.")
             If File.Exists(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri)) Then
+                DynaLog.LogMessage("Deleting incomplete download...")
                 File.Delete(Path.GetDirectoryName(AppInstallerFile) & "\" & Path.GetFileNameWithoutExtension(AppInstallerFile) & Path.GetExtension(AppInstallerUri))
             End If
         End If

@@ -52,7 +52,7 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Image tasks</span></p>
-              <ul class="current">
+              <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/">Overview</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../online_inst_mgmt/">Online installation management mode</a>
@@ -163,13 +163,60 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Windows PE servicing</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../winpe/set_targetpath.md">Setting the target path</a>
-                </li>
-                <li class="toctree-l2"><a class="" href="../../winpe/set_scratchspace.md">Setting the scratch space</a>
-                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Mounted image manager</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#unmounting-a-windows-image">Unmounting a Windows image</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#reloading-the-servicing-sessionrepairing-the-component-store">Reloading the servicing session/repairing the component store</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#enabling-write-permissions">Enabling write permissions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#accessing-the-mount-directory">Accessing the mount directory</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removing-volume-images">Removing volume images</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#loading-mounted-images">Loading mounted images</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#command-line-version">Command-line version</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#differences-from-the-gui-version">Differences from the GUI version</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#accessing-this-version">Accessing this version</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#unmounting-an-image">Unmounting an image</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#removing-volume-images_1">Removing volume images</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#switching-indexes">Switching indexes</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#enabling-write-permissions_1">Enabling write permissions</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../wim2esd/">Image conversion</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../swm2wim/">SWM file merger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../isocreator/">ISO creation tools</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../regcpl/">Image registry control panel</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" >Unattended answer files</a>
     <ul>
@@ -180,71 +227,6 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_create/">Unattended answer file creator</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_apply/">Applying unattended answer files</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" >Tools</a>
-    <ul class="current">
-                <li class="toctree-l2 current"><a class="reference internal current" href="#">Mounted image manager</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#operations">Operations</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#unmounting-a-windows-image">Unmounting a Windows image</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#reloading-the-servicing-sessionrepairing-the-component-store">Reloading the servicing session/repairing the component store</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#enabling-write-permissions">Enabling write permissions</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#accessing-the-mount-directory">Accessing the mount directory</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#removing-volume-images">Removing volume images</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#loading-mounted-images">Loading mounted images</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#command-line-version">Command-line version</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#differences-from-the-gui-version">Differences from the GUI version</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#accessing-this-version">Accessing this version</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#tasks">Tasks</a>
-    </li>
-        </ul>
-    </li>
-    </ul>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../wim2esd/">Image conversion</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../swm2wim/">SWM file merger</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../isocreator/">ISO creation tools</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../regcpl/">Image registry control panel</a>
-                </li>
-    </ul>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Command-line tools</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="" href="../../../cli_tools/cli_tools.md">Overview</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" >Command Console</a>
-    <ul>
-                <li class="toctree-l2"><a class="" href="../../../cli_tools/cmd_console.md">Overview</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" >Tools</a>
-    <ul>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/cmdhelp.md">Command help</a>
-                </li>
-                <li class="toctree-l3"><a class="" href="../../../cli_tools/extappx.md">Extended AppX package getter</a>
-                </li>
-    </ul>
                 </li>
     </ul>
                   </li>
@@ -263,7 +245,6 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Image tasks</li>
           <li class="breadcrumb-item">Tools</li>
       <li class="breadcrumb-item active">Mounted image manager</li>
     <li class="wy-breadcrumbs-aside">
@@ -287,6 +268,9 @@
 <li>Access the mount directory of an image</li>
 <li>Remove volume images (for images with multiple indexes)</li>
 <li>Load a mount directory to projects with no images loaded</li>
+<li>Get image file information</li>
+<li>Save image information</li>
+<li><a href="../isocreator">Create ISO files</a></li>
 </ul>
 <h2 id="operations">Operations</h2>
 <h3 id="unmounting-a-windows-image">Unmounting a Windows image</h3>
@@ -410,7 +394,7 @@
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../../unattend/unatt_apply/" class="btn btn-neutral float-left" title="Applying unattended answer files"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../drivers/remove_driver/" class="btn btn-neutral float-left" title="Removing drivers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
         <a href="../wim2esd/" class="btn btn-neutral float-right" title="Image conversion">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
@@ -434,7 +418,7 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../../unattend/unatt_apply/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../../drivers/remove_driver/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
       <span><a href="../wim2esd/" style="color: #fcfcfc">Next &raquo;</a></span>

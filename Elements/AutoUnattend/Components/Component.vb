@@ -1,6 +1,7 @@
 ﻿Imports System.Xml.Serialization
 Imports System.Xml
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Namespace Elements
 
@@ -12,15 +13,32 @@ Namespace Elements
 
         Public Property Passes As New List(Of Pass)
 
+        Public Overrides Function ToString() As String
+            Dim passList As String = ""
+            If Me.Passes.Count > 0 Then
+                For Each componentPass As Pass In Me.Passes
+                    If passList <> "" Then
+                        passList &= ", " & componentPass.Name
+                    Else
+                        passList = componentPass.Name
+                    End If
+                Next
+            End If
+            Return "Component, with ID: " & Me.Id & "; Passes: " & passList
+        End Function
+
         Public Shared Function LoadItems(filePath As String) As List(Of Component)
+            DynaLog.LogMessage("Preparing to load items from file " & Quote & filePath & Quote & "...")
             Dim componentList As New List(Of Component)
             Try
                 Using fs As FileStream = New FileStream(filePath, FileMode.Open)
+                    DynaLog.LogMessage("Creating XML reader...")
                     Dim xs As New XmlReaderSettings()
                     xs.IgnoreWhitespace = True
                     Using reader As XmlReader = XmlReader.Create(fs, xs)
                         While reader.Read()
                             If reader.NodeType = XmlNodeType.Element AndAlso reader.Name = "Component" Then
+                                DynaLog.LogMessage("We are dealing with a component (XML node type is element and is " & Quote & "Component" & Quote & "). Parsing...")
                                 Dim sysComponent As New Component()
                                 sysComponent.Id = reader.GetAttribute("Id")
                                 Dim PassList As String = reader.GetAttribute("Passes")
@@ -46,8 +64,10 @@ Namespace Elements
                         End While
                     End Using
                 End Using
+                DynaLog.LogMessage("System component count: " & componentList.Count)
                 Return componentList
             Catch ex As Exception
+                DynaLog.LogMessage("Could not load items. Error message: " & ex.Message)
                 If Debugger.IsAttached Then Debugger.Break()
                 Return Nothing
             End Try

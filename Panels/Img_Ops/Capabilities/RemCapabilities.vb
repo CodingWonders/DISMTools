@@ -6,10 +6,12 @@ Public Class RemCapabilities
     Dim capIds(65535) As String
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         Dim capIdList As New List(Of String)
         capCount = ListView1.CheckedItems.Count
         ProgressPanel.MountDir = MainForm.MountDir
+        DynaLog.LogMessage("Detecting capabilities to remove...")
         If ListView1.CheckedItems.Count >= 1 Then
             For x = 0 To capCount - 1
                 capIdList.Add(ListView1.CheckedItems(x).SubItems(0).Text)
@@ -20,6 +22,7 @@ Public Class RemCapabilities
             Next
             ProgressPanel.capRemovalLastId = ListView1.CheckedItems(capCount - 1).SubItems(0).Text
         Else
+            DynaLog.LogMessage("No items have been added to the queue.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

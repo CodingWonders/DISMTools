@@ -246,7 +246,7 @@ Public Class MainForm
     Sub CompareVersions()
         If File.Exists(Application.StartupPath & "\DISMTools.exe") Then
             Dim fv As String = FileVersionInfo.GetVersionInfo(Application.StartupPath & "\DISMTools.exe").ProductVersion.ToString()
-            If fv = latestVer Then
+            If fv = latestVer Or New Version(fv) > New Version(latestVer) Then
                 MsgBox("There aren't any updates available", vbOKOnly + vbInformation, Text)
                 End
             Else
@@ -346,6 +346,11 @@ Public Class MainForm
     End Sub
 
     Private Sub UpdaterBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles UpdaterBW.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MsgBox(e.Error.ToString() & CrLf & CrLf & "Your current version of DISMTools may no longer work correctly if you continue using it. It is recommended that you download the latest version manually and extract/install it manually." & CrLf & CrLf & "Do not worry. Your settings are kept intact.", vbOKOnly + vbExclamation, Text)
+            ' Stop process launch
+            Exit Sub
+        End If
         If CheckBox1.Checked Then
             Process.Start(Application.StartupPath & "\DISMTools.exe", If(needsMigration, "/migrate", ""))
             Environment.Exit(0)
@@ -487,8 +492,8 @@ Public Class MainForm
         DirCopy(Application.StartupPath & "\tools", Application.StartupPath & "\old\tools", True, False)
         DirCopy(Application.StartupPath & "\runtimes", Application.StartupPath & "\old\runtimes", True, False)
         DirCopy(Application.StartupPath & "\videos", Application.StartupPath & "\old\videos", True, False)
-        File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE")
-        File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe")
+        File.Copy(Application.StartupPath & "\LICENSE", Application.StartupPath & "\old\LICENSE", True)
+        File.Copy(Application.StartupPath & "\DISMTools.exe", Application.StartupPath & "\old\DISMTools.exe", True)
         CopiedFiles += 2
         Label12.Text = "Installing the update (" & Math.Round(30 * (CopiedFiles / FileCount), 0) & "%)"
     End Sub

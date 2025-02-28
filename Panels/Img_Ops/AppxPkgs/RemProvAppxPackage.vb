@@ -8,10 +8,13 @@ Public Class RemProvAppxPackage
     Public AppxRemovalCount As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         AppxRemovalCount = ListView1.CheckedItems.Count
         ProgressPanel.appxRemovalCount = AppxRemovalCount
+        DynaLog.LogMessage("Detecting AppX packages to remove...")
         If ListView1.CheckedItems.Count = 0 Then
+            DynaLog.LogMessage("No items have been selected for removal.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -39,10 +42,12 @@ Public Class RemProvAppxPackage
             End Select
             Exit Sub
         Else
+            DynaLog.LogMessage("AppX packages to remove: " & AppxRemovalCount)
             If AppxRemovalCount > 65535 Then
                 MsgBox("Right now, you can only specify less than 65535 AppX packages. This is a program limitation that will be gone in a future update.", vbOKOnly + vbCritical, "Remove provisioned AppX packages")
                 Exit Sub
             Else
+                DynaLog.LogMessage("Adding AppX packages to queue...")
                 For x = 0 To AppxRemovalCount - 1
                     AppxRemovalPackages(x) = ListView1.CheckedItems(x).Text
                 Next
@@ -59,13 +64,16 @@ Public Class RemProvAppxPackage
 
                 ' If the image contains a Server Core/Nano Server installation, detect whether the Desktop Experience
                 ' feature is installed
+                DynaLog.LogMessage("Detecting conditions imposed by the Windows image...")
                 If MainForm.imgInstType <> "" And (MainForm.imgInstType.Contains("Nano") Or MainForm.imgInstType.Contains("Core")) Then
+                    DynaLog.LogMessage("Target Windows image contains Server Core SKU. Detecting state of Desktop Experience feature...")
                     ' Go through every feature and find Desktop Experience
                     If MainForm.imgFeatureNames.Count > 0 Then
                         For x = 0 To Array.LastIndexOf(MainForm.imgFeatureNames, MainForm.imgFeatureNames.Last)
                             If MainForm.imgFeatureNames(x) = "DesktopExperience" Then
                                 ' Detect the state of the feature
                                 If MainForm.imgFeatureState(x) <> "Enabled" Then
+                                    DynaLog.LogMessage("Desktop Experience has been detected as a disabled feature.")
                                     Dim msg As String = ""
                                     ' Display incompatibility
                                     Select Case MainForm.Language
@@ -303,6 +311,7 @@ Public Class RemProvAppxPackage
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
         If ListView1.SelectedItems.Count = 1 Then
             MainForm.ResViewTSMI.Visible = True
+            DynaLog.LogMessage("Updating context menu items...")
             Try
                 Select Case MainForm.Language
                     Case 0

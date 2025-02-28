@@ -1,13 +1,18 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ApplyUnattendFile
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+        DynaLog.LogMessage("Checking answer file...")
         If TextBox1.Text <> "" AndAlso File.Exists(TextBox1.Text) Then
+            DynaLog.LogMessage("An answer file has been specified and it exists in the file system.")
             ProgressPanel.UnattendedFile = TextBox1.Text
         Else
+            DynaLog.LogMessage("Either no unattended answer file has been specified or it does not exist in the file system.")
             Dim msg As String = ""
             Select Case MainForm.Language
                 Case 0
@@ -54,6 +59,7 @@ Public Class ApplyUnattendFile
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Specified unattended answer file: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox1.Text = OpenFileDialog1.FileName
     End Sub
 

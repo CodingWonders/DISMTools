@@ -1,11 +1,13 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
+Imports Microsoft.VisualBasic.ControlChars
 
 Public Class ImgCapture
 
     Dim CompressionTypeStrings() As String = New String(2) {"No compression will be applied to the destination image.", "Fast compression will be applied. This is the default option.", "Maximum compression will be applied. This will take the most time, but will result in a smaller image."}
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.CaptureSourceDir = TextBox1.Text
         ProgressPanel.CaptureDestinationImage = TextBox2.Text
@@ -55,6 +57,7 @@ Public Class ImgCapture
             ProgressPanel.CaptureExtendedAttributes = False
         End If
         If CheckBox8.Checked Then
+            DynaLog.LogMessage("The target image will be mounted after capture is complete.")
             ProgressPanel.CaptureMountDestImg = True
             ' Since ProgressPanel doesn't consider what other form variables contain, set them to ProgressPanel variables
             ProgressPanel.UMountLocalDir = True
@@ -429,6 +432,7 @@ Public Class ImgCapture
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Selected source directory: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub
@@ -438,6 +442,7 @@ Public Class ImgCapture
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        DynaLog.LogMessage("Selected destination image file: " & Quote & SaveFileDialog1.FileName & Quote)
         TextBox2.Text = SaveFileDialog1.FileName
     End Sub
 
@@ -461,20 +466,28 @@ Public Class ImgCapture
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Selected configuration list file: " & Quote & OpenFileDialog1.FileName & Quote)
         TextBox5.Text = OpenFileDialog1.FileName
     End Sub
 
     Sub GatherValidFields()
+        DynaLog.LogMessage("Checking fields...")
         If CheckBox1.Checked Then
+            DynaLog.LogMessage("A configuration list file is expected to be used.")
             If Directory.Exists(TextBox1.Text) And TextBox2.Text IsNot "" And TextBox3.Text IsNot "" And TextBox5.Text IsNot "" Then
+                DynaLog.LogMessage("All fields are valid.")
                 OK_Button.Enabled = True
             Else
+                DynaLog.LogMessage("None or not all fields are valid.")
                 OK_Button.Enabled = False
             End If
         Else
+            DynaLog.LogMessage("A configuration list file is not expected to be used.")
             If Directory.Exists(TextBox1.Text) And TextBox2.Text IsNot "" And TextBox3.Text IsNot "" Then
+                DynaLog.LogMessage("All fields are valid.")
                 OK_Button.Enabled = True
             Else
+                DynaLog.LogMessage("None or not all fields are valid.")
                 OK_Button.Enabled = False
             End If
         End If

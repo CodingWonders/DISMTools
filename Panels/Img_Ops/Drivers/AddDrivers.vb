@@ -12,11 +12,13 @@ Public Class AddDrivers
     Dim drvPkgCount As Integer
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         drvPkgList.Clear()
         drvRecursiveList.Clear()
         ProgressPanel.MountDir = MainForm.MountDir
         drvPkgCount = ListView1.Items.Count
+        DynaLog.LogMessage("Detecting drivers to add...")
         If ListView1.Items.Count > 0 Then
             For x = 0 To ListView1.Items.Count - 1
                 drvPkgList.Add(ListView1.Items(x).SubItems(0).Text)
@@ -26,7 +28,7 @@ Public Class AddDrivers
                 ProgressPanel.drvAdditionPkgs(x) = drvPkgs(x)
             Next
             For x = 0 To drvPkgCount - 1
-                If File.GetAttributes(ListView1.Items(x).SubItems(0).Text) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
+                If (File.GetAttributes(ListView1.Items(x).SubItems(0).Text) And FileAttributes.Directory) = FileAttributes.Directory And CheckedListBox1.CheckedItems.Contains(ListView1.Items(x).SubItems(0).Text) Then
                     drvRecursiveList.Add(ListView1.Items(x).SubItems(0).Text)
                 End If
             Next
@@ -47,6 +49,7 @@ Public Class AddDrivers
                 ProgressPanel.drvAdditionCommit = False
             End If
         Else
+            DynaLog.LogMessage("No items have been added to the queue.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -93,6 +96,7 @@ Public Class AddDrivers
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        DynaLog.LogMessage("Driver file specified: " & Quote & OpenFileDialog1.FileName & Quote)
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -123,8 +127,10 @@ Public Class AddDrivers
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Folder specified: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             Cursor = Cursors.WaitCursor
             If My.Computer.FileSystem.GetFiles(FolderBrowserDialog1.SelectedPath, FileIO.SearchOption.SearchAllSubDirectories, "*.inf").Count > 0 Then
+                DynaLog.LogMessage("This folder has driver files. Asking user...")
                 Dim msg As String = ""
                 Select Case MainForm.Language
                     Case 0
@@ -183,6 +189,7 @@ Public Class AddDrivers
                 End Select
                 Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
                     Case MsgBoxResult.Yes
+                        DynaLog.LogMessage("Adding folder to queue...")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -211,12 +218,15 @@ Public Class AddDrivers
                         CheckedListBox1.Items.Add(FolderBrowserDialog1.SelectedPath)
                         CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(FolderBrowserDialog1.SelectedPath), True)
                     Case MsgBoxResult.No
+                        DynaLog.LogMessage("Opening driver picker...")
                         DriverManualFilePicker.DriverDir = FolderBrowserDialog1.SelectedPath
                         DriverManualFilePicker.ShowDialog(Me)
                     Case MsgBoxResult.Cancel
+                        DynaLog.LogMessage("Cancelling addition of folder to the queue...")
                         Exit Sub
                 End Select
             Else
+                DynaLog.LogMessage("This folder does not have driver files.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -517,10 +527,13 @@ Public Class AddDrivers
     End Sub
 
     Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
+        DynaLog.LogMessage("Getting dropped items...")
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
         For Each PkgFile In PackageFiles
-            If Not File.GetAttributes(PkgFile) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
-            If File.GetAttributes(PkgFile) = FileAttributes.Directory Then
+            DynaLog.LogMessage("Item: " & Quote & PkgFile & Quote)
+            If Not (File.GetAttributes(PkgFile) And FileAttributes.Directory) = FileAttributes.Directory And Not Path.GetExtension(PkgFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then Continue For
+            If (File.GetAttributes(PkgFile) And FileAttributes.Directory) = FileAttributes.Directory Then
+                DynaLog.LogMessage("The specified item is a folder. Asking user...")
                 Dim msg As String = ""
                 Select Case MainForm.Language
                     Case 0
@@ -579,6 +592,7 @@ Public Class AddDrivers
                 End Select
                 Select Case MsgBox(msg, vbYesNoCancel + vbInformation, Label1.Text)
                     Case MsgBoxResult.Yes
+                        DynaLog.LogMessage("Adding folder to queue...")
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -607,12 +621,15 @@ Public Class AddDrivers
                         CheckedListBox1.Items.Add(PkgFile)
                         CheckedListBox1.SetItemChecked(CheckedListBox1.Items.IndexOf(PkgFile), True)
                     Case MsgBoxResult.No
+                        DynaLog.LogMessage("Opening driver picker...")
                         DriverManualFilePicker.DriverDir = PkgFile
                         DriverManualFilePicker.ShowDialog(Me)
                     Case MsgBoxResult.Cancel
+                        DynaLog.LogMessage("Cancelling addition of folder to the queue...")
                         Continue For
                 End Select
             Else
+                DynaLog.LogMessage("The specified item is a file.")
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

@@ -8,8 +8,12 @@ Public Class PkgParentNameLookupDlg
     Public pkgSource As String
     Public pkgArgs As String
 
+    Public OriginatedFrom As String
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
+        DynaLog.LogMessage("Name of selected parent package: " & Quote & TextBox1.Text & Quote)
         If TextBox1.Text = "" Then
+            DynaLog.LogMessage("No package has been specified.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -37,6 +41,7 @@ Public Class PkgParentNameLookupDlg
             End Select
             Exit Sub
         ElseIf Not ListBox1.Items.Contains(TextBox1.Text) Then
+            DynaLog.LogMessage("A bogus package has been specified.")
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -64,7 +69,12 @@ Public Class PkgParentNameLookupDlg
             End Select
             Exit Sub
         Else
-            EnableFeat.TextBox1.Text = TextBox1.Text
+            Select Case OriginatedFrom
+                Case "enablement"
+                    EnableFeat.TextBox1.Text = TextBox1.Text
+                Case "disablement"
+                    DisableFeat.TextBox1.Text = TextBox1.Text
+            End Select
             Me.DialogResult = System.Windows.Forms.DialogResult.OK
             Me.Close()
         End If
@@ -173,6 +183,7 @@ Public Class PkgParentNameLookupDlg
         OK_Button.Enabled = False
         Cancel_Button.Enabled = False
         ListBox1.Items.Clear()
+        DynaLog.LogMessage("Grabbing packages obtained via the background processes...")
         For x = 0 To MainForm.imgPackageNames.Length - 1
             If MainForm.imgPackageNames(x) = "" Then
                 Continue For
