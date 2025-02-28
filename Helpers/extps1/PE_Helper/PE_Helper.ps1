@@ -3,7 +3,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.6.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.6.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -72,7 +72,7 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.6.1"
+    $version = "0.6.2"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2025. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
@@ -1720,7 +1720,7 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.6.1"
+    $version = "0.6.2"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2025. CodingWonders Software"

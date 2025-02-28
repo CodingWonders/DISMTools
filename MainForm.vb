@@ -127,8 +127,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "DTVI_MK2"
+    Public dtBranch As String = "dt_preview"
+    Public dt_codeName As String = "DTVI_MK3"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -4872,7 +4872,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DynaLog.LogMessage("Generating new settings file...")
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -5043,7 +5043,7 @@ Public Class MainForm
                 End If
                 DynaLog.LogMessage("Writing to INI...")
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
