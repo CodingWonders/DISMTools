@@ -19,4 +19,10 @@ Public Class SplashScreen
         Timer1.Enabled = False
         Timer1.Stop()
     End Sub
+
+    Private Sub SplashScreen_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Maximized Then
+            WindowState = FormWindowState.Normal
+        End If
+    End Sub
 End Class
