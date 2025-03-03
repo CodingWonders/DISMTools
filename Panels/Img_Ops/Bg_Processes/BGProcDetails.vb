@@ -168,4 +168,10 @@
             End If
         End If
     End Sub
+
+    Private Sub BGProcDetails_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Maximized Then
+            WindowState = FormWindowState.Normal
+        End If
+    End Sub
 End Class

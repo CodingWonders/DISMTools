@@ -189,4 +189,10 @@ Public Class AutoReloadForm
     Private Sub AutoReloadForm_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
         ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
     End Sub
+
+    Private Sub AutoReloadForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Maximized Then
+            WindowState = FormWindowState.Normal
+        End If
+    End Sub
 End Class
