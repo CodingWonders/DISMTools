@@ -176,14 +176,22 @@ function Start-PEGeneration
                 $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
                 $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
                 $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
+                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-SecureStartup.cab")
+                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-SecureStartup_en-us.cab")
+                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-EnhancedStorage.cab")
+                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
+                $pkgCount = $pkgs.Count
+                $curPkgIndex = 0
                 foreach ($pkg in $pkgs)
                 {
+                    $curPkgIndex = $pkgs.IndexOf($pkg)
+                    Write-Progress -Activity "Adding OS packages..." -Status "Adding OS package $($curPkgIndex + 1) of $($pkgCount): `"$([IO.Path]::GetFileNameWithoutExtension($pkg))`"..." -PercentComplete (($curPkgIndex / $pkgCount) * 100)
                     if (Test-Path $pkg -PathType Leaf)
                     {
-                        Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
                         Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath $pkg | Out-Null
                     }
                 }
+                Write-Progress -Activity "Adding OS packages..." -Completed
                 Write-Host "Saving changes..."
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
@@ -422,20 +430,27 @@ function Copy-PEComponents
         $loc_OCs = Get-ChildItem -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US" -File
         $copied = 0
         $totalSize = 1
+
+        $OC_Count = $general_OCs.Count
+        $OC_CurrentIndex = 0
         foreach ($file in $general_OCs)
         {
-            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\$($file.Name)" -Destination "$targetDir\OCs" -Force -Container -PassThru -Verbose | ForEach-Object {
-                $copied = ($_.BytesTransferred / $totalSize) * 100
-                Write-Debug $copied
-            }
+            $OC_CurrentIndex = $general_OCs.IndexOf($file)
+            Write-Progress -Activity "Copying language-neutral Optional Components..." -Status "Copying Optional Component package $($OC_CurrentIndex + 1) of $($OC_Count)..." -PercentComplete (($OC_CurrentIndex / $OC_Count) * 100)
+            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\$($file.Name)" -Destination "$targetDir\OCs" -Force
         }
+        Write-Progress -Activity "Copying language-neutral Optional Components..." -Completed
+
+        # Reset counters and begin counting again
+        $OC_Count = $loc_OCs.Count
+        $OC_CurrentIndex = 0
         foreach ($file in $loc_OCs)
         {
-            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US\$($file.Name)" -Destination "$targetDir\OCs\en-US" -Force -Container -PassThru -Verbose | ForEach-Object {
-                $copied = ($_.BytesTransferred / $totalSize) * 100
-                Write-Debug $copied
-            }
+            $OC_CurrentIndex = $loc_OCs.IndexOf($file)
+            Write-Progress -Activity "Copying language-specific Optional Components..." -Status "Copying Optional Component package $($OC_CurrentIndex + 1) of $($OC_Count) for English (United States)..." -PercentComplete (($OC_CurrentIndex / $OC_Count) * 100)
+            Copy-Item -Path "$peToolsPath\$($architecture.ToString())\WinPE_OCs\en-US\$($file.Name)" -Destination "$targetDir\OCs\en-US" -Force
         }
+        Write-Progress -Activity "Copying language-specific Optional Components..." -Completed
         Write-Host "PE components have been copied successfully."
         return $true
     }
