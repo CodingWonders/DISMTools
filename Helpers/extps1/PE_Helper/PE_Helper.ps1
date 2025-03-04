@@ -180,6 +180,11 @@ function Start-PEGeneration
                 $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-SecureStartup_en-us.cab")
                 $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-EnhancedStorage.cab")
                 $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
+                # Add ARM64EC packages
+                if ($architecture -eq 'arm64') {
+                    $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
+                    $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-x64-Support_en-us.cab")
+                }
                 $pkgCount = $pkgs.Count
                 $curPkgIndex = 0
                 foreach ($pkg in $pkgs)
