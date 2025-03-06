@@ -543,7 +543,11 @@ function Start-PECustomization
         {
             Write-Host "Could not modify terminal settings"
         }
-        if (($arch.ToString() -eq "x86") -or ($arch.ToString() -eq "amd64"))
+        $supportedArchitectures = [List[string]]::new()
+        $supportedArchitectures.Add("x86")
+        $supportedArchitectures.Add("amd64")
+        $supportedArchitectures.Add("arm64")
+        if ($supportedArchitectures.Contains($arch.ToString()))
         {
             try
             {
@@ -582,7 +586,7 @@ function Start-PECustomization
                     x86 {
                         Copy-Item -Path "\Windows\system32\ExplorerFrame.dll" -Destination "$imagePath\Windows\system32" -Force -Verbose
                     }
-                    amd64 {
+                    {($arch -eq 'amd64') -or ($arch -eq 'arm64')} {
                         Copy-Item -Path "\Windows\system32\ExplorerFrame.dll" -Destination "$imagePath\Windows\system32" -Force -Verbose
                         Copy-Item -Path "\Windows\SysWOW64\ExplorerFrame.dll" -Destination "$imagePath\Windows\SysWOW64" -Force -Verbose
                     }
@@ -1037,7 +1041,7 @@ function Get-SystemArchitecture
             return "amd64"
         }
         "12" {
-            return "arm64"
+            return "aarch64"
         }
         default {
             return ""
@@ -1087,6 +1091,7 @@ function Get-Disks
                 $supportedArchitectures = [List[string]]::new()
                 $supportedArchitectures.Add("i386")
                 $supportedArchitectures.Add("amd64")
+                $supportedArchitectures.Add("aarch64")
                 $systemArchitecture = Get-SystemArchitecture
 
                 if ($supportedArchitectures.Contains($systemArchitecture))

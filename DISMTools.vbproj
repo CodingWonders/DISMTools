@@ -1450,9 +1450,6 @@
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\amd64\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\DIM\arm64ec\DT-DIM.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

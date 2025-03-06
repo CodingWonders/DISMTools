@@ -21,12 +21,10 @@ GOTO Fail_NoBuildTools
 %BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=Win32 /p:PlatformToolset=v110
 %BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:PlatformToolset=v110
 %BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=ARM64
-%BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=ARM64EC
 ECHO Executables were built. Copying them to final outputs...
 XCOPY Win32\Debug\DT-DIM.exe ..\i386\DT-DIM.exe /cey /-i
 XCOPY x64\Debug\DT-DIM.exe ..\amd64\DT-DIM.exe /cey /-i
 XCOPY ARM64\Debug\DT-DIM.exe ..\aarch64\DT-DIM.exe /cey /-i
-XCOPY ARM64EC\Debug\DT-DIM.exe ..\arm64ec\DT-DIM.exe /cey /-i
 EXIT /B
 
 :Fail_NoVS
