@@ -1969,24 +1969,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes
+        '''- Fixed an issue where, if you had an App Installer package and its resulting package, the program would throw an error when attempting to scan the second package
         '''
-        '''- Non-English redirected DISM output is now shown correctly
+        '''New features:
         '''
-        '''-- New features
-        '''
-        '''- The testing environment creator now detects the architectures compatible with the ADK
-        '''- Remaining options that were introduced in preview versions are now localized
-        '''- Help documentation has been updated
-        '''
-        '''Overall changes:
-        '''
-        '''-- Bugfixes
-        '''
-        '''- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
-        '''- Fi [resto de la cadena truncado]&quot;;.
+        '''- 2 new Optional Components are added to Preinstallation Environments, mainly to improve support for drives encrypted with BitLocker, and implementations of IEEE 1667
+        '''- When copying Optional Components and adding packages, you will now see a refreshed output
+        '''- Several improvements were made for Windows PE for ARM [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
