@@ -61,13 +61,6 @@ Public Class ImportDrivers
                             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                             Exit Sub
                         End If
-                        DynaLog.LogMessage("Checking drive type...")
-                        If Casters.CastDriveType(DIList(ListView1.FocusedItem.Index).DriveType) <> "Fixed" Then
-                            DynaLog.LogMessage("The source is not a fixed (non-removable) drive.")
-                            msg = "The import source needs to be a fixed drive. Choose a different source and try again"
-                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
-                            Exit Sub
-                        End If
                         DynaLog.LogMessage("Checking Windows installation in the drive...")
                         If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
                             DynaLog.LogMessage("The source drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
