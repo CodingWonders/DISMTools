@@ -223,6 +223,11 @@ If you want to grab a copy straight from the source code, follow these instructi
 3. Open the solution in Visual Studio 2012 or later
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
+> [!NOTE]
+> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2022 build tools. Install, at least, the Community edition and the **MSVC v143- VS 2022 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
+>
+> Simply searching for "MSVC" in the list of components can get you the necessary component.
+
 ### Additional startup flags
 
 To speed up testing, you can perform these steps before running the program from within Visual Studio:

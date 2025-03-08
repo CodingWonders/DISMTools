@@ -76,6 +76,32 @@ Public Class NewUnattendWiz
     Dim ConfiguredScripts As New List(Of PostInstallScript)
     Dim CurrentlyEditedStage As Integer = 0
     Dim ScriptsRestartExplorer As Boolean
+    ' -- Variables for special scripts
+    ' --- Join Path cmdlet constants
+    ' We put the directory separator character next to the environment variable as homedrive and systemdrive don't end with a backslash.
+    ' Interestingly though, not doing this works fine on PowerShell 7, but not on Windows PowerShell.
+    Const ParentScriptDir As String = "$([IO.Path]::Combine(" & Quote & "$env:SYSTEMDRIVE$([IO.Path]::DirectorySeparatorChar)" & Quote & ", " & Quote & "DISMTools" & Quote & ", " & Quote & "scripts" & Quote & "))"
+    Const ScriptDir As String = "[IO.Path]::Combine(" & Quote & "$DT_TempScriptDir" & Quote & ", " & Quote & "<FILENAME_REPLACE>" & Quote & ")"
+    Const ScriptFile As String = "[IO.Path]::Combine(" & Quote & "$DT_TempScriptDir" & Quote & ", " & Quote & "<FILENAME_REPLACE>" & Quote & ", " & Quote & "<FILENAME_REPLACE>.<EXT_REPLACE>" & Quote & ")"
+    ' --- Snippet constants for script directory creation and deletion
+    Const ScriptDirCreationSnippet As String = CrLf & CrLf & "$DT_TempScriptDir = " & Quote & ParentScriptDir & Quote & CrLf &
+                                               "New-Item -Path " & Quote & "$DT_TempScriptDir" & Quote & " -ItemType Directory -Force | Out-Null"
+    Const ScriptDirDeletionSnippet As String = CrLf & CrLf & "if (Test-Path -Path " & Quote & "$env:SYSTEMDRIVE\DISMTools" & Quote & ") {" & CrLf &
+                                               "    Remove-Item -Path " & Quote & "$env:SYSTEMDRIVE\DISMTools" & Quote & " -Recurse -Force" & CrLf &
+                                               "}"
+    ' --- Template constants for script creation and execution
+    Const ScriptContentTemplateVariable As String = CrLf & CrLf &
+                                                    "New-Item -Path " & Quote & "$(" & ScriptDir & ")" & Quote & " -ItemType Directory -Force | Out-Null" & CrLf &
+                                                    "$<FILENAME_REPLACE> = @'" & CrLf &
+                                                    "<CONTENT_REPLACE>" & CrLf &
+                                                    "'@" & CrLf & CrLf &
+                                                    Quote & "$<FILENAME_REPLACE>" & Quote & " | Out-File -FilePath " & Quote & "$(" & ScriptFile & ")" & Quote & " -Encoding ascii -Force"
+    Const ScriptExecutionTemplateSnippet As String = CrLf & CrLf &
+                                                     "Push-Location " & Quote & "$(" & ScriptDir & ")" & Quote & CrLf &
+                                                     "<EXECUTION_REPLACE>" & CrLf &
+                                                     "Pop-Location"
+    ' --- Snippet constants for script execution, depending on file type
+    Const Cmd_ExecutionSnippet As String = "Start-Process -FilePath " & Quote & "$env:WINDIR\system32\cmd.exe" & Quote & " -ArgumentList " & Quote & "/c .\<FILENAME_REPLACE>.<EXT_REPLACE>" & Quote & " -Wait -NoNewWindow"
 
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
@@ -2011,6 +2037,11 @@ Public Class NewUnattendWiz
                 DynaLog.LogMessage("Saving post-installation scripts...")
                 For Each ConfiguredScript As PostInstallScript In ConfiguredScripts
                     DynaLog.LogMessage(ConfiguredScript.ToString())
+                    DynaLog.LogMessage("Checking if Batch or other special scripts were imported...")
+                    If ConfiguredScript.ScriptContents.IndexOf(ScriptDirCreationSnippet, StringComparison.OrdinalIgnoreCase) <> -1 Then
+                        DynaLog.LogMessage("User has imported special scripts, for which a directory will be created. Since it's temporary, signaling deletion of directory after finishing stage...")
+                        ConfiguredScript.ScriptContents &= ScriptDirDeletionSnippet
+                    End If
                     DynaLog.LogMessage("Saving contents to script directory...")
                     Dim destinationFileName As String = ""
                     Select Case ConfiguredScript.ScriptStage
@@ -2586,13 +2617,56 @@ Public Class NewUnattendWiz
         ScriptEditorOFD.ShowDialog()
     End Sub
 
+    Sub InsertSpecialScript(ScriptFile As String)
+        DynaLog.LogMessage("Preparing to insert script contents...")
+        DynaLog.LogMessage("- Script to insert: " & Quote & ScriptFile & Quote)
+        DynaLog.LogMessage("Checking if directory creation snippet exists...")
+        If Not Scintilla3.Text.Contains(ScriptDirCreationSnippet) Then
+            DynaLog.LogMessage("Adding PowerShell directory creation script snippet...")
+            Scintilla3.AppendText(ScriptDirCreationSnippet)
+        End If
+        ' We will check if the file extension matches those used by other interpreters, like cmd. If that is the case, we will
+        ' prepare directories for those scripts in a parent directory, located in "\DISMTools\scripts"
+        DynaLog.LogMessage("Grabbing file properties...")
+        Dim FileName As String = Path.GetFileNameWithoutExtension(ScriptFile)
+        Dim FileExtension As String = Path.GetExtension(ScriptFile).Replace(".", "")
+        Dim FileContents As String = ""
+        DynaLog.LogMessage("Grabbed Properties:")
+        DynaLog.LogMessage("- File Name: " & Quote & FileName & Quote)
+        DynaLog.LogMessage("- File Extension: " & Quote & FileExtension & Quote)
+        DynaLog.LogMessage("File Properties grabbed. Attempting to grab contents...")
+        Try
+            FileContents = File.ReadAllText(ScriptFile)
+            DynaLog.LogMessage("Contents grabbed. Putting in script...")
+            Dim ScriptContentVariable As String = ScriptContentTemplateVariable.
+                Replace("<FILENAME_REPLACE>", FileName).
+                Replace("<CONTENT_REPLACE>", FileContents).
+                Replace("<EXT_REPLACE>", FileExtension)
+            ' We only support CMD for now, so we only replace the execution template with the cmd snippet
+            Dim ScriptExecutionSnippet As String = ScriptExecutionTemplateSnippet.
+                Replace("<FILENAME_REPLACE>", FileName).
+                Replace("<EXECUTION_REPLACE>", Cmd_ExecutionSnippet.
+                        Replace("<FILENAME_REPLACE>", FileName).
+                        Replace("<EXT_REPLACE>", FileExtension))
+            Scintilla3.AppendText(ScriptContentVariable & ScriptExecutionSnippet)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not grab file contents. Error Message: " & ex.Message)
+        End Try
+    End Sub
+
     Private Sub ScriptEditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptEditorOFD.FileOk
+        Dim AllowedBatchExtensions As String() = New String(2) {".bat", ".cmd", ".nt"}
         DynaLog.LogMessage("Opening contents of script...")
         DynaLog.LogMessage("- Script to open: " & Quote & ScriptEditorOFD.FileName & Quote)
         DynaLog.LogMessage("Checking if file exists...")
         If File.Exists(ScriptEditorOFD.FileName) Then
             DynaLog.LogMessage("File exists. Attempting to read...")
             Try
+                DynaLog.LogMessage("Checking file extension for special files...")
+                If AllowedBatchExtensions.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
+                    InsertSpecialScript(ScriptEditorOFD.FileName)
+                    Exit Sub
+                End If
                 Scintilla3.Text = File.ReadAllText(ScriptEditorOFD.FileName)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)

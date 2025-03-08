@@ -15,6 +15,8 @@ for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 				"%sysdrive%\Tools\DIM\i386\DT-DIM.exe"
 			) else if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
 				"%sysdrive%\Tools\DIM\amd64\DT-DIM.exe"
+			) else if "%PROCESSOR_ARCHITECTURE%" equ "ARM64" (
+				"%sysdrive%\Tools\DIM\aarch64\DT-DIM.exe"
 			)
 			exit
 		)

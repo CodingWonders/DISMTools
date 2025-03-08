@@ -927,61 +927,18 @@ SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview:
+    <value>Bugfixes:
 
--- Bugfixes
+- Fixed an issue where, if you had an App Installer package and its resulting package, the program would throw an error when attempting to scan the second package
 
-- Non-English redirected DISM output is now shown correctly
+New features:
 
--- New features
-
-- The testing environment creator now detects the architectures compatible with the ADK
-- Remaining options that were introduced in preview versions are now localized
-- Help documentation has been updated
-
-Overall changes:
-
--- Bugfixes
-
-- Fixed an issue where the program would sometimes throw an exception when saving settings (#205, thanks @Dretreyt for spotting)
-- Fixed an issue where Windows 8 and 10 detection functions for background processes would sometimes throw exceptions (#206, thanks @arielsil for spotting)
-- Fixed an issue where background processes would sometimes not start after mounting a Windows image, causing you to reload the projects (#208, #210, thanks @novice55 for spotting)
-- Fixed an issue where the program would throw an exception when creating a new project from within the online and/or offline installation management modes (#209, thanks @webber3242 for spotting)
-- Fixed an issue where the program would throw an exception when using keyboard combinations to access items in the recent projects list if there were no items
-- Fixed an issue where feature disablement would not be possible due to a DynaLog logger issue
-- WIMBoot options are no longer enabled if the Windows image being serviced does not contain Windows 8.1 (#211, thanks @arielsil and @dede333)
-- The PE Helper now detects whether the selected index is invalid
-- Fixed a visual issue in the image index switch dialog
-- Fixed an issue where the PE Helper would not create ISO files if you had a version of the Windows ADK earlier than 10.1.26100.2454
-- AppX package counts in image information reports are more reasonable now on Windows 8 hosts
-- Fixed an issue where folder attributes for AppX package addition and driver addition were not being detected correctly (#220, thanks @InnerBrat for spotting)
-- Fixed an additional issue regarding the Recents list
-
--- New features
-
-- DynaLog, which was initially introduced in DISMTools 0.6, has been applied to the whole codebase
-- The PE Helper now supports initiating OS installations from within full Windows environments, thanks to HotInstall
-- You can now view a bit more information when specifying the image index for your Windows image by typing "INFO"
-- You can now copy your ISO files to Ventoy drives
-- When installing the drivers specified in the Driver Installation Module, you will now see a progress indicator
-- The ISO creator now detects the architectures that are supported by the Assessment and Deployment Kit installed on your computer
-- Compatibility has been improved for the latest Windows ADKs (starting from version 10.1.26100.2454 - December 2024 update):
-  - ISO creation will finish successfully now
-  - You can now create ISO files with boot binaries signed with the "Windows UEFI CA 2023" certificate
-- The Extensibility Suite has had some improvements:
-  - Support has been added for ADK 10.1.26100.2454
-  - An alias ("StartDim") has been added, letting you launch the Driver Installation Module more easily
-- UnattendGen has been updated to the latest version
-- You can now tell the unattended answer file to use a configuration set or distribution share
-- Applying unattended answer files from within DISMTools is faster now
-- You can now configure post-installation scripts for your unattended answer files
-- When you change the computer name to an empty value, you won't be annoyed to put a computer name as much
-- User accounts with "None" names are now blocked
-- You can now target multiple processor architectures with your answer file
-- You can now normalize the spacing of your unattended answer file to make it consistent
-- Components have been updated to their latest versions
-- You can now press Alt + U to restart background processes on demand
-- Operation logs can now be opened with the editor of your choosing if the operations have failed
-- DISM output is now redirected to the progress panel</value>
+- 2 new Optional Components are added to Preinstallation Environments, mainly to improve support for drives encrypted with BitLocker, and implementations of IEEE 1667
+- When copying Optional Components and adding packages, you will now see a refreshed output
+- Several improvements were made for Windows PE for ARM64:
+  - Support for the Arm64EC ABI is now added to the PE image, as another Optional Component
+  - The Driver Installation Module (DIM) now works natively on ARM64
+- You can now import Batch scripts when configuring post-installation scripts
+- The program installer is now built with a new version of Inno Setup (v6.4.1)</value>
   </data>
 </root>
