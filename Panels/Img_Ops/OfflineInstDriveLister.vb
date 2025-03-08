@@ -211,10 +211,6 @@ Public Class OfflineInstDriveLister
                         DynaLog.LogMessage("The selected drive is not formatted with NTFS.")
                         OK_Button.Enabled = False
                     End If
-                    If Casters.CastDriveType(DIList(x).DriveType) <> "Fixed" Then
-                        DynaLog.LogMessage("The selected drive is not a fixed (non-removable) drive.")
-                        OK_Button.Enabled = False
-                    End If
                     If Not File.Exists(ListView1.FocusedItem.SubItems(0).Text & "\Windows\system32\ntoskrnl.exe") Then
                         DynaLog.LogMessage("The selected drive does not contain ntoskrnl. There is either an utterly broken Windows installation or no installation at all.")
                         OK_Button.Enabled = False
