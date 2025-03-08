@@ -53,12 +53,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void AddDriver(HWND hwndList, const std::wstring& driverPath, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
 void EditDriver(HWND hwndList, HWND mainHwnd);
 void RemoveDriver(HWND hwndList, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
-void InstallDrivers(HWND hwndList, HWND mainHwnd);
+void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd);
 void UpdateButtonStates(HWND hwnd);
 std::wstring OpenFileDialog(HWND hwnd);
 std::wstring OpenFolderDialog(HWND hwnd);
 void SearchDirectoryForDrivers(HWND hwndList, const std::wstring& folderPath, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
 std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const wchar_t* valueName);
+void UpdateInstructionLabel(HWND instructionLabel, LPCWSTR message);
 
 enum installationStatus {
 	// The device driver has been added to the queue and is ready to be installed
@@ -138,7 +139,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    static HWND hwndList, hAddButton, hEditButton, hRemoveButton, hInstallButton, hExitButton;
+    static HWND hwndList, hAddButton, hEditButton, hRemoveButton, hInstallButton, hExitButton, hInstructionLabel;
 
     switch (uMsg) {
         case WM_CREATE: {
@@ -146,7 +147,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             hwndList = CreateWindow(WC_LISTVIEW, L"",
                                     WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_EDITLABELS,
-                                    10, 10, 560, 300, hwnd, (HMENU)IDC_DRIVER_LIST, NULL, NULL);
+                                    10, 10, 560, 274, hwnd, (HMENU)IDC_DRIVER_LIST, NULL, NULL);
 
             // Enable full row select
             ListView_SetExtendedListViewStyle(hwndList, LVS_EX_FULLROWSELECT);
@@ -180,6 +181,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             hExitButton = CreateWindow(L"BUTTON", L"Exit", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
                                        450, 320, 100, 30, hwnd, (HMENU)IDC_EXIT_BUTTON, NULL, NULL);
+
+			hInstructionLabel = CreateWindowEx(WS_EX_TRANSPARENT, L"static", L"ST_U", 
+				WS_CHILD | WS_VISIBLE | WS_TABSTOP,
+				10, 298, 560, 16, hwnd, (HMENU)(501), (HINSTANCE)GetWindowLong(hwnd, GWLP_HINSTANCE), NULL);
+
+			UpdateInstructionLabel(hInstructionLabel, L"Begin by adding drivers to the queue. Click the \"Add\" button.");
+
             // Initially disable buttons
             EnableWindow(hEditButton, FALSE);
             EnableWindow(hRemoveButton, FALSE);
@@ -195,6 +203,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 			FillRect(hdc, &rect, hBrush); // Fill the background with the white brush
 			DeleteObject(hBrush); // Delete the brush to release resources
 			return (LRESULT)1; // Indicate that background has been handled
+			break;
+		}
+
+		case WM_CTLCOLORSTATIC: {
+			HDC hdcStatic = (HDC)wParam;
+			SetBkMode(hdcStatic, TRANSPARENT);
+			return (LRESULT)GetStockObject(NULL_BRUSH);
 			break;
 		}
 
@@ -218,6 +233,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 							AddDriver(hwndList, filePath, hEditButton, hRemoveButton, hInstallButton);
 						}
 						UpdateButtonStates(hwnd);
+						UpdateInstructionLabel(hInstructionLabel, L"Modify the driver selection or click the \"Install\" button to add the selected driver(s).");
 					}	
 					break;
 				case IDC_ADD_DRV_FOLDER:
@@ -227,6 +243,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 							SearchDirectoryForDrivers(hwndList, folderPath, hEditButton, hRemoveButton, hInstallButton);
 						}
 						UpdateButtonStates(hwnd);
+						UpdateInstructionLabel(hInstructionLabel, L"Modify the driver selection or click the \"Install\" button to add the selected driver(s).");
 					}
 					break;
                 case IDC_EDIT_BUTTON:
@@ -236,6 +253,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 case IDC_REMOVE_BUTTON:
                     RemoveDriver(hwndList, hEditButton, hRemoveButton, hInstallButton);
 					UpdateButtonStates(hwnd);
+					if (ListView_GetItemCount(hwndList) <= 0) {
+						UpdateInstructionLabel(hInstructionLabel, L"Begin by adding drivers to the queue. Click the \"Add\" button.");
+					}
                     break;
                 case IDC_INSTALL_BUTTON:
 					EnableWindow(GetDlgItem(hwnd, IDC_ADD_BUTTON), FALSE);
@@ -243,7 +263,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 					EnableWindow(GetDlgItem(hwnd, IDC_REMOVE_BUTTON), FALSE);
 					EnableWindow(GetDlgItem(hwnd, IDC_INSTALL_BUTTON), FALSE);
 					EnableWindow(GetDlgItem(hwnd, IDC_EXIT_BUTTON), FALSE);
-                    std::thread(InstallDrivers, hwndList, hwnd).detach();
+                    std::thread(InstallDrivers, hwndList, hwnd, hInstructionLabel).detach();
                     break;
                 case IDC_EXIT_BUTTON:
                     PostQuitMessage(0);
@@ -266,6 +286,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     }
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
+}
+
+void UpdateInstructionLabel(HWND instructionLabel, LPCWSTR message) {
+	SetWindowText(instructionLabel, message);
+	
+	RECT rect;
+	GetWindowRect(instructionLabel, &rect);
+	MapWindowPoints(HWND_DESKTOP, GetParent(instructionLabel), (LPPOINT)&rect, 2);
+	InvalidateRect(GetParent(instructionLabel), &rect, TRUE);
+	UpdateWindow(GetParent(instructionLabel));
 }
 
 std::wstring GetStatusFromEnumeration(installationStatus status) {
@@ -364,7 +394,7 @@ installationStatus GetStatusFromLVI(HWND hwndList, int itemIndex) {
 }
 
 
-void InstallDrivers(HWND hwndList, HWND mainHwnd) {
+void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
 
 	// Disable Close button
 	HMENU menu;
@@ -387,6 +417,9 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd) {
 
 		// Install drivers
 		for (int i = 0; i < ListView_GetItemCount(hwndList); ++i) {
+			wchar_t installationProgressBuffer[1024];
+			swprintf(installationProgressBuffer, 1024, L"Installing driver %d of %d...", i + 1, ListView_GetItemCount(hwndList));
+			UpdateInstructionLabel(instructionHwnd, installationProgressBuffer);
 			installationStatus currentStatus = GetStatusFromLVI(hwndList, i);
 
 			if (currentStatus == Installed) {
@@ -472,6 +505,9 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd) {
 			resultMsg += L"\n\nYou can try to install the drivers that could not be installed again.";
 		}
 		MessageBox(mainHwnd, resultMsg.c_str(), L"Driver Installation Module", MB_OK | MB_ICONINFORMATION);
+		wchar_t installationSummaryBuffer[512];
+		swprintf(installationSummaryBuffer, 512, L"Out of %d driver(s), %d were installed successfully.", ListView_GetItemCount(hwndList), successfulInstallations);
+		UpdateInstructionLabel(instructionHwnd, installationSummaryBuffer);
 	}
 	else {
 		MessageBox(mainHwnd, L"This program needs to be run in the Windows Preinstallation Environment (PE) to install drivers.", L"Driver Installation Module", MB_OK | MB_ICONERROR);
@@ -549,7 +585,7 @@ int CALLBACK ComputerCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
 
 std::wstring OpenFolderDialog(HWND hwnd) {
     BROWSEINFO bi = {0};
-    bi.lpszTitle = L"Select a folder containing driver files";
+    bi.lpszTitle = L"Select a folder containing driver files:";
     bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NONEWFOLDERBUTTON | BIF_USENEWUI;
     bi.hwndOwner = hwnd;
 
