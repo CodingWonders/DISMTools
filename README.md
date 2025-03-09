@@ -162,7 +162,6 @@ The following actions are supported by DISMTools:
   - Using the project's or program's scratch directory
   - Get information of packages, features, AppX packages, capabilities, and drivers
   - Configure Windows PE settings
-  - Basic automation
   
 ## Unsupported actions
 
