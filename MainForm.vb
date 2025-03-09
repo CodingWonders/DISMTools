@@ -5904,7 +5904,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
                         WimScriptEditorCommand.Text = "Configuration list editor"
-                        ActionEditorToolStripMenuItem.Text = "Action editor"
                         OptionsToolStripMenuItem.Text = "Options"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -6235,7 +6234,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
                         WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
-                        ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                         OptionsToolStripMenuItem.Text = "Opciones"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -6566,7 +6564,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
                         WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
-                        ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                         OptionsToolStripMenuItem.Text = "Paramètres"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
@@ -6896,7 +6893,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
                         WimScriptEditorCommand.Text = "Editor de listas de configuração"
-                        ActionEditorToolStripMenuItem.Text = "Editor de acções"
                         OptionsToolStripMenuItem.Text = "Opções"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
@@ -7226,7 +7222,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
                         WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
-                        ActionEditorToolStripMenuItem.Text = "Editor di azioni"
                         OptionsToolStripMenuItem.Text = "Opzioni"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
@@ -7563,7 +7558,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
                 WimScriptEditorCommand.Text = "Configuration list editor"
-                ActionEditorToolStripMenuItem.Text = "Action editor"
                 OptionsToolStripMenuItem.Text = "Options"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -7895,7 +7889,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
                 WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
-                ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                 OptionsToolStripMenuItem.Text = "Opciones"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -8226,7 +8219,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
                 WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
-                ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                 OptionsToolStripMenuItem.Text = "Paramètres"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
@@ -8558,7 +8550,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
                 WimScriptEditorCommand.Text = "Editor de listas de configuração"
-                ActionEditorToolStripMenuItem.Text = "Editor de acções"
                 OptionsToolStripMenuItem.Text = "Opções"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
@@ -8889,7 +8880,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
                 WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
-                ActionEditorToolStripMenuItem.Text = "Editor di azioni"
                 OptionsToolStripMenuItem.Text = "Opzioni"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
@@ -14679,10 +14669,6 @@ Public Class MainForm
             Exit Try
         End Try
         RemDrivers.ShowDialog()
-    End Sub
-
-    Private Sub ActionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActionEditorToolStripMenuItem.Click
-        Actions_MainForm.Show()
     End Sub
 
     ''' <summary>

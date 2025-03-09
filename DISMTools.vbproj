@@ -217,18 +217,6 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\Actions.MainForm.Designer.vb">
-      <DependentUpon>Actions.MainForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Actions\Actions.MainForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Actions\Validation\Actions.Validation.Designer.vb">
-      <DependentUpon>Actions.Validation.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Actions\Validation\Actions.Validation.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
@@ -686,18 +674,6 @@
     <Compile Include="Panels\Img_Ops\WinPE\SetTargetPath.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Internal\Feats\FeatErrorText.Designer.vb">
-      <DependentUpon>FeatErrorText.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Internal\Feats\FeatErrorText.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Panels\Internal\Pkgs\PkgErrorText.Designer.vb">
-      <DependentUpon>PkgErrorText.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Internal\Pkgs\PkgErrorText.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Panels\Internal\ProjectValueLoadForm.Designer.vb">
       <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
     </Compile>
@@ -818,18 +794,6 @@
     <Compile Include="Panels\Questions\SaveProjectQuestionDialog.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\Report_Dlgs\Add-Package\ReportForm.Designer.vb">
-      <DependentUpon>ReportForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Report_Dlgs\Add-Package\ReportForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.Designer.vb">
-      <DependentUpon>ReportForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Panels\Startup\AutoReload\AutoReloadForm.Designer.vb">
       <DependentUpon>AutoReloadForm.vb</DependentUpon>
     </Compile>
@@ -870,12 +834,6 @@
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Actions\Actions.MainForm.resx">
-      <DependentUpon>Actions.MainForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Actions\Validation\Actions.Validation.resx">
-      <DependentUpon>Actions.Validation.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Help\HelpBrowserForm.resx">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1089,12 +1047,6 @@
     <EmbeddedResource Include="Panels\Img_Ops\WinPE\SetTargetPath.resx">
       <DependentUpon>SetTargetPath.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Internal\Feats\FeatErrorText.resx">
-      <DependentUpon>FeatErrorText.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Internal\Pkgs\PkgErrorText.resx">
-      <DependentUpon>PkgErrorText.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Internal\ProjectValueLoadForm.resx">
       <DependentUpon>ProjectValueLoadForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1155,12 +1107,6 @@
     <EmbeddedResource Include="Panels\Questions\SaveProjectQuestionDialog.resx">
       <DependentUpon>SaveProjectQuestionDialog.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Report_Dlgs\Add-Package\ReportForm.resx">
-      <DependentUpon>ReportForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\Report_Dlgs\Get-ImageInfo\ReportForm.resx">
-      <DependentUpon>ReportForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Startup\AutoReload\AutoReloadForm.resx">
       <DependentUpon>AutoReloadForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1179,7 +1125,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".editorconfig" />
-    <None Include="Actions\example.dta" />
     <None Include="app.config" />
     <None Include="docs\css\fonts\fontawesome-webfont.eot" />
     <None Include="docs\css\fonts\fontawesome-webfont.ttf" />
