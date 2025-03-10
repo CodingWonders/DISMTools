@@ -19596,4 +19596,200 @@ Public Class MainForm
                 Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/language-packs#prerequisites")
         End Select
     End Sub
+
+    Private Sub GetCurrentEdition_Click(sender As Object, e As EventArgs) Handles GetCurrentEdition.Click
+        DynaLog.LogMessage("Getting current image edition...")
+        DynaLog.LogMessage("Image edition: " & Quote & imgEdition & Quote)
+        If imgEdition <> "" Then
+            DynaLog.LogMessage("Image edition field has been populated. Showing and checking...")
+            Dim msg As String = ""
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "The current edition is " & Quote & imgEdition & Quote & CrLf
+                        Case "ESN"
+                            msg = "La edición actual es " & Quote & imgEdition & Quote & CrLf
+                        Case "FRA"
+                            msg = "L'édition actuelle est " & Quote & imgEdition & Quote & CrLf
+                        Case "PTB", "PTG"
+                            msg = "A edição atual é " & Quote & imgEdition & Quote & CrLf
+                        Case "ITA"
+                            msg = "L'edizione attuale è " & Quote & imgEdition & Quote & CrLf
+                    End Select
+                Case 1
+                    msg = "The current edition is " & Quote & imgEdition & Quote & CrLf
+                Case 2
+                    msg = "La edición actual es " & Quote & imgEdition & Quote & CrLf
+                Case 3
+                    msg = "L'édition actuelle est " & Quote & imgEdition & Quote & CrLf
+                Case 4
+                    msg = "A edição atual é " & Quote & imgEdition & Quote & CrLf
+                Case 5
+                    msg = "L'edizione attuale è " & Quote & imgEdition & Quote & CrLf
+            End Select
+            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Else
+                DynaLog.LogMessage("Image edition is not WindowsPE. This is not a Windows PE image.")
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg &= CrLf & "If you have a product key, you may be able to upgrade this Windows image to a higher edition."
+                            Case "ESN"
+                                msg &= CrLf & "Si cuenta con una clave de producto, podrá actualizar esta imagen de Windows a una edición superior."
+                            Case "FRA"
+                                msg &= CrLf & "Si vous disposez d'une clé de produit, vous pourrez peut-être mettre à niveau cette image Windows vers une édition supérieure."
+                            Case "PTB", "PTG"
+                                msg &= CrLf & "Se tiver uma chave de produto, poderá atualizar esta imagem do Windows para uma edição superior."
+                            Case "ITA"
+                                msg &= CrLf & "Se si dispone di un codice prodotto, è possibile aggiornare questa immagine di Windows a un'edizione superiore."
+                        End Select
+                    Case 1
+                        msg &= CrLf & "If you have a product key, you may be able to upgrade this Windows image to a higher edition."
+                    Case 2
+                        msg &= CrLf & "Si cuenta con una clave de producto, podrá actualizar esta imagen de Windows a una edición superior."
+                    Case 3
+                        msg &= CrLf & "Si vous disposez d'une clé de produit, vous pourrez peut-être mettre à niveau cette image Windows vers une édition supérieure."
+                    Case 4
+                        msg &= CrLf & "Se tiver uma chave de produto, poderá atualizar esta imagem do Windows para uma edição superior."
+                    Case 5
+                        msg &= CrLf & "Se si dispone di un codice prodotto, è possibile aggiornare questa immagine di Windows a un'edizione superiore."
+                End Select
+            End If
+            MsgBox(msg, vbOKOnly + vbInformation, Text)
+        End If
+    End Sub
+
+    Private Sub GetTargetEditions_Click(sender As Object, e As EventArgs) Handles GetTargetEditions.Click
+        DynaLog.LogMessage("Preparing to get target editions...")
+        MountedImageDetectorBWRestarterTimer.Enabled = False
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        DynaLog.LogMessage("Getting target editions...")
+        Dim msg As String = ""
+        Dim msgSuccess As Boolean
+        Try
+            DynaLog.LogMessage("Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            DynaLog.LogMessage("Creating session...")
+            Using imgSession As DismSession = If(OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
+                Dim targetEditions As DismEditionCollection = DismApi.GetTargetEditions(imgSession)
+                DynaLog.LogMessage("Amount of target editions: " & targetEditions.Count)
+                msgSuccess = True
+                If targetEditions.Count > 0 Then
+                    ' This image hasn't been upgraded to its highest edition
+                    DynaLog.LogMessage("There are target editions. This image can give a little more")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "If you have a suitable product key, you can upgrade this Windows image to one of the following editions:" & CrLf & CrLf
+                                Case "ESN"
+                                    msg = "Si cuenta con una clave de producto apropiada, puede actualizar esta imagen de Windows a una de las siguientes ediciones:" & CrLf & CrLf
+                                Case "FRA"
+                                    msg = "Si vous disposez d'une clé de produit appropriée, vous pouvez mettre à niveau cette image Windows vers l'une des éditions suivantes :" & CrLf & CrLf
+                                Case "PTB", "PTG"
+                                    msg = "Se tiver uma chave de produto adequada, pode atualizar esta imagem do Windows para uma das seguintes edições:" & CrLf & CrLf
+                                Case "ITA"
+                                    msg = "Se si dispone di un codice prodotto adeguato, è possibile aggiornare questa immagine di Windows a una delle seguenti edizioni:" & CrLf & CrLf
+                            End Select
+                        Case 1
+                            msg = "If you have a suitable product key, you can upgrade this Windows image to one of the following editions:" & CrLf & CrLf
+                        Case 2
+                            msg = "Si cuenta con una clave de producto apropiada, puede actualizar esta imagen de Windows a una de las siguientes ediciones:" & CrLf & CrLf
+                        Case 3
+                            msg = "Si vous disposez d'une clé de produit appropriée, vous pouvez mettre à niveau cette image Windows vers l'une des éditions suivantes :" & CrLf & CrLf
+                        Case 4
+                            msg = "Se tiver uma chave de produto adequada, pode atualizar esta imagem do Windows para uma das seguintes edições:" & CrLf & CrLf
+                        Case 5
+                            msg = "Se si dispone di un codice prodotto adeguato, è possibile aggiornare questa immagine di Windows a una delle seguenti edizioni:" & CrLf & CrLf
+                    End Select
+                    For Each targetEdition In targetEditions
+                        msg &= "- " & targetEdition & CrLf
+                    Next
+                Else
+                    ' This image has been upgraded to its highest edition
+                    DynaLog.LogMessage("There are no target editions. This image is already rocking the best edition")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                                Case "ESN"
+                                    msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                                Case "FRA"
+                                    msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                                Case "PTB", "PTG"
+                                    msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                                Case "ITA"
+                                    msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                            End Select
+                        Case 1
+                            msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                        Case 2
+                            msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                        Case 3
+                            msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                        Case 4
+                            msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                        Case 5
+                            msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                    End Select
+                End If
+            End Using
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
+            msgSuccess = False
+            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Windows PE images cannot be upgraded to higher editions."
+                            Case "ESN"
+                                msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                            Case "FRA"
+                                msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                            Case "PTB", "PTG"
+                                msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                            Case "ITA"
+                                msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                        End Select
+                    Case 1
+                        msg = "Windows PE images cannot be upgraded to higher editions."
+                    Case 2
+                        msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                    Case 3
+                        msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                    Case 4
+                        msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                    Case 5
+                        msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                End Select
+            Else
+                msg = ex.ToString()
+            End If
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
+        End Try
+        MsgBox(msg, vbOKOnly + If(msgSuccess, vbInformation, vbExclamation), Text)
+        DynaLog.LogMessage("Restarting mounted image detector...")
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
+    End Sub
 End Class
