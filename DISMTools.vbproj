@@ -422,6 +422,12 @@
     <Compile Include="Panels\Get_Ops\WinPE\GetWinPESettings.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\ImageTaskHeader.Designer.vb">
+      <DependentUpon>ImageTaskHeader.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\ImageTaskHeader.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\ActiveInstAccessWarn.Designer.vb">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </Compile>
@@ -522,6 +528,12 @@
       <DependentUpon>RemDrivers.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Drivers\RemDrivers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Editions\SetProductKey.Designer.vb">
+      <DependentUpon>SetProductKey.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Editions\SetProductKey.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Features\DisableFeat.Designer.vb">
@@ -921,6 +933,9 @@
     <EmbeddedResource Include="Panels\Get_Ops\WinPE\GetWinPESettings.resx">
       <DependentUpon>GetWinPESettings.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\ImageTaskHeader.resx">
+      <DependentUpon>ImageTaskHeader.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\ActiveInstAccessWarn.resx">
       <DependentUpon>ActiveInstAccessWarn.vb</DependentUpon>
     </EmbeddedResource>
@@ -971,6 +986,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Drivers\RemDrivers.resx">
       <DependentUpon>RemDrivers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Editions\SetProductKey.resx">
+      <DependentUpon>SetProductKey.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Features\DisableFeat.resx">
       <DependentUpon>DisableFeat.vb</DependentUpon>

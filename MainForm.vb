@@ -19792,4 +19792,23 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
     End Sub
+
+    Private Sub SetProductKey_Click(sender As Object, e As EventArgs) Handles SetProductKey.Click
+        MountedImageDetectorBWRestarterTimer.Enabled = False
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        SetImageKey.ShowDialog()
+        DynaLog.LogMessage("Restarting mounted image detector...")
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
+    End Sub
 End Class

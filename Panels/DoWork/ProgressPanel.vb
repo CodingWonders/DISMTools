@@ -458,6 +458,9 @@ Public Class ProgressPanel
     Public capSuccessfulRemovals As Integer                 ' Number of successful capability removals
     Public capFailedRemovals As Integer                     ' Number of failed capability removals
 
+    ' OperationNum: 72
+    Public pkSetNewProductKey As String                     ' The new product key to set in the Windows image or installation
+
     ' OperationNum: 75
     Public drvAdditionPkgs(65535) As String                 ' Array used to store all drivers to add, whether they are in specified folders or not
     Public drvAdditionLastPkg As String                     ' Last driver package specified for addition
@@ -861,6 +864,8 @@ Public Class ProgressPanel
                 AddCapabilities(targetImage)
             Case 68
                 RemoveCapabilities(targetImage)
+            Case 72
+                SetImageProductKey(targetImage)
             Case 75
                 AddDrivers(targetImage)
             Case 76
@@ -5014,6 +5019,34 @@ Public Class ProgressPanel
             DynaLog.LogMessage("A system restart is needed to fully remove some capabilities.")
             LogView.AppendText(CrLf & "Some capabilities require a system restart to be fully processed. Save your work, close your programs, and restart when ready")
         End If
+    End Sub
+
+#End Region
+
+#Region "Edition Management Tasks"
+
+    Private Sub SetImageProductKey(targetImage As String)
+        DynaLog.LogMessage("Preparing to set the product key...")
+        DynaLog.LogMessage("- New Product Key: " & pkSetNewProductKey)
+        allTasks.Text = "Setting the product key..."
+        currentTask.Text = "Setting the new product key..."
+        LogView.AppendText(CrLf & "Setting the new product key..." & CrLf &
+                           "Options:" & CrLf &
+                           "- New product key: " & pkSetNewProductKey & CrLf)
+        CommandArgs &= " /image=" & targetImage & " /set-productkey=" & pkSetNewProductKey
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
     End Sub
 
 #End Region
