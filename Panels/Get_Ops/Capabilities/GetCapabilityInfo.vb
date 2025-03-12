@@ -7,6 +7,7 @@ Imports DISMTools.Utilities
 Public Class GetCapabilityInfoDlg
 
     Public InstalledCapabilityInfo As DismCapabilityCollection
+    Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -545,5 +546,27 @@ Public Class GetCapabilityInfoDlg
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
             Next
         End If
+    End Sub
+
+    Private Sub ListView1_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles ListView1.ColumnClick
+        ' From Microsoft documentation: https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column
+        DynaLog.LogMessage("Sorting items...")
+        DynaLog.LogMessage("Column to sort: " & e.Column + 1)
+        DynaLog.LogMessage("Current sort order (may be modified): " & _lvwColumnSorter.Order)
+        If e.Column = _lvwColumnSorter.SortColumn Then
+            If _lvwColumnSorter.Order = SortOrder.Ascending Then
+                _lvwColumnSorter.Order = SortOrder.Descending
+            Else
+                _lvwColumnSorter.Order = SortOrder.Ascending
+            End If
+        Else
+            _lvwColumnSorter.SortColumn = e.Column
+            _lvwColumnSorter.Order = SortOrder.Ascending
+        End If
+
+        ' Force sorting
+        ListView1.Sorting = _lvwColumnSorter.Order
+
+        ListView1.Sort()
     End Sub
 End Class
