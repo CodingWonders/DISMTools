@@ -127,12 +127,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
-    <None Include="verinfo\stable.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="verinfo\preview.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dt_bgbranding.jpg" />
@@ -173,8 +167,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF NOT EXIST "$(ProjectDir)update-bin" (md "$(ProjectDir)update-bin")
-COPY "$(ProjectDir)$(OutDir)update.exe" "$(ProjectDir)update-bin"
-COPY "$(ProjectDir)$(OutDir)verinfo\*.ini" "$(ProjectDir)update-bin"</PostBuildEvent>
+COPY "$(ProjectDir)$(OutDir)update.exe" "$(ProjectDir)update-bin"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
