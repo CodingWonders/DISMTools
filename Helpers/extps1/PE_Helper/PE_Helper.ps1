@@ -990,6 +990,7 @@ function Start-OSApplication
         $supportedArchitectures = [List[string]]::new()
         $supportedArchitectures.Add("i386")
         $supportedArchitectures.Add("amd64")
+        $supportedArchitectures.Add("aarch64")
         $systemArchitecture = Get-SystemArchitecture
 
         if ($supportedArchitectures.Contains($systemArchitecture))
