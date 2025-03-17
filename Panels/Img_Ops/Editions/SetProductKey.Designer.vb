@@ -74,6 +74,7 @@ Partial Class SetImageKey
         Me.ImageTaskHeader1.BackColor = System.Drawing.Color.White
         Me.ImageTaskHeader1.Dock = System.Windows.Forms.DockStyle.Top
         Me.ImageTaskHeader1.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ImageTaskHeader1.ForeColor = System.Drawing.Color.Black
         Me.ImageTaskHeader1.ItemColor = DISMTools.ImageTaskHeader.ColorMode.Light
         Me.ImageTaskHeader1.ItemPicture = Nothing
         Me.ImageTaskHeader1.ItemText = "Set product key"
@@ -83,6 +84,7 @@ Partial Class SetImageKey
         Me.ImageTaskHeader1.Name = "ImageTaskHeader1"
         Me.ImageTaskHeader1.Size = New System.Drawing.Size(624, 48)
         Me.ImageTaskHeader1.TabIndex = 1
+        Me.ImageTaskHeader1.Visible = False
         '
         'Label1
         '

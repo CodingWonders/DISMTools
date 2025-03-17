@@ -19794,6 +19794,36 @@ Public Class MainForm
     End Sub
 
     Private Sub SetProductKey_Click(sender As Object, e As EventArgs) Handles SetProductKey.Click
+        Dim msg As String = ""
+        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "Windows PE images cannot be upgraded to higher editions."
+                        Case "ESN"
+                            msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                        Case "FRA"
+                            msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                        Case "PTB", "PTG"
+                            msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                        Case "ITA"
+                            msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                    End Select
+                Case 1
+                    msg = "Windows PE images cannot be upgraded to higher editions."
+                Case 2
+                    msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                Case 3
+                    msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                Case 4
+                    msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                Case 5
+                    msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+            End Select
+            MsgBox(msg, vbOKOnly + vbInformation, Text)
+        End If
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
@@ -19807,6 +19837,113 @@ Public Class MainForm
             Thread.Sleep(100)
         End While
         SetImageKey.ShowDialog()
+        DynaLog.LogMessage("Restarting mounted image detector...")
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
+    End Sub
+
+    Private Sub SetEdition_Click(sender As Object, e As EventArgs) Handles SetEdition.Click
+        DynaLog.LogMessage("Preparing to get target editions...")
+        SetImageEdition.TargetEditions.Clear()
+        MountedImageDetectorBWRestarterTimer.Enabled = False
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        DynaLog.LogMessage("Getting target editions...")
+        Dim msg As String = ""
+        Try
+            DynaLog.LogMessage("Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            DynaLog.LogMessage("Creating session...")
+            Using imgSession As DismSession = If(OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
+                Dim targetEditions As DismEditionCollection = DismApi.GetTargetEditions(imgSession)
+                DynaLog.LogMessage("Amount of target editions: " & targetEditions.Count)
+                If targetEditions.Count > 0 Then
+                    ' This image hasn't been upgraded to its highest edition
+                    DynaLog.LogMessage("There are target editions. This image can give a little more")
+                    For Each targetEdition In targetEditions
+                        SetImageEdition.TargetEditions.Add(targetEdition)
+                    Next
+                Else
+                    ' This image has been upgraded to its highest edition
+                    DynaLog.LogMessage("There are no target editions. This image is already rocking the best edition")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                                Case "ESN"
+                                    msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                                Case "FRA"
+                                    msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                                Case "PTB", "PTG"
+                                    msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                                Case "ITA"
+                                    msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                            End Select
+                        Case 1
+                            msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                        Case 2
+                            msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                        Case 3
+                            msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                        Case 4
+                            msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                        Case 5
+                            msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                    End Select
+                    MsgBox(msg, vbOKOnly + vbInformation, Text)
+                End If
+            End Using
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
+            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Windows PE images cannot be upgraded to higher editions."
+                            Case "ESN"
+                                msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                            Case "FRA"
+                                msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                            Case "PTB", "PTG"
+                                msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                            Case "ITA"
+                                msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                        End Select
+                    Case 1
+                        msg = "Windows PE images cannot be upgraded to higher editions."
+                    Case 2
+                        msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                    Case 3
+                        msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                    Case 4
+                        msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                    Case 5
+                        msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                End Select
+            Else
+                msg = ex.ToString()
+            End If
+            MsgBox(msg, vbOKOnly + vbExclamation, Text)
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
+        End Try
+        SetImageEdition.ShowDialog()
         DynaLog.LogMessage("Restarting mounted image detector...")
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True

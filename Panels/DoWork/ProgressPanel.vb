@@ -208,13 +208,6 @@ Public Class ProgressPanel
     Public SystemEditor As String                           ' System Editor to launch for logs. Backup file is provided below, in case the specified editor doesn't exist
     Dim SystemEditorBackup As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "notepad.exe")
 
-    Public Actions_ImageFile As String
-    Public Actions_ImageIndex As Integer
-
-    Public ActionFile As String
-
-    Public ActionParameters As New List(Of String)
-
     Dim ImgVersion As Version
 
     ' Initial settings
@@ -457,6 +450,13 @@ Public Class ProgressPanel
     Public capRemovalCount As Integer                       ' Total number of capabilities to remove
     Public capSuccessfulRemovals As Integer                 ' Number of successful capability removals
     Public capFailedRemovals As Integer                     ' Number of failed capability removals
+
+    ' OperationNum: 71
+    Public imgEditionNewEdition As String                   ' The edition to upgrade the image to
+    Public imgEditionCopyEula As Boolean                    ' Determines whether or not to copy the end-user license agreement to a destination (Windows Server installations only)
+    Public imgEditionEulaDestination As String              ' The destination to copy the EULA to
+    Public imgEditionAcceptEula As Boolean                  ' Determines whether to accept the end-user license agreement (Windows Server installations only)
+    Public imgEditionEditionKey As String                   ' The product key with which the EULA will be accepted
 
     ' OperationNum: 72
     Public pkSetNewProductKey As String                     ' The new product key to set in the Windows image or installation
@@ -864,6 +864,8 @@ Public Class ProgressPanel
                 AddCapabilities(targetImage)
             Case 68
                 RemoveCapabilities(targetImage)
+            Case 71
+                SetImageEdition(targetImage)
             Case 72
                 SetImageProductKey(targetImage)
             Case 75
@@ -5024,6 +5026,47 @@ Public Class ProgressPanel
 #End Region
 
 #Region "Edition Management Tasks"
+
+    Private Sub SetImageEdition(targetImage As String)
+        DynaLog.LogMessage("Preparing image edition upgrade...")
+        DynaLog.LogMessage("- New Edition: " & imgEditionNewEdition)
+        DynaLog.LogMessage("- Copy the EULA? " & If(imgEditionCopyEula, "Yes", "No"))
+        DynaLog.LogMessage("- EULA destination (if chosen to copy the EULA): " & imgEditionEulaDestination)
+        DynaLog.LogMessage("- Accept the EULA? " & If(imgEditionAcceptEula, "Yes", "No"))
+        DynaLog.LogMessage("- Product key (if chosen to accept the EULA): " & imgEditionEditionKey)
+        allTasks.Text = "Upgrading the image..."
+        currentTask.Text = "Setting the new image edition..."
+        LogView.AppendText(CrLf & "Setting the new image edition..." & CrLf &
+                           "Options:" & CrLf &
+                           "- New edition: " & imgEditionNewEdition & CrLf &
+                           "- Will the EULA be copied? " & If(imgEditionCopyEula, "Yes, to the following destination: " & imgEditionEulaDestination, "No") & CrLf &
+                           "- Will the EULA be accepted? " & If(imgEditionAcceptEula, "Yes, with the following product key: " & imgEditionEditionKey, "No") & CrLf)
+        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-edition=" & imgEditionNewEdition
+        DynaLog.LogMessage("Checking if the active installation is being managed...")
+        If OnlineMgmt Then
+            DynaLog.LogMessage("The active installation is being managed. Taking into account other settings the user may have specified...")
+            If imgEditionCopyEula Then
+                CommandArgs &= " /geteula=" & Quote & imgEditionEulaDestination & Quote
+            ElseIf imgEditionAcceptEula Then
+                CommandArgs &= " /accepteula /productkey=" & imgEditionEditionKey
+            End If
+        Else
+            DynaLog.LogMessage("The active installation is not being managed. Ignoring other settings...")
+        End If
+        RunProcess(DismProgram, CommandArgs)
+        LogView.AppendText(CrLf & "Getting error level...")
+        If Hex(DismExitCode).Length < 8 Then
+            errCode = DismExitCode
+        Else
+            errCode = Hex(DismExitCode)
+        End If
+        If errCode.Length >= 8 Then
+            LogView.AppendText(" Error level : 0x" & errCode)
+        Else
+            LogView.AppendText(" Error level : " & errCode)
+        End If
+        GetErrorCode(False)
+    End Sub
 
     Private Sub SetImageProductKey(targetImage As String)
         DynaLog.LogMessage("Preparing to set the product key...")
