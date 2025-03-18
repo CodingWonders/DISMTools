@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports DISMTools.Elements
+Imports System.IO
 
 Public Class SetImageEdition
 
@@ -11,14 +12,20 @@ Public Class SetImageEdition
         If MainForm.imgInstType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
             ProgressPanel.imgEditionCopyEula = RadioButton1.Checked
             ProgressPanel.imgEditionAcceptEula = RadioButton2.Checked
-            ' TODO: Improve error handling
-            ProgressPanel.imgEditionEulaDestination = TextBox1.Text
-            Dim productKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox2.Text)
-            If Not productKey.Valid Then
-                MsgBox("The product key has been typed incorrectly", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
-                Exit Sub
+            If RadioButton1.Checked Then
+                If (TextBox1.Text = "" Or Not Directory.Exists(TextBox1.Text)) Then
+                    MsgBox("Either no directory has been specified or it does not exist.", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
+                    Exit Sub
+                End If
+                ProgressPanel.imgEditionEulaDestination = TextBox1.Text
+            Else
+                Dim productKey As ProductKey = ProductKeyValidator.ValidateProductKey(TextBox2.Text)
+                If Not productKey.Valid Then
+                    MsgBox("The product key has been typed incorrectly", vbOKOnly + vbExclamation, ImageTaskHeader1.ItemText)
+                    Exit Sub
+                End If
+                ProgressPanel.imgEditionEditionKey = productKey.Key
             End If
-            ProgressPanel.imgEditionEditionKey = productKey.Key
         Else
             ProgressPanel.imgEditionCopyEula = False
             ProgressPanel.imgEditionAcceptEula = False
