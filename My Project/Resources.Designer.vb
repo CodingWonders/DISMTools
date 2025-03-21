@@ -1971,13 +1971,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where, if you had an App Installer package and its resulting package, the program would throw an error when attempting to scan the second package
+        '''- The product key syntax validation algorithm is now more reliable
+        '''- Password entry is now disabled when setting up an open network connection in the unattended answer file creation wizard
+        '''- Fixed an issue where the program would throw an access violation exception if you declined the UnattendGen self-contained version download dialog
         '''
         '''New features:
         '''
-        '''- 2 new Optional Components are added to Preinstallation Environments, mainly to improve support for drives encrypted with BitLocker, and implementations of IEEE 1667
-        '''- When copying Optional Components and adding packages, you will now see a refreshed output
-        '''- Several improvements were made for Windows PE for ARM [resto de la cadena truncado]&quot;;.
+        '''- Image edition tasks have been added
+        '''- The Driver Installation Module (DIM) now shows instructions and progress information at the bottom  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

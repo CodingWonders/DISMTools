@@ -929,16 +929,24 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where, if you had an App Installer package and its resulting package, the program would throw an error when attempting to scan the second package
+- The product key syntax validation algorithm is now more reliable
+- Password entry is now disabled when setting up an open network connection in the unattended answer file creation wizard
+- Fixed an issue where the program would throw an access violation exception if you declined the UnattendGen self-contained version download dialog
 
 New features:
 
-- 2 new Optional Components are added to Preinstallation Environments, mainly to improve support for drives encrypted with BitLocker, and implementations of IEEE 1667
-- When copying Optional Components and adding packages, you will now see a refreshed output
-- Several improvements were made for Windows PE for ARM64:
-  - Support for the Arm64EC ABI is now added to the PE image, as another Optional Component
-  - The Driver Installation Module (DIM) now works natively on ARM64
-- You can now import Batch scripts when configuring post-installation scripts
-- The program installer is now built with a new version of Inno Setup (v6.4.1)</value>
+- Image edition tasks have been added
+- The Driver Installation Module (DIM) now shows instructions and progress information at the bottom of the window
+- The restart dialog has been ported to ARM64
+- CODE: the procedure to add Optional Components for Windows PE has been streamlined for ISO and test environment creation
+- HTML versions of image information reports now have a sidebar for easier section navigation
+- You can now sort features and capabilities by clicking the column headers
+- If a removable medium contains a Windows installation, you will now be able to use it in the offline installation management mode
+- CODE: image operations have been refactored
+
+Removed features:
+
+- Actions, introduced in version 0.3, have been removed due to a lack of maintenance
+- Printing capabilities of image information reports have been removed</value>
   </data>
 </root>
