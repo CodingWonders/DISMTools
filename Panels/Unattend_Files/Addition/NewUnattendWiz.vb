@@ -17,7 +17,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2522"
+    Dim UnattendGenReleaseTag As String = "2532"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -1215,7 +1215,7 @@ Public Class NewUnattendWiz
                     Case WiFiAuthenticationMode.WPA3_SAE
                         TextBox13.AppendText("    - Authentication mode: WPA3 (Simultaneous Authentication of Equals)" & CrLf)
                 End Select
-                TextBox13.AppendText("    - Password: " & New String("*", SelectedNetworkConfiguration.Password.Length) & " (hidden for your security)" & CrLf)
+                If SelectedNetworkConfiguration.Authentication <> WiFiAuthenticationMode.Open Then TextBox13.AppendText("    - Password: " & New String("*", SelectedNetworkConfiguration.Password.Length) & " (hidden for your security)" & CrLf)
             End If
         End If
         ' 9. -- SYSTEM TELEMETRY
@@ -1734,6 +1734,8 @@ Public Class NewUnattendWiz
 
     Private Sub ComboBox13_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox13.SelectedIndexChanged
         SelectedNetworkConfiguration.Authentication = ComboBox13.SelectedIndex
+        ' Disable password on open connections
+        TextBox10.Enabled = (ComboBox13.SelectedIndex <> 0)
     End Sub
 
     Private Sub TextBox10_TextChanged(sender As Object, e As EventArgs) Handles TextBox10.TextChanged
@@ -1859,14 +1861,6 @@ Public Class NewUnattendWiz
             Next
             ArchitectureString = String.Join(",", Architectures.ToArray())
             UnattendGen.StartInfo.Arguments &= " /architecture=" & ArchitectureString
-            'Select Case SelectedArchitectures
-            '    Case DismProcessorArchitecture.Intel
-            '        UnattendGen.StartInfo.Arguments &= " /architecture=x86"
-            '    Case DismProcessorArchitecture.AMD64
-            '        UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
-            '    Case DismProcessorArchitecture.ARM64
-            '        UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
-            'End Select
             ReportMessage("Saving user settings...", 6)
             DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
