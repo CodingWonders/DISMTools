@@ -727,6 +727,8 @@ Public Class NewUnattendWiz
 
         DynaLog.EnableLogging()
 
+        LoadConfiguredScript(0)
+
         ' Detect .NET runtimes/SDKs
         DetectDotNetRuntime("9.0.100", "9.0")
         If Not DotNetRuntimeSupported Then
@@ -767,8 +769,6 @@ Public Class NewUnattendWiz
         CheckedListBox1.SetItemChecked(0, False)
         CheckedListBox1.SetItemChecked(1, True)
         CheckedListBox1.SetItemChecked(2, False)
-
-        LoadConfiguredScript(0)
     End Sub
 
     Sub ReloadSettings()
@@ -2515,15 +2515,19 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub LoadConfiguredScript(Stage As Integer)
-        DynaLog.LogMessage("Loading script contents...")
-        DynaLog.LogMessage("- Stage Number: " & Stage)
-        DynaLog.LogMessage("Determining status of stage number...")
-        If Stage > ConfiguredScripts.Count - 1 Then
-            DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Stage Number is fine. Loading contents...")
-        Scintilla3.Text = ConfiguredScripts(Stage).ScriptContents
+        Try
+            DynaLog.LogMessage("Loading script contents...")
+            DynaLog.LogMessage("- Stage Number: " & Stage)
+            DynaLog.LogMessage("Determining status of stage number...")
+            If Stage > ConfiguredScripts.Count - 1 Then
+                DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
+                Exit Sub
+            End If
+            DynaLog.LogMessage("Stage Number is fine. Loading contents...")
+            Scintilla3.Text = ConfiguredScripts(Stage).ScriptContents
+        Catch ex As Exception
+            ' For some reason, Scintilla causes an access violation
+        End Try
     End Sub
 
     Sub SaveConfiguredScript(Stage As Integer, Contents As String)
