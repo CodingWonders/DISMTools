@@ -17,7 +17,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2522"
+    Dim UnattendGenReleaseTag As String = "2532"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -753,6 +753,8 @@ Public Class NewUnattendWiz
 
         DynaLog.EnableLogging()
 
+        LoadConfiguredScript(0)
+
         ' Detect .NET runtimes/SDKs
         DetectDotNetRuntime("9.0.100", "9.0")
         If Not DotNetRuntimeSupported Then
@@ -793,8 +795,6 @@ Public Class NewUnattendWiz
         CheckedListBox1.SetItemChecked(0, False)
         CheckedListBox1.SetItemChecked(1, True)
         CheckedListBox1.SetItemChecked(2, False)
-
-        LoadConfiguredScript(0)
     End Sub
 
     Sub ReloadSettings()
@@ -1215,7 +1215,7 @@ Public Class NewUnattendWiz
                     Case WiFiAuthenticationMode.WPA3_SAE
                         TextBox13.AppendText("    - Authentication mode: WPA3 (Simultaneous Authentication of Equals)" & CrLf)
                 End Select
-                TextBox13.AppendText("    - Password: " & New String("*", SelectedNetworkConfiguration.Password.Length) & " (hidden for your security)" & CrLf)
+                If SelectedNetworkConfiguration.Authentication <> WiFiAuthenticationMode.Open Then TextBox13.AppendText("    - Password: " & New String("*", SelectedNetworkConfiguration.Password.Length) & " (hidden for your security)" & CrLf)
             End If
         End If
         ' 9. -- SYSTEM TELEMETRY
@@ -1734,6 +1734,8 @@ Public Class NewUnattendWiz
 
     Private Sub ComboBox13_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox13.SelectedIndexChanged
         SelectedNetworkConfiguration.Authentication = ComboBox13.SelectedIndex
+        ' Disable password on open connections
+        TextBox10.Enabled = (ComboBox13.SelectedIndex <> 0)
     End Sub
 
     Private Sub TextBox10_TextChanged(sender As Object, e As EventArgs) Handles TextBox10.TextChanged
@@ -1859,14 +1861,6 @@ Public Class NewUnattendWiz
             Next
             ArchitectureString = String.Join(",", Architectures.ToArray())
             UnattendGen.StartInfo.Arguments &= " /architecture=" & ArchitectureString
-            'Select Case SelectedArchitectures
-            '    Case DismProcessorArchitecture.Intel
-            '        UnattendGen.StartInfo.Arguments &= " /architecture=x86"
-            '    Case DismProcessorArchitecture.AMD64
-            '        UnattendGen.StartInfo.Arguments &= " /architecture=amd64"
-            '    Case DismProcessorArchitecture.ARM64
-            '        UnattendGen.StartInfo.Arguments &= " /architecture=arm64"
-            'End Select
             ReportMessage("Saving user settings...", 6)
             DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
@@ -2552,15 +2546,19 @@ Public Class NewUnattendWiz
     End Sub
 
     Sub LoadConfiguredScript(Stage As Integer)
-        DynaLog.LogMessage("Loading script contents...")
-        DynaLog.LogMessage("- Stage Number: " & Stage)
-        DynaLog.LogMessage("Determining status of stage number...")
-        If Stage > ConfiguredScripts.Count - 1 Then
-            DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Stage Number is fine. Loading contents...")
-        Scintilla3.Text = ConfiguredScripts(Stage).ScriptContents
+        Try
+            DynaLog.LogMessage("Loading script contents...")
+            DynaLog.LogMessage("- Stage Number: " & Stage)
+            DynaLog.LogMessage("Determining status of stage number...")
+            If Stage > ConfiguredScripts.Count - 1 Then
+                DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
+                Exit Sub
+            End If
+            DynaLog.LogMessage("Stage Number is fine. Loading contents...")
+            Scintilla3.Text = ConfiguredScripts(Stage).ScriptContents
+        Catch ex As Exception
+            ' For some reason, Scintilla causes an access violation
+        End Try
     End Sub
 
     Sub SaveConfiguredScript(Stage As Integer, Contents As String)

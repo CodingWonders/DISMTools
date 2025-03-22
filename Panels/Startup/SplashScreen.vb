@@ -1,11 +1,23 @@
 ﻿Imports System.Drawing.Drawing2D
+Imports Microsoft.Win32
+
 Public Class SplashScreen
 
     Dim opacityFade As Single
 
     Private Sub SplashScreen_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.dtBranch.Contains("preview") Then PreviewFlag.Visible = True
-        Timer1.Enabled = True
+        Try
+            Dim wmReg As RegistryKey = Registry.CurrentUser.OpenSubKey("Control Panel\Desktop\WindowMetrics")
+            If wmReg.GetValue("MinAnimate") = 1 Then
+                Timer1.Enabled = True
+            Else
+                Opacity = 1
+            End If
+            wmReg.Close()
+        Catch ex As Exception
+            Opacity = 1
+        End Try
         Refresh()
     End Sub
 

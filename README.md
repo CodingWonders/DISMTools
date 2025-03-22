@@ -162,7 +162,6 @@ The following actions are supported by DISMTools:
   - Using the project's or program's scratch directory
   - Get information of packages, features, AppX packages, capabilities, and drivers
   - Configure Windows PE settings
-  - Basic automation
   
 ## Unsupported actions
 
@@ -192,7 +191,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: October 26, 2024 (Andrei Verdeanu)</i></p>
+	<p align="center"><i>Last updated: February 22, 2025 (Mihaela Teodorovici)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -204,6 +203,7 @@ DISMTools has been featured in news sites. Check them out if you're interested:
 - [DeskModder](https://www.deskmodder.de/blog/2024/06/24/dismtools-iso-oder-image-bearbeiten-in-neuer-stable-version-erschienen/)
 - [Computer BILD](https://www.computerbild.de/artikel/cb-Tipps-Windows-Windows-Media-Player-deinstallieren-31424181.html)
 - [PC World](https://www.pcworld.com/article/2430467/operating-command-line-tools-with-the-mouse-the-best-guis.html)
+- [Windows Central](https://www.windowscentral.com/software-apps/windows-11/what-is-dismtools-and-how-do-you-get-started-windows-11-and-10-image-gui-manager-explained)
 
 ## Support this project
 

@@ -49,6 +49,7 @@ Partial Class GetFeatureInfoDlg
         Me.Label41 = New System.Windows.Forms.Label()
         Me.Label40 = New System.Windows.Forms.Label()
         Me.Label43 = New System.Windows.Forms.Label()
+        Me.Label42 = New System.Windows.Forms.Label()
         Me.CPropViewer = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.cPropPathView = New System.Windows.Forms.TreeView()
@@ -63,7 +64,6 @@ Partial Class GetFeatureInfoDlg
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.Label42 = New System.Windows.Forms.Label()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FeatureInfoPanel.SuspendLayout()
@@ -386,6 +386,19 @@ Partial Class GetFeatureInfoDlg
         Me.Label43.TabIndex = 0
         Me.Label43.Text = "Custom properties:"
         '
+        'Label42
+        '
+        Me.Label42.AutoEllipsis = True
+        Me.Label42.AutoSize = True
+        Me.Label42.Location = New System.Drawing.Point(7, 179)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+        Me.Label42.Size = New System.Drawing.Size(38, 15)
+        Me.Label42.TabIndex = 3
+        Me.Label42.Text = "Label8"
+        Me.Label42.UseMnemonic = False
+        Me.Label42.Visible = False
+        '
         'CPropViewer
         '
         Me.CPropViewer.Controls.Add(Me.TableLayoutPanel1)
@@ -529,19 +542,6 @@ Partial Class GetFeatureInfoDlg
         Me.Button2.TabIndex = 7
         Me.Button2.Text = "Save..."
         Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Label42
-        '
-        Me.Label42.AutoEllipsis = True
-        Me.Label42.AutoSize = True
-        Me.Label42.Location = New System.Drawing.Point(7, 179)
-        Me.Label42.Name = "Label42"
-        Me.Label42.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-        Me.Label42.Size = New System.Drawing.Size(38, 15)
-        Me.Label42.TabIndex = 3
-        Me.Label42.Text = "Label8"
-        Me.Label42.UseMnemonic = False
-        Me.Label42.Visible = False
         '
         'GetFeatureInfoDlg
         '
