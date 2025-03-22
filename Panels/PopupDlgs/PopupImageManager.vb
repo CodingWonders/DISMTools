@@ -187,4 +187,10 @@ Public Class PopupImageManager
             Button2.PerformClick()
         End If
     End Sub
+
+    Private Sub PopupImageManager_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Maximized Then
+            WindowState = FormWindowState.Normal
+        End If
+    End Sub
 End Class

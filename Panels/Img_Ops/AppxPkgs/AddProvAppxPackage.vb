@@ -2317,6 +2317,7 @@ Public Class AddProvAppxPackage
 
     Private Sub ListView1_DragDrop(sender As Object, e As DragEventArgs) Handles ListView1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
+        Dim HasBeenScannedByAppInstaller As Boolean = False
         Cursor = Cursors.WaitCursor
         DynaLog.LogMessage("Interpreting items to add to queue...")
         For Each PackageFile In PackageFiles
@@ -2325,13 +2326,24 @@ Public Class AddProvAppxPackage
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".eappxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsixbundle", StringComparison.OrdinalIgnoreCase) Then
                 DynaLog.LogMessage("The item to add " & Quote & Path.GetFileName(PackageFile) & Quote & " is a regular AppX package.")
-                ScanAppxPackage(False, PackageFile)
+                If Not HasBeenScannedByAppInstaller Then
+                    ScanAppxPackage(False, PackageFile)
+                Else
+                    ' The item has been detected by the app installer package, but the resulting package is already present,
+                    ' so instead of scanning it again, we get rid of an error by ignoring the second scan. Instead of re-scanning
+                    ' the package, we set this flag to false so that we can get more stuff.
+                    HasBeenScannedByAppInstaller = False
+                End If
             ElseIf Path.GetExtension(PackageFile).Equals(".appinstaller", StringComparison.OrdinalIgnoreCase) Then
                 DynaLog.LogMessage("The item to add " & Quote & Path.GetFileName(PackageFile) & Quote & " is an App Installer package.")
                 If Not AppInstallerDownloader.IsDisposed Then AppInstallerDownloader.Dispose()
                 AppInstallerDownloader.AppInstallerFile = PackageFile
-                If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then AppInstallerDownloader.ShowDialog(Me)
-                If File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim()) Then ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
+                If Not File.Exists(PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile))) Then
+                    AppInstallerDownloader.ShowDialog(Me)
+                Else
+                    ScanAppxPackage(False, PackageFile.Replace(".appinstaller", GetDownloadedPackageExtensionFromAppInstaller(PackageFile)).Trim())
+                    HasBeenScannedByAppInstaller = True
+                End If
             ElseIf (File.GetAttributes(PackageFile) And FileAttributes.Directory) = FileAttributes.Directory Then
                 DynaLog.LogMessage("The item to add is a directory. Getting contents...")
                 Dim msg As String = ""
