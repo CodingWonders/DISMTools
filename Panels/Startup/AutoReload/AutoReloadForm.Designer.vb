@@ -26,13 +26,13 @@ Partial Class AutoReloadForm
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.imgMtPnt = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.imgFile = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.imgFile = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.imgMtPnt = New System.Windows.Forms.Label()
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -70,6 +70,60 @@ Partial Class AutoReloadForm
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Image information"
         '
+        'TableLayoutPanel1
+        '
+        Me.TableLayoutPanel1.ColumnCount = 2
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.2134609!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.7865372!))
+        Me.TableLayoutPanel1.Controls.Add(Me.imgMtPnt, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.imgFile, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 0)
+        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 17)
+        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+        Me.TableLayoutPanel1.RowCount = 2
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(594, 76)
+        Me.TableLayoutPanel1.TabIndex = 0
+        '
+        'imgMtPnt
+        '
+        Me.imgMtPnt.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.imgMtPnt.Location = New System.Drawing.Point(182, 38)
+        Me.imgMtPnt.Name = "imgMtPnt"
+        Me.imgMtPnt.Size = New System.Drawing.Size(409, 38)
+        Me.imgMtPnt.TabIndex = 3
+        '
+        'Label4
+        '
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Location = New System.Drawing.Point(3, 38)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(173, 38)
+        Me.Label4.TabIndex = 2
+        Me.Label4.Text = "Image mount point:"
+        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'imgFile
+        '
+        Me.imgFile.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.imgFile.Location = New System.Drawing.Point(182, 0)
+        Me.imgFile.Name = "imgFile"
+        Me.imgFile.Size = New System.Drawing.Size(409, 38)
+        Me.imgFile.TabIndex = 1
+        '
+        'Label3
+        '
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Location = New System.Drawing.Point(3, 0)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(173, 38)
+        Me.Label3.TabIndex = 0
+        Me.Label3.Text = "Image file:"
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'Label2
         '
         Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -88,60 +142,6 @@ Partial Class AutoReloadForm
         Me.ProgressBar1.Size = New System.Drawing.Size(612, 23)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 1
-        '
-        'TableLayoutPanel1
-        '
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.21346!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.78654!))
-        Me.TableLayoutPanel1.Controls.Add(Me.imgMtPnt, 1, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 1)
-        Me.TableLayoutPanel1.Controls.Add(Me.imgFile, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Label3, 0, 0)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 17)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 2
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(594, 76)
-        Me.TableLayoutPanel1.TabIndex = 0
-        '
-        'Label3
-        '
-        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label3.Location = New System.Drawing.Point(3, 0)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(173, 38)
-        Me.Label3.TabIndex = 0
-        Me.Label3.Text = "Image file:"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'imgFile
-        '
-        Me.imgFile.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.imgFile.Location = New System.Drawing.Point(182, 0)
-        Me.imgFile.Name = "imgFile"
-        Me.imgFile.Size = New System.Drawing.Size(409, 38)
-        Me.imgFile.TabIndex = 1
-        '
-        'Label4
-        '
-        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label4.Location = New System.Drawing.Point(3, 38)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(173, 38)
-        Me.Label4.TabIndex = 2
-        Me.Label4.Text = "Image mount point:"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'imgMtPnt
-        '
-        Me.imgMtPnt.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.imgMtPnt.Location = New System.Drawing.Point(182, 38)
-        Me.imgMtPnt.Name = "imgMtPnt"
-        Me.imgMtPnt.Size = New System.Drawing.Size(409, 38)
-        Me.imgMtPnt.TabIndex = 3
         '
         'BackgroundWorker1
         '

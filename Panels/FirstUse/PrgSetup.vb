@@ -881,4 +881,10 @@ Public Class PrgSetup
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
+
+    Private Sub PrgSetup_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Maximized Then
+            WindowState = FormWindowState.Normal
+        End If
+    End Sub
 End Class

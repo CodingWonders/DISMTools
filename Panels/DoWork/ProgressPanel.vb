@@ -7464,4 +7464,10 @@ Public Class ProgressPanel
         Dim olcToolTip As New ToolTip()
         olcToolTip.SetToolTip(sender, olcText)
     End Sub
+
+    Private Sub ProgressPanel_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If WindowState = FormWindowState.Maximized Then
+            WindowState = FormWindowState.Normal
+        End If
+    End Sub
 End Class

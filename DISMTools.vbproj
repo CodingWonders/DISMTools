@@ -1444,10 +1444,16 @@
     <Content Include="Helpers\extps1\PE_Helper\files\README1ST.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\DIM\aarch64\DT-DIM.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\amd64\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\aarch64\DTPE-RestartDialog.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\amd64\DTPE-RestartDialog.exe">

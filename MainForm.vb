@@ -1095,7 +1095,7 @@ Public Class MainForm
             DynaLog.LogMessage("Downloading update information from DISMTools repository...")
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             Try
-                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/DISMTools/" & branch & "/Updater/DISMTools-UCS/update-bin/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt-update-files/refs/heads/main/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
                 DynaLog.LogMessage("Could not grab update info. Well, I guess that we can't update!")
                 Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
