@@ -1343,7 +1343,28 @@ function Get-WimIndexes
             # We could have used a more visual way, but I fear that it won't be supported by the WinPE .NET Framework
             try
             {
-                (Get-WindowsImage -ImagePath "$wimPath") | Out-File "X:\imageinfo.txt" -Force -Encoding UTF8
+                Write-Progress -Activity "Getting image information..." -Status "Preparing to get image information..." -PercentComplete 0
+                $images = [List[Microsoft.Dism.Commands.WimImageInfoObject]]::new()
+                $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
+                if ($imageCount -gt 0)
+                {
+                    for ($i = 0; $i -lt $imageCount; $i++)
+                    {
+                        Write-Progress -Activity "Getting image information..." -Status "Getting information about index $($i + 1) of $($imageCount)..." -PercentComplete (($i / $imageCount) * 100)
+                        try
+                        {
+                            $images.Add($(Get-WindowsImage -ImagePath "$wimPath" -Index $($i + 1)))
+                        }
+                        catch
+                        {
+                            Write-Host "Could not get information about index $($i + 1) of the selected Windows image. Information may be incomplete."
+                        }
+                    }
+                    Write-Progress -Activity "Getting image information..." -Completed
+                    # We'll avoid showing the image path over and over again. The user has gotten it once, they don't need to get what the image is
+                    # every time
+                    $images | Select-Object -ExcludeProperty ImagePath | Format-List | Out-File "$env:SYSTEMDRIVE\imageinfo.txt" -Force -Encoding UTF8
+                }
                 if (Test-Path "X:\imageinfo.txt" -PathType Leaf)
                 {
                     notepad "X:\imageinfo.txt"
