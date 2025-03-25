@@ -50,34 +50,7 @@ Public Class ImgInfoSaveDlg
 
     Public ForceAppxApi As Boolean
 
-    Const TableSeparator As String = "|"
     Const CodeBlockChar As String = " ` "       ' It is " ` " to prevent Markdig problem "Markdown elements in the input are too deeply nested - depth limit exceeded. Input is most likely not sensible or is a very large table."
-
-    ' Table Headers
-    Const ImageFileTableHeader As String = "| Version | Image name | Image description | Image size | Architecture | HAL | Service Pack build | Service Pack level | Installation type | Edition | Product type | Product suite | System root directory | Languages | Date of creation | Date of modification |" & CrLf & _
-                                           "|:--------|:-----------|:------------------|:-----------|:-------------|:----|:-------------------|:-------------------|:------------------|:--------|:-------------|:--------------|:----------------------|:----------|:-----------------|:---------------------|" & CrLf
-    Const FullPackageTableHeader As String = "| Package name | Applicable? | Copyright | Company | Creation time | Description | Install client | Install package name | Install time | Last update time | Display name | Product name | Product version | Release type | Restart required? | Support information | Package state | Boot up required? | Capability identity | Custom properties | Features |" & CrLf & _
-                                             "|:-------------|:------------|:----------|:--------|:--------------|:------------|:---------------|:---------------------|:-------------|:-----------------|:-------------|:-------------|:----------------|:-------------|:------------------|:--------------------|:--------------|:------------------|:--------------------|:------------------|:---------|" & CrLf
-    Const BasicPackageTableHeader As String = "| Package name | Package state | Package release type | Package install time |" & CrLf & _
-                                              "|:-------------|:--------------|:---------------------|:---------------------|" & CrLf
-    Const FullFeatureTableHeader As String = "| Feature name | Display name | Description | Restart required? | Feature state | Custom properties |" & CrLf & _
-                                             "|:-------------|:-------------|:------------|:------------------|:--------------|:------------------|" & CrLf
-    Const BasicFeatureTableHeader As String = "| Feature name | Feature state |" & CrLf & _
-                                              "|:-------------|:--------------|" & CrLf
-    Const FullAppxTableHeader As String = "| Package name | Application display name | Architecture | Resource ID | Version | Registered to a user? | Installation location | Package manifest location | Store logo asset directory | Main store logo asset |" & CrLf & _
-                                          "|:-------------|:-------------------------|:-------------|:------------|:--------|:----------------------|:----------------------|:--------------------------|:---------------------------|:----------------------|" & CrLf
-    Const BasicAppxTableHeader As String = "| Package name | Application display name | Architecture | Resource ID | Version |" & CrLf & _
-                                           "|:-------------|:-------------------------|:-------------|:------------|:--------|" & CrLf
-    Const FullCapabilityTableHeader As String = "| Capability identity | Capability name | Capability state | Display name | Download size | Installation size |" & CrLf & _
-                                                "|:--------------------|:----------------|:-----------------|:-------------|:--------------|:------------------|" & CrLf
-    Const BasicCapabilityTableHeader As String = "| Capability name | Capability state |" & CrLf & _
-                                                 "|:----------------|:-----------------|" & CrLf
-    Const FullDriverTableHeader As String = "| Published name | Original file name | Provider name | Class name | Class description | Class GUID | Catalog file path | Part of the Windows distribution? | Critical to the boot process? | Version | Date | Signature status |" & CrLf & _
-                                            "|:---------------|:-------------------|:--------------|:-----------|:------------------|:-----------|:------------------|:----------------------------------|:------------------------------|:--------|:-----|:-----------------|" & CrLf
-    Const BasicDriverTableHeader As String = "| Published name | Original file name | Part of the Windows distribution? | Class name | Provider name | Date | Version |" & CrLf & _
-                                             "|:---------------|:-------------------|:----------------------------------|:-----------|:--------------|:-----|:--------|" & CrLf
-    Const DriverFileTableHeader As String = "| Hardware description | Hardware IDs | Compatible IDs | Exclude IDs | Hardware manufacturer | Architecture |" & CrLf & _
-                                            "|:---------------------|:-------------|:---------------|:------------|:----------------------|:-------------|" & CrLf
 
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
@@ -86,24 +59,34 @@ Public Class ImgInfoSaveDlg
         Application.DoEvents()
     End Sub
 
+    Sub WriteExceptionInfo(ex As Exception)
+        Contents &= GetParagraph("The program could not get information about this task. See below for reasons why:") & CrLf &
+            GetListItems(New String() {"Exception: " & ex.ToString(),
+                                       "Exception message: " & ex.Message,
+                                       "Error code: " & Hex(ex.HResult) & CrLf & CrLf}.
+                                   ToList())
+    End Sub
+
     Sub GetImageInformation()
         Dim ImageInfoCollection As DismImageInfoCollection = Nothing
         Dim ImageInfoList As New List(Of DismImageInfo)
         If ImageInfoList.Count <> 0 Then ImageInfoList.Clear()
-        Contents &= "## Image information" & CrLf & CrLf
+        Contents &= GetHeader("Image information", HeaderSize.Header2) & CrLf
         If OnlineMode Then
-            Contents &= "### Active installation information:" & CrLf & CrLf & _
-                        "- Name: " & My.Computer.Info.OSFullName & CrLf & _
-                        "- Boot point (mount point): " & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & CrLf & _
-                        "- Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart & CrLf & CrLf
+            Contents &= GetHeader("Active installation information:", HeaderSize.Header3) & CrLf &
+                GetListItems(New String() {"Name: " & My.Computer.Info.OSFullName,
+                                           "Boot point (mount point): " & Environment.GetEnvironmentVariable("SYSTEMDRIVE"),
+                                           "Version: " & Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart}.
+                                       ToList()) & CrLf
             Exit Sub
         ElseIf OfflineMode Then
-            Contents &= "### Offline installation information:" & CrLf & CrLf & _
-                        "- Boot point (mount point): " & ImgMountDir & CrLf & _
-                        "- Version: " & FileVersionInfo.GetVersionInfo(ImgMountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion.ToString() & CrLf & CrLf
+            Contents &= GetHeader("Offline installation information:", HeaderSize.Header3) & CrLf &
+                GetListItems(New String() {"Boot point (mount point): " & ImgMountDir,
+                                           "- Version: " & FileVersionInfo.GetVersionInfo(ImgMountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion.ToString()}.
+                                       ToList()) & CrLf
             Exit Sub
         End If
-        Contents &= "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")
+        Contents &= GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "")}.ToList())
         Debug.WriteLine("[GetImageInformation] Starting task...")
         Try
             Debug.WriteLine("[GetImageInformation] Starting API...")
@@ -111,8 +94,23 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetImageInformation] Populating info collection...")
             ImageInfoCollection = DismApi.GetImageInfo(SourceImage)
             Debug.WriteLine("[GetImageInformation] Information processes completed for the image. Obtained images: " & ImageInfoCollection.Count)
-            Contents &= CrLf & CrLf & _
-                        "**Information summary for " & ImageInfoCollection.Count & " image(s):**" & CrLf & CrLf & ImageFileTableHeader
+            Contents &= CrLf & GetParagraph("Information summary for " & ImageInfoCollection.Count & " image(s):", ParagraphStyle.Bold) & CrLf &
+                GetTableHeader(New String() {"Version",
+                                             "Image name",
+                                             "Image description",
+                                             "Image size",
+                                             "Architecture",
+                                             "HAL",
+                                             "Service Pack build",
+                                             "Service Pack level",
+                                             "Installation type",
+                                             "Edition",
+                                             "Product type",
+                                             "Product suite",
+                                             "System root directory",
+                                             "Languages",
+                                             "Date of creation",
+                                             "Date of modification"}.ToList())
             Debug.WriteLine("[GetImageInformation] Exporting information to contents...")
             For Each ImageInfo As DismImageInfo In ImageInfoCollection
                 Dim msg As String = ""
@@ -147,14 +145,27 @@ Public Class ImgInfoSaveDlg
                 Next
                 languages &= "</ul>"
                 ReportChanges(msg, (ImageInfoCollection.IndexOf(ImageInfo) / ImageInfoCollection.Count) * 100)
-                Contents &= TableSeparator & ImageInfo.ProductVersion.ToString() & TableSeparator & ImageInfo.ImageName & TableSeparator & ImageInfo.ImageDescription & TableSeparator & ImageInfo.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfo.ImageSize) & ")" & TableSeparator & Casters.CastDismArchitecture(ImageInfo.Architecture) & TableSeparator & If(ImageInfo.Hal <> "", ImageInfo.Hal, "Undefined by the image") & TableSeparator & ImageInfo.ProductVersion.Revision & TableSeparator & ImageInfo.SpLevel & TableSeparator & ImageInfo.InstallationType & TableSeparator & ImageInfo.EditionId & TableSeparator & ImageInfo.ProductType & TableSeparator & ImageInfo.ProductSuite & TableSeparator & ImageInfo.SystemRoot & TableSeparator & languages & TableSeparator & ImageInfo.CustomizedInfo.CreatedTime & TableSeparator & ImageInfo.CustomizedInfo.ModifiedTime & TableSeparator & CrLf
+                Contents &= GetTableRow(New String() {ImageInfo.ProductVersion.ToString(),
+                                                      ImageInfo.ImageName,
+                                                      ImageInfo.ImageDescription,
+                                                      ImageInfo.ImageSize.ToString("N0") & " bytes (~" & Converters.BytesToReadableSize(ImageInfo.ImageSize) & ")",
+                                                      Casters.CastDismArchitecture(ImageInfo.Architecture),
+                                                      If(ImageInfo.Hal <> "", ImageInfo.Hal, "Undefined by the image"),
+                                                      ImageInfo.ProductVersion.Revision,
+                                                      ImageInfo.SpLevel,
+                                                      ImageInfo.InstallationType,
+                                                      ImageInfo.EditionId,
+                                                      ImageInfo.ProductType,
+                                                      ImageInfo.ProductSuite,
+                                                      ImageInfo.SystemRoot,
+                                                      languages,
+                                                      ImageInfo.CustomizedInfo.CreatedTime,
+                                                      ImageInfo.CustomizedInfo.ModifiedTime}.
+                                                  ToList())
             Next
         Catch ex As Exception
             Debug.WriteLine("[GetImageInformation] An error occurred while getting image information: " & ex.ToString() & " - " & ex.Message)
-            Contents &= CrLf & "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                        "- Exception: " & ex.ToString() & CrLf & _
-                        "- Exception message: " & ex.Message & CrLf & _
-                        "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            WriteExceptionInfo(ex)
         Finally
             DismApi.Shutdown()
         End Try
@@ -228,8 +239,8 @@ Public Class ImgInfoSaveDlg
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sul pacchetto"
         End Select
-        Contents &= "## Package information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Contents &= GetHeader("Package information", HeaderSize.Header2) & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetPackageInformation] Starting task...")
         Try
             Debug.WriteLine("[GetPackageInformation] Starting API...")
@@ -240,7 +251,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetPackageInformation] Getting basic package information...")
                 ReportChanges(msg(0), 5)
                 InstalledPkgInfo = DismApi.GetPackages(imgSession)
-                Contents &= "**Information summary for " & InstalledPkgInfo.Count & " package(s):**" & CrLf & CrLf
+                Contents &= GetParagraph("Information summary for " & InstalledPkgInfo.Count & " package(s):", ParagraphStyle.Bold) & CrLf
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -270,7 +281,28 @@ Public Class ImgInfoSaveDlg
                 Dim pkgCustomPropsList As String = "<ul>"
                 Dim pkgFeaturesList As String = "<ul>"
                 If SkipQuestions And AutoCompleteInfo(0) Then
-                    Contents &= CrLf & CrLf & FullPackageTableHeader
+                    Contents &= CrLf & GetTableHeader(New String() {"Package name",
+                                                                    "Applicable?",
+                                                                    "Copyright",
+                                                                    "Company",
+                                                                    "Creation time",
+                                                                    "Description",
+                                                                    "Install client",
+                                                                    "Install package name",
+                                                                    "Install time",
+                                                                    "Last update time",
+                                                                    "Display name",
+                                                                    "Product name",
+                                                                    "Product version",
+                                                                    "Release type",
+                                                                    "Restart required?",
+                                                                    "Support information",
+                                                                    "Package state",
+                                                                    "Boot up required?",
+                                                                    "Capability identity",
+                                                                    "Custom properties",
+                                                                    "Features"}.
+                                                                ToList())
                     Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
                     For Each installedPackage As DismPackage In InstalledPkgInfo
                         Select Case MainForm.Language
@@ -330,7 +362,28 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = "None"
                             End If
-                            Contents &= TableSeparator & CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & TableSeparator & pkgInfoEx.Copyright & TableSeparator & pkgInfoEx.Company & TableSeparator & pkgInfoEx.CreationTime & If(pkgInfoEx.CreationTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfoEx.Description & TableSeparator & pkgInfoEx.InstallClient & TableSeparator & CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar & TableSeparator & pkgInfoEx.InstallTime & TableSeparator & pkgInfoEx.LastUpdateTime & If(pkgInfoEx.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfoEx.DisplayName & TableSeparator & pkgInfoEx.ProductName & TableSeparator & pkgInfoEx.ProductVersion.ToString() & TableSeparator & Casters.CastDismReleaseType(pkgInfoEx.ReleaseType) & TableSeparator & Casters.CastDismRestartType(pkgInfoEx.RestartRequired) & TableSeparator & pkgInfoEx.SupportInformation & TableSeparator & Casters.CastDismPackageState(pkgInfoEx.PackageState) & TableSeparator & Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline) & TableSeparator & CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar & TableSeparator & pkgCustomPropsList & TableSeparator & pkgFeaturesList & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
+                                                                  Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
+                                                                  pkgInfoEx.Copyright,
+                                                                  pkgInfoEx.Company,
+                                                                  pkgInfoEx.CreationTime & If(pkgInfoEx.CreationTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfoEx.Description,
+                                                                  pkgInfoEx.InstallClient,
+                                                                  CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar,
+                                                                  pkgInfoEx.InstallTime,
+                                                                  pkgInfoEx.LastUpdateTime & If(pkgInfoEx.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfoEx.DisplayName,
+                                                                  pkgInfoEx.ProductName,
+                                                                  pkgInfoEx.ProductVersion.ToString(),
+                                                                  Casters.CastDismReleaseType(pkgInfoEx.ReleaseType),
+                                                                  Casters.CastDismRestartType(pkgInfoEx.RestartRequired),
+                                                                  pkgInfoEx.SupportInformation,
+                                                                  Casters.CastDismPackageState(pkgInfoEx.PackageState),
+                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline),
+                                                                  CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar,
+                                                                  pkgCustomPropsList,
+                                                                  pkgFeaturesList}.
+                                                              ToList())
                         ElseIf pkgInfo IsNot Nothing Then
                             pkgCustomPropsList = "<ul>"
                             pkgFeaturesList = "<ul>"
@@ -352,12 +405,54 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = "None"
                             End If
-                            Contents &= TableSeparator & CodeBlockChar & pkgInfo.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & TableSeparator & pkgInfo.Copyright & TableSeparator & pkgInfo.Company & TableSeparator & pkgInfo.CreationTime & If(pkgInfo.CreationTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfo.Description & TableSeparator & pkgInfo.InstallClient & TableSeparator & CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar & TableSeparator & pkgInfo.InstallTime & TableSeparator & pkgInfo.LastUpdateTime & If(pkgInfo.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfo.DisplayName & TableSeparator & pkgInfo.ProductName & TableSeparator & pkgInfo.ProductVersion.ToString() & TableSeparator & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & TableSeparator & Casters.CastDismRestartType(pkgInfo.RestartRequired) & TableSeparator & pkgInfo.SupportInformation & TableSeparator & Casters.CastDismPackageState(pkgInfo.PackageState) & TableSeparator & Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline) & TableSeparator & "None" & TableSeparator & pkgCustomPropsList & TableSeparator & pkgFeaturesList & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
+                                                                  Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
+                                                                  pkgInfo.Copyright,
+                                                                  pkgInfo.Company,
+                                                                  pkgInfo.CreationTime & If(pkgInfo.CreationTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfo.Description,
+                                                                  pkgInfo.InstallClient,
+                                                                  CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar,
+                                                                  pkgInfo.InstallTime,
+                                                                  pkgInfo.LastUpdateTime & If(pkgInfo.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfo.DisplayName,
+                                                                  pkgInfo.ProductName,
+                                                                  pkgInfo.ProductVersion.ToString(),
+                                                                  Casters.CastDismReleaseType(pkgInfo.ReleaseType),
+                                                                  Casters.CastDismRestartType(pkgInfo.RestartRequired),
+                                                                  pkgInfo.SupportInformation,
+                                                                  Casters.CastDismPackageState(pkgInfo.PackageState),
+                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline),
+                                                                  "None",
+                                                                  pkgCustomPropsList,
+                                                                  pkgFeaturesList}.
+                                                              ToList())
                         End If
                     Next
-                    Contents &= CrLf & "- Complete package information has been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete package information has been gathered.") & CrLf
                 ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(0)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
-                    Contents &= CrLf & CrLf & FullPackageTableHeader
+                    Contents &= CrLf & GetTableHeader(New String() {"Package name",
+                                                                    "Applicable?",
+                                                                    "Copyright",
+                                                                    "Company",
+                                                                    "Creation time",
+                                                                    "Description",
+                                                                    "Install client",
+                                                                    "Install package name",
+                                                                    "Install time",
+                                                                    "Last update time",
+                                                                    "Display name",
+                                                                    "Product name",
+                                                                    "Product version",
+                                                                    "Release type",
+                                                                    "Restart required?",
+                                                                    "Support information",
+                                                                    "Package state",
+                                                                    "Boot up required?",
+                                                                    "Capability identity",
+                                                                    "Custom properties",
+                                                                    "Features"}.
+                                                                ToList())
                     Debug.WriteLine("[GetPackageInformation] Getting complete package information...")
                     For Each installedPackage As DismPackage In InstalledPkgInfo
                         Select Case MainForm.Language
@@ -417,7 +512,28 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = "None"
                             End If
-                            Contents &= TableSeparator & CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & TableSeparator & pkgInfoEx.Copyright & TableSeparator & pkgInfoEx.Company & TableSeparator & pkgInfoEx.CreationTime & If(pkgInfoEx.CreationTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfoEx.Description & TableSeparator & pkgInfoEx.InstallClient & TableSeparator & CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar & TableSeparator & pkgInfoEx.InstallTime & TableSeparator & pkgInfoEx.LastUpdateTime & If(pkgInfoEx.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfoEx.DisplayName & TableSeparator & pkgInfoEx.ProductName & TableSeparator & pkgInfoEx.ProductVersion.ToString() & TableSeparator & Casters.CastDismReleaseType(pkgInfoEx.ReleaseType) & TableSeparator & Casters.CastDismRestartType(pkgInfoEx.RestartRequired) & TableSeparator & pkgInfoEx.SupportInformation & TableSeparator & Casters.CastDismPackageState(pkgInfoEx.PackageState) & TableSeparator & Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline) & TableSeparator & CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar & TableSeparator & pkgCustomPropsList & TableSeparator & pkgFeaturesList & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
+                                                                  Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
+                                                                  pkgInfoEx.Copyright,
+                                                                  pkgInfoEx.Company,
+                                                                  pkgInfoEx.CreationTime & If(pkgInfoEx.CreationTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfoEx.Description,
+                                                                  pkgInfoEx.InstallClient,
+                                                                  CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar,
+                                                                  pkgInfoEx.InstallTime,
+                                                                  pkgInfoEx.LastUpdateTime & If(pkgInfoEx.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfoEx.DisplayName,
+                                                                  pkgInfoEx.ProductName,
+                                                                  pkgInfoEx.ProductVersion.ToString(),
+                                                                  Casters.CastDismReleaseType(pkgInfoEx.ReleaseType),
+                                                                  Casters.CastDismRestartType(pkgInfoEx.RestartRequired),
+                                                                  pkgInfoEx.SupportInformation,
+                                                                  Casters.CastDismPackageState(pkgInfoEx.PackageState),
+                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline),
+                                                                  CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar,
+                                                                  pkgCustomPropsList,
+                                                                  pkgFeaturesList}.
+                                                              ToList())
                         ElseIf pkgInfo IsNot Nothing Then
                             pkgCustomPropsList = "<ul>"
                             pkgFeaturesList = "<ul>"
@@ -439,10 +555,31 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = "None"
                             End If
-                            Contents &= TableSeparator & CodeBlockChar & pkgInfo.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & TableSeparator & pkgInfo.Copyright & TableSeparator & pkgInfo.Company & TableSeparator & pkgInfo.CreationTime & If(pkgInfo.CreationTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfo.Description & TableSeparator & pkgInfo.InstallClient & TableSeparator & CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar & TableSeparator & pkgInfo.InstallTime & TableSeparator & pkgInfo.LastUpdateTime & If(pkgInfo.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", "") & TableSeparator & pkgInfo.DisplayName & TableSeparator & pkgInfo.ProductName & TableSeparator & pkgInfo.ProductVersion.ToString() & TableSeparator & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & TableSeparator & Casters.CastDismRestartType(pkgInfo.RestartRequired) & TableSeparator & pkgInfo.SupportInformation & TableSeparator & Casters.CastDismPackageState(pkgInfo.PackageState) & TableSeparator & Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline) & TableSeparator & "None" & TableSeparator & pkgCustomPropsList & TableSeparator & pkgFeaturesList & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
+                                                                  Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
+                                                                  pkgInfo.Copyright,
+                                                                  pkgInfo.Company,
+                                                                  pkgInfo.CreationTime & If(pkgInfo.CreationTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfo.Description,
+                                                                  pkgInfo.InstallClient,
+                                                                  CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar,
+                                                                  pkgInfo.InstallTime,
+                                                                  pkgInfo.LastUpdateTime & If(pkgInfo.LastUpdateTime.Year < 1900, " - **Preposterous time and date**", ""),
+                                                                  pkgInfo.DisplayName,
+                                                                  pkgInfo.ProductName,
+                                                                  pkgInfo.ProductVersion.ToString(),
+                                                                  Casters.CastDismReleaseType(pkgInfo.ReleaseType),
+                                                                  Casters.CastDismRestartType(pkgInfo.RestartRequired),
+                                                                  pkgInfo.SupportInformation,
+                                                                  Casters.CastDismPackageState(pkgInfo.PackageState),
+                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline),
+                                                                  "None",
+                                                                  pkgCustomPropsList,
+                                                                  pkgFeaturesList}.
+                                                              ToList())
                         End If
                     Next
-                    Contents &= CrLf & "- Complete package information has been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete package information has been gathered.") & CrLf
                 Else
                     Select Case MainForm.Language
                         Case 0
@@ -470,19 +607,24 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Salvataggio dei pacchetti installati..."
                     End Select
                     ReportChanges(msg(0), 50)
-                    Contents &= BasicPackageTableHeader
+                    Contents &= GetTableHeader(New String() {"Package name",
+                                                             "Package state",
+                                                             "Package release type",
+                                                             "Package install time"}.
+                                                         ToList())
                     For Each installedPackage As DismPackage In InstalledPkgInfo
-                        Contents &= TableSeparator & CodeBlockChar & installedPackage.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismPackageState(installedPackage.PackageState) & TableSeparator & Casters.CastDismReleaseType(installedPackage.ReleaseType) & TableSeparator & installedPackage.InstallTime & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {CodeBlockChar & installedPackage.PackageName & CodeBlockChar,
+                                                              Casters.CastDismPackageState(installedPackage.PackageState),
+                                                              Casters.CastDismReleaseType(installedPackage.ReleaseType),
+                                                              installedPackage.InstallTime}.
+                                                          ToList())
                     Next
-                    Contents &= CrLf & "- Complete package information has not been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete package information has not been gathered") & CrLf
                 End If
             End Using
         Catch ex As Exception
             Debug.WriteLine("[GetPackageInformation] An error occurred while getting package information: " & ex.ToString() & " - " & ex.Message)
-            Contents &= "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                        "- Exception: " & ex.ToString() & CrLf & _
-                        "- Exception message: " & ex.Message & CrLf & _
-                        "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            WriteExceptionInfo(ex)
         Finally
             DismApi.Shutdown()
         End Try
@@ -515,16 +657,37 @@ Public Class ImgInfoSaveDlg
             Case 5
                 msg = "Preparazione dei processi di informazione sui pacchetti..."
         End Select
-        Contents &= "## Package file information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Contents &= GetHeader("Package file information", HeaderSize.Header2) & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetPackageFileInformation] Starting task...")
         Try
             Debug.WriteLine("[GetPackageFileInformation] Starting API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             Debug.WriteLine("[GetPackageFileInformation] Creating image session...")
             ReportChanges(msg, 0)
-            Contents &= "**Amount of package files to get information about: " & PackageFiles.Count & "**"
-            Contents &= CrLf & CrLf & FullPackageTableHeader
+            Contents &= GetParagraph("Amount of package files to get information about: " & PackageFiles.Count, ParagraphStyle.Bold)
+            Contents &= CrLf & GetTableHeader(New String() {"Package name",
+                                                            "Applicable?",
+                                                            "Copyright",
+                                                            "Company",
+                                                            "Creation time",
+                                                            "Description",
+                                                            "Install client",
+                                                            "Install package name",
+                                                            "Install time",
+                                                            "Last update time",
+                                                            "Display name",
+                                                            "Product name",
+                                                            "Product version",
+                                                            "Release type",
+                                                            "Restart required?",
+                                                            "Support information",
+                                                            "Package state",
+                                                            "Boot up required?",
+                                                            "Capability identity",
+                                                            "Custom properties",
+                                                            "Features"}.
+                                                        ToList())
             Dim pkgCustomPropsList As String = "<ul>"
             Dim pkgFeaturesList As String = "<ul>"
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
@@ -587,7 +750,27 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = "None"
                             End If
-                            Contents &= TableSeparator & CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable) & TableSeparator & pkgInfoEx.Copyright & TableSeparator & pkgInfoEx.Company & TableSeparator & pkgInfoEx.CreationTime & TableSeparator & pkgInfoEx.Description & TableSeparator & If(pkgInfoEx.InstallClient = "", "None", pkgInfoEx.InstallClient) & TableSeparator & If(pkgInfoEx.InstallPackageName = "", "None", CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar) & TableSeparator & pkgInfoEx.InstallTime & TableSeparator & pkgInfoEx.LastUpdateTime & TableSeparator & pkgInfoEx.DisplayName & TableSeparator & pkgInfoEx.ProductName & TableSeparator & pkgInfoEx.ProductVersion.ToString() & TableSeparator & Casters.CastDismReleaseType(pkgInfoEx.ReleaseType) & TableSeparator & Casters.CastDismRestartType(pkgInfoEx.RestartRequired) & TableSeparator & pkgInfoEx.SupportInformation & TableSeparator & Casters.CastDismPackageState(pkgInfoEx.PackageState) & TableSeparator & Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline) & TableSeparator & If(pkgInfoEx.CapabilityId = "", "None", CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar) & TableSeparator & pkgCustomPropsList & TableSeparator & pkgFeaturesList & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfoEx.PackageName & CodeBlockChar,
+                                                                  Casters.CastDismApplicabilityStatus(pkgInfoEx.Applicable),
+                                                                  pkgInfoEx.Copyright,
+                                                                  pkgInfoEx.Company,
+                                                                  pkgInfoEx.CreationTime,
+                                                                  pkgInfoEx.Description,
+                                                                  If(pkgInfoEx.InstallClient = "", "None", pkgInfoEx.InstallClient),
+                                                                  If(pkgInfoEx.InstallPackageName = "", "None", CodeBlockChar & pkgInfoEx.InstallPackageName & CodeBlockChar),
+                                                                  pkgInfoEx.InstallTime,
+                                                                  pkgInfoEx.LastUpdateTime,
+                                                                  pkgInfoEx.DisplayName,
+                                                                  pkgInfoEx.ProductName,
+                                                                  pkgInfoEx.ProductVersion.ToString(),
+                                                                  Casters.CastDismReleaseType(pkgInfoEx.ReleaseType),
+                                                                  Casters.CastDismRestartType(pkgInfoEx.RestartRequired),
+                                                                  pkgInfoEx.SupportInformation,
+                                                                  Casters.CastDismPackageState(pkgInfoEx.PackageState),
+                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfoEx.FullyOffline),
+                                                                  If(pkgInfoEx.CapabilityId = "", "None", CodeBlockChar & pkgInfoEx.CapabilityId & CodeBlockChar),
+                                                                  pkgCustomPropsList,
+                                                                  pkgFeaturesList}.ToList())
                         ElseIf pkgInfo IsNot Nothing Then
                             pkgCustomPropsList = "<ul>"
                             pkgFeaturesList = "<ul>"
@@ -609,17 +792,34 @@ Public Class ImgInfoSaveDlg
                             Else
                                 pkgFeaturesList = "None"
                             End If
-                            Contents &= TableSeparator & CodeBlockChar & pkgInfo.PackageName & CodeBlockChar & TableSeparator & Casters.CastDismApplicabilityStatus(pkgInfo.Applicable) & TableSeparator & pkgInfo.Copyright & TableSeparator & pkgInfo.Company & TableSeparator & pkgInfo.CreationTime & TableSeparator & pkgInfo.Description & TableSeparator & If(pkgInfo.InstallClient = "", "None", pkgInfo.InstallClient) & TableSeparator & If(pkgInfo.InstallPackageName = "", "None", CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar) & TableSeparator & pkgInfo.InstallTime & TableSeparator & pkgInfo.LastUpdateTime & TableSeparator & pkgInfo.DisplayName & TableSeparator & pkgInfo.ProductName & TableSeparator & pkgInfo.ProductVersion.ToString() & TableSeparator & Casters.CastDismReleaseType(pkgInfo.ReleaseType) & TableSeparator & Casters.CastDismRestartType(pkgInfo.RestartRequired) & TableSeparator & pkgInfo.SupportInformation & TableSeparator & Casters.CastDismPackageState(pkgInfo.PackageState) & TableSeparator & Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline) & TableSeparator & "None" & TableSeparator & pkgCustomPropsList & TableSeparator & pkgFeaturesList & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & pkgInfo.PackageName & CodeBlockChar,
+                                                                  Casters.CastDismApplicabilityStatus(pkgInfo.Applicable),
+                                                                  pkgInfo.Copyright,
+                                                                  pkgInfo.Company,
+                                                                  pkgInfo.CreationTime,
+                                                                  pkgInfo.Description,
+                                                                  If(pkgInfo.InstallClient = "", "None", pkgInfo.InstallClient),
+                                                                  If(pkgInfo.InstallPackageName = "", "None", CodeBlockChar & pkgInfo.InstallPackageName & CodeBlockChar),
+                                                                  pkgInfo.InstallTime,
+                                                                  pkgInfo.LastUpdateTime,
+                                                                  pkgInfo.DisplayName,
+                                                                  pkgInfo.ProductName,
+                                                                  pkgInfo.ProductVersion.ToString(),
+                                                                  Casters.CastDismReleaseType(pkgInfo.ReleaseType),
+                                                                  Casters.CastDismRestartType(pkgInfo.RestartRequired),
+                                                                  pkgInfo.SupportInformation,
+                                                                  Casters.CastDismPackageState(pkgInfo.PackageState),
+                                                                  Casters.CastDismFullyOfflineInstallationType(pkgInfo.FullyOffline),
+                                                                  "None",
+                                                                  pkgCustomPropsList,
+                                                                  pkgFeaturesList}.ToList())
                         End If
                     End If
                 Next
             End Using
         Catch ex As Exception
             Debug.WriteLine("[GetPackageFileInformation] An error occurred while getting package information: " & ex.ToString() & " - " & ex.Message)
-            Contents &= "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                        "- Exception: " & ex.ToString() & CrLf & _
-                        "- Exception message: " & ex.Message & CrLf & _
-                        "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            WriteExceptionInfo(ex)
         Finally
             DismApi.Shutdown()
         End Try
@@ -694,8 +894,8 @@ Public Class ImgInfoSaveDlg
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sulle caratteristiche"
         End Select
-        Contents &= "## Feature information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Contents &= GetHeader("Feature information", HeaderSize.Header2) & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetFeatureInformation] Starting task...")
         Try
             Debug.WriteLine("[GetFeatureInformation] Starting API...")
@@ -706,7 +906,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetFeatureInformation] Getting basic feature information...")
                 ReportChanges(msg(0), 5)
                 InstalledFeatInfo = DismApi.GetFeatures(imgSession)
-                Contents &= "**Information summary for " & InstalledFeatInfo.Count & " feature(s):**" & CrLf & CrLf
+                Contents &= GetParagraph("Information summary for " & InstalledFeatInfo.Count & " feature(s):", ParagraphStyle.Bold) & CrLf
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -735,7 +935,12 @@ Public Class ImgInfoSaveDlg
                 ReportChanges(msg(0), 10)
                 Dim featCustomPropsList As String = "<ul>"
                 If SkipQuestions And AutoCompleteInfo(1) Then
-                    Contents &= CrLf & CrLf & FullFeatureTableHeader
+                    Contents &= CrLf & GetTableHeader(New String() {"Feature name",
+                                                                    "Display name",
+                                                                    "Description",
+                                                                    "Restart required?",
+                                                                    "Feature state",
+                                                                    "Custom properties"}.ToList())
                     Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                     For Each feature As DismFeature In InstalledFeatInfo
                         featCustomPropsList = "<ul>"
@@ -775,11 +980,21 @@ Public Class ImgInfoSaveDlg
                         Else
                             featCustomPropsList = "None"
                         End If
-                        Contents &= TableSeparator & featInfo.FeatureName & TableSeparator & featInfo.DisplayName & TableSeparator & featInfo.Description & TableSeparator & Casters.CastDismRestartType(featInfo.RestartRequired) & TableSeparator & Casters.CastDismFeatureState(featInfo.FeatureState) & TableSeparator & featCustomPropsList & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {featInfo.FeatureName,
+                                                              featInfo.DisplayName,
+                                                              featInfo.Description,
+                                                              Casters.CastDismRestartType(featInfo.RestartRequired),
+                                                              Casters.CastDismFeatureState(featInfo.FeatureState),
+                                                              featCustomPropsList}.ToList())
                     Next
-                    Contents &= CrLf & "- Complete feature information has been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete feature information has been gathered") & CrLf
                 ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(1)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
-                    Contents &= CrLf & CrLf & FullFeatureTableHeader
+                    Contents &= CrLf & GetTableHeader(New String() {"Feature name",
+                                                                    "Display name",
+                                                                    "Description",
+                                                                    "Restart required?",
+                                                                    "Feature state",
+                                                                    "Custom properties"}.ToList())
                     Debug.WriteLine("[GetFeatureInformation] Getting complete feature information...")
                     For Each feature As DismFeature In InstalledFeatInfo
                         featCustomPropsList = "<ul>"
@@ -819,9 +1034,14 @@ Public Class ImgInfoSaveDlg
                         Else
                             featCustomPropsList = "None"
                         End If
-                        Contents &= TableSeparator & featInfo.FeatureName & TableSeparator & featInfo.DisplayName & TableSeparator & featInfo.Description & TableSeparator & Casters.CastDismRestartType(featInfo.RestartRequired) & TableSeparator & Casters.CastDismFeatureState(featInfo.FeatureState) & TableSeparator & featCustomPropsList & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {featInfo.FeatureName,
+                                                              featInfo.DisplayName,
+                                                              featInfo.Description,
+                                                              Casters.CastDismRestartType(featInfo.RestartRequired),
+                                                              Casters.CastDismFeatureState(featInfo.FeatureState),
+                                                              featCustomPropsList}.ToList())
                     Next
-                    Contents &= CrLf & "- Complete feature information has been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete feature information has been gathered") & CrLf
                 Else
                     Select Case MainForm.Language
                         Case 0
@@ -849,19 +1069,18 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Salvataggio delle caratteristiche installate..."
                     End Select
                     ReportChanges(msg(0), 50)
-                    Contents &= BasicFeatureTableHeader
+                    Contents &= GetTableHeader(New String() {"Feature name",
+                                                             "Feature state"}.ToList())
                     For Each installedFeature As DismFeature In InstalledFeatInfo
-                        Contents &= TableSeparator & installedFeature.FeatureName & TableSeparator & Casters.CastDismFeatureState(installedFeature.State) & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {installedFeature.FeatureName,
+                                                              Casters.CastDismFeatureState(installedFeature.State)}.ToList()) & CrLf
                     Next
-                    Contents &= CrLf & "- Complete feature information has not been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete feature information has not been gathered") & CrLf
                 End If
             End Using
         Catch ex As Exception
             Debug.WriteLine("[GetFeatureInformation] An error occurred while getting feature information: " & ex.ToString() & " - " & ex.Message)
-            Contents &= "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                        "- Exception: " & ex.ToString() & CrLf & _
-                        "- Exception message: " & ex.Message & CrLf & _
-                        "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            WriteExceptionInfo(ex)
         Finally
             DismApi.Shutdown()
         End Try
@@ -935,14 +1154,14 @@ Public Class ImgInfoSaveDlg
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sui pacchetti AppX"
         End Select
-        Contents &= "## AppX package information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf
+        Contents &= GetHeader("AppX package information", HeaderSize.Header2) & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         If MainForm.imgEdition Is Nothing Then
             MainForm.imgEdition = " "
         End If
         ' Detect if the image is Windows 8 or later. If not, skip this task
         If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
-            Contents &= "**This task is not supported on the specified Windows image. Check that it contains Windows 8 or a later Windows version, and that it isn't a Windows PE image.** Skipping task..." & CrLf & CrLf
+            Contents &= GetParagraph("This task is not supported on the specified Windows image. Check that it contains Windows 8 or a later Windows version, and that it isn't a Windows PE image. Skipping task...", ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
             Debug.WriteLine("[GetAppxInformation] Starting task...")
@@ -950,7 +1169,18 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= CrLf & "**Information summary for " & MainForm.imgAppxPackageNames.Count - 65537 & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
+                    Contents &= GetParagraph("Information summary for " & MainForm.imgAppxPackageNames.Count - 65537 & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
+                        GetTableHeader(New String() {"Package name",
+                                                     "Application display name",
+                                                     "Architecture",
+                                                     "Resource ID",
+                                                     "Version",
+                                                     "Registered to a user?",
+                                                     "Installation location",
+                                                     "Package manifest location",
+                                                     "Store logo asset directory",
+                                                     "Main store logo asset"}.
+                                                 ToList())
                     For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
                         If x = MainForm.imgAppxPackageNames.Count - 1 Or MainForm.imgAppxPackageNames(x) Is Nothing Then Continue For
                         Select Case MainForm.Language
@@ -979,7 +1209,6 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                         End Select
                         ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
-                        Contents &= TableSeparator & MainForm.imgAppxPackageNames(x) & TableSeparator & MainForm.imgAppxDisplayNames(x) & TableSeparator & MainForm.imgAppxArchitectures(x) & TableSeparator & MainForm.imgAppxResourceIds(x) & TableSeparator & MainForm.imgAppxVersions(x) & TableSeparator & "{APPXPKG.REGISTERED}" & TableSeparator & "{APPXPKG.INSTALLLOCATION}" & TableSeparator & "{APPXPKG.MANLOCATION}" & TableSeparator & "{APPXPKG.LOGOASSETDIR}" & TableSeparator & "{APPXPKG.MAINLOGO}" & TableSeparator & CrLf
                         Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                         ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                         If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
@@ -1064,9 +1293,18 @@ Public Class ImgInfoSaveDlg
                         Else
                             mainLogo = "Unknown"
                         End If
-                        Contents = Contents.Replace("{APPXPKG.REGISTERED}", registrationStatus).Replace("{APPXPKG.INSTALLLOCATION}", installationLocation).Replace("{APPXPKG.MANLOCATION}", instDir).Replace("{APPXPKG.LOGOASSETDIR}", logoAssetDir.TrimEnd("\")).Replace("{APPXPKG.MAINLOGO}", mainLogo.TrimEnd(Quote))
+                        Contents &= GetTableRow(New String() {MainForm.imgAppxPackageNames(x),
+                                                              MainForm.imgAppxDisplayNames(x),
+                                                              MainForm.imgAppxArchitectures(x),
+                                                              MainForm.imgAppxResourceIds(x),
+                                                              MainForm.imgAppxVersions(x),
+                                                              registrationStatus,
+                                                              installationLocation,
+                                                              instDir,
+                                                              logoAssetDir.TrimEnd("\"),
+                                                              mainLogo.TrimEnd(Quote)}.ToList())
                     Next
-                    Contents &= CrLf & "NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                    Contents &= CrLf & GetParagraph("NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset.", ParagraphStyle.Italic) & CrLf
                 Else
                     Debug.WriteLine("[GetAppxInformation] Starting API...")
                     DismApi.Initialize(DismLogLevel.LogErrors)
@@ -1080,7 +1318,18 @@ Public Class ImgInfoSaveDlg
                         For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
                             pkgNames.Add(pkg.PackageName)
                         Next
-                        Contents &= CrLf & "**Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 65537, pkgNames.Count) & " AppX package(s):**" & CrLf & CrLf & FullAppxTableHeader
+                        Contents &= CrLf & GetParagraph("Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 65537, pkgNames.Count) & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
+                            GetTableHeader(New String() {"Package name",
+                                                         "Application display name",
+                                                         "Architecture",
+                                                         "Resource ID",
+                                                         "Version",
+                                                         "Registered to a user?",
+                                                         "Installation location",
+                                                         "Package manifest location",
+                                                         "Store logo asset directory",
+                                                         "Main store logo asset"}.
+                                                     ToList())
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1138,7 +1387,6 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     End Select
                                     ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
-                                    Contents &= TableSeparator & MainForm.imgAppxPackageNames(x) & TableSeparator & MainForm.imgAppxDisplayNames(x) & TableSeparator & MainForm.imgAppxArchitectures(x) & TableSeparator & MainForm.imgAppxResourceIds(x) & TableSeparator & MainForm.imgAppxVersions(x) & TableSeparator & "{APPXPKG.REGISTERED}" & TableSeparator & "{APPXPKG.INSTALLLOCATION}" & TableSeparator & "{APPXPKG.MANLOCATION}" & TableSeparator & "{APPXPKG.LOGOASSETDIR}" & TableSeparator & "{APPXPKG.MAINLOGO}" & TableSeparator & CrLf
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                                     If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
@@ -1223,9 +1471,18 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         mainLogo = "Unknown"
                                     End If
-                                    Contents = Contents.Replace("{APPXPKG.REGISTERED}", registrationStatus).Replace("{APPXPKG.INSTALLLOCATION}", installationLocation).Replace("{APPXPKG.MANLOCATION}", instDir).Replace("{APPXPKG.LOGOASSETDIR}", logoAssetDir.TrimEnd("\")).Replace("{APPXPKG.MAINLOGO}", mainLogo)
+                                    Contents &= GetTableRow(New String() {MainForm.imgAppxPackageNames(x),
+                                                                          MainForm.imgAppxDisplayNames(x),
+                                                                          MainForm.imgAppxArchitectures(x),
+                                                                          MainForm.imgAppxResourceIds(x),
+                                                                          MainForm.imgAppxVersions(x),
+                                                                          registrationStatus,
+                                                                          installationLocation,
+                                                                          instDir,
+                                                                          logoAssetDir.TrimEnd("\"),
+                                                                          mainLogo.TrimEnd(Quote)}.ToList())
                                 Next
-                                Contents &= CrLf & "NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                Contents &= CrLf & GetParagraph("NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset.", ParagraphStyle.Italic) & CrLf
                             Else
                                 For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
                                     Select Case MainForm.Language
@@ -1254,7 +1511,6 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " di " & InstalledAppxPackageInfo.Count & ")"
                                     End Select
                                     ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
-                                    Contents &= TableSeparator & appxPkg.PackageName & TableSeparator & appxPkg.DisplayName & TableSeparator & Casters.CastDismArchitecture(appxPkg.Architecture) & TableSeparator & appxPkg.ResourceId & TableSeparator & appxPkg.Version.ToString() & TableSeparator & "{APPXPKG.REGISTERED}" & TableSeparator & "{APPXPKG.INSTALLLOCATION}" & TableSeparator & "{APPXPKG.MANLOCATION}" & TableSeparator & "{APPXPKG.LOGOASSETDIR}" & TableSeparator & "{APPXPKG.MAINLOGO}" & TableSeparator & CrLf
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                                     If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
@@ -1333,11 +1589,20 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         mainLogo = "Unknown"
                                     End If
-                                    Contents = Contents.Replace("{APPXPKG.REGISTERED}", registrationStatus).Replace("{APPXPKG.INSTALLLOCATION}", installationLocation).Replace("{APPXPKG.MANLOCATION}", pkgManifestLocation).Replace("{APPXPKG.LOGOASSETDIR}", logoAssetDir.TrimEnd("\")).Replace("{APPXPKG.MAINLOGO}", mainLogo)
+                                    Contents &= GetTableRow(New String() {appxPkg.PackageName,
+                                                                          appxPkg.DisplayName,
+                                                                          Casters.CastDismArchitecture(appxPkg.Architecture),
+                                                                          appxPkg.ResourceId,
+                                                                          appxPkg.Version.ToString(),
+                                                                          registrationStatus,
+                                                                          installationLocation,
+                                                                          pkgManifestLocation,
+                                                                          logoAssetDir.TrimEnd("\"),
+                                                                          mainLogo}.ToList())
                                 Next
-                                Contents &= CrLf & "NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                Contents &= CrLf & GetParagraph("NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset.", ParagraphStyle.Italic) & CrLf
                             End If
-                            Contents &= CrLf & "- Complete AppX package information has been gathered" & CrLf
+                            Contents &= CrLf & GetParagraph("Complete AppX package information has been gathered") & CrLf
                         ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(2)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
                             If MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count Then
@@ -1369,7 +1634,6 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & x + 1 & " di " & MainForm.imgAppxPackageNames.Count - 1 & ")"
                                     End Select
                                     ReportChanges(msg(0), ((x + 1) / MainForm.imgAppxPackageNames.Count) * 100)
-                                    Contents &= TableSeparator & MainForm.imgAppxPackageNames(x) & TableSeparator & MainForm.imgAppxDisplayNames(x) & TableSeparator & MainForm.imgAppxArchitectures(x) & TableSeparator & MainForm.imgAppxResourceIds(x) & TableSeparator & MainForm.imgAppxVersions(x) & TableSeparator & "{APPXPKG.REGISTERED}" & TableSeparator & "{APPXPKG.INSTALLLOCATION}" & TableSeparator & "{APPXPKG.MANLOCATION}" & TableSeparator & "{APPXPKG.LOGOASSETDIR}" & TableSeparator & "{APPXPKG.MAINLOGO}" & TableSeparator & CrLf
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                                     If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), _
@@ -1454,9 +1718,18 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         mainLogo = "Unknown"
                                     End If
-                                    Contents = Contents.Replace("{APPXPKG.REGISTERED}", registrationStatus).Replace("{APPXPKG.INSTALLLOCATION}", installationLocation).Replace("{APPXPKG.MANLOCATION}", instDir).Replace("{APPXPKG.LOGOASSETDIR}", logoAssetDir.TrimEnd("\")).Replace("{APPXPKG.MAINLOGO}", mainLogo)
+                                    Contents &= GetTableRow(New String() {MainForm.imgAppxPackageNames(x),
+                                                                          MainForm.imgAppxDisplayNames(x),
+                                                                          MainForm.imgAppxArchitectures(x),
+                                                                          MainForm.imgAppxResourceIds(x),
+                                                                          MainForm.imgAppxVersions(x),
+                                                                          registrationStatus,
+                                                                          installationLocation,
+                                                                          instDir,
+                                                                          logoAssetDir.TrimEnd("\"),
+                                                                          mainLogo.TrimEnd(Quote)}.ToList())
                                 Next
-                                Contents &= CrLf & "NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset." & CrLf & CrLf
+                                Contents &= CrLf & GetParagraph("NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset.", ParagraphStyle.Italic) & CrLf & CrLf
                             Else
                                 For Each appxPkg As DismAppxPackage In InstalledAppxPackageInfo
                                     Select Case MainForm.Language
@@ -1485,7 +1758,6 @@ Public Class ImgInfoSaveDlg
                                             msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & InstalledAppxPackageInfo.IndexOf(appxPkg) + 1 & " di " & InstalledAppxPackageInfo.Count & ")"
                                     End Select
                                     ReportChanges(msg(0), (InstalledAppxPackageInfo.IndexOf(appxPkg) / InstalledAppxPackageInfo.Count) * 100)
-                                    Contents &= TableSeparator & appxPkg.PackageName & TableSeparator & appxPkg.DisplayName & TableSeparator & Casters.CastDismArchitecture(appxPkg.Architecture) & TableSeparator & appxPkg.ResourceId & TableSeparator & appxPkg.Version.ToString() & TableSeparator & "{APPXPKG.REGISTERED}" & TableSeparator & "{APPXPKG.INSTALLLOCATION}" & TableSeparator & "{APPXPKG.MANLOCATION}" & TableSeparator & "{APPXPKG.LOGOASSETDIR}" & TableSeparator & "{APPXPKG.MAINLOGO}" & TableSeparator & CrLf
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                                     If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & appxPkg.PackageName, _
@@ -1565,8 +1837,18 @@ Public Class ImgInfoSaveDlg
                                     Else
                                         mainLogo = "Unknown"
                                     End If
-                                    Contents = Contents.Replace("{APPXPKG.REGISTERED}", registrationStatus).Replace("{APPXPKG.INSTALLLOCATION}", installationLocation).Replace("{APPXPKG.MANLOCATION}", pkgManifestLocation).Replace("{APPXPKG.LOGOASSETDIR}", logoAssetDir.TrimEnd("\")).Replace("{APPXPKG.MAINLOGO}", mainLogo)
+                                    Contents &= GetTableRow(New String() {appxPkg.PackageName,
+                                                                          appxPkg.DisplayName,
+                                                                          Casters.CastDismArchitecture(appxPkg.Architecture),
+                                                                          appxPkg.ResourceId,
+                                                                          appxPkg.Version.ToString(),
+                                                                          registrationStatus,
+                                                                          installationLocation,
+                                                                          pkgManifestLocation,
+                                                                          logoAssetDir.TrimEnd("\"),
+                                                                          mainLogo}.ToList())
                                 Next
+                                Contents &= CrLf & GetParagraph("NOTE: main store logo asset locations are a guess, and may not be the assets you're looking for. If that happens, report an issue on the GitHub repo using the " & Quote & "Store logo asset preview issue" & Quote & " template. Then, provide the package name, the expected asset and the obtained asset.", ParagraphStyle.Italic) & CrLf
                             End If
                             Contents &= CrLf & "- Complete AppX package information has been gathered" & CrLf
                         Else
@@ -1596,20 +1878,25 @@ Public Class ImgInfoSaveDlg
                                     msg(0) = "Salvataggio dei pacchetti AppX installati..."
                             End Select
                             ReportChanges(msg(0), 50)
-                            Contents &= BasicAppxTableHeader
+                            Contents &= GetTableHeader(New String() {"Package name",
+                                                                     "Application display name",
+                                                                     "Architecture",
+                                                                     "Resource ID",
+                                                                     "Version"}.ToList())
                             For Each installedAppxPkg As DismAppxPackage In InstalledAppxPackageInfo
-                                Contents &= TableSeparator & installedAppxPkg.PackageName & TableSeparator & installedAppxPkg.DisplayName & TableSeparator & Casters.CastDismArchitecture(installedAppxPkg.Architecture) & TableSeparator & installedAppxPkg.ResourceId & TableSeparator & installedAppxPkg.Version.ToString() & TableSeparator & CrLf
+                                Contents &= GetTableRow(New String() {installedAppxPkg.PackageName,
+                                                                      installedAppxPkg.DisplayName,
+                                                                      Casters.CastDismArchitecture(installedAppxPkg.Architecture),
+                                                                      installedAppxPkg.ResourceId,
+                                                                      installedAppxPkg.Version.ToString()}.ToList())
                             Next
-                            Contents &= CrLf & "- Complete AppX package information has not been gathered" & CrLf
+                            Contents &= CrLf & GetParagraph("Complete AppX package information has not been gathered") & CrLf
                         End If
                     End Using
                 End If
             Catch ex As Exception
                 Debug.WriteLine("[GetAppxInformation] An error occurred while getting AppX package information: " & ex.ToString() & " - " & ex.Message)
-                Contents &= "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                            "- Exception: " & ex.ToString() & CrLf & _
-                            "- Exception message: " & ex.Message & CrLf & _
-                            "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+                WriteExceptionInfo(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -1684,13 +1971,13 @@ Public Class ImgInfoSaveDlg
                   "Volete ottenere queste informazioni e salvarle nel rapporto?"
                 msg(2) = "Informazioni sulle capacità"
         End Select
-        Contents &= "## Capability information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Contents &= GetHeader("Capability information", HeaderSize.Header2) & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         If MainForm.imgEdition Is Nothing Then
             MainForm.imgEdition = " "
         End If
         If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
-            Contents &= "**This task is not supported on the specified Windows image. Check that it contains Windows 10 or a later Windows version, and that it isn't a Windows PE image.** Skipping task..." & CrLf & CrLf
+            Contents &= GetParagraph("This task is not supported on the specified Windows image. Check that it contains Windows 10 or a later Windows version, and that it isn't a Windows PE image. Skipping task...", ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
             Debug.WriteLine("[GetCapabilityInformation] Starting task...")
@@ -1702,7 +1989,7 @@ Public Class ImgInfoSaveDlg
                     Debug.WriteLine("[GetCapabilityInformation] Getting basic capability information...")
                     ReportChanges(msg(0), 5)
                     InstalledCapInfo = DismApi.GetCapabilities(imgSession)
-                    Contents &= "**Information summary for " & InstalledCapInfo.Count & " capability/ies:**" & CrLf & CrLf
+                    Contents &= GetParagraph("Information summary for " & InstalledCapInfo.Count & " capability/ies:", ParagraphStyle.Bold) & CrLf
                     Select Case MainForm.Language
                         Case 0
                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1730,7 +2017,12 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg(0), 10)
                     If SkipQuestions And AutoCompleteInfo(3) Then
-                        Contents &= CrLf & CrLf & FullCapabilityTableHeader
+                        Contents &= CrLf & GetTableHeader(New String() {"Capability identity",
+                                                                        "Capability name",
+                                                                        "Capability state",
+                                                                        "Display name",
+                                                                        "Download size",
+                                                                        "Installation size"}.ToList())
                         Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
                         For Each capability As DismCapability In InstalledCapInfo
                             Select Case MainForm.Language
@@ -1760,11 +2052,21 @@ Public Class ImgInfoSaveDlg
                             End Select
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
-                            Contents &= TableSeparator & CodeBlockChar & capInfo.Name & CodeBlockChar & TableSeparator & CodeBlockChar & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CodeBlockChar & TableSeparator & Casters.CastDismPackageState(capInfo.State) & TableSeparator & capInfo.Description & TableSeparator & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & TableSeparator & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "") & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & capInfo.Name & CodeBlockChar,
+                                                                  CodeBlockChar & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CodeBlockChar,
+                                                                  Casters.CastDismPackageState(capInfo.State),
+                                                                  capInfo.Description,
+                                                                  capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", ""),
+                                                                  capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")}.ToList())
                         Next
-                        Contents &= CrLf & "- Complete capability information has been gathered" & CrLf
+                        Contents &= CrLf & GetParagraph("Complete capability information has been gathered") & CrLf
                     ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(3)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
-                        Contents &= CrLf & CrLf & FullCapabilityTableHeader
+                        Contents &= CrLf & GetTableHeader(New String() {"Capability identity",
+                                                                        "Capability name",
+                                                                        "Capability state",
+                                                                        "Display name",
+                                                                        "Download size",
+                                                                        "Installation size"}.ToList())
                         Debug.WriteLine("[GetCapabilityInformation] Getting complete capability information...")
                         For Each capability As DismCapability In InstalledCapInfo
                             Select Case MainForm.Language
@@ -1794,9 +2096,14 @@ Public Class ImgInfoSaveDlg
                             End Select
                             ReportChanges(msg(0), (InstalledCapInfo.IndexOf(capability) / InstalledCapInfo.Count) * 100)
                             Dim capInfo As DismCapabilityInfo = DismApi.GetCapabilityInfo(imgSession, capability.Name)
-                            Contents &= TableSeparator & CodeBlockChar & capInfo.Name & CodeBlockChar & TableSeparator & CodeBlockChar & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CodeBlockChar & TableSeparator & Casters.CastDismPackageState(capInfo.State) & TableSeparator & capInfo.Description & TableSeparator & capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", "") & TableSeparator & capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "") & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & capInfo.Name & CodeBlockChar,
+                                                                  CodeBlockChar & capInfo.Name.Remove(InStr(capInfo.Name, "~") - 1) & CodeBlockChar,
+                                                                  Casters.CastDismPackageState(capInfo.State),
+                                                                  capInfo.Description,
+                                                                  capInfo.DownloadSize & " bytes" & If(capInfo.DownloadSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.DownloadSize) & ")", ""),
+                                                                  capInfo.InstallSize & " bytes" & If(capInfo.InstallSize >= 1024, " (~" & Converters.BytesToReadableSize(capInfo.InstallSize) & ")", "")}.ToList())
                         Next
-                        Contents &= CrLf & "- Complete capability information has been gathered" & CrLf
+                        Contents &= CrLf & GetParagraph("Complete capability information has been gathered") & CrLf
                     Else
                         Select Case MainForm.Language
                             Case 0
@@ -1824,19 +2131,18 @@ Public Class ImgInfoSaveDlg
                                 msg(0) = "Salvataggio delle capacità installate..."
                         End Select
                         ReportChanges(msg(0), 50)
-                        Contents &= BasicCapabilityTableHeader
+                        Contents &= GetTableHeader(New String() {"Capability identity",
+                                                                 "Capability state"}.ToList()) & CrLf
                         For Each installedCapability As DismCapability In InstalledCapInfo
-                            Contents &= TableSeparator & CodeBlockChar & installedCapability.Name & CodeBlockChar & TableSeparator & Casters.CastDismPackageState(installedCapability.State) & TableSeparator & CrLf
+                            Contents &= GetTableRow(New String() {CodeBlockChar & installedCapability.Name & CodeBlockChar,
+                                                                  Casters.CastDismPackageState(installedCapability.State)}.ToList())
                         Next
-                        Contents &= CrLf & "- Complete capability information has not been gathered" & CrLf
+                        Contents &= CrLf & GetParagraph("Complete capability information has not been gathered") & CrLf
                     End If
                 End Using
             Catch ex As Exception
                 Debug.WriteLine("[GetCapabilityInformation] An error occurred while getting capability information: " & ex.ToString() & " - " & ex.Message)
-                Contents &= "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                            "- Exception: " & ex.ToString() & CrLf & _
-                            "- Exception message: " & ex.Message & CrLf & _
-                            "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+                WriteExceptionInfo(ex)
             Finally
                 DismApi.Shutdown()
             End Try
@@ -1946,9 +2252,9 @@ Public Class ImgInfoSaveDlg
                 AllDrivers = True
             End If
         End If
-        Contents &= "## Driver information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & _
-                    "- In-box driver information " & If(AllDrivers, "was saved", "was not saved") & CrLf & CrLf
+        Contents &= GetHeader("Driver information", HeaderSize.Header2) & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation"),
+                                               "In-box driver information " & If(AllDrivers, "was saved", "was not saved")}.ToList()) & CrLf
         Debug.WriteLine("[GetDriverInformation] Starting task...")
         Try
             Debug.WriteLine("[GetDriverInformation] Starting API...")
@@ -1958,7 +2264,7 @@ Public Class ImgInfoSaveDlg
                 Debug.WriteLine("[GetDriverInformation] Getting basic driver information...")
                 ReportChanges(msg(0), 5)
                 InstalledDrvInfo = DismApi.GetDrivers(imgSession, AllDrivers)
-                Contents &= "**Information summary for " & InstalledDrvInfo.Count & " driver(s):**" & CrLf & CrLf
+                Contents &= GetParagraph("Information summary for " & InstalledDrvInfo.Count & " driver(s):", ParagraphStyle.Bold) & CrLf
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1986,7 +2292,18 @@ Public Class ImgInfoSaveDlg
                 End Select
                 ReportChanges(msg(0), 10)
                 If SkipQuestions And AutoCompleteInfo(4) Then
-                    Contents &= CrLf & CrLf & FullDriverTableHeader
+                    Contents &= CrLf & GetTableHeader(New String() {"Published name",
+                                                                    "Original file name",
+                                                                    "Provider name",
+                                                                    "Class name",
+                                                                    "Class description",
+                                                                    "Class GUID",
+                                                                    "Catalog file path",
+                                                                    "Part of the Windows distribution?",
+                                                                    "Critical to the boot process?",
+                                                                    "Version",
+                                                                    "Date",
+                                                                    "Signature status"}.ToList())
                     Debug.WriteLine("[GetDriverInformation] Getting complete driver information...")
                     For Each driver As DismDriverPackage In InstalledDrvInfo
                         Select Case MainForm.Language
@@ -2016,11 +2333,33 @@ Public Class ImgInfoSaveDlg
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Dim signer As String = DriverSignerViewer.GetSignerInfo(driver.OriginalFileName)
-                        Contents &= TableSeparator & CodeBlockChar & driver.PublishedName & CodeBlockChar & TableSeparator & Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")" & TableSeparator & driver.ProviderName & TableSeparator & driver.ClassName & TableSeparator & driver.ClassDescription & TableSeparator & driver.ClassGuid & TableSeparator & driver.CatalogFile & TableSeparator & If(driver.InBox, "Yes", "No") & TableSeparator & If(driver.BootCritical, "Yes", "No") & TableSeparator & driver.Version.ToString() & TableSeparator & driver.Date & TableSeparator & Casters.CastDismSignatureStatus(driver.DriverSignature) & If(Not (signer Is Nothing OrElse signer = ""), " by " & signer, "") & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {CodeBlockChar & driver.PublishedName & CodeBlockChar,
+                                                              Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")",
+                                                              driver.ProviderName,
+                                                              driver.ClassName,
+                                                              driver.ClassDescription,
+                                                              driver.ClassGuid,
+                                                              driver.CatalogFile,
+                                                              If(driver.InBox, "Yes", "No"),
+                                                              If(driver.BootCritical, "Yes", "No"),
+                                                              driver.Version.ToString(),
+                                                              driver.Date,
+                                                              Casters.CastDismSignatureStatus(driver.DriverSignature) & If(Not (signer Is Nothing OrElse signer = ""), " by " & signer, "")}.ToList())
                     Next
-                    Contents &= CrLf & "- Complete driver information has been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete driver information has been gathered") & CrLf
                 ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(4)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
-                    Contents &= CrLf & CrLf & FullDriverTableHeader
+                    Contents &= CrLf & GetTableHeader(New String() {"Published name",
+                                                                    "Original file name",
+                                                                    "Provider name",
+                                                                    "Class name",
+                                                                    "Class description",
+                                                                    "Class GUID",
+                                                                    "Catalog file path",
+                                                                    "Part of the Windows distribution?",
+                                                                    "Critical to the boot process?",
+                                                                    "Version",
+                                                                    "Date",
+                                                                    "Signature status"}.ToList())
                     Debug.WriteLine("[GetDriverInformation] Getting complete driver information...")
                     For Each driver As DismDriverPackage In InstalledDrvInfo
                         Select Case MainForm.Language
@@ -2050,9 +2389,20 @@ Public Class ImgInfoSaveDlg
                         End Select
                         ReportChanges(msg(0), (InstalledDrvInfo.IndexOf(driver) / InstalledDrvInfo.Count) * 100)
                         Dim signer As String = DriverSignerViewer.GetSignerInfo(driver.OriginalFileName)
-                        Contents &= TableSeparator & CodeBlockChar & driver.PublishedName & CodeBlockChar & TableSeparator & Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")" & TableSeparator & driver.ProviderName & TableSeparator & driver.ClassName & TableSeparator & driver.ClassDescription & TableSeparator & driver.ClassGuid & TableSeparator & driver.CatalogFile & TableSeparator & If(driver.InBox, "Yes", "No") & TableSeparator & If(driver.BootCritical, "Yes", "No") & TableSeparator & driver.Version.ToString() & TableSeparator & driver.Date & TableSeparator & Casters.CastDismSignatureStatus(driver.DriverSignature) & If(Not (signer Is Nothing OrElse signer = ""), " by " & signer, "") & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {CodeBlockChar & driver.PublishedName & CodeBlockChar,
+                                                              Path.GetFileName(driver.OriginalFileName) & " (" & Path.GetDirectoryName(driver.OriginalFileName) & ")",
+                                                              driver.ProviderName,
+                                                              driver.ClassName,
+                                                              driver.ClassDescription,
+                                                              driver.ClassGuid,
+                                                              driver.CatalogFile,
+                                                              If(driver.InBox, "Yes", "No"),
+                                                              If(driver.BootCritical, "Yes", "No"),
+                                                              driver.Version.ToString(),
+                                                              driver.Date,
+                                                              Casters.CastDismSignatureStatus(driver.DriverSignature) & If(Not (signer Is Nothing OrElse signer = ""), " by " & signer, "")}.ToList())
                     Next
-                    Contents &= CrLf & "- Complete driver information has been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete driver information has been gathered") & CrLf
                 Else
                     Select Case MainForm.Language
                         Case 0
@@ -2080,19 +2430,28 @@ Public Class ImgInfoSaveDlg
                             msg(0) = "Salvataggio dei driver installati..."
                     End Select
                     ReportChanges(msg(0), 50)
-                    Contents &= BasicDriverTableHeader
+                    Contents &= GetTableHeader(New String() {"Published name",
+                                                             "Original file name",
+                                                             "Part of the Windows distribution?",
+                                                             "Class name",
+                                                             "Provider name",
+                                                             "Date",
+                                                             "Version"}.ToList())
                     For Each installedDriver As DismDriverPackage In InstalledDrvInfo
-                        Contents &= TableSeparator & CodeBlockChar & installedDriver.PublishedName & CodeBlockChar & TableSeparator & Path.GetFileName(installedDriver.OriginalFileName) & " (" & Path.GetDirectoryName(installedDriver.OriginalFileName) & ")" & TableSeparator & If(installedDriver.InBox, "Yes", "No") & TableSeparator & installedDriver.ClassName & TableSeparator & installedDriver.ProviderName & TableSeparator & installedDriver.Date & TableSeparator & installedDriver.Version.ToString() & TableSeparator & CrLf
+                        Contents &= GetTableRow(New String() {CodeBlockChar & installedDriver.PublishedName & CodeBlockChar,
+                                                              Path.GetFileName(installedDriver.OriginalFileName) & " (" & Path.GetDirectoryName(installedDriver.OriginalFileName) & ")",
+                                                              If(installedDriver.InBox, "Yes", "No"),
+                                                              installedDriver.ClassName,
+                                                              installedDriver.ProviderName,
+                                                              installedDriver.Date,
+                                                              installedDriver.Version.ToString()}.ToList())
                     Next
-                    Contents &= CrLf & "- Complete driver information has not been gathered" & CrLf
+                    Contents &= CrLf & GetParagraph("Complete driver information has not been gathered") & CrLf
                 End If
             End Using
         Catch ex As Exception
             Debug.WriteLine("[GetDriverInformation] An error occurred while getting driver information: " & ex.ToString() & " - " & ex.Message)
-            Contents &= "**The program could not get information about this task. See below for reasons why:**" & CrLf & CrLf & _
-                        "- Exception: " & ex.ToString() & CrLf & _
-                        "- Exception message: " & ex.Message & CrLf & _
-                        "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            WriteExceptionInfo(ex)
         Finally
             DismApi.Shutdown()
         End Try
@@ -2125,8 +2484,8 @@ Public Class ImgInfoSaveDlg
             Case 5
                 msg = "Preparazione dei processi di informazione del driver..."
         End Select
-        Contents &= "## Driver package information" & CrLf & CrLf & _
-                    "- Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+        Contents &= GetHeader("Driver package information", HeaderSize.Header2) & CrLf & CrLf & _
+                    GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
         Debug.WriteLine("[GetDriverFileInformation] Starting task...")
         Try
             Debug.WriteLine("[GetDriverFileInformation] Starting API...")
@@ -2134,7 +2493,7 @@ Public Class ImgInfoSaveDlg
             Debug.WriteLine("[GetDriverFileInformation] Creating image session...")
             ReportChanges(msg, 0)
             Using imgSession As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(ImgMountDir))
-                Contents &= "**Information summary for " & DriverPkgs.Count & " driver package(s):**" & CrLf & CrLf
+                Contents &= GetParagraph("Information summary for " & DriverPkgs.Count & " driver package(s):", ParagraphStyle.Bold) & CrLf
                 For Each drvPkg In DriverPkgs
                     Select Case MainForm.Language
                         Case 0
@@ -2163,10 +2522,16 @@ Public Class ImgInfoSaveDlg
                     End Select
                     ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100)
                     If File.Exists(drvPkg) Then
-                        Contents &= "### Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & "" & CrLf & CrLf
+                        Contents &= GetHeader("Driver package " & DriverPkgs.IndexOf(drvPkg) + 1 & " of " & DriverPkgs.Count & "", HeaderSize.Header3) & CrLf
                         Dim drvInfoCollection As DismDriverCollection = DismApi.GetDriverInfo(imgSession, drvPkg)
                         If drvInfoCollection.Count > 0 Then
-                            Contents &= "**Information summary for " & drvInfoCollection.Count & " hardware target(s):**" & CrLf & CrLf & DriverFileTableHeader
+                            Contents &= GetParagraph("Information summary for " & drvInfoCollection.Count & " hardware target(s):", ParagraphStyle.Bold) & CrLf &
+                                GetTableHeader(New String() {"Hardware description",
+                                                             "Hardware ID",
+                                                             "Compatible IDs",
+                                                             "Exclude IDs",
+                                                             "Hardware manufacturer",
+                                                             "Architecture"}.ToList())
                             For Each hwTarget As DismDriver In drvInfoCollection
                                 Select Case MainForm.Language
                                     Case 0
@@ -2194,21 +2559,23 @@ Public Class ImgInfoSaveDlg
                                         msg = "Ottenere informazioni dai target hardware... (target " & drvInfoCollection.IndexOf(hwTarget) + 1 & " of " & drvInfoCollection.Count & ")"
                                 End Select
                                 ReportChanges(msg, (DriverPkgs.IndexOf(drvPkg) / DriverPkgs.Count) * 100 + (drvInfoCollection.IndexOf(hwTarget) + 1) / drvInfoCollection.Count * 100 / DriverPkgs.Count)
-                                Contents &= TableSeparator & hwTarget.HardwareDescription & TableSeparator & hwTarget.HardwareId & TableSeparator & If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds) & TableSeparator & If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds) & TableSeparator & hwTarget.ManufacturerName & TableSeparator & Casters.CastDismArchitecture(hwTarget.Architecture) & TableSeparator & CrLf
+                                Contents &= GetTableRow(New String() {hwTarget.HardwareDescription,
+                                                                      hwTarget.HardwareId,
+                                                                      If(hwTarget.CompatibleIds = "", "None declared by the manufacturer", hwTarget.CompatibleIds),
+                                                                      If(hwTarget.ExcludeIds = "", "None declared by the manufacturer", hwTarget.ExcludeIds),
+                                                                      hwTarget.ManufacturerName,
+                                                                      Casters.CastDismArchitecture(hwTarget.Architecture)}.ToList())
                             Next
                             Contents &= CrLf
                         Else
-                            Contents &= "**This file contains no hardware targets. It could be invalid.**" & CrLf & CrLf
+                            Contents &= GetParagraph("This file contains no hardware targets. It could be invalid.", ParagraphStyle.Bold) & CrLf
                         End If
                     End If
                 Next
             End Using
         Catch ex As Exception
             Debug.WriteLine("[GetDriverFileInformation] An error occurred while getting driver information: " & ex.ToString() & " - " & ex.Message)
-            Contents &= "The program could not get information about this task. See below for reasons why:" & CrLf & CrLf & _
-                        "- Exception: " & ex.ToString() & CrLf & _
-                        "- Exception message: " & ex.Message & CrLf & _
-                        "- Error code: " & Hex(ex.HResult) & CrLf & CrLf
+            WriteExceptionInfo(ex)
         Finally
             DismApi.Shutdown()
         End Try
@@ -2241,12 +2608,12 @@ Public Class ImgInfoSaveDlg
             Case 5
                 msg = "Preparazione per ottenere la configurazione di Windows PE..."
         End Select
-        Contents &= "## Windows PE configuration" & CrLf & CrLf
+        Contents &= GetHeader("Windows PE configuration", HeaderSize.Header2) & CrLf & CrLf
         If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-            Contents &= "**This task is not supported on the specified Windows image. Check that it is a Windows PE image.** Skipping task..." & CrLf & CrLf
+            Contents &= GetParagraph("This task is not supported on the specified Windows image. Check that it is a Windows PE image. Skipping task...", ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
-            Contents &= " - Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation") & CrLf & CrLf
+            Contents &= GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
             Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
             Using reg As New Process
                 Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
@@ -2258,13 +2625,13 @@ Public Class ImgInfoSaveDlg
                 reg.Start()
                 reg.WaitForExit()
                 If reg.ExitCode <> 0 Then
-                    Contents &= "- Target path: could not get value" & CrLf
+                    Contents &= GetListItems(New String() {"Target path: could not get value"}.ToList()) & CrLf
                 End If
                 reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
                 reg.Start()
                 reg.WaitForExit()
                 If reg.ExitCode <> 0 Then
-                    Contents &= "- Scratch space: could not get value" & CrLf & CrLf
+                    Contents &= GetListItems(New String() {"Scratch space: could not get value"}.ToList()) & CrLf & CrLf
                     Exit Sub
                 End If
                 Try
@@ -2296,7 +2663,7 @@ Public Class ImgInfoSaveDlg
                     ReportChanges(msg, 50)
                     ' Get target path first
                     Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                    Contents &= "- Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString() & CrLf
+                    Contents &= GetListItems(New String() {"Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString()}.ToList()) & CrLf
                     regKey.Close()
                     Select Case MainForm.Language
                         Case 0
@@ -2326,7 +2693,7 @@ Public Class ImgInfoSaveDlg
                     ReportChanges(msg, 75)
                     regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
                     Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
-                    Contents &= "- Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value") & CrLf & CrLf
+                    Contents &= GetListItems(New String() {"Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value")}.ToList()) & CrLf & CrLf
                     regKey.Close()
                 Catch ex As Exception
 
@@ -2536,13 +2903,12 @@ Public Class ImgInfoSaveDlg
         End If
 
         ' Set the beginning of the contents
-        Contents = "# DISMTools Image Information Report" & CrLf & CrLf & _
-                   "This is an automatically generated report created by DISMTools. It can be viewed at any time to check image information." & CrLf & CrLf & _
-                   "This report contains information about the tasks that you wanted to get information about, which are reflected below this message." & CrLf & CrLf & _
-                   "This process primarily uses the DISM API to get information. If you want to get information of the API operations, this file does not include it. However, you can get that information from the log file stored in the standard location of: " & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote & CrLf & CrLf & _
-                   "## Task details" & CrLf & _
-                   "- Processes started at: " & Date.Now & CrLf & _
-                   "- Report file target: " & Quote & SaveTarget & Quote & CrLf & CrLf
+        Contents = GetHeader("DISMTools Image Information Report", HeaderSize.Header1) &
+                   GetParagraph("This is an automatically generated report created by DISMTools. It can be viewed at any time to check image information." & CrLf & CrLf & _
+                                "This report contains information about the tasks that you wanted to get information about, which are reflected below this message." & CrLf & CrLf & _
+                                "This process primarily uses the DISM API to get information. If you want to get information of the API operations, this file does not include it. However, you can get that information from the log file stored in the standard location of: " & Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote & CrLf, ParagraphStyle.Normal) & CrLf &
+                   GetHeader("Task details", HeaderSize.Header2) & CrLf &
+                   GetListItems(New String() {"Processes started at: " & Date.Now, "Report file target: " & Quote & SaveTarget & Quote}.ToList())
 
         If OfflineMode Then SourceImage = ImgMountDir
 
@@ -2552,7 +2918,7 @@ Public Class ImgInfoSaveDlg
         ' Begin performing operations
         Select Case SaveTask
             Case 0
-                Contents &= "- Information tasks: get complete image information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get complete image information"}.ToList()) & CrLf & CrLf
                 GetImageInformation()
                 GetPackageInformation()
                 GetFeatureInformation()
@@ -2561,36 +2927,36 @@ Public Class ImgInfoSaveDlg
                 GetDriverInformation()
                 GetWinPEConfiguration()
             Case 1
-                Contents &= "- Information tasks: get image file information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get image file information"}.ToList()) & CrLf & CrLf
                 GetImageInformation()
             Case 2
-                Contents &= "- Information tasks: get installed package information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get installed package information"}.ToList()) & CrLf & CrLf
                 GetPackageInformation()
             Case 3
-                Contents &= "- Information tasks: get package file information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get package file information"}.ToList()) & CrLf & CrLf
                 GetPackageFileInformation()
             Case 4
-                Contents &= "- Information tasks: get feature information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get feature information"}.ToList()) & CrLf & CrLf
                 GetFeatureInformation()
             Case 5
-                Contents &= "- Information tasks: get installed AppX package information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get installed AppX package information"}.ToList()) & CrLf & CrLf
                 GetAppxInformation()
             Case 6
-                Contents &= "- Information tasks: get capability information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get capability information"}.ToList()) & CrLf & CrLf
                 GetCapabilityInformation()
             Case 7
-                Contents &= "- Information tasks: get installed driver information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get installed driver information"}.ToList()) & CrLf & CrLf
                 GetDriverInformation()
             Case 8
-                Contents &= "- Information tasks: get driver package information" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get driver package information"}.ToList()) & CrLf & CrLf
                 GetDriverFileInformation()
             Case 9
-                Contents &= "- Information tasks: get Windows PE configuration" & CrLf & CrLf
+                Contents &= GetListItems(New String() {"Information tasks: get Windows PE configuration"}.ToList()) & CrLf & CrLf
                 GetWinPEConfiguration()
         End Select
 
         ' Put an ending to the contents
-        Contents &= CrLf & CrLf & "## We have ended at " & Date.Now & ". Have a nice day!"
+        Contents &= CrLf & CrLf & GetHeader("We have ended at " & Date.Now & ". Have a nice day!", HeaderSize.Header2)
 
         ' Inform user that we are saving the file
         Dim saveMsg As String = ""

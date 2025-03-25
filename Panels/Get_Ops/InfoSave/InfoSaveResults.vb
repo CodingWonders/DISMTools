@@ -170,7 +170,7 @@ Public Class InfoSaveResults
                                        "                    sidebar.classList.toggle(" & Quote & "shrink" & Quote & ");" & CrLf &
                                        "                    content.classList.toggle(" & Quote & "shrink" & Quote & ");" & CrLf &
                                        "                });" & CrLf & CrLf &
-                                       "                var headings = content.querySelectorAll(" & Quote & "h2, h3, h4, h5, h6" & Quote & ");" & CrLf & CrLf &
+                                       "                var headings = content.querySelectorAll(" & Quote & "h2, h4, h5, h6" & Quote & ");" & CrLf & CrLf &
                                        "                for (var i = 0; i < headings.length; i++) {" & CrLf &
                                        "                    var heading = headings[i];" & CrLf &
                                        "                    var link = document.createElement(" & Quote & "a" & Quote & ");" & CrLf &
