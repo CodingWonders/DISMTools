@@ -668,7 +668,12 @@ Public Class ISOCreator
         Dim ISOCreator As New Process()
         ISOCreator.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
         ISOCreator.StartInfo.WorkingDirectory = Application.StartupPath & "\bin\extps1\PE_Helper"
-        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & TextBox4.Text & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
+        ' Disable the unattended answer file thing if not willing to use
+        Dim unattFile As String = TextBox4.Text
+        If Not CheckBox1.Checked Then
+            unattFile = ""
+        End If
+        ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
         DynaLog.LogMessage("The PE Helper process finished with exit code " & Hex(ISOCreator.ExitCode))
