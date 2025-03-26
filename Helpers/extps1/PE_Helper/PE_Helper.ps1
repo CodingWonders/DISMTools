@@ -1365,9 +1365,9 @@ function Get-WimIndexes
                     # every time
                     $images | Select-Object -ExcludeProperty ImagePath | Format-List | Out-File "$env:SYSTEMDRIVE\imageinfo.txt" -Force -Encoding UTF8
                 }
-                if (Test-Path "X:\imageinfo.txt" -PathType Leaf)
+                if (Test-Path "$env:SYSTEMDRIVE\imageinfo.txt" -PathType Leaf)
                 {
-                    notepad "X:\imageinfo.txt"
+                    notepad "$env:SYSTEMDRIVE\imageinfo.txt"
                 }
                 Get-WimIndexes
             }
