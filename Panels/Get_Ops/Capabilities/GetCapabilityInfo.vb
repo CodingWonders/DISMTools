@@ -519,14 +519,12 @@ Public Class GetCapabilityInfoDlg
             End Select
         End If
         If InstalledCapabilityInfo.Count > 0 Then
-            For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-                If InstalledCapability.Name.ToLower().Contains(sQuery.ToLower()) Then
-                    If capState <> "" AndAlso InstalledCapability.State = expectedCapabilityState Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-                    ElseIf capState = "" Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-                    End If
-                End If
+            Dim finalCapabilityLookup = InstalledCapabilityInfo.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If capState <> "" Then      ' We filter them again based on the state
+                finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.State = expectedCapabilityState)
+            End If
+            For Each filteredCapability In finalCapabilityLookup
+                ListView1.Items.Add(New ListViewItem(New String() {filteredCapability.Name, Casters.CastDismPackageState(filteredCapability.State, True)}))
             Next
         End If
     End Sub

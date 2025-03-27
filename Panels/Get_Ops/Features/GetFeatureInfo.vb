@@ -636,14 +636,12 @@ Public Class GetFeatureInfoDlg
             End Select
         End If
         If InstalledFeatureInfo.Count > 0 Then
-            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-                If InstalledFeature.FeatureName.ToLower().Contains(sQuery.ToLower()) Then
-                    If featureState <> "" AndAlso InstalledFeature.State = expectedFeatureState Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-                    ElseIf featureState = "" Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-                    End If
-                End If
+            Dim finalFeatureLookup = InstalledFeatureInfo.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If featureState <> "" Then      ' We filter them again based on the state
+                finalFeatureLookup = finalFeatureLookup.Where(Function(feature) feature.State = expectedFeatureState)
+            End If
+            For Each filteredFeature In finalFeatureLookup
+                ListView1.Items.Add(New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)}))
             Next
         End If
     End Sub
