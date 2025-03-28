@@ -609,7 +609,6 @@ Public Class MainForm
                            "(c) " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
         DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
         DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
-        DynaLog.LogMessage("- DockPanelSuite: (c) " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
         DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov" & CrLf &
                            "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
         DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")

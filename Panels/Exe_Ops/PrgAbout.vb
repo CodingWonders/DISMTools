@@ -48,7 +48,6 @@ Public Class PrgAbout
                         LinkLabel10.Text = "Visit website"
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visit website"
-                        LinkLabel13.Text = "Visit website"
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de este programa"
@@ -82,7 +81,6 @@ Public Class PrgAbout
                         LinkLabel10.Text = "Visitar sitio"
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Visitar sitio"
-                        LinkLabel13.Text = "Visitar sitio"
                         OK_Button.Text = "Aceptar"
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
                     Case "FRA"
@@ -117,7 +115,6 @@ Public Class PrgAbout
                         LinkLabel10.Text = "Site web"
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Site web"
-                        LinkLabel13.Text = "Site web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
                     Case "PTB", "PTG"
@@ -152,7 +149,6 @@ Public Class PrgAbout
                         LinkLabel10.Text = "Sítio Web"
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Sítio Web"
-                        LinkLabel13.Text = "Sítio Web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Verificar actualizações"
                     Case "ITA"
@@ -187,7 +183,6 @@ Public Class PrgAbout
                         LinkLabel10.Text = "Sito web"
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Sito web"
-                        LinkLabel13.Text = "Sito web"
                         OK_Button.Text = "OK"
                         UpdCheckBtn.Text = "Controlla gli aggiornamenti"
                 End Select
@@ -223,7 +218,6 @@ Public Class PrgAbout
                 LinkLabel10.Text = "Visit website"
                 LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Visit website"
-                LinkLabel13.Text = "Visit website"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Check for updates"
             Case 2
@@ -258,7 +252,6 @@ Public Class PrgAbout
                 LinkLabel10.Text = "Visitar sitio"
                 LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Visitar sitio"
-                LinkLabel13.Text = "Visitar sitio"
                 OK_Button.Text = "Aceptar"
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
             Case 3
@@ -293,7 +286,6 @@ Public Class PrgAbout
                 LinkLabel10.Text = "Site web"
                 LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Site web"
-                LinkLabel13.Text = "Site web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
             Case 4
@@ -328,7 +320,6 @@ Public Class PrgAbout
                 LinkLabel10.Text = "Sítio Web"
                 LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Sítio Web"
-                LinkLabel13.Text = "Sítio Web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Verificar actualizações"
             Case 5
@@ -363,7 +354,6 @@ Public Class PrgAbout
                 LinkLabel10.Text = "Sito web"
                 LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Sito web"
-                LinkLabel13.Text = "Sito web"
                 OK_Button.Text = "OK"
                 UpdCheckBtn.Text = "Controlla gli aggiornamenti"
         End Select
@@ -429,7 +419,7 @@ Public Class PrgAbout
         Process.Start("https://github.com/RobinPerris/DarkUI")
     End Sub
 
-    Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
+    Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("https://github.com/DockPanelSuite/DockPanelSuite")
     End Sub
 

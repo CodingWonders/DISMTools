@@ -51,8 +51,6 @@ Partial Class PrgAbout
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.LinkLabel12 = New System.Windows.Forms.LinkLabel()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.LinkLabel13 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel11 = New System.Windows.Forms.LinkLabel()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.LicensesPanel = New System.Windows.Forms.Panel()
@@ -201,8 +199,6 @@ Partial Class PrgAbout
         Me.TableLayoutPanel2.Controls.Add(Me.Label17, 0, 15)
         Me.TableLayoutPanel2.Controls.Add(Me.Label19, 0, 9)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel12, 1, 9)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label20, 0, 10)
-        Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel13, 1, 10)
         Me.TableLayoutPanel2.Controls.Add(Me.LinkLabel11, 1, 16)
         Me.TableLayoutPanel2.Controls.Add(Me.Label18, 0, 16)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
@@ -235,7 +231,7 @@ Partial Class PrgAbout
         Me.Label9.AutoSize = True
         Me.Label9.Location = New System.Drawing.Point(3, 129)
         Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(191, 15)
+        Me.Label9.Size = New System.Drawing.Size(190, 15)
         Me.Label9.TabIndex = 5
         Me.Label9.Text = "wimlib-imagex (used in the future)"
         '
@@ -375,7 +371,7 @@ Partial Class PrgAbout
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(3, 204)
+        Me.Label10.Location = New System.Drawing.Point(3, 189)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(168, 21)
         Me.Label10.TabIndex = 1
@@ -386,7 +382,7 @@ Partial Class PrgAbout
         Me.Label13.AutoSize = True
         Me.Label13.Location = New System.Drawing.Point(3, 144)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(161, 15)
+        Me.Label13.Size = New System.Drawing.Size(162, 15)
         Me.Label13.TabIndex = 1
         Me.Label13.Text = "Scintila.NET (NuGet package)"
         '
@@ -402,7 +398,7 @@ Partial Class PrgAbout
         'Label11
         '
         Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(3, 225)
+        Me.Label11.Location = New System.Drawing.Point(3, 210)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(130, 15)
         Me.Label11.TabIndex = 6
@@ -414,7 +410,7 @@ Partial Class PrgAbout
         Me.LinkLabel7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.LinkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel7.LinkColor = System.Drawing.Color.Lime
-        Me.LinkLabel7.Location = New System.Drawing.Point(337, 225)
+        Me.LinkLabel7.Location = New System.Drawing.Point(337, 210)
         Me.LinkLabel7.Name = "LinkLabel7"
         Me.LinkLabel7.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel7.TabIndex = 4
@@ -426,7 +422,7 @@ Partial Class PrgAbout
         '
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label17.Location = New System.Drawing.Point(3, 240)
+        Me.Label17.Location = New System.Drawing.Point(3, 225)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(129, 21)
         Me.Label17.TabIndex = 1
@@ -455,29 +451,6 @@ Partial Class PrgAbout
         Me.LinkLabel12.Text = "Visit website"
         Me.LinkLabel12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(3, 189)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(89, 15)
-        Me.Label20.TabIndex = 2
-        Me.Label20.Text = "DockPanelSuite"
-        '
-        'LinkLabel13
-        '
-        Me.LinkLabel13.AutoSize = True
-        Me.LinkLabel13.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.LinkLabel13.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel13.LinkColor = System.Drawing.Color.Lime
-        Me.LinkLabel13.Location = New System.Drawing.Point(337, 189)
-        Me.LinkLabel13.Name = "LinkLabel13"
-        Me.LinkLabel13.Size = New System.Drawing.Size(80, 15)
-        Me.LinkLabel13.TabIndex = 9
-        Me.LinkLabel13.TabStop = True
-        Me.LinkLabel13.Text = "Visit website"
-        Me.LinkLabel13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'LinkLabel11
         '
         Me.LinkLabel11.AutoSize = True
@@ -485,7 +458,7 @@ Partial Class PrgAbout
         Me.LinkLabel11.LinkArea = New System.Windows.Forms.LinkArea(0, 0)
         Me.LinkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
         Me.LinkLabel11.LinkColor = System.Drawing.Color.Lime
-        Me.LinkLabel11.Location = New System.Drawing.Point(337, 261)
+        Me.LinkLabel11.Location = New System.Drawing.Point(337, 246)
         Me.LinkLabel11.Name = "LinkLabel11"
         Me.LinkLabel11.Size = New System.Drawing.Size(80, 15)
         Me.LinkLabel11.TabIndex = 9
@@ -495,7 +468,7 @@ Partial Class PrgAbout
         'Label18
         '
         Me.Label18.AutoSize = True
-        Me.Label18.Location = New System.Drawing.Point(3, 261)
+        Me.Label18.Location = New System.Drawing.Point(3, 246)
         Me.Label18.Name = "Label18"
         Me.Label18.Size = New System.Drawing.Size(154, 15)
         Me.Label18.TabIndex = 2
@@ -747,11 +720,9 @@ Partial Class PrgAbout
     Friend WithEvents RichTextBox2 As System.Windows.Forms.RichTextBox
     Friend WithEvents LinkLabel11 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel12 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel13 As System.Windows.Forms.LinkLabel
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents Label19 As System.Windows.Forms.Label
-    Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents UpdCheckBtn As System.Windows.Forms.Button
