@@ -2533,7 +2533,7 @@ Partial Class MainForm
         'Button24
         '
         Me.Button24.ForeColor = System.Drawing.Color.Black
-        Me.Button24.Image = CType(resources.GetObject("Button24.Image"), System.Drawing.Image)
+        Me.Button24.Image = Global.DISMTools.My.Resources.Resources.switch_indexes
         Me.Button24.Location = New System.Drawing.Point(336, 89)
         Me.Button24.Name = "Button24"
         Me.Button24.Size = New System.Drawing.Size(324, 63)
