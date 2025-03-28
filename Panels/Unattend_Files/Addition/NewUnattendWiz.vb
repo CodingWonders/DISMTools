@@ -47,6 +47,7 @@ Public Class NewUnattendWiz
 
     ' Product Key Panel
     Dim GenericChosen As Boolean = True
+    Dim FirmwareChosen As Boolean
     Dim GenericKeys As New List(Of ProductKey)
     Dim SelectedKey As New ProductKey()
 
@@ -833,6 +834,7 @@ Public Class NewUnattendWiz
         RadioButton13.Checked = True
         ComboBox6.SelectedItem = "Pro"
         TextBox3.Text = ""
+        CheckBox21.Checked = False
         ' Restore user accounts
         CheckBox6.Checked = True
         TextBox4.Text = "Admin"
@@ -1149,7 +1151,7 @@ Public Class NewUnattendWiz
             End Select
         End If
         ' 5. -- PRODUCT KEY
-        TextBox13.AppendText("Product key: " & If(GenericChosen, "generic" & CrLf, "custom" & CrLf) &
+        TextBox13.AppendText("Product key: " & If(CheckBox21.Checked, "get from firmware" & CrLf, If(GenericChosen, "generic" & CrLf, "custom" & CrLf)) &
                              "- Key: " & SelectedKey.Key & CrLf)
         ' 6. -- USER ACCOUNTS
         TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
@@ -1911,7 +1913,10 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Saving user settings...", 14)
             DynaLog.LogMessage("Saving edition settings...")
-            If GenericChosen Then
+            If FirmwareChosen Then
+                DynaLog.LogMessage("The product key will be grabbed from firmware.")
+                UnattendGen.StartInfo.Arguments &= " /firmware"
+            ElseIf GenericChosen Then
                 DynaLog.LogMessage("A generic product key has been chosen.")
                 UnattendGen.StartInfo.Arguments &= " /generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -2700,5 +2705,22 @@ Public Class NewUnattendWiz
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         Scintilla1.Text = Regex.Replace(Scintilla1.Text, Tab, "    ")
+    End Sub
+
+    Private Sub CheckBox21_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox21.CheckedChanged
+        FirmwareChosen = CheckBox21.Checked
+        ManualProductKeyOptionsPanel.Enabled = Not CheckBox21.Checked
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Try
+            DynaLog.LogMessage("Copying key to clipboard...")
+            My.Computer.Clipboard.SetText(TextBox2.Text)
+            DynaLog.LogMessage("Key copied successfully.")
+            MsgBox("The product key was copied successfully to your clipboard.", vbOKOnly + vbInformation)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not copy key. Error message: " & ex.Message)
+            MsgBox("We could not copy the key to your clipboard. Error message: " & ex.Message, vbOKOnly + vbInformation)
+        End Try
     End Sub
 End Class
