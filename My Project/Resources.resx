@@ -937,4 +937,10 @@ Removed features:
 - Actions, introduced in version 0.3, have been removed due to a lack of maintenance
 - Printing capabilities of image information reports have been removed</value>
   </data>
+  <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="exit_full_screen_glyph_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\exit_full_screen_glyph_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -262,6 +262,9 @@ Public Class MainForm
 
     Dim AdkCopyEx As Exception
 
+    Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
+    Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -5464,6 +5467,7 @@ Public Class MainForm
                         ImgSpecialToolsCMS.ForeColor = Color.White
                         ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
+                        ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                         ' New design stuff
                         FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
@@ -5529,6 +5533,7 @@ Public Class MainForm
                         ImgSpecialToolsCMS.ForeColor = Color.Black
                         ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
+                        ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                         ' New design stuff
                         FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
@@ -5599,6 +5604,7 @@ Public Class MainForm
                 ImgSpecialToolsCMS.ForeColor = Color.Black
                 ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
+                ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
                 ' New design stuff
                 FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
@@ -5665,6 +5671,7 @@ Public Class MainForm
                 ImgSpecialToolsCMS.ForeColor = Color.White
                 ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
+                ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                 ' New design stuff
                 FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
@@ -12450,6 +12457,9 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
+        If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
+            ToggleFullScreenMode()
+        End If
         If Not VolatileMode Then
             DynaLog.LogMessage("DISMTools is not in volatile mode. Saving settings...")
             SaveDTSettings()
@@ -19042,6 +19052,8 @@ Public Class MainForm
                 DynaLog.LogMessage("Triggering background processes...")
                 ImgBW.RunWorkerAsync()
             End If
+        ElseIf e.KeyCode = Keys.F11 Then
+            ToggleFullScreenMode()
         End If
     End Sub
 
@@ -19946,5 +19958,26 @@ Public Class MainForm
         DynaLog.LogMessage("Restarting mounted image detector...")
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
+    End Sub
+
+    Sub ToggleFullScreenMode()
+        If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
+            DynaLog.LogMessage("Exiting full-screen mode...")
+            FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
+            Bounds = OriginalWindowBounds
+            WindowState = OriginalWindowState
+        Else
+            DynaLog.LogMessage("Entering full-screen mode...")
+            FormBorderStyle = Windows.Forms.FormBorderStyle.None
+            OriginalWindowState = WindowState
+            WindowState = FormWindowState.Normal
+            OriginalWindowBounds = Bounds
+            Bounds = Screen.FromControl(Me).Bounds
+        End If
+        ExitFullScreenTSMI.Visible = (FormBorderStyle = Windows.Forms.FormBorderStyle.None)
+    End Sub
+
+    Private Sub ExitFullScreenTSMI_Click(sender As Object, e As EventArgs) Handles ExitFullScreenTSMI.Click
+        ToggleFullScreenMode()
     End Sub
 End Class

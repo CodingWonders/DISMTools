@@ -1440,6 +1440,8 @@
     <Content Include="Installer\ISPPBuiltins.iss" />
     <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
+    <None Include="Resources\menus\exit_full_screen_glyph.png" />
+    <None Include="Resources\menus\exit_full_screen_glyph_dark.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
