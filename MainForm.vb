@@ -19963,11 +19963,13 @@ Public Class MainForm
     Sub ToggleFullScreenMode()
         If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
             DynaLog.LogMessage("Exiting full-screen mode...")
+            StatusStrip.SizingGrip = True
             FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
             Bounds = OriginalWindowBounds
             WindowState = OriginalWindowState
         Else
             DynaLog.LogMessage("Entering full-screen mode...")
+            StatusStrip.SizingGrip = False
             FormBorderStyle = Windows.Forms.FormBorderStyle.None
             OriginalWindowState = WindowState
             WindowState = FormWindowState.Normal
