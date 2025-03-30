@@ -66,7 +66,7 @@ Partial Class ImageTaskHeader
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents ItemPictureBox As System.Windows.Forms.PictureBox
-    Friend WithEvents ItemTitle As System.Windows.Forms.Label
+    Private WithEvents ItemPictureBox As System.Windows.Forms.PictureBox
+    Private WithEvents ItemTitle As System.Windows.Forms.Label
 
 End Class
