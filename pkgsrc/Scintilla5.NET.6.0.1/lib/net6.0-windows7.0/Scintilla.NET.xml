@@ -29,6 +29,31 @@
             Annotations are indented to match the text.
             </summary>
         </member>
+        <member name="T:ScintillaNET.Architecture">
+            <summary>
+            Indicates the processor architecture.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Architecture.X86">
+            <summary>
+            An Intel-based 32-bit processor architecture.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Architecture.X64">
+            <summary>
+            An Intel-based 64-bit processor architecture.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Architecture.Arm">
+            <summary>
+            A 32-bit ARM processor architecture.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.Architecture.Arm64">
+            <summary>
+            A 64-bit ARM processor architecture.
+            </summary>
+        </member>
         <member name="T:ScintillaNET.AutoCSelectionChangeEventArgs">
             <summary>
             Provides data for the <see cref="E:ScintillaNET.Scintilla.AutoCSelectionChange" /> event.
@@ -363,6 +388,25 @@
             Initializes a new instance of the <see cref="T:ScintillaNET.CharAddedEventArgs" /> class.
             </summary>
             <param name="ch">The character added.</param>
+        </member>
+        <member name="P:ScintillaNET.CharToBytePositionInfo.Length">
+            <summary>
+            Length of this code point.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.CharToBytePositionInfo.RoundToNext">
+            <summary>
+            Returns <see cref="F:ScintillaNET.CharToBytePositionInfo.NextCodePointBytePosition"/> if <see cref="F:ScintillaNET.CharToBytePositionInfo.LowSurrogate"/> is true. In other
+            words, returns the next code point position in bytes if this <see cref="F:ScintillaNET.CharToBytePositionInfo.CharPosition"/>
+            points to the middle of a code point.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.CharToBytePositionInfo.RoundToNextChar">
+            <summary>
+            Returns <c><see cref="F:ScintillaNET.CharToBytePositionInfo.CharPosition"/> + 1</c> if <see cref="F:ScintillaNET.CharToBytePositionInfo.LowSurrogate"/> is true. In other
+            words, returns the next UTF-16 char position if this <see cref="F:ScintillaNET.CharToBytePositionInfo.CharPosition"/>
+            points to the middle of a code point.
+            </summary>
         </member>
         <member name="T:ScintillaNET.OkLab">
             <summary>
@@ -2849,7 +2893,7 @@
         </member>
         <member name="M:ScintillaNET.LineCollection.GetCharCount(System.Int32,System.Int32)">
             <summary>
-            Gets the number of CHARACTERS int a BYTE range.
+            Gets the number of CHARACTERS in a BYTE range.
             </summary>
         </member>
         <member name="M:ScintillaNET.LineCollection.GetCharCount(System.IntPtr,System.Int32,System.Text.Encoding)">
@@ -4204,16 +4248,25 @@
             <returns>A String describing the lexer property name if found; otherwise, String.Empty.</returns>
             <remarks>A list of supported property names for the current <see cref="P:ScintillaNET.Scintilla.LexerName">Lexer</see> can be obtained by calling <see cref="M:ScintillaNET.Scintilla.PropertyNames" />.</remarks>
         </member>
-        <member name="M:ScintillaNET.Scintilla.DirectMessage(System.Int32,System.IntPtr,System.IntPtr)">
+        <member name="M:ScintillaNET.Scintilla.DirectMessage(System.Int32)">
             <summary>
             Sends the specified message directly to the native Scintilla window,
             bypassing any managed APIs.
             </summary>
             <param name="msg">The message ID.</param>
-            <param name="wParam">The message <c>wparam</c> field.</param>
-            <param name="lParam">The message <c>lparam</c> field.</param>
             <returns>An <see cref="T:System.IntPtr"/> representing the result of the message request.</returns>
             <remarks>This API supports the Scintilla infrastructure and is not intended to be used directly from your code.</remarks>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.DirectMessage(System.Int32,System.IntPtr)">
+            <inheritdoc cref="M:ScintillaNET.Scintilla.DirectMessage(System.Int32)"/>
+            <param name="msg"></param>
+            <param name="wParam">The message <c>wparam</c> field.</param>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.DirectMessage(System.Int32,System.IntPtr,System.IntPtr)">
+            <inheritdoc cref="M:ScintillaNET.Scintilla.DirectMessage(System.Int32,System.IntPtr)"/>
+            <param name="msg"></param>
+            <param name="wParam"></param>
+            <param name="lParam">The message <c>lparam</c> field.</param>
         </member>
         <member name="M:ScintillaNET.Scintilla.Dispose(System.Boolean)">
             <summary>
@@ -4288,7 +4341,14 @@
         </member>
         <member name="M:ScintillaNET.Scintilla.GetCharAt(System.Int32)">
             <summary>
-            Returns the character as the specified document position.
+            Returns the character at the specified document position.
+            </summary>
+            <param name="position">The zero-based document position of the character to get.</param>
+            <returns>The character at the specified <paramref name="position" />.</returns>
+        </member>
+        <member name="M:ScintillaNET.Scintilla.GetCodePointAt(System.Int32)">
+            <summary>
+            Returns the code point at the specified document position.
             </summary>
             <param name="position">The zero-based document position of the character to get.</param>
             <returns>The character at the specified <paramref name="position" />.</returns>
@@ -4392,14 +4452,6 @@
             <param name="tagNumber">The capture group (1 through 9) to get the text for.</param>
             <returns>A String containing the capture group text if it participated in the match; otherwise, an empty string.</returns>
             <seealso cref="M:ScintillaNET.Scintilla.SearchInTarget(System.String)" />
-        </member>
-        <member name="M:ScintillaNET.Scintilla.GetWideTextRange(System.Int32,System.Int32)">
-            <summary>
-            Gets a range of text from the document accounting for wide characters.
-            </summary>
-            <param name="position">The zero-based starting character position of the range to get.</param>
-            <param name="length">The number of characters (including wide) to get.</param>
-            <returns>A string representing the text range.</returns>
         </member>
         <member name="M:ScintillaNET.Scintilla.GetLexerIDFromLexer(ScintillaNET.Lexer)">
             <summary>
@@ -10116,6 +10168,31 @@
             <summary>
             Renders text using Direct2D/DirectWrite. Since Direct2D buffers drawing,
             Scintilla's buffering can be turned off with <see cref="P:ScintillaNET.Scintilla.BufferedDraw" />.
+            </summary>
+        </member>
+        <member name="T:ScintillaNET.UnicodeConstants">
+            <summary>
+            Includes various unicode constants and common code points such as "Replacement Character".
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.UnicodeConstants.replacementCharacter">
+            <summary>
+            Unicode "Replacement Character" (�) as char.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.UnicodeConstants.replacementCharacterString">
+            <summary>
+            Unicode "Replacement Character" (�) as string.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.UnicodeConstants.replacementCharacterUtf8">
+            <summary>
+            Unicode "Replacement Character" (�) as UTF-8 encoded bytes.
+            </summary>
+        </member>
+        <member name="F:ScintillaNET.UnicodeConstants.replacementCharacterUtf8z">
+            <summary>
+            Unicode "Replacement Character" (�) as UTF-8 encoded null-terminated bytes.
             </summary>
         </member>
         <member name="T:ScintillaNET.UpdateChange">
