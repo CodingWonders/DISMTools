@@ -483,6 +483,7 @@ Public Class GetAppxPkgInfoDlg
             Try
                 If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
             Catch ex As Exception
+                PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
                 PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
             End Try
             Try

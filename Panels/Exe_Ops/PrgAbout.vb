@@ -26,7 +26,6 @@ Public Class PrgAbout
                         Label6.Text = "SQL Server icon (Color)"
                         Label7.Text = "Utilities"
                         Label8.Text = "7-Zip"
-                        Label9.Text = "wimlib-imagex (used in the future)"
                         Label10.Text = "Help documentation"
                         Label11.Text = "Command Help source"
                         Label13.Text = "Scintilla.NET (NuGet package)"
@@ -42,7 +41,6 @@ Public Class PrgAbout
                         LinkLabel3.Text = "WHAT'S NEW"
                         LinkLabel4.Text = "Icons8"
                         LinkLabel5.Text = "Visit website"
-                        LinkLabel6.Text = "Visit website"
                         LinkLabel7.Text = "Microsoft"
                         LinkLabel9.Text = "Visit website"
                         LinkLabel10.Text = "Visit website"
@@ -59,7 +57,6 @@ Public Class PrgAbout
                         Label6.Text = "Icono de SQL Server (Color)"
                         Label7.Text = "Utilidades"
                         Label8.Text = "7-Zip"
-                        Label9.Text = "wimlib-imagex (usado en el futuro)"
                         Label10.Text = "Documentación de ayuda"
                         Label11.Text = "Fuente de ayuda de comandos"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
@@ -75,7 +72,6 @@ Public Class PrgAbout
                         LinkLabel3.Text = "NOVEDADES"
                         LinkLabel4.Text = "Icons8"
                         LinkLabel5.Text = "Visitar sitio"
-                        LinkLabel6.Text = "Visitar sitio"
                         LinkLabel7.Text = "Microsoft"
                         LinkLabel9.Text = "Visitar sitio"
                         LinkLabel10.Text = "Visitar sitio"
@@ -93,7 +89,6 @@ Public Class PrgAbout
                         Label6.Text = "Icône SQL Server (Color)"
                         Label7.Text = "Outils"
                         Label8.Text = "7-Zip"
-                        Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
                         Label10.Text = "Documentation d'aide"
                         Label11.Text = "Source d'aide à la commande"
                         Label13.Text = "Scintilla.NET (paquet NuGet)"
@@ -109,7 +104,6 @@ Public Class PrgAbout
                         LinkLabel3.Text = "QUOI DE NEUF"
                         LinkLabel4.Text = "Icons8"
                         LinkLabel5.Text = "Site web"
-                        LinkLabel6.Text = "Site web"
                         LinkLabel7.Text = "Microsoft"
                         LinkLabel9.Text = "Site web"
                         LinkLabel10.Text = "Site web"
@@ -127,7 +121,6 @@ Public Class PrgAbout
                         Label6.Text = "Ícone do SQL Server (Cor)"
                         Label7.Text = "Utilitários"
                         Label8.Text = "7-Zip"
-                        Label9.Text = "wimlib-imagex (usado no futuro)"
                         Label10.Text = "Documentação de ajuda"
                         Label11.Text = "Fonte da Ajuda do Comando"
                         Label13.Text = "Scintilla.NET (pacote NuGet)"
@@ -143,7 +136,6 @@ Public Class PrgAbout
                         LinkLabel3.Text = "O QUE HÁ DE NOVO"
                         LinkLabel4.Text = "Ícones8"
                         LinkLabel5.Text = "Sítio Web"
-                        LinkLabel6.Text = "Sítio Web"
                         LinkLabel7.Text = "Microsoft"
                         LinkLabel9.Text = "Sítio Web"
                         LinkLabel10.Text = "Sítio Web"
@@ -161,7 +153,6 @@ Public Class PrgAbout
                         Label6.Text = "Icona di SQL Server (Color)"
                         Label7.Text = "Utilità"
                         Label8.Text = "7-Zip"
-                        Label9.Text = "wimlib-imagex (usato in futuro)"
                         Label10.Text = "Documentazione di aiuto"
                         Label11.Text = "Fonte della guida ai comandi"
                         Label13.Text = "Scintilla.NET (pacchetto NuGet)"
@@ -177,7 +168,6 @@ Public Class PrgAbout
                         LinkLabel3.Text = "COSA C'È DI NUOVO"
                         LinkLabel4.Text = "Icons8"
                         LinkLabel5.Text = "Sito web"
-                        LinkLabel6.Text = "Sito web"
                         LinkLabel7.Text = "Microsoft"
                         LinkLabel9.Text = "Sito web"
                         LinkLabel10.Text = "Sito web"
@@ -196,7 +186,6 @@ Public Class PrgAbout
                 Label6.Text = "SQL Server icon (Color)"
                 Label7.Text = "Utilities"
                 Label8.Text = "7-Zip"
-                Label9.Text = "wimlib-imagex (used in the future)"
                 Label10.Text = "Help documentation"
                 Label11.Text = "Command Help source"
                 Label13.Text = "Scintilla.NET (NuGet package)"
@@ -212,7 +201,6 @@ Public Class PrgAbout
                 LinkLabel3.Text = "WHAT'S NEW"
                 LinkLabel4.Text = "Icons8"
                 LinkLabel5.Text = "Visit website"
-                LinkLabel6.Text = "Visit website"
                 LinkLabel7.Text = "Microsoft"
                 LinkLabel9.Text = "Visit website"
                 LinkLabel10.Text = "Visit website"
@@ -230,7 +218,6 @@ Public Class PrgAbout
                 Label6.Text = "Icono de SQL Server (Color)"
                 Label7.Text = "Utilidades"
                 Label8.Text = "7-Zip"
-                Label9.Text = "wimlib-imagex (usado en el futuro)"
                 Label10.Text = "Documentación de ayuda"
                 Label11.Text = "Fuente de ayuda de comandos"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
@@ -246,7 +233,6 @@ Public Class PrgAbout
                 LinkLabel3.Text = "NOVEDADES"
                 LinkLabel4.Text = "Icons8"
                 LinkLabel5.Text = "Visitar sitio"
-                LinkLabel6.Text = "Visitar sitio"
                 LinkLabel7.Text = "Microsoft"
                 LinkLabel9.Text = "Visitar sitio"
                 LinkLabel10.Text = "Visitar sitio"
@@ -264,7 +250,6 @@ Public Class PrgAbout
                 Label6.Text = "Icône SQL Server (Color)"
                 Label7.Text = "Outils"
                 Label8.Text = "7-Zip"
-                Label9.Text = "wimlib-imagex (utilisé à l'avenir)"
                 Label10.Text = "Documentation d'aide"
                 Label11.Text = "Source d'aide à la commande"
                 Label13.Text = "Scintilla.NET (paquet NuGet)"
@@ -280,7 +265,6 @@ Public Class PrgAbout
                 LinkLabel3.Text = "QUOI DE NEUF"
                 LinkLabel4.Text = "Icons8"
                 LinkLabel5.Text = "Site web"
-                LinkLabel6.Text = "Site web"
                 LinkLabel7.Text = "Microsoft"
                 LinkLabel9.Text = "Site web"
                 LinkLabel10.Text = "Site web"
@@ -298,7 +282,6 @@ Public Class PrgAbout
                 Label6.Text = "Ícone do SQL Server (Cor)"
                 Label7.Text = "Utilitários"
                 Label8.Text = "7-Zip"
-                Label9.Text = "wimlib-imagex (usado no futuro)"
                 Label10.Text = "Documentação de ajuda"
                 Label11.Text = "Fonte da Ajuda do Comando"
                 Label13.Text = "Scintilla.NET (pacote NuGet)"
@@ -314,7 +297,6 @@ Public Class PrgAbout
                 LinkLabel3.Text = "O QUE HÁ DE NOVO"
                 LinkLabel4.Text = "Ícones8"
                 LinkLabel5.Text = "Sítio Web"
-                LinkLabel6.Text = "Sítio Web"
                 LinkLabel7.Text = "Microsoft"
                 LinkLabel9.Text = "Sítio Web"
                 LinkLabel10.Text = "Sítio Web"
@@ -332,7 +314,6 @@ Public Class PrgAbout
                 Label6.Text = "Icona di SQL Server (Color)"
                 Label7.Text = "Utilità"
                 Label8.Text = "7-Zip"
-                Label9.Text = "wimlib-imagex (usato in futuro)"
                 Label10.Text = "Documentazione di aiuto"
                 Label11.Text = "Fonte della guida ai comandi"
                 Label13.Text = "Scintilla.NET (pacchetto NuGet)"
@@ -348,7 +329,6 @@ Public Class PrgAbout
                 LinkLabel3.Text = "COSA C'È DI NUOVO"
                 LinkLabel4.Text = "Icons8"
                 LinkLabel5.Text = "Sito web"
-                LinkLabel6.Text = "Sito web"
                 LinkLabel7.Text = "Microsoft"
                 LinkLabel9.Text = "Sito web"
                 LinkLabel10.Text = "Sito web"
@@ -389,10 +369,6 @@ Public Class PrgAbout
 
     Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
         Process.Start("https://7-zip.org")
-    End Sub
-
-    Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
-        Process.Start("https://wimlib.net")
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
@@ -534,11 +510,11 @@ Public Class PrgAbout
     End Sub
 #End Region
 
-    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter, PictureBox5.MouseEnter
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter
         Cursor = Cursors.Hand
     End Sub
 
-    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave, PictureBox5.MouseLeave
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave
         Cursor = Cursors.Arrow
     End Sub
 
@@ -552,10 +528,6 @@ Public Class PrgAbout
 
     Private Sub PictureBox4_Click(sender As Object, e As EventArgs) Handles PictureBox4.Click
         Process.Start("https://forums.mydigitallife.net/threads/discussion-dismtools.87263/")
-    End Sub
-
-    Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click
-        Process.Start("https://matrix.to/#/#dismtools:gitter.im")
     End Sub
 
     Private Sub PictureBox2_MouseHover(sender As Object, e As EventArgs) Handles PictureBox2.MouseHover
@@ -639,34 +611,6 @@ Public Class PrgAbout
                 PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
             Case 5
                 PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto sui forum di My Digital Life")
-        End Select
-    End Sub
-
-    Private Sub PictureBox5_MouseHover(sender As Object, e As EventArgs) Handles PictureBox5.MouseHover
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check out the Gitter chat (powered by Matrix)")
-                    Case "ESN"
-                        PictureToolTip.SetToolTip(sender, "Consulte el chat de Gitter (potenciado por Matrix)")
-                    Case "FRA"
-                        PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
-                    Case "PTB", "PTG"
-                        PictureToolTip.SetToolTip(sender, "Consulte o chat do Gitter (com tecnologia Matrix)")
-                    Case "ITA"
-                        PictureToolTip.SetToolTip(sender, "Controlla la chat Gitter (basata su Matrix)")
-                End Select
-            Case 1
-                PictureToolTip.SetToolTip(sender, "Check out the Gitter chat (powered by Matrix)")
-            Case 2
-                PictureToolTip.SetToolTip(sender, "Consulte el chat de Gitter (potenciado por Matrix)")
-            Case 3
-                PictureToolTip.SetToolTip(sender, "Consultez le chat sur Gitter (powered by Matrix)")
-            Case 4
-                PictureToolTip.SetToolTip(sender, "Consulte o chat do Gitter (com tecnologia Matrix)")
-            Case 5
-                PictureToolTip.SetToolTip(sender, "Controlla la chat Gitter (basata su Matrix)")
         End Select
     End Sub
 
