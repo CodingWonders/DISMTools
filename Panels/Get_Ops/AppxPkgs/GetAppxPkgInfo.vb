@@ -464,18 +464,27 @@ Public Class GetAppxPkgInfoDlg
             mainAsset = MainForm.GetStoreAppMainLogo(Label23.Text)
             DynaLog.LogMessage("Main asset location: " & Quote & mainAsset & Quote)
             If mainAsset <> "" And File.Exists(mainAsset) Then
-                Dim asset As Image = Image.FromFile(mainAsset)
-                If (asset.Width > PictureBox2.Width) Or (asset.Height > PictureBox2.Height) Then
-                    PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
-                Else
-                    PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
-                End If
+                Try
+                    DynaLog.LogMessage("Attempting to open picture...")
+                    Dim asset As Image = Image.FromFile(mainAsset)
+                    If (asset.Width > PictureBox2.Width) Or (asset.Height > PictureBox2.Height) Then
+                        PictureBox2.SizeMode = PictureBoxSizeMode.Zoom
+                    Else
+                        PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
+                    End If
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not open picture. This can happen if the file is corrupted. Error message: " & ex.Message)
+                End Try
             Else
                 Label10.Visible = False
                 LinkLabel1.Visible = False
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
             End If
-            If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+            Try
+                If mainAsset <> "" And File.Exists(mainAsset) Then PictureBox2.Image = Image.FromFile(mainAsset) Else PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+            Catch ex As Exception
+                PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+            End Try
             Try
                 assetDir = MainForm.GetSuitablePackageFolder(Label25.Text)
             Catch ex As Exception
