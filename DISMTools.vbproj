@@ -836,6 +836,7 @@
     <Compile Include="UserControls\ConsoleControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />

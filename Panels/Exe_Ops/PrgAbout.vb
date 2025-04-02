@@ -18,7 +18,7 @@ Public Class PrgAbout
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "About this program"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                         Label3.Text = "These resources and components were used in the creation of this program:"
                         Label4.Text = "Resources"
@@ -30,7 +30,7 @@ Public Class PrgAbout
                         Label11.Text = "Command Help source"
                         Label13.Text = "Scintilla.NET (NuGet package)"
                         If Not MainForm.dtBranch.Contains("preview") Then
-                            Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
+                            Label15.Text = "Built on " & RetrieveLinkerTimestamp() & " by msbuild"
                             Label15.Visible = True
                         End If
                         Label16.Text = "ManagedDism (NuGet package)"
@@ -49,7 +49,7 @@ Public Class PrgAbout
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de este programa"
-                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                         Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                         Label4.Text = "Recursos"
@@ -61,7 +61,7 @@ Public Class PrgAbout
                         Label11.Text = "Fuente de ayuda de comandos"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
-                            Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                            Label15.Text = "Compilado el " & RetrieveLinkerTimestamp() & " por msbuild"
                             Label15.Visible = True
                         End If
                         Label16.Text = "ManagedDism (paquete NuGet)"
@@ -81,7 +81,7 @@ Public Class PrgAbout
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
                     Case "FRA"
                         Text = "À propos de ce programme"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
                         Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                         Label4.Text = "Ressources"
@@ -93,7 +93,7 @@ Public Class PrgAbout
                         Label11.Text = "Source d'aide à la commande"
                         Label13.Text = "Scintilla.NET (paquet NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
-                            Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
+                            Label15.Text = "Construit le " & RetrieveLinkerTimestamp() & " par msbuild"
                             Label15.Visible = True
                         End If
                         Label16.Text = "ManagedDism (paquet NuGet)"
@@ -113,7 +113,7 @@ Public Class PrgAbout
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
-                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                         Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                         Label4.Text = "Recursos"
@@ -125,7 +125,7 @@ Public Class PrgAbout
                         Label11.Text = "Fonte da Ajuda do Comando"
                         Label13.Text = "Scintilla.NET (pacote NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
-                            Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                            Label15.Text = "Construído em " & RetrieveLinkerTimestamp() & " por msbuild"
                             Label15.Visible = True
                         End If
                         Label16.Text = "ManagedDism (pacote NuGet)"
@@ -145,7 +145,7 @@ Public Class PrgAbout
                         UpdCheckBtn.Text = "Verificar actualizações"
                     Case "ITA"
                         Text = "Informazioni su questo programma"
-                        Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
                         Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
                         Label4.Text = "Risorse"
@@ -157,7 +157,7 @@ Public Class PrgAbout
                         Label11.Text = "Fonte della guida ai comandi"
                         Label13.Text = "Scintilla.NET (pacchetto NuGet)"
                         If Not MainForm.dtBranch.Contains("preview") Then
-                            Label15.Text = "Costruito su " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " da msbuild"
+                            Label15.Text = "Costruito su " & RetrieveLinkerTimestamp() & " da msbuild"
                             Label15.Visible = True
                         End If
                         Label16.Text = "ManagedDism (pacchetto NuGet)"
@@ -178,7 +178,7 @@ Public Class PrgAbout
                 End Select
             Case 1
                 Text = "About this program"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                 Label3.Text = "These resources and components were used in the creation of this program:"
                 Label4.Text = "Resources"
@@ -190,7 +190,7 @@ Public Class PrgAbout
                 Label11.Text = "Command Help source"
                 Label13.Text = "Scintilla.NET (NuGet package)"
                 If Not MainForm.dtBranch.Contains("preview") Then
-                    Label15.Text = "Built on " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " by msbuild"
+                    Label15.Text = "Built on " & RetrieveLinkerTimestamp() & " by msbuild"
                     Label15.Visible = True
                 End If
                 Label16.Text = "ManagedDism (NuGet package)"
@@ -210,7 +210,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Check for updates"
             Case 2
                 Text = "Acerca de este programa"
-                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                 Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                 Label4.Text = "Recursos"
@@ -222,7 +222,7 @@ Public Class PrgAbout
                 Label11.Text = "Fuente de ayuda de comandos"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
-                    Label15.Text = "Compilado el " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                    Label15.Text = "Compilado el " & RetrieveLinkerTimestamp() & " por msbuild"
                     Label15.Visible = True
                 End If
                 Label16.Text = "ManagedDism (paquete NuGet)"
@@ -242,7 +242,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
             Case 3
                 Text = "À propos de ce programme"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
                 Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                 Label4.Text = "Ressources"
@@ -254,7 +254,7 @@ Public Class PrgAbout
                 Label11.Text = "Source d'aide à la commande"
                 Label13.Text = "Scintilla.NET (paquet NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
-                    Label15.Text = "Construit le " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " par msbuild"
+                    Label15.Text = "Construit le " & RetrieveLinkerTimestamp() & " par msbuild"
                     Label15.Visible = True
                 End If
                 Label16.Text = "ManagedDism (paquet NuGet)"
@@ -274,7 +274,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
             Case 4
                 Text = "Acerca deste programa"
-                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                 Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                 Label4.Text = "Recursos"
@@ -286,7 +286,7 @@ Public Class PrgAbout
                 Label11.Text = "Fonte da Ajuda do Comando"
                 Label13.Text = "Scintilla.NET (pacote NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
-                    Label15.Text = "Construído em " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " por msbuild"
+                    Label15.Text = "Construído em " & RetrieveLinkerTimestamp() & " por msbuild"
                     Label15.Visible = True
                 End If
                 Label16.Text = "ManagedDism (pacote NuGet)"
@@ -306,7 +306,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Verificar actualizações"
             Case 5
                 Text = "Informazioni su questo programma"
-                Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
                 Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
                 Label4.Text = "Risorse"
@@ -318,7 +318,7 @@ Public Class PrgAbout
                 Label11.Text = "Fonte della guida ai comandi"
                 Label13.Text = "Scintilla.NET (pacchetto NuGet)"
                 If Not MainForm.dtBranch.Contains("preview") Then
-                    Label15.Text = "Costruito su " & RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe") & " da msbuild"
+                    Label15.Text = "Costruito su " & RetrieveLinkerTimestamp() & " da msbuild"
                     Label15.Visible = True
                 End If
                 Label16.Text = "ManagedDism (pacchetto NuGet)"
@@ -402,26 +402,6 @@ Public Class PrgAbout
     Private Sub RichTextBox1_LinkClicked(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
         Process.Start(e.LinkText)
     End Sub
-
-    Function RetrieveLinkerTimestamp(ByVal filePath As String) As DateTime
-        Const PeHeaderOffset As Integer = 60
-        Const LinkerTimestampOffset As Integer = 8
-        Dim b(2047) As Byte
-        Dim s As Stream = Nothing
-        Try
-            s = New FileStream(filePath, FileMode.Open, FileAccess.Read)
-            s.Read(b, 0, 2048)
-        Finally
-            If Not s Is Nothing Then s.Close()
-        End Try
-        Dim i As Integer = BitConverter.ToInt32(b, PeHeaderOffset)
-        Dim SecondsSince1970 As Integer = BitConverter.ToInt32(b, i + LinkerTimestampOffset)
-        Dim dt As New DateTime(1970, 1, 1, 0, 0, 0)
-        dt = dt.AddSeconds(SecondsSince1970)
-        Dim tz As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")
-        dt = TimeZoneInfo.ConvertTimeFromUtc(dt, tz)
-        Return dt
-    End Function
 
 #Region "LinkLabel.MouseEnter events"
 

@@ -597,7 +597,7 @@ Public Class MainForm
 
     Sub InitDynaLog()
         DynaLog.CheckLogAge()
-        DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
+        DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
@@ -625,7 +625,7 @@ Public Class MainForm
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, Date.Now.Year) & ")")
         DynaLog.BeginLogging()
     End Sub
-    
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -5362,7 +5362,7 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             If NoMigration Then Exit Sub
             DynaLog.LogMessage("Checking build date...")
-            Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
+            Dim bldDate As Date = RetrieveLinkerTimestamp()
             DynaLog.LogMessage("Comparing dates...")
             If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
                 DynaLog.LogMessage("Settings file was last modified at a date older than build date. Migrating settings...")
