@@ -636,14 +636,12 @@ Public Class GetFeatureInfoDlg
             End Select
         End If
         If InstalledFeatureInfo.Count > 0 Then
-            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-                If InstalledFeature.FeatureName.ToLower().Contains(sQuery.ToLower()) Then
-                    If featureState <> "" AndAlso InstalledFeature.State = expectedFeatureState Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-                    ElseIf featureState = "" Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-                    End If
-                End If
+            Dim finalFeatureLookup = InstalledFeatureInfo.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If featureState <> "" Then      ' We filter them again based on the state
+                finalFeatureLookup = finalFeatureLookup.Where(Function(feature) feature.State = expectedFeatureState)
+            End If
+            For Each filteredFeature In finalFeatureLookup
+                ListView1.Items.Add(New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)}))
             Next
         End If
     End Sub
@@ -685,5 +683,19 @@ Public Class GetFeatureInfoDlg
         If ListView1.SelectedItems.Count < 1 Then ListView1.Sorting = _lvwColumnSorter.Order
 
         ListView1.Sort()
+    End Sub
+
+    Private Sub SearchBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles SearchBox1.KeyDown
+        If e.KeyCode = Keys.Back And e.Control Then
+            Dim text As String = SearchBox1.Text
+            Dim lastSpaceIndex As Integer = text.LastIndexOf(" "c)
+            If lastSpaceIndex > 0 Then
+                SearchBox1.Text = text.Substring(0, lastSpaceIndex).TrimEnd()
+            Else
+                SearchBox1.Text = ""
+            End If
+            e.SuppressKeyPress = True
+            SearchBox1.SelectionStart = SearchBox1.TextLength
+        End If
     End Sub
 End Class

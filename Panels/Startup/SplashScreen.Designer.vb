@@ -26,6 +26,7 @@ Partial Class SplashScreen
         Me.LogoPic = New System.Windows.Forms.PictureBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.PreviewFlag = New System.Windows.Forms.PictureBox()
+        Me.VersionLabel = New System.Windows.Forms.Label()
         CType(Me.LogoPic, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PreviewFlag, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -58,6 +59,20 @@ Partial Class SplashScreen
         Me.PreviewFlag.TabStop = False
         Me.PreviewFlag.Visible = False
         '
+        'VersionLabel
+        '
+        Me.VersionLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.VersionLabel.AutoEllipsis = True
+        Me.VersionLabel.BackColor = System.Drawing.Color.Transparent
+        Me.VersionLabel.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.VersionLabel.Location = New System.Drawing.Point(233, 170)
+        Me.VersionLabel.Name = "VersionLabel"
+        Me.VersionLabel.Size = New System.Drawing.Size(560, 23)
+        Me.VersionLabel.TabIndex = 1
+        Me.VersionLabel.Text = "Version"
+        Me.VersionLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight
+        Me.VersionLabel.Visible = False
+        '
         'SplashScreen
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -65,6 +80,7 @@ Partial Class SplashScreen
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.startup_bg
         Me.ClientSize = New System.Drawing.Size(800, 200)
         Me.ControlBox = False
+        Me.Controls.Add(Me.VersionLabel)
         Me.Controls.Add(Me.PreviewFlag)
         Me.Controls.Add(Me.LogoPic)
         Me.DoubleBuffered = True
@@ -88,4 +104,5 @@ Partial Class SplashScreen
     Friend WithEvents LogoPic As System.Windows.Forms.PictureBox
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents PreviewFlag As System.Windows.Forms.PictureBox
+    Friend WithEvents VersionLabel As System.Windows.Forms.Label
 End Class

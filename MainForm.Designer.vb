@@ -204,6 +204,7 @@ Partial Class MainForm
         Me.ContributeToTheHelpSystemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BranchTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitFullScreenTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.InvalidSettingsTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ISFix = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
@@ -551,7 +552,7 @@ Partial Class MainForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.CommandsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem, Me.BranchTSMI, Me.VersionTSMI, Me.InvalidSettingsTSMI})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.CommandsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem, Me.BranchTSMI, Me.VersionTSMI, Me.ExitFullScreenTSMI, Me.InvalidSettingsTSMI})
         Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
@@ -1657,6 +1658,15 @@ Partial Class MainForm
     "tures."
         Me.VersionTSMI.Visible = False
         '
+        'ExitFullScreenTSMI
+        '
+        Me.ExitFullScreenTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ExitFullScreenTSMI.Image = Global.DISMTools.My.Resources.Resources.exit_full_screen_glyph
+        Me.ExitFullScreenTSMI.Name = "ExitFullScreenTSMI"
+        Me.ExitFullScreenTSMI.Size = New System.Drawing.Size(61, 20)
+        Me.ExitFullScreenTSMI.Text = "(F11)"
+        Me.ExitFullScreenTSMI.Visible = False
+        '
         'InvalidSettingsTSMI
         '
         Me.InvalidSettingsTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -2533,7 +2543,7 @@ Partial Class MainForm
         'Button24
         '
         Me.Button24.ForeColor = System.Drawing.Color.Black
-        Me.Button24.Image = CType(resources.GetObject("Button24.Image"), System.Drawing.Image)
+        Me.Button24.Image = Global.DISMTools.My.Resources.Resources.switch_indexes
         Me.Button24.Location = New System.Drawing.Point(336, 89)
         Me.Button24.Name = "Button24"
         Me.Button24.Size = New System.Drawing.Size(324, 63)
@@ -4945,4 +4955,5 @@ Partial Class MainForm
     Friend WithEvents WebResourcesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndFODWin10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExitFullScreenTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class

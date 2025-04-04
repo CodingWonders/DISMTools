@@ -104,8 +104,8 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=5.6.6.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.5.6.6\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=6.0.1.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.6.0.1\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -190,12 +190,6 @@
     </Reference>
     <Reference Include="System.Xml.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
-    </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
-    </Reference>
-    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2012, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
-      <HintPath>packages\DockPanelSuite.ThemeVS2012.3.1.1\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2012.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase">
       <Private>True</Private>
@@ -842,11 +836,13 @@
     <Compile Include="UserControls\ConsoleControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
+    <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
@@ -1445,31 +1441,8 @@
     <Content Include="Installer\ISPPBuiltins.iss" />
     <Content Include="Installer\license.txt" />
     <Content Include="logo.ico" />
-    <Content Include="ThemeVS2012\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
-    <Content Include="ThemeVS2012\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskArrowTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskCoreTop.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskDockFive.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabList.png" />
-    <Content Include="ThemeVS2012\Resources\MaskTabOverflow.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowAutoHide.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowClose.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowDock.png" />
-    <Content Include="ThemeVS2012\Resources\MaskToolWindowOption.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowBottom.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowCenter.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowLeft.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowRight.png" />
-    <Content Include="ThemeVS2012\Resources\MaskWindowTop.png" />
+    <None Include="Resources\menus\exit_full_screen_glyph.png" />
+    <None Include="Resources\menus\exit_full_screen_glyph_dark.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1984,12 +1957,12 @@ IF EXIST tools (
 
 IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets')" />
+  <Import Project="packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.5.6.6\build\scintilla5.net.targets'))" />
+    <Error Condition="!Exists('packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
