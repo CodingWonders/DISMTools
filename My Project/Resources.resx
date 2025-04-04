@@ -914,25 +914,21 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The product key syntax validation algorithm is now more reliable
-- Password entry is now disabled when setting up an open network connection in the unattended answer file creation wizard
-- Fixed an issue where the program would throw an access violation exception if you declined the UnattendGen self-contained version download dialog
+- Fixed some minor visual issues in the Driver Installation Module (DIM) and the main program
+- Fixed an issue where the ISO creator would not disregard a specified answer file if the option was unchecked
+- Fixed an issue where the program would throw an out-of-memory exception when attempting to show main Store logo assets for some applications
+- Fixed an issue where AppX packages that had been downloaded with the App Installer downloader would not be added to the list
 
 New features:
 
-- Image edition tasks have been added
-- The Driver Installation Module (DIM) now shows instructions and progress information at the bottom of the window
-- The restart dialog has been ported to ARM64
-- CODE: the procedure to add Optional Components for Windows PE has been streamlined for ISO and test environment creation
-- HTML versions of image information reports now have a sidebar for easier section navigation
-- You can now sort features and capabilities by clicking the column headers
-- If a removable medium contains a Windows installation, you will now be able to use it in the offline installation management mode
-- CODE: image operations have been refactored
-
-Removed features:
-
-- Actions, introduced in version 0.3, have been removed due to a lack of maintenance
-- Printing capabilities of image information reports have been removed</value>
+- The amount of information reported by the PE Helper has been significantly improved
+- HotInstall has been updated to the latest version
+- You can now configure the unattended answer file for the target OS to grab the product key from firmware
+- You can now copy generic product keys to your clipboard
+- CODE: feature and capability information search boxes now use LINQ queries
+- Some libraries were updated
+- CODE: Markdown writers in the image information saver were refactored into the new Markdown Helper
+- You can now toggle full-screen mode by pressing F11</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

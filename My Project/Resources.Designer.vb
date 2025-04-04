@@ -1981,14 +1981,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The product key syntax validation algorithm is now more reliable
-        '''- Password entry is now disabled when setting up an open network connection in the unattended answer file creation wizard
-        '''- Fixed an issue where the program would throw an access violation exception if you declined the UnattendGen self-contained version download dialog
+        '''- Fixed some minor visual issues in the Driver Installation Module (DIM) and the main program
+        '''- Fixed an issue where the ISO creator would not disregard a specified answer file if the option was unchecked
+        '''- Fixed an issue where the program would throw an out-of-memory exception when attempting to show main Store logo assets for some applications
+        '''- Fixed an issue where AppX packages that had been downloaded with the App Installer downloader would not be added to the list
         '''
         '''New features:
         '''
-        '''- Image edition tasks have been added
-        '''- The Driver Installation Module (DIM) now shows instructions and progress information at the bottom  [resto de la cadena truncado]&quot;;.
+        '''- [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
