@@ -39,6 +39,7 @@
 #include "resource.h"
 
 #pragma comment(lib, "comctl32.lib")
+#pragma warning(disable: 4312)
 
 #define IDC_DRIVER_LIST   101
 #define IDC_ADD_BUTTON    102
@@ -60,6 +61,7 @@ std::wstring OpenFolderDialog(HWND hwnd);
 void SearchDirectoryForDrivers(HWND hwndList, const std::wstring& folderPath, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
 std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const wchar_t* valueName);
 void UpdateInstructionLabel(HWND instructionLabel, LPCWSTR message);
+void SetWindowCursor(LPCTSTR cursor);
 
 enum installationStatus {
     // The device driver has been added to the queue and is ready to be installed
@@ -192,9 +194,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             EnableWindow(hEditButton, FALSE);
             EnableWindow(hRemoveButton, FALSE);
             EnableWindow(hInstallButton, FALSE);
+
+            SetWindowCursor(IDC_ARROW);
             break;
         }
-
         case WM_ERASEBKGND: {
             HDC hdc = (HDC)wParam;
             RECT rect;
@@ -205,14 +208,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             return (LRESULT)1; // Indicate that background has been handled
             break;
         }
-
         case WM_CTLCOLORSTATIC: {
             HDC hdcStatic = (HDC)wParam;
             SetBkMode(hdcStatic, TRANSPARENT);
             return (LRESULT)GetStockObject(NULL_BRUSH);
             break;
         }
-
         case WM_COMMAND: {
             switch (LOWORD(wParam)) {
                 case IDC_ADD_BUTTON:
@@ -242,12 +243,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     break;
                 case IDC_ADD_DRV_FOLDER:
                     {
+                        SetWindowCursor(IDC_WAIT);
                         std::wstring folderPath = OpenFolderDialog(hwnd);
                         if (!folderPath.empty()) {
                             SearchDirectoryForDrivers(hwndList, folderPath, hEditButton, hRemoveButton, hInstallButton);
                         }
                         UpdateButtonStates(hwnd);
-						// Don't modify the instruction label if we cancelled the dialog
+                        SetWindowCursor(IDC_ARROW);
+                        // Don't modify the instruction label if we cancelled the dialog
                         if (folderPath.empty()) {
                             break;
                         }
@@ -279,14 +282,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             }
             break;
         }
-
         case WM_NOTIFY: {
             if (((LPNMHDR)lParam)->idFrom == IDC_DRIVER_LIST && ((LPNMHDR)lParam)->code == LVN_ITEMCHANGED) {
                 UpdateButtonStates(hwnd);
             }
             break;
         }
-
         case WM_DESTROY: {
             PostQuitMessage(0);
             return 0;
@@ -411,6 +412,9 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
         EnableMenuItem(menu, SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     }
 
+    HCURSOR hCursor = LoadCursor(NULL, IDC_WAIT);
+    SetCursor(hCursor);
+
     std::wstring state;
 
     int successfulInstallations = 0;
@@ -526,6 +530,9 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
     EnableWindow(GetDlgItem(mainHwnd, IDC_INSTALL_BUTTON), (ListView_GetItemCount(hwndList) > 0));
     EnableWindow(GetDlgItem(mainHwnd, IDC_EXIT_BUTTON), TRUE);
 
+    hCursor = LoadCursor(NULL, IDC_ARROW);
+    SetCursor(hCursor);
+
     // Enable Close button
     menu = GetSystemMenu(mainHwnd, FALSE);
     if (menu != NULL) {
@@ -634,4 +641,9 @@ void SearchDirectoryForDrivers(HWND hwndList, const std::wstring& folderPath, HW
         } while (FindNextFile(hFind, &finder) != 0);
         FindClose(hFind);
     }
+}
+
+void SetWindowCursor(LPCTSTR cursor) {
+    HCURSOR hCursor = LoadCursor(NULL, cursor);
+    SetCursor(hCursor);
 }
