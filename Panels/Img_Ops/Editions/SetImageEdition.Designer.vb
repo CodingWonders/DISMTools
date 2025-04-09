@@ -28,12 +28,12 @@ Partial Class SetImageEdition
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.EulaPanel = New System.Windows.Forms.Panel()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.EulaPanel = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.ImageTaskHeader1 = New DISMTools.ImageTaskHeader()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -79,7 +79,7 @@ Partial Class SetImageEdition
         '
         'Label1
         '
-        Me.Label1.AutoSize = True
+        Me.Label1.AutoEllipsis = True
         Me.Label1.Location = New System.Drawing.Point(12, 58)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(147, 13)
@@ -107,17 +107,15 @@ Partial Class SetImageEdition
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Active server installation options"
         '
-        'RadioButton1
+        'TextBox2
         '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(22, 30)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(367, 17)
-        Me.RadioButton1.TabIndex = 0
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Copy the End-User License Agreement (EULA) to the following location:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        Me.TextBox2.Enabled = False
+        Me.TextBox2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.Location = New System.Drawing.Point(41, 116)
+        Me.TextBox2.MaxLength = 29
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.Size = New System.Drawing.Size(552, 23)
+        Me.TextBox2.TabIndex = 4
         '
         'EulaPanel
         '
@@ -127,13 +125,6 @@ Partial Class SetImageEdition
         Me.EulaPanel.Name = "EulaPanel"
         Me.EulaPanel.Size = New System.Drawing.Size(552, 33)
         Me.EulaPanel.TabIndex = 1
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(4, 6)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(437, 21)
-        Me.TextBox1.TabIndex = 0
         '
         'Button1
         '
@@ -145,25 +136,34 @@ Partial Class SetImageEdition
         Me.Button1.Text = "Browse..."
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(4, 6)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(437, 21)
+        Me.TextBox1.TabIndex = 0
+        '
         'RadioButton2
         '
-        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.AutoEllipsis = True
         Me.RadioButton2.Location = New System.Drawing.Point(22, 93)
         Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(423, 17)
+        Me.RadioButton2.Size = New System.Drawing.Size(571, 17)
         Me.RadioButton2.TabIndex = 0
         Me.RadioButton2.Text = "Accept the End-User License Agreement (EULA) and use the following product key:"
         Me.RadioButton2.UseVisualStyleBackColor = True
         '
-        'TextBox2
+        'RadioButton1
         '
-        Me.TextBox2.Enabled = False
-        Me.TextBox2.Font = New System.Drawing.Font("Consolas", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.Location = New System.Drawing.Point(41, 116)
-        Me.TextBox2.MaxLength = 29
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(552, 23)
-        Me.TextBox2.TabIndex = 4
+        Me.RadioButton1.AutoEllipsis = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(22, 30)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(571, 17)
+        Me.RadioButton1.TabIndex = 0
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Copy the End-User License Agreement (EULA) to the following location:"
+        Me.RadioButton1.UseVisualStyleBackColor = True
         '
         'ImageTaskHeader1
         '
@@ -212,7 +212,6 @@ Partial Class SetImageEdition
         Me.EulaPanel.ResumeLayout(False)
         Me.EulaPanel.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel

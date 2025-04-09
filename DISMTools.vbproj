@@ -416,6 +416,7 @@
     <Compile Include="Panels\Get_Ops\WinPE\GetWinPESettings.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\IImageTaskDialog.vb" />
     <Compile Include="Panels\ImageTaskHeader.Designer.vb">
       <DependentUpon>ImageTaskHeader.vb</DependentUpon>
     </Compile>
