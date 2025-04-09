@@ -2,12 +2,12 @@
 //                                         .'^""""""^.            
 //      '^`'.                            '^"""""""^.              
 //     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-//      .^""""""`                      ^"""""""`                  | DISMTools 0.6                                         |
+//      .^""""""`                      ^"""""""`                  | DISMTools 0.6.2                                       |
 //       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 //         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 //            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Driver Installation Module (DIM)	      |
 //              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-//                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024 CodingWonders Software                       |
+//                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2025 CodingWonders Software                  |
 //                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 //                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.        
 //                      .^""";_]]]?)}:^^""",,,`'````'..           
@@ -25,43 +25,7 @@
 //          `^^^^^^^^^'                    `{xxxxxxxxr,           This program is provided AS IS, without any warranty.
 //           .'`^^^`'                        `i1jrt[:.            
 
-#include <windows.h>
-#include <commctrl.h>
-#include <string>
-#include <vector>
-#include <thread>
-#include <commdlg.h>
-#include <shlobj.h>
-#include <iostream>
-#include <tchar.h>
-#include <fstream>
-#include <codecvt>
-#include "resource.h"
-
-#pragma comment(lib, "comctl32.lib")
-#pragma warning(disable: 4312)
-
-#define IDC_DRIVER_LIST   101
-#define IDC_ADD_BUTTON    102
-#define IDC_EDIT_BUTTON   103
-#define IDC_REMOVE_BUTTON 104
-#define IDC_INSTALL_BUTTON 105
-#define IDC_EXIT_BUTTON   106
-#define IDC_ADD_DRV_FILE 107
-#define IDC_ADD_DRV_FOLDER 108
-
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-void AddDriver(HWND hwndList, const std::wstring& driverPath, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
-void EditDriver(HWND hwndList, HWND mainHwnd);
-void RemoveDriver(HWND hwndList, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
-void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd);
-void UpdateButtonStates(HWND hwnd);
-std::wstring OpenFileDialog(HWND hwnd);
-std::wstring OpenFolderDialog(HWND hwnd);
-void SearchDirectoryForDrivers(HWND hwndList, const std::wstring& folderPath, HWND hEditButton, HWND hRemoveButton, HWND hInstallButton);
-std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const wchar_t* valueName);
-void UpdateInstructionLabel(HWND instructionLabel, LPCWSTR message);
-void SetWindowCursor(LPCTSTR cursor);
+#include "DT-DIM.h"
 
 enum installationStatus {
     // The device driver has been added to the queue and is ready to be installed
@@ -188,7 +152,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP,
                 10, 298, 560, 16, hwnd, (HMENU)(501), (HINSTANCE)GetWindowLong(hwnd, GWLP_HINSTANCE), NULL);
 
-            UpdateInstructionLabel(hInstructionLabel, L"Begin by adding drivers to the queue. Click the \"Add\" button.");
+            UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_BEGIN);
 
             // Initially disable buttons
             EnableWindow(hEditButton, FALSE);
@@ -238,7 +202,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                         if (filePath.empty()) {
                             break;
                         }
-                        UpdateInstructionLabel(hInstructionLabel, L"Modify the driver selection or click the \"Install\" button to add the selected driver(s).");
+                        UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_MODIFY_ADD);
                     }	
                     break;
                 case IDC_ADD_DRV_FOLDER:
@@ -254,7 +218,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                         if (folderPath.empty()) {
                             break;
                         }
-                        UpdateInstructionLabel(hInstructionLabel, L"Modify the driver selection or click the \"Install\" button to add the selected driver(s).");
+                        UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_MODIFY_ADD);
                     }
                     break;
                 case IDC_EDIT_BUTTON:
@@ -265,7 +229,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     RemoveDriver(hwndList, hEditButton, hRemoveButton, hInstallButton);
                     UpdateButtonStates(hwnd);
                     if (ListView_GetItemCount(hwndList) <= 0) {
-                        UpdateInstructionLabel(hInstructionLabel, L"Begin by adding drivers to the queue. Click the \"Add\" button.");
+                        UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_BEGIN);
                     }
                     break;
                 case IDC_INSTALL_BUTTON:
@@ -430,7 +394,7 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
         // Install drivers
         for (int i = 0; i < ListView_GetItemCount(hwndList); ++i) {
             wchar_t installationProgressBuffer[1024];
-            swprintf(installationProgressBuffer, 1024, L"Installing driver %d of %d...", i + 1, ListView_GetItemCount(hwndList));
+            swprintf(installationProgressBuffer, 1024, INSTR_DRIVER_INSTALL_PROGRESS, i + 1, ListView_GetItemCount(hwndList));
             UpdateInstructionLabel(instructionHwnd, installationProgressBuffer);
             installationStatus currentStatus = GetStatusFromLVI(hwndList, i);
 
@@ -518,7 +482,7 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
         }
         MessageBox(mainHwnd, resultMsg.c_str(), L"Driver Installation Module", MB_OK | MB_ICONINFORMATION);
         wchar_t installationSummaryBuffer[512];
-        swprintf(installationSummaryBuffer, 512, L"Out of %d driver(s), %d were installed successfully.", ListView_GetItemCount(hwndList), successfulInstallations);
+        swprintf(installationSummaryBuffer, 512, INSTR_DRIVER_INSTALL_SUMMARY, ListView_GetItemCount(hwndList), successfulInstallations);
         UpdateInstructionLabel(instructionHwnd, installationSummaryBuffer);
     }
     else {
