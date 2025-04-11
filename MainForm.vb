@@ -1236,6 +1236,32 @@ Public Class MainForm
         End If
     End Sub
 
+    Public Class DarkModeRenderer
+        Inherits ToolStripProfessionalRenderer
+
+        Public Sub New()
+            MyBase.New(New DarkModeColorTable())
+        End Sub
+
+        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
+            e.ArrowColor = Color.White
+            MyBase.OnRenderArrow(e)
+        End Sub
+    End Class
+
+    Public Class LightModeRenderer
+        Inherits ToolStripProfessionalRenderer
+
+        Public Sub New()
+            MyBase.New(New LightModeColorTable())
+        End Sub
+
+        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
+            e.ArrowColor = Color.Black
+            MyBase.OnRenderArrow(e)
+        End Sub
+    End Class
+
     ''' <summary>
     ''' Set colors on any surface with the "Professional" RenderMode in dark mode
     ''' </summary>
@@ -5448,16 +5474,16 @@ Public Class MainForm
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                         End Try
                         MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        MenuStrip1.Renderer = New DarkModeRenderer()
+                        ToolStrip1.Renderer = New DarkModeRenderer()
+                        ToolStrip2.Renderer = New DarkModeRenderer()
+                        PkgInfoCMS.Renderer = New DarkModeRenderer()
+                        ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
+                        AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
+                        AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
+                        TreeViewCMS.Renderer = New DarkModeRenderer()
+                        AppxResCMS.Renderer = New DarkModeRenderer()
+                        ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
@@ -5514,16 +5540,16 @@ Public Class MainForm
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
                         End Try
                         MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        MenuStrip1.Renderer = New LightModeRenderer()
+                        ToolStrip1.Renderer = New LightModeRenderer()
+                        ToolStrip2.Renderer = New LightModeRenderer()
+                        PkgInfoCMS.Renderer = New LightModeRenderer()
+                        ImgUMountPopupCMS.Renderer = New LightModeRenderer()
+                        AppxPackagePopupCMS.Renderer = New LightModeRenderer()
+                        AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
+                        TreeViewCMS.Renderer = New LightModeRenderer()
+                        AppxResCMS.Renderer = New LightModeRenderer()
+                        ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
@@ -5585,16 +5611,16 @@ Public Class MainForm
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
                 End Try
                 MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                MenuStrip1.Renderer = New LightModeRenderer()
+                ToolStrip1.Renderer = New LightModeRenderer()
+                ToolStrip2.Renderer = New LightModeRenderer()
+                PkgInfoCMS.Renderer = New LightModeRenderer()
+                ImgUMountPopupCMS.Renderer = New LightModeRenderer()
+                AppxPackagePopupCMS.Renderer = New LightModeRenderer()
+                AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
+                TreeViewCMS.Renderer = New LightModeRenderer()
+                AppxResCMS.Renderer = New LightModeRenderer()
+                ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
@@ -5652,16 +5678,16 @@ Public Class MainForm
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                 End Try
                 MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                MenuStrip1.Renderer = New DarkModeRenderer()
+                ToolStrip1.Renderer = New DarkModeRenderer()
+                ToolStrip2.Renderer = New DarkModeRenderer()
+                PkgInfoCMS.Renderer = New DarkModeRenderer()
+                ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
+                AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
+                AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
+                TreeViewCMS.Renderer = New DarkModeRenderer()
+                AppxResCMS.Renderer = New DarkModeRenderer()
+                ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
