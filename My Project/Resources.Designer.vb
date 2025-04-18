@@ -1981,14 +1981,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed some minor visual issues in the Driver Installation Module (DIM) and the main program
-        '''- Fixed an issue where the ISO creator would not disregard a specified answer file if the option was unchecked
-        '''- Fixed an issue where the program would throw an out-of-memory exception when attempting to show main Store logo assets for some applications
-        '''- Fixed an issue where AppX packages that had been downloaded with the App Installer downloader would not be added to the list
+        '''- Fixed final visual issues in the Driver Installation Module
+        '''- A default architecture is now specified in the ISO creator and the testing environment creator
+        '''- Fixed a color issue affecting menu arrows
+        '''- &quot;WDAGUtilityAccount&quot; can no longer be specified when setting up user accounts
+        '''- More characters deemed forbidden for user account names are automatically trimmed now
         '''
         '''New features:
         '''
-        '''- [resto de la cadena truncado]&quot;;.
+        '''- CODE: method and function declarations, macro definitions, and pragma directives of the Driver Install [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
