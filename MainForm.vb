@@ -1236,6 +1236,32 @@ Public Class MainForm
         End If
     End Sub
 
+    Public Class DarkModeRenderer
+        Inherits ToolStripProfessionalRenderer
+
+        Public Sub New()
+            MyBase.New(New DarkModeColorTable())
+        End Sub
+
+        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
+            e.ArrowColor = Color.White
+            MyBase.OnRenderArrow(e)
+        End Sub
+    End Class
+
+    Public Class LightModeRenderer
+        Inherits ToolStripProfessionalRenderer
+
+        Public Sub New()
+            MyBase.New(New LightModeColorTable())
+        End Sub
+
+        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
+            e.ArrowColor = Color.Black
+            MyBase.OnRenderArrow(e)
+        End Sub
+    End Class
+
     ''' <summary>
     ''' Set colors on any surface with the "Professional" RenderMode in dark mode
     ''' </summary>
@@ -5448,16 +5474,16 @@ Public Class MainForm
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                         End Try
                         MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        MenuStrip1.Renderer = New DarkModeRenderer()
+                        ToolStrip1.Renderer = New DarkModeRenderer()
+                        ToolStrip2.Renderer = New DarkModeRenderer()
+                        PkgInfoCMS.Renderer = New DarkModeRenderer()
+                        ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
+                        AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
+                        AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
+                        TreeViewCMS.Renderer = New DarkModeRenderer()
+                        AppxResCMS.Renderer = New DarkModeRenderer()
+                        ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
@@ -5514,16 +5540,16 @@ Public Class MainForm
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
                         End Try
                         MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        MenuStrip1.Renderer = New LightModeRenderer()
+                        ToolStrip1.Renderer = New LightModeRenderer()
+                        ToolStrip2.Renderer = New LightModeRenderer()
+                        PkgInfoCMS.Renderer = New LightModeRenderer()
+                        ImgUMountPopupCMS.Renderer = New LightModeRenderer()
+                        AppxPackagePopupCMS.Renderer = New LightModeRenderer()
+                        AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
+                        TreeViewCMS.Renderer = New LightModeRenderer()
+                        AppxResCMS.Renderer = New LightModeRenderer()
+                        ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
@@ -5585,16 +5611,16 @@ Public Class MainForm
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
                 End Try
                 MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                MenuStrip1.Renderer = New LightModeRenderer()
+                ToolStrip1.Renderer = New LightModeRenderer()
+                ToolStrip2.Renderer = New LightModeRenderer()
+                PkgInfoCMS.Renderer = New LightModeRenderer()
+                ImgUMountPopupCMS.Renderer = New LightModeRenderer()
+                AppxPackagePopupCMS.Renderer = New LightModeRenderer()
+                AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
+                TreeViewCMS.Renderer = New LightModeRenderer()
+                AppxResCMS.Renderer = New LightModeRenderer()
+                ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
@@ -5652,16 +5678,16 @@ Public Class MainForm
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                 End Try
                 MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                MenuStrip1.Renderer = New DarkModeRenderer()
+                ToolStrip1.Renderer = New DarkModeRenderer()
+                ToolStrip2.Renderer = New DarkModeRenderer()
+                PkgInfoCMS.Renderer = New DarkModeRenderer()
+                ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
+                AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
+                AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
+                TreeViewCMS.Renderer = New DarkModeRenderer()
+                AppxResCMS.Renderer = New DarkModeRenderer()
+                ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
@@ -19805,159 +19831,15 @@ Public Class MainForm
     End Sub
 
     Private Sub SetProductKey_Click(sender As Object, e As EventArgs) Handles SetProductKey.Click
-        Dim msg As String = ""
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-            DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            msg = "Windows PE images cannot be upgraded to higher editions."
-                        Case "ESN"
-                            msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                        Case "FRA"
-                            msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                        Case "PTB", "PTG"
-                            msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
-                        Case "ITA"
-                            msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
-                    End Select
-                Case 1
-                    msg = "Windows PE images cannot be upgraded to higher editions."
-                Case 2
-                    msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                Case 3
-                    msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                Case 4
-                    msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
-                Case 5
-                    msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
-            End Select
-            MsgBox(msg, vbOKOnly + vbInformation, Text)
-        End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         SetImageKey.ShowDialog()
-        DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
+        StartMountedImageDetector()
     End Sub
 
     Private Sub SetEdition_Click(sender As Object, e As EventArgs) Handles SetEdition.Click
-        DynaLog.LogMessage("Preparing to get target editions...")
-        SetImageEdition.TargetEditions.Clear()
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Getting target editions...")
-        Dim msg As String = ""
-        Try
-            DynaLog.LogMessage("Starting API...")
-            DismApi.Initialize(DismLogLevel.LogErrors)
-            DynaLog.LogMessage("Creating session...")
-            Using imgSession As DismSession = If(OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
-                Dim targetEditions As DismEditionCollection = DismApi.GetTargetEditions(imgSession)
-                DynaLog.LogMessage("Amount of target editions: " & targetEditions.Count)
-                If targetEditions.Count > 0 Then
-                    ' This image hasn't been upgraded to its highest edition
-                    DynaLog.LogMessage("There are target editions. This image can give a little more")
-                    For Each targetEdition In targetEditions
-                        SetImageEdition.TargetEditions.Add(targetEdition)
-                    Next
-                Else
-                    ' This image has been upgraded to its highest edition
-                    DynaLog.LogMessage("There are no target editions. This image is already rocking the best edition")
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
-                                Case "ESN"
-                                    msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
-                                Case "FRA"
-                                    msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
-                                Case "PTB", "PTG"
-                                    msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
-                                Case "ITA"
-                                    msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
-                            End Select
-                        Case 1
-                            msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
-                        Case 2
-                            msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
-                        Case 3
-                            msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
-                        Case 4
-                            msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
-                        Case 5
-                            msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
-                    End Select
-                    MsgBox(msg, vbOKOnly + vbInformation, Text)
-                End If
-            End Using
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
-            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "Windows PE images cannot be upgraded to higher editions."
-                            Case "ESN"
-                                msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                            Case "FRA"
-                                msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                            Case "PTB", "PTG"
-                                msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
-                            Case "ITA"
-                                msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
-                        End Select
-                    Case 1
-                        msg = "Windows PE images cannot be upgraded to higher editions."
-                    Case 2
-                        msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
-                    Case 3
-                        msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
-                    Case 4
-                        msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
-                    Case 5
-                        msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
-                End Select
-            Else
-                msg = ex.ToString()
-            End If
-            MsgBox(msg, vbOKOnly + vbExclamation, Text)
-        Finally
-            Try
-                DismApi.Shutdown()
-            Catch ex As Exception
-                ' Don't do anything
-            End Try
-        End Try
+        StopMountedImageDetector()
         SetImageEdition.ShowDialog()
-        DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
+        StartMountedImageDetector()
     End Sub
 
     Sub ToggleFullScreenMode()
@@ -19981,5 +19863,26 @@ Public Class MainForm
 
     Private Sub ExitFullScreenTSMI_Click(sender As Object, e As EventArgs) Handles ExitFullScreenTSMI.Click
         ToggleFullScreenMode()
+    End Sub
+
+    Sub StopMountedImageDetector()
+        MountedImageDetectorBWRestarterTimer.Enabled = False
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+    End Sub
+
+    Sub StartMountedImageDetector()
+        DynaLog.LogMessage("Restarting mounted image detector...")
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
     End Sub
 End Class

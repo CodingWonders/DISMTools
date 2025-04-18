@@ -1520,10 +1520,9 @@ Public Class GetPkgInfoDlg
     Sub SearchPackages(sQuery As String)
         DynaLog.LogMessage("Search query: " & sQuery)
         If InstalledPkgInfo.Count > 0 Then
-            For Each InstalledPackage As DismPackage In InstalledPkgInfo
-                If InstalledPackage.PackageName.ToLower().Contains(sQuery.ToLower()) Then
-                    ListBox2.Items.Add(InstalledPackage.PackageName)
-                End If
+            Dim FilteredPackages = InstalledPkgInfo.Where(Function(package) package.PackageName.ToLower().Contains(sQuery.ToLower()))
+            For Each FilteredPackage As DismPackage In FilteredPackages
+                ListBox2.Items.Add(FilteredPackage.PackageName)
             Next
         End If
     End Sub

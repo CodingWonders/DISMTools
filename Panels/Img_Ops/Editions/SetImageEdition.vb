@@ -1,8 +1,10 @@
 ﻿Imports System.Windows.Forms
 Imports DISMTools.Elements
 Imports System.IO
+Imports Microsoft.Dism
 
 Public Class SetImageEdition
+    Implements IImageTaskDialog
 
     Public TargetEditions As New List(Of String)
 
@@ -42,9 +44,97 @@ Public Class SetImageEdition
         Me.Close()
     End Sub
 
-    Private Sub SetImageEdition_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Preparing to get target editions...")
+        TargetEditions.Clear()
+        DynaLog.LogMessage("Getting target editions...")
+        Dim msg As String = ""
+        Try
+            DynaLog.LogMessage("Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            DynaLog.LogMessage("Creating session...")
+            Using imgSession As DismSession = If(MainForm.OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MainForm.MountDir))
+                Dim imageTargetEditions As DismEditionCollection = DismApi.GetTargetEditions(imgSession)
+                DynaLog.LogMessage("Amount of target editions: " & imageTargetEditions.Count)
+                If imageTargetEditions.Count > 0 Then
+                    ' This image hasn't been upgraded to its highest edition
+                    DynaLog.LogMessage("There are target editions. This image can give a little more")
+                    For Each targetEdition In imageTargetEditions
+                        TargetEditions.Add(targetEdition)
+                    Next
+                Else
+                    ' This image has been upgraded to its highest edition
+                    DynaLog.LogMessage("There are no target editions. This image is already rocking the best edition")
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                                Case "ESN"
+                                    msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                                Case "FRA"
+                                    msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                                Case "PTB", "PTG"
+                                    msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                                Case "ITA"
+                                    msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                            End Select
+                        Case 1
+                            msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                        Case 2
+                            msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                        Case 3
+                            msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                        Case 4
+                            msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                        Case 5
+                            msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                    End Select
+                    MsgBox(msg, vbOKOnly + vbInformation, Text)
+                End If
+            End Using
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
+            If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Windows PE images cannot be upgraded to higher editions."
+                            Case "ESN"
+                                msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                            Case "FRA"
+                                msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                            Case "PTB", "PTG"
+                                msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                            Case "ITA"
+                                msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                        End Select
+                    Case 1
+                        msg = "Windows PE images cannot be upgraded to higher editions."
+                    Case 2
+                        msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                    Case 3
+                        msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                    Case 4
+                        msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                    Case 5
+                        msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                End Select
+            Else
+                msg = ex.ToString()
+            End If
+            MsgBox(msg, vbOKOnly + vbExclamation, Text)
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
+        End Try
         If TargetEditions.Count < 1 Then
-            Close()
+            Return False
         Else
             ComboBox1.Items.Clear()
             ComboBox1.Items.AddRange(TargetEditions.ToArray())
@@ -52,7 +142,118 @@ Public Class SetImageEdition
                 ComboBox1.SelectedIndex = 0
             End If
         End If
+        Return True
+    End Function
 
+    Private Sub SetImageEdition_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        Text = "Set image edition"
+                        ImageTaskHeader1.ItemText = Text
+                        Label1.Text = "Target edition to upgrade to:"
+                        GroupBox1.Text = "Active server installation options"
+                        RadioButton1.Text = "Copy the End-User License Agreement (EULA) to the following location:"
+                        RadioButton2.Text = "Accept the End-User License Agreement (EULA) and use the following product key:"
+                        Button1.Text = "Browse..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancel"
+                    Case "ESN"
+                        Text = "Establecer edición de la imagen"
+                        ImageTaskHeader1.ItemText = Text
+                        Label1.Text = "Edición a la que actualizar:"
+                        GroupBox1.Text = "Opciones para instalaciones de servidores"
+                        RadioButton1.Text = "Copiar el Contrato de Licencia de Usuario Final (CLUF) a la siguiente ubicación:"
+                        RadioButton2.Text = "Aceptar el Contrato de Licencia de Usuario Final (CLUF) y utilizar la siguiente clave de producto:"
+                        Button1.Text = "Examinar..."
+                        OK_Button.Text = "Aceptar"
+                        Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Text = "Définir l'édition de l'image"
+                        ImageTaskHeader1.ItemText = Text
+                        Label1.Text = "Édition cible pour la mise à niveau :"
+                        GroupBox1.Text = "Options d'installation active du serveur"
+                        RadioButton1.Text = "Copier le Contrat de Licence Utilisateur Final (CLUF) à l'emplacement suivant :"
+                        RadioButton2.Text = "Accepter le Contrat de Licence Utilisateur Final (CLUF) et utiliser la clé de produit suivante :"
+                        Button1.Text = "Parcourir..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annuler"
+                    Case "PTB", "PTG"
+                        Text = "Definir edição da imagem"
+                        ImageTaskHeader1.ItemText = Text
+                        Label1.Text = "Edição de destino para atualizar:"
+                        GroupBox1.Text = "Opções de instalação ativa do servidor"
+                        RadioButton1.Text = "Copiar o Contrato de Licença de Usuário Final (EULA) para o seguinte local:"
+                        RadioButton2.Text = "Aceitar o Contrato de Licença de Usuário Final (EULA) e usar a seguinte chave de produto:"
+                        Button1.Text = "Procurar..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Cancelar"
+                    Case "FRA"
+                        Text = "Imposta edizione immagine"
+                        ImageTaskHeader1.ItemText = Text
+                        Label1.Text = "Edizione di destinazione per l'aggiornamento:"
+                        GroupBox1.Text = "Opzioni di installazione attiva del server"
+                        RadioButton1.Text = "Copia il Contratto di Licenza con l'Utente Finale (CLUF) nella seguente posizione:"
+                        RadioButton2.Text = "Accetta il Contratto di Licenza con l'Utente Finale (CLUF) e utilizza la seguente chiave prodotto:"
+                        Button1.Text = "Sfoglia..."
+                        OK_Button.Text = "OK"
+                        Cancel_Button.Text = "Annulla"
+                End Select
+            Case 1
+                Text = "Set image edition"
+                ImageTaskHeader1.ItemText = Text
+                Label1.Text = "Target edition to upgrade to:"
+                GroupBox1.Text = "Active server installation options"
+                RadioButton1.Text = "Copy the End-User License Agreement (EULA) to the following location:"
+                RadioButton2.Text = "Accept the End-User License Agreement (EULA) and use the following product key:"
+                Button1.Text = "Browse..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancel"
+            Case 2
+                Text = "Establecer edición de la imagen"
+                ImageTaskHeader1.ItemText = Text
+                Label1.Text = "Edición a la que actualizar:"
+                GroupBox1.Text = "Opciones para instalaciones de servidores"
+                RadioButton1.Text = "Copiar el Contrato de Licencia de Usuario Final (CLUF) a la siguiente ubicación:"
+                RadioButton2.Text = "Aceptar el Contrato de Licencia de Usuario Final (CLUF) y utilizar la siguiente clave de producto:"
+                Button1.Text = "Examinar..."
+                OK_Button.Text = "Aceptar"
+                Cancel_Button.Text = "Cancelar"
+            Case 3
+                Text = "Définir l'édition de l'image"
+                ImageTaskHeader1.ItemText = Text
+                Label1.Text = "Édition cible pour la mise à niveau :"
+                GroupBox1.Text = "Options d'installation active du serveur"
+                RadioButton1.Text = "Copier le Contrat de Licence Utilisateur Final (CLUF) à l'emplacement suivant :"
+                RadioButton2.Text = "Accepter le Contrat de Licence Utilisateur Final (CLUF) et utiliser la clé de produit suivante :"
+                Button1.Text = "Parcourir..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annuler"
+            Case 4
+                Text = "Definir edição da imagem"
+                ImageTaskHeader1.ItemText = Text
+                Label1.Text = "Edição de destino para atualizar:"
+                GroupBox1.Text = "Opções de instalação ativa do servidor"
+                RadioButton1.Text = "Copiar o Contrato de Licença de Usuário Final (EULA) para o seguinte local:"
+                RadioButton2.Text = "Aceitar o Contrato de Licença de Usuário Final (EULA) e usar a seguinte chave de produto:"
+                Button1.Text = "Procurar..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Cancelar"
+            Case 5
+                Text = "Imposta edizione immagine"
+                ImageTaskHeader1.ItemText = Text
+                Label1.Text = "Edizione di destinazione per l'aggiornamento:"
+                GroupBox1.Text = "Opzioni di installazione attiva del server"
+                RadioButton1.Text = "Copia il Contratto di Licenza con l'Utente Finale (CLUF) nella seguente posizione:"
+                RadioButton2.Text = "Accetta il Contratto di Licenza con l'Utente Finale (CLUF) e utilizza la seguente chiave prodotto:"
+                Button1.Text = "Sfoglia..."
+                OK_Button.Text = "OK"
+                Cancel_Button.Text = "Annulla"
+        End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             ImageTaskHeader1.Visible = True

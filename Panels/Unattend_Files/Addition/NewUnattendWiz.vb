@@ -7,6 +7,7 @@ Imports DISMTools.Elements
 Imports Microsoft.Dism
 Imports System.Net
 Imports System.Text.RegularExpressions
+Imports System.Text
 
 Public Class NewUnattendWiz
 
@@ -17,7 +18,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2532"
+    Const UnattendGenReleaseTag As String = "2543"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -34,6 +35,7 @@ Public Class NewUnattendWiz
     Dim SelectedArchitectures As New Dictionary(Of DismProcessorArchitecture, Boolean)
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
+    Dim PCNameScript As String = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEach-Object {[char]$_})"
     Dim UseConfigSet As Boolean
 
     ' Time Zone Panel
@@ -606,6 +608,7 @@ Public Class NewUnattendWiz
         TextBox13.BackColor = BackColor
         TextBox14.BackColor = BackColor
         TextBox15.BackColor = BackColor
+        TextBox16.BackColor = BackColor
         TextBox17.BackColor = BackColor
         TextBox18.BackColor = BackColor
         NumericUpDown1.BackColor = BackColor
@@ -647,6 +650,7 @@ Public Class NewUnattendWiz
         TextBox13.ForeColor = ForeColor
         TextBox14.ForeColor = ForeColor
         TextBox15.ForeColor = ForeColor
+        TextBox16.ForeColor = ForeColor
         TextBox17.ForeColor = ForeColor
         TextBox18.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
@@ -811,6 +815,8 @@ Public Class NewUnattendWiz
         Win11Config.OOBE_BypassNRO = False
         CheckBox1.Checked = False
         CheckBox2.Checked = False
+        RadioButton28.Checked = True
+        TextBox16.Text = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEach-Object {[char]$_})"
         CheckBox3.Checked = True
         TextBox1.Text = ""
         CheckBox19.Checked = False
@@ -1010,12 +1016,21 @@ Public Class NewUnattendWiz
                     MessageBox.Show("Please select an architecture and try again", "Validation error")
                     Return False
                 End If
-                If Not PCName.DefaultName Then
-                    DynaLog.LogMessage("Checking computer name...")
-                    Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
-                    If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
-                        DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
-                        MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                If RadioButton28.Checked Then
+                    If Not PCName.DefaultName Then
+                        DynaLog.LogMessage("Checking computer name...")
+                        Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
+                        If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
+                            DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
+                            MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                            Return False
+                        End If
+                    End If
+                Else
+                    DynaLog.LogMessage("Checking if a computer name script has been specified...")
+                    If String.IsNullOrEmpty(PCNameScript) Then
+                        DynaLog.LogMessage("No script has been provided")
+                        MessageBox.Show("No script has been passed for the computer name", "Computer name error")
                         Return False
                     End If
                 End If
@@ -1055,14 +1070,14 @@ Public Class NewUnattendWiz
                     MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
-                Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">"}
+                Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">", Quote, "%"}
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
                     DynaLog.LogMessage("Checking account names and groups...")
                     DynaLog.LogMessage("This process will trim any invalid characters from user accounts automatically.")
                     Dim AtLeastOneAdmin As Boolean = False
                     If UserAccountsList.Count > 0 Then
                         For Each UserAccount As User In UserAccountsList
-                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray())
+                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray()).TrimEnd(".")
                             If UserAccount.Group = UserGroup.Administrators Then
                                 AtLeastOneAdmin = True
                                 Exit For
@@ -1119,7 +1134,11 @@ Public Class NewUnattendWiz
                              "- Windows 11 Settings:" & CrLf &
                              "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
                              "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
-                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf &
+                             "- Computer name: " & If(String.IsNullOrEmpty(PCNameScript),
+                                                      If(PCName.DefaultName,
+                                                         "random by Windows",
+                                                         PCName.Name),
+                                                      "determined by script " & Quote & PCNameScript & Quote) & CrLf &
                              "- Will a configuration set or distribution share be used? " & If(UseConfigSet, "Yes", "No") & CrLf)
         ' 3. -- TIME ZONE
         TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
@@ -1873,8 +1892,14 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Saving user settings...", 8)
             DynaLog.LogMessage("Saving computer settings...")
-            If Not PCName.DefaultName Then
-                UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+            If RadioButton28.Checked Then
+                If Not PCName.DefaultName Then
+                    UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+                End If
+            Else
+                If Not String.IsNullOrEmpty(PCNameScript) Then
+                    UnattendGen.StartInfo.Arguments &= " /computername=script:" & Quote & PCNameScript & Quote
+                End If
             End If
             DynaLog.LogMessage("Saving configuration set/distribution share settings...")
             If UseConfigSet Then
@@ -2722,5 +2747,28 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Could not copy key. Error message: " & ex.Message)
             MsgBox("We could not copy the key to your clipboard. Error message: " & ex.Message, vbOKOnly + vbInformation)
         End Try
+    End Sub
+
+    Private Sub RadioButton28_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton28.CheckedChanged
+        ManualComputerNamePanel.Enabled = RadioButton28.Checked
+        ScriptedComputerNamePanel.Enabled = Not RadioButton28.Checked
+    End Sub
+
+    Private Sub TextBox16_TextChanged(sender As Object, e As EventArgs) Handles TextBox16.TextChanged
+        PCNameScript = TextBox16.Text
+    End Sub
+
+    Private Sub RadioButton29_MouseHover(sender As Object, e As EventArgs) Handles RadioButton29.MouseHover
+        Dim ExampleName As String = ""
+        Const Characters As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        Dim random = New Random()
+        Dim sb = New StringBuilder(7)
+        For i = 0 To 6
+            sb.Append(Characters(random.Next(Characters.Length)))
+        Next
+        ExampleName = String.Format("DESKTOP-{0}", sb.ToString())
+        CNameTTip.Show("Choose this option if the unattended answer file will be used on multiple computers on the same network." & CrLf &
+                       "The default script will return a random computer name similar to " & Quote & ExampleName & Quote & CrLf &
+                       "This can avoid name resolution conflicts.", sender)
     End Sub
 End Class

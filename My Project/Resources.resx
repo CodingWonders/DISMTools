@@ -914,21 +914,24 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed some minor visual issues in the Driver Installation Module (DIM) and the main program
-- Fixed an issue where the ISO creator would not disregard a specified answer file if the option was unchecked
-- Fixed an issue where the program would throw an out-of-memory exception when attempting to show main Store logo assets for some applications
-- Fixed an issue where AppX packages that had been downloaded with the App Installer downloader would not be added to the list
+- Fixed final visual issues in the Driver Installation Module
+- A default architecture is now specified in the ISO creator and the testing environment creator
+- Fixed a color issue affecting menu arrows
+- "WDAGUtilityAccount" can no longer be specified when setting up user accounts
+- More characters deemed forbidden for user account names are automatically trimmed now
 
 New features:
 
-- The amount of information reported by the PE Helper has been significantly improved
-- HotInstall has been updated to the latest version
-- You can now configure the unattended answer file for the target OS to grab the product key from firmware
-- You can now copy generic product keys to your clipboard
-- CODE: feature and capability information search boxes now use LINQ queries
-- Some libraries were updated
-- CODE: Markdown writers in the image information saver were refactored into the new Markdown Helper
-- You can now toggle full-screen mode by pressing F11</value>
+- CODE: method and function declarations, macro definitions, and pragma directives of the Driver Installation Module are now in a header file
+- HotInstall has been updated
+- UnattendGen has been updated to the latest version
+- You can now have a PowerShell script configure a computer name based on a pattern
+- The search features of the remaining image information dialogs now use LINQ
+- Markdig has been updated to version 0.41.0
+- The image edition tasks have received translations
+- CODE: the foundation for improved image task startup has been set
+- The image mount dialog now defaults to the mount directory provided by the project. The option "Use defaults" has been removed to avoid any confusion
+- The installer now features a revamped banner</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -119,7 +119,6 @@ Public Class ImgMount
                         GroupBox3.Text = "Options"
                         Button1.Text = "Browse..."
                         Button2.Text = "Browse..."
-                        Button5.Text = "Use defaults"
                         Cancel_Button.Text = "Cancel"
                         OK_Button.Text = "OK"
                         ListView1.Columns(0).Text = "Index"
@@ -149,7 +148,6 @@ Public Class ImgMount
                         GroupBox3.Text = "Opciones"
                         Button1.Text = "Examinar..."
                         Button2.Text = "Examinar..."
-                        Button5.Text = "Predeterminados"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "Aceptar"
                         ListView1.Columns(0).Text = "Índice"
@@ -179,7 +177,6 @@ Public Class ImgMount
                         GroupBox3.Text = "Paramètres"
                         Button1.Text = "Parcourir..."
                         Button2.Text = "Parcourir..."
-                        Button5.Text = "Valeurs par défaut"
                         Cancel_Button.Text = "Annuler"
                         OK_Button.Text = "OK"
                         ListView1.Columns(0).Text = "Index"
@@ -209,7 +206,6 @@ Public Class ImgMount
                         GroupBox3.Text = "Opções"
                         Button1.Text = "Navegar..."
                         Button2.Text = "Navegar..."
-                        Button5.Text = "Utilizar predefinições"
                         Cancel_Button.Text = "Cancelar"
                         OK_Button.Text = "OK"
                         ListView1.Columns(0).Text = "Índice"
@@ -239,7 +235,6 @@ Public Class ImgMount
                         GroupBox3.Text = "Opzioni"
                         Button1.Text = "Sfoglia..."
                         Button2.Text = "Sfoglia..."
-                        Button5.Text = "Utilizza i valori predefiniti"
                         Cancel_Button.Text = "Annullare"
                         OK_Button.Text = "OK"
                         ListView1.Columns(0).Text = "Indice"
@@ -270,7 +265,6 @@ Public Class ImgMount
                 GroupBox3.Text = "Options"
                 Button1.Text = "Browse..."
                 Button2.Text = "Browse..."
-                Button5.Text = "Use defaults"
                 Cancel_Button.Text = "Cancel"
                 OK_Button.Text = "OK"
                 ListView1.Columns(0).Text = "Index"
@@ -300,7 +294,6 @@ Public Class ImgMount
                 GroupBox3.Text = "Opciones"
                 Button1.Text = "Examinar..."
                 Button2.Text = "Examinar..."
-                Button5.Text = "Predeterminados"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "Aceptar"
                 ListView1.Columns(0).Text = "Índice"
@@ -330,7 +323,6 @@ Public Class ImgMount
                 GroupBox3.Text = "Paramètres"
                 Button1.Text = "Parcourir..."
                 Button2.Text = "Parcourir..."
-                Button5.Text = "Valeurs par défaut"
                 Cancel_Button.Text = "Annuler"
                 OK_Button.Text = "OK"
                 ListView1.Columns(0).Text = "Index"
@@ -360,7 +352,6 @@ Public Class ImgMount
                 GroupBox3.Text = "Opções"
                 Button1.Text = "Navegar..."
                 Button2.Text = "Navegar..."
-                Button5.Text = "Utilizar predefinições"
                 Cancel_Button.Text = "Cancelar"
                 OK_Button.Text = "OK"
                 ListView1.Columns(0).Text = "Índice"
@@ -390,7 +381,6 @@ Public Class ImgMount
                 GroupBox3.Text = "Opzioni"
                 Button1.Text = "Sfoglia..."
                 Button2.Text = "Sfoglia..."
-                Button5.Text = "Utilizza i valori predefiniti"
                 Cancel_Button.Text = "Annullare"
                 OK_Button.Text = "OK"
                 ListView1.Columns(0).Text = "Indice"
@@ -445,6 +435,20 @@ Public Class ImgMount
             IsReqField1Valid = True
             OK_Button.Enabled = True
         End If
+        Try
+            DynaLog.LogMessage("Setting mount directory to be the one provided by the project...")
+            If ProgressPanel.OperationNum = 0 Then
+                If ProgressPanel.projPath = "" Then
+                    TextBox2.Text = MainForm.projPath & "\mount"
+                Else
+                    TextBox2.Text = ProgressPanel.projPath & "\" & ProgressPanel.projName & "\mount"
+                End If
+            Else
+                TextBox2.Text = MainForm.projPath & "\mount"
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -780,19 +784,6 @@ Public Class ImgMount
 
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
         GetFields()
-    End Sub
-
-    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        DynaLog.LogMessage("Setting mount directory to be the one provided by the project...")
-        If ProgressPanel.OperationNum = 0 Then
-            If ProgressPanel.projPath = "" Then
-                TextBox2.Text = MainForm.projPath & "\mount"
-            Else
-                TextBox2.Text = ProgressPanel.projPath & "\" & ProgressPanel.projName & "\mount"
-            End If
-        Else
-            TextBox2.Text = MainForm.projPath & "\mount"
-        End If
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged

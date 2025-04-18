@@ -593,10 +593,9 @@ Public Class GetAppxPkgInfoDlg
     Sub SearchPackages(sQuery As String)
         DynaLog.LogMessage("Search query: " & sQuery)
         If InstalledAppxPkgInfo.Count > 0 Then
-            For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
-                If InstalledAppx.PackageName.ToLower().Contains(sQuery.ToLower()) Then
-                    ListBox1.Items.Add(InstalledAppx.PackageName)
-                End If
+            Dim FilteredAppxPackages = InstalledAppxPkgInfo.Where(Function(AppxPackage) AppxPackage.PackageName.ToLower().Contains(sQuery.ToLower()))
+            For Each FilteredAppx As DismAppxPackage In FilteredAppxPackages
+                ListBox1.Items.Add(FilteredAppx.PackageName)
             Next
         End If
     End Sub
