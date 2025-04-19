@@ -14,7 +14,7 @@ if %debug% equ 1 (
 	taskmgr
 )
 powershell -command Set-ExecutionPolicy Unrestricted
-if exist "%sysdrive%\HotInstall" (
+if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	echo Please insert the disc image and press ENTER...
 	pause > nul
 )
@@ -50,7 +50,7 @@ if %debug% lss 2 (
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
 	echo - To start the Driver Installation Module in case you need to load drivers, type "StartDim" and press ENTER
 	echo.
-	doskey StartInstall=powershell -file "\StartInstall.ps1"
-	doskey StartDim=cmd /c "\dimstart.bat"
+	doskey StartInstall=powershell -file "%sysdrive%\StartInstall.ps1"
+	doskey StartDim=cmd /c "%sysdrive%\dimstart.bat"
 	exit /b
 )
