@@ -604,8 +604,8 @@ Public Class MainForm
         DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: (c) " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
-                           "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, 2024) & " CodingWonders Software" & CrLf &
-                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, 2025) & " CodingWonders Software")
+                           "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -622,7 +622,7 @@ Public Class MainForm
         DynaLog.LogMessage("- Windows API Code Pack: " &
                            "(c) " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
-                           "Peter William Wagner (" & GetCopyrightTimespan(2017, Date.Now.Year) & ")")
+                           "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.BeginLogging()
     End Sub
 
