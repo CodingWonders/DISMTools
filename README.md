@@ -190,7 +190,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: February 22, 2025 (Mihaela Teodorovici)</i></p>
+	<p align="center"><i>Last updated: April 5, 2025 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -202,7 +202,9 @@ DISMTools has been featured in news sites. Check them out if you're interested:
 - [DeskModder](https://www.deskmodder.de/blog/2024/06/24/dismtools-iso-oder-image-bearbeiten-in-neuer-stable-version-erschienen/)
 - [Computer BILD](https://www.computerbild.de/artikel/cb-Tipps-Windows-Windows-Media-Player-deinstallieren-31424181.html)
 - [PC World](https://www.pcworld.com/article/2430467/operating-command-line-tools-with-the-mouse-the-best-guis.html)
-- [Windows Central](https://www.windowscentral.com/software-apps/windows-11/what-is-dismtools-and-how-do-you-get-started-windows-11-and-10-image-gui-manager-explained)
+- Windows Central:
+  - https://www.windowscentral.com/software-apps/windows-11/what-is-dismtools-and-how-do-you-get-started-windows-11-and-10-image-gui-manager-explained
+  - https://www.windowscentral.com/software-apps/windows-11/how-to-easily-create-an-unattended-answer-file-for-windows-11
 
 ## Support this project
 
@@ -226,6 +228,9 @@ If you want to grab a copy straight from the source code, follow these instructi
 > To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2022 build tools. Install, at least, the Community edition and the **MSVC v143- VS 2022 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
 >
 > Simply searching for "MSVC" in the list of components can get you the necessary component.
+
+> [!NOTE]
+> To build the Driver Installation Module project for all architectures, run the `build.bat` script in the project root.
 
 ### Additional startup flags
 
