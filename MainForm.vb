@@ -9914,6 +9914,7 @@ Public Class MainForm
                             BGProcNotify.Show()
                         End If
                 End Select
+                Focus()
             End If
             BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         Else
