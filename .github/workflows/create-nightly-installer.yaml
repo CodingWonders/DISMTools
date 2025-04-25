@@ -3,7 +3,7 @@ name: Create Nightly Installer
 on:
   push:
     branches:
-      - dt_pre_*
+      - dt_prerel_*
       - dt_rel*
     paths-ignore:
       - '.github/**'
