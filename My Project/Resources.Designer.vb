@@ -1979,17 +1979,21 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''- Fixed final visual issues in the Driver Installation Module
-        '''- A default architecture is now specified in the ISO creator and the testing environment creator
-        '''- Fixed a color issue affecting menu arrows
-        '''- &quot;WDAGUtilityAccount&quot; can no longer be specified when setting up user accounts
-        '''- More characters deemed forbidden for user account names are automatically trimmed now
+        '''-- Bugfixes
         '''
-        '''New features:
+        '''- Fixed an issue where the program would throw encoding-related exceptions when trying to redirect DISM output in some systems (#239, thanks Vincent Långström (@vinicentus) for spotting)
+        '''- The background process notification dialog no longer steals focus from the main window
+        '''- Image size reporting has been fixed for HotInstall
         '''
-        '''- CODE: method and function declarations, macro definitions, and pragma directives of the Driver Install [resto de la cadena truncado]&quot;;.
+        '''-- New features
+        '''
+        '''- The documentation has been updated to reflect the changes in this version
+        '''
+        '''Overall changes:
+        '''
+        '''-- Bugfix [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
