@@ -260,6 +260,7 @@ Partial Class ImgMount
         '
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(388, 17)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(369, 136)

@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>Removing drivers - DISMTools Help Documentation</title>
+    <title>Setting the product key - DISMTools Help Documentation</title>
     <link rel="stylesheet" href="../../../css/theme.css" />
     <link rel="stylesheet" href="../../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Removing drivers";
-        var mkdocs_page_input_path = "img_tasks\\drivers\\remove_driver.md";
+        var mkdocs_page_name = "Setting the product key";
+        var mkdocs_page_input_path = "img_tasks\\editions\\set_productkey.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -133,13 +133,21 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" >Edition servicing</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../editions/editions/">Overview</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Edition servicing</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../editions/">Overview</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../editions/set_edition/">Upgrading an image to a higher edition</a>
+                <li class="toctree-l2"><a class="reference internal" href="../set_edition/">Upgrading an image to a higher edition</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../editions/set_productkey/">Setting the product key</a>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Setting the product key</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#target-os-support">Target OS support</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
+    </ul>
                 </li>
     </ul>
                   </li>
@@ -159,25 +167,17 @@
                 </li>
     </ul>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" >Drivers</a>
-    <ul class="current">
-                <li class="toctree-l2"><a class="reference internal" href="../drvs/">Overview</a>
+                  <li class="toctree-l1"><a class="reference internal" >Drivers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/drvs/">Overview</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../add_driver/">Adding drivers</a>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/add_driver/">Adding drivers</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../export_driver/">Exporting drivers</a>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/export_driver/">Exporting drivers</a>
                 </li>
-                <li class="toctree-l2"><a class="reference internal" href="../import_driver/">Importing drivers</a>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/import_driver/">Importing drivers</a>
                 </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="#">Removing drivers</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#target-os-support">Target OS support</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#related-topics">Related topics</a>
-    </li>
-    </ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../drivers/remove_driver/">Removing drivers</a>
                 </li>
     </ul>
                   </li>
@@ -224,8 +224,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Image tasks</li>
-          <li class="breadcrumb-item">Drivers</li>
-      <li class="breadcrumb-item active">Removing drivers</li>
+          <li class="breadcrumb-item">Edition servicing</li>
+      <li class="breadcrumb-item active">Setting the product key</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -234,12 +234,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="removing-drivers">Removing drivers</h1>
+                <h1 id="setting-the-image-product-key">Setting the image product key</h1>
 <p align="center">
-    <img src="../../../res/img_tasks/drivers/remove_driver.png" />
+    <img src="../../../res/img_tasks/editions/set_imagekey.png" />
 </p>
 
-<p>With DISMTools you can remove third-party drivers from a Windows image. This action can be accessed by clicking Commands &gt; Drivers &gt; Remove driver...</p>
+<p>With DISMTools you can set the product key of a Windows image. This action can be accessed by clicking Commands &gt; Windows editions &gt; Set product key...</p>
 <h2 id="target-os-support">Target OS support</h2>
 <p>This action is supported on the following platforms:</p>
 <table>
@@ -272,28 +272,17 @@
 </tr>
 </tbody>
 </table>
-<p><i>This action is supported on DISMTools 0.3 and newer</i></p>
-<p><strong>NOTE:</strong> this action is not supported on online installations</p>
+<p><i>This action is supported on DISMTools 0.6.2 and newer</i></p>
 <h2 id="usage">Usage</h2>
-<p>You need to specify driver packages and/or folders to remove from your Windows image.</p>
-<p>There are 4 view modes available:</p>
-<ul>
-<li>No boot-critical drivers, no inbox drivers (drivers part of the Windows distribution)</li>
-<li>Third-party drivers, boot-critical drivers, no inbox drivers</li>
-<li>Third-party drivers, no boot-critical drivers, inbox drivers</li>
-<li>Third-party drivers, boot-critical drivers and inbox drivers</li>
-</ul>
-<p>We recommend against removing boot-critical drivers and inbox drivers, as they may make the image unbootable. That's why the program won't show these drivers by default, unless you mark the <strong>Detect all drivers</strong> <a href="https://example.com">background process</a> setting.</p>
-<h2 id="related-topics">Related topics</h2>
-<ul>
-<li><a href="https://example.com">Command-line help</a></li>
-</ul>
+<p>Simply specify the product key you want to set on your Windows image. You can also verify if the product key is valid by clicking the "Validate key" button.</p>
+<h2 id="remarks">Remarks</h2>
+<p>This is not applicable to active Windows installations.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../import_driver/" class="btn btn-neutral float-left" title="Importing drivers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../../tools/mimgmgr/" class="btn btn-neutral float-right" title="Mounted image manager">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../set_edition/" class="btn btn-neutral float-left" title="Upgrading an image to a higher edition"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../langs/set_layereddriver/" class="btn btn-neutral float-right" title="Setting keyboard layered drivers">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -316,10 +305,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../import_driver/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../set_edition/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../../tools/mimgmgr/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../../langs/set_layereddriver/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
