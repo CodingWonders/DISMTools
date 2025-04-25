@@ -1889,6 +1889,12 @@ IF EXIST "$(SolutionDir)Tools\UnattendGen" (
 	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
 )
 
+:: Copy DynaViewer
+IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
+	md "Tools\DynaViewer"
+	xcopy "$(SolutionDir)Tools\DynaViewer\out\*.exe" "Tools\DynaViewer" /cehyi
+)
+
 IF NOT EXIST AutoUnattend (
 	md AutoUnattend
 	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
