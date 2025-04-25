@@ -191,8 +191,6 @@ Partial Class MainForm
         Me.ToolStripSeparator38 = New System.Windows.Forms.ToolStripSeparator()
         Me.WimScriptEditorCommand = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator9 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ActionEditorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripSeparator22 = New System.Windows.Forms.ToolStripSeparator()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -206,6 +204,7 @@ Partial Class MainForm
         Me.ContributeToTheHelpSystemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BranchTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitFullScreenTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.InvalidSettingsTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ISFix = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator19 = New System.Windows.Forms.ToolStripSeparator()
@@ -553,7 +552,7 @@ Partial Class MainForm
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.CommandsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem, Me.BranchTSMI, Me.VersionTSMI, Me.InvalidSettingsTSMI})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.CommandsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem, Me.BranchTSMI, Me.VersionTSMI, Me.ExitFullScreenTSMI, Me.InvalidSettingsTSMI})
         Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
@@ -1418,7 +1417,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.ActionEditorToolStripMenuItem, Me.ToolStripSeparator22, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1572,17 +1571,6 @@ Partial Class MainForm
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
         Me.ToolStripSeparator9.Size = New System.Drawing.Size(277, 6)
         '
-        'ActionEditorToolStripMenuItem
-        '
-        Me.ActionEditorToolStripMenuItem.Name = "ActionEditorToolStripMenuItem"
-        Me.ActionEditorToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
-        Me.ActionEditorToolStripMenuItem.Text = "Action editor"
-        '
-        'ToolStripSeparator22
-        '
-        Me.ToolStripSeparator22.Name = "ToolStripSeparator22"
-        Me.ToolStripSeparator22.Size = New System.Drawing.Size(277, 6)
-        '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
@@ -1669,6 +1657,15 @@ Partial Class MainForm
         Me.VersionTSMI.ToolTipText = "This is a beta release. In it, you will encounter lots of bugs and incomplete fea" & _
     "tures."
         Me.VersionTSMI.Visible = False
+        '
+        'ExitFullScreenTSMI
+        '
+        Me.ExitFullScreenTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+        Me.ExitFullScreenTSMI.Image = Global.DISMTools.My.Resources.Resources.exit_full_screen_glyph
+        Me.ExitFullScreenTSMI.Name = "ExitFullScreenTSMI"
+        Me.ExitFullScreenTSMI.Size = New System.Drawing.Size(61, 20)
+        Me.ExitFullScreenTSMI.Text = "(F11)"
+        Me.ExitFullScreenTSMI.Visible = False
         '
         'InvalidSettingsTSMI
         '
@@ -2546,7 +2543,7 @@ Partial Class MainForm
         'Button24
         '
         Me.Button24.ForeColor = System.Drawing.Color.Black
-        Me.Button24.Image = CType(resources.GetObject("Button24.Image"), System.Drawing.Image)
+        Me.Button24.Image = Global.DISMTools.My.Resources.Resources.switch_indexes
         Me.Button24.Location = New System.Drawing.Point(336, 89)
         Me.Button24.Name = "Button24"
         Me.Button24.Size = New System.Drawing.Size(324, 63)
@@ -4717,8 +4714,6 @@ Partial Class MainForm
     Friend WithEvents LatestNewsPanel As System.Windows.Forms.Panel
     Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator21 As System.Windows.Forms.ToolStripSeparator
-    Friend WithEvents ActionEditorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator22 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents OnlineInstMgmt As System.Windows.Forms.LinkLabel
     Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents ViewPackageDirectoryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
@@ -4960,4 +4955,5 @@ Partial Class MainForm
     Friend WithEvents WebResourcesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndFODWin10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExitFullScreenTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class

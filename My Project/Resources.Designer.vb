@@ -676,6 +676,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property exit_full_screen_glyph() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("exit_full_screen_glyph", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property exit_full_screen_glyph_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("exit_full_screen_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property expand_glyph() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("expand_glyph", resourceCulture)
@@ -819,16 +839,6 @@ Namespace My.Resources
         Friend ReadOnly Property gh_repo() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("gh_repo", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property gitter_chat() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("gitter_chat", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1969,9 +1979,21 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
+        '''  Busca una cadena traducida similar a Changes made since last preview:
         '''
-        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.6.1_upd1.
+        '''-- Bugfixes
+        '''
+        '''- Fixed an issue where the program would throw encoding-related exceptions when trying to redirect DISM output in some systems (#239, thanks Vincent Långström (@vinicentus) for spotting)
+        '''- The background process notification dialog no longer steals focus from the main window
+        '''- Image size reporting has been fixed for HotInstall
+        '''
+        '''-- New features
+        '''
+        '''- The documentation has been updated to reflect the changes in this version
+        '''
+        '''Overall changes:
+        '''
+        '''-- Bugfix [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

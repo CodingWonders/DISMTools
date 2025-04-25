@@ -7,6 +7,7 @@ Imports DISMTools.Utilities
 Public Class GetFeatureInfoDlg
 
     Public InstalledFeatureInfo As DismFeatureCollection
+    Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetFeatureInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -505,6 +506,9 @@ Public Class GetFeatureInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+
+        _lvwColumnSorter = New ListViewColumnSorter()
+        ListView1.ListViewItemSorter = _lvwColumnSorter
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)
@@ -632,14 +636,12 @@ Public Class GetFeatureInfoDlg
             End Select
         End If
         If InstalledFeatureInfo.Count > 0 Then
-            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-                If InstalledFeature.FeatureName.ToLower().Contains(sQuery.ToLower()) Then
-                    If featureState <> "" AndAlso InstalledFeature.State = expectedFeatureState Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-                    ElseIf featureState = "" Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-                    End If
-                End If
+            Dim finalFeatureLookup = InstalledFeatureInfo.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If featureState <> "" Then      ' We filter them again based on the state
+                finalFeatureLookup = finalFeatureLookup.Where(Function(feature) feature.State = expectedFeatureState)
+            End If
+            For Each filteredFeature In finalFeatureLookup
+                ListView1.Items.Add(New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)}))
             Next
         End If
     End Sub
@@ -658,6 +660,42 @@ Public Class GetFeatureInfoDlg
             For Each InstalledFeature As DismFeature In InstalledFeatureInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
             Next
+        End If
+    End Sub
+
+    Private Sub ListView1_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles ListView1.ColumnClick
+        ' From Microsoft documentation: https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column
+        DynaLog.LogMessage("Sorting items...")
+        DynaLog.LogMessage("Column to sort: " & e.Column + 1)
+        DynaLog.LogMessage("Current sort order (may be modified): " & _lvwColumnSorter.Order)
+        If e.Column = _lvwColumnSorter.SortColumn Then
+            If _lvwColumnSorter.Order = SortOrder.Ascending Then
+                _lvwColumnSorter.Order = SortOrder.Descending
+            Else
+                _lvwColumnSorter.Order = SortOrder.Ascending
+            End If
+        Else
+            _lvwColumnSorter.SortColumn = e.Column
+            _lvwColumnSorter.Order = SortOrder.Ascending
+        End If
+
+        ' If we haven't selected items, force sorting
+        If ListView1.SelectedItems.Count < 1 Then ListView1.Sorting = _lvwColumnSorter.Order
+
+        ListView1.Sort()
+    End Sub
+
+    Private Sub SearchBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles SearchBox1.KeyDown
+        If e.KeyCode = Keys.Back And e.Control Then
+            Dim text As String = SearchBox1.Text
+            Dim lastSpaceIndex As Integer = text.LastIndexOf(" "c)
+            If lastSpaceIndex > 0 Then
+                SearchBox1.Text = text.Substring(0, lastSpaceIndex).TrimEnd()
+            Else
+                SearchBox1.Text = ""
+            End If
+            e.SuppressKeyPress = True
+            SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
     End Sub
 End Class

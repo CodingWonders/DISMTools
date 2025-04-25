@@ -7,6 +7,7 @@ Imports DISMTools.Elements
 Imports Microsoft.Dism
 Imports System.Net
 Imports System.Text.RegularExpressions
+Imports System.Text
 
 Public Class NewUnattendWiz
 
@@ -17,7 +18,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Dim UnattendGenReleaseTag As String = "2532"
+    Const UnattendGenReleaseTag As String = "2543"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -34,6 +35,7 @@ Public Class NewUnattendWiz
     Dim SelectedArchitectures As New Dictionary(Of DismProcessorArchitecture, Boolean)
     Dim Win11Config As New SVSettings()
     Dim PCName As New ComputerName()
+    Dim PCNameScript As String = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEach-Object {[char]$_})"
     Dim UseConfigSet As Boolean
 
     ' Time Zone Panel
@@ -47,6 +49,7 @@ Public Class NewUnattendWiz
 
     ' Product Key Panel
     Dim GenericChosen As Boolean = True
+    Dim FirmwareChosen As Boolean
     Dim GenericKeys As New List(Of ProductKey)
     Dim SelectedKey As New ProductKey()
 
@@ -76,6 +79,32 @@ Public Class NewUnattendWiz
     Dim ConfiguredScripts As New List(Of PostInstallScript)
     Dim CurrentlyEditedStage As Integer = 0
     Dim ScriptsRestartExplorer As Boolean
+    ' -- Variables for special scripts
+    ' --- Join Path cmdlet constants
+    ' We put the directory separator character next to the environment variable as homedrive and systemdrive don't end with a backslash.
+    ' Interestingly though, not doing this works fine on PowerShell 7, but not on Windows PowerShell.
+    Const ParentScriptDir As String = "$([IO.Path]::Combine(" & Quote & "$env:SYSTEMDRIVE$([IO.Path]::DirectorySeparatorChar)" & Quote & ", " & Quote & "DISMTools" & Quote & ", " & Quote & "scripts" & Quote & "))"
+    Const ScriptDir As String = "[IO.Path]::Combine(" & Quote & "$DT_TempScriptDir" & Quote & ", " & Quote & "<FILENAME_REPLACE>" & Quote & ")"
+    Const ScriptFile As String = "[IO.Path]::Combine(" & Quote & "$DT_TempScriptDir" & Quote & ", " & Quote & "<FILENAME_REPLACE>" & Quote & ", " & Quote & "<FILENAME_REPLACE>.<EXT_REPLACE>" & Quote & ")"
+    ' --- Snippet constants for script directory creation and deletion
+    Const ScriptDirCreationSnippet As String = CrLf & CrLf & "$DT_TempScriptDir = " & Quote & ParentScriptDir & Quote & CrLf &
+                                               "New-Item -Path " & Quote & "$DT_TempScriptDir" & Quote & " -ItemType Directory -Force | Out-Null"
+    Const ScriptDirDeletionSnippet As String = CrLf & CrLf & "if (Test-Path -Path " & Quote & "$env:SYSTEMDRIVE\DISMTools" & Quote & ") {" & CrLf &
+                                               "    Remove-Item -Path " & Quote & "$env:SYSTEMDRIVE\DISMTools" & Quote & " -Recurse -Force" & CrLf &
+                                               "}"
+    ' --- Template constants for script creation and execution
+    Const ScriptContentTemplateVariable As String = CrLf & CrLf &
+                                                    "New-Item -Path " & Quote & "$(" & ScriptDir & ")" & Quote & " -ItemType Directory -Force | Out-Null" & CrLf &
+                                                    "$<FILENAME_REPLACE> = @'" & CrLf &
+                                                    "<CONTENT_REPLACE>" & CrLf &
+                                                    "'@" & CrLf & CrLf &
+                                                    Quote & "$<FILENAME_REPLACE>" & Quote & " | Out-File -FilePath " & Quote & "$(" & ScriptFile & ")" & Quote & " -Encoding ascii -Force"
+    Const ScriptExecutionTemplateSnippet As String = CrLf & CrLf &
+                                                     "Push-Location " & Quote & "$(" & ScriptDir & ")" & Quote & CrLf &
+                                                     "<EXECUTION_REPLACE>" & CrLf &
+                                                     "Pop-Location"
+    ' --- Snippet constants for script execution, depending on file type
+    Const Cmd_ExecutionSnippet As String = "Start-Process -FilePath " & Quote & "$env:WINDIR\system32\cmd.exe" & Quote & " -ArgumentList " & Quote & "/c .\<FILENAME_REPLACE>.<EXT_REPLACE>" & Quote & " -Wait -NoNewWindow"
 
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
@@ -579,6 +608,7 @@ Public Class NewUnattendWiz
         TextBox13.BackColor = BackColor
         TextBox14.BackColor = BackColor
         TextBox15.BackColor = BackColor
+        TextBox16.BackColor = BackColor
         TextBox17.BackColor = BackColor
         TextBox18.BackColor = BackColor
         NumericUpDown1.BackColor = BackColor
@@ -620,6 +650,7 @@ Public Class NewUnattendWiz
         TextBox13.ForeColor = ForeColor
         TextBox14.ForeColor = ForeColor
         TextBox15.ForeColor = ForeColor
+        TextBox16.ForeColor = ForeColor
         TextBox17.ForeColor = ForeColor
         TextBox18.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
@@ -784,6 +815,8 @@ Public Class NewUnattendWiz
         Win11Config.OOBE_BypassNRO = False
         CheckBox1.Checked = False
         CheckBox2.Checked = False
+        RadioButton28.Checked = True
+        TextBox16.Text = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEach-Object {[char]$_})"
         CheckBox3.Checked = True
         TextBox1.Text = ""
         CheckBox19.Checked = False
@@ -807,6 +840,7 @@ Public Class NewUnattendWiz
         RadioButton13.Checked = True
         ComboBox6.SelectedItem = "Pro"
         TextBox3.Text = ""
+        CheckBox21.Checked = False
         ' Restore user accounts
         CheckBox6.Checked = True
         TextBox4.Text = "Admin"
@@ -982,12 +1016,21 @@ Public Class NewUnattendWiz
                     MessageBox.Show("Please select an architecture and try again", "Validation error")
                     Return False
                 End If
-                If Not PCName.DefaultName Then
-                    DynaLog.LogMessage("Checking computer name...")
-                    Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
-                    If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
-                        DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
-                        MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                If RadioButton28.Checked Then
+                    If Not PCName.DefaultName Then
+                        DynaLog.LogMessage("Checking computer name...")
+                        Dim testerPC As ComputerName = ComputerNameValidator.ValidateComputerName(TextBox1.Text)
+                        If Not testerPC.Valid AndAlso testerPC.ErrorMessage <> "" Then
+                            DynaLog.LogMessage("This computer name is not valid. Look above for reasons why.")
+                            MessageBox.Show(testerPC.ErrorMessage, "Computer name error")
+                            Return False
+                        End If
+                    End If
+                Else
+                    DynaLog.LogMessage("Checking if a computer name script has been specified...")
+                    If String.IsNullOrEmpty(PCNameScript) Then
+                        DynaLog.LogMessage("No script has been provided")
+                        MessageBox.Show("No script has been passed for the computer name", "Computer name error")
                         Return False
                     End If
                 End If
@@ -1027,14 +1070,14 @@ Public Class NewUnattendWiz
                     MessageBox.Show("There is a problem with one or more of the users specified. Here are the reasons why:" & CrLf & CrLf & validationResults.ValidationErrorReason & CrLf & CrLf & "Try again after fixing the aforementioned problems", "User Accounts error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                     Return False
                 End If
-                Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">"}
+                Dim invalidChars As Char() = {"/", "\", "[", "]", ":", ";", "|", "=", ",", "+", "*", "?", "<", ">", Quote, "%"}
                 If Not UserAccountsInteractive AndAlso Not MicrosoftAccountInteractive Then
                     DynaLog.LogMessage("Checking account names and groups...")
                     DynaLog.LogMessage("This process will trim any invalid characters from user accounts automatically.")
                     Dim AtLeastOneAdmin As Boolean = False
                     If UserAccountsList.Count > 0 Then
                         For Each UserAccount As User In UserAccountsList
-                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray())
+                            UserAccount.Name = New String(UserAccount.Name.Where(Function(c) Not invalidChars.Contains(c)).ToArray()).TrimEnd(".")
                             If UserAccount.Group = UserGroup.Administrators Then
                                 AtLeastOneAdmin = True
                                 Exit For
@@ -1091,7 +1134,11 @@ Public Class NewUnattendWiz
                              "- Windows 11 Settings:" & CrLf &
                              "    - Bypass System Requirements? " & If(Win11Config.LabConfig_BypassRequirements, "Yes", "No") & CrLf &
                              "    - Bypass Mandatory Network Connection? " & If(Win11Config.OOBE_BypassNRO, "Yes", "No") & CrLf &
-                             "- Computer name: " & If(PCName.DefaultName, "random by Windows", PCName.Name) & CrLf &
+                             "- Computer name: " & If(String.IsNullOrEmpty(PCNameScript),
+                                                      If(PCName.DefaultName,
+                                                         "random by Windows",
+                                                         PCName.Name),
+                                                      "determined by script " & Quote & PCNameScript & Quote) & CrLf &
                              "- Will a configuration set or distribution share be used? " & If(UseConfigSet, "Yes", "No") & CrLf)
         ' 3. -- TIME ZONE
         TextBox13.AppendText("Time zone configuration: " & If(TimeOffsetInteractive, "based on regional settings" & CrLf, CrLf))
@@ -1123,7 +1170,7 @@ Public Class NewUnattendWiz
             End Select
         End If
         ' 5. -- PRODUCT KEY
-        TextBox13.AppendText("Product key: " & If(GenericChosen, "generic" & CrLf, "custom" & CrLf) &
+        TextBox13.AppendText("Product key: " & If(CheckBox21.Checked, "get from firmware" & CrLf, If(GenericChosen, "generic" & CrLf, "custom" & CrLf)) &
                              "- Key: " & SelectedKey.Key & CrLf)
         ' 6. -- USER ACCOUNTS
         TextBox13.AppendText("User account settings: " & If(UserAccountsInteractive, "configured during setup" & CrLf, CrLf))
@@ -1845,8 +1892,14 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Saving user settings...", 8)
             DynaLog.LogMessage("Saving computer settings...")
-            If Not PCName.DefaultName Then
-                UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+            If RadioButton28.Checked Then
+                If Not PCName.DefaultName Then
+                    UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+                End If
+            Else
+                If Not String.IsNullOrEmpty(PCNameScript) Then
+                    UnattendGen.StartInfo.Arguments &= " /computername=script:" & Quote & PCNameScript & Quote
+                End If
             End If
             DynaLog.LogMessage("Saving configuration set/distribution share settings...")
             If UseConfigSet Then
@@ -1885,7 +1938,10 @@ Public Class NewUnattendWiz
             End If
             ReportMessage("Saving user settings...", 14)
             DynaLog.LogMessage("Saving edition settings...")
-            If GenericChosen Then
+            If FirmwareChosen Then
+                DynaLog.LogMessage("The product key will be grabbed from firmware.")
+                UnattendGen.StartInfo.Arguments &= " /firmware"
+            ElseIf GenericChosen Then
                 DynaLog.LogMessage("A generic product key has been chosen.")
                 UnattendGen.StartInfo.Arguments &= " /generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -2005,6 +2061,11 @@ Public Class NewUnattendWiz
                 DynaLog.LogMessage("Saving post-installation scripts...")
                 For Each ConfiguredScript As PostInstallScript In ConfiguredScripts
                     DynaLog.LogMessage(ConfiguredScript.ToString())
+                    DynaLog.LogMessage("Checking if Batch or other special scripts were imported...")
+                    If ConfiguredScript.ScriptContents.IndexOf(ScriptDirCreationSnippet, StringComparison.OrdinalIgnoreCase) <> -1 Then
+                        DynaLog.LogMessage("User has imported special scripts, for which a directory will be created. Since it's temporary, signaling deletion of directory after finishing stage...")
+                        ConfiguredScript.ScriptContents &= ScriptDirDeletionSnippet
+                    End If
                     DynaLog.LogMessage("Saving contents to script directory...")
                     Dim destinationFileName As String = ""
                     Select Case ConfiguredScript.ScriptStage
@@ -2584,13 +2645,56 @@ Public Class NewUnattendWiz
         ScriptEditorOFD.ShowDialog()
     End Sub
 
+    Sub InsertSpecialScript(ScriptFile As String)
+        DynaLog.LogMessage("Preparing to insert script contents...")
+        DynaLog.LogMessage("- Script to insert: " & Quote & ScriptFile & Quote)
+        DynaLog.LogMessage("Checking if directory creation snippet exists...")
+        If Not Scintilla3.Text.Contains(ScriptDirCreationSnippet) Then
+            DynaLog.LogMessage("Adding PowerShell directory creation script snippet...")
+            Scintilla3.AppendText(ScriptDirCreationSnippet)
+        End If
+        ' We will check if the file extension matches those used by other interpreters, like cmd. If that is the case, we will
+        ' prepare directories for those scripts in a parent directory, located in "\DISMTools\scripts"
+        DynaLog.LogMessage("Grabbing file properties...")
+        Dim FileName As String = Path.GetFileNameWithoutExtension(ScriptFile)
+        Dim FileExtension As String = Path.GetExtension(ScriptFile).Replace(".", "")
+        Dim FileContents As String = ""
+        DynaLog.LogMessage("Grabbed Properties:")
+        DynaLog.LogMessage("- File Name: " & Quote & FileName & Quote)
+        DynaLog.LogMessage("- File Extension: " & Quote & FileExtension & Quote)
+        DynaLog.LogMessage("File Properties grabbed. Attempting to grab contents...")
+        Try
+            FileContents = File.ReadAllText(ScriptFile)
+            DynaLog.LogMessage("Contents grabbed. Putting in script...")
+            Dim ScriptContentVariable As String = ScriptContentTemplateVariable.
+                Replace("<FILENAME_REPLACE>", FileName).
+                Replace("<CONTENT_REPLACE>", FileContents).
+                Replace("<EXT_REPLACE>", FileExtension)
+            ' We only support CMD for now, so we only replace the execution template with the cmd snippet
+            Dim ScriptExecutionSnippet As String = ScriptExecutionTemplateSnippet.
+                Replace("<FILENAME_REPLACE>", FileName).
+                Replace("<EXECUTION_REPLACE>", Cmd_ExecutionSnippet.
+                        Replace("<FILENAME_REPLACE>", FileName).
+                        Replace("<EXT_REPLACE>", FileExtension))
+            Scintilla3.AppendText(ScriptContentVariable & ScriptExecutionSnippet)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not grab file contents. Error Message: " & ex.Message)
+        End Try
+    End Sub
+
     Private Sub ScriptEditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptEditorOFD.FileOk
+        Dim AllowedBatchExtensions As String() = New String(2) {".bat", ".cmd", ".nt"}
         DynaLog.LogMessage("Opening contents of script...")
         DynaLog.LogMessage("- Script to open: " & Quote & ScriptEditorOFD.FileName & Quote)
         DynaLog.LogMessage("Checking if file exists...")
         If File.Exists(ScriptEditorOFD.FileName) Then
             DynaLog.LogMessage("File exists. Attempting to read...")
             Try
+                DynaLog.LogMessage("Checking file extension for special files...")
+                If AllowedBatchExtensions.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
+                    InsertSpecialScript(ScriptEditorOFD.FileName)
+                    Exit Sub
+                End If
                 Scintilla3.Text = File.ReadAllText(ScriptEditorOFD.FileName)
             Catch ex As Exception
                 DynaLog.LogMessage("Could not load file. Error message: " & ex.Message)
@@ -2626,5 +2730,45 @@ Public Class NewUnattendWiz
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         Scintilla1.Text = Regex.Replace(Scintilla1.Text, Tab, "    ")
+    End Sub
+
+    Private Sub CheckBox21_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox21.CheckedChanged
+        FirmwareChosen = CheckBox21.Checked
+        ManualProductKeyOptionsPanel.Enabled = Not CheckBox21.Checked
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
+        Try
+            DynaLog.LogMessage("Copying key to clipboard...")
+            My.Computer.Clipboard.SetText(TextBox2.Text)
+            DynaLog.LogMessage("Key copied successfully.")
+            MsgBox("The product key was copied successfully to your clipboard.", vbOKOnly + vbInformation)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not copy key. Error message: " & ex.Message)
+            MsgBox("We could not copy the key to your clipboard. Error message: " & ex.Message, vbOKOnly + vbInformation)
+        End Try
+    End Sub
+
+    Private Sub RadioButton28_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton28.CheckedChanged
+        ManualComputerNamePanel.Enabled = RadioButton28.Checked
+        ScriptedComputerNamePanel.Enabled = Not RadioButton28.Checked
+    End Sub
+
+    Private Sub TextBox16_TextChanged(sender As Object, e As EventArgs) Handles TextBox16.TextChanged
+        PCNameScript = TextBox16.Text
+    End Sub
+
+    Private Sub RadioButton29_MouseHover(sender As Object, e As EventArgs) Handles RadioButton29.MouseHover
+        Dim ExampleName As String = ""
+        Const Characters As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        Dim random = New Random()
+        Dim sb = New StringBuilder(7)
+        For i = 0 To 6
+            sb.Append(Characters(random.Next(Characters.Length)))
+        Next
+        ExampleName = String.Format("DESKTOP-{0}", sb.ToString())
+        CNameTTip.Show("Choose this option if the unattended answer file will be used on multiple computers on the same network." & CrLf &
+                       "The default script will return a random computer name similar to " & Quote & ExampleName & Quote & CrLf &
+                       "This can avoid name resolution conflicts.", sender)
     End Sub
 End Class

@@ -127,8 +127,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "DTVI_MK2"
+    Public dtBranch As String = "dt_preview_relcndid"
+    Public dt_codeName As String = "DTVI_MK3"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -261,6 +261,9 @@ Public Class MainForm
     Dim thumbnailList As ImageList = New ImageList()
 
     Dim AdkCopyEx As Exception
+
+    Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
+    Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
 
     Friend NotInheritable Class NativeMethods
 
@@ -594,22 +597,21 @@ Public Class MainForm
 
     Sub InitDynaLog()
         DynaLog.CheckLogAge()
-        DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & PrgAbout.RetrieveLinkerTimestamp(My.Application.Info.DirectoryPath & "\" & My.Application.Info.AssemblyName & ".exe").ToString("yyMMdd-HHmm"))
+        DynaLog.LogMessage("DISMTools - Version " & My.Application.Info.Version.ToString() & " (" & dt_codeName & "), build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
         ' Display copyright/author information for every component
         DynaLog.LogMessage("Components:")
         DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
         DynaLog.LogMessage("- ExtAppx.ps1/MImgMgr.ps1: (c) " & GetCopyrightTimespan(2023, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
-                           "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, 2024) & " CodingWonders Software" & CrLf &
-                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, 2025) & " CodingWonders Software")
+                           "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
                            "(c) " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
         DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
         DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
-        DynaLog.LogMessage("- DockPanelSuite: (c) " & GetCopyrightTimespan(2007, 2007) & " Weifen Luo")
         DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov" & CrLf &
                            "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
         DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
@@ -620,10 +622,10 @@ Public Class MainForm
         DynaLog.LogMessage("- Windows API Code Pack: " &
                            "(c) " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
-                           "Peter William Wagner (" & GetCopyrightTimespan(2017, Date.Now.Year) & ")")
+                           "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.BeginLogging()
     End Sub
-    
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
@@ -1233,6 +1235,32 @@ Public Class MainForm
             LinkLabel14.Visible = False
         End If
     End Sub
+
+    Public Class DarkModeRenderer
+        Inherits ToolStripProfessionalRenderer
+
+        Public Sub New()
+            MyBase.New(New DarkModeColorTable())
+        End Sub
+
+        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
+            e.ArrowColor = Color.White
+            MyBase.OnRenderArrow(e)
+        End Sub
+    End Class
+
+    Public Class LightModeRenderer
+        Inherits ToolStripProfessionalRenderer
+
+        Public Sub New()
+            MyBase.New(New LightModeColorTable())
+        End Sub
+
+        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
+            e.ArrowColor = Color.Black
+            MyBase.OnRenderArrow(e)
+        End Sub
+    End Class
 
     ''' <summary>
     ''' Set colors on any surface with the "Professional" RenderMode in dark mode
@@ -4872,7 +4900,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DynaLog.LogMessage("Generating new settings file...")
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -5043,7 +5071,7 @@ Public Class MainForm
                 End If
                 DynaLog.LogMessage("Writing to INI...")
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.1) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -5360,7 +5388,7 @@ Public Class MainForm
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             If NoMigration Then Exit Sub
             DynaLog.LogMessage("Checking build date...")
-            Dim bldDate As Date = PrgAbout.RetrieveLinkerTimestamp(Application.StartupPath & "\DISMTools.exe")
+            Dim bldDate As Date = RetrieveLinkerTimestamp()
             DynaLog.LogMessage("Comparing dates...")
             If File.GetLastWriteTime(Application.StartupPath & "\settings.ini") < bldDate Then
                 DynaLog.LogMessage("Settings file was last modified at a date older than build date. Migrating settings...")
@@ -5446,16 +5474,16 @@ Public Class MainForm
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                         End Try
                         MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                        MenuStrip1.Renderer = New DarkModeRenderer()
+                        ToolStrip1.Renderer = New DarkModeRenderer()
+                        ToolStrip2.Renderer = New DarkModeRenderer()
+                        PkgInfoCMS.Renderer = New DarkModeRenderer()
+                        ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
+                        AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
+                        AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
+                        TreeViewCMS.Renderer = New DarkModeRenderer()
+                        AppxResCMS.Renderer = New DarkModeRenderer()
+                        ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
                         PkgInfoCMS.ForeColor = Color.White
                         ImgUMountPopupCMS.ForeColor = Color.White
                         AppxPackagePopupCMS.ForeColor = Color.White
@@ -5465,6 +5493,7 @@ Public Class MainForm
                         ImgSpecialToolsCMS.ForeColor = Color.White
                         ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
+                        ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph_dark)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                         ' New design stuff
                         FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
@@ -5511,16 +5540,16 @@ Public Class MainForm
                             ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
                         End Try
                         MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                        ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                        MenuStrip1.Renderer = New LightModeRenderer()
+                        ToolStrip1.Renderer = New LightModeRenderer()
+                        ToolStrip2.Renderer = New LightModeRenderer()
+                        PkgInfoCMS.Renderer = New LightModeRenderer()
+                        ImgUMountPopupCMS.Renderer = New LightModeRenderer()
+                        AppxPackagePopupCMS.Renderer = New LightModeRenderer()
+                        AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
+                        TreeViewCMS.Renderer = New LightModeRenderer()
+                        AppxResCMS.Renderer = New LightModeRenderer()
+                        ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
                         PkgInfoCMS.ForeColor = Color.Black
                         ImgUMountPopupCMS.ForeColor = Color.Black
                         AppxPackagePopupCMS.ForeColor = Color.Black
@@ -5530,6 +5559,7 @@ Public Class MainForm
                         ImgSpecialToolsCMS.ForeColor = Color.Black
                         ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
                         InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
+                        ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph)
                         BranchTSMI.Image = New Bitmap(My.Resources.branch)
                         ' New design stuff
                         FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
@@ -5581,16 +5611,16 @@ Public Class MainForm
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
                 End Try
                 MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
-                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New LightModeColorTable())
+                MenuStrip1.Renderer = New LightModeRenderer()
+                ToolStrip1.Renderer = New LightModeRenderer()
+                ToolStrip2.Renderer = New LightModeRenderer()
+                PkgInfoCMS.Renderer = New LightModeRenderer()
+                ImgUMountPopupCMS.Renderer = New LightModeRenderer()
+                AppxPackagePopupCMS.Renderer = New LightModeRenderer()
+                AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
+                TreeViewCMS.Renderer = New LightModeRenderer()
+                AppxResCMS.Renderer = New LightModeRenderer()
+                ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
                 PkgInfoCMS.ForeColor = Color.Black
                 ImgUMountPopupCMS.ForeColor = Color.Black
                 AppxPackagePopupCMS.ForeColor = Color.Black
@@ -5600,6 +5630,7 @@ Public Class MainForm
                 ImgSpecialToolsCMS.ForeColor = Color.Black
                 ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
+                ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch)
                 ' New design stuff
                 FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
@@ -5647,16 +5678,16 @@ Public Class MainForm
                     ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
                 End Try
                 MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ToolStrip1.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ToolStrip2.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                PkgInfoCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ImgUMountPopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxPackagePopupCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxRelatedLinksCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                TreeViewCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                AppxResCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
-                ImgSpecialToolsCMS.Renderer = New ToolStripProfessionalRenderer(New DarkModeColorTable())
+                MenuStrip1.Renderer = New DarkModeRenderer()
+                ToolStrip1.Renderer = New DarkModeRenderer()
+                ToolStrip2.Renderer = New DarkModeRenderer()
+                PkgInfoCMS.Renderer = New DarkModeRenderer()
+                ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
+                AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
+                AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
+                TreeViewCMS.Renderer = New DarkModeRenderer()
+                AppxResCMS.Renderer = New DarkModeRenderer()
+                ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
                 PkgInfoCMS.ForeColor = Color.White
                 ImgUMountPopupCMS.ForeColor = Color.White
                 AppxPackagePopupCMS.ForeColor = Color.White
@@ -5666,6 +5697,7 @@ Public Class MainForm
                 ImgSpecialToolsCMS.ForeColor = Color.White
                 ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
                 InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
+                ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph_dark)
                 BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
                 ' New design stuff
                 FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
@@ -5904,7 +5936,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
                         WimScriptEditorCommand.Text = "Configuration list editor"
-                        ActionEditorToolStripMenuItem.Text = "Action editor"
                         OptionsToolStripMenuItem.Text = "Options"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -6235,7 +6266,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
                         WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
-                        ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                         OptionsToolStripMenuItem.Text = "Opciones"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -6566,7 +6596,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
                         WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
-                        ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                         OptionsToolStripMenuItem.Text = "Paramètres"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
@@ -6896,7 +6925,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
                         WimScriptEditorCommand.Text = "Editor de listas de configuração"
-                        ActionEditorToolStripMenuItem.Text = "Editor de acções"
                         OptionsToolStripMenuItem.Text = "Opções"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
@@ -7226,7 +7254,6 @@ Public Class MainForm
                         CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
                         CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
                         WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
-                        ActionEditorToolStripMenuItem.Text = "Editor di azioni"
                         OptionsToolStripMenuItem.Text = "Opzioni"
                         ' Menu - Help
                         HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
@@ -7563,7 +7590,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Create a testing environment..."
                 WimScriptEditorCommand.Text = "Configuration list editor"
-                ActionEditorToolStripMenuItem.Text = "Action editor"
                 OptionsToolStripMenuItem.Text = "Options"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Help Topics"
@@ -7895,7 +7921,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Crear imagen de disco..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Crear un entorno de pruebas..."
                 WimScriptEditorCommand.Text = "Editor de lista de configuraciones"
-                ActionEditorToolStripMenuItem.Text = "Editor de acciones"
                 OptionsToolStripMenuItem.Text = "Opciones"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Ver la ayuda"
@@ -8226,7 +8251,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Créer une image disque..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Créer un environnement de test..."
                 WimScriptEditorCommand.Text = "Éditeur de listes de configuration"
-                ActionEditorToolStripMenuItem.Text = "Éditeur des actions"
                 OptionsToolStripMenuItem.Text = "Paramètres"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Rubriques d'aide"
@@ -8558,7 +8582,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Criar imagem de disco..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Criar um ambiente de teste..."
                 WimScriptEditorCommand.Text = "Editor de listas de configuração"
-                ActionEditorToolStripMenuItem.Text = "Editor de acções"
                 OptionsToolStripMenuItem.Text = "Opções"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Tópicos de Ajuda"
@@ -8889,7 +8912,6 @@ Public Class MainForm
                 CreateDiscImageToolStripMenuItem.Text = "Crea immagine disco..."
                 CreateTestingEnvironmentToolStripMenuItem.Text = "Creare un ambiente di test..."
                 WimScriptEditorCommand.Text = "Editor dell'elenco di configurazione"
-                ActionEditorToolStripMenuItem.Text = "Editor di azioni"
                 OptionsToolStripMenuItem.Text = "Opzioni"
                 ' Menu - Help
                 HelpTopicsToolStripMenuItem.Text = "Argomenti di aiuto"
@@ -9892,6 +9914,7 @@ Public Class MainForm
                             BGProcNotify.Show()
                         End If
                 End Select
+                Focus()
             End If
             BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
         Else
@@ -12461,6 +12484,9 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
+        If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
+            ToggleFullScreenMode()
+        End If
         If Not VolatileMode Then
             DynaLog.LogMessage("DISMTools is not in volatile mode. Saving settings...")
             SaveDTSettings()
@@ -14679,10 +14705,6 @@ Public Class MainForm
             Exit Try
         End Try
         RemDrivers.ShowDialog()
-    End Sub
-
-    Private Sub ActionEditorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ActionEditorToolStripMenuItem.Click
-        Actions_MainForm.Show()
     End Sub
 
     ''' <summary>
@@ -19057,6 +19079,8 @@ Public Class MainForm
                 DynaLog.LogMessage("Triggering background processes...")
                 ImgBW.RunWorkerAsync()
             End If
+        ElseIf e.KeyCode = Keys.F11 Then
+            ToggleFullScreenMode()
         End If
     End Sub
 
@@ -19609,5 +19633,257 @@ Public Class MainForm
             Case 5
                 Process.Start("https://learn.microsoft.com/it-it/azure/virtual-desktop/language-packs#prerequisites")
         End Select
+    End Sub
+
+    Private Sub GetCurrentEdition_Click(sender As Object, e As EventArgs) Handles GetCurrentEdition.Click
+        DynaLog.LogMessage("Getting current image edition...")
+        DynaLog.LogMessage("Image edition: " & Quote & imgEdition & Quote)
+        If imgEdition <> "" Then
+            DynaLog.LogMessage("Image edition field has been populated. Showing and checking...")
+            Dim msg As String = ""
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "The current edition is " & Quote & imgEdition & Quote & CrLf
+                        Case "ESN"
+                            msg = "La edición actual es " & Quote & imgEdition & Quote & CrLf
+                        Case "FRA"
+                            msg = "L'édition actuelle est " & Quote & imgEdition & Quote & CrLf
+                        Case "PTB", "PTG"
+                            msg = "A edição atual é " & Quote & imgEdition & Quote & CrLf
+                        Case "ITA"
+                            msg = "L'edizione attuale è " & Quote & imgEdition & Quote & CrLf
+                    End Select
+                Case 1
+                    msg = "The current edition is " & Quote & imgEdition & Quote & CrLf
+                Case 2
+                    msg = "La edición actual es " & Quote & imgEdition & Quote & CrLf
+                Case 3
+                    msg = "L'édition actuelle est " & Quote & imgEdition & Quote & CrLf
+                Case 4
+                    msg = "A edição atual é " & Quote & imgEdition & Quote & CrLf
+                Case 5
+                    msg = "L'edizione attuale è " & Quote & imgEdition & Quote & CrLf
+            End Select
+            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            Else
+                DynaLog.LogMessage("Image edition is not WindowsPE. This is not a Windows PE image.")
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg &= CrLf & "If you have a product key, you may be able to upgrade this Windows image to a higher edition."
+                            Case "ESN"
+                                msg &= CrLf & "Si cuenta con una clave de producto, podrá actualizar esta imagen de Windows a una edición superior."
+                            Case "FRA"
+                                msg &= CrLf & "Si vous disposez d'une clé de produit, vous pourrez peut-être mettre à niveau cette image Windows vers une édition supérieure."
+                            Case "PTB", "PTG"
+                                msg &= CrLf & "Se tiver uma chave de produto, poderá atualizar esta imagem do Windows para uma edição superior."
+                            Case "ITA"
+                                msg &= CrLf & "Se si dispone di un codice prodotto, è possibile aggiornare questa immagine di Windows a un'edizione superiore."
+                        End Select
+                    Case 1
+                        msg &= CrLf & "If you have a product key, you may be able to upgrade this Windows image to a higher edition."
+                    Case 2
+                        msg &= CrLf & "Si cuenta con una clave de producto, podrá actualizar esta imagen de Windows a una edición superior."
+                    Case 3
+                        msg &= CrLf & "Si vous disposez d'une clé de produit, vous pourrez peut-être mettre à niveau cette image Windows vers une édition supérieure."
+                    Case 4
+                        msg &= CrLf & "Se tiver uma chave de produto, poderá atualizar esta imagem do Windows para uma edição superior."
+                    Case 5
+                        msg &= CrLf & "Se si dispone di un codice prodotto, è possibile aggiornare questa immagine di Windows a un'edizione superiore."
+                End Select
+            End If
+            MsgBox(msg, vbOKOnly + vbInformation, Text)
+        End If
+    End Sub
+
+    Private Sub GetTargetEditions_Click(sender As Object, e As EventArgs) Handles GetTargetEditions.Click
+        DynaLog.LogMessage("Preparing to get target editions...")
+        MountedImageDetectorBWRestarterTimer.Enabled = False
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+        DynaLog.LogMessage("Getting target editions...")
+        Dim msg As String = ""
+        Dim msgSuccess As Boolean
+        Try
+            DynaLog.LogMessage("Starting API...")
+            DismApi.Initialize(DismLogLevel.LogErrors)
+            DynaLog.LogMessage("Creating session...")
+            Using imgSession As DismSession = If(OnlineManagement, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
+                Dim targetEditions As DismEditionCollection = DismApi.GetTargetEditions(imgSession)
+                DynaLog.LogMessage("Amount of target editions: " & targetEditions.Count)
+                msgSuccess = True
+                If targetEditions.Count > 0 Then
+                    ' This image hasn't been upgraded to its highest edition
+                    DynaLog.LogMessage("There are target editions. This image can give a little more")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "If you have a suitable product key, you can upgrade this Windows image to one of the following editions:" & CrLf & CrLf
+                                Case "ESN"
+                                    msg = "Si cuenta con una clave de producto apropiada, puede actualizar esta imagen de Windows a una de las siguientes ediciones:" & CrLf & CrLf
+                                Case "FRA"
+                                    msg = "Si vous disposez d'une clé de produit appropriée, vous pouvez mettre à niveau cette image Windows vers l'une des éditions suivantes :" & CrLf & CrLf
+                                Case "PTB", "PTG"
+                                    msg = "Se tiver uma chave de produto adequada, pode atualizar esta imagem do Windows para uma das seguintes edições:" & CrLf & CrLf
+                                Case "ITA"
+                                    msg = "Se si dispone di un codice prodotto adeguato, è possibile aggiornare questa immagine di Windows a una delle seguenti edizioni:" & CrLf & CrLf
+                            End Select
+                        Case 1
+                            msg = "If you have a suitable product key, you can upgrade this Windows image to one of the following editions:" & CrLf & CrLf
+                        Case 2
+                            msg = "Si cuenta con una clave de producto apropiada, puede actualizar esta imagen de Windows a una de las siguientes ediciones:" & CrLf & CrLf
+                        Case 3
+                            msg = "Si vous disposez d'une clé de produit appropriée, vous pouvez mettre à niveau cette image Windows vers l'une des éditions suivantes :" & CrLf & CrLf
+                        Case 4
+                            msg = "Se tiver uma chave de produto adequada, pode atualizar esta imagem do Windows para uma das seguintes edições:" & CrLf & CrLf
+                        Case 5
+                            msg = "Se si dispone di un codice prodotto adeguato, è possibile aggiornare questa immagine di Windows a una delle seguenti edizioni:" & CrLf & CrLf
+                    End Select
+                    For Each targetEdition In targetEditions
+                        msg &= "- " & targetEdition & CrLf
+                    Next
+                Else
+                    ' This image has been upgraded to its highest edition
+                    DynaLog.LogMessage("There are no target editions. This image is already rocking the best edition")
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                                Case "ESN"
+                                    msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                                Case "FRA"
+                                    msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                                Case "PTB", "PTG"
+                                    msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                                Case "ITA"
+                                    msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                            End Select
+                        Case 1
+                            msg = "This image cannot be upgraded to higher editions because it is in its highest edition"
+                        Case 2
+                            msg = "Esta imagen no puede ser actualizada a ediciones superiores porque ya tiene la edición más avanzada"
+                        Case 3
+                            msg = "Cette image ne peut pas être mise à niveau vers des éditions supérieures car elle se trouve dans son édition la plus élevée"
+                        Case 4
+                            msg = "Esta imagem não pode ser actualizada para edições superiores porque está na sua edição mais elevada"
+                        Case 5
+                            msg = "Questa immagine non può essere aggiornata a edizioni superiori perché si trova nell'edizione più alta"
+                    End Select
+                End If
+            End Using
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
+            msgSuccess = False
+            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Windows PE images cannot be upgraded to higher editions."
+                            Case "ESN"
+                                msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                            Case "FRA"
+                                msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                            Case "PTB", "PTG"
+                                msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                            Case "ITA"
+                                msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                        End Select
+                    Case 1
+                        msg = "Windows PE images cannot be upgraded to higher editions."
+                    Case 2
+                        msg = "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                    Case 3
+                        msg = "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                    Case 4
+                        msg = "As imagens do Windows PE não podem ser actualizadas para edições superiores."
+                    Case 5
+                        msg = "Le immagini di Windows PE non possono essere aggiornate a edizioni superiori."
+                End Select
+            Else
+                msg = ex.ToString()
+            End If
+        Finally
+            Try
+                DismApi.Shutdown()
+            Catch ex As Exception
+                ' Don't do anything
+            End Try
+        End Try
+        MsgBox(msg, vbOKOnly + If(msgSuccess, vbInformation, vbExclamation), Text)
+        DynaLog.LogMessage("Restarting mounted image detector...")
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
+    End Sub
+
+    Private Sub SetProductKey_Click(sender As Object, e As EventArgs) Handles SetProductKey.Click
+        StopMountedImageDetector()
+        SetImageKey.ShowDialog()
+        StartMountedImageDetector()
+    End Sub
+
+    Private Sub SetEdition_Click(sender As Object, e As EventArgs) Handles SetEdition.Click
+        StopMountedImageDetector()
+        SetImageEdition.ShowDialog()
+        StartMountedImageDetector()
+    End Sub
+
+    Sub ToggleFullScreenMode()
+        If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
+            DynaLog.LogMessage("Exiting full-screen mode...")
+            StatusStrip.SizingGrip = True
+            FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
+            Bounds = OriginalWindowBounds
+            WindowState = OriginalWindowState
+        Else
+            DynaLog.LogMessage("Entering full-screen mode...")
+            StatusStrip.SizingGrip = False
+            FormBorderStyle = Windows.Forms.FormBorderStyle.None
+            OriginalWindowState = WindowState
+            WindowState = FormWindowState.Normal
+            OriginalWindowBounds = Bounds
+            Bounds = Screen.FromControl(Me).Bounds
+        End If
+        ExitFullScreenTSMI.Visible = (FormBorderStyle = Windows.Forms.FormBorderStyle.None)
+    End Sub
+
+    Private Sub ExitFullScreenTSMI_Click(sender As Object, e As EventArgs) Handles ExitFullScreenTSMI.Click
+        ToggleFullScreenMode()
+    End Sub
+
+    Sub StopMountedImageDetector()
+        MountedImageDetectorBWRestarterTimer.Enabled = False
+        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
+        While MountedImageDetectorBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(500)
+        End While
+        WatcherTimer.Enabled = False
+        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
+        While WatcherBW.IsBusy
+            Application.DoEvents()
+            Thread.Sleep(100)
+        End While
+    End Sub
+
+    Sub StartMountedImageDetector()
+        DynaLog.LogMessage("Restarting mounted image detector...")
+        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
+        WatcherTimer.Enabled = True
     End Sub
 End Class

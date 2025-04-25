@@ -52,7 +52,7 @@ jobs:
           path: ./downloaded_artifacts
       - name: Prepare directory
         run: |
-          mkdir "./${{ GITHUB.REF_NAME }}"
+          mkdir -p "./${{ GITHUB.REF_NAME }}"
           mv -f "./downloaded_artifacts/dt_setup.exe" "./${{ GITHUB.REF_NAME }}/dt_setup.exe"
           rm -rf "./downloaded_artifacts"
       - name: Upload Installer

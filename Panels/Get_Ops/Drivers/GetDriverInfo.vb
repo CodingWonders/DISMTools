@@ -1312,18 +1312,15 @@ Public Class GetDriverInfo
         DynaLog.LogMessage("Search query: " & sQuery)
         DynaLog.LogMessage("Will original file names be searched instead of published names? " & If(OriginalNames, "Yes", "No"))
         If InstalledDriverInfo.Count > 0 Then
-            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
-                If OriginalNames Then
-                    If (Path.GetFileName(InstalledDriver.OriginalFileName)).ToLower().Contains(sQuery.Replace("og:", "").Trim().ToLower()) Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
-                        SearchedDriverList.Add(InstalledDriver)
-                    End If
-                Else
-                    If InstalledDriver.PublishedName.ToLower().Contains(sQuery.ToLower()) Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
-                        SearchedDriverList.Add(InstalledDriver)
-                    End If
-                End If
+            Dim FilteredDrivers
+            If OriginalNames Then
+                FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
+            Else
+                FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+            End If
+            For Each FilteredDriver As DismDriverPackage In FilteredDrivers
+                ListView1.Items.Add(New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)}))
+                SearchedDriverList.Add(FilteredDriver)
             Next
         End If
     End Sub
@@ -1338,6 +1335,20 @@ Public Class GetDriverInfo
             For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
             Next
+        End If
+    End Sub
+
+    Private Sub SearchBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles SearchBox1.KeyDown
+        If e.KeyCode = Keys.Back And e.Control Then
+            Dim text As String = SearchBox1.Text
+            Dim lastSpaceIndex As Integer = text.LastIndexOf(" "c)
+            If lastSpaceIndex > 0 Then
+                SearchBox1.Text = text.Substring(0, lastSpaceIndex).TrimEnd()
+            Else
+                SearchBox1.Text = ""
+            End If
+            e.SuppressKeyPress = True
+            SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
     End Sub
 End Class

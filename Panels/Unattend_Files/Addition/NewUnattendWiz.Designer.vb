@@ -199,6 +199,8 @@ Partial Class NewUnattendWiz
         Me.FillerLabel2 = New System.Windows.Forms.Label()
         Me.UserAccountHeader = New System.Windows.Forms.Label()
         Me.ProductKeyPanel = New System.Windows.Forms.Panel()
+        Me.CheckBox21 = New System.Windows.Forms.CheckBox()
+        Me.ManualProductKeyOptionsPanel = New System.Windows.Forms.Panel()
         Me.ManualKeyPanel = New System.Windows.Forms.Panel()
         Me.KeyVerifyWarningPanel = New System.Windows.Forms.Panel()
         Me.Label32 = New System.Windows.Forms.Label()
@@ -207,6 +209,7 @@ Partial Class NewUnattendWiz
         Me.Label30 = New System.Windows.Forms.Label()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.GenericKeyPanel = New System.Windows.Forms.Panel()
+        Me.Button5 = New System.Windows.Forms.Button()
         Me.Label29 = New System.Windows.Forms.Label()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.ComboBox6 = New System.Windows.Forms.ComboBox()
@@ -267,7 +270,6 @@ Partial Class NewUnattendWiz
         Me.CheckBox19 = New System.Windows.Forms.CheckBox()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.Label62 = New System.Windows.Forms.Label()
-        Me.Label15 = New System.Windows.Forms.Label()
         Me.ComputerNamePanel = New System.Windows.Forms.Panel()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -314,6 +316,7 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton6 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -335,7 +338,11 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.ManualComputerNamePanel = New System.Windows.Forms.Panel()
+        Me.RadioButton28 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton29 = New System.Windows.Forms.RadioButton()
+        Me.TextBox16 = New System.Windows.Forms.TextBox()
+        Me.ScriptedComputerNamePanel = New System.Windows.Forms.Panel()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -387,6 +394,7 @@ Partial Class NewUnattendWiz
         Me.GroupBox1.SuspendLayout()
         Me.AutoLogonSettingsPanel.SuspendLayout()
         Me.ProductKeyPanel.SuspendLayout()
+        Me.ManualProductKeyOptionsPanel.SuspendLayout()
         Me.ManualKeyPanel.SuspendLayout()
         Me.KeyVerifyWarningPanel.SuspendLayout()
         Me.GenericKeyPanel.SuspendLayout()
@@ -423,6 +431,8 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.ManualComputerNamePanel.SuspendLayout()
+        Me.ScriptedComputerNamePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -2301,16 +2311,37 @@ Partial Class NewUnattendWiz
         '
         'ProductKeyPanel
         '
-        Me.ProductKeyPanel.Controls.Add(Me.ManualKeyPanel)
-        Me.ProductKeyPanel.Controls.Add(Me.GenericKeyPanel)
-        Me.ProductKeyPanel.Controls.Add(Me.RadioButton14)
-        Me.ProductKeyPanel.Controls.Add(Me.RadioButton13)
+        Me.ProductKeyPanel.Controls.Add(Me.CheckBox21)
+        Me.ProductKeyPanel.Controls.Add(Me.ManualProductKeyOptionsPanel)
         Me.ProductKeyPanel.Controls.Add(Me.ProductKeyHeader)
         Me.ProductKeyPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ProductKeyPanel.Location = New System.Drawing.Point(0, 0)
         Me.ProductKeyPanel.Name = "ProductKeyPanel"
         Me.ProductKeyPanel.Size = New System.Drawing.Size(1008, 569)
         Me.ProductKeyPanel.TabIndex = 5
+        '
+        'CheckBox21
+        '
+        Me.CheckBox21.AutoSize = True
+        Me.CheckBox21.Location = New System.Drawing.Point(53, 381)
+        Me.CheckBox21.Name = "CheckBox21"
+        Me.CheckBox21.Size = New System.Drawing.Size(285, 17)
+        Me.CheckBox21.TabIndex = 10
+        Me.CheckBox21.Text = "Get product key from firmware (modern systems only)"
+        Me.CheckBox21.UseVisualStyleBackColor = True
+        '
+        'ManualProductKeyOptionsPanel
+        '
+        Me.ManualProductKeyOptionsPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ManualProductKeyOptionsPanel.Controls.Add(Me.ManualKeyPanel)
+        Me.ManualProductKeyOptionsPanel.Controls.Add(Me.GenericKeyPanel)
+        Me.ManualProductKeyOptionsPanel.Controls.Add(Me.RadioButton14)
+        Me.ManualProductKeyOptionsPanel.Controls.Add(Me.RadioButton13)
+        Me.ManualProductKeyOptionsPanel.Location = New System.Drawing.Point(53, 61)
+        Me.ManualProductKeyOptionsPanel.Name = "ManualProductKeyOptionsPanel"
+        Me.ManualProductKeyOptionsPanel.Size = New System.Drawing.Size(900, 313)
+        Me.ManualProductKeyOptionsPanel.TabIndex = 9
         '
         'ManualKeyPanel
         '
@@ -2321,7 +2352,7 @@ Partial Class NewUnattendWiz
         Me.ManualKeyPanel.Controls.Add(Me.Label30)
         Me.ManualKeyPanel.Controls.Add(Me.TextBox3)
         Me.ManualKeyPanel.Enabled = False
-        Me.ManualKeyPanel.Location = New System.Drawing.Point(85, 225)
+        Me.ManualKeyPanel.Location = New System.Drawing.Point(32, 164)
         Me.ManualKeyPanel.Name = "ManualKeyPanel"
         Me.ManualKeyPanel.Size = New System.Drawing.Size(858, 140)
         Me.ManualKeyPanel.TabIndex = 8
@@ -2391,15 +2422,27 @@ Partial Class NewUnattendWiz
         '
         Me.GenericKeyPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GenericKeyPanel.Controls.Add(Me.Button5)
         Me.GenericKeyPanel.Controls.Add(Me.Label29)
         Me.GenericKeyPanel.Controls.Add(Me.TextBox2)
         Me.GenericKeyPanel.Controls.Add(Me.ComboBox6)
         Me.GenericKeyPanel.Controls.Add(Me.Label28)
         Me.GenericKeyPanel.Controls.Add(Me.Label27)
-        Me.GenericKeyPanel.Location = New System.Drawing.Point(85, 96)
+        Me.GenericKeyPanel.Location = New System.Drawing.Point(32, 35)
         Me.GenericKeyPanel.Name = "GenericKeyPanel"
         Me.GenericKeyPanel.Size = New System.Drawing.Size(857, 100)
         Me.GenericKeyPanel.TabIndex = 7
+        '
+        'Button5
+        '
+        Me.Button5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button5.Location = New System.Drawing.Point(770, 34)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 4
+        Me.Button5.Text = "Copy"
+        Me.Button5.UseVisualStyleBackColor = True
         '
         'Label29
         '
@@ -2417,7 +2460,7 @@ Partial Class NewUnattendWiz
         Me.TextBox2.Location = New System.Drawing.Point(262, 35)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ReadOnly = True
-        Me.TextBox2.Size = New System.Drawing.Size(583, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(502, 21)
         Me.TextBox2.TabIndex = 2
         '
         'ComboBox6
@@ -2452,7 +2495,7 @@ Partial Class NewUnattendWiz
         'RadioButton14
         '
         Me.RadioButton14.AutoSize = True
-        Me.RadioButton14.Location = New System.Drawing.Point(65, 202)
+        Me.RadioButton14.Location = New System.Drawing.Point(12, 141)
         Me.RadioButton14.Name = "RadioButton14"
         Me.RadioButton14.Size = New System.Drawing.Size(149, 17)
         Me.RadioButton14.TabIndex = 6
@@ -2463,7 +2506,7 @@ Partial Class NewUnattendWiz
         '
         Me.RadioButton13.AutoSize = True
         Me.RadioButton13.Checked = True
-        Me.RadioButton13.Location = New System.Drawing.Point(65, 71)
+        Me.RadioButton13.Location = New System.Drawing.Point(12, 10)
         Me.RadioButton13.Name = "RadioButton13"
         Me.RadioButton13.Size = New System.Drawing.Size(278, 17)
         Me.RadioButton13.TabIndex = 6
@@ -3011,7 +3054,6 @@ Partial Class NewUnattendWiz
         Me.SysConfigPanel.Controls.Add(Me.CheckBox19)
         Me.SysConfigPanel.Controls.Add(Me.CheckBox3)
         Me.SysConfigPanel.Controls.Add(Me.Label62)
-        Me.SysConfigPanel.Controls.Add(Me.Label15)
         Me.SysConfigPanel.Controls.Add(Me.ComputerNamePanel)
         Me.SysConfigPanel.Controls.Add(Me.WinSVSettingsPanel)
         Me.SysConfigPanel.Controls.Add(Me.Label13)
@@ -3038,7 +3080,7 @@ Partial Class NewUnattendWiz
         'CheckBox19
         '
         Me.CheckBox19.AutoSize = True
-        Me.CheckBox19.Location = New System.Drawing.Point(55, 466)
+        Me.CheckBox19.Location = New System.Drawing.Point(54, 480)
         Me.CheckBox19.Name = "CheckBox19"
         Me.CheckBox19.Size = New System.Drawing.Size(236, 17)
         Me.CheckBox19.TabIndex = 9
@@ -3050,7 +3092,7 @@ Partial Class NewUnattendWiz
         Me.CheckBox3.AutoSize = True
         Me.CheckBox3.Checked = True
         Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox3.Location = New System.Drawing.Point(55, 339)
+        Me.CheckBox3.Location = New System.Drawing.Point(53, 301)
         Me.CheckBox3.Name = "CheckBox3"
         Me.CheckBox3.Size = New System.Drawing.Size(230, 17)
         Me.CheckBox3.TabIndex = 8
@@ -3062,42 +3104,31 @@ Partial Class NewUnattendWiz
         Me.Label62.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label62.AutoEllipsis = True
-        Me.Label62.Location = New System.Drawing.Point(71, 489)
+        Me.Label62.Location = New System.Drawing.Point(70, 503)
         Me.Label62.Name = "Label62"
         Me.Label62.Size = New System.Drawing.Size(872, 33)
         Me.Label62.TabIndex = 1
         Me.Label62.Text = resources.GetString("Label62.Text")
         '
-        'Label15
-        '
-        Me.Label15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Location = New System.Drawing.Point(71, 430)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(872, 18)
-        Me.Label15.TabIndex = 1
-        Me.Label15.Text = "You can set a different computer name at any time in the system settings"
-        '
         'ComputerNamePanel
         '
         Me.ComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ComputerNamePanel.Controls.Add(Me.Button3)
-        Me.ComputerNamePanel.Controls.Add(Me.TextBox1)
-        Me.ComputerNamePanel.Controls.Add(Me.Label16)
-        Me.ComputerNamePanel.Controls.Add(Me.Label63)
+        Me.ComputerNamePanel.Controls.Add(Me.ScriptedComputerNamePanel)
+        Me.ComputerNamePanel.Controls.Add(Me.RadioButton29)
+        Me.ComputerNamePanel.Controls.Add(Me.RadioButton28)
+        Me.ComputerNamePanel.Controls.Add(Me.ManualComputerNamePanel)
         Me.ComputerNamePanel.Enabled = False
-        Me.ComputerNamePanel.Location = New System.Drawing.Point(61, 362)
+        Me.ComputerNamePanel.Location = New System.Drawing.Point(72, 324)
         Me.ComputerNamePanel.Name = "ComputerNamePanel"
-        Me.ComputerNamePanel.Size = New System.Drawing.Size(882, 60)
+        Me.ComputerNamePanel.Size = New System.Drawing.Size(869, 150)
         Me.ComputerNamePanel.TabIndex = 7
         '
         'Button3
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(726, 8)
+        Me.Button3.Location = New System.Drawing.Point(676, 3)
         Me.Button3.Name = "Button3"
         Me.Button3.Size = New System.Drawing.Size(152, 23)
         Me.Button3.TabIndex = 3
@@ -3108,16 +3139,16 @@ Partial Class NewUnattendWiz
         '
         Me.TextBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox1.Location = New System.Drawing.Point(124, 9)
+        Me.TextBox1.Location = New System.Drawing.Point(119, 4)
         Me.TextBox1.MaxLength = 15
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(596, 21)
+        Me.TextBox1.Size = New System.Drawing.Size(551, 21)
         Me.TextBox1.TabIndex = 2
         '
         'Label16
         '
         Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(10, 12)
+        Me.Label16.Location = New System.Drawing.Point(5, 7)
         Me.Label16.Name = "Label16"
         Me.Label16.Size = New System.Drawing.Size(87, 13)
         Me.Label16.TabIndex = 1
@@ -3129,9 +3160,9 @@ Partial Class NewUnattendWiz
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label63.AutoEllipsis = True
         Me.Label63.ForeColor = System.Drawing.Color.Red
-        Me.Label63.Location = New System.Drawing.Point(124, 35)
+        Me.Label63.Location = New System.Drawing.Point(119, 30)
         Me.Label63.Name = "Label63"
-        Me.Label63.Size = New System.Drawing.Size(596, 18)
+        Me.Label63.Size = New System.Drawing.Size(551, 18)
         Me.Label63.TabIndex = 1
         Me.Label63.Text = "Please type a computer name"
         Me.Label63.Visible = False
@@ -3145,7 +3176,7 @@ Partial Class NewUnattendWiz
         Me.WinSVSettingsPanel.Controls.Add(Me.CheckBox1)
         Me.WinSVSettingsPanel.Location = New System.Drawing.Point(182, 196)
         Me.WinSVSettingsPanel.Name = "WinSVSettingsPanel"
-        Me.WinSVSettingsPanel.Size = New System.Drawing.Size(761, 131)
+        Me.WinSVSettingsPanel.Size = New System.Drawing.Size(761, 98)
         Me.WinSVSettingsPanel.TabIndex = 7
         '
         'Label14
@@ -3155,7 +3186,7 @@ Partial Class NewUnattendWiz
         Me.Label14.AutoEllipsis = True
         Me.Label14.Location = New System.Drawing.Point(28, 54)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(720, 70)
+        Me.Label14.Size = New System.Drawing.Size(720, 31)
         Me.Label14.TabIndex = 1
         Me.Label14.Text = "Check this option only if the target system does not have any network capabilitie" & _
     "s. You can configure local users in the User Accounts section"
@@ -3582,6 +3613,18 @@ Partial Class NewUnattendWiz
         Me.ToolStripButton6.Size = New System.Drawing.Size(23, 25)
         Me.ToolStripButton6.Text = "Help"
         '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.ToolStripButton1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(96, 25)
+        Me.ToolStripButton1.Text = "Normalize spacing"
+        Me.ToolStripButton1.ToolTipText = "Makes the spacing consistent by replacing tabs with spaces"
+        '
         'HeaderPanel
         '
         Me.HeaderPanel.Controls.Add(Me.Label4)
@@ -3746,20 +3789,64 @@ Partial Class NewUnattendWiz
         '
         'ScriptEditorOFD
         '
-        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1"
+        Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt"
         Me.ScriptEditorOFD.Title = "Open script"
         '
-        'ToolStripButton1
+        'ManualComputerNamePanel
         '
-        Me.ToolStripButton1.BackColor = System.Drawing.Color.FromArgb(CType(CType(60, Byte), Integer), CType(CType(63, Byte), Integer), CType(CType(65, Byte), Integer))
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
-        Me.ToolStripButton1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer), CType(CType(220, Byte), Integer))
-        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(96, 25)
-        Me.ToolStripButton1.Text = "Normalize spacing"
-        Me.ToolStripButton1.ToolTipText = "Makes the spacing consistent by replacing tabs with spaces"
+        Me.ManualComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ManualComputerNamePanel.Controls.Add(Me.Button3)
+        Me.ManualComputerNamePanel.Controls.Add(Me.TextBox1)
+        Me.ManualComputerNamePanel.Controls.Add(Me.Label16)
+        Me.ManualComputerNamePanel.Controls.Add(Me.Label63)
+        Me.ManualComputerNamePanel.Location = New System.Drawing.Point(30, 35)
+        Me.ManualComputerNamePanel.Name = "ManualComputerNamePanel"
+        Me.ManualComputerNamePanel.Size = New System.Drawing.Size(831, 49)
+        Me.ManualComputerNamePanel.TabIndex = 4
+        '
+        'RadioButton28
+        '
+        Me.RadioButton28.AutoSize = True
+        Me.RadioButton28.Checked = True
+        Me.RadioButton28.Location = New System.Drawing.Point(12, 10)
+        Me.RadioButton28.Name = "RadioButton28"
+        Me.RadioButton28.Size = New System.Drawing.Size(267, 17)
+        Me.RadioButton28.TabIndex = 5
+        Me.RadioButton28.Text = "Choose a computer name yourself (recommended)"
+        Me.RadioButton28.UseVisualStyleBackColor = True
+        '
+        'RadioButton29
+        '
+        Me.RadioButton29.AutoSize = True
+        Me.RadioButton29.Location = New System.Drawing.Point(12, 94)
+        Me.RadioButton29.Name = "RadioButton29"
+        Me.RadioButton29.Size = New System.Drawing.Size(301, 17)
+        Me.RadioButton29.TabIndex = 5
+        Me.RadioButton29.Text = "Have the following script configure the name (advanced):"
+        Me.RadioButton29.UseVisualStyleBackColor = True
+        '
+        'TextBox16
+        '
+        Me.TextBox16.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox16.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox16.Location = New System.Drawing.Point(0, 0)
+        Me.TextBox16.Name = "TextBox16"
+        Me.TextBox16.Size = New System.Drawing.Size(831, 25)
+        Me.TextBox16.TabIndex = 6
+        Me.TextBox16.Text = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEac" & _
+    "h-Object {[char]$_})"
+        '
+        'ScriptedComputerNamePanel
+        '
+        Me.ScriptedComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ScriptedComputerNamePanel.Controls.Add(Me.TextBox16)
+        Me.ScriptedComputerNamePanel.Enabled = False
+        Me.ScriptedComputerNamePanel.Location = New System.Drawing.Point(30, 117)
+        Me.ScriptedComputerNamePanel.Name = "ScriptedComputerNamePanel"
+        Me.ScriptedComputerNamePanel.Size = New System.Drawing.Size(831, 25)
+        Me.ScriptedComputerNamePanel.TabIndex = 7
         '
         'NewUnattendWiz
         '
@@ -3856,6 +3943,8 @@ Partial Class NewUnattendWiz
         Me.AutoLogonSettingsPanel.PerformLayout()
         Me.ProductKeyPanel.ResumeLayout(False)
         Me.ProductKeyPanel.PerformLayout()
+        Me.ManualProductKeyOptionsPanel.ResumeLayout(False)
+        Me.ManualProductKeyOptionsPanel.PerformLayout()
         Me.ManualKeyPanel.ResumeLayout(False)
         Me.ManualKeyPanel.PerformLayout()
         Me.KeyVerifyWarningPanel.ResumeLayout(False)
@@ -3910,6 +3999,10 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.ManualComputerNamePanel.ResumeLayout(False)
+        Me.ManualComputerNamePanel.PerformLayout()
+        Me.ScriptedComputerNamePanel.ResumeLayout(False)
+        Me.ScriptedComputerNamePanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3969,7 +4062,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents WelcomeDesc As System.Windows.Forms.Label
     Friend WithEvents SysConfigPanel As System.Windows.Forms.Panel
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
-    Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents ComputerNamePanel As System.Windows.Forms.Panel
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
     Friend WithEvents Label16 As System.Windows.Forms.Label
@@ -4212,4 +4304,12 @@ Partial Class NewUnattendWiz
     Friend WithEvents Label63 As System.Windows.Forms.Label
     Friend WithEvents CheckedListBox1 As System.Windows.Forms.CheckedListBox
     Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
+    Friend WithEvents CheckBox21 As System.Windows.Forms.CheckBox
+    Friend WithEvents ManualProductKeyOptionsPanel As System.Windows.Forms.Panel
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents ScriptedComputerNamePanel As System.Windows.Forms.Panel
+    Friend WithEvents TextBox16 As System.Windows.Forms.TextBox
+    Friend WithEvents RadioButton29 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton28 As System.Windows.Forms.RadioButton
+    Friend WithEvents ManualComputerNamePanel As System.Windows.Forms.Panel
 End Class

@@ -3,7 +3,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.6.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.6.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -72,7 +72,7 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.6.1"
+    $version = "0.6.2"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2025. CodingWonders Software"
     Write-Host "-----------------------------------------------------------"
@@ -167,36 +167,13 @@ function Start-PEGeneration
                     exit 1
                 }
                 Write-Host "Adding OS packages..."
-                $pkgs = [List[string]]::new()
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-SecureStartup.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-SecureStartup_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-EnhancedStorage.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
-                # Add ARM64EC packages
-                if ($architecture -eq 'arm64') {
-                    $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
-                    $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-x64-Support_en-us.cab")
-                }
-                $pkgCount = $pkgs.Count
-                $curPkgIndex = 0
-                foreach ($pkg in $pkgs)
+                if ((Add-PEPackages -mountDirectory "$mountDirectory" -architecture $architecture) -eq $false)
                 {
-                    $curPkgIndex = $pkgs.IndexOf($pkg)
-                    Write-Progress -Activity "Adding OS packages..." -Status "Adding OS package $($curPkgIndex + 1) of $($pkgCount): `"$([IO.Path]::GetFileNameWithoutExtension($pkg))`"..." -PercentComplete (($curPkgIndex / $pkgCount) * 100)
-                    if (Test-Path $pkg -PathType Leaf)
-                    {
-                        Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath $pkg | Out-Null
-                    }
+                    Write-Host "Preinstallation Environment creation has failed in the PE package addition phase."
+                    Write-Host "`nPress ENTER to exit"
+                    Read-Host | Out-Null
+                    exit 1
                 }
-                Write-Progress -Activity "Adding OS packages..." -Completed
                 Write-Host "Saving changes..."
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 # Perform customization tasks later
@@ -462,6 +439,52 @@ function Copy-PEComponents
     catch
     {
         Write-Host "Failed to copy PE optional components."
+        return $false
+    }
+}
+
+function Add-PEPackages {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [string]$mountDirectory,
+        [Parameter(Mandatory = $true, Position = 1)] [PE_Arch]$architecture
+    )
+
+    try
+    {
+        $pkgs = [List[string]]::new()
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-SecureStartup.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-SecureStartup_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-EnhancedStorage.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
+        # Add ARM64EC packages
+        if ($architecture -eq 'arm64') {
+            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
+            $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-x64-Support_en-us.cab")
+        }
+        $pkgCount = $pkgs.Count
+        $curPkgIndex = 0
+        foreach ($pkg in $pkgs)
+        {
+            $curPkgIndex = $pkgs.IndexOf($pkg)
+            Write-Progress -Activity "Adding OS packages..." -Status "Adding OS package $($curPkgIndex + 1) of $($pkgCount): `"$([IO.Path]::GetFileNameWithoutExtension($pkg))`"..." -PercentComplete (($curPkgIndex / $pkgCount) * 100)
+            if (Test-Path $pkg -PathType Leaf)
+            {
+                Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath $pkg | Out-Null
+            }
+        }
+        Write-Progress -Activity "Adding OS packages..." -Completed
+        return $true
+    }
+    catch
+    {
         return $false
     }
 }
@@ -1320,10 +1343,31 @@ function Get-WimIndexes
             # We could have used a more visual way, but I fear that it won't be supported by the WinPE .NET Framework
             try
             {
-                (Get-WindowsImage -ImagePath "$wimPath") | Out-File "X:\imageinfo.txt" -Force -Encoding UTF8
-                if (Test-Path "X:\imageinfo.txt" -PathType Leaf)
+                Write-Progress -Activity "Getting image information..." -Status "Preparing to get image information..." -PercentComplete 0
+                $images = [List[Microsoft.Dism.Commands.WimImageInfoObject]]::new()
+                $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
+                if ($imageCount -gt 0)
                 {
-                    notepad "X:\imageinfo.txt"
+                    for ($i = 0; $i -lt $imageCount; $i++)
+                    {
+                        Write-Progress -Activity "Getting image information..." -Status "Getting information about index $($i + 1) of $($imageCount)..." -PercentComplete (($i / $imageCount) * 100)
+                        try
+                        {
+                            $images.Add($(Get-WindowsImage -ImagePath "$wimPath" -Index $($i + 1)))
+                        }
+                        catch
+                        {
+                            Write-Host "Could not get information about index $($i + 1) of the selected Windows image. Information may be incomplete."
+                        }
+                    }
+                    Write-Progress -Activity "Getting image information..." -Completed
+                    # We'll avoid showing the image path over and over again. The user has gotten it once, they don't need to get what the image is
+                    # every time
+                    $images | Select-Object -ExcludeProperty ImagePath | Format-List | Out-File "$env:SYSTEMDRIVE\imageinfo.txt" -Force -Encoding UTF8
+                }
+                if (Test-Path "$env:SYSTEMDRIVE\imageinfo.txt" -PathType Leaf)
+                {
+                    notepad "$env:SYSTEMDRIVE\imageinfo.txt"
                 }
                 Get-WimIndexes
             }
@@ -1746,7 +1790,7 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.6.1"
+    $version = "0.6.2"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
     Write-Host "(c) 2024-2025. CodingWonders Software"
@@ -1812,22 +1856,12 @@ function Start-ProjectDevelopment {
                     exit 1
                 }
                 Write-Host "Adding OS packages..."
-                $pkgs = [List[string]]::new()
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-NetFx.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-NetFx_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WMI.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WMI_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-PowerShell.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-PowerShell_en-us.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-DismCmdlets.cab")
-                $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-DismCmdlets_en-us.cab")
-                foreach ($pkg in $pkgs)
+                if ((Add-PEPackages -mountDirectory "$mountDirectory" -architecture $architecture) -eq $false)
                 {
-                    if (Test-Path $pkg -PathType Leaf)
-                    {
-                        Write-Host "Adding OS package $([IO.Path]::GetFileNameWithoutExtension($pkg))..."
-                        Start-DismCommand -Verb Add-Package -ImagePath "$mountDirectory" -PackagePath $pkg | Out-Null
-                    }
+                    Write-Host "Preinstallation Environment creation has failed in the PE package addition phase."
+                    Write-Host "`nPress ENTER to exit"
+                    Read-Host | Out-Null
+                    exit 1
                 }
                 Write-Host "Saving changes..."
                 Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null

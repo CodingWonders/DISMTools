@@ -36,7 +36,6 @@ Partial Class ImgMount
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Button5 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -206,7 +205,6 @@ Partial Class ImgMount
         '
         'GroupBox2
         '
-        Me.GroupBox2.Controls.Add(Me.Button5)
         Me.GroupBox2.Controls.Add(Me.Button2)
         Me.GroupBox2.Controls.Add(Me.TextBox2)
         Me.GroupBox2.Controls.Add(Me.Label6)
@@ -217,21 +215,10 @@ Partial Class ImgMount
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Destination"
         '
-        'Button5
-        '
-        Me.Button5.AutoEllipsis = True
-        Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(663, 24)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(91, 23)
-        Me.Button5.TabIndex = 4
-        Me.Button5.Text = "Use defaults"
-        Me.Button5.UseVisualStyleBackColor = True
-        '
         'Button2
         '
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(582, 24)
+        Me.Button2.Location = New System.Drawing.Point(679, 24)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 4
@@ -242,7 +229,7 @@ Partial Class ImgMount
         '
         Me.TextBox2.Location = New System.Drawing.Point(152, 25)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(424, 21)
+        Me.TextBox2.Size = New System.Drawing.Size(521, 21)
         Me.TextBox2.TabIndex = 3
         '
         'Label6
@@ -273,6 +260,7 @@ Partial Class ImgMount
         '
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Right
+        Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(388, 17)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(369, 136)
@@ -423,7 +411,6 @@ Partial Class ImgMount
     Friend WithEvents FileSpecDialog As System.Windows.Forms.OpenFileDialog
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
-    Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader

@@ -23,19 +23,33 @@ Public Class ConsoleControl
     End Sub
 
     Public Function StartProcess(executablePath As String, arguments As String) As Integer
+        DynaLog.LogMessage("Preparing to start process and redirect output...")
+        DynaLog.LogMessage("- Executable path: " & Quote & executablePath & Quote)
+        DynaLog.LogMessage("- Arguments: " & arguments & Quote)
         proc = New Process()
-        proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
-        proc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        Try
+            DynaLog.LogMessage("Setting STDOUT/STDERR encodings...")
+            proc.StartInfo.StandardOutputEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+            proc.StartInfo.StandardErrorEncoding = System.Text.Encoding.GetEncoding(Globalization.CultureInfo.CurrentCulture.TextInfo.OEMCodePage)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not set STDOUT/STDERR encodings. Error message: " & ex.Message)
+            DynaLog.LogMessage("Falling back to system default encodings...")
+            proc.StartInfo.StandardOutputEncoding = Nothing
+            proc.StartInfo.StandardErrorEncoding = Nothing
+        End Try
         proc.StartInfo.FileName = executablePath
         proc.StartInfo.Arguments = arguments
+        DynaLog.LogMessage("Enabling redirection...")
         proc.StartInfo.CreateNoWindow = True
         proc.StartInfo.UseShellExecute = False
         proc.StartInfo.RedirectStandardOutput = True
         proc.StartInfo.RedirectStandardError = True
         AddHandler proc.OutputDataReceived, AddressOf ProcessOutputHandler
+        DynaLog.LogMessage("Starting process...")
         proc.Start()
         proc.BeginOutputReadLine()
         proc.WaitForExit()
+        DynaLog.LogMessage("Returning exit code " & Hex(proc.ExitCode) & "...")
         Return proc.ExitCode
     End Function
 

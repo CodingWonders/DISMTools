@@ -7,6 +7,7 @@ Imports DISMTools.Utilities
 Public Class GetCapabilityInfoDlg
 
     Public InstalledCapabilityInfo As DismCapabilityCollection
+    Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
@@ -518,14 +519,12 @@ Public Class GetCapabilityInfoDlg
             End Select
         End If
         If InstalledCapabilityInfo.Count > 0 Then
-            For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-                If InstalledCapability.Name.ToLower().Contains(sQuery.ToLower()) Then
-                    If capState <> "" AndAlso InstalledCapability.State = expectedCapabilityState Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-                    ElseIf capState = "" Then
-                        ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-                    End If
-                End If
+            Dim finalCapabilityLookup = InstalledCapabilityInfo.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If capState <> "" Then      ' We filter them again based on the state
+                finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.State = expectedCapabilityState)
+            End If
+            For Each filteredCapability In finalCapabilityLookup
+                ListView1.Items.Add(New ListViewItem(New String() {filteredCapability.Name, Casters.CastDismPackageState(filteredCapability.State, True)}))
             Next
         End If
     End Sub
@@ -544,6 +543,42 @@ Public Class GetCapabilityInfoDlg
             For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
                 ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
             Next
+        End If
+    End Sub
+
+    Private Sub ListView1_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles ListView1.ColumnClick
+        ' From Microsoft documentation: https://learn.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/language-compilers/sort-listview-by-column
+        DynaLog.LogMessage("Sorting items...")
+        DynaLog.LogMessage("Column to sort: " & e.Column + 1)
+        DynaLog.LogMessage("Current sort order (may be modified): " & _lvwColumnSorter.Order)
+        If e.Column = _lvwColumnSorter.SortColumn Then
+            If _lvwColumnSorter.Order = SortOrder.Ascending Then
+                _lvwColumnSorter.Order = SortOrder.Descending
+            Else
+                _lvwColumnSorter.Order = SortOrder.Ascending
+            End If
+        Else
+            _lvwColumnSorter.SortColumn = e.Column
+            _lvwColumnSorter.Order = SortOrder.Ascending
+        End If
+
+        ' Force sorting
+        ListView1.Sorting = _lvwColumnSorter.Order
+
+        ListView1.Sort()
+    End Sub
+
+    Private Sub SearchBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles SearchBox1.KeyDown
+        If e.KeyCode = Keys.Back And e.Control Then
+            Dim text As String = SearchBox1.Text
+            Dim lastSpaceIndex As Integer = text.LastIndexOf(" "c)
+            If lastSpaceIndex > 0 Then
+                SearchBox1.Text = text.Substring(0, lastSpaceIndex).TrimEnd()
+            Else
+                SearchBox1.Text = ""
+            End If
+            e.SuppressKeyPress = True
+            SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
     End Sub
 End Class

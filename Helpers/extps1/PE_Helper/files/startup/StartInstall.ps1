@@ -1,6 +1,7 @@
 # Reset variable
-$setupScript = Get-Content -Path "\Windows\system32\startnet.cmd"
+$setupScript = Get-Content -Path "$env:SYSTEMDRIVE\Windows\system32\startnet.cmd"
 $setupScript[5] = "set debug=0"
-Set-Content -Path "\Windows\system32\startnet.cmd" -Value $setupScript -Force
+Set-Content -Path "$env:SYSTEMDRIVE\Windows\system32\startnet.cmd" -Value $setupScript -Force
 Clear-Host
-\Windows\system32\startnet.cmd
+Set-Location "$env:SYSTEMDRIVE\"
+iex "$env:SYSTEMDRIVE\Windows\system32\startnet.cmd"

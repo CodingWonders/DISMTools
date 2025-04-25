@@ -243,6 +243,7 @@
     <ClCompile Include="DT-DIM.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DT-DIM.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

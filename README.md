@@ -8,7 +8,6 @@
 	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools?display_name=release&label=Latest%20Version" /></a>
 	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
 	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
-	<a href="https://matrix.to/#/#dismtools:gitter.im"><img src="https://img.shields.io/gitter/room/CodingWonders/DISMTools" /></a>
 </p>
 <hr>
 
@@ -162,7 +161,6 @@ The following actions are supported by DISMTools:
   - Using the project's or program's scratch directory
   - Get information of packages, features, AppX packages, capabilities, and drivers
   - Configure Windows PE settings
-  - Basic automation
   
 ## Unsupported actions
 
@@ -192,7 +190,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: October 26, 2024 (Andrei Verdeanu)</i></p>
+	<p align="center"><i>Last updated: April 5, 2025 (Roberto Zamfir)</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -204,6 +202,9 @@ DISMTools has been featured in news sites. Check them out if you're interested:
 - [DeskModder](https://www.deskmodder.de/blog/2024/06/24/dismtools-iso-oder-image-bearbeiten-in-neuer-stable-version-erschienen/)
 - [Computer BILD](https://www.computerbild.de/artikel/cb-Tipps-Windows-Windows-Media-Player-deinstallieren-31424181.html)
 - [PC World](https://www.pcworld.com/article/2430467/operating-command-line-tools-with-the-mouse-the-best-guis.html)
+- Windows Central:
+  - https://www.windowscentral.com/software-apps/windows-11/what-is-dismtools-and-how-do-you-get-started-windows-11-and-10-image-gui-manager-explained
+  - https://www.windowscentral.com/software-apps/windows-11/how-to-easily-create-an-unattended-answer-file-for-windows-11
 
 ## Support this project
 
@@ -222,6 +223,14 @@ If you want to grab a copy straight from the source code, follow these instructi
 2. Prepare the NuGet packages by running `nugetpkgprep.bat` in the location you cloned the repository to
 3. Open the solution in Visual Studio 2012 or later
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
+
+> [!NOTE]
+> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2022 build tools. Install, at least, the Community edition and the **MSVC v143- VS 2022 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
+>
+> Simply searching for "MSVC" in the list of components can get you the necessary component.
+
+> [!NOTE]
+> To build the Driver Installation Module project for all architectures, run the `build.bat` script in the project root.
 
 ### Additional startup flags
 
@@ -255,9 +264,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/dt-nightly-installers/raw/refs/heads/main/dt_pre_2523_relcndid/dt_setup.exe).
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/dt-nightly-installers/raw/refs/heads/main/dt_pre_2542/dt_setup.exe).
 
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.6.1, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.6.2, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 
