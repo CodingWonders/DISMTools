@@ -127,7 +127,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_preview"
+    Public dtBranch As String = "dt_pre_0.7"
     Public dt_codeName As String = "DTVII"
 
     ' Arrays and other variables used on background processes
@@ -734,7 +734,7 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
         DynaLog.LogMessage("Enabling image status watchers...")
         WatcherTimer.Enabled = True
-        If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
+        If dtBranch.Contains("pre") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
         Else
             VersionTSMI.Visible = False
@@ -1598,7 +1598,7 @@ Public Class MainForm
             End If
             Try
                 DynaLog.LogMessage("Preparing to grab values...")
-                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
                 Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
                 If CInt(PrgKey.GetValue("Volatile")) = 1 Then
@@ -4971,7 +4971,7 @@ Public Class MainForm
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
-        Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+        Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
         Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
         Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
         PrgKey.SetValue("DismExe", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe" & Quote, RegistryValueKind.ExpandString)
@@ -5271,7 +5271,7 @@ Public Class MainForm
                     SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
                     File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
                     DynaLog.LogMessage("Setting key values...")
-                    Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                    Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                     DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
                     Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
                     DynaLog.LogMessage("Configuring program settings...")
