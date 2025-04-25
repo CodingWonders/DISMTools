@@ -1444,6 +1444,7 @@
     <Content Include="logo.ico" />
     <None Include="Resources\menus\exit_full_screen_glyph.png" />
     <None Include="Resources\menus\exit_full_screen_glyph_dark.png" />
+    <None Include="Resources\startup\dt_branding_preview.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1817,7 +1818,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 ECHO Generating program structure...

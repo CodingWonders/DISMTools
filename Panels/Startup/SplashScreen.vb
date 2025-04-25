@@ -12,7 +12,7 @@ Public Class SplashScreen
                                           MainForm.dt_codeName.ToLower(),
                                           RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
         If MainForm.dtBranch.Contains("preview") Then
-            PreviewFlag.Visible = True
+            LogoPic.Image = My.Resources.dt_branding_preview
             VersionLabel.Visible = True
         End If
         Try
