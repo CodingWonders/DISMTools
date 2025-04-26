@@ -91,6 +91,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: ".\files\{#MyAppExeName}"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\DarkUI.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
+Source: ".\files\IniFileParser.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\LICENSE"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Markdig.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
 Source: ".\files\Microsoft.Dism.dll"; DestDir: "{#pfDir}"; Flags: ignoreversion
