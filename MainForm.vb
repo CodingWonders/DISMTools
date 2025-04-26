@@ -688,6 +688,10 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
+        ' Load theme files (EXPERIMENTS ONLY)
+        If EnableExperiments Then
+            ThemeHelper.LoadThemes()
+        End If
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             DynaLog.LogMessage("A settings file has been found. Loading settings...")
