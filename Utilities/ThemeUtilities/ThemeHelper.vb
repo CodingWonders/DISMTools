@@ -51,7 +51,11 @@ Module ThemeHelper
                                             )
                                             }
                                         )
-        If FallbackOnly Then Exit Sub
+        If FallbackOnly Then
+            Themes = FallbackThemes
+            ChangeCurrentTheme(0, True)
+            Exit Sub
+        End If
         Try
             If Not Directory.Exists(ThemePath) Then
                 Throw New Exception("No theme directory exists")
