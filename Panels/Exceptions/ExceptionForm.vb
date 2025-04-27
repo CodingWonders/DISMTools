@@ -87,17 +87,12 @@ Public Class ExceptionForm
                 copySuccess = "Queste informazioni sono state copiate negli appunti"
                 copyFail = "È necessario copiare queste informazioni manualmente"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
-        ErrorText.BackColor = BackColor
-        ErrorText.ForeColor = ForeColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ErrorText.BackColor = CurrentTheme.BackgroundColor
+        ErrorText.ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             Dim data As New DataObject()
             data.SetText(ErrorText.Text, TextDataFormat.Text)

@@ -58,19 +58,12 @@ Public Class OSNoRollbackErrorDlg
                 Label2.Text = "Non è stata rilevata alcuna vecchia versione, perché i suoi file non sono stati trovati. È possibile che si disponga di questa versione da un tempo superiore a quello consentito dalla finestra di disinstallazione, oppure che siano stati cancellati i file della vecchia versione (per risparmiare spazio). Non è necessario fare nulla"
                 OK_Button.Text = "OK"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            Panel1.BackColor = Color.FromArgb(31, 31, 31)
-            Label1.ForeColor = Color.FromArgb(0, 122, 204)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            Panel1.BackColor = Color.FromArgb(238, 238, 242)
-            Label1.ForeColor = Color.FromArgb(0, 51, 153)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        Panel1.BackColor = CurrentTheme.SectionBackgroundColor
+        Label1.ForeColor = Color.FromArgb(0, 122, 204)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Beep()
     End Sub
 End Class

@@ -1,9 +1,19 @@
 ﻿Public Class Theme
 
+    Private _themeFileName As String
     Private _themeName As String
     Private _themeIsDark As Boolean
-    Private _themeBackgroundColor, _themeSectionBackgroundColor, _themeForegroundColor As Color
+    Private _themeBackgroundColor, _themeSectionBackgroundColor, _themeForegroundColor, _themeDisabledForegroundColor As Color
     Private _themeAccentColors() As Color
+
+    Public Property FileName As String
+        Get
+            Return _themeFileName
+        End Get
+        Set(value As String)
+            _themeFileName = value
+        End Set
+    End Property
 
     Public Property Name As String
         Get
@@ -50,6 +60,15 @@
         End Set
     End Property
 
+    Public Property DisabledForegroundColor As Color
+        Get
+            Return _themeDisabledForegroundColor
+        End Get
+        Set(value As Color)
+            _themeDisabledForegroundColor = value
+        End Set
+    End Property
+
     Public Property AccentColors As Color()
         Get
             Return _themeAccentColors
@@ -63,7 +82,7 @@
 
     End Sub
 
-    Public Sub New(name As String, isDark As Boolean, backgroundColor As Color, sectionBackgroundColor As Color, foregroundColor As Color, accentColors As Color())
+    Public Sub New(fileName As String, name As String, isDark As Boolean, backgroundColor As Color, sectionBackgroundColor As Color, foregroundColor As Color, accentColors As Color())
         Me._themeName = name
         Me._themeIsDark = isDark
         Me._themeBackgroundColor = backgroundColor

@@ -34,7 +34,7 @@ Public Class HelpBrowserForm
                 TitleMsg = "Argomenti della guida di DISMTools"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Text = TitleMsg
     End Sub
 
@@ -61,7 +61,7 @@ Public Class HelpBrowserForm
     Private Sub HelpBrowserForm_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
         If Visible Then
             Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
     End Sub
 End Class

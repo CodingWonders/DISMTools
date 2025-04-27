@@ -664,31 +664,17 @@ Public Class AddProvAppxPackage
                 StubPreferences(2) = "Installa l'applicazione come pacchetto completo"
         End Select
         ComboBox1.Items.AddRange(StubPreferences)
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            GroupBox3.ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox3.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            GroupBox3.ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox3.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox3.ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         ListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
@@ -701,7 +687,7 @@ Public Class AddProvAppxPackage
         End If
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
@@ -1923,12 +1909,12 @@ Public Class AddProvAppxPackage
             Else
                 DynaLog.LogMessage("There are no items in the Store logo asset cache folder. Grabbing item...")
                 PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
-                PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+                PictureBox2.Image = GetGlyphResource("preview_unavail")
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get logo asset. Error message: " & ex.Message)
             PictureBox2.SizeMode = PictureBoxSizeMode.CenterImage
-            PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.preview_unavail_dark, My.Resources.preview_unavail_light)
+            PictureBox2.Image = GetGlyphResource("preview_unavail")
         End Try
 
         If ListView1.FocusedItem IsNot Nothing Then

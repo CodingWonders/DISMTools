@@ -359,7 +359,7 @@ Public Class PrgAbout
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         UpdCheckBtn.Enabled = Not MainForm.SkipUpdates
     End Sub
 

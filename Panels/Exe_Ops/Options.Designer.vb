@@ -196,17 +196,6 @@ Partial Class Options
         Me.Panel17 = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.Panel18 = New System.Windows.Forms.Panel()
-        Me.Panel21 = New System.Windows.Forms.Panel()
-        Me.ProgressPanel_Ops = New System.Windows.Forms.PictureBox()
-        Me.StatusBar_Ops = New System.Windows.Forms.PictureBox()
-        Me.StatusBar_Idle = New System.Windows.Forms.PictureBox()
-        Me.Label33 = New System.Windows.Forms.Label()
-        Me.Label32 = New System.Windows.Forms.Label()
-        Me.Label31 = New System.Windows.Forms.Label()
-        Me.Label30 = New System.Windows.Forms.Label()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.Panel22 = New System.Windows.Forms.Panel()
         Me.Label61 = New System.Windows.Forms.Label()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
@@ -306,10 +295,6 @@ Partial Class Options
         Me.Panel16.SuspendLayout()
         Me.Panel17.SuspendLayout()
         Me.Panel18.SuspendLayout()
-        Me.Panel21.SuspendLayout()
-        CType(Me.ProgressPanel_Ops, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.StatusBar_Ops, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.StatusBar_Idle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel22.SuspendLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Options_ImgOps.SuspendLayout()
@@ -1649,7 +1634,7 @@ Partial Class Options
         '
         'PictureBox13
         '
-        Me.PictureBox13.Image = Global.DISMTools.My.Resources.Resources.image_light
+        Me.PictureBox13.Image = Global.DISMTools.My.Resources.Resources.image_glyph_light
         Me.PictureBox13.Location = New System.Drawing.Point(9, 6)
         Me.PictureBox13.Name = "PictureBox13"
         Me.PictureBox13.Size = New System.Drawing.Size(20, 20)
@@ -1868,9 +1853,9 @@ Partial Class Options
         '
         'ValueContainer
         '
-        Me.ValueContainer.Controls.Add(Me.Options_Logs)
-        Me.ValueContainer.Controls.Add(Me.Options_Program)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
+        Me.ValueContainer.Controls.Add(Me.Options_Program)
+        Me.ValueContainer.Controls.Add(Me.Options_Logs)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_Scratch)
         Me.ValueContainer.Controls.Add(Me.Options_Output)
@@ -2126,7 +2111,6 @@ Partial Class Options
         Me.FlowLayoutPanel3.Controls.Add(Me.Panel16)
         Me.FlowLayoutPanel3.Controls.Add(Me.Panel17)
         Me.FlowLayoutPanel3.Controls.Add(Me.Panel18)
-        Me.FlowLayoutPanel3.Controls.Add(Me.Panel21)
         Me.FlowLayoutPanel3.Controls.Add(Me.Panel22)
         Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 0)
@@ -2185,132 +2169,12 @@ Partial Class Options
         Me.Panel18.Size = New System.Drawing.Size(728, 127)
         Me.Panel18.TabIndex = 2
         '
-        'Panel21
-        '
-        Me.Panel21.Controls.Add(Me.ProgressPanel_Ops)
-        Me.Panel21.Controls.Add(Me.StatusBar_Ops)
-        Me.Panel21.Controls.Add(Me.StatusBar_Idle)
-        Me.Panel21.Controls.Add(Me.Label33)
-        Me.Panel21.Controls.Add(Me.Label32)
-        Me.Panel21.Controls.Add(Me.Label31)
-        Me.Panel21.Controls.Add(Me.Label30)
-        Me.Panel21.Controls.Add(Me.Label17)
-        Me.Panel21.Controls.Add(Me.RadioButton1)
-        Me.Panel21.Controls.Add(Me.RadioButton2)
-        Me.Panel21.Location = New System.Drawing.Point(0, 590)
-        Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel21.Name = "Panel21"
-        Me.Panel21.Size = New System.Drawing.Size(728, 466)
-        Me.Panel21.TabIndex = 3
-        '
-        'ProgressPanel_Ops
-        '
-        Me.ProgressPanel_Ops.Image = Global.DISMTools.My.Resources.Resources.CS_ProgressPanel_Green
-        Me.ProgressPanel_Ops.Location = New System.Drawing.Point(21, 274)
-        Me.ProgressPanel_Ops.Name = "ProgressPanel_Ops"
-        Me.ProgressPanel_Ops.Size = New System.Drawing.Size(684, 160)
-        Me.ProgressPanel_Ops.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.ProgressPanel_Ops.TabIndex = 7
-        Me.ProgressPanel_Ops.TabStop = False
-        '
-        'StatusBar_Ops
-        '
-        Me.StatusBar_Ops.Image = Global.DISMTools.My.Resources.Resources.CS_Ops_Green
-        Me.StatusBar_Ops.Location = New System.Drawing.Point(21, 208)
-        Me.StatusBar_Ops.Name = "StatusBar_Ops"
-        Me.StatusBar_Ops.Size = New System.Drawing.Size(684, 26)
-        Me.StatusBar_Ops.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.StatusBar_Ops.TabIndex = 7
-        Me.StatusBar_Ops.TabStop = False
-        '
-        'StatusBar_Idle
-        '
-        Me.StatusBar_Idle.Image = Global.DISMTools.My.Resources.Resources.CS_Idle_Green
-        Me.StatusBar_Idle.Location = New System.Drawing.Point(22, 144)
-        Me.StatusBar_Idle.Name = "StatusBar_Idle"
-        Me.StatusBar_Idle.Size = New System.Drawing.Size(684, 26)
-        Me.StatusBar_Idle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.StatusBar_Idle.TabIndex = 7
-        Me.StatusBar_Idle.TabStop = False
-        '
-        'Label33
-        '
-        Me.Label33.AutoEllipsis = True
-        Me.Label33.Location = New System.Drawing.Point(18, 242)
-        Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(690, 24)
-        Me.Label33.TabIndex = 2
-        Me.Label33.Text = "Progress panel:"
-        Me.Label33.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label32
-        '
-        Me.Label32.AutoEllipsis = True
-        Me.Label32.Location = New System.Drawing.Point(16, 178)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(690, 24)
-        Me.Label32.TabIndex = 2
-        Me.Label32.Text = "Performing operations"
-        Me.Label32.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label31
-        '
-        Me.Label31.AutoEllipsis = True
-        Me.Label31.Location = New System.Drawing.Point(17, 114)
-        Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(690, 24)
-        Me.Label31.TabIndex = 2
-        Me.Label31.Text = "Idle"
-        Me.Label31.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label30
-        '
-        Me.Label30.AutoEllipsis = True
-        Me.Label30.Location = New System.Drawing.Point(16, 87)
-        Me.Label30.Name = "Label30"
-        Me.Label30.Size = New System.Drawing.Size(690, 24)
-        Me.Label30.TabIndex = 2
-        Me.Label30.Text = "Previews:"
-        Me.Label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label17
-        '
-        Me.Label17.AutoEllipsis = True
-        Me.Label17.Location = New System.Drawing.Point(18, 13)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(690, 24)
-        Me.Label17.TabIndex = 2
-        Me.Label17.Text = "Color scheme of status bar and panels:"
-        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(48, 40)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(218, 19)
-        Me.RadioButton1.TabIndex = 6
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "DISMTools 0.5 Color Scheme (Green)"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(48, 65)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(248, 19)
-        Me.RadioButton2.TabIndex = 6
-        Me.RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
         'Panel22
         '
         Me.Panel22.Controls.Add(Me.Label61)
         Me.Panel22.Controls.Add(Me.CheckBox7)
         Me.Panel22.Controls.Add(Me.ProgressPanelPic)
-        Me.Panel22.Location = New System.Drawing.Point(0, 1056)
+        Me.Panel22.Location = New System.Drawing.Point(0, 590)
         Me.Panel22.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel22.Name = "Panel22"
         Me.Panel22.Size = New System.Drawing.Size(728, 471)
@@ -2780,11 +2644,6 @@ Partial Class Options
         Me.Panel17.PerformLayout()
         Me.Panel18.ResumeLayout(False)
         Me.Panel18.PerformLayout()
-        Me.Panel21.ResumeLayout(False)
-        Me.Panel21.PerformLayout()
-        CType(Me.ProgressPanel_Ops, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.StatusBar_Ops, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.StatusBar_Idle, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel22.ResumeLayout(False)
         Me.Panel22.PerformLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3009,17 +2868,6 @@ Partial Class Options
     Friend WithEvents FlowLayoutPanel10 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents FlowLayoutPanel11 As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents Panel20 As System.Windows.Forms.Panel
-    Friend WithEvents Panel21 As System.Windows.Forms.Panel
-    Friend WithEvents ProgressPanel_Ops As System.Windows.Forms.PictureBox
-    Friend WithEvents StatusBar_Ops As System.Windows.Forms.PictureBox
-    Friend WithEvents StatusBar_Idle As System.Windows.Forms.PictureBox
-    Friend WithEvents Label33 As System.Windows.Forms.Label
-    Friend WithEvents Label32 As System.Windows.Forms.Label
-    Friend WithEvents Label31 As System.Windows.Forms.Label
-    Friend WithEvents Label30 As System.Windows.Forms.Label
-    Friend WithEvents Label17 As System.Windows.Forms.Label
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents ShutdownSectionBtn As System.Windows.Forms.Panel
     Friend WithEvents PictureBox20 As System.Windows.Forms.PictureBox
     Friend WithEvents Label34 As System.Windows.Forms.Label

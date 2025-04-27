@@ -15,27 +15,17 @@
                 Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - MainForm.StatusStrip.Height - 75)
             End If
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(37, 37, 38)
-            ForeColor = Color.White
-            If MainForm.pinState = 0 Then
-                PictureBox1.Image = My.Resources.dlg_unpin_dark
-            ElseIf MainForm.pinState = 1 Then
-                PictureBox1.Image = My.Resources.dlg_pin_dark
-            End If
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.White
-            ForeColor = Color.Black
-            If MainForm.pinState = 0 Then
-                PictureBox1.Image = My.Resources.dlg_unpin
-            ElseIf MainForm.pinState = 1 Then
-                PictureBox1.Image = My.Resources.dlg_pin
-            End If
+        BackColor = CurrentTheme.BackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        If MainForm.pinState = 0 Then
+            PictureBox1.Image = GetGlyphResource("dlg_unpin")
+        ElseIf MainForm.pinState = 1 Then
+            PictureBox1.Image = GetGlyphResource("dlg_pin")
         End If
     End Sub
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, CurrentTheme.AccentColors(1), ButtonBorderStyle.Solid)
     End Sub
 
     Sub ChangePBValue(ByRef Divider As Integer)
@@ -44,22 +34,14 @@
 
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
         If MainForm.pinState = 0 Then
-            If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-                PictureBox1.Image = My.Resources.dlg_pin_dark
-            ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-                PictureBox1.Image = My.Resources.dlg_pin
-            End If
+            PictureBox1.Image = GetGlyphResource("dlg_pin")
             MainForm.pinState = 1
             AddHandler Panel1.MouseMove, AddressOf Panel1_MouseMove
             AddHandler Panel1.MouseUp, AddressOf Panel1_MouseUp
             AddHandler Panel1.MouseDown, AddressOf Panel1_MouseDown
             ShowInTaskbar = True
         ElseIf MainForm.pinState = 1 Then
-            If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-                PictureBox1.Image = My.Resources.dlg_unpin_dark
-            ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-                PictureBox1.Image = My.Resources.dlg_unpin
-            End If
+            PictureBox1.Image = GetGlyphResource("dlg_unpin")
             MainForm.pinState = 0
             RemoveHandler Panel1.MouseMove, AddressOf Panel1_MouseMove
             RemoveHandler Panel1.MouseUp, AddressOf Panel1_MouseUp
@@ -149,22 +131,12 @@
                     Label1.Text = "Raccolta informazioni sull'immagine..."
                     Label3.Text = "Il completamento di questi processi può richiedere del tempo"
             End Select
-            If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-                BackColor = Color.FromArgb(37, 37, 38)
-                ForeColor = Color.White
-                If MainForm.pinState = 0 Then
-                    PictureBox1.Image = My.Resources.dlg_unpin_dark
-                ElseIf MainForm.pinState = 1 Then
-                    PictureBox1.Image = My.Resources.dlg_pin_dark
-                End If
-            ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-                BackColor = Color.White
-                ForeColor = Color.Black
-                If MainForm.pinState = 0 Then
-                    PictureBox1.Image = My.Resources.dlg_unpin
-                ElseIf MainForm.pinState = 1 Then
-                    PictureBox1.Image = My.Resources.dlg_pin
-                End If
+            BackColor = CurrentTheme.BackgroundColor
+            ForeColor = CurrentTheme.ForegroundColor
+            If MainForm.pinState = 0 Then
+                PictureBox1.Image = GetGlyphResource("dlg_unpin")
+            ElseIf MainForm.pinState = 1 Then
+                PictureBox1.Image = GetGlyphResource("dlg_pin")
             End If
         End If
     End Sub

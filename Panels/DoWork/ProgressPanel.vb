@@ -6918,7 +6918,7 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Pronto"
             End Select
             TaskList.Clear()
-            MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+            MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             MainForm.ToolStripButton4.Visible = False
             If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
             MainForm.WatcherTimer.Enabled = True
@@ -7104,7 +7104,7 @@ Public Class ProgressPanel
                 Case 5
                     MainForm.MenuDesc.Text = "Pronto"
             End Select
-            MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+            MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
         End If
     End Sub
@@ -7232,37 +7232,20 @@ Public Class ProgressPanel
         BodyPanel.BorderStyle = BorderStyle.None
         ImgVersion = MainForm.imgVersionInfo
         ' Determine program colors
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BodyPanel.BackColor = Color.FromArgb(37, 37, 38)
-            BodyPanel.ForeColor = Color.White
-            LogView.BackColor = Color.FromArgb(37, 37, 38)
-            LogView.ForeColor = Color.White
-            DISM_LogView.RichTextBox1.BackColor = Color.FromArgb(37, 37, 38)
-            DISM_LogView.RichTextBox1.ForeColor = Color.White
-            LogSwitcherPic1.Image = My.Resources.options_logs_dark
-            LogSwitcherPic2.Image = My.Resources.options_output_dark
-            LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.DarkGray
-            LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.DimGray
-            LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.DarkGray
-            LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.DimGray
-            LogSwitcherPic1.FlatAppearance.BorderColor = Color.White
-            LogSwitcherPic2.FlatAppearance.BorderColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BodyPanel.BackColor = Color.FromArgb(246, 246, 246)
-            BodyPanel.ForeColor = Color.Black
-            LogView.BackColor = Color.FromArgb(246, 246, 246)
-            LogView.ForeColor = Color.Black
-            DISM_LogView.RichTextBox1.BackColor = Color.FromArgb(246, 246, 246)
-            DISM_LogView.RichTextBox1.ForeColor = Color.Black
-            LogSwitcherPic1.Image = My.Resources.options_logs_light
-            LogSwitcherPic2.Image = My.Resources.options_output_light
-            LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
-            LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.Gray
-            LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
-            LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.Gray
-            LogSwitcherPic1.FlatAppearance.BorderColor = Color.Black
-            LogSwitcherPic2.FlatAppearance.BorderColor = Color.Black
-        End If
+        BodyPanel.BackColor = CurrentTheme.BackgroundColor
+        BodyPanel.ForeColor = CurrentTheme.ForegroundColor
+        LogView.BackColor = CurrentTheme.BackgroundColor
+        LogView.ForeColor = CurrentTheme.ForegroundColor
+        DISM_LogView.RichTextBox1.BackColor = CurrentTheme.BackgroundColor
+        DISM_LogView.RichTextBox1.ForeColor = CurrentTheme.ForegroundColor
+        LogSwitcherPic1.Image = GetGlyphResource("options_logs")
+        LogSwitcherPic2.Image = GetGlyphResource("options_output")
+        LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.DarkGray
+        LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.DimGray
+        LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.DarkGray
+        LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.DimGray
+        LogSwitcherPic1.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
+        LogSwitcherPic2.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
         CurrentPB.Value = 0
         AllPB.Value = 0
         If LogView.Text <> "" Then LogView.Clear()
@@ -7352,7 +7335,7 @@ Public Class ProgressPanel
             Case 5
                 MainForm.MenuDesc.Text = "Esecuzione di operazioni sulle immagini. Attendere..."
         End Select
-        MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(18, 51, 14), Color.FromArgb(14, 99, 156))
+        MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(3)
         If Debugger.IsAttached Then
             IsDebugged = True
         Else
@@ -7464,7 +7447,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
-        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, CurrentTheme.AccentColors(1), ButtonBorderStyle.Solid)
     End Sub
 
     Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -7493,7 +7476,7 @@ Public Class ProgressPanel
             Case 5
                 MainForm.MenuDesc.Text = "Pronto"
         End Select
-        MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+        MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.ToolStripButton4.Visible = False
         If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
         MainForm.WatcherTimer.Enabled = True

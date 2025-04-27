@@ -258,15 +258,9 @@ Public Class SetImageEdition
             Text = ""
             ImageTaskHeader1.Visible = True
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            ImageTaskHeader1.ItemColor = ImageTaskHeader.ColorMode.Dark
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            ImageTaskHeader1.ItemColor = ImageTaskHeader.ColorMode.Light
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
+        ImageTaskHeader1.SetColors()
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
@@ -274,7 +268,7 @@ Public Class SetImageEdition
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Determining EULA option compatibility...")
         DynaLog.LogMessage("- Image Installation Type: " & MainForm.imgPType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))
