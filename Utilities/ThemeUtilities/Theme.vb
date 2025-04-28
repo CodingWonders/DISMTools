@@ -1,94 +1,95 @@
-﻿Public Class Theme
+﻿Imports Microsoft.VisualBasic.ControlChars
 
-    Private _themeFileName As String
-    Private _themeName As String
-    Private _themeIsDark As Boolean
-    Private _themeBackgroundColor, _themeSectionBackgroundColor, _themeForegroundColor, _themeDisabledForegroundColor As Color
-    Private _themeAccentColors() As Color
-
+Public Class Theme
+    ''' <summary>
+    ''' The file name of the theme
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The theme file name</returns>
+    ''' <remarks></remarks>
     Public Property FileName As String
-        Get
-            Return _themeFileName
-        End Get
-        Set(value As String)
-            _themeFileName = value
-        End Set
-    End Property
 
+    ''' <summary>
+    ''' The name of the theme
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The theme name</returns>
+    ''' <remarks>Not to be confused with <see>FileName</see></remarks>
     Public Property Name As String
-        Get
-            Return _themeName
-        End Get
-        Set(value As String)
-            _themeName = value
-        End Set
-    End Property
 
+    ''' <summary>
+    ''' Determines whether a theme uses dark glyphs
+    ''' </summary>
+    ''' <value>True = the theme is expected to use dark glyphs; False = the theme is expected to use light glyphs</value>
+    ''' <returns>Whether a theme uses dark glyphs</returns>
+    ''' <remarks></remarks>
     Public Property IsDark As Boolean
-        Get
-            Return _themeIsDark
-        End Get
-        Set(value As Boolean)
-            _themeIsDark = value
-        End Set
-    End Property
 
+    ''' <summary>
+    ''' The main background color of the theme
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The private attribute</returns>
+    ''' <remarks></remarks>
     Public Property BackgroundColor As Color
-        Get
-            Return _themeBackgroundColor
-        End Get
-        Set(value As Color)
 
-        End Set
-    End Property
-
+    ''' <summary>
+    ''' The background color of the theme for inner sections
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The section background color</returns>
+    ''' <remarks></remarks>
     Public Property SectionBackgroundColor As Color
-        Get
-            Return _themeSectionBackgroundColor
-        End Get
-        Set(value As Color)
-            _themeSectionBackgroundColor = value
-        End Set
-    End Property
 
+    ''' <summary>
+    ''' The main foreground color of the theme
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The main foreground color</returns>
+    ''' <remarks></remarks>
     Public Property ForegroundColor As Color
-        Get
-            Return _themeForegroundColor
-        End Get
-        Set(value As Color)
-            _themeForegroundColor = value
-        End Set
-    End Property
 
+    ''' <summary>
+    ''' The foreground color for disabled items (for example, inactive headers in a set of pages)
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The disabled foreground color</returns>
+    ''' <remarks>This attribute is calculated automatically by <see>ThemeHelper.LoadThemes</see></remarks>
     Public Property DisabledForegroundColor As Color
-        Get
-            Return _themeDisabledForegroundColor
-        End Get
-        Set(value As Color)
-            _themeDisabledForegroundColor = value
-        End Set
-    End Property
 
+    ''' <summary>
+    ''' A list of accent colors
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>The accent color</returns>
+    ''' <remarks>The implementation in 0.7 uses 4 accent colors</remarks>
     Public Property AccentColors As Color()
-        Get
-            Return _themeAccentColors
-        End Get
-        Set(value As Color())
-            _themeAccentColors = value
-        End Set
-    End Property
 
-    Public Sub New()
-
-    End Sub
-
+    ''' <summary>
+    ''' Initializes a new theme object
+    ''' </summary>
+    ''' <param name="fileName">The name of the theme file</param>
+    ''' <param name="name">The name of the theme</param>
+    ''' <param name="isDark">Determines whether to set light/dark glyphs</param>
+    ''' <param name="backgroundColor">The main background color</param>
+    ''' <param name="sectionBackgroundColor">The background color for inner sections</param>
+    ''' <param name="foregroundColor">The main foreground color</param>
+    ''' <param name="accentColors">A list of accent colors</param>
+    ''' <remarks></remarks>
     Public Sub New(fileName As String, name As String, isDark As Boolean, backgroundColor As Color, sectionBackgroundColor As Color, foregroundColor As Color, accentColors As Color())
-        Me._themeName = name
-        Me._themeIsDark = isDark
-        Me._themeBackgroundColor = backgroundColor
-        Me._themeSectionBackgroundColor = sectionBackgroundColor
-        Me._themeForegroundColor = foregroundColor
-        Me._themeAccentColors = accentColors
+        Me.FileName = fileName
+        Me.Name = name
+        Me.IsDark = isDark
+        Me.BackgroundColor = backgroundColor
+        Me.SectionBackgroundColor = sectionBackgroundColor
+        Me.ForegroundColor = foregroundColor
+        Me.AccentColors = accentColors
     End Sub
 
+    Public Overrides Function ToString() As String
+        Return "Theme:" & CrLf &
+               "- File Name: " & FileName & CrLf &
+               "- Name: " & Name & CrLf &
+               "Check additional properties in debugger."
+    End Function
 End Class
