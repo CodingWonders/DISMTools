@@ -50,15 +50,9 @@ Public Class BGProcNotify
                 Location = New Point(MainForm.Left + 8, MainForm.Top + MainForm.StatusStrip.Top - MainForm.StatusStrip.Height - 7)
             End If
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(37, 37, 38)
-            ForeColor = Color.White
-            PictureBox1.Image = New Bitmap(My.Resources.close_glyph_dark)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.White
-            ForeColor = Color.Black
-            PictureBox1.Image = New Bitmap(My.Resources.close_glyph)
-        End If
+        BackColor = CurrentTheme.BackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        PictureBox1.Image = GetGlyphResource("close_glyph")
         Timer1.Enabled = True
     End Sub
 
@@ -77,7 +71,7 @@ Public Class BGProcNotify
     End Sub
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, CurrentTheme.AccentColors(1), ButtonBorderStyle.Solid)
     End Sub
 
     Private Sub BGProcNotify_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged

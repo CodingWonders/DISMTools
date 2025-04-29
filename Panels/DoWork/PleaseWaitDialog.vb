@@ -66,13 +66,8 @@ Public Class PleaseWaitDialog
         End Select
         Visible = True
         Panel1.BorderStyle = BorderStyle.None
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Panel1.BackColor = Color.FromArgb(37, 37, 38)
-            Panel1.ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Panel1.BackColor = Color.FromArgb(246, 246, 246)
-            Panel1.ForeColor = Color.Black
-        End If
+        Panel1.BackColor = CurrentTheme.SectionBackgroundColor
+        Panel1.ForeColor = CurrentTheme.ForegroundColor
         Refresh()
         If ProgressPanel.OperationNum = 0 Then
             DynaLog.LogMessage("Extracting values from project settings...")
@@ -227,7 +222,7 @@ Public Class PleaseWaitDialog
     End Sub
 
     Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, Panel1.ClientRectangle, CurrentTheme.AccentColors(1), ButtonBorderStyle.Solid)
     End Sub
 
     Private Sub PleaseWaitDialog_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged

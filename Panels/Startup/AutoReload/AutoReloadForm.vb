@@ -143,8 +143,8 @@ Public Class AutoReloadForm
             Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")
             Select Case ColorModeRk.GetValue("AppsUseLightTheme").ToString()
                 Case "0"
-                    BackColor = Color.FromArgb(31, 31, 31)
-                    ForeColor = Color.White
+                    BackColor = CurrentTheme.SectionBackgroundColor
+                    ForeColor = CurrentTheme.ForegroundColor
                 Case "1"
                     BackColor = Color.FromArgb(238, 238, 242)
                     ForeColor = Color.Black

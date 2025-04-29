@@ -123,18 +123,12 @@ Public Class DriverManualFilePicker
                 Cancel_Button.Text = "Annullare"
                 Button1.Text = "Aggiorna"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            CheckedListBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            CheckedListBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        CheckedListBox1.BackColor = CurrentTheme.SectionBackgroundColor
         CheckedListBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         If DriverDir <> "" And Directory.Exists(DriverDir) Then ScanBW.RunWorkerAsync()
     End Sub
 

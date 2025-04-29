@@ -64,15 +64,8 @@ Public Class InvalidSettingsDialog
                 Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Controllare i campi sottostanti per ulteriori informazioni:"
                 Button1.Text = "OK"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            Label1.ForeColor = Color.FromArgb(0, 122, 204)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            Label1.ForeColor = Color.FromArgb(0, 51, 153)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
         If MainForm.isExeProblematic Then
             Select Case MainForm.Language
                 Case 0
@@ -286,6 +279,6 @@ Public Class InvalidSettingsDialog
             End Select
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 End Class

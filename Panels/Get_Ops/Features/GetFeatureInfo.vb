@@ -10,27 +10,18 @@ Public Class GetFeatureInfoDlg
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetFeatureInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            cPropPathView.BackColor = Color.FromArgb(31, 31, 31)
-            cPropValue.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            cPropPathView.BackColor = Color.FromArgb(238, 238, 242)
-            cPropValue.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        cPropPathView.BackColor = CurrentTheme.SectionBackgroundColor
+        cPropValue.BackColor = CurrentTheme.SectionBackgroundColor
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         cPropPathView.ForeColor = ForeColor
         cPropValue.ForeColor = ForeColor
-        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
+        SearchPic.Image = GetGlyphResource("search")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -201,7 +192,7 @@ Public Class GetFeatureInfoDlg
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True

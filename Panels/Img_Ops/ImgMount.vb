@@ -391,29 +391,16 @@ Public Class ImgMount
                 CheckBox3.Text = "Ottimizza tempi di montaggio"
                 CheckBox4.Text = "Controlla l'integrità dell'immagine"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
-            NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            GroupBox3.ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
-            NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            GroupBox3.ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox3.ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
@@ -427,7 +414,7 @@ Public Class ImgMount
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
             IsReqField1Valid = False
             OK_Button.Enabled = False

@@ -850,6 +850,10 @@
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Videos\Video.vb" />
@@ -1255,8 +1259,8 @@
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
     <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
     <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
-    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT07Dark.ini" />
-    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT07Light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\default_dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\default_light.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1454,6 +1458,8 @@
     <None Include="Resources\menus\exit_full_screen_glyph.png" />
     <None Include="Resources\menus\exit_full_screen_glyph_dark.png" />
     <None Include="Resources\startup\dt_branding_preview.png" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_light.gif" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_complete_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
