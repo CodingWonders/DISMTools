@@ -1,4 +1,4 @@
-![Product image](https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/product_overview.png)
+![Product image](https://github.com/CodingWonders/DISMTools/blob/stable/res/product_overview.png)
 
 <!-- Tags (powered by Shields.io) -->
 
@@ -33,7 +33,7 @@ Inspired by Visual Studio, DISMTools is the first project-based GUI. Projects st
 DISMTools projects are also tiny when you create them, and contain a structure that is easy to navigate.
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/project_sizes.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/project_sizes.png" />
 </p>
 
 The program also supports setting and removing file associations for projects with the click of a button (only on portable installations), so you can load your projects instantly by double-clicking them. You can also **copy your installed deployment tools** to your projects, allowing you to use those anywhere you take them.
@@ -53,62 +53,62 @@ DISMTools isn't just a front-end for DISM, but an advanced one. As you perform t
 - **Rich information during AppX package addition.** When adding an AppX package, you'll see rich information and, in most cases, the main Store logo asset. You can also add encrypted application packages to active installations, and configure stub package preferences, for full AppX package management:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/rich_appx_info.gif" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/rich_appx_info.gif" />
 </p>
 
 - **Download content from App Installer packages automatically.** Have an App Installer package? No problem. Add it, and DISMTools will download the main package and use it automatically:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/app_installer_downloader.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/app_installer_downloader.png" />
 </p>
 
 - **Automatic detection of sources from Group Policy.** If you want to enable a feature, repair the component store of a Windows image, or add a capability, with a source defined in the Group Policy; you can easily use it:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/group_policy_caps.gif" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/group_policy_caps.gif" />
 </p>
 
 - **Easily create configuration lists.** With the *DISM Configuration List Editor* you can quickly create your configuration list to exclude certain items during operations like capturing an image:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/config_list_editor.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/config_list_editor.png" />
 </p>
 
 - **Quickly manage all your mounted images in one interface.** The mounted image manager lets you perform basic image management tasks with your mounted images:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/mounted_image_manager.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/mounted_image_manager.png" />
 </p>
 
 You can also get and save image file information using the manager:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/img_info_quick_action.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_quick_action.png" />
 </p>
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/img_info_saver_quick_action.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/img_info_saver_quick_action.png" />
 </p>
 
 - **Generate and print image information easily.** With image information reports, you can save the information of one area or all areas of the Windows image you're servicing for future reference as a Markdown file. You can also see your Markdown report in HTML form thanks to Markdig:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/info_report_viewer.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/info_report_viewer.png" />
 </p>
 
 - **Generate unattended answer files with ease.** Using the unattended answer file creation wizard, powered by the answer file generator from Christoph Schneegans, you can create your files by simply following the pages:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/autounattend_wizard.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/autounattend_wizard.png" />
 </p>
 
 - **Quickly test your Windows images.** With the ISO creation wizard, you can test your Windows image quickly and easily. You can also use your unattended answer files to test them, or to speed up the installation process by removing tedious steps from the out-of-box experience:
 
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/iso_creator.png" />
 </p>
 <p align="center">
-	<img src="https://github.com/CodingWonders/DISMTools/blob/dt_preview/res/iso_creator_installation.png" />
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/iso_creator_installation.png" />
 </p>
 
 > [!NOTE]
