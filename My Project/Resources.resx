@@ -924,71 +924,18 @@ SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Changes made since last preview:
+    <value>Bugfixes:
 
--- Bugfixes
+- Fixed a minor issue where DynaLog timestamps would not use a common format for time
 
-- Fixed an issue where the program would throw encoding-related exceptions when trying to redirect DISM output in some systems (#239, thanks Vincent Långström (@vinicentus) for spotting)
-- The background process notification dialog no longer steals focus from the main window
-- Image size reporting has been fixed for HotInstall
+New features:
 
--- New features
-
-- The documentation has been updated to reflect the changes in this version
-
-Overall changes:
-
--- Bugfixes
-
-- Fixed an issue where, if you had an App Installer package and its resulting package, the program would throw an error when attempting to scan the second package
-- The product key syntax validation algorithm is now more reliable
-- Password entry is now disabled when setting up an open network connection in the unattended answer file creation wizard
-- Fixed an issue where the program would throw an access violation exception if you declined the UnattendGen self-contained version download dialog
-- Fixed some minor visual issues in the Driver Installation Module (DIM) and the main program
-- Fixed an issue where the ISO creator would not disregard a specified answer file if the option were unchecked
-- Fixed an issue where the program would throw an out-of-memory exception when attempting to show main Store logo assets for some applications
-- Fixed an issue where AppX packages that had been downloaded with the App Installer downloader would not be added to the list
-- Fixed final visual issues in the Driver Installation Module
-- A default architecture is now specified in the ISO creator and the testing environment creator
-- Fixed a color issue affecting menu arrows
-- "WDAGUtilityAccount" can no longer be specified when setting up user accounts
-- More characters deemed forbidden for user account names (quotation marks, percentage signs, and periods at the end) are automatically trimmed now
-
--- New features
-
-- Image edition tasks have been added
-- 2 new Optional Components are added to Preinstallation Environments, mainly to improve support for drives encrypted with BitLocker, and implementations of IEEE 1667
-- When copying Optional Components and adding packages, you will now see a refreshed output
-- Support for the Arm64EC ABI is now added to the PE image, as another Optional Component
-- The Driver Installation Module (DIM) and the restart dialog now work natively on ARM64
-- The Driver Installation Module (DIM) now shows instructions and progress information at the bottom of the window
-- CODE: The procedure to add Optional Components for Windows PE has been streamlined for ISO and test environment creation
-- The amount of information reported by the PE Helper has been significantly improved
-- HotInstall has been updated to the latest version
-- CODE: Method and function declarations, macro definitions, and pragma directives of the Driver Installation Module are now in a header file
-- You can now import Batch scripts when configuring post-installation scripts
-- You can now configure the unattended answer file for the target OS to grab the product key from firmware
-- You can now copy generic product keys to your clipboard
-- UnattendGen has been updated to the latest version
-- You can now have a PowerShell script configure a computer name based on a pattern
-- You can now sort features and capabilities by clicking the column headers
-- CODE: search boxes in the information dialogs now use LINQ queries
-- The program installer is now built with a new version of Inno Setup (v6.4.1)
-- If a removable medium contains a Windows installation, you will now be able to use it in the offline installation management mode
-- CODE: image operations have been refactored
-- Scintilla.NET has been updated to version 6.0.1
-- Markdig has been updated to 0.41.0
-- Dock Panel Suite has been removed
-- CODE: Markdown writers in the image information saver were refactored into the new Markdown Helper
-- You can now toggle full-screen mode by pressing F11
-- CODE: the foundation for improved image task startup has been set
-- The image mount dialog now defaults to the mount directory provided by the project. The option "Use defaults" has been removed to avoid any confusion
-- The installer now features a revamped banner
+- The program now uses a theme engine that makes it easy for you to make your own themes
+- DISMTools now includes a log viewer (*DynaViewer*)
 
 Removed features:
 
-- Actions, introduced in version 0.3, have been removed due to a lack of maintenance
-- Printing capabilities of image information reports have been removed</value>
+- The restart dialog in the DISMTools Preinstallation Environment has been removed due to alleged "malware infections" (#246, thanks @MTTGamer for informing me)</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

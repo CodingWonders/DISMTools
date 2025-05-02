@@ -2009,21 +2009,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes
+        '''- Fixed a minor issue where DynaLog timestamps would not use a common format for time
         '''
-        '''- Fixed an issue where the program would throw encoding-related exceptions when trying to redirect DISM output in some systems (#239, thanks Vincent Långström (@vinicentus) for spotting)
-        '''- The background process notification dialog no longer steals focus from the main window
-        '''- Image size reporting has been fixed for HotInstall
+        '''New features:
         '''
-        '''-- New features
+        '''- The program now uses a theme engine that makes it easy for you to make your own themes
+        '''- DISMTools now includes a log viewer (*DynaViewer*)
         '''
-        '''- The documentation has been updated to reflect the changes in this version
+        '''Removed features:
         '''
-        '''Overall changes:
-        '''
-        '''-- Bugfix [resto de la cadena truncado]&quot;;.
+        '''- The restart dialog in the DISMTools Preinstallation Environment has been removed due to alleged &quot;malware infections&quot; (#246, thanks @MTTGamer for informing me).
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
