@@ -153,7 +153,7 @@ Module ThemeHelper
     ''' <remarks></remarks>
     Private Sub SetDisabledForegroundColors()
         For Each loadedTheme As Theme In _themes
-            Dim multiplicationFactor As Decimal = If(loadedTheme.IsDark, 0.7, 1.3)
+            Dim multiplicationFactor As Decimal = If(IsLightColor(loadedTheme.ForegroundColor), 0.7, 1.3)
             Dim colorValue As Integer
             If multiplicationFactor = 1.3 Then
                 colorValue = Math.Min(loadedTheme.ForegroundColor.R + 133, 255)
@@ -169,6 +169,11 @@ Module ThemeHelper
             loadedTheme.DisabledForegroundColor = disabledFgColor
         Next
     End Sub
+
+    Private Function IsLightColor(color As Color) As Boolean
+        Dim brightness As Double = (0.299 * color.R) + (0.587 * color.G) + (0.114 * color.B)
+        Return brightness >= 128
+    End Function
 
     ''' <summary>
     ''' Changes the current theme to one of the currently loaded ones
