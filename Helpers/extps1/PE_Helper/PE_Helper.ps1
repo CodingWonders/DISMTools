@@ -1007,34 +1007,10 @@ function Start-OSApplication
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     Start-Sleep -Milliseconds 250
-    try
-    {
-        # Get CPU architecture and launch Driver Installation Module
-        $supportedArchitectures = [List[string]]::new()
-        $supportedArchitectures.Add("i386")
-        $supportedArchitectures.Add("amd64")
-        $supportedArchitectures.Add("aarch64")
-        $systemArchitecture = Get-SystemArchitecture
-
-        if ($supportedArchitectures.Contains($systemArchitecture))
-        {
-            if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe")
-            {
-                Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\RestartDialog\$systemArchitecture\DTPE-RestartDialog.exe" -Wait
-            }
-        }
-
-        Start-Sleep -Milliseconds 250
-        Write-Host "Restarting your system..."
-    }
-    catch
-    {
-        # Show message before rebooting system
-        Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
-        Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
-        Write-Host "When your computer restarts, Setup will continue."
-        Show-Timeout -Seconds 10
-    }
+    Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
+    Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
+    Write-Host "When your computer restarts, Setup will continue."
+    Show-Timeout -Seconds 10
     wpeutil reboot
 }
 

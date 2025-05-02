@@ -411,25 +411,14 @@ Public Class AddCapabilities
             Case 5
                 Label4.Text &= " Sono mostrate solo le funzionalità non installate (" & ListView1.Items.Count & ")"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            RichTextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            PictureBox2.Image = My.Resources.image_dark
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            RichTextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            PictureBox2.Image = My.Resources.image_light
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        RichTextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        PictureBox2.Image = GetGlyphResource("image_glyph")
         CheckBox1.ForeColor = ForeColor
         CheckBox2.ForeColor = ForeColor
         CheckBox3.ForeColor = ForeColor
@@ -443,7 +432,7 @@ Public Class AddCapabilities
         End If
         CheckBox3.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

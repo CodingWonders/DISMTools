@@ -150,7 +150,7 @@ Public Class NewUnattendWiz
         Scintilla3.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         DynaLog.LogMessage("Setting colors for selection...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+        If CurrentTheme.IsDark Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla3.SelectionBackColor = Color.FromArgb(38, 79, 120)
@@ -168,34 +168,22 @@ Public Class NewUnattendWiz
 
         ' Set background and foreground colors (from Visual Studio)
         DynaLog.LogMessage("Setting colors for styles...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla1.Styles(Style.Default).ForeColor = Color.White
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla2.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla2.Styles(Style.Default).ForeColor = Color.White
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla3.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla3.Styles(Style.Default).ForeColor = Color.White
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.Default).BackColor = Color.White
-            Scintilla1.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla2.Styles(Style.Default).BackColor = Color.White
-            Scintilla2.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla3.Styles(Style.Default).BackColor = Color.White
-            Scintilla3.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.White
-        End If
+        Scintilla1.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla1.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla2.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla2.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla3.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla3.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.StyleClearAll()
         Scintilla2.StyleClearAll()
         Scintilla3.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
         DynaLog.LogMessage("Setting colors for XML and PowerShell lexers...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+        If CurrentTheme.IsDark Then
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.FromArgb(220, 220, 204)
@@ -266,15 +254,9 @@ Public Class NewUnattendWiz
 
         ' Set line number margin properties
         DynaLog.LogMessage("Setting colors for line margin...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.White
-        End If
+        Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla3.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
@@ -569,15 +551,9 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            StepsTreeView.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        StepsTreeView.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = BackColor
         ComboBox2.BackColor = BackColor
         ComboBox3.BackColor = BackColor
@@ -663,11 +639,11 @@ Public Class NewUnattendWiz
         NumericUpDown8.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
-        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
+        PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -1267,7 +1243,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
+            ExpressPanelTrigger.BackColor = If(CurrentTheme.IsDark, CurrentTheme.BackgroundColor, Color.Gainsboro)
         End If
     End Sub
 
@@ -1301,11 +1277,11 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = False
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        ExpressPanelTrigger.ForeColor = Color.White
+        ExpressPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox1.Image = My.Resources.express_mode_select
         EditorPanelTrigger.BackColor = SidePanel.BackColor
-        EditorPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
-        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
+        EditorPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
+        PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox3.Image = My.Resources.express_mode_fc
         Label3.Text = "Express mode"
         Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
@@ -1316,7 +1292,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
+            EditorPanelTrigger.BackColor = If(CurrentTheme.IsDark, CurrentTheme.BackgroundColor, Color.Gainsboro)
         End If
     End Sub
 
@@ -1332,7 +1308,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.SteelBlue
         Else
-            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(36, 36, 36), Color.Silver)
+            EditorPanelTrigger.BackColor = If(CurrentTheme.IsDark, Color.FromArgb(36, 36, 36), Color.Silver)
         End If
     End Sub
 
@@ -1340,7 +1316,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
+            EditorPanelTrigger.BackColor = If(CurrentTheme.IsDark, CurrentTheme.BackgroundColor, Color.Gainsboro)
         End If
     End Sub
 
@@ -1350,10 +1326,10 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
-        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        ExpressPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
+        PictureBox1.Image = If(CurrentTheme.IsDark, My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        EditorPanelTrigger.ForeColor = Color.White
+        EditorPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox2.Image = My.Resources.editor_mode_select
         PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
@@ -2202,10 +2178,10 @@ Public Class NewUnattendWiz
 
     Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs) Handles StepsTreeView.DrawNode
         ' Determine the custom background color
-        Dim customBackColor As Color = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(31, 31, 31), Color.FromArgb(239, 239, 242))
+        Dim customBackColor As Color = CurrentTheme.SectionBackgroundColor
 
         ' Determine the custom foreground color based on the custom background color
-        Dim customForeColor As Color = If(customBackColor = Color.FromArgb(31, 31, 31), Color.White, Color.Black)
+        Dim customForeColor As Color = CurrentTheme.ForegroundColor
 
         ' Check if the node is selected
         If (e.State And TreeNodeStates.Selected) <> 0 Then
@@ -2551,10 +2527,10 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
-        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        ExpressPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
+        PictureBox1.Image = If(CurrentTheme.IsDark, My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        EditorPanelTrigger.ForeColor = Color.White
+        EditorPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox2.Image = My.Resources.editor_mode_select
         PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"

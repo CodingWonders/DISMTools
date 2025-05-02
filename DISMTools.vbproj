@@ -77,6 +77,9 @@
     <Reference Include="DarkUI, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
     <Reference Include="Markdig, Version=0.41.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Markdig.0.41.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
@@ -847,6 +850,12 @@
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
+    <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -1248,6 +1257,10 @@
     <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\default_dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\default_light.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1423,15 +1436,6 @@
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\aarch64\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\amd64\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\i386\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -1445,6 +1449,8 @@
     <None Include="Resources\menus\exit_full_screen_glyph.png" />
     <None Include="Resources\menus\exit_full_screen_glyph_dark.png" />
     <None Include="Resources\startup\dt_branding_preview.png" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_light.gif" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_complete_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1887,6 +1893,18 @@ IF EXIST "$(SolutionDir)Tools\UnpEax-Bin\UnpEax.exe" (
 IF EXIST "$(SolutionDir)Tools\UnattendGen" (
 	md "Tools\UnattendGen"
 	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
+)
+
+:: Copy DynaViewer
+IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
+	md "Tools\DynaViewer"
+	xcopy "$(SolutionDir)Tools\DynaViewer\out\*.exe" "Tools\DynaViewer" /cehyi
+)
+
+:: Copy themes over to bin directory
+IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
+	md "bin\themes"
+	xcopy "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" "bin\themes" /cehyi
 )
 
 IF NOT EXIST AutoUnattend (

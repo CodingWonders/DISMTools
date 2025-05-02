@@ -93,17 +93,10 @@ Public Class SaveProjectQuestionDialog
                 No_Button.Text = "No"
                 Cancel_Button.Text = "Annulla"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            Panel1.BackColor = Color.FromArgb(31, 31, 31)
-            Label1.ForeColor = Color.FromArgb(0, 122, 204)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            Panel1.BackColor = Color.FromArgb(238, 238, 242)
-            Label1.ForeColor = Color.FromArgb(0, 51, 153)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        Panel1.BackColor = CurrentTheme.SectionBackgroundColor
+        Label1.ForeColor = Color.FromArgb(0, 122, 204)
         If MainForm.IsImageMounted Then
             CheckBox1.Enabled = True
             Label2.Visible = True
@@ -113,6 +106,6 @@ Public Class SaveProjectQuestionDialog
             Label2.Visible = False
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 End Class

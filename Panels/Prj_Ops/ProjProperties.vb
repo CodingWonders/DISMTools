@@ -882,23 +882,14 @@ Public Class ProjProperties
                 Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
         End Select
         ' Set program colors
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TabPage1.BackColor = Color.FromArgb(31, 31, 31)
-            TabPage2.BackColor = Color.FromArgb(31, 31, 31)
-            LanguageList.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TabPage1.BackColor = Color.FromArgb(238, 238, 242)
-            TabPage2.BackColor = Color.FromArgb(238, 238, 242)
-            LanguageList.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TabPage1.BackColor = CurrentTheme.SectionBackgroundColor
+        TabPage2.BackColor = CurrentTheme.SectionBackgroundColor
+        LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""

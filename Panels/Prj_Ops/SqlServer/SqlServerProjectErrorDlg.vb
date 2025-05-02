@@ -149,21 +149,14 @@ Public Class SqlServerProjectErrorDlg
         ComboBox1.Items.Clear()
         ComboBox2.Items.Clear()
         CheckVisualStudioVersions()
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(48, 48, 48)
-            ForeColor = Color.White
-            ComboBox1.BackColor = Color.FromArgb(48, 48, 48)
-            ComboBox2.BackColor = Color.FromArgb(48, 48, 48)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.White
-            ForeColor = Color.Black
-            ComboBox1.BackColor = Color.White
-            ComboBox2.BackColor = Color.White
-        End If
+        BackColor = CurrentTheme.BackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ComboBox1.BackColor = CurrentTheme.BackgroundColor
+        ComboBox2.BackColor = CurrentTheme.BackgroundColor
         ComboBox1.ForeColor = ForeColor
         ComboBox2.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked

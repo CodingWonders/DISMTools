@@ -40,7 +40,7 @@ Namespace My
                 ExceptionForm.ErrorText.AppendText(CrLf & CrLf &
                                                    "Program information:" & CrLf &
                                                    " - DISMTools Version: " & My.Application.Info.Version.ToString() & CrLf &
-                                                   " - Preview release? " & If(DISMTools.MainForm.dtBranch.Contains("preview"), "Yes", "No") & CrLf &
+                                                   " - Preview release? " & If(DISMTools.MainForm.dtBranch.Contains("pre"), "Yes", "No") & CrLf &
                                                    " - Branch: " & DISMTools.MainForm.dtBranch & CrLf &
                                                    " - Build time: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") & CrLf &
                                                    " - Portable copy? " & If(File.Exists(My.Application.Info.DirectoryPath & "\portable"), "Yes", "No") & CrLf)

@@ -254,22 +254,17 @@ Public Class WimScriptEditor
                 ToolStripDropDownButton1.Text = "Strumenti"
                 NoOneDriveToolStripMenuItem.Text = "Escludi cartelle OneDrive dell'utente..."
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
-        ListView1.BackColor = BackColor
-        ListView1.ForeColor = ForeColor
-        ListView2.BackColor = BackColor
-        ListView2.ForeColor = ForeColor
-        ListView3.BackColor = BackColor
-        ListView3.ForeColor = ForeColor
-        GroupBox1.ForeColor = ForeColor
-        GroupBox2.ForeColor = ForeColor
-        GroupBox3.ForeColor = ForeColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.BackgroundColor
+        ListView1.ForeColor = CurrentTheme.ForegroundColor
+        ListView2.BackColor = CurrentTheme.BackgroundColor
+        ListView2.ForeColor = CurrentTheme.ForegroundColor
+        ListView3.BackColor = CurrentTheme.BackgroundColor
+        ListView3.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox3.ForeColor = CurrentTheme.ForegroundColor
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -294,7 +289,7 @@ Public Class WimScriptEditor
         Scintilla1.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         DynaLog.LogMessage("Setting colors for selection...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+        If CurrentTheme.IsDark Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
@@ -304,20 +299,14 @@ Public Class WimScriptEditor
 
         ' Set background and foreground colors (from Visual Studio)
         DynaLog.LogMessage("Setting colors for styles...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla1.Styles(Style.Default).ForeColor = Color.White
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.Default).BackColor = Color.White
-            Scintilla1.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
-        End If
+        Scintilla1.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla1.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
         DynaLog.LogMessage("Setting colors for INI lexer...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+        If CurrentTheme.IsDark Then
             Scintilla1.Styles(Style.Properties.Default).ForeColor = Color.FromArgb(220, 220, 204)
             Scintilla1.Styles(Style.Properties.Comment).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Properties.Section).ForeColor = Color.FromArgb(140, 208, 211)
@@ -339,12 +328,8 @@ Public Class WimScriptEditor
 
         ' Set line number margin properties
         DynaLog.LogMessage("Setting colors for line margin...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
-        End If
-        Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla1.Styles(Style.LineNumber).ForeColor = CurrentTheme.ForegroundColor
         Dim Margin = Scintilla1.Margins(1)
         Margin.Width = 30
         Margin.Type = MarginType.Number
@@ -373,7 +358,7 @@ Public Class WimScriptEditor
 
         ' Set editor caret settings
         DynaLog.LogMessage("Setting colors for editor caret...")
-        Scintilla1.CaretForeColor = ForeColor
+        Scintilla1.CaretForeColor = CurrentTheme.ForegroundColor
 
 
         ' Configure code folding margins
@@ -1554,7 +1539,7 @@ Public Class WimScriptEditor
     Private Sub WimScriptEditor_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
         If Visible Then
             Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
     End Sub
 
