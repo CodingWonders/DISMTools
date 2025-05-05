@@ -263,8 +263,8 @@ Public Class MainForm
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
     Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
 
-    Dim DarkThemeIndex As Integer                   ' Color theme index for dark color scheme
-    Dim LightThemeIndex As Integer                  ' Color theme index for light color scheme
+    Dim DarkThemeIndex As Integer = 0               ' Color theme index for dark color scheme
+    Dim LightThemeIndex As Integer = 1              ' Color theme index for light color scheme
 
     Friend NotInheritable Class NativeMethods
 
