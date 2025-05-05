@@ -1909,6 +1909,11 @@ IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
 	xcopy "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" "bin\themes" /cehyi
 )
 
+:: Copy Theme Designer
+IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
+	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" "Tools\ThemeDesigner" /cehyi
+)
+
 IF NOT EXIST AutoUnattend (
 	md AutoUnattend
 	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
