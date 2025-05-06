@@ -43,7 +43,7 @@ param (
 enum PE_Arch {
     x86 = 0
     amd64 = 1
-    arm = 2
+    # 32-bit ARM support has been removed in 0.7. Here lies the placement of such an architecture
     arm64 = 3
 }
 
@@ -334,7 +334,7 @@ function Copy-PEFiles
         .PARAMETER peToolsPath
             The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
         .PARAMETER architecture
-            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm, arm64
+            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm64
         .PARAMETER targetDir
             The target directory to copy the Preinstallation Environment (PE) files to
         .EXAMPLE
@@ -393,7 +393,7 @@ function Copy-PEComponents
         .PARAMETER peToolsPath
             The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
         .PARAMETER architecture
-            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm, arm64
+            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm64
         .PARAMETER targetDir
             The target directory to copy the Preinstallation Environment (PE) component files to
         .EXAMPLE
@@ -528,9 +528,6 @@ function Start-PECustomization
                     }
                     amd64 {
                         Copy-Item -Path "$((Get-Location).Path)\backgrounds\winpe_amd64.jpg" -Destination "$imagePath\Windows\system32\winpe.jpg" -Force
-                    }
-                    arm {
-                        Copy-Item -Path "$((Get-Location).Path)\backgrounds\winpe_arm.jpg" -Destination "$imagePath\Windows\system32\winpe.jpg" -Force
                     }
                     arm64 {
                         Copy-Item -Path "$((Get-Location).Path)\backgrounds\winpe_arm64.jpg" -Destination "$imagePath\Windows\system32\winpe.jpg" -Force
@@ -1973,7 +1970,7 @@ elseif ($cmd -eq "Help")
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
-    Write-Host "             x86, amd64, arm, arm64"
+    Write-Host "             x86, amd64, arm64"
     Write-Host "      -imgFile: (Mandatory) Specifies the WIM file to copy to the target Preinstallation Environment (PE)"
     Write-Host "      -isoPath: (Mandatory) Specifies the target path of the ISO file"
     Write-Host "      You need the Windows ADK and the PE plugin, which you can download here:"
@@ -1982,7 +1979,7 @@ elseif ($cmd -eq "Help")
     Write-Host "      This can only be run on Windows PE. Starting this action on other environments will fail."
     Write-Host "    StartDevelopment: starts the PE project creation phase. Parameters:"
     Write-Host "      -testArch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
-    Write-Host "                 x86, amd64, arm, arm64"
+    Write-Host "                 x86, amd64, arm64"
     Write-Host "      -targetPath: (Mandatory) Specifies the target path for the PE project"
     Write-Host "    Help: shows this help documentation`n"
 

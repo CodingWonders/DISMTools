@@ -6,7 +6,7 @@ Public Class NewTestingEnv
 
     Dim progressMessages() As String = New String(2) {"Status", "Creating project. This can take some time. Please wait...", "The project has been created"}
     Dim success As Boolean
-    Dim architectures() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
+    Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
 
     Private Sub NewTestingEnv_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language

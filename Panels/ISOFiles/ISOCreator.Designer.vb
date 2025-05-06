@@ -51,6 +51,7 @@ Partial Class ISOCreator
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -65,7 +66,6 @@ Partial Class ISOCreator
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -262,7 +262,7 @@ Partial Class ISOCreator
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"x86", "amd64", "arm", "arm64"})
+        Me.ComboBox1.Items.AddRange(New Object() {"x86", "amd64", "arm64"})
         Me.ComboBox1.Location = New System.Drawing.Point(119, 5)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(803, 21)
@@ -357,6 +357,17 @@ Partial Class ISOCreator
         Me.Button4.TabIndex = 2
         Me.Button4.Text = "Use mounted image"
         Me.Button4.UseVisualStyleBackColor = True
+        '
+        'CheckBox3
+        '
+        Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Location = New System.Drawing.Point(24, 310)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(175, 17)
+        Me.CheckBox3.TabIndex = 8
+        Me.CheckBox3.Text = "Use newly-signed boot binaries"
+        Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'Cancel_Button
         '
@@ -492,17 +503,6 @@ Partial Class ISOCreator
         'OpenFileDialog2
         '
         Me.OpenFileDialog2.Filter = "Answer files|*.xml"
-        '
-        'CheckBox3
-        '
-        Me.CheckBox3.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Location = New System.Drawing.Point(24, 310)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(175, 17)
-        Me.CheckBox3.TabIndex = 8
-        Me.CheckBox3.Text = "Use newly-signed boot binaries"
-        Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'ISOCreator
         '

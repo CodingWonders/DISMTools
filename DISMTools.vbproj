@@ -1416,9 +1416,6 @@
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_amd64.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm64.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
