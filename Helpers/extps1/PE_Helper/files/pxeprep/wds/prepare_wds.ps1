@@ -156,6 +156,7 @@ function Get-PxeOptionStatus {
     #>
 
     if ((Get-ComputerInfo).WindowsInstallationType -ne "Server") {
+        Write-Host "This computer is not running Windows Server."
         return $false
     }
 
@@ -204,7 +205,7 @@ function Get-DhcpScopeOptionsForPxe {
             Checks if the DHCP scopes support PXE (DHCP Option 60)
         .PARAMETER dhcpVersion
             The version of the DHCP protocol
-        .RETURNS
+        .OUTPUTS
             Whether there is Option 60 for a given subset of the DHCP server
     #>
     param (
