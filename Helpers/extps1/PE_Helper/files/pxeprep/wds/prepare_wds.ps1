@@ -199,6 +199,63 @@ enum DhcpVersion {
     DHCPv6    # DHCPv6 is designed for IPv6 addresses
 }
 
+enum Architecture {
+    <#
+        .SYNOPSIS
+            Architecture for multicast transmissions
+        .NOTES
+            32-bit ARM (ARMHF) is not included because of its low market share
+    #>
+    x86       # x86-based WinPE
+    x64       # amd64-based WinPE
+    arm64     # arm64-based WinPE
+}
+
+enum MulticastTransmissionType {
+    <#
+        .SYNOPSIS
+            Types for multicast transmissions
+    #>
+    AutoCast
+    ScheduledCast
+}
+
+class MulticastTransmission {
+    <#
+        .SYNOPSIS
+            A multicast transmission class
+    #>
+    [string] $transmissionName                                                                # The name of the multicast transmission
+    [string] $transmissionImageFile                                                           # The image file for the multicast transmission
+    [string] $transmissionImageFileName                                                       # The image file name in WDS for the multicast transmission
+    [Architecture] $transmissionArchitecture                                                  # The architecture for the multicast transmission
+    [MulticastTransmissionType] $transmissionType = [MulticastTransmissionType]::AutoCast     # The transmission type for the multicast transmission
+
+    MulticastTransmission() {
+        $this.transmissionName = ""
+        $this.transmissionImageFile = ""
+        $this.transmissionImageFileName = ""
+        $this.transmissionArchitecture = [Architecture]::x64
+        $this.transmissionType = [MulticastTransmissionType]::AutoCast
+    }
+
+    MulticastTransmission($tName, $tImgFile, $tImgFileName, $tArch) {
+        $this.transmissionName = $tName
+        $this.transmissionImageFile = $tImgFile
+        $this.transmissionImageFileName = $tImgFileName
+        $this.transmissionArchitecture = $tArch
+        $this.transmissionType = [MulticastTransmissionType]::AutoCast
+    }
+
+    MulticastTransmission($tName, $tImgFile, $tImgFileName, $tArch, $tType) {
+        $this.transmissionName = $tName
+        $this.transmissionImageFile = $tImgFile
+        $this.transmissionImageFileName = $tImgFileName
+        $this.transmissionArchitecture = $tArch
+        $this.transmissionType = $tType
+    }
+}
+
 function Get-DhcpScopeOptionsForPxe {
     <#
         .SYNOPSIS
@@ -497,28 +554,76 @@ function Add-BootImageToWds {
         $imagePriority = 500000
     }
     $imageMulticast = Read-Host -Prompt "Choose transmission type: [U]nicast; [M]ulticast"
-    $imageTrName = ""
+    $mCastTransmission = $null
     if ($imageMulticast -eq "M") {
-        $imageTrName = Read-Host -Prompt "Since you specified a multicast transmission, you have to specify a name. Please type the name of the transmission:"
-        if ($imageTrName -eq "") {
-            Write-Host "No transmission name was specified. Reverting to unicast..."
-            $imageMulticast = "U"
-        }
+        Write-Host "Using multicast transmissions..."
     } else {
         Write-Host "Using unicast transmissions..."
     }
 
     try {
         Write-Host "Adding image to WDS..."
-        if ($imageMulticast -eq "M") {
-            Import-WdsBootImage -Path "$bootImage" -NewImageName "$imageName" -NewDescription "$imageDescription" -DisplayOrder $imagePriority -Multicast $true -TransmissionName "$imageTrName"
-        } else {
-            Import-WdsBootImage -Path "$bootImage" -NewImageName "$imageName" -NewDescription "$imageDescription" -DisplayOrder $imagePriority
+        if ((Split-Path -Path "$bootImage" -IsAbsolute) -eq $false) {
+            $bootImage = "$((Get-Location).Path)\$bootImage"
         }
+        Import-WdsBootImage -Path "$bootImage" -NewImageName "$imageName" -NewDescription "$imageDescription" -DisplayOrder $imagePriority
+        if ($? -eq $false) { throw }
         Write-Host "Image added to WDS successfully. Close and re-open WDS to see the changes in the `"Boot Images`" part of the server."
     } catch {
         Write-Host "Could not add image to WDS..."
+        return $false
     }
+
+    if ($imageMulticast -eq "M") {
+        $multicastTransmission = New-MulticastTransmission
+        if ($null -ne $multicastTransmission) {
+            wdsutil /new-multicasttransmission /friendlyname:"$($multicastTransmission.transmissionName)" /image:"$($multicastTransmission.transmissionImageFileName)" /imagetype:boot /architecture:$($multicastTransmission.transmissionArchitecture) /transmissiontype:$($multicastTransmission.transmissionType)
+        }
+    }
+}
+
+function New-MulticastTransmission {
+    $imageTrName = ""
+    $imageTrImgFile = ""
+    Write-Host "Multicast has been specified. Answer the following questions to create a simple multicast AutoCast transmission."
+    $imageTrName = Read-Host -Prompt "Please type the name of the transmission"
+    if ($imageTrName -eq "") {
+        Write-Host "No transmission name was specified. Reverting to unicast..."
+        return $null
+    }
+    $wdsImages = Get-WdsBootImage
+    if (($wdsImages | Select-Object -ExpandProperty Id).Count -le 0) {
+        Write-Host "No images have been added to the list. Reverting to unicast..."
+        return $null
+    }
+    # Display images in image store
+    $wdsImages | Select-Object FileName, Name, Architecture, Status, Size, LastModificationTime, Version, DisplayOrder | Format-Table | Out-Host
+    $imageTrImgFile = Read-Host -Prompt "Choose a boot image to add to the multicast transmission"
+    if ($imageTrImgFile -eq "") {
+        Write-Host "No boot image has been specified. Reverting to unicast..."
+        return $null
+    }
+    $imageTrFileName = (Get-WdsBootImage -FileName "$imageTrImgFile").ImageName
+    $imageTrArchitecture = $null
+    $imageTrArchitectureStr = Read-Host -Prompt "Choose image architecture for the multicast transmission: x86, amd64, arm64"
+    if ($imageTrArchitecture -eq "") {
+        Write-Host "No architecture specified. Defaulting to AMD64..."
+        $imageTrArchitecture = [Architecture]::x64
+    } else {
+        switch ($imageTrArchitectureStr) {
+            "x86" {
+                $imageTrArchitecture = [Architecture]::x86
+            }
+            "amd64" {
+                $imageTrArchitecture = [Architecture]::x64
+            }
+            "arm64" {
+                $imageTrArchitecture = [Architecture]::arm
+            }
+        }
+    }
+
+    return [MulticastTransmission]::new("$imageTrName", "$imageTrImgFile", "$imageTrFileName", $imageTrArchitecture)
 }
 
 Clear-Host
