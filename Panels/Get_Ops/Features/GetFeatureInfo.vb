@@ -206,6 +206,7 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Selected items: " & ListView1.SelectedItems.Count)
         Try
             If ListView1.SelectedItems.Count = 1 Then
@@ -500,6 +501,7 @@ Public Class GetFeatureInfoDlg
 
         _lvwColumnSorter = New ListViewColumnSorter()
         ListView1.ListViewItemSorter = _lvwColumnSorter
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)

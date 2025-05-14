@@ -857,6 +857,7 @@
     <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
