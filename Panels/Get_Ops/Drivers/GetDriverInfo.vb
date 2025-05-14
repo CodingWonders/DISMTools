@@ -573,6 +573,7 @@ Public Class GetDriverInfo
     End Sub
 
     Sub GetDriverInformation()
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Clearing information lists...")
         DriverInfoList.Clear()
         Try
@@ -758,6 +759,7 @@ Public Class GetDriverInfo
             Case 5
                 Label5.Text = "Pronto"
         End Select
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Sub DisplayDriverInformation(HWTarget As Integer)

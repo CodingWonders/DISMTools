@@ -209,6 +209,7 @@ Public Class GetCapabilityInfoDlg
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Selected items: " & ListView1.SelectedItems.Count)
         Try
             If ListView1.SelectedItems.Count = 1 Then
@@ -466,6 +467,7 @@ Public Class GetCapabilityInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Private Sub GetCapabilityInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
