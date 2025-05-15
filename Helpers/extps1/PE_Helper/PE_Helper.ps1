@@ -1297,13 +1297,14 @@ function Get-WimIndexes
     {
         $wimPath = "$((Get-Location).Path)sources\install.wim"
     }
-    (Get-WindowsImage -ImagePath "$wimPath" | Format-Table ImageIndex, ImageName) | Out-Host
+    $imageInformation = (Get-WindowsImage -ImagePath "$wimPath")
+    $imageInformation | Format-Table ImageIndex, ImageName | Out-Host
     Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
         $index = [int]$idx
-        $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
+        $imageCount = $imageInformation.Count
         # return $index
         if (($index -lt 1) -or ($index -gt $imageCount)) {
             Write-Host "An invalid index has been specified."
@@ -1321,7 +1322,7 @@ function Get-WimIndexes
             {
                 Write-Progress -Activity "Getting image information..." -Status "Preparing to get image information..." -PercentComplete 0
                 $images = [List[Microsoft.Dism.Commands.WimImageInfoObject]]::new()
-                $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
+                $imageCount = $imageInformation.Count
                 if ($imageCount -gt 0)
                 {
                     for ($i = 0; $i -lt $imageCount; $i++)
