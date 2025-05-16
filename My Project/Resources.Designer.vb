@@ -2011,16 +2011,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed a minor issue where DynaLog timestamps would not use a common format for time
+        '''- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
         '''
         '''New features:
         '''
-        '''- The program now uses a theme engine that makes it easy for you to make your own themes
-        '''- DISMTools now includes a log viewer (*DynaViewer*)
-        '''
-        '''Removed features:
-        '''
-        '''- The restart dialog in the DISMTools Preinstallation Environment has been removed due to alleged &quot;malware infections&quot; (#246, thanks @MTTGamer for informing me).
+        '''- DISMTools now includes a theme designer and editor
+        '''- Massive improvements were made to the DISMTools PE on network environments using PXE/Windows Deployment Services (WDS, #230)
+        '''- CODE: the language engine, first introduced in HotInstall, has been ported to DISMTools
+        '''- CODE: information dialogs are now able to disable the close button when gettin [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

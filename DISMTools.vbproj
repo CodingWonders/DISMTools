@@ -845,6 +845,7 @@
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
+    <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
@@ -856,6 +857,7 @@
     <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -1214,6 +1216,15 @@
     <None Include="Helpers\extps1\PE_Helper\PE_Helper.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\common\PXEHelpers.Common.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\prepare_wds.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper_server.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Installer\Default.isl" />
     <None Include="Installer\French.isl" />
     <None Include="Installer\German.isl" />
@@ -1413,9 +1424,6 @@
     <Content Include="docs\search\worker.js" />
     <Content Include="docs\sitemap.xml" />
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_amd64.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm64.jpg">
@@ -1807,6 +1815,7 @@
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
+    <Folder Include="Utilities\LanguageUtilities\LanguageFiles\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
   <ItemGroup>
@@ -1905,6 +1914,11 @@ IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
 IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
 	md "bin\themes"
 	xcopy "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" "bin\themes" /cehyi
+)
+
+:: Copy Theme Designer
+IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
+	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" "Tools\ThemeDesigner" /cehyi
 )
 
 IF NOT EXIST AutoUnattend (

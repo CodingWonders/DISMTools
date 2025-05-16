@@ -10,7 +10,7 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
-    Dim architectures() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
+    Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language

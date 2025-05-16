@@ -695,6 +695,7 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
+        WindowHelper.DisableCloseCapability(Handle)
         Try
             If ListBox2.SelectedItems.Count = 1 Then
                 ' Background processes need to have completed before showing information
@@ -1015,6 +1016,7 @@ Public Class GetPkgInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)
@@ -1092,6 +1094,7 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub GetPackageFileInformation()
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Clearing information lists...")
         PackageInfoList.Clear()
         PackageInfoExList.Clear()
@@ -1290,6 +1293,7 @@ Public Class GetPkgInfoDlg
             Case 5
                 Label5.Text = "Pronto"
         End Select
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)

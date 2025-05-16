@@ -43,7 +43,7 @@ param (
 enum PE_Arch {
     x86 = 0
     amd64 = 1
-    arm = 2
+    # 32-bit ARM support has been removed in 0.7. Here lies the placement of such an architecture
     arm64 = 3
 }
 
@@ -211,11 +211,11 @@ function Start-PEGeneration
                 Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\files\diskpart\*.dp" -Destination "$((Get-Location).Path)\ISOTEMP\media\files\diskpart" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\pxehelpers" -ItemType Directory | Out-Null
+                Copy-Item -Path "$((Get-Location).Path)\pxehelpers\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\pxehelpers" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Copy-Item -Path "$((Get-Location).Path)\files\README1ST.TXT" -Destination "$((Get-Location).Path)\ISOTEMP\media\README.TXT" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
-                New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\RestartDialog" -ItemType Directory | Out-Null
-                Copy-Item -Path "$((Get-Location).Path)\tools\RestartDialog\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\RestartDialog" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
                 {
                     Write-Host "Unattended answer file has been detected. Copying to ISO file..."
@@ -334,7 +334,7 @@ function Copy-PEFiles
         .PARAMETER peToolsPath
             The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
         .PARAMETER architecture
-            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm, arm64
+            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm64
         .PARAMETER targetDir
             The target directory to copy the Preinstallation Environment (PE) files to
         .EXAMPLE
@@ -393,7 +393,7 @@ function Copy-PEComponents
         .PARAMETER peToolsPath
             The path of the Preinstallation Environment (PE) tools. By default, this is "Program Files\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools"
         .PARAMETER architecture
-            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm, arm64
+            The architecture of the target Preinstallation Environment (PE). Valid options: x86, amd64, arm64
         .PARAMETER targetDir
             The target directory to copy the Preinstallation Environment (PE) component files to
         .EXAMPLE
@@ -528,9 +528,6 @@ function Start-PECustomization
                     }
                     amd64 {
                         Copy-Item -Path "$((Get-Location).Path)\backgrounds\winpe_amd64.jpg" -Destination "$imagePath\Windows\system32\winpe.jpg" -Force
-                    }
-                    arm {
-                        Copy-Item -Path "$((Get-Location).Path)\backgrounds\winpe_arm.jpg" -Destination "$imagePath\Windows\system32\winpe.jpg" -Force
                     }
                     arm64 {
                         Copy-Item -Path "$((Get-Location).Path)\backgrounds\winpe_arm64.jpg" -Destination "$imagePath\Windows\system32\winpe.jpg" -Force
@@ -1297,13 +1294,14 @@ function Get-WimIndexes
     {
         $wimPath = "$((Get-Location).Path)sources\install.wim"
     }
-    (Get-WindowsImage -ImagePath "$wimPath" | Format-Table ImageIndex, ImageName) | Out-Host
+    $imageInformation = (Get-WindowsImage -ImagePath "$wimPath")
+    $imageInformation | Format-Table ImageIndex, ImageName | Out-Host
     Write-Host "To get more complete information about the Windows image, type `"INFO`"`n"
     $idx = Read-Host -Prompt "Specify the image index to apply"
     try
     {
         $index = [int]$idx
-        $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
+        $imageCount = $imageInformation.Count
         # return $index
         if (($index -lt 1) -or ($index -gt $imageCount)) {
             Write-Host "An invalid index has been specified."
@@ -1321,7 +1319,7 @@ function Get-WimIndexes
             {
                 Write-Progress -Activity "Getting image information..." -Status "Preparing to get image information..." -PercentComplete 0
                 $images = [List[Microsoft.Dism.Commands.WimImageInfoObject]]::new()
-                $imageCount = (Get-WindowsImage -ImagePath "$wimPath").Count
+                $imageCount = $imageInformation.Count
                 if ($imageCount -gt 0)
                 {
                     for ($i = 0; $i -lt $imageCount; $i++)
@@ -1973,7 +1971,7 @@ elseif ($cmd -eq "Help")
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
-    Write-Host "             x86, amd64, arm, arm64"
+    Write-Host "             x86, amd64, arm64"
     Write-Host "      -imgFile: (Mandatory) Specifies the WIM file to copy to the target Preinstallation Environment (PE)"
     Write-Host "      -isoPath: (Mandatory) Specifies the target path of the ISO file"
     Write-Host "      You need the Windows ADK and the PE plugin, which you can download here:"
@@ -1982,7 +1980,7 @@ elseif ($cmd -eq "Help")
     Write-Host "      This can only be run on Windows PE. Starting this action on other environments will fail."
     Write-Host "    StartDevelopment: starts the PE project creation phase. Parameters:"
     Write-Host "      -testArch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
-    Write-Host "                 x86, amd64, arm, arm64"
+    Write-Host "                 x86, amd64, arm64"
     Write-Host "      -targetPath: (Mandatory) Specifies the target path for the PE project"
     Write-Host "    Help: shows this help documentation`n"
 

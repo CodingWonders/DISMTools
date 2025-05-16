@@ -8,28 +8,28 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("DISMTools")> 
-<Assembly: AssemblyDescription("The connected place for Windows system administration.")> 
+<Assembly: AssemblyTitle("DISMTools Theme Designer")> 
+<Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("DISMTools")> 
-<Assembly: AssemblyCopyright("© 2022-2025 CodingWonders Software")> 
+<Assembly: AssemblyProduct("DISMTools Theme Designer")> 
+<Assembly: AssemblyCopyright("© 2025 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
-'El siguiente GUID sirve como identificador de typelib si este proyecto se expone a COM
-<Assembly: Guid("f6f97856-b121-4274-afe6-ea40516b8192")>
+'El siguiente GUID sirve como identificador de la biblioteca de tipos si este proyecto se expone a COM
+<Assembly: Guid("d5499895-9156-439c-8761-f847f018ee59")> 
 
 ' La información de versión de un ensamblado consta de los cuatro valores siguientes:
 '
 '      Versión principal
 '      Versión secundaria 
-'      Número de compilación
+'      Número de versión de compilación
 '      Revisión
 '
-' Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión 
+' Puede especificar todos los valores o establecer como predeterminados los números de versión de compilación y de revisión 
 ' mediante el asterisco ('*'), como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.7.0.25052")> 
-<Assembly: AssemblyFileVersion("0.7.0.25052")> 
+<Assembly: AssemblyVersion("0.7.0.0")> 
+<Assembly: AssemblyFileVersion("0.7.0.0")> 
