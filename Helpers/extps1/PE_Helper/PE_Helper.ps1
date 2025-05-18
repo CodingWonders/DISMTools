@@ -1007,6 +1007,8 @@ function Start-OSApplication
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     Start-Sleep -Milliseconds 250
+    Clear-Host
+    Write-Host "`n`n`n`n`n`n`n`n`n`n"
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
     Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
     Write-Host "When your computer restarts, Setup will continue."
