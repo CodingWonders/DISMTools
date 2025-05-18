@@ -52,6 +52,8 @@ Public Class ImgInfoSaveDlg
 
     Const CodeBlockChar As String = " ` "       ' It is " ` " to prevent Markdig problem "Markdown elements in the input are too deeply nested - depth limit exceeded. Input is most likely not sensible or is a very large table."
 
+    Dim OSVer As Version
+
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -336,7 +338,7 @@ Public Class ImgInfoSaveDlg
                         Dim cProps As DismCustomPropertyCollection = Nothing
 
                         ' Determine Windows version, as capability identity information can't be obtained in Windows versions older than 10
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             pkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, installedPackage.PackageName)
                         Else
                             pkgInfo = DismApi.GetPackageInfoByName(imgSession, installedPackage.PackageName)
@@ -486,7 +488,7 @@ Public Class ImgInfoSaveDlg
                         Dim cProps As DismCustomPropertyCollection = Nothing
 
                         ' Determine Windows version, as capability identity information can't be obtained in Windows versions older than 10
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             pkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, installedPackage.PackageName)
                         Else
                             pkgInfo = DismApi.GetPackageInfoByName(imgSession, installedPackage.PackageName)
@@ -724,7 +726,7 @@ Public Class ImgInfoSaveDlg
                         Dim cProps As DismCustomPropertyCollection = Nothing
 
                         ' Determine Windows version
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
                         Else
                             pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
@@ -2714,6 +2716,7 @@ Public Class ImgInfoSaveDlg
             InfoSaveResults.Close()
             InfoSaveResults.Dispose()
         End If
+        OSVer = Environment.OSVersion.Version
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
