@@ -836,7 +836,12 @@ function Start-OSApplication
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
         exit 1
     }
+    $diskGetterDpScript = @'
+    lis dis
+    exit
+'@
     New-Item -Path "X:\files\diskpart" -ItemType Directory -Force | Out-Null
+    $diskGetterDpScript | Out-File "X:\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
     {
@@ -1057,9 +1062,9 @@ function Get-Disks
     #>
 
     # Show disk list with diskpart
-    if (Test-Path .\files\diskpart\dp_listdisk.dp -PathType Leaf)
+    if (Test-Path "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -PathType Leaf)
     {
-        diskpart /s ".\files\diskpart\dp_listdisk.dp" | Out-Host
+        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" | Out-Host
     }
     else
     {

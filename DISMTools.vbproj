@@ -1198,9 +1198,6 @@
     <None Include="Helpers\extps1\PE_Helper\files\dim_start\dimstart.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1812,6 +1809,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+    <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
