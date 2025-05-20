@@ -1916,7 +1916,8 @@ IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
 
 :: Copy Theme Designer
 IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
-	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" "Tools\ThemeDesigner" /cehyi
+	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.*" "Tools\ThemeDesigner" /cehyi
+	del "Tools\ThemeDesigner\*.zip" /F /S /Q
 )
 
 IF NOT EXIST AutoUnattend (
