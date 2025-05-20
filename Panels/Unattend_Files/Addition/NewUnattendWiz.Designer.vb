@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode27 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode28 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode29 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode30 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode31 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode32 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode33 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode34 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode35 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode36 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode37 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode38 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode39 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -271,6 +271,11 @@ Partial Class NewUnattendWiz
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.Label62 = New System.Windows.Forms.Label()
         Me.ComputerNamePanel = New System.Windows.Forms.Panel()
+        Me.ScriptedComputerNamePanel = New System.Windows.Forms.Panel()
+        Me.TextBox16 = New System.Windows.Forms.TextBox()
+        Me.RadioButton29 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton28 = New System.Windows.Forms.RadioButton()
+        Me.ManualComputerNamePanel = New System.Windows.Forms.Panel()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
@@ -338,11 +343,7 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.ManualComputerNamePanel = New System.Windows.Forms.Panel()
-        Me.RadioButton28 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton29 = New System.Windows.Forms.RadioButton()
-        Me.TextBox16 = New System.Windows.Forms.TextBox()
-        Me.ScriptedComputerNamePanel = New System.Windows.Forms.Panel()
+        Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -420,6 +421,8 @@ Partial Class NewUnattendWiz
         Me.TimeZoneSettings.SuspendLayout()
         Me.SysConfigPanel.SuspendLayout()
         Me.ComputerNamePanel.SuspendLayout()
+        Me.ScriptedComputerNamePanel.SuspendLayout()
+        Me.ManualComputerNamePanel.SuspendLayout()
         Me.WinSVSettingsPanel.SuspendLayout()
         Me.RegionalSettingsPanel.SuspendLayout()
         Me.RegionalSettings.SuspendLayout()
@@ -431,8 +434,6 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.ManualComputerNamePanel.SuspendLayout()
-        Me.ScriptedComputerNamePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'SidePanel
@@ -468,33 +469,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode14.Name = "Nodo0"
-        TreeNode14.Text = "Welcome"
-        TreeNode15.Name = "Nodo1"
-        TreeNode15.Text = "Regional Configuration"
-        TreeNode16.Name = "Nodo2"
-        TreeNode16.Text = "Basic System Configuration"
-        TreeNode17.Name = "Nodo3"
-        TreeNode17.Text = "Time Zone"
-        TreeNode18.Name = "Nodo4"
-        TreeNode18.Text = "Disk Configuration"
-        TreeNode19.Name = "Nodo5"
-        TreeNode19.Text = "Product Key"
-        TreeNode20.Name = "Nodo6"
-        TreeNode20.Text = "User Accounts"
-        TreeNode21.Name = "Nodo9"
-        TreeNode21.Text = "Virtual Machine Support"
-        TreeNode22.Name = "Nodo10"
-        TreeNode22.Text = "Wireless Networking"
-        TreeNode23.Name = "Nodo11"
-        TreeNode23.Text = "System Telemetry"
-        TreeNode24.Name = "Nodo12"
-        TreeNode24.Text = "Post-Installation Scripts"
-        TreeNode25.Name = "Nodo13"
-        TreeNode25.Text = "Component Settings"
-        TreeNode26.Name = "Nodo14"
-        TreeNode26.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
+        TreeNode27.Name = "Nodo0"
+        TreeNode27.Text = "Welcome"
+        TreeNode28.Name = "Nodo1"
+        TreeNode28.Text = "Regional Configuration"
+        TreeNode29.Name = "Nodo2"
+        TreeNode29.Text = "Basic System Configuration"
+        TreeNode30.Name = "Nodo3"
+        TreeNode30.Text = "Time Zone"
+        TreeNode31.Name = "Nodo4"
+        TreeNode31.Text = "Disk Configuration"
+        TreeNode32.Name = "Nodo5"
+        TreeNode32.Text = "Product Key"
+        TreeNode33.Name = "Nodo6"
+        TreeNode33.Text = "User Accounts"
+        TreeNode34.Name = "Nodo9"
+        TreeNode34.Text = "Virtual Machine Support"
+        TreeNode35.Name = "Nodo10"
+        TreeNode35.Text = "Wireless Networking"
+        TreeNode36.Name = "Nodo11"
+        TreeNode36.Text = "System Telemetry"
+        TreeNode37.Name = "Nodo12"
+        TreeNode37.Text = "Post-Installation Scripts"
+        TreeNode38.Name = "Nodo13"
+        TreeNode38.Text = "Component Settings"
+        TreeNode39.Name = "Nodo14"
+        TreeNode39.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode27, TreeNode28, TreeNode29, TreeNode30, TreeNode31, TreeNode32, TreeNode33, TreeNode34, TreeNode35, TreeNode36, TreeNode37, TreeNode38, TreeNode39})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -1039,6 +1040,7 @@ Partial Class NewUnattendWiz
         '
         'PostInstallPanel
         '
+        Me.PostInstallPanel.Controls.Add(Me.CheckBox22)
         Me.PostInstallPanel.Controls.Add(Me.CheckBox20)
         Me.PostInstallPanel.Controls.Add(Me.ScriptEditorContainerPanel)
         Me.PostInstallPanel.Controls.Add(Me.Label51)
@@ -3124,6 +3126,63 @@ Partial Class NewUnattendWiz
         Me.ComputerNamePanel.Size = New System.Drawing.Size(869, 150)
         Me.ComputerNamePanel.TabIndex = 7
         '
+        'ScriptedComputerNamePanel
+        '
+        Me.ScriptedComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ScriptedComputerNamePanel.Controls.Add(Me.TextBox16)
+        Me.ScriptedComputerNamePanel.Enabled = False
+        Me.ScriptedComputerNamePanel.Location = New System.Drawing.Point(30, 117)
+        Me.ScriptedComputerNamePanel.Name = "ScriptedComputerNamePanel"
+        Me.ScriptedComputerNamePanel.Size = New System.Drawing.Size(831, 25)
+        Me.ScriptedComputerNamePanel.TabIndex = 7
+        '
+        'TextBox16
+        '
+        Me.TextBox16.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox16.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox16.Location = New System.Drawing.Point(0, 0)
+        Me.TextBox16.Name = "TextBox16"
+        Me.TextBox16.Size = New System.Drawing.Size(831, 25)
+        Me.TextBox16.TabIndex = 6
+        Me.TextBox16.Text = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEac" & _
+    "h-Object {[char]$_})"
+        '
+        'RadioButton29
+        '
+        Me.RadioButton29.AutoSize = True
+        Me.RadioButton29.Location = New System.Drawing.Point(12, 94)
+        Me.RadioButton29.Name = "RadioButton29"
+        Me.RadioButton29.Size = New System.Drawing.Size(301, 17)
+        Me.RadioButton29.TabIndex = 5
+        Me.RadioButton29.Text = "Have the following script configure the name (advanced):"
+        Me.RadioButton29.UseVisualStyleBackColor = True
+        '
+        'RadioButton28
+        '
+        Me.RadioButton28.AutoSize = True
+        Me.RadioButton28.Checked = True
+        Me.RadioButton28.Location = New System.Drawing.Point(12, 10)
+        Me.RadioButton28.Name = "RadioButton28"
+        Me.RadioButton28.Size = New System.Drawing.Size(267, 17)
+        Me.RadioButton28.TabIndex = 5
+        Me.RadioButton28.TabStop = True
+        Me.RadioButton28.Text = "Choose a computer name yourself (recommended)"
+        Me.RadioButton28.UseVisualStyleBackColor = True
+        '
+        'ManualComputerNamePanel
+        '
+        Me.ManualComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ManualComputerNamePanel.Controls.Add(Me.Button3)
+        Me.ManualComputerNamePanel.Controls.Add(Me.TextBox1)
+        Me.ManualComputerNamePanel.Controls.Add(Me.Label16)
+        Me.ManualComputerNamePanel.Controls.Add(Me.Label63)
+        Me.ManualComputerNamePanel.Location = New System.Drawing.Point(30, 35)
+        Me.ManualComputerNamePanel.Name = "ManualComputerNamePanel"
+        Me.ManualComputerNamePanel.Size = New System.Drawing.Size(831, 49)
+        Me.ManualComputerNamePanel.TabIndex = 4
+        '
         'Button3
         '
         Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -3792,61 +3851,15 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt"
         Me.ScriptEditorOFD.Title = "Open script"
         '
-        'ManualComputerNamePanel
+        'CheckBox22
         '
-        Me.ManualComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ManualComputerNamePanel.Controls.Add(Me.Button3)
-        Me.ManualComputerNamePanel.Controls.Add(Me.TextBox1)
-        Me.ManualComputerNamePanel.Controls.Add(Me.Label16)
-        Me.ManualComputerNamePanel.Controls.Add(Me.Label63)
-        Me.ManualComputerNamePanel.Location = New System.Drawing.Point(30, 35)
-        Me.ManualComputerNamePanel.Name = "ManualComputerNamePanel"
-        Me.ManualComputerNamePanel.Size = New System.Drawing.Size(831, 49)
-        Me.ManualComputerNamePanel.TabIndex = 4
-        '
-        'RadioButton28
-        '
-        Me.RadioButton28.AutoSize = True
-        Me.RadioButton28.Checked = True
-        Me.RadioButton28.Location = New System.Drawing.Point(12, 10)
-        Me.RadioButton28.Name = "RadioButton28"
-        Me.RadioButton28.Size = New System.Drawing.Size(267, 17)
-        Me.RadioButton28.TabIndex = 5
-        Me.RadioButton28.Text = "Choose a computer name yourself (recommended)"
-        Me.RadioButton28.UseVisualStyleBackColor = True
-        '
-        'RadioButton29
-        '
-        Me.RadioButton29.AutoSize = True
-        Me.RadioButton29.Location = New System.Drawing.Point(12, 94)
-        Me.RadioButton29.Name = "RadioButton29"
-        Me.RadioButton29.Size = New System.Drawing.Size(301, 17)
-        Me.RadioButton29.TabIndex = 5
-        Me.RadioButton29.Text = "Have the following script configure the name (advanced):"
-        Me.RadioButton29.UseVisualStyleBackColor = True
-        '
-        'TextBox16
-        '
-        Me.TextBox16.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox16.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox16.Location = New System.Drawing.Point(0, 0)
-        Me.TextBox16.Name = "TextBox16"
-        Me.TextBox16.Size = New System.Drawing.Size(831, 25)
-        Me.TextBox16.TabIndex = 6
-        Me.TextBox16.Text = "return 'DESKTOP-{0}' -f -join ((48..57) + (65..90) | Get-Random -Count 7 | ForEac" & _
-    "h-Object {[char]$_})"
-        '
-        'ScriptedComputerNamePanel
-        '
-        Me.ScriptedComputerNamePanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ScriptedComputerNamePanel.Controls.Add(Me.TextBox16)
-        Me.ScriptedComputerNamePanel.Enabled = False
-        Me.ScriptedComputerNamePanel.Location = New System.Drawing.Point(30, 117)
-        Me.ScriptedComputerNamePanel.Name = "ScriptedComputerNamePanel"
-        Me.ScriptedComputerNamePanel.Size = New System.Drawing.Size(831, 25)
-        Me.ScriptedComputerNamePanel.TabIndex = 7
+        Me.CheckBox22.AutoSize = True
+        Me.CheckBox22.Location = New System.Drawing.Point(338, 516)
+        Me.CheckBox22.Name = "CheckBox22"
+        Me.CheckBox22.Size = New System.Drawing.Size(120, 17)
+        Me.CheckBox22.TabIndex = 14
+        Me.CheckBox22.Text = "Hide script windows"
+        Me.CheckBox22.UseVisualStyleBackColor = True
         '
         'NewUnattendWiz
         '
@@ -3984,6 +3997,10 @@ Partial Class NewUnattendWiz
         Me.SysConfigPanel.PerformLayout()
         Me.ComputerNamePanel.ResumeLayout(False)
         Me.ComputerNamePanel.PerformLayout()
+        Me.ScriptedComputerNamePanel.ResumeLayout(False)
+        Me.ScriptedComputerNamePanel.PerformLayout()
+        Me.ManualComputerNamePanel.ResumeLayout(False)
+        Me.ManualComputerNamePanel.PerformLayout()
         Me.WinSVSettingsPanel.ResumeLayout(False)
         Me.WinSVSettingsPanel.PerformLayout()
         Me.RegionalSettingsPanel.ResumeLayout(False)
@@ -3999,10 +4016,6 @@ Partial Class NewUnattendWiz
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.ManualComputerNamePanel.ResumeLayout(False)
-        Me.ManualComputerNamePanel.PerformLayout()
-        Me.ScriptedComputerNamePanel.ResumeLayout(False)
-        Me.ScriptedComputerNamePanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -4312,4 +4325,5 @@ Partial Class NewUnattendWiz
     Friend WithEvents RadioButton29 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton28 As System.Windows.Forms.RadioButton
     Friend WithEvents ManualComputerNamePanel As System.Windows.Forms.Panel
+    Friend WithEvents CheckBox22 As System.Windows.Forms.CheckBox
 End Class
