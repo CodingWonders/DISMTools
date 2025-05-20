@@ -171,6 +171,20 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
+        Me.Options_Personalization = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel16 = New System.Windows.Forms.Panel()
+        Me.Panel17 = New System.Windows.Forms.Panel()
+        Me.Label59 = New System.Windows.Forms.Label()
+        Me.Panel18 = New System.Windows.Forms.Panel()
+        Me.Panel22 = New System.Windows.Forms.Panel()
+        Me.Label61 = New System.Windows.Forms.Label()
+        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
+        Me.ProgressPanelPic = New System.Windows.Forms.PictureBox()
+        Me.Options_Program = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel14 = New System.Windows.Forms.Panel()
+        Me.Panel15 = New System.Windows.Forms.Panel()
         Me.Options_Logs = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel4 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel5 = New System.Windows.Forms.Panel()
@@ -186,20 +200,6 @@ Partial Class Options
         Me.Label66 = New System.Windows.Forms.Label()
         Me.Label65 = New System.Windows.Forms.Label()
         Me.Label63 = New System.Windows.Forms.Label()
-        Me.Options_Program = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel14 = New System.Windows.Forms.Panel()
-        Me.Panel15 = New System.Windows.Forms.Panel()
-        Me.Options_Personalization = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel16 = New System.Windows.Forms.Panel()
-        Me.Panel17 = New System.Windows.Forms.Panel()
-        Me.Label59 = New System.Windows.Forms.Label()
-        Me.Panel18 = New System.Windows.Forms.Panel()
-        Me.Panel22 = New System.Windows.Forms.Panel()
-        Me.Label61 = New System.Windows.Forms.Label()
-        Me.CheckBox7 = New System.Windows.Forms.CheckBox()
-        Me.ProgressPanelPic = New System.Windows.Forms.PictureBox()
         Me.Options_ImgOps = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel6 = New System.Windows.Forms.Panel()
@@ -230,6 +230,12 @@ Partial Class Options
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.DarkThemesCB = New System.Windows.Forms.ComboBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.LightThemesCB = New System.Windows.Forms.ComboBox()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Label31 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -280,16 +286,6 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
-        Me.Options_Logs.SuspendLayout()
-        Me.FlowLayoutPanel4.SuspendLayout()
-        Me.Panel5.SuspendLayout()
-        Me.Panel19.SuspendLayout()
-        Me.Panel24.SuspendLayout()
-        Me.Panel25.SuspendLayout()
-        Me.Options_Program.SuspendLayout()
-        Me.FlowLayoutPanel2.SuspendLayout()
-        Me.Panel14.SuspendLayout()
-        Me.Panel15.SuspendLayout()
         Me.Options_Personalization.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.Panel16.SuspendLayout()
@@ -297,6 +293,16 @@ Partial Class Options
         Me.Panel18.SuspendLayout()
         Me.Panel22.SuspendLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Options_Program.SuspendLayout()
+        Me.FlowLayoutPanel2.SuspendLayout()
+        Me.Panel14.SuspendLayout()
+        Me.Panel15.SuspendLayout()
+        Me.Options_Logs.SuspendLayout()
+        Me.FlowLayoutPanel4.SuspendLayout()
+        Me.Panel5.SuspendLayout()
+        Me.Panel19.SuspendLayout()
+        Me.Panel24.SuspendLayout()
+        Me.Panel25.SuspendLayout()
         Me.Options_ImgOps.SuspendLayout()
         Me.FlowLayoutPanel5.SuspendLayout()
         Me.Panel6.SuspendLayout()
@@ -323,6 +329,7 @@ Partial Class Options
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1871,6 +1878,172 @@ Partial Class Options
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
         '
+        'Options_Personalization
+        '
+        Me.Options_Personalization.Controls.Add(Me.FlowLayoutPanel3)
+        Me.Options_Personalization.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_Personalization.Location = New System.Drawing.Point(0, 0)
+        Me.Options_Personalization.Name = "Options_Personalization"
+        Me.Options_Personalization.Size = New System.Drawing.Size(748, 465)
+        Me.Options_Personalization.TabIndex = 1
+        Me.Options_Personalization.Visible = False
+        '
+        'FlowLayoutPanel3
+        '
+        Me.FlowLayoutPanel3.AutoScroll = True
+        Me.FlowLayoutPanel3.Controls.Add(Me.Panel16)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Panel17)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Panel18)
+        Me.FlowLayoutPanel3.Controls.Add(Me.Panel22)
+        Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
+        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel3.TabIndex = 0
+        '
+        'Panel16
+        '
+        Me.Panel16.Controls.Add(Me.GroupBox1)
+        Me.Panel16.Controls.Add(Me.Label7)
+        Me.Panel16.Controls.Add(Me.Label8)
+        Me.Panel16.Controls.Add(Me.ComboBox2)
+        Me.Panel16.Controls.Add(Me.ComboBox3)
+        Me.Panel16.Controls.Add(Me.CheckBox9)
+        Me.Panel16.Location = New System.Drawing.Point(0, 0)
+        Me.Panel16.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel16.Name = "Panel16"
+        Me.Panel16.Size = New System.Drawing.Size(728, 224)
+        Me.Panel16.TabIndex = 0
+        '
+        'Panel17
+        '
+        Me.Panel17.Controls.Add(Me.Panel4)
+        Me.Panel17.Controls.Add(Me.Label59)
+        Me.Panel17.Controls.Add(Me.Toggle1)
+        Me.Panel17.Controls.Add(Me.NumericUpDown1)
+        Me.Panel17.Controls.Add(Me.ComboBox4)
+        Me.Panel17.Controls.Add(Me.LogPreview)
+        Me.Panel17.Controls.Add(Me.Label10)
+        Me.Panel17.Controls.Add(Me.Label11)
+        Me.Panel17.Location = New System.Drawing.Point(0, 224)
+        Me.Panel17.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel17.Name = "Panel17"
+        Me.Panel17.Size = New System.Drawing.Size(728, 363)
+        Me.Panel17.TabIndex = 1
+        '
+        'Label59
+        '
+        Me.Label59.AutoSize = True
+        Me.Label59.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label59.Location = New System.Drawing.Point(18, 18)
+        Me.Label59.Name = "Label59"
+        Me.Label59.Size = New System.Drawing.Size(108, 15)
+        Me.Label59.TabIndex = 0
+        Me.Label59.Text = "Log customization"
+        '
+        'Panel18
+        '
+        Me.Panel18.Controls.Add(Me.Label45)
+        Me.Panel18.Controls.Add(Me.SecProgressStylePreview)
+        Me.Panel18.Controls.Add(Me.RadioButton5)
+        Me.Panel18.Controls.Add(Me.RadioButton6)
+        Me.Panel18.Location = New System.Drawing.Point(0, 587)
+        Me.Panel18.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel18.Name = "Panel18"
+        Me.Panel18.Size = New System.Drawing.Size(728, 127)
+        Me.Panel18.TabIndex = 2
+        '
+        'Panel22
+        '
+        Me.Panel22.Controls.Add(Me.Label61)
+        Me.Panel22.Controls.Add(Me.CheckBox7)
+        Me.Panel22.Controls.Add(Me.ProgressPanelPic)
+        Me.Panel22.Location = New System.Drawing.Point(0, 714)
+        Me.Panel22.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel22.Name = "Panel22"
+        Me.Panel22.Size = New System.Drawing.Size(728, 471)
+        Me.Panel22.TabIndex = 4
+        '
+        'Label61
+        '
+        Me.Label61.AutoEllipsis = True
+        Me.Label61.Location = New System.Drawing.Point(21, 53)
+        Me.Label61.Name = "Label61"
+        Me.Label61.Size = New System.Drawing.Size(690, 24)
+        Me.Label61.TabIndex = 9
+        Me.Label61.Text = "Preview:"
+        Me.Label61.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'CheckBox7
+        '
+        Me.CheckBox7.AutoSize = True
+        Me.CheckBox7.Location = New System.Drawing.Point(20, 17)
+        Me.CheckBox7.Name = "CheckBox7"
+        Me.CheckBox7.Size = New System.Drawing.Size(275, 19)
+        Me.CheckBox7.TabIndex = 8
+        Me.CheckBox7.Text = "Show log view on the progress panel by default"
+        Me.CheckBox7.UseVisualStyleBackColor = True
+        '
+        'ProgressPanelPic
+        '
+        Me.ProgressPanelPic.Image = Global.DISMTools.My.Resources.Resources.progresspanel_logview_hidden
+        Me.ProgressPanelPic.Location = New System.Drawing.Point(23, 83)
+        Me.ProgressPanelPic.Name = "ProgressPanelPic"
+        Me.ProgressPanelPic.Size = New System.Drawing.Size(684, 370)
+        Me.ProgressPanelPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.ProgressPanelPic.TabIndex = 7
+        Me.ProgressPanelPic.TabStop = False
+        '
+        'Options_Program
+        '
+        Me.Options_Program.Controls.Add(Me.FlowLayoutPanel2)
+        Me.Options_Program.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_Program.Location = New System.Drawing.Point(0, 0)
+        Me.Options_Program.Name = "Options_Program"
+        Me.Options_Program.Size = New System.Drawing.Size(748, 465)
+        Me.Options_Program.TabIndex = 0
+        Me.Options_Program.Visible = False
+        '
+        'FlowLayoutPanel2
+        '
+        Me.FlowLayoutPanel2.AutoScroll = True
+        Me.FlowLayoutPanel2.Controls.Add(Me.Panel14)
+        Me.FlowLayoutPanel2.Controls.Add(Me.Panel15)
+        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
+        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel2.TabIndex = 0
+        '
+        'Panel14
+        '
+        Me.Panel14.Controls.Add(Me.Label2)
+        Me.Panel14.Controls.Add(Me.Label3)
+        Me.Panel14.Controls.Add(Me.Label4)
+        Me.Panel14.Controls.Add(Me.LinkLabel1)
+        Me.Panel14.Controls.Add(Me.TextBox1)
+        Me.Panel14.Controls.Add(Me.PictureBox2)
+        Me.Panel14.Controls.Add(Me.Button1)
+        Me.Panel14.Controls.Add(Me.Button2)
+        Me.Panel14.Location = New System.Drawing.Point(0, 0)
+        Me.Panel14.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel14.Name = "Panel14"
+        Me.Panel14.Size = New System.Drawing.Size(748, 138)
+        Me.Panel14.TabIndex = 0
+        '
+        'Panel15
+        '
+        Me.Panel15.Controls.Add(Me.CheckBox1)
+        Me.Panel15.Controls.Add(Me.Label5)
+        Me.Panel15.Controls.Add(Me.ComboBox1)
+        Me.Panel15.Controls.Add(Me.Label6)
+        Me.Panel15.Controls.Add(Me.PictureBox3)
+        Me.Panel15.Location = New System.Drawing.Point(0, 138)
+        Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel15.Name = "Panel15"
+        Me.Panel15.Size = New System.Drawing.Size(748, 118)
+        Me.Panel15.TabIndex = 1
+        '
         'Options_Logs
         '
         Me.Options_Logs.Controls.Add(Me.FlowLayoutPanel4)
@@ -2044,171 +2217,6 @@ Partial Class Options
         Me.Label63.Text = "By default, operation logs are opened with Notepad in the event of an operation e" & _
     "rror. However, if you want to open them with a different program, specify it bel" & _
     "ow:"
-        '
-        'Options_Program
-        '
-        Me.Options_Program.Controls.Add(Me.FlowLayoutPanel2)
-        Me.Options_Program.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_Program.Location = New System.Drawing.Point(0, 0)
-        Me.Options_Program.Name = "Options_Program"
-        Me.Options_Program.Size = New System.Drawing.Size(748, 465)
-        Me.Options_Program.TabIndex = 0
-        Me.Options_Program.Visible = False
-        '
-        'FlowLayoutPanel2
-        '
-        Me.FlowLayoutPanel2.AutoScroll = True
-        Me.FlowLayoutPanel2.Controls.Add(Me.Panel14)
-        Me.FlowLayoutPanel2.Controls.Add(Me.Panel15)
-        Me.FlowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel2.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel2.Name = "FlowLayoutPanel2"
-        Me.FlowLayoutPanel2.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel2.TabIndex = 0
-        '
-        'Panel14
-        '
-        Me.Panel14.Controls.Add(Me.Label2)
-        Me.Panel14.Controls.Add(Me.Label3)
-        Me.Panel14.Controls.Add(Me.Label4)
-        Me.Panel14.Controls.Add(Me.LinkLabel1)
-        Me.Panel14.Controls.Add(Me.TextBox1)
-        Me.Panel14.Controls.Add(Me.PictureBox2)
-        Me.Panel14.Controls.Add(Me.Button1)
-        Me.Panel14.Controls.Add(Me.Button2)
-        Me.Panel14.Location = New System.Drawing.Point(0, 0)
-        Me.Panel14.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel14.Name = "Panel14"
-        Me.Panel14.Size = New System.Drawing.Size(748, 138)
-        Me.Panel14.TabIndex = 0
-        '
-        'Panel15
-        '
-        Me.Panel15.Controls.Add(Me.CheckBox1)
-        Me.Panel15.Controls.Add(Me.Label5)
-        Me.Panel15.Controls.Add(Me.ComboBox1)
-        Me.Panel15.Controls.Add(Me.Label6)
-        Me.Panel15.Controls.Add(Me.PictureBox3)
-        Me.Panel15.Location = New System.Drawing.Point(0, 138)
-        Me.Panel15.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel15.Name = "Panel15"
-        Me.Panel15.Size = New System.Drawing.Size(748, 118)
-        Me.Panel15.TabIndex = 1
-        '
-        'Options_Personalization
-        '
-        Me.Options_Personalization.Controls.Add(Me.FlowLayoutPanel3)
-        Me.Options_Personalization.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_Personalization.Location = New System.Drawing.Point(0, 0)
-        Me.Options_Personalization.Name = "Options_Personalization"
-        Me.Options_Personalization.Size = New System.Drawing.Size(748, 465)
-        Me.Options_Personalization.TabIndex = 1
-        Me.Options_Personalization.Visible = False
-        '
-        'FlowLayoutPanel3
-        '
-        Me.FlowLayoutPanel3.AutoScroll = True
-        Me.FlowLayoutPanel3.Controls.Add(Me.Panel16)
-        Me.FlowLayoutPanel3.Controls.Add(Me.Panel17)
-        Me.FlowLayoutPanel3.Controls.Add(Me.Panel18)
-        Me.FlowLayoutPanel3.Controls.Add(Me.Panel22)
-        Me.FlowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel3.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel3.Name = "FlowLayoutPanel3"
-        Me.FlowLayoutPanel3.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel3.TabIndex = 0
-        '
-        'Panel16
-        '
-        Me.Panel16.Controls.Add(Me.Label7)
-        Me.Panel16.Controls.Add(Me.Label8)
-        Me.Panel16.Controls.Add(Me.ComboBox2)
-        Me.Panel16.Controls.Add(Me.ComboBox3)
-        Me.Panel16.Controls.Add(Me.CheckBox9)
-        Me.Panel16.Location = New System.Drawing.Point(0, 0)
-        Me.Panel16.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel16.Name = "Panel16"
-        Me.Panel16.Size = New System.Drawing.Size(728, 100)
-        Me.Panel16.TabIndex = 0
-        '
-        'Panel17
-        '
-        Me.Panel17.Controls.Add(Me.Panel4)
-        Me.Panel17.Controls.Add(Me.Label59)
-        Me.Panel17.Controls.Add(Me.Toggle1)
-        Me.Panel17.Controls.Add(Me.NumericUpDown1)
-        Me.Panel17.Controls.Add(Me.ComboBox4)
-        Me.Panel17.Controls.Add(Me.LogPreview)
-        Me.Panel17.Controls.Add(Me.Label10)
-        Me.Panel17.Controls.Add(Me.Label11)
-        Me.Panel17.Location = New System.Drawing.Point(0, 100)
-        Me.Panel17.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel17.Name = "Panel17"
-        Me.Panel17.Size = New System.Drawing.Size(728, 363)
-        Me.Panel17.TabIndex = 1
-        '
-        'Label59
-        '
-        Me.Label59.AutoSize = True
-        Me.Label59.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label59.Location = New System.Drawing.Point(18, 18)
-        Me.Label59.Name = "Label59"
-        Me.Label59.Size = New System.Drawing.Size(108, 15)
-        Me.Label59.TabIndex = 0
-        Me.Label59.Text = "Log customization"
-        '
-        'Panel18
-        '
-        Me.Panel18.Controls.Add(Me.Label45)
-        Me.Panel18.Controls.Add(Me.SecProgressStylePreview)
-        Me.Panel18.Controls.Add(Me.RadioButton5)
-        Me.Panel18.Controls.Add(Me.RadioButton6)
-        Me.Panel18.Location = New System.Drawing.Point(0, 463)
-        Me.Panel18.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel18.Name = "Panel18"
-        Me.Panel18.Size = New System.Drawing.Size(728, 127)
-        Me.Panel18.TabIndex = 2
-        '
-        'Panel22
-        '
-        Me.Panel22.Controls.Add(Me.Label61)
-        Me.Panel22.Controls.Add(Me.CheckBox7)
-        Me.Panel22.Controls.Add(Me.ProgressPanelPic)
-        Me.Panel22.Location = New System.Drawing.Point(0, 590)
-        Me.Panel22.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel22.Name = "Panel22"
-        Me.Panel22.Size = New System.Drawing.Size(728, 471)
-        Me.Panel22.TabIndex = 4
-        '
-        'Label61
-        '
-        Me.Label61.AutoEllipsis = True
-        Me.Label61.Location = New System.Drawing.Point(21, 53)
-        Me.Label61.Name = "Label61"
-        Me.Label61.Size = New System.Drawing.Size(690, 24)
-        Me.Label61.TabIndex = 9
-        Me.Label61.Text = "Preview:"
-        Me.Label61.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'CheckBox7
-        '
-        Me.CheckBox7.AutoSize = True
-        Me.CheckBox7.Location = New System.Drawing.Point(20, 17)
-        Me.CheckBox7.Name = "CheckBox7"
-        Me.CheckBox7.Size = New System.Drawing.Size(275, 19)
-        Me.CheckBox7.TabIndex = 8
-        Me.CheckBox7.Text = "Show log view on the progress panel by default"
-        Me.CheckBox7.UseVisualStyleBackColor = True
-        '
-        'ProgressPanelPic
-        '
-        Me.ProgressPanelPic.Image = Global.DISMTools.My.Resources.Resources.progresspanel_logview_hidden
-        Me.ProgressPanelPic.Location = New System.Drawing.Point(23, 83)
-        Me.ProgressPanelPic.Name = "ProgressPanelPic"
-        Me.ProgressPanelPic.Size = New System.Drawing.Size(684, 370)
-        Me.ProgressPanelPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.ProgressPanelPic.TabIndex = 7
-        Me.ProgressPanelPic.TabStop = False
         '
         'Options_ImgOps
         '
@@ -2535,6 +2543,71 @@ Partial Class Options
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label30)
+        Me.GroupBox1.Controls.Add(Me.Label31)
+        Me.GroupBox1.Controls.Add(Me.Label17)
+        Me.GroupBox1.Controls.Add(Me.LightThemesCB)
+        Me.GroupBox1.Controls.Add(Me.DarkThemesCB)
+        Me.GroupBox1.Location = New System.Drawing.Point(17, 97)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(693, 112)
+        Me.GroupBox1.TabIndex = 6
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Color Themes"
+        '
+        'DarkThemesCB
+        '
+        Me.DarkThemesCB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DarkThemesCB.FormattingEnabled = True
+        Me.DarkThemesCB.Location = New System.Drawing.Point(114, 52)
+        Me.DarkThemesCB.Name = "DarkThemesCB"
+        Me.DarkThemesCB.Size = New System.Drawing.Size(570, 23)
+        Me.DarkThemesCB.TabIndex = 3
+        '
+        'Label17
+        '
+        Me.Label17.AutoEllipsis = True
+        Me.Label17.Location = New System.Drawing.Point(13, 52)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(95, 23)
+        Me.Label17.TabIndex = 2
+        Me.Label17.Text = "Dark Mode:"
+        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'LightThemesCB
+        '
+        Me.LightThemesCB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LightThemesCB.FormattingEnabled = True
+        Me.LightThemesCB.Location = New System.Drawing.Point(114, 81)
+        Me.LightThemesCB.Name = "LightThemesCB"
+        Me.LightThemesCB.Size = New System.Drawing.Size(570, 23)
+        Me.LightThemesCB.TabIndex = 3
+        '
+        'Label30
+        '
+        Me.Label30.AutoEllipsis = True
+        Me.Label30.Location = New System.Drawing.Point(13, 81)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Size = New System.Drawing.Size(95, 23)
+        Me.Label30.TabIndex = 2
+        Me.Label30.Text = "Light Mode:"
+        Me.Label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label31
+        '
+        Me.Label31.AutoEllipsis = True
+        Me.Label31.Location = New System.Drawing.Point(13, 21)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(671, 23)
+        Me.Label31.TabIndex = 2
+        Me.Label31.Text = "You can have the program change the color theme according to your preferred color" & _
+    " mode."
+        Me.Label31.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -2620,22 +2693,6 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
-        Me.Options_Logs.ResumeLayout(False)
-        Me.FlowLayoutPanel4.ResumeLayout(False)
-        Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
-        Me.Panel19.ResumeLayout(False)
-        Me.Panel19.PerformLayout()
-        Me.Panel24.ResumeLayout(False)
-        Me.Panel24.PerformLayout()
-        Me.Panel25.ResumeLayout(False)
-        Me.Panel25.PerformLayout()
-        Me.Options_Program.ResumeLayout(False)
-        Me.FlowLayoutPanel2.ResumeLayout(False)
-        Me.Panel14.ResumeLayout(False)
-        Me.Panel14.PerformLayout()
-        Me.Panel15.ResumeLayout(False)
-        Me.Panel15.PerformLayout()
         Me.Options_Personalization.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.Panel16.ResumeLayout(False)
@@ -2647,6 +2704,22 @@ Partial Class Options
         Me.Panel22.ResumeLayout(False)
         Me.Panel22.PerformLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Options_Program.ResumeLayout(False)
+        Me.FlowLayoutPanel2.ResumeLayout(False)
+        Me.Panel14.ResumeLayout(False)
+        Me.Panel14.PerformLayout()
+        Me.Panel15.ResumeLayout(False)
+        Me.Panel15.PerformLayout()
+        Me.Options_Logs.ResumeLayout(False)
+        Me.FlowLayoutPanel4.ResumeLayout(False)
+        Me.Panel5.ResumeLayout(False)
+        Me.Panel5.PerformLayout()
+        Me.Panel19.ResumeLayout(False)
+        Me.Panel19.PerformLayout()
+        Me.Panel24.ResumeLayout(False)
+        Me.Panel24.PerformLayout()
+        Me.Panel25.ResumeLayout(False)
+        Me.Panel25.PerformLayout()
         Me.Options_ImgOps.ResumeLayout(False)
         Me.FlowLayoutPanel5.ResumeLayout(False)
         Me.Panel6.ResumeLayout(False)
@@ -2682,6 +2755,7 @@ Partial Class Options
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
         Me.Panel23.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -2892,5 +2966,11 @@ Partial Class Options
     Friend WithEvents Label65 As System.Windows.Forms.Label
     Friend WithEvents Label63 As System.Windows.Forms.Label
     Friend WithEvents EditorOFD As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents Label30 As System.Windows.Forms.Label
+    Friend WithEvents Label31 As System.Windows.Forms.Label
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents LightThemesCB As System.Windows.Forms.ComboBox
+    Friend WithEvents DarkThemesCB As System.Windows.Forms.ComboBox
 
 End Class

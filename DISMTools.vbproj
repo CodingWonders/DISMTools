@@ -1265,10 +1265,12 @@
     <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
-    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
-    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
     <None Include="Utilities\ThemeUtilities\ThemeFiles\default_dark.ini" />
     <None Include="Utilities\ThemeUtilities\ThemeFiles\default_light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT04Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT04Light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
