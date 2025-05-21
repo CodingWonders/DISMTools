@@ -213,6 +213,8 @@ Public Class Options
         MainForm.AutoCompleteInfo(4) = CheckBox19.Checked
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.ExpandedProgressPanel = CheckBox7.Checked
+        MainForm.ShowDateAndTime = CheckBox21.Checked
+        MainForm.TimeLabel.Visible = CheckBox21.Checked
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1810,6 +1812,7 @@ Public Class Options
         CheckBox19.Checked = MainForm.AutoCompleteInfo(4)
         CheckBox22.Checked = MainForm.AutoCleanMounts
         CheckBox7.Checked = MainForm.ExpandedProgressPanel
+        CheckBox21.Checked = MainForm.ShowDateAndTime
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

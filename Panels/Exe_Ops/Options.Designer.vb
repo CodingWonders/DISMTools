@@ -174,6 +174,12 @@ Partial Class Options
         Me.Options_Personalization = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel16 = New System.Windows.Forms.Panel()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.LightThemesCB = New System.Windows.Forms.ComboBox()
+        Me.DarkThemesCB = New System.Windows.Forms.ComboBox()
         Me.Panel17 = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.Panel18 = New System.Windows.Forms.Panel()
@@ -230,12 +236,7 @@ Partial Class Options
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.DarkThemesCB = New System.Windows.Forms.ComboBox()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.LightThemesCB = New System.Windows.Forms.ComboBox()
-        Me.Label30 = New System.Windows.Forms.Label()
-        Me.Label31 = New System.Windows.Forms.Label()
+        Me.CheckBox21 = New System.Windows.Forms.CheckBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -289,6 +290,7 @@ Partial Class Options
         Me.Options_Personalization.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.Panel16.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.Panel17.SuspendLayout()
         Me.Panel18.SuspendLayout()
         Me.Panel22.SuspendLayout()
@@ -329,7 +331,6 @@ Partial Class Options
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1908,12 +1909,78 @@ Partial Class Options
         Me.Panel16.Controls.Add(Me.Label8)
         Me.Panel16.Controls.Add(Me.ComboBox2)
         Me.Panel16.Controls.Add(Me.ComboBox3)
+        Me.Panel16.Controls.Add(Me.CheckBox21)
         Me.Panel16.Controls.Add(Me.CheckBox9)
         Me.Panel16.Location = New System.Drawing.Point(0, 0)
         Me.Panel16.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel16.Name = "Panel16"
         Me.Panel16.Size = New System.Drawing.Size(728, 224)
         Me.Panel16.TabIndex = 0
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.Label30)
+        Me.GroupBox1.Controls.Add(Me.Label31)
+        Me.GroupBox1.Controls.Add(Me.Label17)
+        Me.GroupBox1.Controls.Add(Me.LightThemesCB)
+        Me.GroupBox1.Controls.Add(Me.DarkThemesCB)
+        Me.GroupBox1.Location = New System.Drawing.Point(17, 97)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(693, 112)
+        Me.GroupBox1.TabIndex = 6
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Color Themes"
+        '
+        'Label30
+        '
+        Me.Label30.AutoEllipsis = True
+        Me.Label30.Location = New System.Drawing.Point(13, 81)
+        Me.Label30.Name = "Label30"
+        Me.Label30.Size = New System.Drawing.Size(95, 23)
+        Me.Label30.TabIndex = 2
+        Me.Label30.Text = "Light Mode:"
+        Me.Label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label31
+        '
+        Me.Label31.AutoEllipsis = True
+        Me.Label31.Location = New System.Drawing.Point(13, 21)
+        Me.Label31.Name = "Label31"
+        Me.Label31.Size = New System.Drawing.Size(671, 23)
+        Me.Label31.TabIndex = 2
+        Me.Label31.Text = "You can have the program change the color theme according to your preferred color" & _
+    " mode."
+        Me.Label31.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label17
+        '
+        Me.Label17.AutoEllipsis = True
+        Me.Label17.Location = New System.Drawing.Point(13, 52)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(95, 23)
+        Me.Label17.TabIndex = 2
+        Me.Label17.Text = "Dark Mode:"
+        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'LightThemesCB
+        '
+        Me.LightThemesCB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LightThemesCB.FormattingEnabled = True
+        Me.LightThemesCB.Location = New System.Drawing.Point(114, 81)
+        Me.LightThemesCB.Name = "LightThemesCB"
+        Me.LightThemesCB.Size = New System.Drawing.Size(570, 23)
+        Me.LightThemesCB.TabIndex = 3
+        '
+        'DarkThemesCB
+        '
+        Me.DarkThemesCB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DarkThemesCB.FormattingEnabled = True
+        Me.DarkThemesCB.Location = New System.Drawing.Point(114, 52)
+        Me.DarkThemesCB.Name = "DarkThemesCB"
+        Me.DarkThemesCB.Size = New System.Drawing.Size(570, 23)
+        Me.DarkThemesCB.TabIndex = 3
         '
         'Panel17
         '
@@ -2543,70 +2610,15 @@ Partial Class Options
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
         '
-        'GroupBox1
+        'CheckBox21
         '
-        Me.GroupBox1.Controls.Add(Me.Label30)
-        Me.GroupBox1.Controls.Add(Me.Label31)
-        Me.GroupBox1.Controls.Add(Me.Label17)
-        Me.GroupBox1.Controls.Add(Me.LightThemesCB)
-        Me.GroupBox1.Controls.Add(Me.DarkThemesCB)
-        Me.GroupBox1.Location = New System.Drawing.Point(17, 97)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(693, 112)
-        Me.GroupBox1.TabIndex = 6
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Color Themes"
-        '
-        'DarkThemesCB
-        '
-        Me.DarkThemesCB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DarkThemesCB.FormattingEnabled = True
-        Me.DarkThemesCB.Location = New System.Drawing.Point(114, 52)
-        Me.DarkThemesCB.Name = "DarkThemesCB"
-        Me.DarkThemesCB.Size = New System.Drawing.Size(570, 23)
-        Me.DarkThemesCB.TabIndex = 3
-        '
-        'Label17
-        '
-        Me.Label17.AutoEllipsis = True
-        Me.Label17.Location = New System.Drawing.Point(13, 52)
-        Me.Label17.Name = "Label17"
-        Me.Label17.Size = New System.Drawing.Size(95, 23)
-        Me.Label17.TabIndex = 2
-        Me.Label17.Text = "Dark Mode:"
-        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'LightThemesCB
-        '
-        Me.LightThemesCB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LightThemesCB.FormattingEnabled = True
-        Me.LightThemesCB.Location = New System.Drawing.Point(114, 81)
-        Me.LightThemesCB.Name = "LightThemesCB"
-        Me.LightThemesCB.Size = New System.Drawing.Size(570, 23)
-        Me.LightThemesCB.TabIndex = 3
-        '
-        'Label30
-        '
-        Me.Label30.AutoEllipsis = True
-        Me.Label30.Location = New System.Drawing.Point(13, 81)
-        Me.Label30.Name = "Label30"
-        Me.Label30.Size = New System.Drawing.Size(95, 23)
-        Me.Label30.TabIndex = 2
-        Me.Label30.Text = "Light Mode:"
-        Me.Label30.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Label31
-        '
-        Me.Label31.AutoEllipsis = True
-        Me.Label31.Location = New System.Drawing.Point(13, 21)
-        Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(671, 23)
-        Me.Label31.TabIndex = 2
-        Me.Label31.Text = "You can have the program change the color theme according to your preferred color" & _
-    " mode."
-        Me.Label31.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.CheckBox21.AutoSize = True
+        Me.CheckBox21.Location = New System.Drawing.Point(366, 71)
+        Me.CheckBox21.Name = "CheckBox21"
+        Me.CheckBox21.Size = New System.Drawing.Size(235, 19)
+        Me.CheckBox21.TabIndex = 5
+        Me.CheckBox21.Text = "Show date and time on the project view"
+        Me.CheckBox21.UseVisualStyleBackColor = True
         '
         'Options
         '
@@ -2697,6 +2709,7 @@ Partial Class Options
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.Panel16.ResumeLayout(False)
         Me.Panel16.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
         Me.Panel17.ResumeLayout(False)
         Me.Panel17.PerformLayout()
         Me.Panel18.ResumeLayout(False)
@@ -2755,7 +2768,6 @@ Partial Class Options
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
         Me.Panel23.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -2972,5 +2984,6 @@ Partial Class Options
     Friend WithEvents Label17 As System.Windows.Forms.Label
     Friend WithEvents LightThemesCB As System.Windows.Forms.ComboBox
     Friend WithEvents DarkThemesCB As System.Windows.Forms.ComboBox
+    Friend WithEvents CheckBox21 As System.Windows.Forms.CheckBox
 
 End Class
