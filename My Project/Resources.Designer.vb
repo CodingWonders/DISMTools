@@ -1979,21 +1979,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''-- Bugfixes
-        '''
-        '''- Fixed an issue where the program would throw encoding-related exceptions when trying to redirect DISM output in some systems (#239, thanks Vincent Långström (@vinicentus) for spotting)
-        '''- The background process notification dialog no longer steals focus from the main window
-        '''- Image size reporting has been fixed for HotInstall
-        '''
-        '''-- New features
-        '''
-        '''- The documentation has been updated to reflect the changes in this version
-        '''
-        '''Overall changes:
-        '''
-        '''-- Bugfix [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.6.2_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
