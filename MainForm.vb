@@ -3638,7 +3638,7 @@ Public Class MainForm
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -3795,7 +3795,7 @@ Public Class MainForm
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -3978,7 +3978,7 @@ Public Class MainForm
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4214,7 +4214,7 @@ Public Class MainForm
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4394,7 +4394,7 @@ Public Class MainForm
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
