@@ -33,6 +33,7 @@ Partial Class ExceptionForm
         Me.Label4 = New System.Windows.Forms.Label()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.DynaViewer_Button = New System.Windows.Forms.Button()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -43,8 +44,8 @@ Partial Class ExceptionForm
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(666, 57)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "We are sorry for the inconvenience, but DISMTools has run into an error that it c" &
-    "ouldn't handle and we need your help in order to continue." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Here is the error " &
+        Me.Label1.Text = "We are sorry for the inconvenience, but DISMTools has run into an error that it c" & _
+    "ouldn't handle and we need your help in order to continue." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Here is the error " & _
     "information if you need it:"
         '
         'PictureBox1
@@ -68,7 +69,7 @@ Partial Class ExceptionForm
         Me.ErrorText.Name = "ErrorText"
         Me.ErrorText.ReadOnly = True
         Me.ErrorText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.ErrorText.Size = New System.Drawing.Size(663, 516)
+        Me.ErrorText.Size = New System.Drawing.Size(662, 516)
         Me.ErrorText.TabIndex = 2
         '
         'Label2
@@ -88,15 +89,15 @@ Partial Class ExceptionForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(502, 42)
         Me.Label3.TabIndex = 0
-        Me.Label3.Text = "In order to prevent this problem from happening again, we would like to know more" &
-    " about it by reporting an issue on the GitHub repository. You will need a GitHub" &
+        Me.Label3.Text = "In order to prevent this problem from happening again, we would like to know more" & _
+    " about it by reporting an issue on the GitHub repository. You will need a GitHub" & _
     " account to report feedback."
         '
         'Issue_Btn
         '
         Me.Issue_Btn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Issue_Btn.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Issue_Btn.Location = New System.Drawing.Point(910, 111)
+        Me.Issue_Btn.Location = New System.Drawing.Point(793, 111)
         Me.Issue_Btn.Name = "Issue_Btn"
         Me.Issue_Btn.Size = New System.Drawing.Size(197, 32)
         Me.Issue_Btn.TabIndex = 3
@@ -120,8 +121,8 @@ Partial Class ExceptionForm
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(502, 42)
         Me.Label4.TabIndex = 0
-        Me.Label4.Text = "When reporting this issue, PLEASE paste the exception information on the left. Ot" &
-    "herwise, standard closure policies will be applied which imply closing your issu" &
+        Me.Label4.Text = "When reporting this issue, PLEASE paste the exception information on the left. Ot" & _
+    "herwise, standard closure policies will be applied which imply closing your issu" & _
     "e after (at least) 4 hours."
         '
         'LinkLabel1
@@ -145,10 +146,21 @@ Partial Class ExceptionForm
         Me.LinkLabel2.LinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel2.Location = New System.Drawing.Point(736, 336)
         Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.Size = New System.Drawing.Size(26, 15)
+        Me.LinkLabel2.Size = New System.Drawing.Size(25, 15)
         Me.LinkLabel2.TabIndex = 5
         Me.LinkLabel2.TabStop = True
         Me.LinkLabel2.Text = "Exit"
+        '
+        'DynaViewer_Button
+        '
+        Me.DynaViewer_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DynaViewer_Button.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DynaViewer_Button.Location = New System.Drawing.Point(996, 111)
+        Me.DynaViewer_Button.Name = "DynaViewer_Button"
+        Me.DynaViewer_Button.Size = New System.Drawing.Size(197, 32)
+        Me.DynaViewer_Button.TabIndex = 3
+        Me.DynaViewer_Button.Text = "Copy and Inspect Logs"
+        Me.DynaViewer_Button.UseVisualStyleBackColor = True
         '
         'ExceptionForm
         '
@@ -157,6 +169,7 @@ Partial Class ExceptionForm
         Me.ClientSize = New System.Drawing.Size(1264, 601)
         Me.Controls.Add(Me.LinkLabel2)
         Me.Controls.Add(Me.LinkLabel1)
+        Me.Controls.Add(Me.DynaViewer_Button)
         Me.Controls.Add(Me.Issue_Btn)
         Me.Controls.Add(Me.ErrorText)
         Me.Controls.Add(Me.PictureBox1)
@@ -189,4 +202,5 @@ Partial Class ExceptionForm
     Friend WithEvents Label4 As Label
     Friend WithEvents LinkLabel1 As LinkLabel
     Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents DynaViewer_Button As System.Windows.Forms.Button
 End Class

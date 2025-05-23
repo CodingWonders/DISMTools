@@ -847,6 +847,7 @@
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -1423,15 +1424,6 @@
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\aarch64\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\amd64\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\i386\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -1886,6 +1878,12 @@ IF EXIST "$(SolutionDir)Tools\UnpEax-Bin\UnpEax.exe" (
 IF EXIST "$(SolutionDir)Tools\UnattendGen" (
 	md "Tools\UnattendGen"
 	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
+)
+
+:: Copy DynaViewer
+IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
+	md "Tools\DynaViewer"
+	xcopy "$(SolutionDir)Tools\DynaViewer\out\*.exe" "Tools\DynaViewer" /cehyi
 )
 
 IF NOT EXIST AutoUnattend (
