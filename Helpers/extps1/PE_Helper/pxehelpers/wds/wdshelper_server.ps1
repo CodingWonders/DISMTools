@@ -91,6 +91,10 @@ if (((Get-WindowsRole -RoleName "WDS") -eq $false) -or ((Get-WindowsRole -RoleNa
     return $false
 }
 
+Write-LogMessage -message "Checking share locations..."
+$wdsShareLocation = ""
+$wdsShareLocation = (Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Shares" -Name "REMINST" -ErrorAction SilentlyContinue)[3].Replace("Path=", "")
+
 Write-LogMessage -message "Starting Windows Deployment Services Web API..."
 Write-LogMessage -message "Server Options:"
 Write-LogMessage -message " - Web API Host: $webHost"
@@ -182,6 +186,14 @@ function Deploy-WimImage {
         if ($wdsUtilProc.ExitCode -ne 0) {
             throw "WDSUtil Exited with Code $($wdsUtilProc.ExitCode)"
         }
+        if (Test-Path -Path "$wdsShareLocation\Images\$($ImageGroup)\$([IO.Path]::GetFileNameWithoutExtension("$ImageName"))\Unattend\ImageUnattend.xml" -PathType Leaf) {
+            Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Copying answer file..." -PercentComplete 80
+            try {
+                Copy-Item -Path "$wdsShareLocation\Images\$($ImageGroup)\$([IO.Path]::GetFileNameWithoutExtension("$ImageName"))\Unattend\ImageUnattend.xml" -Destination "$tmpImageFolderPath\unattend.xml"
+            } catch {
+                Write-LogMessage "Could not copy unattended answer file. The target installation will not be unattended"
+            }
+        }
         Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Finishing up..." -PercentComplete 90
         $authInfo = [WdsShareAuthenticationInfo]::new("$env:COMPUTERNAME", "$env:USERNAME", "\\$env:COMPUTERNAME\$shareName")
         Write-Progress -Activity "WDS Deployment Preparation Work" -Completed
@@ -193,7 +205,7 @@ function Deploy-WimImage {
 }
 
 function Clear-Files {
-    Get-SmbShare -Name "$shareName" | Remove-SmbShare -Force
+    Get-SmbShare -Name "$shareName" -ErrorAction SilentlyContinue | Remove-SmbShare -Force -ErrorAction SilentlyContinue
     Remove-Item -Path "$tmpImageFolderPath" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
 }
 
