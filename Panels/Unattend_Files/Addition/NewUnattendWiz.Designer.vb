@@ -1053,6 +1053,7 @@ Partial Class NewUnattendWiz
         '
         'CheckBox22
         '
+        Me.CheckBox22.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.CheckBox22.AutoSize = True
         Me.CheckBox22.Location = New System.Drawing.Point(338, 516)
         Me.CheckBox22.Name = "CheckBox22"
