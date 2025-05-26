@@ -1,4 +1,5 @@
 #requires -version 5.0
+#requires -runasadministrator
 #                                              ....
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
@@ -168,12 +169,14 @@ function Deploy-WimImage {
         if (-not (Test-Path -Path "$tmpImageFolderPath")) {
             New-Item -Path "$tmpImageFolderPath" -ItemType Directory | Out-Null
         }
-        Remove-Item -Path "$tmpImageFolderPath\*.wim" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
-        Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Creating SMB network share..." -PercentComplete 30
-        Write-LogMessage -message "Setting network share..."
-        # Create the SMB share if it doesn't exist
-        if (((Get-SmbShare -Name "$shareName" -ErrorAction Ignore) | Select-Object -ExpandProperty Name).Count -le 0) {
-            New-SmbShare -Path "$tmpImageFolderPath" -Name "$shareName" -ReadAccess 'EVERYONE' | Out-Null
+        if ((Get-SmbShare -Name "$shareName" -ErrorAction SilentlyContinue) -eq $null) {
+            Remove-Item -Path "$tmpImageFolderPath\*.wim" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+            Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Creating SMB network share..." -PercentComplete 30
+            Write-LogMessage -message "Setting network share..."
+            # Create the SMB share if it doesn't exist
+            if (((Get-SmbShare -Name "$shareName" -ErrorAction Ignore) | Select-Object -ExpandProperty Name).Count -le 0) {
+                New-SmbShare -Path "$tmpImageFolderPath" -Name "$shareName" -ReadAccess 'EVERYONE' | Out-Null
+            }
         }
         Write-LogMessage -message "Beginning image export..."
         Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Getting complete information about specified image..." -PercentComplete 45
@@ -205,8 +208,13 @@ function Deploy-WimImage {
 }
 
 function Clear-Files {
-    Get-SmbShare -Name "$shareName" -ErrorAction SilentlyContinue | Remove-SmbShare -Force -ErrorAction SilentlyContinue
-    Remove-Item -Path "$tmpImageFolderPath" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+    $smbShare = Get-SmbShare -Name "$shareName" -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 20                        # We wait this long because, even though we disconnect a client from a share, it might take a while for that to be picked up by the server
+    if (($smbShare -ne $null) -and ($smbShare.CurrentUsers -le 0)) {
+        Write-LogMessage -message "The share has no users currently. Removing share and folder..."
+        $smbShare | Remove-SmbShare -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$tmpImageFolderPath" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+    }
 }
 
 $shutdownRequested = $false

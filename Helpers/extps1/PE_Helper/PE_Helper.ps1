@@ -632,12 +632,25 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat"
+            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
             Write-Host "Startup commands changed"
         }
         catch
         {
             Write-Host "Could not change startup commands"
+        }
+        try
+        {
+            Write-Host "CUSTOMIZATION STEP - Prepare System for Network-based Installations" -BackgroundColor DarkGreen
+            Write-Host "Preparing NetInstall..."
+            New-Item -Path "$imagePath\pxehelpers" -ItemType Directory | Out-Null
+            Copy-Item -Path "$((Get-Location).Path)\pxehelpers\*" -Destination "$imagePath\pxehelpers" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+            Write-Host "The target system is now ready for network-based installations"
+        }
+        catch
+        {
+            Write-Host "Could not prepare the system for network-based installations"
         }
         Write-Host "CUSTOMIZATION STEP - Set Scratch Size" -BackgroundColor DarkGreen
         Write-Host "Setting scratch size..."

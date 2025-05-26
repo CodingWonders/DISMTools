@@ -14,30 +14,13 @@ if %debug% equ 1 (
 	taskmgr
 )
 powershell -command Set-ExecutionPolicy Unrestricted
-REM if not exist "%sysdrive%\HotInstall" (
-	REM echo Choose your preferred installation method:
-	REM echo.
-	REM echo 1 - Local Installation
-	REM echo     Choose this method if you started the Preinstallation Environment using local media, such as
-	REM echo     DVD or USB drives. This is recommended for newcomers
-	REM Next Section Is Not Ready Yet
-	REM echo 2 - Network Installation
-	REM echo     Choose this method if you started the Preinstallation Environment using a network-based
-	REM echo     deployment solution. This is recommended for system administrators that want to deploy a system
-	REM echo     image to multiple computers at once.
-	REM echo S - Shut down my computer
-	REM echo R - Restart my computer
-	REM echo.
-	REM echo You will not be able to go back to choose another option after making your decision. You must reboot your
-	REM echo computer and select the correct option. You can also restart your computer by closing this window.
-	REM echo.
-	REM choice /C 12SR /M "Choose an installation method by typing the option and pressing ENTER: "
-	REM if %errorlevel% equ 3 (
-		REM wpeutil shutdown
-	REM ) else if %errorlevel% equ 4 (
-		REM wpeutil reboot
-	REM )
-REM )
+if not exist "%sysdrive%\HotInstall" (
+	powershell -file "%sysdrive%\menu.ps1"
+	if exist "%sysdrive%\netinstall" (
+		cd /d "%sysdrive%"\
+		powershell -file ".\pxehelpers\wds\wdshelper.ps1"
+	)
+)
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	echo Please insert the disc image and press ENTER...
 	pause > nul
