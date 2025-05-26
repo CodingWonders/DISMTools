@@ -14,6 +14,13 @@ if %debug% equ 1 (
 	taskmgr
 )
 powershell -command Set-ExecutionPolicy Unrestricted
+if not exist "%sysdrive%\HotInstall" (
+	powershell -file "%sysdrive%\menu.ps1"
+	if exist "%sysdrive%\netinstall" (
+		cd /d "%sysdrive%"\
+		powershell -file ".\pxehelpers\wds\wdshelper.ps1"
+	)
+)
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	echo Please insert the disc image and press ENTER...
 	pause > nul

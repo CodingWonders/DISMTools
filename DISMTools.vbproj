@@ -1197,6 +1197,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
