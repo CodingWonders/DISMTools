@@ -342,11 +342,15 @@ Public Class NewTestingEnv
         IdlePanel.Visible = False
         ISOProgressPanel.Visible = True
         If e.ProgressPercentage < 100 Then
+            WindowHelper.DisableCloseCapability(Handle)
             Label8.Text = progressMessages(1)
             ProgressBar1.Style = ProgressBarStyle.Marquee
+            TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
         Else
+            WindowHelper.EnableCloseCapability(Handle)
             If success Then Label8.Text = progressMessages(2)
             ProgressBar1.Style = ProgressBarStyle.Blocks
+            TaskbarHelper.SetIndicatorState(100, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
         End If
         ProgressBar1.Value = e.ProgressPercentage
     End Sub
