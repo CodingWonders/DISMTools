@@ -420,14 +420,15 @@ function Start-OSApplication {
 
     New-Item -Path "$($driveLetter):\NetInstall" -ItemType Directory | Out-Null
 
-    if ((Copy-Item -Path "Z:\install.wim" -Destination "$($driveLetter):\NetInstall\install.wim" -Force) -eq $false) {
+    if ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\install.wim" -Destination "$($driveLetter):\NetInstall\install.wim" -Force) -eq $false) {
         Show-CenteredTextBox -Text "Could not prepare the deployment of this image file." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
-        return
+        Start-Sleep -Seconds 5
+        wpeutil reboot
     }
 
     Show-CenteredTextBox -Text "Downloading unattended answer file. This can take some time, depending on the speed of the network connection..." -MaxWidth 100 -CenterOfAll
 
-    if ((Test-Path -Path "Z:\unattend.xml" -PathType Leaf) -and ((Copy-Item -Path "Z:\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false)) {
+    if ((Test-Path -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -PathType Leaf) -and ((Copy-Item -Path "Z:\$($connectionResult.output.shareFolderGuid)\unattend.xml" -Destination "$($driveLetter):\NetInstall\unattend.xml" -Force) -eq $false)) {
         Show-CenteredTextBox -Text "An unattended answer file was detected, but could not be downloaded. The target installation will not be unattended." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
         Write-Host "`n`nPress ENTER to continue..."
         Read-Host | Out-Null
@@ -436,7 +437,7 @@ function Start-OSApplication {
     Show-SectionMessage -sectionTitle "Select the Windows image to install"
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
-    
+
     Show-SectionMessage -sectionTitle "Collecting information and copying files needed for Setup" -sectionDescription "Please wait while Setup applies the Windows image. This can take some time, depending on the speed of your computer's disks."
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
@@ -474,7 +475,7 @@ function Start-OSApplication {
         Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
     }
     net use * /d /y | Out-Null
-    
+
     Start-Job {
         param ($authInfo)
         Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/clearfiles" | Out-Null
@@ -918,12 +919,31 @@ Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "P
 
 $authInfo = Invoke-ServerAuthentication
 
+Show-CenteredTextBox -Text "Connecting to the WDS server . . ." -MaxWidth 100 -CenterOfAll
+
+$connectionBody = @{
+    deviceID = (Get-WmiObject Win32_ComputerSystemProduct).UUID
+} | ConvertTo-Json
+
+$connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/connect"
+
+if (($connectionResult -eq $null) -or ($connectionResult.output.successful -eq $false)) {
+    if ($connectionResult -ne $null) {
+        Show-CenteredTextBox -Text "Could not connect to the server. Reason: $($connectionResult.output.failureReason)" -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+    } else {
+        Show-CenteredTextBox -Text "Could not connect to the server." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+    }
+    Start-Sleep -Seconds 5
+    wpeutil reboot
+}
+
 Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
 $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
 
 if (($installImages -eq $null) -or ($installImages.success -eq $false) -or ($installImages.images.Count -le 0)) {
     Show-CenteredTextBox -Text "Could not get installation images" -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
-    return
+    Start-Sleep -Seconds 5
+    wpeutil reboot
 }
 
 Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
@@ -935,6 +955,7 @@ $installationImageGroup = Read-Host -Prompt "Please type the group the desired i
 if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
     Show-CenteredTextBox -Text "Preparing the deployment of the selected image file . . ." -MaxWidth 100 -CenterOfAll
     $shareBody = @{
+        shareGuid = $($connectionResult.output.shareFolderGuid)
         image_group = "$installationImageGroup"
         image_name = "$installationImageToDeploy"
     } | ConvertTo-Json
@@ -944,12 +965,12 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
         net use * $($shareResults.output.mountPath) $($authInfo.serverPassword) /user:$($shareResults.output.username)
     } else {
         Show-CenteredTextBox -Text "Could not prepare the deployment of this image file." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
-        return
+        Start-Sleep -Seconds 5
+        wpeutil reboot
     }
 } else {
-    return
+    Start-Sleep -Seconds 5
+    wpeutil reboot
 }
 
 Start-OSApplication
-
-#Disable-Networking

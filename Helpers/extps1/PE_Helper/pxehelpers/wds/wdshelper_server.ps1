@@ -30,12 +30,21 @@
 # Exposed APIs:
 #
 #   - /api/installimages --> Gets the install images in the WDS store
+#   - /api/connect       --> Connects a client to a server
+#
+#         A client must send data to /api/connect like this (example in PowerShell):
+#
+#         $json = @{
+#             deviceId = "<Device ID>"
+#         } | ConvertTo-Json
+#
 #   - /api/deploy        --> Prepares a server for image deployment to a client
 #
 #         A client must send data to /api/deploy like this (example in PowerShell):
 #
 #         $json = @{
-#             image_name = "<File name of image in WDS"
+#             shareGuid = "<GUID for share, obtained with /api/connect>"
+#             image_name = "<File name of image in WDS>"
 #             image_group = "<WDS image group>"
 #         } | ConvertTo-Json
 #
@@ -64,7 +73,7 @@ function Write-LogMessage {
 
 function Get-WindowsRole {
     param(
-        [Parameter(Mandatory = $true)] [string] $RoleName
+        [Parameter(Mandatory = $true)] [string]$RoleName
     )
     Write-LogMessage -message "Detecting server role `"$RoleName`"..."
     return (Get-WindowsFeature | Where-Object { $_.Name -match "$RoleName" }).InstallState -eq "Installed"
@@ -137,10 +146,28 @@ function Get-WdsInstallImages {
     }
 }
 
+class WdsConnectionInfo {
+    [bool]$successful
+    [string]$failureReason
+    [string]$shareFolderGuid
+
+    WdsConnectionInfo() {
+        $this.successful = $false
+        $this.failureReason = ""
+        $this.shareFolderGuid = ""
+    }
+
+    WdsConnectionInfo($success, $failReason, $guid) {
+        $this.successful = $success
+        $this.failureReason = $failReason
+        $this.shareFolderGuid = $guid
+    }
+}
+
 class WdsShareAuthenticationInfo {
-    [string] $server
-    [string] $username
-    [string] $mountPath
+    [string]$server
+    [string]$username
+    [string]$mountPath
 
     WdsShareAuthenticationInfo() {
         $this.server = ""
@@ -155,12 +182,40 @@ class WdsShareAuthenticationInfo {
     }
 }
 
+function Start-ServerConnection {
+    param (
+        [Parameter(Mandatory)] [string]$deviceId
+    )
+    try {
+        Write-LogMessage -message "Checking if device is approved..."
+        $allowedDeviceRequests = (Get-WdsClient -PendingClientStatus Approved)
+        $blockedDeviceRequests = (Get-WdsClient -PendingClientStatus Denied)
+        # Start with blocked devices
+        if ((($blockedDeviceRequests | Where-Object { $_.DeviceID.Contains($deviceId) }) | Select-Object -ExpandProperty DeviceID).Count -ge 1) {
+            Write-LogMessage -message "This device is blocked."
+            return [WdsConnectionInfo]::new($false, "This device cannot connect to this server because its request has been denied in the WDS server", "")
+        }
+        # Continue with allowed devices. If it's not there, it's still pending or its status could not be obtained
+        if ((($allowedDeviceRequests | Where-Object { $_.DeviceID.Contains($deviceId) }) | Select-Object -ExpandProperty DeviceId).Count -lt 1) {
+            Write-LogMessage -message "This device is neither approved nor blocked."
+            return [WdsConnectionInfo]::new($false, "This device cannot connect to this server because its approval is either pending or unknown", "")
+        }
+        return [WdsConnectionInfo]::new($true, "", [System.Guid]::NewGuid().Guid)
+    } catch {
+        throw $_
+    }
+}
+
 # Function to deploy a WIM image to the target drive using native WDS cmdlets
 function Deploy-WimImage {
     param(
+        [string]$shareGuid,
         [string]$ImageName,
         [string]$ImageGroup
     )
+    if ($shareGuid -eq "") {
+        throw "The Share GUID cannot be empty."
+    }
     Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Please wait..." -PercentComplete 0
     Write-LogMessage -message "Preparing the deployment of a WIM file..."
     try {
@@ -178,6 +233,7 @@ function Deploy-WimImage {
                 New-SmbShare -Path "$tmpImageFolderPath" -Name "$shareName" -ReadAccess 'EVERYONE' | Out-Null
             }
         }
+        New-Item -Path "$tmpImageFolderPath\$shareGuid" -ItemType Directory | Out-Null
         Write-LogMessage -message "Beginning image export..."
         Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Getting complete information about specified image..." -PercentComplete 45
         $installImage = (Get-WdsInstallImage -ImageGroup "$ImageGroup" -FileName "$ImageName")
@@ -185,14 +241,14 @@ function Deploy-WimImage {
             throw "Image information could not be found"
         }
         Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Exporting image to share..." -PercentComplete 60
-        $wdsUtilProc = Start-Process "wdsutil" -ArgumentList " /verbose /progress /export-image /image:`"$($installImage.Name)`" /server:$($env:COMPUTERNAME) /imagetype:Install /imagegroup:`"$ImageGroup`" /filename:`"$ImageName`" /destinationimage /filepath:`"$tmpImageFolderPath\$ImageName`" /name:`"$($installImage.Name)`" /overwrite:yes" -NoNewWindow -Wait -PassThru
+        $wdsUtilProc = Start-Process "wdsutil" -ArgumentList " /verbose /progress /export-image /image:`"$($installImage.Name)`" /server:$($env:COMPUTERNAME) /imagetype:Install /imagegroup:`"$ImageGroup`" /filename:`"$ImageName`" /destinationimage /filepath:`"$tmpImageFolderPath\$shareGuid\$ImageName`" /name:`"$($installImage.Name)`" /overwrite:yes" -NoNewWindow -Wait -PassThru
         if ($wdsUtilProc.ExitCode -ne 0) {
             throw "WDSUtil Exited with Code $($wdsUtilProc.ExitCode)"
         }
         if (Test-Path -Path "$wdsShareLocation\Images\$($ImageGroup)\$([IO.Path]::GetFileNameWithoutExtension("$ImageName"))\Unattend\ImageUnattend.xml" -PathType Leaf) {
             Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Copying answer file..." -PercentComplete 80
             try {
-                Copy-Item -Path "$wdsShareLocation\Images\$($ImageGroup)\$([IO.Path]::GetFileNameWithoutExtension("$ImageName"))\Unattend\ImageUnattend.xml" -Destination "$tmpImageFolderPath\unattend.xml"
+                Copy-Item -Path "$wdsShareLocation\Images\$($ImageGroup)\$([IO.Path]::GetFileNameWithoutExtension("$ImageName"))\Unattend\ImageUnattend.xml" -Destination "$tmpImageFolderPath\$shareGuid\unattend.xml"
             } catch {
                 Write-LogMessage "Could not copy unattended answer file. The target installation will not be unattended"
             }
@@ -209,12 +265,8 @@ function Deploy-WimImage {
 
 function Clear-Files {
     $smbShare = Get-SmbShare -Name "$shareName" -ErrorAction SilentlyContinue
-    Start-Sleep -Seconds 20                        # We wait this long because, even though we disconnect a client from a share, it might take a while for that to be picked up by the server
-    if (($smbShare -ne $null) -and ($smbShare.CurrentUsers -le 0)) {
-        Write-LogMessage -message "The share has no users currently. Removing share and folder..."
-        $smbShare | Remove-SmbShare -Force -ErrorAction SilentlyContinue
-        Remove-Item -Path "$tmpImageFolderPath" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
-    }
+    $smbShare | Remove-SmbShare -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path "$tmpImageFolderPath" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
 }
 
 $shutdownRequested = $false
@@ -223,17 +275,9 @@ $shutdownEvent = New-Object System.Threading.ManualResetEvent $false
 $ctrlC_EH = [ConsoleCancelEventHandler]{
     param($sender, $args)
 
-    #Write-Host "`nShutting down..."
-
-    #$shutdownRequested = $true
-    #$args.Cancel = $true  # prevent immediate termination
-    #$shutdownEvent.Set() | Out-Null
-
     $shutdownRequested = $true
     throw
 }
-
-#[Console]::add_CancelKeyPress($ctrlC_EH)
 
 try {
     while (-not $shutdownRequested) {
@@ -275,15 +319,33 @@ try {
                     $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
                 }
             }
+            "/api/connect" {
+                if ($request.HttpMethod -eq "POST") {
+                    try {
+                        $reader = New-Object IO.StreamReader $request.InputStream
+                        $body = $reader.ReadToEnd() | ConvertFrom-Json
+                        $deviceId = $body.deviceId
+
+                        $result = Start-ServerConnection -deviceId $deviceId
+                        if ($result -ne $null) {
+                            $sendJson.Invoke(@{ success = $result.successful; output = $result })
+                        }
+                    } catch {
+                        Write-LogMessage -message "Exception caught: $_"
+                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
+                    }
+                }
+            }
             "/api/deploy" {
                 if ($request.HttpMethod -eq "POST") {
                     try {
                         $reader = New-Object IO.StreamReader $request.InputStream
                         $body = $reader.ReadToEnd() | ConvertFrom-Json
+                        $guid = $body.shareGuid
                         $imageName = $body.image_name
                         $imageGroup = if ($body.image_group) { $body.image_group } else { "ImageGroup1" }
 
-                        $output = Deploy-WimImage -ImageName $imageName -ImageGroup $imageGroup
+                        $output = Deploy-WimImage -shareGuid $guid -ImageName $imageName -ImageGroup $imageGroup
                         $sendJson.Invoke(@{ success = $true; output = $output })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"

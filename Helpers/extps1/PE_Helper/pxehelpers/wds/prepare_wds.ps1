@@ -32,7 +32,7 @@ using namespace System.Collections.Generic
         The path to the boot image
 #>
 param (
-    [Parameter(Mandatory = $true, Position = 0)] [string] $bootImagePath
+    [Parameter(Mandatory = $true, Position = 0)] [string]$bootImagePath
 )
 
 $version = "0.7"
@@ -67,7 +67,7 @@ function Update-WinPEForWds {
             This will replace the PE Helper as the operating system installer and will reinstate Windows Setup
     #>
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [string] $bootImage
+        [Parameter(Mandatory = $true, Position = 0)] [string]$bootImage
     )
     if (-not (Get-PxeOptionStatus)) {
         Write-Host "PXE option checkers have failed."
@@ -119,7 +119,7 @@ function Add-WindowsSetupPackages {
             The path to the mounted Windows PE image
     #>
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [string] $mountPath
+        [Parameter(Mandatory = $true, Position = 0)] [string]$mountPath
     )
     $pkgs = [List[string]]::new()
     $pkgs.Add("$winpeToolsPath\amd64\WinPE_OCs\WinPE-Setup.cab")
@@ -225,11 +225,11 @@ class MulticastTransmission {
         .SYNOPSIS
             A multicast transmission class
     #>
-    [string] $transmissionName                                                                # The name of the multicast transmission
-    [string] $transmissionImageFile                                                           # The image file for the multicast transmission
-    [string] $transmissionImageFileName                                                       # The image file name in WDS for the multicast transmission
-    [Architecture] $transmissionArchitecture                                                  # The architecture for the multicast transmission
-    [MulticastTransmissionType] $transmissionType = [MulticastTransmissionType]::AutoCast     # The transmission type for the multicast transmission
+    [string]$transmissionName                                                                # The name of the multicast transmission
+    [string]$transmissionImageFile                                                           # The image file for the multicast transmission
+    [string]$transmissionImageFileName                                                       # The image file name in WDS for the multicast transmission
+    [Architecture]$transmissionArchitecture                                                  # The architecture for the multicast transmission
+    [MulticastTransmissionType]$transmissionType = [MulticastTransmissionType]::AutoCast     # The transmission type for the multicast transmission
 
     MulticastTransmission() {
         $this.transmissionName = ""
@@ -266,7 +266,7 @@ function Get-DhcpScopeOptionsForPxe {
             Whether there is Option 60 for a given subset of the DHCP server
     #>
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [DhcpVersion] $dhcpVersion
+        [Parameter(Mandatory = $true, Position = 0)] [DhcpVersion]$dhcpVersion
     )
     $hasOption60 = $false
     switch ($dhcpVersion) {
@@ -532,7 +532,7 @@ function Add-BootImageToWds {
     #>
 
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [string] $bootImage
+        [Parameter(Mandatory = $true, Position = 0)] [string]$bootImage
     )
 
     $imageName = Read-Host -Prompt "Name of the Windows image to put in WDS"
