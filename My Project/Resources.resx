@@ -926,18 +926,26 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
+- Fixed an issue in the update checker
+- Fixed a deployment issue in the Theme Designer
+- Fixed an issue where people could write to the console output
+- Fixed an issue where DISM would never finish after edition servicing tasks due to a computer restart prompt
+- Fixed an issue where exceptions that aren't related to the DISM API were not being logged when running background processes
+- Fixed an issue where background processes would abruptly stop when getting package information due to specific time representations
 
 New features:
 
-- DISMTools now includes a theme designer and editor
-- Massive improvements were made to the DISMTools PE on network environments using PXE/Windows Deployment Services (WDS, #230)
-- CODE: the language engine, first introduced in HotInstall, has been ported to DISMTools
-- CODE: information dialogs are now able to disable the close button when getting information using Windows APIs
-
-Removed features:
-
-- 32-bit ARM support has been fully removed from the PE Helper</value>
+- The restart message is now shown in a cleaner way
+- CODE: the PE Helper no longer requires "dp_listdisk.dp" to be present in order to list disks, as it's now generated automatically
+- When starting up the DISMTools Preinstallation Environment, you will now see a menu from which you can choose the installation type
+- The WDS REST API now separates install images with folders with GUIDs as names
+- Following the introduction of the WDS REST API in Preview 2, the DISMTools PE now includes the client component
+- UnattendGen has been updated to the latest version
+- You can now hide post-installation script windows when creating answer files
+- The managed DISM API has been updated to version 3.3.12
+- You can now switch color themes for both dark and light modes in the personalization settings
+- You can now hide the clock in the project view
+- DISM output is now saved to log files after operations are complete</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -2011,14 +2011,12 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
-        '''
-        '''New features:
-        '''
-        '''- DISMTools now includes a theme designer and editor
-        '''- Massive improvements were made to the DISMTools PE on network environments using PXE/Windows Deployment Services (WDS, #230)
-        '''- CODE: the language engine, first introduced in HotInstall, has been ported to DISMTools
-        '''- CODE: information dialogs are now able to disable the close button when gettin [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue in the update checker
+        '''- Fixed a deployment issue in the Theme Designer
+        '''- Fixed an issue where people could write to the console output
+        '''- Fixed an issue where DISM would never finish after edition servicing tasks due to a computer restart prompt
+        '''- Fixed an issue where exceptions that aren&apos;t related to the DISM API were not being logged when running background processes
+        '''- Fixed an issue where background processes would abruptly stop when getting package information due to sp [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
