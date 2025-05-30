@@ -263,8 +263,9 @@ Public Class MainForm
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
     Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
 
-    Dim DarkThemeIndex As Integer = 0               ' Color theme index for dark color scheme
-    Dim LightThemeIndex As Integer = 1              ' Color theme index for light color scheme
+    Public DarkThemeIndex As Integer = 0            ' Color theme index for dark color scheme
+    Public LightThemeIndex As Integer = 1           ' Color theme index for light color scheme
+    Public ShowDateAndTime As Boolean = True        ' Whether to show the date and time on the project view
 
     Friend NotInheritable Class NativeMethods
 
@@ -713,6 +714,7 @@ Public Class MainForm
             LoadDTSettings(1)
         End If
         imgStatus = 0
+        TimeLabel.Visible = ShowDateAndTime
         ChangeImgStatus()
         If DismExe <> "" Then
             DynaLog.LogMessage("Checking version of DISM executable...")
@@ -1103,7 +1105,7 @@ Public Class MainForm
             DynaLog.LogMessage("Downloading update information from DISMTools repository...")
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             Try
-                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt-update-files/refs/heads/main/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt-update-files/refs/heads/main/" & If(branch.Contains("pre"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
                 DynaLog.LogMessage("Could not grab update info. Well, I guess that we can't update!")
                 Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
@@ -1280,6 +1282,7 @@ Public Class MainForm
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
                 ExpandedProgressPanel = (CInt(PersKey.GetValue("ExpandedProgressPanel")) = 1)
+                ShowDateAndTime = (CInt(PersKey.GetValue("ShowDateAndTime")) = 1)
                 ProjectView.Visible = True
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
@@ -1462,6 +1465,11 @@ Public Class MainForm
                     ExpandedProgressPanel = 0
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
                     ExpandedProgressPanel = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=0") Then
+                    ShowDateAndTime = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=1") Then
+                    ShowDateAndTime = True
                 End If
                 ProjectView.Visible = True
                 ' Detect log file level: 1 - Errors only
@@ -1694,6 +1702,7 @@ Public Class MainForm
                            "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf &
                            "AllCaps                    =    " & AllCaps & CrLf &
                            "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf &
+                           "ShowDateAndTime            =    " & ShowDateAndTime & CrLf &
                            "LogFile                    =    " & Quote & LogFile & Quote & CrLf &
                            "LogLevel                   =    " & LogLevel & CrLf &
                            "AutoLogs                   =    " & AutoLogs & CrLf &
@@ -3629,7 +3638,7 @@ Public Class MainForm
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -3786,7 +3795,7 @@ Public Class MainForm
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -3969,7 +3978,7 @@ Public Class MainForm
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4205,7 +4214,7 @@ Public Class MainForm
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4385,7 +4394,7 @@ Public Class MainForm
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4578,9 +4587,9 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4652,9 +4661,9 @@ Public Class MainForm
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
-        PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.SetValue("ColorSchemes", 0, RegistryValueKind.DWord)
         PersKey.SetValue("ExpandedProgressPanel", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("ShowDateAndTime", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -4775,6 +4784,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
+                End If
+                If ShowDateAndTime Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -4946,6 +4960,7 @@ Public Class MainForm
                     PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                     PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
                     PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
+                    PersKey.SetValue("ShowDateAndTime", If(ShowDateAndTime, 1, 0), RegistryValueKind.DWord)
                     PersKey.Close()
                     DynaLog.LogMessage("Configuring log settings...")
                     Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")

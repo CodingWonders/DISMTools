@@ -18,7 +18,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2543"
+    Const UnattendGenReleaseTag As String = "2561"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -79,6 +79,7 @@ Public Class NewUnattendWiz
     Dim ConfiguredScripts As New List(Of PostInstallScript)
     Dim CurrentlyEditedStage As Integer = 0
     Dim ScriptsRestartExplorer As Boolean
+    Dim ScriptsHideWindow As Boolean
     ' -- Variables for special scripts
     ' --- Join Path cmdlet constants
     ' We put the directory separator character next to the environment variable as homedrive and systemdrive don't end with a backslash.
@@ -2070,6 +2071,11 @@ Public Class NewUnattendWiz
                     DynaLog.LogMessage("Explorer will be restarted.")
                     UnattendGen.StartInfo.Arguments &= " /restartexplorer"
                 End If
+                DynaLog.LogMessage("Checking if PowerShell windows will be hidden...")
+                If ScriptsHideWindow Then
+                    DynaLog.LogMessage("Windows will be hidden.")
+                    UnattendGen.StartInfo.Arguments &= " /hidewindows"
+                End If
             End If
             If FinalComponents.Count > 0 Then
                 ReportMessage("Saving user settings...", 24.75)
@@ -2746,5 +2752,9 @@ Public Class NewUnattendWiz
         CNameTTip.Show("Choose this option if the unattended answer file will be used on multiple computers on the same network." & CrLf &
                        "The default script will return a random computer name similar to " & Quote & ExampleName & Quote & CrLf &
                        "This can avoid name resolution conflicts.", sender)
+    End Sub
+
+    Private Sub CheckBox22_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox22.CheckedChanged
+        ScriptsHideWindow = CheckBox22.Checked
     End Sub
 End Class

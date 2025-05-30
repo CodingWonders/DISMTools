@@ -5041,7 +5041,7 @@ Public Class ProgressPanel
                            "- New edition: " & imgEditionNewEdition & CrLf &
                            "- Will the EULA be copied? " & If(imgEditionCopyEula, "Yes, to the following destination: " & imgEditionEulaDestination, "No") & CrLf &
                            "- Will the EULA be accepted? " & If(imgEditionAcceptEula, "Yes, with the following product key: " & imgEditionEditionKey, "No") & CrLf)
-        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-edition=" & imgEditionNewEdition
+        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /set-edition=" & imgEditionNewEdition
         DynaLog.LogMessage("Checking if the active installation is being managed...")
         If OnlineMgmt Then
             DynaLog.LogMessage("The active installation is being managed. Taking into account other settings the user may have specified...")
@@ -5076,7 +5076,7 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Setting the new product key..." & CrLf &
                            "Options:" & CrLf &
                            "- New product key: " & pkSetNewProductKey & CrLf)
-        CommandArgs &= " /image=" & targetImage & " /set-productkey=" & pkSetNewProductKey
+        CommandArgs &= " /image=" & targetImage & " /norestart /set-productkey=" & pkSetNewProductKey
         RunProcess(DismProgram, CommandArgs)
         LogView.AppendText(CrLf & "Getting error level...")
         If Hex(DismExitCode).Length < 8 Then
@@ -6648,21 +6648,51 @@ Public Class ProgressPanel
         Dim FileLength As Integer = 0
         FileLength = New FileInfo(LogFile).Length
         DynaLog.LogMessage("Size of log file in bytes: " & FileLength)
-        If FileLength <> 0 Then
-            File.AppendAllText(LogFile, CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================", ASCII)
-        Else
-            File.AppendAllText(LogFile, "======================== DISMTools Log File ========================" & CrLf &
-                                        "This is an automatically generated log file created by DISMTools." & CrLf &
-                                        "This file can be viewed at any time to view successful and/or" & CrLf &
-                                        "failed tasks." & CrLf & CrLf &
-                                        "This log file is updated every time an operation is performed." & CrLf &
-                                        "However, it does not contain the actual DISM log file, which is" & CrLf &
-                                        "also automatically generated each time DISM is run from this" & CrLf &
-                                        "program. These log files are named: " & CrLf &
-                                        "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf &
-                                        "====================================================================", ASCII)
+        Try
+            If FileLength <> 0 Then
+                File.AppendAllText(LogFile, CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================", ASCII)
+            Else
+                File.AppendAllText(LogFile, "======================== DISMTools Log File ========================" & CrLf &
+                                            "This is an automatically generated log file created by DISMTools." & CrLf &
+                                            "This file can be viewed at any time to view successful and/or" & CrLf &
+                                            "failed tasks." & CrLf & CrLf &
+                                            "This log file is updated every time an operation is performed." & CrLf &
+                                            "However, it does not contain the actual DISM log file, which is" & CrLf &
+                                            "also automatically generated each time DISM is run from this" & CrLf &
+                                            "program. These log files are named: " & CrLf &
+                                            "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf &
+                                            "====================================================================", ASCII)
+            End If
+            File.AppendAllText(LogFile, CrLf & LogView.Text, ASCII)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not log this operation. Error message: " & ex.Message)
+        End Try
+    End Sub
+
+    Sub SaveDismOutput(OutputFile As String)
+        DynaLog.LogMessage("Saving DISM output to a file...")
+        DynaLog.LogMessage("- Log destination: " & Quote & OutputFile & Quote)
+        If String.IsNullOrEmpty(DISM_LogView.RichTextBox1.Text) Then
+            DynaLog.LogMessage("There is no content to save.")
+            Exit Sub
         End If
-        File.AppendAllText(LogFile, CrLf & LogView.Text, ASCII)
+        Try
+            If Not File.Exists(OutputFile) Then
+                DynaLog.LogMessage("Attempting to create output file...")
+                ' Create file
+                Try
+                    File.WriteAllText(OutputFile, String.Empty)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not create log file. Error message: " & ex.Message)
+                    LogView.AppendText(CrLf &
+                                       "Warning: the contents of the log window could not be saved to the log file. Reason: " & ex.Message)
+                    Exit Sub
+                End Try
+            End If
+            File.AppendAllText(OutputFile, DISM_LogView.RichTextBox1.Text, ASCII)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not log this operation. Error message: " & ex.Message)
+        End Try
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
@@ -6674,6 +6704,7 @@ Public Class ProgressPanel
                                "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
             DynaLog.LogMessage("Saving operation logs...")
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
+            SaveDismOutput(Application.StartupPath & "\logs\DISM_Output_" & Date.Now.ToString("yy-MM-dd-HH-mm-ss") & ".log")
             Try
                 CurrentPB.Value = 100
             Catch ex As Exception
@@ -7106,6 +7137,7 @@ Public Class ProgressPanel
             End Select
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
+            SaveDismOutput(Application.StartupPath & "\logs\DISM_Output_" & Date.Now.ToString("yy-MM-dd-HH-mm-ss") & ".log")
         End If
     End Sub
 

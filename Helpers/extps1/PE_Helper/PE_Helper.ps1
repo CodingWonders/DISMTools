@@ -632,12 +632,25 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat"
+            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
             Write-Host "Startup commands changed"
         }
         catch
         {
             Write-Host "Could not change startup commands"
+        }
+        try
+        {
+            Write-Host "CUSTOMIZATION STEP - Prepare System for Network-based Installations" -BackgroundColor DarkGreen
+            Write-Host "Preparing NetInstall..."
+            New-Item -Path "$imagePath\pxehelpers" -ItemType Directory | Out-Null
+            Copy-Item -Path "$((Get-Location).Path)\pxehelpers\*" -Destination "$imagePath\pxehelpers" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+            Write-Host "The target system is now ready for network-based installations"
+        }
+        catch
+        {
+            Write-Host "Could not prepare the system for network-based installations"
         }
         Write-Host "CUSTOMIZATION STEP - Set Scratch Size" -BackgroundColor DarkGreen
         Write-Host "Setting scratch size..."
@@ -836,7 +849,12 @@ function Start-OSApplication
         Write-Host "No Windows image has been found on this drive. An installation image is required. Exiting..."
         exit 1
     }
+    $diskGetterDpScript = @'
+    lis dis
+    exit
+'@
     New-Item -Path "X:\files\diskpart" -ItemType Directory -Force | Out-Null
+    $diskGetterDpScript | Out-File "X:\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
     {
@@ -1004,6 +1022,8 @@ function Start-OSApplication
     }
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
     Start-Sleep -Milliseconds 250
+    Clear-Host
+    Write-Host "`n`n`n`n`n`n`n`n`n`n"
     Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
     Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
     Write-Host "When your computer restarts, Setup will continue."
@@ -1055,9 +1075,9 @@ function Get-Disks
     #>
 
     # Show disk list with diskpart
-    if (Test-Path .\files\diskpart\dp_listdisk.dp -PathType Leaf)
+    if (Test-Path "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -PathType Leaf)
     {
-        diskpart /s ".\files\diskpart\dp_listdisk.dp" | Out-Host
+        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" | Out-Host
     }
     else
     {

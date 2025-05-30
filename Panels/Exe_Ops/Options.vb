@@ -174,6 +174,8 @@ Public Class Options
             MainForm.HelpToolStripMenuItem.Text = ti.ToTitleCase(MainForm.HelpToolStripMenuItem.Text.ToLower())
         End If
         MainForm.ReportView = ComboBox5.SelectedIndex
+        MainForm.DarkThemeIndex = DarkThemesCB.SelectedIndex
+        MainForm.LightThemeIndex = LightThemesCB.SelectedIndex
         MainForm.ChangePrgColors(MainForm.ColorMode)
         MainForm.ChangeLangs(MainForm.Language)
         If MountedImgMgr.Visible Then
@@ -211,6 +213,8 @@ Public Class Options
         MainForm.AutoCompleteInfo(4) = CheckBox19.Checked
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.ExpandedProgressPanel = CheckBox7.Checked
+        MainForm.ShowDateAndTime = CheckBox21.Checked
+        MainForm.TimeLabel.Visible = CheckBox21.Checked
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1611,8 +1615,13 @@ Public Class Options
         ComboBox5.ForeColor = CurrentTheme.ForegroundColor
         ComboBox6.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox6.ForeColor = CurrentTheme.ForegroundColor
+        DarkThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
+        DarkThemesCB.ForeColor = CurrentTheme.ForegroundColor
+        LightThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
+        LightThemesCB.ForeColor = CurrentTheme.ForegroundColor
         NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
         GroupBox5.ForeColor = CurrentTheme.ForegroundColor
         TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
         PictureBox10.Image = GetGlyphResource("options_program")
@@ -1658,6 +1667,18 @@ Public Class Options
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
         End Select
+        DarkThemesCB.Items.Clear()
+        LightThemesCB.Items.Clear()
+        For Each LoadedTheme In ThemeHelper.GetThemes()
+            DarkThemesCB.Items.Add(LoadedTheme.Name)
+            LightThemesCB.Items.Add(LoadedTheme.Name)
+        Next
+        Try
+            DarkThemesCB.SelectedIndex = MainForm.DarkThemeIndex
+            LightThemesCB.SelectedIndex = MainForm.LightThemeIndex
+        Catch ex As Exception
+
+        End Try
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -1791,6 +1812,7 @@ Public Class Options
         CheckBox19.Checked = MainForm.AutoCompleteInfo(4)
         CheckBox22.Checked = MainForm.AutoCleanMounts
         CheckBox7.Checked = MainForm.ExpandedProgressPanel
+        CheckBox21.Checked = MainForm.ShowDateAndTime
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

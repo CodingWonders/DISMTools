@@ -84,7 +84,7 @@
       <HintPath>packages\Markdig.0.41.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.3.3.0\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.3.3.12\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Core, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Core.dll</HintPath>
@@ -1198,13 +1198,13 @@
     <None Include="Helpers\extps1\PE_Helper\files\dim_start\dimstart.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
@@ -1220,6 +1220,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\prepare_wds.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper_server.ps1">
@@ -1268,10 +1271,12 @@
     <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
-    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
-    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
     <None Include="Utilities\ThemeUtilities\ThemeFiles\default_dark.ini" />
     <None Include="Utilities\ThemeUtilities\ThemeFiles\default_light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT04Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT04Light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1812,6 +1817,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+    <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
@@ -1918,7 +1924,8 @@ IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
 
 :: Copy Theme Designer
 IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
-	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" "Tools\ThemeDesigner" /cehyi
+	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.*" "Tools\ThemeDesigner" /cehyi
+	del "Tools\ThemeDesigner\*.zip" /F /S /Q
 )
 
 IF NOT EXIST AutoUnattend (

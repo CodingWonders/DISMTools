@@ -107,6 +107,7 @@ Module ThemeHelper
                 End Try
             Next
             If ThemeData.Count > 0 Then
+                _themes.Clear()
                 For Each dataFile As IniData In ThemeData
                     Try
                         Dim name, isDark, bgColor, sectionBgColor, fgColor, ac1, ac2, ac3, ac4 As String
@@ -230,6 +231,15 @@ Module ThemeHelper
         Else
             Return New LightModeRenderer()
         End If
+    End Function
+
+    ''' <summary>
+    ''' Gets the list of loaded themes
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Function GetThemes() As List(Of Theme)
+        Return _themes
     End Function
 
 End Module

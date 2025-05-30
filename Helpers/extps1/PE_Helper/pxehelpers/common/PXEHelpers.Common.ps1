@@ -1,3 +1,5 @@
+using namespace System.Collections.Generic
+
 $global:product = ""
 $global:description = ""
 
