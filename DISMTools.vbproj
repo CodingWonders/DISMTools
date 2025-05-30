@@ -1818,6 +1818,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
+    <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
