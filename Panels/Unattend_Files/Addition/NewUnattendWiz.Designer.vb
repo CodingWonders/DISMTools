@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -344,6 +344,7 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -469,33 +470,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode1.Name = "Nodo0"
-        TreeNode1.Text = "Welcome"
-        TreeNode2.Name = "Nodo1"
-        TreeNode2.Text = "Regional Configuration"
-        TreeNode3.Name = "Nodo2"
-        TreeNode3.Text = "Basic System Configuration"
-        TreeNode4.Name = "Nodo3"
-        TreeNode4.Text = "Time Zone"
-        TreeNode5.Name = "Nodo4"
-        TreeNode5.Text = "Disk Configuration"
-        TreeNode6.Name = "Nodo5"
-        TreeNode6.Text = "Product Key"
-        TreeNode7.Name = "Nodo6"
-        TreeNode7.Text = "User Accounts"
-        TreeNode8.Name = "Nodo9"
-        TreeNode8.Text = "Virtual Machine Support"
-        TreeNode9.Name = "Nodo10"
-        TreeNode9.Text = "Wireless Networking"
-        TreeNode10.Name = "Nodo11"
-        TreeNode10.Text = "System Telemetry"
-        TreeNode11.Name = "Nodo12"
-        TreeNode11.Text = "Post-Installation Scripts"
-        TreeNode12.Name = "Nodo13"
-        TreeNode12.Text = "Component Settings"
-        TreeNode13.Name = "Nodo14"
-        TreeNode13.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
+        TreeNode14.Name = "Nodo0"
+        TreeNode14.Text = "Welcome"
+        TreeNode15.Name = "Nodo1"
+        TreeNode15.Text = "Regional Configuration"
+        TreeNode16.Name = "Nodo2"
+        TreeNode16.Text = "Basic System Configuration"
+        TreeNode17.Name = "Nodo3"
+        TreeNode17.Text = "Time Zone"
+        TreeNode18.Name = "Nodo4"
+        TreeNode18.Text = "Disk Configuration"
+        TreeNode19.Name = "Nodo5"
+        TreeNode19.Text = "Product Key"
+        TreeNode20.Name = "Nodo6"
+        TreeNode20.Text = "User Accounts"
+        TreeNode21.Name = "Nodo9"
+        TreeNode21.Text = "Virtual Machine Support"
+        TreeNode22.Name = "Nodo10"
+        TreeNode22.Text = "Wireless Networking"
+        TreeNode23.Name = "Nodo11"
+        TreeNode23.Text = "System Telemetry"
+        TreeNode24.Name = "Nodo12"
+        TreeNode24.Text = "Post-Installation Scripts"
+        TreeNode25.Name = "Nodo13"
+        TreeNode25.Text = "Component Settings"
+        TreeNode26.Name = "Nodo14"
+        TreeNode26.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -1331,6 +1332,7 @@ Partial Class NewUnattendWiz
         '
         'WirelessNetworkSettingsPanel
         '
+        Me.WirelessNetworkSettingsPanel.Controls.Add(Me.LinkLabel8)
         Me.WirelessNetworkSettingsPanel.Controls.Add(Me.ComboBox13)
         Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox10)
         Me.WirelessNetworkSettingsPanel.Controls.Add(Me.TextBox7)
@@ -1342,7 +1344,7 @@ Partial Class NewUnattendWiz
         Me.WirelessNetworkSettingsPanel.Location = New System.Drawing.Point(24, 32)
         Me.WirelessNetworkSettingsPanel.Margin = New System.Windows.Forms.Padding(20, 3, 3, 3)
         Me.WirelessNetworkSettingsPanel.Name = "WirelessNetworkSettingsPanel"
-        Me.WirelessNetworkSettingsPanel.Size = New System.Drawing.Size(576, 188)
+        Me.WirelessNetworkSettingsPanel.Size = New System.Drawing.Size(576, 207)
         Me.WirelessNetworkSettingsPanel.TabIndex = 5
         '
         'ComboBox13
@@ -1360,7 +1362,7 @@ Partial Class NewUnattendWiz
         '
         Me.TextBox10.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox10.Location = New System.Drawing.Point(277, 155)
+        Me.TextBox10.Location = New System.Drawing.Point(277, 173)
         Me.TextBox10.Name = "TextBox10"
         Me.TextBox10.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox10.Size = New System.Drawing.Size(221, 21)
@@ -1390,7 +1392,7 @@ Partial Class NewUnattendWiz
         'Label49
         '
         Me.Label49.AutoEllipsis = True
-        Me.Label49.Location = New System.Drawing.Point(78, 158)
+        Me.Label49.Location = New System.Drawing.Point(78, 176)
         Me.Label49.Name = "Label49"
         Me.Label49.Size = New System.Drawing.Size(193, 13)
         Me.Label49.TabIndex = 0
@@ -1412,7 +1414,7 @@ Partial Class NewUnattendWiz
         Me.Label50.AutoEllipsis = True
         Me.Label50.Location = New System.Drawing.Point(277, 93)
         Me.Label50.Name = "Label50"
-        Me.Label50.Size = New System.Drawing.Size(221, 57)
+        Me.Label50.Size = New System.Drawing.Size(221, 48)
         Me.Label50.TabIndex = 0
         Me.Label50.Text = "Please choose the technology that both the wireless router and your network adapt" & _
     "er support."
@@ -1429,7 +1431,7 @@ Partial Class NewUnattendWiz
         'RadioButton30
         '
         Me.RadioButton30.AutoSize = True
-        Me.RadioButton30.Location = New System.Drawing.Point(7, 226)
+        Me.RadioButton30.Location = New System.Drawing.Point(7, 245)
         Me.RadioButton30.Name = "RadioButton30"
         Me.RadioButton30.Size = New System.Drawing.Size(110, 17)
         Me.RadioButton30.TabIndex = 4
@@ -1439,7 +1441,7 @@ Partial Class NewUnattendWiz
         'Label55
         '
         Me.Label55.AutoEllipsis = True
-        Me.Label55.Location = New System.Drawing.Point(24, 246)
+        Me.Label55.Location = New System.Drawing.Point(24, 265)
         Me.Label55.Margin = New System.Windows.Forms.Padding(20, 0, 3, 0)
         Me.Label55.Name = "Label55"
         Me.Label55.Size = New System.Drawing.Size(576, 36)
@@ -1450,7 +1452,7 @@ Partial Class NewUnattendWiz
         'Label53
         '
         Me.Label53.AutoEllipsis = True
-        Me.Label53.Location = New System.Drawing.Point(7, 282)
+        Me.Label53.Location = New System.Drawing.Point(7, 301)
         Me.Label53.Name = "Label53"
         Me.Label53.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
         Me.Label53.Size = New System.Drawing.Size(405, 6)
@@ -3862,6 +3864,18 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt"
         Me.ScriptEditorOFD.Title = "Open script"
         '
+        'LinkLabel8
+        '
+        Me.LinkLabel8.AutoSize = True
+        Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel8.Location = New System.Drawing.Point(277, 144)
+        Me.LinkLabel8.Name = "LinkLabel8"
+        Me.LinkLabel8.Size = New System.Drawing.Size(206, 13)
+        Me.LinkLabel8.TabIndex = 4
+        Me.LinkLabel8.TabStop = True
+        Me.LinkLabel8.Text = "Access router configuration to learn more"
+        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4327,4 +4341,5 @@ Partial Class NewUnattendWiz
     Friend WithEvents RadioButton28 As System.Windows.Forms.RadioButton
     Friend WithEvents ManualComputerNamePanel As System.Windows.Forms.Panel
     Friend WithEvents CheckBox22 As System.Windows.Forms.CheckBox
+    Friend WithEvents LinkLabel8 As System.Windows.Forms.LinkLabel
 End Class

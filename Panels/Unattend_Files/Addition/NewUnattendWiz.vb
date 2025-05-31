@@ -6,6 +6,7 @@ Imports ScintillaNET
 Imports DISMTools.Elements
 Imports Microsoft.Dism
 Imports System.Net
+Imports System.Net.NetworkInformation
 Imports System.Text.RegularExpressions
 Imports System.Text
 
@@ -2756,5 +2757,18 @@ Public Class NewUnattendWiz
 
     Private Sub CheckBox22_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox22.CheckedChanged
         ScriptsHideWindow = CheckBox22.Checked
+    End Sub
+
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+        Dim IpGateway As IPAddress = NetworkInterface.GetAllNetworkInterfaces().
+            Where(Function(nic) nic.OperationalStatus = OperationalStatus.Up).
+            Where(Function(nic) nic.NetworkInterfaceType = NetworkInterfaceType.Wireless80211).
+            SelectMany(Function(nic) nic.GetIPProperties().GatewayAddresses).
+            Select(Function(gateway) gateway.Address).
+            Where(Function(address) address IsNot Nothing And Not address.IsIPv6LinkLocal).
+            FirstOrDefault()
+        If IpGateway IsNot Nothing Then
+            Process.Start(String.Format("http://{0}", IpGateway.ToString()))
+        End If
     End Sub
 End Class
