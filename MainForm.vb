@@ -929,6 +929,19 @@ Public Class MainForm
                 End Try
             End If
         End If
+
+        DynaLog.LogMessage("Checking boot mode...")
+        DynaLog.LogMessage(SystemInformation.BootMode)
+        If SystemInformation.BootMode <> BootMode.Normal Then
+            DynaLog.LogMessage("This system is in limp home mode. Offering choice to enter online installation management mode...")
+            Dim safeModeMessage As String = "This computer has booted into Safe Mode. This mode is designed for live operating system recovery." & CrLf & CrLf &
+                "DISMTools can automatically load the online installation management mode so that you can start attempting repairs." & CrLf & CrLf &
+                "Do you want to load the online installation management mode?"
+            If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
+                DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
+                BeginOnlineManagement(False)
+            End If
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
