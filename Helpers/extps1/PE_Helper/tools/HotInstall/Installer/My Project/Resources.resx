@@ -166,4 +166,36 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <data name="logo_aboutdlg_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\splashscreen\logo_aboutdlg_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="HI_UninstallScript" xml:space="preserve">
+    <value>@ECHO OFF
+TITLE HotInstall - Delete DISMTools PE
+NET SESSION &gt;NUL 2&gt;&amp;1
+IF %ERRORLEVEL% NEQ 0 (
+    REM https://stackoverflow.com/a/37669661
+    ECHO Administrator privileges were not detected. This removal script will launch itself as an administrator now.
+    ECHO This is because DISMTools operating system installation needs to modify system settings to revert all changes made.
+    PUSHD %~dp0
+    MSHTA "javascript: var shell =new ActiveXObject('shell.application'); shell.ShellExecute('%~nx0', '', '', 'runas', 1);close();"
+    EXIT
+)
+
+ECHO This device has rebooted to the full Windows installation. Do you want to remove the DISMTools Preinstallation Environment?
+CHOICE /C YN /M "Delete the DISMTools Preinstallation Environment BCD entries?"
+
+IF %ERRORLEVEL% EQU 1 (
+    REM An errorlevel of 1 is set when Y is pressed
+    ECHO Setting default boot entries...
+    BCDEDIT /DEFAULT {{current}}
+    ECHO Removing DISMTools PE BCD entry...
+    BCDEDIT /DELETE {0} /F
+    ECHO Removing HotInstall files...
+    REG DELETE "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v HotInstallDelete /f &gt;NUL 2&gt;&amp;1
+    IF EXIST "%SYSTEMDRIVE%\$DISMTOOLS.~BT" (
+        RD "%SYSTEMDRIVE%\$DISMTOOLS.~BT" /S /Q
+    )
+    IF EXIST "%SYSTEMDRIVE%\bcdguid.txt" (
+        DEL "%SYSTEMDRIVE%\bcdguid.txt" /F /Q
+    )
+)</value>
+  </data>
 </root>

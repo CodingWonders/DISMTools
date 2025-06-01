@@ -61,6 +61,23 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca una cadena traducida similar a @ECHO OFF
+        '''TITLE HotInstall - Delete DISMTools PE
+        '''NET SESSION &gt;NUL 2&gt;&amp;1
+        '''IF %ERRORLEVEL% NEQ 0 (
+        '''    REM https://stackoverflow.com/a/37669661
+        '''    ECHO Administrator privileges were not detected. This removal script will launch itself as an administrator now.
+        '''    ECHO This is because DISMTools operating system installation needs to modify system settings to revert all changes made.
+        '''    PUSHD %~dp0
+        '''    MSHTA &quot;javascript: var shell =new ActiveXObject(&apos;shell.application&apos;); shell.ShellExecute(&apos;%~nx0&apos;, &apos;&apos;,  [resto de la cadena truncado]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property HI_UninstallScript() As String
+            Get
+                Return ResourceManager.GetString("HI_UninstallScript", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property hotinstall_step1() As System.Drawing.Bitmap

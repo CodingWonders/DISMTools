@@ -5,6 +5,7 @@ Imports System.Management
 Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Text.Encoding
+Imports Microsoft.Win32
 
 Public Class MainForm
 
@@ -590,6 +591,10 @@ Public Class MainForm
             RunBCDConfigurator("/displayorder " & TargetGuid & " /addfirst")
             RunBCDConfigurator("/default " & TargetGuid)
 
+            ' Write removal script
+            File.WriteAllText(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\$DISMTOOLS.~BT\remove.cmd",
+                              String.Format(My.Resources.HI_UninstallScript, TargetGuid), ASCII)
+
         Catch ex As Exception
             Throw
         End Try
@@ -654,6 +659,16 @@ Public Class MainForm
         Try
             If TestMode Then Directory.Delete(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), True)
             Directory.Delete(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"), True)
+            If File.Exists(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\$DISMTOOLS.~BT\remove.cmd") Then
+                ' Run on startup (set reg key)
+                Dim RemovalAdderProcess As New Process()
+                RemovalAdderProcess.StartInfo.FileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe")
+                RemovalAdderProcess.StartInfo.Arguments = "add " & Quote & "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" & Quote & " /f /v HotInstallDelete /t REG_SZ /d " & Quote & "cmd /c " & Quote & "%SYSTEMDRIVE%\$DISMTOOLS.~BT\remove.cmd" & Quote & Quote
+                RemovalAdderProcess.StartInfo.CreateNoWindow = True
+                RemovalAdderProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                RemovalAdderProcess.Start()
+                RemovalAdderProcess.WaitForExit()
+            End If
         Catch ex As Exception
 
         End Try
