@@ -1464,6 +1464,12 @@
     <None Include="Resources\startup\dt_branding_preview.png" />
     <None Include="Resources\progress\bg_ops_gif\bg_ops_light.gif" />
     <None Include="Resources\progress\bg_ops_gif\bg_ops_complete_light.png" />
+    <None Include="Resources\glyphs\cmps_addfirstcomponent_dark.png" />
+    <None Include="Resources\glyphs\cmps_addfirstcomponent_light.png" />
+    <None Include="Resources\first_element.png" />
+    <None Include="Resources\last_element.png" />
+    <None Include="Resources\add_element.png" />
+    <None Include="Resources\remove_element.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />

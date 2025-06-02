@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,6 +49,32 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.ComponentPanel = New System.Windows.Forms.Panel()
+        Me.SystemComponentPanel = New System.Windows.Forms.Panel()
+        Me.ComponentBodyPanel = New System.Windows.Forms.Panel()
+        Me.ComponentEditorPanel = New System.Windows.Forms.Panel()
+        Me.Scintilla4 = New ScintillaNET.Scintilla()
+        Me.CompConfigPanel = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.ComboBox15 = New System.Windows.Forms.ComboBox()
+        Me.Label64 = New System.Windows.Forms.Label()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ComboBox14 = New System.Windows.Forms.ComboBox()
+        Me.Label61 = New System.Windows.Forms.Label()
+        Me.NoSpecifiedComponentsPanel = New System.Windows.Forms.Panel()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.ComponentSwitcherPanel = New System.Windows.Forms.Panel()
+        Me.Button10 = New System.Windows.Forms.Button()
+        Me.Button8 = New System.Windows.Forms.Button()
+        Me.Button7 = New System.Windows.Forms.Button()
+        Me.Button11 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
+        Me.Button6 = New System.Windows.Forms.Button()
+        Me.Label60 = New System.Windows.Forms.Label()
+        Me.Label52 = New System.Windows.Forms.Label()
+        Me.ComponentHeader = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
@@ -68,25 +94,6 @@ Partial Class NewUnattendWiz
         Me.CheckBox17 = New System.Windows.Forms.CheckBox()
         Me.TextBox13 = New System.Windows.Forms.TextBox()
         Me.FinalReviewHeader = New System.Windows.Forms.Label()
-        Me.ComponentPanel = New System.Windows.Forms.Panel()
-        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
-        Me.SystemComponentPanel = New System.Windows.Forms.Panel()
-        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.ListBox2 = New System.Windows.Forms.ListBox()
-        Me.PassContainerPanel = New System.Windows.Forms.Panel()
-        Me.PassConfigurationPanel = New System.Windows.Forms.Panel()
-        Me.oobeSystem = New System.Windows.Forms.CheckBox()
-        Me.auditUser = New System.Windows.Forms.CheckBox()
-        Me.auditSystem = New System.Windows.Forms.CheckBox()
-        Me.generalize = New System.Windows.Forms.CheckBox()
-        Me.specialize = New System.Windows.Forms.CheckBox()
-        Me.offlineServicing = New System.Windows.Forms.CheckBox()
-        Me.windowsPE = New System.Windows.Forms.CheckBox()
-        Me.Label61 = New System.Windows.Forms.Label()
-        Me.NoComponentSelectedPanel = New System.Windows.Forms.Panel()
-        Me.Label60 = New System.Windows.Forms.Label()
-        Me.Label52 = New System.Windows.Forms.Label()
-        Me.ComponentHeader = New System.Windows.Forms.Label()
         Me.PostInstallPanel = New System.Windows.Forms.Panel()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.CheckBox20 = New System.Windows.Forms.CheckBox()
@@ -113,6 +120,7 @@ Partial Class NewUnattendWiz
         Me.ManualNetworkConfigPanel = New System.Windows.Forms.FlowLayoutPanel()
         Me.RadioButton25 = New System.Windows.Forms.RadioButton()
         Me.WirelessNetworkSettingsPanel = New System.Windows.Forms.Panel()
+        Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
         Me.ComboBox13 = New System.Windows.Forms.ComboBox()
         Me.TextBox10 = New System.Windows.Forms.TextBox()
         Me.TextBox7 = New System.Windows.Forms.TextBox()
@@ -344,7 +352,6 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.LinkLabel8 = New System.Windows.Forms.LinkLabel()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -354,18 +361,19 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.ComponentPanel.SuspendLayout()
+        Me.SystemComponentPanel.SuspendLayout()
+        Me.ComponentBodyPanel.SuspendLayout()
+        Me.ComponentEditorPanel.SuspendLayout()
+        Me.CompConfigPanel.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.NoSpecifiedComponentsPanel.SuspendLayout()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ComponentSwitcherPanel.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
-        Me.ComponentPanel.SuspendLayout()
-        Me.SystemComponentPanel.SuspendLayout()
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer2.Panel1.SuspendLayout()
-        Me.SplitContainer2.Panel2.SuspendLayout()
-        Me.SplitContainer2.SuspendLayout()
-        Me.PassContainerPanel.SuspendLayout()
-        Me.PassConfigurationPanel.SuspendLayout()
-        Me.NoComponentSelectedPanel.SuspendLayout()
         Me.PostInstallPanel.SuspendLayout()
         Me.ScriptEditorContainerPanel.SuspendLayout()
         Me.ScriptEditorPanel.SuspendLayout()
@@ -470,33 +478,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode14.Name = "Nodo0"
-        TreeNode14.Text = "Welcome"
-        TreeNode15.Name = "Nodo1"
-        TreeNode15.Text = "Regional Configuration"
-        TreeNode16.Name = "Nodo2"
-        TreeNode16.Text = "Basic System Configuration"
-        TreeNode17.Name = "Nodo3"
-        TreeNode17.Text = "Time Zone"
-        TreeNode18.Name = "Nodo4"
-        TreeNode18.Text = "Disk Configuration"
-        TreeNode19.Name = "Nodo5"
-        TreeNode19.Text = "Product Key"
-        TreeNode20.Name = "Nodo6"
-        TreeNode20.Text = "User Accounts"
-        TreeNode21.Name = "Nodo9"
-        TreeNode21.Text = "Virtual Machine Support"
-        TreeNode22.Name = "Nodo10"
-        TreeNode22.Text = "Wireless Networking"
-        TreeNode23.Name = "Nodo11"
-        TreeNode23.Text = "System Telemetry"
-        TreeNode24.Name = "Nodo12"
-        TreeNode24.Text = "Post-Installation Scripts"
-        TreeNode25.Name = "Nodo13"
-        TreeNode25.Text = "Component Settings"
-        TreeNode26.Name = "Nodo14"
-        TreeNode26.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
+        TreeNode1.Name = "Nodo0"
+        TreeNode1.Text = "Welcome"
+        TreeNode2.Name = "Nodo1"
+        TreeNode2.Text = "Regional Configuration"
+        TreeNode3.Name = "Nodo2"
+        TreeNode3.Text = "Basic System Configuration"
+        TreeNode4.Name = "Nodo3"
+        TreeNode4.Text = "Time Zone"
+        TreeNode5.Name = "Nodo4"
+        TreeNode5.Text = "Disk Configuration"
+        TreeNode6.Name = "Nodo5"
+        TreeNode6.Text = "Product Key"
+        TreeNode7.Name = "Nodo6"
+        TreeNode7.Text = "User Accounts"
+        TreeNode8.Name = "Nodo9"
+        TreeNode8.Text = "Virtual Machine Support"
+        TreeNode9.Name = "Nodo10"
+        TreeNode9.Text = "Wireless Networking"
+        TreeNode10.Name = "Nodo11"
+        TreeNode10.Text = "System Telemetry"
+        TreeNode11.Name = "Nodo12"
+        TreeNode11.Text = "Post-Installation Scripts"
+        TreeNode12.Name = "Nodo13"
+        TreeNode12.Text = "Component Settings"
+        TreeNode13.Name = "Nodo14"
+        TreeNode13.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -608,6 +616,297 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(1008, 569)
         Me.StepsContainer.TabIndex = 1
+        '
+        'ComponentPanel
+        '
+        Me.ComponentPanel.Controls.Add(Me.SystemComponentPanel)
+        Me.ComponentPanel.Controls.Add(Me.Label52)
+        Me.ComponentPanel.Controls.Add(Me.ComponentHeader)
+        Me.ComponentPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComponentPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ComponentPanel.Name = "ComponentPanel"
+        Me.ComponentPanel.Size = New System.Drawing.Size(1008, 569)
+        Me.ComponentPanel.TabIndex = 13
+        '
+        'SystemComponentPanel
+        '
+        Me.SystemComponentPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SystemComponentPanel.Controls.Add(Me.ComponentBodyPanel)
+        Me.SystemComponentPanel.Controls.Add(Me.ComponentSwitcherPanel)
+        Me.SystemComponentPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SystemComponentPanel.Location = New System.Drawing.Point(53, 102)
+        Me.SystemComponentPanel.Name = "SystemComponentPanel"
+        Me.SystemComponentPanel.Size = New System.Drawing.Size(901, 423)
+        Me.SystemComponentPanel.TabIndex = 16
+        '
+        'ComponentBodyPanel
+        '
+        Me.ComponentBodyPanel.Controls.Add(Me.NoSpecifiedComponentsPanel)
+        Me.ComponentBodyPanel.Controls.Add(Me.ComponentEditorPanel)
+        Me.ComponentBodyPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComponentBodyPanel.Location = New System.Drawing.Point(0, 32)
+        Me.ComponentBodyPanel.Name = "ComponentBodyPanel"
+        Me.ComponentBodyPanel.Size = New System.Drawing.Size(901, 391)
+        Me.ComponentBodyPanel.TabIndex = 1
+        '
+        'ComponentEditorPanel
+        '
+        Me.ComponentEditorPanel.Controls.Add(Me.Scintilla4)
+        Me.ComponentEditorPanel.Controls.Add(Me.CompConfigPanel)
+        Me.ComponentEditorPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComponentEditorPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ComponentEditorPanel.Name = "ComponentEditorPanel"
+        Me.ComponentEditorPanel.Size = New System.Drawing.Size(901, 391)
+        Me.ComponentEditorPanel.TabIndex = 1
+        Me.ComponentEditorPanel.Visible = False
+        '
+        'Scintilla4
+        '
+        Me.Scintilla4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Scintilla4.IndentationGuides = ScintillaNET.IndentView.LookBoth
+        Me.Scintilla4.LexerName = Nothing
+        Me.Scintilla4.Location = New System.Drawing.Point(0, 32)
+        Me.Scintilla4.Name = "Scintilla4"
+        Me.Scintilla4.Size = New System.Drawing.Size(901, 359)
+        Me.Scintilla4.TabIndex = 3
+        '
+        'CompConfigPanel
+        '
+        Me.CompConfigPanel.ColumnCount = 2
+        Me.CompConfigPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.0388489!))
+        Me.CompConfigPanel.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.9611511!))
+        Me.CompConfigPanel.Controls.Add(Me.Panel3, 1, 0)
+        Me.CompConfigPanel.Controls.Add(Me.Panel2, 0, 0)
+        Me.CompConfigPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.CompConfigPanel.Location = New System.Drawing.Point(0, 0)
+        Me.CompConfigPanel.Name = "CompConfigPanel"
+        Me.CompConfigPanel.RowCount = 1
+        Me.CompConfigPanel.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.CompConfigPanel.Size = New System.Drawing.Size(901, 32)
+        Me.CompConfigPanel.TabIndex = 0
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.ComboBox15)
+        Me.Panel3.Controls.Add(Me.Label64)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel3.Location = New System.Drawing.Point(589, 3)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(309, 26)
+        Me.Panel3.TabIndex = 1
+        '
+        'ComboBox15
+        '
+        Me.ComboBox15.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox15.FormattingEnabled = True
+        Me.ComboBox15.Location = New System.Drawing.Point(57, 2)
+        Me.ComboBox15.Name = "ComboBox15"
+        Me.ComboBox15.Size = New System.Drawing.Size(250, 23)
+        Me.ComboBox15.TabIndex = 1
+        '
+        'Label64
+        '
+        Me.Label64.AutoEllipsis = True
+        Me.Label64.Location = New System.Drawing.Point(4, 5)
+        Me.Label64.Name = "Label64"
+        Me.Label64.Size = New System.Drawing.Size(47, 15)
+        Me.Label64.TabIndex = 0
+        Me.Label64.Text = "Pass:"
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ComboBox14)
+        Me.Panel2.Controls.Add(Me.Label61)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel2.Location = New System.Drawing.Point(3, 3)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(580, 26)
+        Me.Panel2.TabIndex = 0
+        '
+        'ComboBox14
+        '
+        Me.ComboBox14.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ComboBox14.FormattingEnabled = True
+        Me.ComboBox14.Location = New System.Drawing.Point(121, 2)
+        Me.ComboBox14.Name = "ComboBox14"
+        Me.ComboBox14.Size = New System.Drawing.Size(456, 23)
+        Me.ComboBox14.TabIndex = 1
+        '
+        'Label61
+        '
+        Me.Label61.AutoEllipsis = True
+        Me.Label61.Location = New System.Drawing.Point(5, 5)
+        Me.Label61.Name = "Label61"
+        Me.Label61.Size = New System.Drawing.Size(110, 15)
+        Me.Label61.TabIndex = 0
+        Me.Label61.Text = "Component:"
+        '
+        'NoSpecifiedComponentsPanel
+        '
+        Me.NoSpecifiedComponentsPanel.Controls.Add(Me.Label15)
+        Me.NoSpecifiedComponentsPanel.Controls.Add(Me.LinkLabel5)
+        Me.NoSpecifiedComponentsPanel.Controls.Add(Me.PictureBox4)
+        Me.NoSpecifiedComponentsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NoSpecifiedComponentsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NoSpecifiedComponentsPanel.Name = "NoSpecifiedComponentsPanel"
+        Me.NoSpecifiedComponentsPanel.Size = New System.Drawing.Size(901, 391)
+        Me.NoSpecifiedComponentsPanel.TabIndex = 0
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Location = New System.Drawing.Point(17, 221)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(866, 44)
+        Me.Label15.TabIndex = 1
+        Me.Label15.Text = "No custom components have been added yet. Click the plus symbol on the top of thi" & _
+    "s section to add a new component."
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'LinkLabel5
+        '
+        Me.LinkLabel5.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LinkLabel5.AutoEllipsis = True
+        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel5.Location = New System.Drawing.Point(20, 273)
+        Me.LinkLabel5.Name = "LinkLabel5"
+        Me.LinkLabel5.Size = New System.Drawing.Size(861, 27)
+        Me.LinkLabel5.TabIndex = 15
+        Me.LinkLabel5.TabStop = True
+        Me.LinkLabel5.Text = "Learn more about custom components in Windows"
+        Me.LinkLabel5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PictureBox4.Image = Global.DISMTools.My.Resources.Resources.cmps_addfirstcomponent_light
+        Me.PictureBox4.Location = New System.Drawing.Point(258, 73)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(384, 128)
+        Me.PictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox4.TabIndex = 0
+        Me.PictureBox4.TabStop = False
+        '
+        'ComponentSwitcherPanel
+        '
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Button10)
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Button8)
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Button7)
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Button11)
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Button9)
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Button6)
+        Me.ComponentSwitcherPanel.Controls.Add(Me.Label60)
+        Me.ComponentSwitcherPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ComponentSwitcherPanel.Location = New System.Drawing.Point(0, 0)
+        Me.ComponentSwitcherPanel.Name = "ComponentSwitcherPanel"
+        Me.ComponentSwitcherPanel.Size = New System.Drawing.Size(901, 32)
+        Me.ComponentSwitcherPanel.TabIndex = 0
+        '
+        'Button10
+        '
+        Me.Button10.Enabled = False
+        Me.Button10.Image = Global.DISMTools.My.Resources.Resources.remove_element
+        Me.Button10.Location = New System.Drawing.Point(72, 3)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(28, 28)
+        Me.Button10.TabIndex = 3
+        Me.Button10.UseVisualStyleBackColor = True
+        '
+        'Button8
+        '
+        Me.Button8.Enabled = False
+        Me.Button8.Image = Global.DISMTools.My.Resources.Resources.prev_element
+        Me.Button8.Location = New System.Drawing.Point(38, 3)
+        Me.Button8.Name = "Button8"
+        Me.Button8.Size = New System.Drawing.Size(28, 28)
+        Me.Button8.TabIndex = 3
+        Me.Button8.UseVisualStyleBackColor = True
+        '
+        'Button7
+        '
+        Me.Button7.Enabled = False
+        Me.Button7.Image = Global.DISMTools.My.Resources.Resources.first_element
+        Me.Button7.Location = New System.Drawing.Point(4, 3)
+        Me.Button7.Name = "Button7"
+        Me.Button7.Size = New System.Drawing.Size(28, 28)
+        Me.Button7.TabIndex = 3
+        Me.Button7.UseVisualStyleBackColor = True
+        '
+        'Button11
+        '
+        Me.Button11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button11.Image = Global.DISMTools.My.Resources.Resources.add_element
+        Me.Button11.Location = New System.Drawing.Point(802, 3)
+        Me.Button11.Name = "Button11"
+        Me.Button11.Size = New System.Drawing.Size(28, 28)
+        Me.Button11.TabIndex = 2
+        Me.Button11.UseVisualStyleBackColor = True
+        '
+        'Button9
+        '
+        Me.Button9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button9.Enabled = False
+        Me.Button9.Image = Global.DISMTools.My.Resources.Resources.next_element
+        Me.Button9.Location = New System.Drawing.Point(836, 3)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(28, 28)
+        Me.Button9.TabIndex = 2
+        Me.Button9.UseVisualStyleBackColor = True
+        '
+        'Button6
+        '
+        Me.Button6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button6.Enabled = False
+        Me.Button6.Image = Global.DISMTools.My.Resources.Resources.last_element
+        Me.Button6.Location = New System.Drawing.Point(870, 3)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(28, 28)
+        Me.Button6.TabIndex = 2
+        Me.Button6.UseVisualStyleBackColor = True
+        '
+        'Label60
+        '
+        Me.Label60.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label60.AutoEllipsis = True
+        Me.Label60.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label60.Location = New System.Drawing.Point(106, 8)
+        Me.Label60.Name = "Label60"
+        Me.Label60.Size = New System.Drawing.Size(690, 15)
+        Me.Label60.TabIndex = 0
+        Me.Label60.Text = "Component {{current}} of {{count}}"
+        Me.Label60.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.Label60.Visible = False
+        '
+        'Label52
+        '
+        Me.Label52.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label52.AutoEllipsis = True
+        Me.Label52.Location = New System.Drawing.Point(52, 67)
+        Me.Label52.Name = "Label52"
+        Me.Label52.Size = New System.Drawing.Size(912, 42)
+        Me.Label52.TabIndex = 12
+        Me.Label52.Text = "In this screen you can add additional components that you want to configure in yo" & _
+    "ur unattended answer file. Add new components, specify their passes and their da" & _
+    "ta, and click Next." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'ComponentHeader
+        '
+        Me.ComponentHeader.AutoEllipsis = True
+        Me.ComponentHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.ComponentHeader.Location = New System.Drawing.Point(16, 17)
+        Me.ComponentHeader.Name = "ComponentHeader"
+        Me.ComponentHeader.Size = New System.Drawing.Size(708, 51)
+        Me.ComponentHeader.TabIndex = 11
+        Me.ComponentHeader.Text = "Configure additional components"
         '
         'FinishPanel
         '
@@ -826,218 +1125,6 @@ Partial Class NewUnattendWiz
         Me.FinalReviewHeader.Size = New System.Drawing.Size(708, 51)
         Me.FinalReviewHeader.TabIndex = 12
         Me.FinalReviewHeader.Text = "Review your settings for the unattended answer file"
-        '
-        'ComponentPanel
-        '
-        Me.ComponentPanel.Controls.Add(Me.LinkLabel5)
-        Me.ComponentPanel.Controls.Add(Me.SystemComponentPanel)
-        Me.ComponentPanel.Controls.Add(Me.Label52)
-        Me.ComponentPanel.Controls.Add(Me.ComponentHeader)
-        Me.ComponentPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComponentPanel.Location = New System.Drawing.Point(0, 0)
-        Me.ComponentPanel.Name = "ComponentPanel"
-        Me.ComponentPanel.Size = New System.Drawing.Size(1008, 569)
-        Me.ComponentPanel.TabIndex = 13
-        '
-        'LinkLabel5
-        '
-        Me.LinkLabel5.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel5.AutoSize = True
-        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel5.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel5.Location = New System.Drawing.Point(53, 533)
-        Me.LinkLabel5.Name = "LinkLabel5"
-        Me.LinkLabel5.Size = New System.Drawing.Size(112, 13)
-        Me.LinkLabel5.TabIndex = 15
-        Me.LinkLabel5.TabStop = True
-        Me.LinkLabel5.Text = "Component reference"
-        '
-        'SystemComponentPanel
-        '
-        Me.SystemComponentPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SystemComponentPanel.Controls.Add(Me.SplitContainer2)
-        Me.SystemComponentPanel.Location = New System.Drawing.Point(53, 148)
-        Me.SystemComponentPanel.Name = "SystemComponentPanel"
-        Me.SystemComponentPanel.Size = New System.Drawing.Size(901, 373)
-        Me.SystemComponentPanel.TabIndex = 14
-        '
-        'SplitContainer2
-        '
-        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer2.Name = "SplitContainer2"
-        '
-        'SplitContainer2.Panel1
-        '
-        Me.SplitContainer2.Panel1.Controls.Add(Me.ListBox2)
-        '
-        'SplitContainer2.Panel2
-        '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.PassContainerPanel)
-        Me.SplitContainer2.Size = New System.Drawing.Size(901, 373)
-        Me.SplitContainer2.SplitterDistance = 575
-        Me.SplitContainer2.TabIndex = 14
-        '
-        'ListBox2
-        '
-        Me.ListBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListBox2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ListBox2.FormattingEnabled = True
-        Me.ListBox2.IntegralHeight = False
-        Me.ListBox2.ItemHeight = 15
-        Me.ListBox2.Location = New System.Drawing.Point(0, 0)
-        Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(575, 373)
-        Me.ListBox2.TabIndex = 0
-        '
-        'PassContainerPanel
-        '
-        Me.PassContainerPanel.Controls.Add(Me.PassConfigurationPanel)
-        Me.PassContainerPanel.Controls.Add(Me.NoComponentSelectedPanel)
-        Me.PassContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PassContainerPanel.Location = New System.Drawing.Point(0, 0)
-        Me.PassContainerPanel.Name = "PassContainerPanel"
-        Me.PassContainerPanel.Size = New System.Drawing.Size(322, 373)
-        Me.PassContainerPanel.TabIndex = 0
-        '
-        'PassConfigurationPanel
-        '
-        Me.PassConfigurationPanel.Controls.Add(Me.oobeSystem)
-        Me.PassConfigurationPanel.Controls.Add(Me.auditUser)
-        Me.PassConfigurationPanel.Controls.Add(Me.auditSystem)
-        Me.PassConfigurationPanel.Controls.Add(Me.generalize)
-        Me.PassConfigurationPanel.Controls.Add(Me.specialize)
-        Me.PassConfigurationPanel.Controls.Add(Me.offlineServicing)
-        Me.PassConfigurationPanel.Controls.Add(Me.windowsPE)
-        Me.PassConfigurationPanel.Controls.Add(Me.Label61)
-        Me.PassConfigurationPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PassConfigurationPanel.Location = New System.Drawing.Point(0, 0)
-        Me.PassConfigurationPanel.Name = "PassConfigurationPanel"
-        Me.PassConfigurationPanel.Size = New System.Drawing.Size(322, 373)
-        Me.PassConfigurationPanel.TabIndex = 0
-        Me.PassConfigurationPanel.Visible = False
-        '
-        'oobeSystem
-        '
-        Me.oobeSystem.AutoSize = True
-        Me.oobeSystem.Location = New System.Drawing.Point(25, 184)
-        Me.oobeSystem.Name = "oobeSystem"
-        Me.oobeSystem.Size = New System.Drawing.Size(85, 17)
-        Me.oobeSystem.TabIndex = 1
-        Me.oobeSystem.Text = "oobeSystem"
-        Me.oobeSystem.UseVisualStyleBackColor = True
-        '
-        'auditUser
-        '
-        Me.auditUser.AutoSize = True
-        Me.auditUser.Location = New System.Drawing.Point(25, 161)
-        Me.auditUser.Name = "auditUser"
-        Me.auditUser.Size = New System.Drawing.Size(72, 17)
-        Me.auditUser.TabIndex = 1
-        Me.auditUser.Text = "auditUser"
-        Me.auditUser.UseVisualStyleBackColor = True
-        '
-        'auditSystem
-        '
-        Me.auditSystem.AutoSize = True
-        Me.auditSystem.Location = New System.Drawing.Point(25, 138)
-        Me.auditSystem.Name = "auditSystem"
-        Me.auditSystem.Size = New System.Drawing.Size(85, 17)
-        Me.auditSystem.TabIndex = 1
-        Me.auditSystem.Text = "auditSystem"
-        Me.auditSystem.UseVisualStyleBackColor = True
-        '
-        'generalize
-        '
-        Me.generalize.AutoSize = True
-        Me.generalize.Location = New System.Drawing.Point(25, 116)
-        Me.generalize.Name = "generalize"
-        Me.generalize.Size = New System.Drawing.Size(75, 17)
-        Me.generalize.TabIndex = 1
-        Me.generalize.Text = "generalize"
-        Me.generalize.UseVisualStyleBackColor = True
-        '
-        'specialize
-        '
-        Me.specialize.AutoSize = True
-        Me.specialize.Location = New System.Drawing.Point(25, 93)
-        Me.specialize.Name = "specialize"
-        Me.specialize.Size = New System.Drawing.Size(71, 17)
-        Me.specialize.TabIndex = 1
-        Me.specialize.Text = "specialize"
-        Me.specialize.UseVisualStyleBackColor = True
-        '
-        'offlineServicing
-        '
-        Me.offlineServicing.AutoSize = True
-        Me.offlineServicing.Location = New System.Drawing.Point(25, 70)
-        Me.offlineServicing.Name = "offlineServicing"
-        Me.offlineServicing.Size = New System.Drawing.Size(99, 17)
-        Me.offlineServicing.TabIndex = 1
-        Me.offlineServicing.Text = "offlineServicing"
-        Me.offlineServicing.UseVisualStyleBackColor = True
-        '
-        'windowsPE
-        '
-        Me.windowsPE.AutoSize = True
-        Me.windowsPE.Location = New System.Drawing.Point(25, 46)
-        Me.windowsPE.Name = "windowsPE"
-        Me.windowsPE.Size = New System.Drawing.Size(79, 17)
-        Me.windowsPE.TabIndex = 1
-        Me.windowsPE.Text = "windowsPE"
-        Me.windowsPE.UseVisualStyleBackColor = True
-        '
-        'Label61
-        '
-        Me.Label61.AutoSize = True
-        Me.Label61.Location = New System.Drawing.Point(11, 10)
-        Me.Label61.Name = "Label61"
-        Me.Label61.Size = New System.Drawing.Size(94, 13)
-        Me.Label61.TabIndex = 0
-        Me.Label61.Text = "Configure passes:"
-        '
-        'NoComponentSelectedPanel
-        '
-        Me.NoComponentSelectedPanel.Controls.Add(Me.Label60)
-        Me.NoComponentSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NoComponentSelectedPanel.Location = New System.Drawing.Point(0, 0)
-        Me.NoComponentSelectedPanel.Name = "NoComponentSelectedPanel"
-        Me.NoComponentSelectedPanel.Size = New System.Drawing.Size(322, 373)
-        Me.NoComponentSelectedPanel.TabIndex = 0
-        '
-        'Label60
-        '
-        Me.Label60.AutoEllipsis = True
-        Me.Label60.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label60.Location = New System.Drawing.Point(0, 0)
-        Me.Label60.Name = "Label60"
-        Me.Label60.Size = New System.Drawing.Size(322, 373)
-        Me.Label60.TabIndex = 0
-        Me.Label60.Text = "Select a component to configure passes"
-        Me.Label60.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label52
-        '
-        Me.Label52.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label52.AutoEllipsis = True
-        Me.Label52.Location = New System.Drawing.Point(52, 67)
-        Me.Label52.Name = "Label52"
-        Me.Label52.Size = New System.Drawing.Size(912, 69)
-        Me.Label52.TabIndex = 12
-        Me.Label52.Text = resources.GetString("Label52.Text")
-        '
-        'ComponentHeader
-        '
-        Me.ComponentHeader.AutoEllipsis = True
-        Me.ComponentHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.ComponentHeader.Location = New System.Drawing.Point(16, 17)
-        Me.ComponentHeader.Name = "ComponentHeader"
-        Me.ComponentHeader.Size = New System.Drawing.Size(708, 51)
-        Me.ComponentHeader.TabIndex = 11
-        Me.ComponentHeader.Text = "Configure additional components"
         '
         'PostInstallPanel
         '
@@ -1346,6 +1433,18 @@ Partial Class NewUnattendWiz
         Me.WirelessNetworkSettingsPanel.Name = "WirelessNetworkSettingsPanel"
         Me.WirelessNetworkSettingsPanel.Size = New System.Drawing.Size(576, 207)
         Me.WirelessNetworkSettingsPanel.TabIndex = 5
+        '
+        'LinkLabel8
+        '
+        Me.LinkLabel8.AutoSize = True
+        Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel8.Location = New System.Drawing.Point(277, 144)
+        Me.LinkLabel8.Name = "LinkLabel8"
+        Me.LinkLabel8.Size = New System.Drawing.Size(206, 13)
+        Me.LinkLabel8.TabIndex = 4
+        Me.LinkLabel8.TabStop = True
+        Me.LinkLabel8.Text = "Access router configuration to learn more"
         '
         'ComboBox13
         '
@@ -3864,18 +3963,6 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt"
         Me.ScriptEditorOFD.Title = "Open script"
         '
-        'LinkLabel8
-        '
-        Me.LinkLabel8.AutoSize = True
-        Me.LinkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel8.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel8.Location = New System.Drawing.Point(277, 144)
-        Me.LinkLabel8.Name = "LinkLabel8"
-        Me.LinkLabel8.Size = New System.Drawing.Size(206, 13)
-        Me.LinkLabel8.TabIndex = 4
-        Me.LinkLabel8.TabStop = True
-        Me.LinkLabel8.Text = "Access router configuration to learn more"
-        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3903,23 +3990,22 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.ComponentPanel.ResumeLayout(False)
+        Me.SystemComponentPanel.ResumeLayout(False)
+        Me.ComponentBodyPanel.ResumeLayout(False)
+        Me.ComponentEditorPanel.ResumeLayout(False)
+        Me.CompConfigPanel.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
+        Me.NoSpecifiedComponentsPanel.ResumeLayout(False)
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ComponentSwitcherPanel.ResumeLayout(False)
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.UnattendProgressPanel.ResumeLayout(False)
         Me.UnattendProgressPanel.PerformLayout()
         Me.FinalReviewPanel.ResumeLayout(False)
         Me.FinalReviewPanel.PerformLayout()
-        Me.ComponentPanel.ResumeLayout(False)
-        Me.ComponentPanel.PerformLayout()
-        Me.SystemComponentPanel.ResumeLayout(False)
-        Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer2.ResumeLayout(False)
-        Me.PassContainerPanel.ResumeLayout(False)
-        Me.PassConfigurationPanel.ResumeLayout(False)
-        Me.PassConfigurationPanel.PerformLayout()
-        Me.NoComponentSelectedPanel.ResumeLayout(False)
         Me.PostInstallPanel.ResumeLayout(False)
         Me.PostInstallPanel.PerformLayout()
         Me.ScriptEditorContainerPanel.ResumeLayout(False)
@@ -4293,21 +4379,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents EditorModeOFD As System.Windows.Forms.OpenFileDialog
     Friend WithEvents EditorModeSFD As System.Windows.Forms.SaveFileDialog
     Friend WithEvents UserListOverviewLabel As System.Windows.Forms.Label
-    Friend WithEvents SystemComponentPanel As Panel
-    Friend WithEvents SplitContainer2 As System.Windows.Forms.SplitContainer
-    Friend WithEvents PassContainerPanel As System.Windows.Forms.Panel
-    Friend WithEvents PassConfigurationPanel As System.Windows.Forms.Panel
-    Friend WithEvents oobeSystem As System.Windows.Forms.CheckBox
-    Friend WithEvents auditUser As System.Windows.Forms.CheckBox
-    Friend WithEvents auditSystem As System.Windows.Forms.CheckBox
-    Friend WithEvents generalize As System.Windows.Forms.CheckBox
-    Friend WithEvents specialize As System.Windows.Forms.CheckBox
-    Friend WithEvents offlineServicing As System.Windows.Forms.CheckBox
-    Friend WithEvents windowsPE As System.Windows.Forms.CheckBox
-    Friend WithEvents Label61 As System.Windows.Forms.Label
-    Friend WithEvents NoComponentSelectedPanel As System.Windows.Forms.Panel
-    Friend WithEvents Label60 As System.Windows.Forms.Label
-    Friend WithEvents ListBox2 As System.Windows.Forms.ListBox
     Friend WithEvents LinkLabel5 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel6 As System.Windows.Forms.LinkLabel
     Friend WithEvents LinkLabel7 As System.Windows.Forms.LinkLabel
@@ -4320,7 +4391,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents ScriptEditorContainerPanel As System.Windows.Forms.Panel
     Friend WithEvents ScriptEditorPanel As System.Windows.Forms.Panel
     Friend WithEvents Scintilla3 As ScintillaNET.Scintilla
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents ScriptStagePanel As System.Windows.Forms.Panel
     Friend WithEvents FlowLayoutPanel1 As System.Windows.Forms.FlowLayoutPanel
@@ -4342,4 +4412,27 @@ Partial Class NewUnattendWiz
     Friend WithEvents ManualComputerNamePanel As System.Windows.Forms.Panel
     Friend WithEvents CheckBox22 As System.Windows.Forms.CheckBox
     Friend WithEvents LinkLabel8 As System.Windows.Forms.LinkLabel
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents SystemComponentPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComponentBodyPanel As System.Windows.Forms.Panel
+    Friend WithEvents NoSpecifiedComponentsPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox4 As System.Windows.Forms.PictureBox
+    Friend WithEvents ComponentEditorPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComponentSwitcherPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label60 As System.Windows.Forms.Label
+    Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents Button7 As System.Windows.Forms.Button
+    Friend WithEvents Button8 As System.Windows.Forms.Button
+    Friend WithEvents Button9 As System.Windows.Forms.Button
+    Friend WithEvents Scintilla4 As ScintillaNET.Scintilla
+    Friend WithEvents CompConfigPanel As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox15 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label64 As System.Windows.Forms.Label
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox14 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label61 As System.Windows.Forms.Label
+    Friend WithEvents Button10 As System.Windows.Forms.Button
+    Friend WithEvents Button11 As System.Windows.Forms.Button
 End Class

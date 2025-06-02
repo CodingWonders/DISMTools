@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2561"
+    Const UnattendGenReleaseTag As String = "2562_BETA1"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -110,7 +110,8 @@ Public Class NewUnattendWiz
 
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
-    Dim FinalComponents As New List(Of Component)
+    Dim SystemComponentsEx As New List(Of Component)
+    Dim ComponentIndex As Integer
 
     ' Default Settings
     Dim DefaultLanguage As New ImageLanguage()
@@ -124,7 +125,6 @@ Public Class NewUnattendWiz
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
     Dim DefaultPostInstallScripts As New List(Of PostInstallScript)
-    Dim DefaultSystemComponents As New List(Of Component)
 
     ' Progress info
     Dim ProgressMessage As String = ""
@@ -150,16 +150,19 @@ Public Class NewUnattendWiz
         Scintilla1.StyleResetDefault()
         Scintilla2.StyleResetDefault()
         Scintilla3.StyleResetDefault()
+        Scintilla4.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         DynaLog.LogMessage("Setting colors for selection...")
         If CurrentTheme.IsDark Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla3.SelectionBackColor = Color.FromArgb(38, 79, 120)
+            Scintilla4.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla3.SelectionBackColor = Color.FromArgb(153, 201, 239)
+            Scintilla4.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
@@ -167,6 +170,8 @@ Public Class NewUnattendWiz
         Scintilla2.Styles(Style.Default).Size = fntSize
         Scintilla3.Styles(Style.Default).Font = fntName
         Scintilla3.Styles(Style.Default).Size = fntSize
+        Scintilla4.Styles(Style.Default).Font = fntName
+        Scintilla4.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
         DynaLog.LogMessage("Setting colors for styles...")
@@ -179,9 +184,13 @@ Public Class NewUnattendWiz
         Scintilla3.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
         Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla4.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla4.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.StyleClearAll()
         Scintilla2.StyleClearAll()
         Scintilla3.StyleClearAll()
+        Scintilla4.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
         DynaLog.LogMessage("Setting colors for XML and PowerShell lexers...")
@@ -200,6 +209,20 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
             Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
+            Scintilla4.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla4.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla4.Styles(Style.Xml.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla4.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla4.Styles(Style.Xml.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla4.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla4.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla4.Styles(Style.Xml.Tag).ForeColor = Color.FromArgb(227, 206, 171)
+            Scintilla4.Styles(Style.Xml.TagEnd).ForeColor = Color.FromArgb(227, 206, 171)
+            Scintilla4.Styles(Style.Xml.TagUnknown).ForeColor = Color.FromArgb(237, 214, 237)
+            Scintilla4.Styles(Style.Xml.Attribute).ForeColor = Color.FromArgb(190, 200, 158)
+            Scintilla4.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
+            Scintilla4.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla4.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
             Scintilla3.Styles(Style.PowerShell.Default).ForeColor = Color.FromArgb(220, 220, 204)
             Scintilla3.Styles(Style.PowerShell.Comment).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla3.Styles(Style.PowerShell.String).ForeColor = Color.FromArgb(204, 147, 147)
@@ -232,6 +255,20 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.Black
+            Scintilla4.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.Default).ForeColor = Color.Black
+            Scintilla4.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla4.Styles(Style.Xml.Number).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla4.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla4.Styles(Style.Xml.Tag).ForeColor = Color.Blue
+            Scintilla4.Styles(Style.Xml.TagEnd).ForeColor = Color.Blue
+            Scintilla4.Styles(Style.Xml.TagUnknown).ForeColor = Color.Blue
+            Scintilla4.Styles(Style.Xml.Attribute).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
+            Scintilla4.Styles(Style.Xml.Entity).ForeColor = Color.Black
             Scintilla3.Styles(Style.PowerShell.Default).ForeColor = Color.Black
             Scintilla3.Styles(Style.PowerShell.Comment).ForeColor = Color.FromArgb(0, 128, 0)
             Scintilla3.Styles(Style.PowerShell.String).ForeColor = Color.FromArgb(128, 128, 128)
@@ -253,15 +290,18 @@ Public Class NewUnattendWiz
         ' Set lexer
         Scintilla1.LexerName = "xml"
         Scintilla3.LexerName = "powershell"
+        Scintilla4.LexerName = "xml"
 
         ' Set line number margin properties
         DynaLog.LogMessage("Setting colors for line margin...")
         Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla3.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Scintilla4.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
         Margin.Width = 48
         Margin.Type = MarginType.Number
@@ -273,6 +313,11 @@ Public Class NewUnattendWiz
         Margin.Sensitive = True
         Margin.Mask = 0
         Margin = Scintilla3.Margins(1)
+        Margin.Width = 48
+        Margin.Type = MarginType.Number
+        Margin.Sensitive = True
+        Margin.Mask = 0
+        Margin = Scintilla4.Margins(1)
         Margin.Width = 48
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
@@ -292,6 +337,10 @@ Public Class NewUnattendWiz
         Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
         Scintilla3.SetProperty("fold", "1")
         Scintilla3.SetProperty("fold.compact", "1")
+        Scintilla4.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
+        Scintilla4.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
+        Scintilla4.SetProperty("fold", "1")
+        Scintilla4.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
         DynaLog.LogMessage("Seting bookmark margins...")
@@ -325,12 +374,23 @@ Public Class NewUnattendWiz
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
+        Bookmarks = Scintilla4.Margins(2)
+        Bookmarks.Width = 20
+        Bookmarks.Sensitive = True
+        Bookmarks.Type = MarginType.Symbol
+        Bookmarks.Mask = (1 << 2)
+        Marker = Scintilla4.Markers(2)
+        Marker.Symbol = MarkerSymbol.Circle
+        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
+        Marker.SetForeColor(Color.Black)
+        Marker.SetAlpha(100)
 
         ' Set editor caret settings
         DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
         Scintilla2.CaretForeColor = ForeColor
         Scintilla3.CaretForeColor = ForeColor
+        Scintilla4.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
@@ -347,6 +407,10 @@ Public Class NewUnattendWiz
         Scintilla3.Margins(3).Mask = Marker.MaskFolders
         Scintilla3.Margins(3).Sensitive = True
         Scintilla3.Margins(3).Width = 1
+        Scintilla4.Margins(3).Type = MarginType.Symbol
+        Scintilla4.Margins(3).Mask = Marker.MaskFolders
+        Scintilla4.Margins(3).Sensitive = True
+        Scintilla4.Margins(3).Width = 1
 
         ' Set colors for all folding markers
         DynaLog.LogMessage("Setting colors for folding markers...")
@@ -357,6 +421,8 @@ Public Class NewUnattendWiz
             Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla3.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla3.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
+            Scintilla4.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
+            Scintilla4.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
         Next
 
         ' Folding marker configuration
@@ -382,12 +448,20 @@ Public Class NewUnattendWiz
         Scintilla3.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla3.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla3.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
+        Scintilla4.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
+        Scintilla4.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
+        Scintilla4.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
+        Scintilla4.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
+        Scintilla4.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
+        Scintilla4.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
+        Scintilla4.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
         DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla3.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+        Scintilla4.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
 
         ' Add Keywords
         DynaLog.LogMessage("Adding keywords to editors...")
@@ -570,7 +644,6 @@ Public Class NewUnattendWiz
         ComboBox12.BackColor = BackColor
         ComboBox13.BackColor = BackColor
         CheckedListBox1.BackColor = BackColor
-        ListBox2.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox3.BackColor = BackColor
@@ -612,7 +685,6 @@ Public Class NewUnattendWiz
         ComboBox12.ForeColor = ForeColor
         ComboBox13.ForeColor = ForeColor
         CheckedListBox1.ForeColor = ForeColor
-        ListBox2.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -646,6 +718,7 @@ Public Class NewUnattendWiz
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
         PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
+        PictureBox4.Image = If(CurrentTheme.IsDark, My.Resources.cmps_addfirstcomponent_dark, My.Resources.cmps_addfirstcomponent_light)
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -716,10 +789,9 @@ Public Class NewUnattendWiz
         ' System components
         If File.Exists(Application.StartupPath & "\AutoUnattend\Component.xml") Then
             SystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
-            DefaultSystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
             If SystemComponents IsNot Nothing Then
                 For Each SystemComponent As Component In SystemComponents
-                    ListBox2.Items.Add(SystemComponent.Id)
+                    ComboBox14.Items.Add(SystemComponent.Id)
                 Next
             End If
         End If
@@ -871,7 +943,15 @@ Public Class NewUnattendWiz
         ' Restore default script settings
         CheckBox20.Checked = False
         ' Restore default selections for components
-        SystemComponents = DefaultSystemComponents
+        SystemComponentsEx.Clear()
+        NoSpecifiedComponentsPanel.Visible = True
+        ComponentEditorPanel.Visible = False
+        Label60.Visible = False
+        Button10.Enabled = False
+        Button6.Enabled = False
+        Button7.Enabled = False
+        Button8.Enabled = False
+        Button9.Enabled = False
 
         ' Restore variables
         UserAccountsList.Clear()
@@ -1224,20 +1304,13 @@ Public Class NewUnattendWiz
         End If
         ' Post Install Scripts and Component Manager will be added in a future release
         ' 11. -- COMPONENTS
-        TextBox13.AppendText("Additional components: " & If(Not AreComponentListsEqual(SystemComponents, DefaultSystemComponents), "", "none") & CrLf)
-        If Not AreComponentListsEqual(SystemComponents, DefaultSystemComponents) Then
-            FinalComponents = GetComponentDifferences(SystemComponents, DefaultSystemComponents)
-            If FinalComponents.Count > 0 Then
-                For Each systemComponent As Component In FinalComponents
-                    TextBox13.AppendText("- Component name: " & Quote & systemComponent.Id & Quote & CrLf &
-                                         "  - Passes:" & CrLf)
-                    If systemComponent.Passes.Count > 0 Then
-                        For Each systemPass As Pass In systemComponent.Passes
-                            TextBox13.AppendText("    - " & Quote & systemPass.Name & Quote & CrLf)
-                        Next
-                    End If
-                Next
-            End If
+        TextBox13.AppendText("Additional components: " & If(Not SystemComponentsEx.Count = 0, SystemComponentsEx.Count, "none") & CrLf)
+        If SystemComponentsEx.Count > 0 Then
+            For Each SpecifiedComponent As Component In SystemComponentsEx
+                TextBox13.AppendText("Component Details:" & CrLf &
+                                     "  - Component ID: " & SpecifiedComponent.Id & CrLf &
+                                     "  - Pass: " & SpecifiedComponent.Pass.Name & CrLf)
+            Next
         End If
     End Sub
 
@@ -2078,24 +2151,20 @@ Public Class NewUnattendWiz
                     UnattendGen.StartInfo.Arguments &= " /hidewindows"
                 End If
             End If
-            If FinalComponents.Count > 0 Then
+            If SystemComponentsEx.Count > 0 Then
                 ReportMessage("Saving user settings...", 24.75)
+                DynaLog.LogMessage("Checking if components directory exists...")
+                If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components")) Then
+                    DynaLog.LogMessage("Components directory does not exist. Attempting to create it...")
+                    Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components"))
+                End If
                 DynaLog.LogMessage("Saving custom components...")
                 UnattendGen.StartInfo.Arguments &= " /customcomponents"
-                Dim customComponentContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                    "<root>" & CrLf
-                For Each systemComponent As Component In FinalComponents
-                    Dim passName As String = ""
-                    If systemComponent.Passes.Count > 0 Then
-                        For Each systemPass As Pass In systemComponent.Passes
-                            passName &= systemPass.Name & ","
-                        Next
-                        passName = passName.TrimEnd(",")
-                    End If
-                    customComponentContents &= "    <Component Id=" & Quote & systemComponent.Id.Replace("&", "&amp;").Trim() & Quote & " Passes=" & Quote & passName.Replace("&", "&amp;").Trim() & Quote & " />" & CrLf
+                For Each SystemComponent As Component In SystemComponentsEx
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components", String.Format("{0}_{1}.xml", SystemComponent.Id, SystemComponent.Pass.Name)),
+                                      SystemComponent.XmlData, UTF8)
                 Next
-                customComponentContents &= "</root>"
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "components.xml"), customComponentContents, UTF8)
+                DynaLog.LogMessage("Components were saved.")
             End If
             ReportMessage("Generating unattended answer file...", 25)
             DynaLog.LogMessage("Starting UnattendGen...")
@@ -2336,179 +2405,9 @@ Public Class NewUnattendWiz
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
     End Sub
 
-    Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
-        PassConfigurationPanel.Visible = (ListBox2.SelectedItems.Count = 1)
-        If ListBox2.SelectedItems.Count = 1 Then
-            For Each configurationPass As Pass In SystemComponents(ListBox2.SelectedIndex).Passes
-                Select Case configurationPass.Name
-                    Case "windowsPE"
-                        windowsPE.Enabled = configurationPass.Compatible
-                        windowsPE.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "offlineServicing"
-                        offlineServicing.Enabled = configurationPass.Compatible
-                        offlineServicing.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "specialize"
-                        specialize.Enabled = configurationPass.Compatible
-                        specialize.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "generalize"
-                        generalize.Enabled = configurationPass.Compatible
-                        generalize.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "auditSystem"
-                        auditSystem.Enabled = configurationPass.Compatible
-                        auditSystem.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "auditUser"
-                        auditUser.Enabled = configurationPass.Compatible
-                        auditUser.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "oobeSystem"
-                        oobeSystem.Enabled = configurationPass.Compatible
-                        oobeSystem.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                End Select
-            Next
-        End If
-    End Sub
-
     Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
         Process.Start("https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/components-b-unattend")
     End Sub
-
-    Sub ConfigureComponent(componentName As String, componentPass As String, componentPassEnabled As Boolean)
-        DynaLog.LogMessage("Configuring system component...")
-        DynaLog.LogMessage("- Component name: " & componentName)
-        DynaLog.LogMessage("- Component pass: " & componentPass)
-        DynaLog.LogMessage("- New state: " & If(componentPassEnabled, "enabled", "disabled"))
-        If String.IsNullOrWhiteSpace(componentName) Then Exit Sub
-        If String.IsNullOrWhiteSpace(componentPass) Then Exit Sub
-        Dim componentNames As New List(Of String)
-        Dim knownPasses As New Dictionary(Of String, Boolean)
-        knownPasses.Add("offlineServicing", False)
-        knownPasses.Add("windowsPE", False)
-        knownPasses.Add("generalize", False)
-        knownPasses.Add("specialize", False)
-        knownPasses.Add("auditSystem", False)
-        knownPasses.Add("auditUser", False)
-        knownPasses.Add("oobeSystem", False)
-        For Each systemComponent As Component In SystemComponents
-            componentNames.Add(systemComponent.Id)
-        Next
-        ' Determine if the passed component ID "componentName" exists in the grabbed components
-        If componentNames.Contains(componentName) Then
-            DynaLog.LogMessage("The specified component exists in the component list.")
-            Dim placementIndex As Integer = componentNames.IndexOf(componentName)
-            ' Grab pass to configure and configure it
-            If Not knownPasses.ContainsKey(componentPass) Then
-                DynaLog.LogMessage("The specified pass does not exist in the pass list.")
-                MsgBox("The component pass " & componentPass & " does not exist in the pass list", vbOKOnly + vbCritical, Text)
-                Exit Sub
-            End If
-            Dim editedPass As Pass = SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass)
-            If editedPass IsNot Nothing Then
-                editedPass.Enabled = componentPassEnabled
-                DynaLog.LogMessage("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
-            Else
-                DynaLog.LogMessage("Could not edit the specified pass.")
-            End If
-        Else
-            DynaLog.LogMessage("The specified component does not exist in the component list.")
-            MsgBox("The component " & componentName & " does not exist in the component list", vbOKOnly + vbCritical, Text)
-            Exit Sub
-        End If
-    End Sub
-
-    Private Sub oobeSystem_CheckedChanged(sender As Object, e As EventArgs) Handles oobeSystem.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "oobeSystem", oobeSystem.Checked)
-    End Sub
-
-    Private Sub auditUser_CheckedChanged(sender As Object, e As EventArgs) Handles auditUser.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "auditUser", auditUser.Checked)
-    End Sub
-
-    Private Sub auditSystem_CheckedChanged(sender As Object, e As EventArgs) Handles auditSystem.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "auditSystem", auditSystem.Checked)
-    End Sub
-
-    Private Sub generalize_CheckedChanged(sender As Object, e As EventArgs) Handles generalize.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "generalize", generalize.Checked)
-    End Sub
-
-    Private Sub specialize_CheckedChanged(sender As Object, e As EventArgs) Handles specialize.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "specialize", specialize.Checked)
-    End Sub
-
-    Private Sub offlineServicing_CheckedChanged(sender As Object, e As EventArgs) Handles offlineServicing.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "offlineServicing", offlineServicing.Checked)
-    End Sub
-
-    Private Sub windowsPE_CheckedChanged(sender As Object, e As EventArgs) Handles windowsPE.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "windowsPE", windowsPE.Checked)
-    End Sub
-
-    Function AreComponentListsEqual(list1 As List(Of Component), list2 As List(Of Component)) As Boolean
-        ' Check if the counts of both lists are the same
-        If list1.Count <> list2.Count Then Return False
-
-        ' Iterate through components in both lists
-        For i As Integer = 0 To list1.Count - 1
-            Dim component1 As Component = list1(i)
-            Dim component2 As Component = list2(i)
-
-            ' Compare component IDs
-            If component1.Id <> component2.Id Then Return False
-
-            ' Compare the number of passes in each component
-            If component1.Passes.Count <> component2.Passes.Count Then Return False
-
-            ' Compare each pass
-            For j As Integer = 0 To component1.Passes.Count - 1
-                Dim pass1 As Pass = component1.Passes(j)
-                Dim pass2 As Pass = component2.Passes(j)
-
-                ' Compare pass names and compatible states
-                If pass1.Name <> pass2.Name OrElse pass1.Enabled <> pass2.Enabled Then
-                    Return False
-                End If
-            Next
-        Next
-
-        ' If all comparisons pass, the lists are equal
-        Return True
-    End Function
-
-    Function GetComponentDifferences(list1 As List(Of Component), list2 As List(Of Component)) As List(Of Component)
-        Dim differences As New List(Of Component)
-
-        ' Combine both lists to check for differences in either
-        Dim allComponents As List(Of Component) = list1.Concat(list2).GroupBy(Function(c) c.Id).Select(Function(g) g.First()).ToList()
-
-        For Each component In allComponents
-            ' Find the component in both lists
-            Dim component1 As Component = list1.FirstOrDefault(Function(c) c.Id = component.Id)
-            Dim component2 As Component = list2.FirstOrDefault(Function(c) c.Id = component.Id)
-
-            If component1 Is Nothing OrElse component2 Is Nothing Then
-                ' If a component is missing in one of the lists, it's different
-                differences.Add(component)
-            Else
-                ' Compare passes if the component exists in both lists
-                Dim differingComponent As New Component() With {.Id = component.Id}
-                For Each pass1 In component1.Passes
-                    ' Find corresponding pass in component2
-                    Dim pass2 As Pass = component2.Passes.FirstOrDefault(Function(p) p.Name = pass1.Name)
-
-                    If pass2 Is Nothing OrElse pass1.Enabled <> pass2.Enabled Then
-                        ' If pass is missing or its status is different, mark it as different
-                        differingComponent.Passes.Add(pass1)
-                    End If
-                Next
-
-                ' Only add the component if there are differing passes
-                If differingComponent.Passes.Count > 0 Then
-                    differences.Add(differingComponent)
-                End If
-            End If
-        Next
-
-        Return differences
-    End Function
 
     Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
         If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
@@ -2770,5 +2669,92 @@ Public Class NewUnattendWiz
         If IpGateway IsNot Nothing Then
             Process.Start(String.Format("http://{0}", IpGateway.ToString()))
         End If
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If SystemComponentsEx.Count = 0 Then
+            NoSpecifiedComponentsPanel.Visible = False
+            ComponentEditorPanel.Visible = True
+            Label60.Visible = True
+            Button10.Enabled = True
+        End If
+        SystemComponentsEx.Add(New Component(SystemComponents(0).Id, SystemComponents(0).Passes(0)))
+        ComponentIndex = SystemComponentsEx.Count - 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Sub LoadCustomComponent(Index As Integer)
+        DynaLog.LogMessage("Loading custom component item...")
+        DynaLog.LogMessage("Index: " & Index)
+        Label60.Text = String.Format("Component {0} of {1}", Index + 1, SystemComponentsEx.Count)
+        If SystemComponentsEx(Index) IsNot Nothing Then
+            ComboBox14.SelectedItem = SystemComponentsEx(Index).Id
+            ComboBox15.SelectedItem = SystemComponentsEx(Index).Pass.Name
+            Scintilla4.Text = SystemComponentsEx(Index).XmlData
+            Button6.Enabled = Not (Index = SystemComponentsEx.Count - 1)
+            Button7.Enabled = Not (Index = 0)
+            Button8.Enabled = Not (Index = 0)
+            Button9.Enabled = Not (Index = SystemComponentsEx.Count - 1)
+        End If
+    End Sub
+
+    Private Sub ComboBox14_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox14.SelectedIndexChanged
+        ComboBox15.Items.Clear()
+        For Each componentPass As Pass In SystemComponents(ComboBox14.SelectedIndex).Passes.Where(Function(pass) pass.Compatible)
+            ComboBox15.Items.Add(componentPass.Name)
+            ComboBox15.SelectedIndex = 0
+        Next
+        SystemComponentsEx(ComponentIndex).Id = ComboBox14.SelectedItem
+    End Sub
+
+    Private Sub ComboBox15_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox15.SelectedIndexChanged
+        SystemComponentsEx(ComponentIndex).Pass = SystemComponents(ComponentIndex).Passes.Where(Function(pass) pass.Name = ComboBox15.SelectedItem)(0)
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        ComponentIndex = SystemComponentsEx.Count - 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        ComponentIndex += 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        ' Don't do it if there are no items
+        If SystemComponentsEx.Count = 0 Then Exit Sub
+
+        SystemComponentsEx.RemoveAt(ComponentIndex)
+        ' Check again if there are no items
+        If SystemComponentsEx.Count = 0 Then
+            NoSpecifiedComponentsPanel.Visible = True
+            ComponentEditorPanel.Visible = False
+            Label60.Visible = False
+            Button10.Enabled = False
+            Button6.Enabled = False
+            Button7.Enabled = False
+            Button8.Enabled = False
+            Button9.Enabled = False
+        Else
+            If ComponentIndex > SystemComponentsEx.Count - 1 Then
+                ComponentIndex = SystemComponentsEx.Count - 1
+            End If
+            LoadCustomComponent(ComponentIndex)
+        End If
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        ComponentIndex -= 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        ComponentIndex = 0
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Scintilla4_TextChanged(sender As Object, e As EventArgs) Handles Scintilla4.TextChanged
+        SystemComponentsEx(ComponentIndex).XmlData = Scintilla4.Text
     End Sub
 End Class

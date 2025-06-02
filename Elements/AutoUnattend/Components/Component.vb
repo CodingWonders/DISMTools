@@ -11,7 +11,20 @@ Namespace Elements
         <XmlAttribute("Id")>
         Public Property Id As String
 
+        Public Property Pass As Pass
+
         Public Property Passes As New List(Of Pass)
+
+        Public Property XmlData As String
+
+        Public Sub New()
+
+        End Sub
+
+        Public Sub New(id As String, pass As Pass)
+            Me.Id = id
+            Me.Pass = pass
+        End Sub
 
         Public Overrides Function ToString() As String
             Dim passList As String = ""
