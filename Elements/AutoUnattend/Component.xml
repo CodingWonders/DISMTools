@@ -10,6 +10,7 @@
     <Component Id="Microsoft-Windows-Deployment" Passes="generalize,specialize,auditSystem,auditUser,oobeSystem"/>
     <Component Id="Microsoft-Windows-DeviceAccess" Passes="specialize"/>
     <Component Id="Microsoft-Windows-DeviceGuard-Unattend" Passes="offlineServicing"/>
+    <Component Id="Microsoft-Windows-Devices-Lights-WinRT" Passes="offlineServicing"/>
     <Component Id="Microsoft-Windows-DiagCpl" Passes="offlineServicing,generalize,specialize"/>
     <Component Id="Microsoft-Windows-Disk-Failure-Diagnostic-Module" Passes="offlineServicing,generalize,specialize"/>
     <Component Id="Microsoft-Windows-DNS-Client" Passes="specialize"/>
@@ -43,6 +44,7 @@
     <Component Id="Microsoft-Windows-PnpSysprep" Passes="generalize,specialize"/>
     <Component Id="Microsoft-Windows-PowerCPL" Passes="generalize,specialize"/>
     <Component Id="Microsoft-Windows-Printing-Spooler-Core" Passes="specialize"/>
+    <Component Id="Microsoft-Windows-Sensors-Core" Passes="offlineServicing,specialize,oobeSystem"/>
     <Component Id="Microsoft-Windows-RasServer" Passes="specialize"/>
     <Component Id="Microsoft-Windows-RemoteAssistance-Exe" Passes="specialize"/>
     <Component Id="Microsoft-Windows-SecureStartup-FilterDriver" Passes="offlineServicing,specialize,auditSystem,oobeSystem"/>
