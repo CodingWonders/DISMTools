@@ -37,7 +37,7 @@ Namespace Elements
                     End If
                 Next
             End If
-            Return "Component, with ID: " & Me.Id & "; Passes: " & passList
+            Return "Component, with ID: " & Me.Id & "; Pass: " & Pass.Name
         End Function
 
         Public Shared Function LoadItems(filePath As String) As List(Of Component)

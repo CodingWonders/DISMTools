@@ -111,7 +111,9 @@ Public Class NewUnattendWiz
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
     Dim SystemComponentsEx As New List(Of Component)
+    Dim ReservedComponents As New List(Of Component)
     Dim ComponentIndex As Integer
+    Dim IsComponentBeingLoaded As Boolean
 
     ' Default Settings
     Dim DefaultLanguage As New ImageLanguage()
@@ -795,6 +797,14 @@ Public Class NewUnattendWiz
                 Next
             End If
         End If
+        ' Begin reserving components for proper OS installation
+        If ReservedComponents.Count > 0 Then ReservedComponents.Clear()
+        ReservedComponents.Add(New Component("Microsoft-Windows-Deployment", New Pass("specialize")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-International-Core", New Pass("oobeSystem")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-International-Core-WinPE", New Pass("windowsPE")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-Setup", New Pass("windowsPE")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-Shell-Setup", New Pass("specialize")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-Shell-Setup", New Pass("oobeSystem")))
         CheckedListBox1.SelectedIndex = 1
         ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
@@ -952,6 +962,7 @@ Public Class NewUnattendWiz
         Button7.Enabled = False
         Button8.Enabled = False
         Button9.Enabled = False
+        LinkLabel9.Visible = False
 
         ' Restore variables
         UserAccountsList.Clear()
@@ -2677,24 +2688,44 @@ Public Class NewUnattendWiz
             ComponentEditorPanel.Visible = True
             Label60.Visible = True
             Button10.Enabled = True
+            LinkLabel9.Visible = True
         End If
         SystemComponentsEx.Add(New Component(SystemComponents(0).Id, SystemComponents(0).Passes(0)))
         ComponentIndex = SystemComponentsEx.Count - 1
-        LoadCustomComponent(ComponentIndex)
+        LoadCustomComponent(ComponentIndex, True)
     End Sub
 
-    Sub LoadCustomComponent(Index As Integer)
+    Sub LoadCustomComponent(Index As Integer, Optional NewItem As Boolean = False)
         DynaLog.LogMessage("Loading custom component item...")
         DynaLog.LogMessage("Index: " & Index)
         Label60.Text = String.Format("Component {0} of {1}", Index + 1, SystemComponentsEx.Count)
         If SystemComponentsEx(Index) IsNot Nothing Then
+            If Not NewItem Then IsComponentBeingLoaded = True
             ComboBox14.SelectedItem = SystemComponentsEx(Index).Id
-            ComboBox15.SelectedItem = SystemComponentsEx(Index).Pass.Name
+            If NewItem Then
+                ComboBox15.SelectedIndex = 0
+            Else
+                ComboBox15.SelectedIndex = ComboBox15.Items.IndexOf(SystemComponentsEx(Index).Pass.Name)
+            End If
+            IsComponentBeingLoaded = False
+
             Scintilla4.Text = SystemComponentsEx(Index).XmlData
             Button6.Enabled = Not (Index = SystemComponentsEx.Count - 1)
             Button7.Enabled = Not (Index = 0)
             Button8.Enabled = Not (Index = 0)
             Button9.Enabled = Not (Index = SystemComponentsEx.Count - 1)
+
+            ShowReservedComponentStatusMessage(Index)
+        End If
+    End Sub
+
+    Private Function IsAReservedComponent(cmpName As String, cmpPass As Pass) As Boolean
+        Return ReservedComponents.Where(Function(component) component.Id = cmpName And component.Pass.Equals(cmpPass))(0) IsNot Nothing
+    End Function
+
+    Sub ShowReservedComponentStatusMessage(SelectedComponentIndex As Integer)
+        If IsAReservedComponent(SystemComponentsEx(SelectedComponentIndex).Id, SystemComponentsEx(SelectedComponentIndex).Pass) Then
+            MessageBox.Show("This component is already reserved for proper OS installation. If you overwrite this component with your data, OS installation may not give you expected results.", "Component in use", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -2702,13 +2733,19 @@ Public Class NewUnattendWiz
         ComboBox15.Items.Clear()
         For Each componentPass As Pass In SystemComponents(ComboBox14.SelectedIndex).Passes.Where(Function(pass) pass.Compatible)
             ComboBox15.Items.Add(componentPass.Name)
-            ComboBox15.SelectedIndex = 0
         Next
         SystemComponentsEx(ComponentIndex).Id = ComboBox14.SelectedItem
+        If Not IsComponentBeingLoaded Then
+            If ComboBox15.Items.Count > 0 Then
+                ComboBox15.SelectedIndex = 0
+            End If
+        End If
+        If Not IsComponentBeingLoaded Then ShowReservedComponentStatusMessage(ComponentIndex)
     End Sub
 
     Private Sub ComboBox15_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox15.SelectedIndexChanged
         SystemComponentsEx(ComponentIndex).Pass = SystemComponents(ComponentIndex).Passes.Where(Function(pass) pass.Name = ComboBox15.SelectedItem)(0)
+        If Not IsComponentBeingLoaded Then ShowReservedComponentStatusMessage(ComponentIndex)
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
@@ -2736,6 +2773,7 @@ Public Class NewUnattendWiz
             Button7.Enabled = False
             Button8.Enabled = False
             Button9.Enabled = False
+            LinkLabel9.Visible = False
         Else
             If ComponentIndex > SystemComponentsEx.Count - 1 Then
                 ComponentIndex = SystemComponentsEx.Count - 1
@@ -2756,5 +2794,12 @@ Public Class NewUnattendWiz
 
     Private Sub Scintilla4_TextChanged(sender As Object, e As EventArgs) Handles Scintilla4.TextChanged
         SystemComponentsEx(ComponentIndex).XmlData = Scintilla4.Text
+    End Sub
+
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+        If ComboBox14.SelectedItem IsNot Nothing Then
+            ' Perform a Google search (yes, Google is not my favorite search engine, but this takes advantage of the Web tab)
+            Process.Start(String.Format("https://www.google.com/search?q={0}+site:learn.microsoft.com&udm=14", ComboBox14.SelectedItem))
+        End If
     End Sub
 End Class
