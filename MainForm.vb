@@ -1074,11 +1074,7 @@ Public Class MainForm
         DynaLog.LogMessage("Do we REALLY have to do this? Let's find out!")
         Dim NeedToRemount As Boolean = False
         If MountedImageImgStatuses.Count > 0 Then
-            For x = 0 To Array.LastIndexOf(MountedImageImgStatuses, MountedImageImgStatuses.Last)
-                If MountedImageImgStatuses(x) = 1 Then
-                    NeedToRemount = True
-                End If
-            Next
+            NeedToRemount = MountedImageImgStatuses.Where(Function(status) status = 1).Any()
         End If
         DynaLog.LogMessage(If(NeedToRemount, "Remounting any orphaned images...", "There is no need to do this. Skipping..."))
         If NeedToRemount Then AutoReloadForm.ShowDialog()
