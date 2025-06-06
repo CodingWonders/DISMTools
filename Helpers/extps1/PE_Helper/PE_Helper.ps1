@@ -853,8 +853,8 @@ function Start-OSApplication
     lis dis
     exit
 '@
-    New-Item -Path "X:\files\diskpart" -ItemType Directory -Force | Out-Null
-    $diskGetterDpScript | Out-File "X:\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
+    New-Item -Path "$env:SYSTEMDRIVE\files\diskpart" -ItemType Directory -Force | Out-Null
+    $diskGetterDpScript | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_listdisk.dp" -Force -Encoding utf8
     $drive = Get-Disks
     if ($drive -eq "ERROR")
     {
@@ -931,8 +931,8 @@ function Start-OSApplication
         lis vol
         exit
 '@
-        $volLister | Out-File "X:\files\diskpart\dp_vols.dp" -Force -Encoding utf8
-        diskpart /s "X:\files\diskpart\dp_vols.dp" | Out-Host
+        $volLister | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_vols.dp" -Force -Encoding utf8
+        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_vols.dp" | Out-Host
         $driveLetter = Read-Host "Specify a drive letter"
         if ($driveLetter -eq "")
         {
@@ -1268,8 +1268,8 @@ function Write-DiskConfiguration
             $formatter = $formatter.Replace("#MBRPART#", $formatter_mbr).Trim()
             $formatter = $formatter.Replace("#GPTPART#", "REM Unused Partition Block").Trim()
         }
-        $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
-        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"X:\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
+        $formatter | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_format.dp" -Force -Encoding utf8
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"$env:SYSTEMDRIVE\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     else
     {
@@ -1281,8 +1281,8 @@ function Write-DiskConfiguration
 '@
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
         $formatter = $formatter.Replace("#PARTID#", $partId).Trim()
-        $formatter | Out-File "X:\files\diskpart\dp_format.dp" -Force -Encoding utf8
-        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"X:\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
+        $formatter | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_format.dp" -Force -Encoding utf8
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"$env:SYSTEMDRIVE\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     Write-Host "Disk configuration has been written successfully."
 }
@@ -1696,14 +1696,14 @@ function New-BootFiles
 '@
                         $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
-                        $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
-                        diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                        $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
                     }
                 }
 
-                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
                     Write-Host "Deleting BCD entry..."
-                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
                     if ($entryGuid -ne "") {
                         bcdedit /delete $entryGuid | Out-Host
                     }
@@ -1735,14 +1735,14 @@ function New-BootFiles
 '@
                         $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
-                        $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
-                        diskpart /s "X:\files\diskpart\dp_bootassign.dp" | Out-Host
+                        $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
+                        diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" | Out-Host
                     }
                 }
 
-                if (Test-Path -Path "X:\HotInstall\BcdEntry" -PathType Leaf) {
+                if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry" -PathType Leaf) {
                     Write-Host "Deleting BCD entry..."
-                    $entryGuid = Get-Content -Path "X:\HotInstall\BcdEntry"
+                    $entryGuid = Get-Content -Path "$env:SYSTEMDRIVE\HotInstall\BcdEntry"
                     if ($entryGuid -ne "") {
                         bcdedit /delete $entryGuid | Out-Host
                     }
