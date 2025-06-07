@@ -353,7 +353,7 @@ function Start-OSApplication {
     }
     else
     {
-        $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
+        $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
     }
     Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
     $choice = Read-Host "Are you sure you want to continue (Y/N)"
