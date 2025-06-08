@@ -62,14 +62,15 @@ Namespace My.Resources
         
         '''<summary>
         '''  Busca una cadena traducida similar a @ECHO OFF
-        '''TITLE HotInstall - Delete DISMTools PE
-        '''NET SESSION &gt;NUL 2&gt;&amp;1
-        '''IF %ERRORLEVEL% NEQ 0 (
-        '''    REM https://stackoverflow.com/a/37669661
-        '''    ECHO Administrator privileges were not detected. This removal script will launch itself as an administrator now.
-        '''    ECHO This is because DISMTools operating system installation needs to modify system settings to revert all changes made.
-        '''    PUSHD %~dp0
-        '''    MSHTA &quot;javascript: var shell =new ActiveXObject(&apos;shell.application&apos;); shell.ShellExecute(&apos;%~nx0&apos;, &apos;&apos;,  [resto de la cadena truncado]&quot;;.
+        '''SETLOCAL ENABLEDELAYEDEXPANSION
+        '''TITLE Revert Installation Changes
+        '''
+        '''IF &quot;%1&quot; NEQ &quot;doit&quot; (
+        '''    ECHO This device has rebooted to the full Windows installation. Do you want to remove the DISMTools Preinstallation Environment?
+        '''    CHOICE /C YN /M &quot;Delete the DISMTools Preinstallation Environment BCD entries&quot;
+        '''
+        '''    REM for some stupid reason, cmd decides to evaluate errorlevel at parse time, therefore returning 0, regardless of the option chosen in choice command
+        '''    REM if we delay the expansion [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property HI_UninstallScript() As String
             Get
