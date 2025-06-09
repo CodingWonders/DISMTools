@@ -15503,12 +15503,11 @@ Public Class MainForm
 
     Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
         DynaLog.LogMessage("Opening popup mounted image picker...")
-        PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
-        PopupImageManager.Top -= PopupImageManager.Height
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(LinkLabel18.PointToScreen(Point.Empty), True)
+        If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("User accepted the popup.")
             If MountedImageMountDirs.Count > 0 Then
-                MountDir = PopupImageManager.selectedMntDir
+                MountDir = selectedImage.MountPath
                 If MountedImageMountDirs.Count > 0 Then
                     Try
                         For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)

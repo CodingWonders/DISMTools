@@ -738,12 +738,7 @@
     <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\PopupDlgs\PopupImageManager.Designer.vb">
-      <DependentUpon>PopupImageManager.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\PopupDlgs\PopupImageManager.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Panels\PopupDlgs\PopupMountedImagePicker.vb" />
     <Compile Include="Panels\Prj_Ops\NewProj.Designer.vb">
       <DependentUpon>NewProj.vb</DependentUpon>
     </Compile>
@@ -1106,9 +1101,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.resx">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\PopupDlgs\PopupImageManager.resx">
-      <DependentUpon>PopupImageManager.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Prj_Ops\NewProj.resx">
       <DependentUpon>NewProj.vb</DependentUpon>

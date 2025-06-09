@@ -734,10 +734,10 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        PopupImageManager.Location = Button2.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
-            DynaLog.LogMessage("Selected image: " & PopupImageManager.selectedImgFile)
-            TextBox1.Text = PopupImageManager.selectedImgFile
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button2.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
+            DynaLog.LogMessage("Selected image: " & selectedImage.ImageFilePath)
+            TextBox1.Text = selectedImage.ImageFilePath
         End If
     End Sub
 

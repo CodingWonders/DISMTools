@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Public Class ImgUMount
 
@@ -354,9 +355,9 @@ Public Class ImgUMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
-            TextBox1.Text = PopupImageManager.selectedMntDir
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button1.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
+            TextBox1.Text = selectedImage.MountPath
             DynaLog.LogMessage("Checking if selected item is the mount directory of the project...")
             If TextBox1.Text = MainForm.MountDir Then
                 DynaLog.LogMessage("The selected item is the mount directory of the project.")
