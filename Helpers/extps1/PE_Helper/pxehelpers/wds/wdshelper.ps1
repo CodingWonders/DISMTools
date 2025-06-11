@@ -1003,7 +1003,7 @@ if (($connectionResult -eq $null) -or ($connectionResult.output.successful -eq $
 Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
 $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
 
-if (($installImages -eq $null) -or ($installImages.success -eq $false) -or ($installImages.images.Count -le 0)) {
+if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
     Show-CenteredTextBox -Text "Could not get installation images" -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
     Start-Sleep -Seconds 5
     wpeutil reboot

@@ -188,8 +188,8 @@ function Start-ServerConnection {
     )
     try {
         Write-LogMessage -message "Checking if device is approved..."
-        $allowedDeviceRequests = (Get-WdsClient -PendingClientStatus Approved)
-        $blockedDeviceRequests = (Get-WdsClient -PendingClientStatus Denied)
+        $allowedDeviceRequests = (Get-WdsClient -PendingClientStatus Approved -ErrorAction Stop)
+        $blockedDeviceRequests = (Get-WdsClient -PendingClientStatus Denied -ErrorAction Stop)
         # Start with blocked devices
         if ((($blockedDeviceRequests | Where-Object { $_.DeviceID.Contains($deviceId) }) | Select-Object -ExpandProperty DeviceID).Count -ge 1) {
             Write-LogMessage -message "This device is blocked."
@@ -202,7 +202,12 @@ function Start-ServerConnection {
         }
         return [WdsConnectionInfo]::new($true, "", [System.Guid]::NewGuid().Guid)
     } catch {
-        throw $_
+        if ($Error[0].FullyQualifiedErrorId.Split(",")[0] -eq "0xC1050100") {
+            # The Pending Devices policy is not set up. Immediately return true
+            return [WdsConnectionInfo]::new($true, "", [System.Guid]::NewGuid().Guid)
+        } else {
+            throw $_
+        }
     }
 }
 
