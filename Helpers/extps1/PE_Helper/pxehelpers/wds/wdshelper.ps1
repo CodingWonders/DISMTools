@@ -992,9 +992,9 @@ $connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "h
 
 if (($connectionResult -eq $null) -or ($connectionResult.output.successful -eq $false)) {
     if ($connectionResult -ne $null) {
-        Show-CenteredTextBox -Text "Could not connect to the server. Reason: $($connectionResult.output.failureReason)" -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+        Show-CenteredTextBox -Text "Could not connect to the server. Reason: $($connectionResult.output.failureReason). The server has imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
     } else {
-        Show-CenteredTextBox -Text "Could not connect to the server." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+        Show-CenteredTextBox -Text "Could not connect to the server. The server has imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
     }
     Start-Sleep -Seconds 5
     wpeutil reboot
@@ -1004,7 +1004,7 @@ Show-CenteredTextBox -Text "Getting images from install groups in the WDS server
 $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
 
 if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
-    Show-CenteredTextBox -Text "Could not get installation images" -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+    Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
     Start-Sleep -Seconds 5
     wpeutil reboot
 }
@@ -1027,7 +1027,7 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
         Show-CenteredTextBox -Text "Mounting network share to this system . . ." -MaxWidth 100 -CenterOfAll
         net use * $($shareResults.output.mountPath) $($authInfo.serverPassword) /user:$($shareResults.output.username)
     } else {
-        Show-CenteredTextBox -Text "Could not prepare the deployment of this image file." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
+        Show-CenteredTextBox -Text "Could not prepare the deployment of this image file. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkRed
         Start-Sleep -Seconds 5
         wpeutil reboot
     }
