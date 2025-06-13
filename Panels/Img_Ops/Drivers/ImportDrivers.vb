@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports DISMTools.Utilities
+Imports Microsoft.Dism
 
 Public Class ImportDrivers
 
@@ -451,12 +452,12 @@ Public Class ImportDrivers
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button1.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Information will be obtained from the popup mounted image manager...")
-            TextBox1.Text = PopupImageManager.selectedMntDir
+            TextBox1.Text = selectedImage.MountPath
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
-            Label10.Text = PopupImageManager.selectedImgFile
+            Label10.Text = selectedImage.ImageFilePath
             Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub

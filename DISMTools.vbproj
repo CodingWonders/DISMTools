@@ -81,7 +81,7 @@
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
     <Reference Include="Markdig, Version=0.41.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.41.0\lib\net462\Markdig.dll</HintPath>
+      <HintPath>packages\Markdig.0.41.2\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.3.3.12\lib\net40\Microsoft.Dism.dll</HintPath>
@@ -738,12 +738,7 @@
     <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\PopupDlgs\PopupImageManager.Designer.vb">
-      <DependentUpon>PopupImageManager.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\PopupDlgs\PopupImageManager.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Panels\PopupDlgs\PopupMountedImagePicker.vb" />
     <Compile Include="Panels\Prj_Ops\NewProj.Designer.vb">
       <DependentUpon>NewProj.vb</DependentUpon>
     </Compile>
@@ -1107,9 +1102,6 @@
     <EmbeddedResource Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.resx">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\PopupDlgs\PopupImageManager.resx">
-      <DependentUpon>PopupImageManager.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Prj_Ops\NewProj.resx">
       <DependentUpon>NewProj.vb</DependentUpon>
     </EmbeddedResource>
@@ -1464,6 +1456,12 @@
     <None Include="Resources\startup\dt_branding_preview.png" />
     <None Include="Resources\progress\bg_ops_gif\bg_ops_light.gif" />
     <None Include="Resources\progress\bg_ops_gif\bg_ops_complete_light.png" />
+    <None Include="Resources\glyphs\cmps_addfirstcomponent_dark.png" />
+    <None Include="Resources\glyphs\cmps_addfirstcomponent_light.png" />
+    <None Include="Resources\first_element.png" />
+    <None Include="Resources\last_element.png" />
+    <None Include="Resources\add_element.png" />
+    <None Include="Resources\remove_element.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1818,6 +1816,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
+    <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />

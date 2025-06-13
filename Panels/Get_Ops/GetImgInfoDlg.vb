@@ -814,9 +814,9 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        PopupImageManager.Location = Button3.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
-            TextBox1.Text = PopupImageManager.selectedImgFile
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button3.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
+            TextBox1.Text = selectedImage.ImageFilePath
         End If
     End Sub
 End Class

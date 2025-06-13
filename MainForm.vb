@@ -608,7 +608,7 @@ Public Class MainForm
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  WDS Preparation Script: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
@@ -929,6 +929,19 @@ Public Class MainForm
                 End Try
             End If
         End If
+
+        DynaLog.LogMessage("Checking boot mode...")
+        DynaLog.LogMessage(SystemInformation.BootMode)
+        If SystemInformation.BootMode <> BootMode.Normal Then
+            DynaLog.LogMessage("This system is in limp home mode. Offering choice to enter online installation management mode...")
+            Dim safeModeMessage As String = "This computer has booted into Safe Mode. This mode is designed for live operating system recovery." & CrLf & CrLf &
+                "DISMTools can automatically load the online installation management mode so that you can start attempting repairs." & CrLf & CrLf &
+                "Do you want to load the online installation management mode?"
+            If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
+                DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
+                BeginOnlineManagement(False)
+            End If
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -1061,11 +1074,7 @@ Public Class MainForm
         DynaLog.LogMessage("Do we REALLY have to do this? Let's find out!")
         Dim NeedToRemount As Boolean = False
         If MountedImageImgStatuses.Count > 0 Then
-            For x = 0 To Array.LastIndexOf(MountedImageImgStatuses, MountedImageImgStatuses.Last)
-                If MountedImageImgStatuses(x) = 1 Then
-                    NeedToRemount = True
-                End If
-            Next
+            NeedToRemount = MountedImageImgStatuses.Where(Function(status) status = 1).Any()
         End If
         DynaLog.LogMessage(If(NeedToRemount, "Remounting any orphaned images...", "There is no need to do this. Skipping..."))
         If NeedToRemount Then AutoReloadForm.ShowDialog()
@@ -15494,12 +15503,11 @@ Public Class MainForm
 
     Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
         DynaLog.LogMessage("Opening popup mounted image picker...")
-        PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
-        PopupImageManager.Top -= PopupImageManager.Height
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(LinkLabel18.PointToScreen(Point.Empty), True)
+        If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("User accepted the popup.")
             If MountedImageMountDirs.Count > 0 Then
-                MountDir = PopupImageManager.selectedMntDir
+                MountDir = selectedImage.MountPath
                 If MountedImageMountDirs.Count > 0 Then
                     Try
                         For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
