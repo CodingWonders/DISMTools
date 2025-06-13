@@ -2071,12 +2071,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue in the update checker
-        '''- Fixed a deployment issue in the Theme Designer
-        '''- Fixed an issue where people could write to the console output
-        '''- Fixed an issue where DISM would never finish after edition servicing tasks due to a computer restart prompt
-        '''- Fixed an issue where exceptions that aren&apos;t related to the DISM API were not being logged when running background processes
-        '''- Fixed an issue where background processes would abruptly stop when getting package information due to sp [resto de la cadena truncado]&quot;;.
+        '''- Fixed an issue where the popup mounted image picker would not show any results if the mounted image manager was already open
+        '''- Fixed an issue where connecting to a WDS server would fail if it didn&apos;t have a Pending Devices policy set up
+        '''- Fixed an issue where the WDS Helper client would not get the installation images in some cases
+        '''
+        '''New features:
+        '''
+        '''- HotInstall now uses the latest version of the DISM API
+        '''- HotInstall now creates a removal script that&apos;s launched on system startup to rever [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
