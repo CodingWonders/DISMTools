@@ -90,7 +90,9 @@ Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
-if ((Get-ComputerInfo).WindowsInstallationType -ne "Server") {
+$compInfo = Get-ComputerInfo
+$netAdapter = Get-NetIPConfiguration
+if ($compInfo.WindowsInstallationType -ne "Server") {
     Write-LogMessage -message "This computer is not running Windows Server."
     return $false
 }
@@ -127,7 +129,7 @@ $listener = [System.Net.HttpListener]::new()
 $listener.Prefixes.Add("http://$($webHost):$port/api/")
 $listener.Start()
 Write-LogMessage -message "WDS REST API Listener running on http://$($webHost):$port/api/"
-Write-LogMessage -message "To shut down, press CTRL + C and perform an API call. Alternatively, close the window"
+Write-LogMessage -message "To shut down, click the `"Stop Server`" button in the Control Panel, which you can access at any time while the server is running at http://localhost:$port/api."
 
 # Function to get the list of WDS install images using native WDS cmdlets
 function Get-WdsInstallImages {
@@ -284,6 +286,8 @@ $ctrlC_EH = [ConsoleCancelEventHandler]{
     throw
 }
 
+Start-Process "http://localhost:$port/api"
+
 try {
     while (-not $shutdownRequested) {
         if ($host.UI.RawUI.KeyAvailable -and (3 -eq [int]$host.UI.RawUI.ReadKey("AllowCtrlC,IncludeKeyUp,NoEcho").Character)) {
@@ -311,6 +315,240 @@ try {
         Write-LogMessage -message "API method: $($request.HttpMethod)"
 
         switch -Wildcard ($request.Url.AbsolutePath) {
+            "/api" {
+                $wsm_html = @"
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <title>Server Control Panel</title>
+                        <meta charset="utf8">
+                        <style>
+                            * {
+                                margin: 0;
+                            }
+                            body {
+                                font-size: 1em;
+                                font-family: "Trebuchet MS", "Arial", "Helvetica", sans-serif;
+                                display: grid;
+                                grid-template-areas:
+                                    "header"
+                                    "osinfo"
+                                    "actions";
+                                grid-template-rows: 96px auto 72px;
+                                height: 100vh;
+                            }
+                            button {
+                                font-size: 1.125em;
+                                font-family: "Trebuchet MS", "Arial", "Helvetica", sans-serif;
+                            }
+                            .important_tab {
+                                font-weight: bold;
+                            }
+                            .important_important_tab {
+                                font-weight: bold;
+                                text-decoration: underline;
+                            }
+                            .super_duper_important_tab {
+                                font-weight: bold;
+                                text-decoration: underline;
+                                background-color: gold;
+                                color: black;
+                            }
+                            .header {
+                                grid-area: header;
+                                padding: 8px;
+                                background-color: black;
+                                color: white;
+                            }
+                            .osinfo {
+                                grid-area: osinfo;
+                                overflow-y: auto;
+                                padding: 4px;
+                                background-color: #333;
+                                color: white;
+                            }
+                            .actions {
+                                grid-area: actions;
+                                padding: 8px;
+                                background-color: black;
+                                color: white;
+                            }
+                            abbr {
+                                cursor: help;
+                            }
+                            a {
+                                text-decoration: none;
+                                color: white;
+                                transition: 0.25s ease-in-out;
+                            }
+                            a:hover {
+                                text-decoration: underline;
+                                color: lightblue;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Windows Deployment Services Helper Server Control Panel</h1>
+                            <p>WDSH Server component version: $version; included with DISMTools $($version). To view server logs, switch to the PowerShell window.</p>
+                        </div>
+                        <div class="osinfo">
+                            <fieldset>
+                                <legend>Information about the REST API Server</legend>
+                                <table border="0" cellspacing="2" cellpadding="4">
+                                    <tr>
+                                        <td class="important_tab">API Host:</td>
+                                        <td>$webHost (use $($netAdapter.IPv4Address.IPAddress) when connecting to it from other clients)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Port to listen to:</td>
+                                        <td>$port</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">User that started the server:</td>
+                                        <td>$env:USERNAME</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="super_duper_important_tab">IMPORTANT! You will need to provide the aforementioned information when connecting from clients</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Temporary folder for network shares:</td>
+                                        <td>$tmpImageFolderPath</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Share Name:</td>
+                                        <td>$shareName</td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Information about the Operating Environment</legend>
+
+                                <table border="0" cellspacing="2" cellpadding="4">
+                                    <tr>
+                                        <td colspan="2" class="important_important_tab">System Hardware</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">System:</td>
+                                        <td>$($compInfo.CsManufacturer) $($compInfo.CsModel)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Processor:</td>
+                                        <td>$($compInfo.CsProcessors[0].Name)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Memory:</td>
+                                        <td>$(((Get-CimInstance Win32_PhysicalMemory) | Measure-Object -Property Capacity -Sum).Sum/1MB) MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">NTFS Volumes:</td>
+                                        <td>
+                                            <ul>
+                                            $(Get-Volume | Where-Object { $_.DriveType -eq "Fixed" -and $_.FileSystemType -eq "NTFS" -and $_.DriveLetter -ne $null } | Foreach-Object {
+                                                "<li>Drive $($_.DriveLetter) (`"$($_.FileSystemLabel)`"). Size: $([Math]::Round($_.Size / 1073741824, 2)) GB (percentage remaining: $([Math]::Round(($_.SizeRemaining / $_.Size) * 100, 2))%)</li>"
+                                            })
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Current Network Adapter (NIC):</td>
+                                        <td>$($netAdapter.InterfaceAlias): $($netAdapter.InterfaceDescription):
+                                            <ul>
+                                                <li><abbr title="Internet Protocol, version 4">IPv4</abbr> Address: $($netAdapter.IPv4Address.IPAddress). Default Gateway: $($netAdapter.IPv4DefaultGateway.NextHop)</li>
+                                                <li><abbr title="Media Access Control">MAC</abbr> Address: $($netAdapter.NetAdapter.LinkLayerAddress)</li>
+                                                <li><abbr title="Internet Protocol, version 6">IPv6</abbr> Link-Local: $($netAdapter.IPv6LinkLocalAddress.IPAddress). Default Gateway: $($netAdapter.IPv6DefaultGateway.NextHop)</li>
+                                                <li><abbr title="Domain Name System">DNS</abbr> Servers:
+                                                    <ul>
+                                                        $($netAdapter.DNSServer | Where-Object { $_.ServerAddresses.Count -gt 0 } | Foreach-Object {
+                                                            "<li>$($_.InterfaceAlias): $($_.ServerAddresses -join ", ")</li>"
+                                                        })
+                                                    </ul>
+                                                </li>
+                                                <li>Adapter Speed: $($netAdapter.NetAdapter.LinkSpeed)</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="important_important_tab">System Software</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Operating system:</td>
+                                        <td>$($compInfo.OsName) (NT Version: $($compInfo.OsVersion). Extended Build String: $($compInfo.WindowsBuildLabEx))</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Build Type:</td>
+                                        <td>$($compInfo.OsBuildType)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Installed HotFixes:</td>
+                                        <td>
+                                            <ul>
+                                                $($compInfo.OsHotFixes | ForEach-Object {
+                                                    "<li>$($_.HotFixID): $($_.Description). Installed on: $($_.InstalledOn)</li>"
+                                                })
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">OS Suites:</td>
+                                        <td>$($compInfo.OsSuites -join ", ")</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Logon Server:</td>
+                                        <td>$($compInfo.LogonServer)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Available Environment Variables:</td>
+                                        <td style="word-wrap: break-word; word-break: break-all; white-space: normal">
+                                            <ul>
+                                                $(Get-ChildItem "ENV:" | ForEach-Object {
+                                                    "<li><b>$($_.Name)</b>: $($_.Value)</li>"
+                                                })
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Service Pack Version:</td>
+                                        <td>$($compInfo.OsServicePackMajorVersion).$($compInfo.OsServicePackMinorVersion)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Server Level:</td>
+                                        <td>$($compInfo.OsServerLevel)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">Architecture:</td>
+                                        <td>$($compInfo.OsArchitecture)</td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </div>
+                        <div class="actions">
+                            Actions:
+                            <button onclick="invokeCleanup()">Clear Temporary Files</button>
+                            <button onclick="invokeExit()">Stop the Server</button>
+                            Other actions exposed by the API can only be called by clients.
+                            <p align="right"><i>&copy; 2025. <a href="https://github.com/CodingWonders" target="_blank">CodingWonders Software</a></i></p>
+                        </div>
+
+                        <script>
+                            function invokeCleanup() {
+                                fetch('/api/clearfiles', { method: "GET" });
+                            }
+
+                            function invokeExit() {
+                                fetch('/api/exit', { method: "GET" });
+                                alert("The server has stopped. Close this tab now.");
+                            }
+                        </script>
+                    </body>
+                </html>
+"@
+                $buffer = [System.Text.Encoding]::UTF8.GetBytes($wsm_html)
+                $response.ContentType = "text/html"
+                $response.ContentLength64 = $buffer.Length
+                $response.OutputStream.Write($buffer, 0, $buffer.Length)
+                $response.OutputStream.Close()
+            }
             "/api/installimages" {
                 if ($request.HttpMethod -eq "GET") {
                     try {
