@@ -385,14 +385,14 @@ Public Class MainForm
                         If arg.Replace("/offline:", "").Trim() <> "" Then
                             DynaLog.LogMessage("Getting all disks...")
                             Dim diList As New List(Of DriveInfo)
-                            diList = DriveInfo.GetDrives().ToList()
+                            diList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
                             Dim diPaths As New List(Of String)
                             DynaLog.LogMessage("Disks have been obtained. Preparing list...")
                             For Each di As DriveInfo In diList
                                 DynaLog.LogMessage("Essential disk information:" & CrLf &
                                                    "- Is disk ready? " & If(di.IsReady, "Yes", "No. Skipping...") & CrLf &
                                                    "- Drive letter: " & If(di.IsReady, di.Name, "Disk is not ready"))
-                                If di.IsReady Then diPaths.Add(di.Name)
+                                diPaths.Add(di.Name)
                             Next
                             If Path.GetPathRoot(arg.Replace("/offline:", "").Trim()) = arg.Replace("/offline:", "").Trim() And diPaths.Contains(arg.Replace("/offline:", "").Trim()) Then
                                 DynaLog.LogMessage("Disk specified satisfies all requirements (disk is ready, path is only path root). Passing to load...")
