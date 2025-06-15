@@ -3,6 +3,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Net
 
 Public Class ISOCreator
 
@@ -11,6 +12,9 @@ Public Class ISOCreator
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
+    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/2/d/9/2d9c8902-3fcd-48a6-a22a-432b08bed61e/ADK/adksetup.exe", "https://download.microsoft.com/download/5/5/6/556e01ec-9d78-417d-b1e1-d83a2eff20bc/ADKWinPEAddons/adkwinpesetup.exe"}
+    Dim adkDownloadSuccess As Boolean
+    Dim adkDownloadMessage As String = ""
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -368,32 +372,43 @@ Public Class ISOCreator
         ' Check ADK status
         If Not Directory.Exists(ADKPath) Then
             DynaLog.LogMessage("ADK installation directory " & Quote & ADKPath & Quote & " is not found in this system. Either it has not been installed or it has been installed somewhere else.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
+            If MsgBox("The Windows ADK was not found on your system. Do you want DISMTools to download and install the latest one for you? Note that you'll need around 4 GB on your system.", vbYesNo + vbQuestion, "") = MsgBoxResult.Yes Then
+                Visible = True
+                ADKDownloaderBW.RunWorkerAsync()
+                Do Until Not ADKDownloaderBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(100)
+                Loop
+                If Not adkDownloadSuccess Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                                Case "ESN"
+                                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                                Case "FRA"
+                                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                                Case "PTB", "PTG"
+                                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                                Case "ITA"
+                                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+                            End Select
+                        Case 1
                             Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                        Case "ESN"
+                        Case 2
                             Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                        Case "FRA"
+                        Case 3
                             Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                        Case "PTB", "PTG"
+                        Case 4
                             Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                        Case "ITA"
+                        Case 5
                             Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
                     End Select
-                Case 1
-                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                Case 2
-                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                Case 3
-                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                Case 4
-                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                Case 5
-                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
-            End Select
-            Close()
+                    Close()
+                End If
+            End If
+
         End If
 
         ' Restore combobox architecture items
@@ -414,6 +429,61 @@ Public Class ISOCreator
             ComboBox1.Items.AddRange(architectures)
         End If
         ComboBox1.SelectedIndex = 0
+    End Sub
+
+    Private Sub DownloadADK()
+        Try
+            adkDownloadMessage = "Preparing to download Assessment and Deployment Kit..."
+            ADKDownloaderBW.ReportProgress(0)
+            Dim FileNames As New List(Of String)
+            For Each downloadLocation In adkDownloadLocations
+                FileNames.Add(Path.GetFileName(downloadLocation))
+                Dim current As Integer = adkDownloadLocations.ToList().IndexOf(downloadLocation)
+                Dim count As Integer = adkDownloadLocations.Count
+                adkDownloadMessage = String.Format("Downloading ADK component {0} of {1}...", current + 1, count)
+                ADKDownloaderBW.ReportProgress(50 * (current / count))
+                Using client As New WebClient()
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                    client.DownloadFile(downloadLocation, Path.Combine(Application.StartupPath, Path.GetFileName(downloadLocation)))
+                End Using
+            Next
+            Dim currentProgress As Integer = 50
+            For Each FileName In FileNames
+                Dim current As Integer = FileNames.IndexOf(FileName)
+                Dim count As Integer = FileNames.Count
+                adkDownloadMessage = String.Format("Installing ADK component {0} of {1}...", current + 1, count)
+                ADKDownloaderBW.ReportProgress(currentProgress)
+                Dim InstallerProcess As New Process()
+                InstallerProcess.StartInfo.WorkingDirectory = Application.StartupPath
+                If File.Exists(Path.Combine(Application.StartupPath, FileName)) Then
+                    InstallerProcess.StartInfo.FileName = FileName
+                    ' Guess command-line options. Source of necessary options comes from remediation script Microsoft published
+                    ' during the CrowdStrike incident.
+                    InstallerProcess.StartInfo.Arguments = String.Format("/features {0} /q /ceip off",
+                                                                         If(FileName.Contains("winpe"),
+                                                                            "OptionId.WindowsPreinstallationEnvironment",
+                                                                            "OptionId.DeploymentTools")
+                                                                        )
+                    InstallerProcess.Start()
+                    InstallerProcess.WaitForExit()
+                    If Not InstallerProcess.ExitCode = 0 Then
+                        Throw New Exception("One of the ADK component installers has finished with exit code " & InstallerProcess.ExitCode)
+                    End If
+                End If
+                currentProgress += 25
+            Next
+            Try
+                adkDownloadMessage = "Deleting temporary files..."
+                ADKDownloaderBW.ReportProgress(100)
+                For Each FileName In FileNames
+                    File.Delete(Path.Combine(Application.StartupPath, FileName))
+                Next
+            Catch ex As Exception
+
+            End Try
+        Catch ex As Exception
+            Throw
+        End Try
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -877,5 +947,18 @@ Public Class ISOCreator
         If CheckBox3.Checked Then
             MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, uefiCA2023_Title)
         End If
+    End Sub
+
+    Private Sub ADKDownloaderBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ADKDownloaderBW.DoWork
+        DownloadADK()
+    End Sub
+
+    Private Sub ADKDownloaderBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKDownloaderBW.ProgressChanged
+        ProgressReporter.ReportProgress(Me, adkDownloadMessage, e.ProgressPercentage)
+    End Sub
+
+    Private Sub ADKDownloaderBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKDownloaderBW.RunWorkerCompleted
+        ProgressReporter.Hide()
+        adkDownloadSuccess = e.Error Is Nothing
     End Sub
 End Class

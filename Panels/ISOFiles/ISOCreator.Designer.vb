@@ -66,6 +66,7 @@ Partial Class ISOCreator
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
+        Me.ADKDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -504,6 +505,10 @@ Partial Class ISOCreator
         '
         Me.OpenFileDialog2.Filter = "Answer files|*.xml"
         '
+        'ADKDownloaderBW
+        '
+        Me.ADKDownloaderBW.WorkerReportsProgress = True
+        '
         'ISOCreator
         '
         Me.AcceptButton = Me.OK_Button
@@ -582,4 +587,5 @@ Partial Class ISOCreator
     Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
+    Friend WithEvents ADKDownloaderBW As System.ComponentModel.BackgroundWorker
 End Class

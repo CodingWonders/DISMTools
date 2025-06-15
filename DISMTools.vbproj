@@ -299,6 +299,7 @@
     <Compile Include="Panels\DoWork\ProgressPanel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\DoWork\ProgressReporter.vb" />
     <Compile Include="Panels\Exceptions\ExceptionForm.Designer.vb">
       <DependentUpon>ExceptionForm.vb</DependentUpon>
     </Compile>

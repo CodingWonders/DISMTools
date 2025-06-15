@@ -82,7 +82,7 @@ Public Class PopupMountedImagePicker
                                          End If
                                      End Sub
         AddHandler pmipForm.Paint, Sub(sender, e)
-                                       ControlPaint.DrawBorder(e.Graphics, pmipForm.ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
+                                       ControlPaint.DrawBorder(e.Graphics, pmipForm.ClientRectangle, CurrentTheme.AccentColors(1), ButtonBorderStyle.Solid)
                                    End Sub
         AddHandler pmipOkButton.Click, Sub(sender, e)
                                            pmipForm.DialogResult = DialogResult.OK
