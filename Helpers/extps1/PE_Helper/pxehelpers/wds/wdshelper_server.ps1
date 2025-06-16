@@ -85,13 +85,15 @@ $version = "0.7"
 
 Clear-Host
 
+# Start logging stuff
+Start-Transcript -Path "$env:TEMP\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
+
 Write-Host "DISMTools $version - Windows Deployment Services Helper API"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
 $compInfo = Get-ComputerInfo
-$netAdapter = Get-NetIPConfiguration
 if ($compInfo.WindowsInstallationType -ne "Server") {
     Write-LogMessage -message "This computer is not running Windows Server."
     return $false
@@ -129,7 +131,7 @@ $listener = [System.Net.HttpListener]::new()
 $listener.Prefixes.Add("http://$($webHost):$port/api/")
 $listener.Start()
 Write-LogMessage -message "WDS REST API Listener running on http://$($webHost):$port/api/"
-Write-LogMessage -message "To shut down, click the `"Stop Server`" button in the Control Panel, which you can access at any time while the server is running at http://localhost:$port/api."
+Write-LogMessage -message "To shut down, click the `"Stop Server`" button in the Control Panel, which you can access at any time while the server is running at http://localhost:$port/api/wdshome."
 
 # Function to get the list of WDS install images using native WDS cmdlets
 function Get-WdsInstallImages {
@@ -286,7 +288,7 @@ $ctrlC_EH = [ConsoleCancelEventHandler]{
     throw
 }
 
-Start-Process "http://localhost:$port/api"
+Start-Process "http://localhost:$port/api/wdshome"
 
 try {
     while (-not $shutdownRequested) {
@@ -315,7 +317,54 @@ try {
         Write-LogMessage -message "API method: $($request.HttpMethod)"
 
         switch -Wildcard ($request.Url.AbsolutePath) {
-            "/api" {
+            "/api/wdshome" {
+                $teamingStatus = ""
+                $nicStatus = ""
+                $netAdapter = Get-NetIPConfiguration
+                if (($netAdapter -ne $null) -and (($netAdapter | Select-Object -ExpandProperty InterfaceAlias).Count -gt 0)) {
+                    $nicStatus += "$(($netAdapter | Select-Object -ExpandProperty InterfaceAlias).Count) network adapters were detected:`n<ul>`n"
+                    foreach ($nic in $netAdapter) {
+                        $nicStatus += @"
+                        <li>$($nic.InterfaceAlias -join "; "): $($nic.InterfaceDescription -join "; "):
+                            <ul>
+                                <li><abbr title="Internet Protocol, version 4">IPv4</abbr> Address: $($nic.IPv4Address.IPAddress -join "; "). Default Gateway: $($nic.IPv4DefaultGateway.NextHop -join "; ")</li>
+                                <li><abbr title="Media Access Control">MAC</abbr> Address: $($nic.NetAdapter.LinkLayerAddress -join "; ")</li>
+                                <li><abbr title="Internet Protocol, version 6">IPv6</abbr> Link-Local: $($nic.IPv6LinkLocalAddress.IPAddress -join "; "). Default Gateway: $($nic.IPv6DefaultGateway.NextHop -join "; ")</li>
+                                <li><abbr title="Domain Name System">DNS</abbr> Servers:
+                                    <ul>
+                                        $($nic.DNSServer | Where-Object { $_.ServerAddresses.Count -gt 0 } | Foreach-Object {
+                                            "<li>$($_.InterfaceAlias -join "; "): $($_.ServerAddresses -join "; ")</li>"
+                                        })
+                                    </ul>
+                                </li>
+                                <li>Adapter Speed: $($nic.NetAdapter.LinkSpeed -join "; ")</li>
+                            </ul>
+                        </li>
+"@
+                    }
+                    $nicStatus += "</ul>"
+                } else {
+                    $nicStatus += "No network adapters were detected."
+                }
+                $lbfoTeams = Get-NetLbfoTeam
+                if (($lbfoTeams -ne $null) -and (($lbfoTeams | Select-Object -ExpandProperty Name).Count -gt 0)) {
+                    $teamingStatus += "$(($lbfoTeams | Select-Object -ExpandProperty Name).Count) NIC teams were set up:`n<ul>`n"
+                    foreach ($lbfoTeam in $lbfoTeams) {
+                        $teamingStatus += @"
+                        <li>$($lbfoTeam.Name)
+                            <ul>
+                                <li>Members: $($lbfoTeam.Members -join ", ")</li>
+                                <li>Teaming Mode: $($lbfoTeam.TeamingMode)</li>
+                                <li>Load Balancing Algorithm: $($lbfoTeam.LoadBalancingAlgorithm)</li>
+                                <li>Status: $($lbfoTeam.Status)</li>
+                            </ul>
+                        </li>
+"@
+                    }
+                    $teamingStatus += "</ul>"
+                } else {
+                    $teamingStatus += "No NIC teams were set up."
+                }
                 $wsm_html = @"
                 <!DOCTYPE html>
                 <html>
@@ -390,7 +439,7 @@ try {
                     <body>
                         <div class="header">
                             <h1>Windows Deployment Services Helper Server Control Panel</h1>
-                            <p>WDSH Server component version: $version; included with DISMTools $($version). To view server logs, switch to the PowerShell window.</p>
+                            <p>WDSH Server component version: $version; included with DISMTools $($version).</p>
                         </div>
                         <div class="osinfo">
                             <fieldset>
@@ -398,7 +447,7 @@ try {
                                 <table border="0" cellspacing="2" cellpadding="4">
                                     <tr>
                                         <td class="important_tab">API Host:</td>
-                                        <td>$webHost (use $($netAdapter.IPv4Address.IPAddress) when connecting to it from other clients)</td>
+                                        <td>$webHost (use $(($netAdapter | Where-Object { $_.NetIPv4Interface.Dhcp -eq 'Disabled' }).IPv4Address.IPAddress -join ", or ") when connecting to it from other clients). <a onclick="displayChooserMessage()" href="#">Which do I choose if I see multiple addresses?</a></td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Port to listen to:</td>
@@ -451,22 +500,12 @@ try {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="important_tab">Current Network Adapter (NIC):</td>
-                                        <td>$($netAdapter.InterfaceAlias): $($netAdapter.InterfaceDescription):
-                                            <ul>
-                                                <li><abbr title="Internet Protocol, version 4">IPv4</abbr> Address: $($netAdapter.IPv4Address.IPAddress). Default Gateway: $($netAdapter.IPv4DefaultGateway.NextHop)</li>
-                                                <li><abbr title="Media Access Control">MAC</abbr> Address: $($netAdapter.NetAdapter.LinkLayerAddress)</li>
-                                                <li><abbr title="Internet Protocol, version 6">IPv6</abbr> Link-Local: $($netAdapter.IPv6LinkLocalAddress.IPAddress). Default Gateway: $($netAdapter.IPv6DefaultGateway.NextHop)</li>
-                                                <li><abbr title="Domain Name System">DNS</abbr> Servers:
-                                                    <ul>
-                                                        $($netAdapter.DNSServer | Where-Object { $_.ServerAddresses.Count -gt 0 } | Foreach-Object {
-                                                            "<li>$($_.InterfaceAlias): $($_.ServerAddresses -join ", ")</li>"
-                                                        })
-                                                    </ul>
-                                                </li>
-                                                <li>Adapter Speed: $($netAdapter.NetAdapter.LinkSpeed)</li>
-                                            </ul>
-                                        </td>
+                                        <td class="important_tab">Current Network Adapters (NICs):</td>
+                                        <td>$nicStatus</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="important_tab">NIC Teaming:</td>
+                                        <td>$teamingStatus</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" class="important_important_tab">System Software</td>
@@ -526,6 +565,8 @@ try {
                             Actions:
                             <button onclick="invokeCleanup()">Clear Temporary Files</button>
                             <button onclick="invokeExit()">Stop the Server</button>
+                            <button onclick="invokeLogViewer()">View Server Logs</button>
+                            <button onclick="window.location.reload();">Refresh Page</button>
                             Other actions exposed by the API can only be called by clients.
                             <p align="right"><i>&copy; 2025. <a href="https://github.com/CodingWonders" target="_blank">CodingWonders Software</a></i></p>
                         </div>
@@ -538,6 +579,14 @@ try {
                             function invokeExit() {
                                 fetch('/api/exit', { method: "GET" });
                                 alert("The server has stopped. Close this tab now.");
+                            }
+
+                            function invokeLogViewer() {
+                                fetch('/api/viewlogs', { method: "GET" });
+                            }
+
+                            function displayChooserMessage() {
+                                alert("Note the IP address that the client displays when booting to a boot image. Typically, these aren't affected by any DHCP scopes.");
                             }
                         </script>
                     </body>
@@ -611,6 +660,9 @@ try {
                     $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
                 }
             }
+            "/api/viewlogs" {
+                notepad "$env:TEMP\DT_WDSHS_Log.log"
+            }
             "/api/exit" {
                 $sendJson.Invoke(@{ success = $true })
                 throw
@@ -636,3 +688,4 @@ Write-LogMessage -message "Stopping listener..."
 $listener.Stop()
 
 Write-LogMessage -message "Shutdown complete."
+Stop-Transcript
