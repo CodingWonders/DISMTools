@@ -950,6 +950,7 @@ function Start-OSApplication
                 $driveLetter = Read-Host "Specify a drive letter"
             } until ($driveLetter -ne "")
         }
+        $bootLetter = "W"
     }
     Write-Host "Creating page file for Windows PE..."
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
@@ -1768,12 +1769,12 @@ function New-BootFiles
                 {
                     if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
                     {
-                        $MSRAssign = @'
+                        $MSRAssign = @"
                         sel dis #DISKID#
                         sel par #VOLNUM#
-                        ass letter w
+                        ass letter $espLetter
                         exit
-'@
+"@
                         $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                         $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
@@ -1807,12 +1808,12 @@ function New-BootFiles
                 {
                     if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
                     {
-                        $MSRAssign = @'
+                        $MSRAssign = @"
                         sel dis #DISKID#
                         sel par #VOLNUM#
-                        ass letter w
+                        ass letter $espLetter
                         exit
-'@
+"@
                         $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                         $MSRAssign | Out-File "X:\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
