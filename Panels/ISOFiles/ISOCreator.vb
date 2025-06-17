@@ -407,6 +407,8 @@ Public Class ISOCreator
                     End Select
                     Close()
                 End If
+            Else
+                Close()
             End If
 
         End If
