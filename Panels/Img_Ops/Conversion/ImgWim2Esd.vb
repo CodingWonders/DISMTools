@@ -296,23 +296,7 @@ Public Class ImgWim2Esd
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("Getting image file information...")
-            DynaLog.LogMessage("Detecting if the mounted image detector is busy...")
-            If MainForm.MountedImageDetectorBW.IsBusy Then
-                DynaLog.LogMessage("Stopping mounted image detector...")
-                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                MainForm.MountedImageDetectorBW.CancelAsync()
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            DynaLog.LogMessage("Stopping image status watchers if they are active...")
-            MainForm.WatcherTimer.Enabled = False
-            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-            While MainForm.WatcherBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            MainForm.StopMountedImageDetector()
             Try
                 ListView1.Items.Clear()
                 DynaLog.LogMessage("Initializing API...")

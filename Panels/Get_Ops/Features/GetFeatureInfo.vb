@@ -271,24 +271,7 @@ Public Class GetFeatureInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
-                DynaLog.LogMessage("Checking if mounted image detector is busy...")
-                If MainForm.MountedImageDetectorBW.IsBusy Then
-                    DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                    While MainForm.MountedImageDetectorBW.IsBusy
-                        Application.DoEvents()
-                        Thread.Sleep(500)
-                    End While
-                End If
-                DynaLog.LogMessage("Checking if image status watchers are busy...")
-                MainForm.WatcherTimer.Enabled = False
-                DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-                If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-                While MainForm.WatcherBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(100)
-                End While
+                MainForm.StopMountedImageDetector()
                 cPropPathView.Nodes.Clear()
                 cPropName.Text = ""
                 cPropValue.Text = ""
@@ -579,9 +562,7 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub GetFeatureInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click

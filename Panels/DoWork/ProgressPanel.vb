@@ -6951,8 +6951,7 @@ Public Class ProgressPanel
             TaskList.Clear()
             MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             MainForm.ToolStripButton4.Visible = False
-            If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-            MainForm.WatcherTimer.Enabled = True
+            MainForm.StartMountedImageDetector()
             Close()
         Else
             DynaLog.LogMessage("Tasks have not been successful.")
@@ -7301,19 +7300,7 @@ Public Class ProgressPanel
         End If
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
-        While MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         DynaLog.LogMessage("Setting mount directory target for operations...")
         DynaLog.LogMessage("Images mounted in this system: " & MainForm.MountedImageMountDirs.Count)
         If MainForm.MountedImageMountDirs.Count > 0 Then
@@ -7510,8 +7497,7 @@ Public Class ProgressPanel
         End Select
         MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.ToolStripButton4.Visible = False
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Sub SwitchLogContext(Context As Integer)
