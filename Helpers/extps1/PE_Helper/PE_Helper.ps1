@@ -1238,6 +1238,9 @@ function Write-DiskConfiguration
         $bootLetter = "C"
         $recoveryLetter = "R"
         $usedLetters = 0
+        $espUsed = $false
+        $bootUsed = $false
+        $recoveryUsed = $false
 
         Write-Host "Checking letters of mounted drives for conflicts..."
 
@@ -1246,16 +1249,19 @@ function Write-DiskConfiguration
         if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter }).Count -gt 0) {
             Write-Host "The default letter for the EFI System Partition is already in use."
             $usedLetters++
+            $espUsed = $true
         }
 
         if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter }).Count -gt 0) {
             Write-Host "The default letter for the boot partition is already in use."
             $usedLetters++
+            $bootUsed = $true
         }
 
         if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter }).Count -gt 0) {
             Write-Host "The default letter for the Windows Recovery Environment partition is already in use."
             $usedLetters++
+            $recoveryUsed = $true
         }
 
         if ($usedLetters -gt 0) {
@@ -1263,30 +1269,33 @@ function Write-DiskConfiguration
             Write-Host "You will now be shown a list of disks, and you will be given the opportunity to reassign disk letters."
             Write-Host "These settings only apply to the disk changes in the Preinstallation Environment."
 
-            Get-Volume
+            Get-Volume | Out-Host        # let's make sure we are outputting this info
+
             # Ask for all the letters that are producing conflicts
 
-            if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter }).Count -gt 0) {
+            if ($espUsed) {
                 $newEspLetter = Read-Host -Prompt "Provide a volume letter for the EFI System Partition, or press ENTER to use the default letter [$($espLetter)]"
                 if ($newEspLetter -ne "") {
                     $espLetter = $newEspLetter
                 }
             }
 
-            if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter }).Count -gt 0) {
+            if ($bootUsed) {
                 $newBootLetter = Read-Host -Prompt "Provide a volume letter for the boot partition, or press ENTER to use the default letter [$($bootLetter)]"
                 if ($newBootLetter -ne "") {
                     $bootLetter = $newBootLetter
                 }
             }
 
-            if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter }).Count -gt 0) {
+            if ($recoveryUsed) {
                 $newRecoveryLetter = Read-Host -Prompt "Provide a volume letter for the Windows Recovery Environment partition, or press ENTER to use the default letter [$($recoveryLetter)]"
                 if ($newRecoveryLetter -ne "") {
                     $recoveryLetter = $newRecoveryLetter
                 }
             }
 
+        } else {
+            Write-Host "No conflicts were detected after clearing the partitions of disk $diskId. Continuing with disk configuration..."
         }
 
         $formatter = @'
