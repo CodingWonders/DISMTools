@@ -19,6 +19,8 @@ if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 	if exist "%sysdrive%\netinstall" (
 		cd /d "%sysdrive%"\
 		powershell -file ".\pxehelpers\wds\wdshelper.ps1"
+	) else if exist "%sysdrive%\cmdcons" (
+		set debug=2
 	)
 )
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
@@ -48,16 +50,26 @@ if %debug% lss 2 (
 ) else (
 	echo.
 	echo.
-	echo You have been dropped to a command shell, in which you can test your applications for Windows PE compatibility.
+	if exist "%sysdrive%\cmdcons" ( cls )
+	echo You have been dropped to a command shell.
 	echo.
 	echo - To shut down the system, type "wpeutil shutdown" and press ENTER
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
+	echo - To initialize networking, type "netinit" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
 	echo - To start the Driver Installation Module in case you need to load drivers, type "StartDim" and press ENTER
 	echo.
+	echo Some administration scripts are included in the "scripts" directory, in "%sysdrive%". Type "cd %sysdrive%\scripts" to
+	echo go to this directory.
+	echo If you have a script that you think will be useful for this kind of environment, feel free to make it a contribution.
+	echo The more, the better.
+	echo.
+	echo This environment will automatically shut down in 72 hours.
+	echo.
 	doskey StartInstall=powershell -file "%sysdrive%\StartInstall.ps1"
 	doskey StartDim=cmd /c "%sysdrive%\dimstart.bat"
+	doskey netinit=cmd /c "%sysdrive%\scripts\initializenetwork.bat"
 	exit /b
 )

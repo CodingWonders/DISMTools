@@ -648,6 +648,8 @@ function Start-PECustomization
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
+            New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
+            Copy-Item -Path "$((Get-Location).Path)\files\scripts\*" -Destination "$imagePath\scripts" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
             Write-Host "Startup commands changed"
         }
         catch
