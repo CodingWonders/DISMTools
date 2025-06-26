@@ -250,7 +250,7 @@ function Deploy-WimImage {
             throw "Image information could not be found"
         }
         Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Exporting image to share..." -PercentComplete 60
-        $wdsUtilProc = Start-Process "wdsutil" -ArgumentList " /verbose /progress /export-image /image:`"$($installImage.Name)`" /server:$($env:COMPUTERNAME) /imagetype:Install /imagegroup:`"$ImageGroup`" /filename:`"$ImageName`" /destinationimage /filepath:`"$tmpImageFolderPath\$shareGuid\$ImageName`" /name:`"$($installImage.Name)`" /overwrite:yes" -NoNewWindow -Wait -PassThru
+        $wdsUtilProc = Start-Process "wdsutil" -ArgumentList " /verbose /progress /export-image /image:`"$($installImage.Name)`" /server:$($env:COMPUTERNAME) /imagetype:Install /imagegroup:`"$ImageGroup`" /filename:`"$ImageName`" /destinationimage /filepath:`"$tmpImageFolderPath\$shareGuid\install.wim`" /name:`"$($installImage.Name)`" /overwrite:yes" -NoNewWindow -Wait -PassThru
         if ($wdsUtilProc.ExitCode -ne 0) {
             throw "WDSUtil Exited with Code $($wdsUtilProc.ExitCode)"
         }
