@@ -41,7 +41,7 @@ Public Class Form1
             For Each LogLine As String In DynaLogLines
                 dlEvent = LogHelper.ParseEventLine(LogLine)
                 If dlEvent IsNot Nothing Then
-                    ListView1.Items.Add(New ListViewItem(New String() {dlEvent.EventTimestamp, dlEvent.EventCaller, dlEvent.EventMessage}))
+                    ListView1.Items.Add(New ListViewItem(New String() {dlEvent.EventTimestamp, dlEvent.EventPid, dlEvent.EventCaller, dlEvent.EventMessage}))
                 End If
             Next
         Else
@@ -118,14 +118,15 @@ Public Class Form1
         If e.Button = Windows.Forms.MouseButtons.Left AndAlso ListView1.SelectedItems.Count = 1 Then
             EventProperties.Label1.Text = String.Format("Information for event {0} of {1}:", ListView1.FocusedItem.Index + 1, ListView1.Items.Count)
             EventProperties.txtEventTimestamp.Text = ListView1.FocusedItem.SubItems(0).Text
-            Dim evtCallerParts As String() = ListView1.FocusedItem.SubItems(1).Text.Replace(" (", " ").Trim().Split(" ")
+            EventProperties.Label6.Text = String.Format("PID {0}", ListView1.FocusedItem.SubItems(1).Text)
+            Dim evtCallerParts As String() = ListView1.FocusedItem.SubItems(2).Text.Replace(" (", " ").Trim().Split(" ")
             EventProperties.txtEventCaller.Text = evtCallerParts(0)
             If evtCallerParts.Length = 2 Then
                 EventProperties.txtEventParentCaller.Text = evtCallerParts(1).TrimEnd(")")
             Else
                 EventProperties.txtEventParentCaller.Text = ""
             End If
-            EventProperties.txtEventMessage.Text = ListView1.FocusedItem.SubItems(2).Text
+            EventProperties.txtEventMessage.Text = ListView1.FocusedItem.SubItems(3).Text
 
             EventProperties.CurrentEventIndex = ListView1.FocusedItem.Index
             EventProperties.EventCount = ListView1.Items.Count

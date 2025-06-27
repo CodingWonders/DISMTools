@@ -385,14 +385,14 @@ Public Class MainForm
                         If arg.Replace("/offline:", "").Trim() <> "" Then
                             DynaLog.LogMessage("Getting all disks...")
                             Dim diList As New List(Of DriveInfo)
-                            diList = DriveInfo.GetDrives().ToList()
+                            diList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
                             Dim diPaths As New List(Of String)
                             DynaLog.LogMessage("Disks have been obtained. Preparing list...")
                             For Each di As DriveInfo In diList
                                 DynaLog.LogMessage("Essential disk information:" & CrLf &
                                                    "- Is disk ready? " & If(di.IsReady, "Yes", "No. Skipping...") & CrLf &
                                                    "- Drive letter: " & If(di.IsReady, di.Name, "Disk is not ready"))
-                                If di.IsReady Then diPaths.Add(di.Name)
+                                diPaths.Add(di.Name)
                             Next
                             If Path.GetPathRoot(arg.Replace("/offline:", "").Trim()) = arg.Replace("/offline:", "").Trim() And diPaths.Contains(arg.Replace("/offline:", "").Trim()) Then
                                 DynaLog.LogMessage("Disk specified satisfies all requirements (disk is ready, path is only path root). Passing to load...")
@@ -11684,19 +11684,7 @@ Public Class MainForm
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -11734,19 +11722,7 @@ Public Class MainForm
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -11811,32 +11787,12 @@ Public Class MainForm
         If OnlineManagement Then
             DynaLog.LogMessage("DISMTools is managing the active installation at this time. Ending this mode...")
             EndOnlineManagement()
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
-            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
-            While MountedImgMgr.DetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            StopMountedImageDetector()
         End If
         If OfflineManagement Then
             DynaLog.LogMessage("DISMTools is managing an offline installation at this time. Ending this mode...")
             EndOfflineManagement()
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
-            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
-            While MountedImgMgr.DetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            StopMountedImageDetector()
         End If
         If isProjectLoaded And (Not OnlineManagement Or Not OfflineManagement) Then
             DynaLog.LogMessage("DISMTools is managing a project at this time. Unloading project...")
@@ -11901,24 +11857,7 @@ Public Class MainForm
             DynaLog.EnableLogging()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
-        While MountedImgMgr.DetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Stopping detection of news...")
         If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
         While FeedWorker.IsBusy
@@ -12361,19 +12300,7 @@ Public Class MainForm
         DynaLog.LogMessage("- Get basic image information? " & If(bwGetImageInfo, "Yes", "No"))
         DynaLog.LogMessage("- Get advanced image information? " & If(bwGetAdvImgInfo, "Yes", "No"))
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Starting background processes...")
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
@@ -14686,19 +14613,7 @@ Public Class MainForm
     Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image mount dialog...")
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ImgMount.ShowDialog()
     End Sub
 
@@ -14712,19 +14627,7 @@ Public Class MainForm
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
         DynaLog.LogMessage("Opening volume image removal dialog...")
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
             If MountedImageMountDirs(x) = MountDir Then
                 ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
@@ -14737,19 +14640,7 @@ Public Class MainForm
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
         DynaLog.LogMessage("Opening image index switch dialog...")
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Getting image indexes...")
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
@@ -14919,18 +14810,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
@@ -14990,18 +14870,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -15070,18 +14939,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -15119,20 +14977,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If MountedImageDetectorBW.IsBusy Then
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -15444,19 +15289,7 @@ Public Class MainForm
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -15558,19 +15391,7 @@ Public Class MainForm
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -15618,15 +15439,7 @@ Public Class MainForm
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
         DynaLog.LogMessage("Opening image index switch dialog...")
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
+        StopMountedImageDetector()
         ProgressPanel.OperationNum = 995
         PleaseWaitDialog.indexesSourceImg = SourceImg
         Select Case Language
@@ -15673,18 +15486,7 @@ Public Class MainForm
 
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
         DynaLog.LogMessage("Opening image mount dialog...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ImgMount.ShowDialog()
     End Sub
 
@@ -15786,20 +15588,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If MountedImageDetectorBW.IsBusy Then
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -15953,18 +15742,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -16809,18 +16587,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -16981,18 +16748,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
@@ -17392,15 +17148,7 @@ Public Class MainForm
         Debug.WriteLine("Detected image status: " & ImageStatus.ToString())
         If Not ImageStatus = ImageWatcher.Status.OK Then
             DynaLog.LogMessage("Image status is not OK. Stopping mounted image detector to step in...")
-            WatcherTimer.Enabled = False
-            If MountedImageDetectorBW.IsBusy Then
-                MountedImageDetectorBWRestarterTimer.Enabled = False
-                MountedImageDetectorBW.CancelAsync()
-                While MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
+            StopMountedImageDetector()
         End If
         Select Case ImageStatus
             Case ImageWatcher.Status.NeedsRemount
@@ -18691,18 +18439,7 @@ Public Class MainForm
 
     Private Sub GetTargetEditions_Click(sender As Object, e As EventArgs) Handles GetTargetEditions.Click
         DynaLog.LogMessage("Preparing to get target editions...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Getting target editions...")
         Dim msg As String = ""
         Dim msgSuccess As Boolean
@@ -18857,12 +18594,14 @@ Public Class MainForm
     End Sub
 
     Sub StopMountedImageDetector()
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        DynaLog.LogMessage("Stopping image status watchers...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
@@ -18872,7 +18611,7 @@ Public Class MainForm
     End Sub
 
     Sub StartMountedImageDetector()
-        DynaLog.LogMessage("Restarting mounted image detector...")
+        DynaLog.LogMessage("Restarting mounted image detector and watchers...")
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
     End Sub

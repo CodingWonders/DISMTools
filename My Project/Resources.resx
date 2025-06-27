@@ -926,22 +926,21 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where the popup mounted image picker would not show any results if the mounted image manager was already open
-- Fixed an issue where connecting to a WDS server would fail if it didn't have a Pending Devices policy set up
-- Fixed an issue where the WDS Helper client would not get the installation images in some cases
+- Fixed an issue where the PE Helper could apply the installation image to the wrong volume if it had been assigned drive letter C (#262, thanks @Real-MullaC for spotting)
+- Fixed an issue where the WDS Helper Server would not export installation images to "install.wim" if they were named differently in WDS
 
 New features:
 
-- HotInstall now uses the latest version of the DISM API
-- HotInstall now creates a removal script that's launched on system startup to revert installation changes, in case the target system boots to the full Windows installation instead of the DISMTools PE
-- If drivers are applied to the boot image that clients will boot to with WDS, the WDS Helper client now applies such drivers to the target installation
-- The WDS Helper client now informs about blocks the server will impose for 2 minutes for a specific device if any connections to the server errored out
-- When configuring the wireless network, a link to go to your router's gateway page
-- UnattendGen has been updated to the latest version
-- The system component screen has been fully revamped
-- Markdig has been updated to version 0.41.2
-- DISMTools now detects if the computer has booted into Safe Mode and offers you the choice to load the online installation management mode
-- DISMTools now features a revamped popup mounted image picker</value>
+- The WDS Helper server component now offers a web dashboard
+- The ISO creator can now download and install the latest version of the Windows ADK (10.1.26100.2454) for you if it can't find it on your system
+- The default size of the ISO creator has been increased to 1280x720
+- The PE Helper now adds the `WinPE-StorageWMI` packages to the Preinstallation Environment
+- The command line can now be accessed from the main menu when you boot to the ISO file or when you start the boot image via WDS 
+- A new command-line alias, "netinit", now lets you initialize the networking stack and enable the firewall on demand; and other administration scripts are now included
+- DynaLog now logs process IDs
+- Markdig has been updated to version 0.41.3
+- CODE: more LINQ queries have been introduced
+- CODE: a new progress reporter module has been introduced. This is used by the ISO creator, but is expected to be used in other places as well</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

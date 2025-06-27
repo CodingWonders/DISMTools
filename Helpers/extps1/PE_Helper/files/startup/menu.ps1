@@ -7,6 +7,7 @@ Write-Host "      Choose this method if you started the Preinstallation Environm
 Write-Host "      deployment solution. This is recommended for system administrators that want to deploy a system"
 Write-Host "      image to multiple computers at once."
 Write-Host "      Note that WDS is only supported at the moment." -ForegroundColor White
+Write-Host "  C - Command-Line"
 Write-Host "  S - Shut down my computer"
 Write-Host "  R - Restart my computer`n"
 Write-Host "You will not be able to go back to choose another option after making your decision. You must reboot your"
@@ -26,7 +27,10 @@ switch ($option) {
 		Write-Host "                                  - CodingWonders Software`n`n"
 		Write-Host "Press ENTER to start the WDS Helper..."
 		Read-Host | Out-Null
-		New-Item -Path "$env:SYSTEMDRIVE\netinstall" | Out-Null
+		New-Item -Path "$env:SYSTEMDRIVE\netinstall" -ErrorAction SilentlyContinue | Out-Null
+	}
+	"C" {
+		New-Item -Path "$env:SYSTEMDRIVE\cmdcons" -ErrorAction SilentlyContinue | Out-Null
 	}
 	"S" {
 		Start-Process -FilePath "$env:WINDIR\system32\wpeutil.exe" -ArgumentList "shutdown" -NoNewWindow -Wait

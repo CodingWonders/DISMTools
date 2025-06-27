@@ -534,26 +534,9 @@ Public Class ImgAppend
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         DynaLog.LogMessage("Checking if the destination file has been specified and exists...")
         If TextBox2.Text = "" OrElse Not File.Exists(TextBox2.Text) Then Exit Sub
-        DynaLog.LogMessage("Checking if mounted image detector is busy...")
-        If MainForm.MountedImageDetectorBW.IsBusy Then
-            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-            MainForm.MountedImageDetectorBW.CancelAsync()
-            While MainForm.MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Threading.Thread.Sleep(500)
-            End While
-        End If
-        DynaLog.LogMessage("Checking if image status watchers are busy...")
-        MainForm.WatcherTimer.Enabled = False
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         TextBox3.Text = GetLastImageName()
-        Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub Button4_MouseHover(sender As Object, e As EventArgs) Handles Button4.MouseHover
