@@ -2071,14 +2071,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where the popup mounted image picker would not show any results if the mounted image manager was already open
-        '''- Fixed an issue where connecting to a WDS server would fail if it didn&apos;t have a Pending Devices policy set up
-        '''- Fixed an issue where the WDS Helper client would not get the installation images in some cases
+        '''- Fixed an issue where the PE Helper could apply the installation image to the wrong volume if it had been assigned drive letter C (#262, thanks @Real-MullaC for spotting)
+        '''- Fixed an issue where the WDS Helper Server would not export installation images to &quot;install.wim&quot; if they were named differently in WDS
         '''
         '''New features:
         '''
-        '''- HotInstall now uses the latest version of the DISM API
-        '''- HotInstall now creates a removal script that&apos;s launched on system startup to rever [resto de la cadena truncado]&quot;;.
+        '''- The WDS Helper server component now offers a web dashboard
+        '''- The ISO creator can now download and install the latest version of the Windows ADK (10.1.26100.2454) for  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
