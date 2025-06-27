@@ -30,6 +30,18 @@ class TargetImage {
     }
 }
 
+class DiskLayout {
+    [string]$espVolume
+    [string]$bootVolume
+    [string]$recoveryVolume
+
+    DiskLayout([string]$esp, [string]$boot, [string]$recovery) {
+        $this.espVolume = $esp
+        $this.bootVolume = $boot
+        $this.recoveryVolume = $recovery
+    }
+}
+
 function Invoke-ServerAuthentication {
     $ip = Read-Host -Prompt "Please enter the IP address of the server"
     $port = Read-Host -Prompt "Please enter the port to which the WDS Helper Web API is listening"
@@ -175,46 +187,118 @@ function Write-DiskConfiguration
     Write-Host "Writing disk configuration. Please wait..."
     if ($cleanDrive)
     {
-        $formatter = @'
+        $preFormatter = @"
         sel dis #DISKID#
         cle
+        exit
+"@
+        $preFormatter = $preFormatter.Replace("#DISKID#", $diskId).Trim()
+        $preFormatter | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_preformat.dp" -Force -Encoding utf8
+        $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"$env:SYSTEMDRIVE\files\diskpart\dp_preformat.dp`"" -Wait -PassThru -NoNewWindow
+
+        $espLetter = "W"
+        $bootLetter = "C"
+        $recoveryLetter = "R"
+        $usedLetters = 0
+        $espUsed = $false
+        $bootUsed = $false
+        $recoveryUsed = $false
+
+        Write-Host "Checking letters of mounted drives for conflicts..."
+
+        # One of the three letters mentioned above may be already in use. Check these before assuming they're our targets.
+        # This is more the case when you boot the ISO with Ventoy
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter }).Count -gt 0) {
+            Write-Host "The default letter for the EFI System Partition is already in use."
+            $usedLetters++
+            $espUsed = $true
+        }
+
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter }).Count -gt 0) {
+            Write-Host "The default letter for the boot partition is already in use."
+            $usedLetters++
+            $bootUsed = $true
+        }
+
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter }).Count -gt 0) {
+            Write-Host "The default letter for the Windows Recovery Environment partition is already in use."
+            $usedLetters++
+            $recoveryUsed = $true
+        }
+
+        if ($usedLetters -gt 0) {
+            Write-Host "After clearing the partitions of disk $diskId, some of the drive letters are still in use by, possibly, external disks. This may cause undesired behavior."
+            Write-Host "You will now be shown a list of disks, and you will be given the opportunity to reassign disk letters."
+            Write-Host "These settings only apply to the disk changes in the Preinstallation Environment."
+
+            Get-Volume | Out-Host        # let's make sure we are outputting this info
+
+            # Ask for all the letters that are producing conflicts
+
+            if ($espUsed) {
+                $newEspLetter = Read-Host -Prompt "Provide a volume letter for the EFI System Partition, or press ENTER to use the default letter [$($espLetter)]"
+                if ($newEspLetter -ne "") {
+                    $espLetter = $newEspLetter
+                }
+            }
+
+            if ($bootUsed) {
+                $newBootLetter = Read-Host -Prompt "Provide a volume letter for the boot partition, or press ENTER to use the default letter [$($bootLetter)]"
+                if ($newBootLetter -ne "") {
+                    $bootLetter = $newBootLetter
+                }
+            }
+
+            if ($recoveryUsed) {
+                $newRecoveryLetter = Read-Host -Prompt "Provide a volume letter for the Windows Recovery Environment partition, or press ENTER to use the default letter [$($recoveryLetter)]"
+                if ($newRecoveryLetter -ne "") {
+                    $recoveryLetter = $newRecoveryLetter
+                }
+            }
+
+        } else {
+            Write-Host "No conflicts were detected after clearing the partitions of disk $diskId. Continuing with disk configuration..."
+        }
+
+        $formatter = @'
+        sel dis #DISKID#
         #GPTPART#
         #MBRPART#
         exit
 '@
-        $formatter_gpt = @'
+        $formatter_gpt = @"
         conv gpt
         cre par efi size=512
         for fs=fat32 quick label="System"
-        ass letter W
+        ass letter $espLetter
         cre par msr size=16
         cre par pri
         REM Prevent updates from failing to update WinRE
         shrink minimum=1024
         for quick label="Windows"
-        ass letter C
+        ass letter $bootLetter
         cre par pri
         for quick label="Recovery"
-        ass letter R
+        ass letter $recoveryLetter
         set id="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
         gpt attributes=0x8000000000000001
-'@
-        $formatter_mbr = @'
+"@
+        $formatter_mbr = @"
         cre par pri size=100
         for quick label="System"
-        ass letter W
+        ass letter $espLetter
         REM Important for MBR configurations
         active
         cre par pri
         REM Prevent updates from failing to update WinRE
         shrink minimum=1024
         for quick label="Windows"
-        ass letter C
+        ass letter $bootLetter
         cre par pri
         for quick label="Recovery"
-        ass letter R
+        ass letter $recoveryLetter
         set id=27
-'@
+"@
         $uefiMode = ($env:firmware_type -eq "UEFI")
         $formatter = $formatter.Replace("#DISKID#", $diskId).Trim()
         if ($uefiMode)
@@ -229,6 +313,7 @@ function Write-DiskConfiguration
         }
         $formatter | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_format.dp" -Force -Encoding utf8
         $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"$env:SYSTEMDRIVE\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
+        $finalLayout = [DiskLayout]::new($espLetter, $bootLetter, $recoveryLetter)
     }
     else
     {
@@ -244,6 +329,9 @@ function Write-DiskConfiguration
         $dpProc = Start-Process -FilePath "$env:SYSTEMROOT\system32\diskpart.exe" -ArgumentList "/s `"$env:SYSTEMDRIVE\files\diskpart\dp_format.dp`"" -Wait -PassThru -NoNewWindow
     }
     Write-Host "Disk configuration has been written successfully."
+    if ($finalLayout -ne $null) {
+        return $finalLayout
+    }
 }
 
 function Get-WimIndexes
@@ -387,11 +475,21 @@ function Start-OSApplication {
             $choice = Read-Host "Are you sure you want to continue (Y/N)"
         } until ($choice -eq "Y")
     }
+    $driveLetter = ""
+    $bootLetter = ""
     if ($partition -eq 0)
     {
-        $driveLetter = "C"
         # Proceed with default disk configuration
-        Write-DiskConfiguration $drive $true $partition
+        $diskLayout = Write-DiskConfiguration $drive $true $partition
+        if ($diskLayout -ne $null) {
+            # Get the volume letter that was stored in the function
+            $driveLetter = $diskLayout.bootVolume
+            $bootLetter = $diskLayout.espVolume
+        } else {
+            # Assume boot drive is C and ESP is W
+            $driveLetter = "C"
+            $bootLetter = "W"
+        }
     }
     else
     {
@@ -530,7 +628,7 @@ function Start-OSApplication {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0)
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter
 
     Show-CenteredTextBox -Text "Removing temporary files and unmounting network shares..." -MaxWidth 100 -CenterOfAll
 
@@ -845,14 +943,19 @@ function New-BootFiles
             The index of a disk
         .PARAMETER cleanDrive
             Determine whether to run detections for specific boot scenarios
+        .PARAMETER espLetter
+            The letter of the EFI System Partition volume. By default, it's W if not specified
         .EXAMPLE
             New-BootFiles -drLetter "C:" -bootPart "auto" -diskId 0 -cleanDrive $false
+        .EXAMPLE
+            New-BootFiles -drLetter "C:" -bootPart "auto" -diskId 0 -cleanDrive $false -espLetter "V"
     #>
     param (
         [Parameter(Mandatory = $true, Position = 0)] [string]$drLetter,
         [Parameter(Mandatory = $true, Position = 1)] [string]$bootPart,
         [Parameter(Mandatory = $true, Position = 2)] [int]$diskId,
-        [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive
+        [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive,
+        [Parameter(Position = 4)] [string]$espLetter = "W"
     )
     if ($env:firmware_type -eq "UEFI")
     {
@@ -865,12 +968,12 @@ function New-BootFiles
                 {
                     if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
                     {
-                        $MSRAssign = @'
+                        $MSRAssign = @"
                         sel dis #DISKID#
                         sel par #VOLNUM#
-                        ass letter w
+                        ass letter $espLetter
                         exit
-'@
+"@
                         $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                         $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
@@ -886,11 +989,11 @@ function New-BootFiles
                     }
                 }
             }
-            bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
+            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
         }
         else
         {
-            bcdboot "$($drLetter):\Windows" /s "W:" /f ALL
+            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
         }
     }
     else
@@ -904,12 +1007,12 @@ function New-BootFiles
                 {
                     if (($disk.DiskIndex -eq $diskId) -and ($disk.BootPartition))
                     {
-                        $MSRAssign = @'
+                        $MSRAssign = @"
                         sel dis #DISKID#
                         sel par #VOLNUM#
-                        ass letter w
+                        ass letter $espLetter
                         exit
-'@
+"@
                         $MSRAssign = $MSRAssign.Replace("#DISKID#", $diskId).Trim()
                         $MSRAssign = $MSRAssign.Replace("#VOLNUM#", $($disk.Index + 1)).Trim()
                         $MSRAssign | Out-File "$env:SYSTEMDRIVE\files\diskpart\dp_bootassign.dp" -Force -Encoding utf8
@@ -925,15 +1028,16 @@ function New-BootFiles
                     }
                 }
             }
-            bootsect /nt60 W:
-            bootsect /nt60 W: /mbr
-            bcdboot "$($drLetter):\Windows" /s "W:" /f BIOS
+            # We have to do this stupid thing to coax bootsect to work for BIOS
+            bootsect /nt60 "$espLetter`:"
+            bootsect /nt60 "$espLetter`:" /mbr
+            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
         }
         else
         {
-            bootsect /nt60 W:
-            bootsect /nt60 W: /mbr
-            bcdboot "$($drLetter):\Windows" /s "W:" /f BIOS
+            bootsect /nt60 "$espLetter`:"
+            bootsect /nt60 "$espLetter`:" /mbr
+            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f BIOS
         }
     }
 }
@@ -966,6 +1070,8 @@ if ((Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVer
     Read-Host | Out-Null
     exit 1
 }
+
+$host.UI.RawUI.WindowTitle = "Preboot eXecution Environment Helpers: $($global:product)"
 
 Show-SectionMessage -sectionTitle "Welcome to Setup." -sectionDescription "$global:description Make sure that your device meets the requirements for a network-based deployment. Afterwards, networking will be initialized."
 
