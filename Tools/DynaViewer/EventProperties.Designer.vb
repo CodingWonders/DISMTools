@@ -22,21 +22,22 @@ Partial Class EventProperties
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.txtEventTimestamp = New System.Windows.Forms.TextBox
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.txtEventParentCaller = New System.Windows.Forms.TextBox
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.txtEventCaller = New System.Windows.Forms.TextBox
-        Me.Panel1 = New System.Windows.Forms.Panel
-        Me.txtEventMessage = New System.Windows.Forms.TextBox
-        Me.Label5 = New System.Windows.Forms.Label
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel
-        Me.btnNextEvent = New System.Windows.Forms.Button
-        Me.btnPreviousEvent = New System.Windows.Forms.Button
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.txtEventTimestamp = New System.Windows.Forms.TextBox()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.txtEventParentCaller = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.txtEventCaller = New System.Windows.Forms.TextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.txtEventMessage = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.btnNextEvent = New System.Windows.Forms.Button()
+        Me.btnPreviousEvent = New System.Windows.Forms.Button()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -45,7 +46,7 @@ Partial Class EventProperties
         'Label1
         '
         Me.Label1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoEllipsis = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
@@ -65,7 +66,7 @@ Partial Class EventProperties
         'txtEventTimestamp
         '
         Me.txtEventTimestamp.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEventTimestamp.Location = New System.Drawing.Point(106, 6)
         Me.txtEventTimestamp.Name = "txtEventTimestamp"
         Me.txtEventTimestamp.ReadOnly = True
@@ -75,11 +76,12 @@ Partial Class EventProperties
         'GroupBox1
         '
         Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.LinkLabel1)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.txtEventParentCaller)
         Me.GroupBox1.Controls.Add(Me.Label3)
+        Me.GroupBox1.Controls.Add(Me.Label6)
         Me.GroupBox1.Controls.Add(Me.txtEventCaller)
         Me.GroupBox1.Location = New System.Drawing.Point(10, 33)
         Me.GroupBox1.Name = "GroupBox1"
@@ -110,7 +112,7 @@ Partial Class EventProperties
         'txtEventParentCaller
         '
         Me.txtEventParentCaller.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEventParentCaller.Location = New System.Drawing.Point(15, 84)
         Me.txtEventParentCaller.Name = "txtEventParentCaller"
         Me.txtEventParentCaller.ReadOnly = True
@@ -129,18 +131,18 @@ Partial Class EventProperties
         'txtEventCaller
         '
         Me.txtEventCaller.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEventCaller.Location = New System.Drawing.Point(15, 40)
         Me.txtEventCaller.Name = "txtEventCaller"
         Me.txtEventCaller.ReadOnly = True
-        Me.txtEventCaller.Size = New System.Drawing.Size(364, 21)
+        Me.txtEventCaller.Size = New System.Drawing.Size(262, 21)
         Me.txtEventCaller.TabIndex = 3
         '
         'Panel1
         '
         Me.Panel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me.txtEventMessage)
         Me.Panel1.Controls.Add(Me.Label5)
         Me.Panel1.Controls.Add(Me.GroupBox1)
@@ -154,8 +156,8 @@ Partial Class EventProperties
         'txtEventMessage
         '
         Me.txtEventMessage.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEventMessage.Location = New System.Drawing.Point(10, 193)
         Me.txtEventMessage.Multiline = True
         Me.txtEventMessage.Name = "txtEventMessage"
@@ -176,7 +178,7 @@ Partial Class EventProperties
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
@@ -192,6 +194,7 @@ Partial Class EventProperties
         'btnNextEvent
         '
         Me.btnNextEvent.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnNextEvent.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnNextEvent.Location = New System.Drawing.Point(210, 3)
         Me.btnNextEvent.Name = "btnNextEvent"
         Me.btnNextEvent.Size = New System.Drawing.Size(201, 23)
@@ -202,12 +205,22 @@ Partial Class EventProperties
         'btnPreviousEvent
         '
         Me.btnPreviousEvent.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnPreviousEvent.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.btnPreviousEvent.Location = New System.Drawing.Point(3, 3)
         Me.btnPreviousEvent.Name = "btnPreviousEvent"
         Me.btnPreviousEvent.Size = New System.Drawing.Size(201, 23)
         Me.btnPreviousEvent.TabIndex = 0
         Me.btnPreviousEvent.Text = "&Previous Event"
         Me.btnPreviousEvent.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Location = New System.Drawing.Point(283, 43)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(96, 13)
+        Me.Label6.TabIndex = 2
+        Me.Label6.Text = "PID: "
         '
         'EventProperties
         '
@@ -248,5 +261,6 @@ Partial Class EventProperties
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents btnPreviousEvent As System.Windows.Forms.Button
     Friend WithEvents btnNextEvent As System.Windows.Forms.Button
+    Friend WithEvents Label6 As System.Windows.Forms.Label
 
 End Class

@@ -5041,7 +5041,7 @@ Public Class ProgressPanel
                            "- New edition: " & imgEditionNewEdition & CrLf &
                            "- Will the EULA be copied? " & If(imgEditionCopyEula, "Yes, to the following destination: " & imgEditionEulaDestination, "No") & CrLf &
                            "- Will the EULA be accepted? " & If(imgEditionAcceptEula, "Yes, with the following product key: " & imgEditionEditionKey, "No") & CrLf)
-        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-edition=" & imgEditionNewEdition
+        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /set-edition=" & imgEditionNewEdition
         DynaLog.LogMessage("Checking if the active installation is being managed...")
         If OnlineMgmt Then
             DynaLog.LogMessage("The active installation is being managed. Taking into account other settings the user may have specified...")
@@ -5076,7 +5076,7 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Setting the new product key..." & CrLf &
                            "Options:" & CrLf &
                            "- New product key: " & pkSetNewProductKey & CrLf)
-        CommandArgs &= " /image=" & targetImage & " /set-productkey=" & pkSetNewProductKey
+        CommandArgs &= " /image=" & targetImage & " /norestart /set-productkey=" & pkSetNewProductKey
         RunProcess(DismProgram, CommandArgs)
         LogView.AppendText(CrLf & "Getting error level...")
         If Hex(DismExitCode).Length < 8 Then

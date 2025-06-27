@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Globalization
 
 ''' <summary>
 ''' Dynamic Logging (DynaLog) Logger Class
@@ -94,7 +95,7 @@ Public Class DynaLog
             If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
                 FileLength = New FileInfo(Application.StartupPath & "\logs\DT_DynaLog.log").Length
             End If
-            Dim MessagePrefix As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss") & "] " & "[" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] "
+            Dim MessagePrefix As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture) & "] [PID " & Process.GetCurrentProcess().Id & "] [" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] "
             Dim MessageLine As String = MessagePrefix & message.Replace(CrLf, CrLf & MessagePrefix).Trim()
             File.AppendAllText(Application.StartupPath & "\logs\DT_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
         Catch ex As Exception

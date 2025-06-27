@@ -921,6 +921,19 @@ Public Class MainForm
                 End Try
             End If
         End If
+
+        DynaLog.LogMessage("Checking boot mode...")
+        DynaLog.LogMessage(SystemInformation.BootMode)
+        If SystemInformation.BootMode <> BootMode.Normal Then
+            DynaLog.LogMessage("This system is in limp home mode. Offering choice to enter online installation management mode...")
+            Dim safeModeMessage As String = "This computer has booted into Safe Mode. This mode is designed for live operating system recovery." & CrLf & CrLf &
+                "DISMTools can automatically load the online installation management mode so that you can start attempting repairs." & CrLf & CrLf &
+                "Do you want to load the online installation management mode?"
+            If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
+                DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
+                BeginOnlineManagement(False)
+            End If
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -3975,7 +3988,7 @@ Public Class MainForm
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4132,7 +4145,7 @@ Public Class MainForm
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4315,7 +4328,7 @@ Public Class MainForm
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4551,7 +4564,7 @@ Public Class MainForm
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4731,7 +4744,7 @@ Public Class MainForm
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
