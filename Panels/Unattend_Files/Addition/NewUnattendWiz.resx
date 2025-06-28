@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Label62.Text" xml:space="preserve">
+    <value>Make sure that the configuration set or distribution share has been created before copying the resulting unattended answer file to an ISO file and installing the operating system. You can create configuration sets or distribution shares with the Windows System Image Manager (SIM)</value>
+  </data>
   <data name="Label51.Text" xml:space="preserve">
     <value>In this screen you can configure scripts that will be run during a specific stage of Windows installation. Use the sections below to specify the code for the scripts.
 
@@ -139,9 +142,6 @@ FORMAT QUICK FS=NTFS LABEL="Recovery"
 SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
-  <data name="Label62.Text" xml:space="preserve">
-    <value>Make sure that the configuration set or distribution share has been created before copying the resulting unattended answer file to an ISO file and installing the operating system. You can create configuration sets or distribution shares with the Windows System Image Manager (SIM)</value>
-  </data>
   <data name="WelcomeDesc.Text" xml:space="preserve">
     <value>The unattended answer file creation wizard lets you create unattended answer files using intuitive interfaces. This wizard is suitable for those people who have never created unattended answer files before or do not want to use a text editor.
 
@@ -152,6 +152,9 @@ Special thanks to Christoph Schneegans for making the library that makes this wi
 
 To begin creating your answer file, click Next.</value>
   </data>
+  <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

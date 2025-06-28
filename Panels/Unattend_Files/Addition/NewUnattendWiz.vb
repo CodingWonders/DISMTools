@@ -2792,6 +2792,38 @@ Public Class NewUnattendWiz
         LoadCustomComponent(ComponentIndex)
     End Sub
 
+    Sub AddComponent(ComponentName As String, ComponentPass As String, ComponentData As String)
+        DynaLog.LogMessage("Adding data to component...")
+        DynaLog.LogMessage("- Component name: " & ComponentName)
+        DynaLog.LogMessage("- Component pass: " & ComponentPass)
+        If Not ComboBox14.Items.Contains(ComponentName) Then
+            DynaLog.LogMessage("Component list does not contain component name. Leaving...")
+            Exit Sub
+        End If
+        Dim component = SystemComponents.Where(Function(cmp) cmp.Id.Equals(ComponentName, StringComparison.InvariantCultureIgnoreCase))
+        Dim pass = component(0).Passes.Where(Function(systemPass) systemPass.Name.Equals(ComponentPass))
+        If pass Is Nothing Then
+            DynaLog.LogMessage("Pass is not supported by this component. Leaving...")
+            Exit Sub
+        End If
+
+        ' Clicking the Add button won't trigger the event when hidden
+        If SystemComponentsEx.Count = 0 Then
+            NoSpecifiedComponentsPanel.Visible = False
+            ComponentEditorPanel.Visible = True
+            Label60.Visible = True
+            Button10.Enabled = True
+            LinkLabel9.Visible = True
+        End If
+        SystemComponentsEx.Add(New Component(SystemComponents(0).Id, SystemComponents(0).Passes(0)))
+        ComponentIndex = SystemComponentsEx.Count - 1
+        LoadCustomComponent(ComponentIndex, True)
+
+        ComboBox14.SelectedIndex = ComboBox14.Items.IndexOf(ComponentName)
+        ComboBox15.SelectedIndex = ComboBox15.Items.IndexOf(ComponentPass)
+        Scintilla4.Text = ComponentData
+    End Sub
+
     Private Sub Scintilla4_TextChanged(sender As Object, e As EventArgs) Handles Scintilla4.TextChanged
         SystemComponentsEx(ComponentIndex).XmlData = Scintilla4.Text
     End Sub
@@ -2801,5 +2833,9 @@ Public Class NewUnattendWiz
             ' Perform a Google search (yes, Google is not my favorite search engine, but this takes advantage of the Web tab)
             Process.Start(String.Format("https://www.google.com/search?q={0}+site:learn.microsoft.com&udm=14", ComboBox14.SelectedItem))
         End If
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        ADDSJoinDialog.ShowDialog(Me)
     End Sub
 End Class

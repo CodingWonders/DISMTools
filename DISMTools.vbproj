@@ -216,6 +216,13 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
+      <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
     <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
@@ -857,6 +864,9 @@
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
+      <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Help\HelpBrowserForm.resx">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1472,6 +1482,7 @@
     <None Include="Resources\last_element.png" />
     <None Include="Resources\add_element.png" />
     <None Include="Resources\remove_element.png" />
+    <None Include="Resources\ad_ds.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
