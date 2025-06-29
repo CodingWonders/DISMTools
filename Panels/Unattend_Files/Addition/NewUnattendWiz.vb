@@ -1011,6 +1011,9 @@ Public Class NewUnattendWiz
         Next_Button.Enabled = (Not NewPage <> UnattendedWizardPage.Page.FinishPage) OrElse (Not NewPage + 1 >= UnattendedWizardPage.PageCount)
         Cancel_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.FinishPage)
         Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.WelcomePage) And Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+        Button12.Visible = New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage,
+                                                            UnattendedWizardPage.Page.UserAccountsPage,
+                                                            UnattendedWizardPage.Page.ComponentPage}.Contains(NewPage)
 
         Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
 

@@ -190,6 +190,8 @@ Public Class ADDSJoinDialog
         Back_Button.Enabled = Not (NewPage = WizardPage.DnsConfigPage)
 
         Next_Button.Text = If(NewPage = WizardPage.DsConfigPage, "Finish", "Next")
+
+        DNS_Explanation_Link.Visible = (NewPage = WizardPage.DnsConfigPage)
     End Sub
 
     Private Function VerifyOptionsInPage(page As WizardPage) As Boolean
@@ -317,5 +319,11 @@ Public Class ADDSJoinDialog
 
     Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles TextBox2.TextChanged
         dnsAliasName = TextBox2.Text
+    End Sub
+
+    Private Sub DNS_Explanation_Link_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles DNS_Explanation_Link.LinkClicked
+        MsgBox("DNS (short for Domain Name System) is a server role that automatically translates IP addresses to human-readable names." & CrLf & CrLf &
+               "When you use this wizard, DISMTools assumes that either you or your system administrator have set up DNS on your network. If not, cancel this wizard and set it up.",
+               vbOKOnly + vbInformation)
     End Sub
 End Class

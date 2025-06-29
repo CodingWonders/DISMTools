@@ -43,6 +43,17 @@ Partial Class ADDSJoinDialog
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DNSConfigHeader = New System.Windows.Forms.Label()
         Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
+        Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.TextBox5 = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.DSDomainConfigHeader = New System.Windows.Forms.Label()
         Me.HeaderPanel = New System.Windows.Forms.Panel()
         Me.DS7_Description = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
@@ -55,30 +66,20 @@ Partial Class ADDSJoinDialog
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
-        Me.DSDomainConfigHeader = New System.Windows.Forms.Label()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.TextBox4 = New System.Windows.Forms.TextBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.TextBox5 = New System.Windows.Forms.TextBox()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
-        Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
+        Me.DNS_Explanation_Link = New System.Windows.Forms.LinkLabel()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
         Me.DNSConfigPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.DSDomainConfigPanel.SuspendLayout()
+        Me.DSNoDomainPanel.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.HeaderPanel.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.DSNoDomainPanel.SuspendLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -311,6 +312,108 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigPanel.TabIndex = 1
         Me.DSDomainConfigPanel.Visible = False
         '
+        'DSNoDomainPanel
+        '
+        Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
+        Me.DSNoDomainPanel.Controls.Add(Me.Label11)
+        Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 203)
+        Me.DSNoDomainPanel.Name = "DSNoDomainPanel"
+        Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 92)
+        Me.DSNoDomainPanel.TabIndex = 7
+        Me.DSNoDomainPanel.Visible = False
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.caution
+        Me.PictureBox2.Location = New System.Drawing.Point(12, 12)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox2.TabIndex = 0
+        Me.PictureBox2.TabStop = False
+        '
+        'Label11
+        '
+        Me.Label11.AutoEllipsis = True
+        Me.Label11.Location = New System.Drawing.Point(50, 12)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(517, 56)
+        Me.Label11.TabIndex = 5
+        Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
+    "long to a domain."
+        '
+        'TextBox6
+        '
+        Me.TextBox6.Location = New System.Drawing.Point(211, 108)
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
+        Me.TextBox6.Size = New System.Drawing.Size(459, 21)
+        Me.TextBox6.TabIndex = 6
+        '
+        'Label12
+        '
+        Me.Label12.AutoEllipsis = True
+        Me.Label12.Location = New System.Drawing.Point(88, 383)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(582, 49)
+        Me.Label12.TabIndex = 5
+        Me.Label12.Text = "Contact your system administrator to provide authentication information used to j" & _
+    "oin the domain." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "To finish setting up target devices to join this domain, clic" & _
+    "k Finish."
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(88, 111)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(57, 13)
+        Me.Label10.TabIndex = 5
+        Me.Label10.Text = "Password:"
+        '
+        'TextBox5
+        '
+        Me.TextBox5.Location = New System.Drawing.Point(211, 81)
+        Me.TextBox5.Name = "TextBox5"
+        Me.TextBox5.Size = New System.Drawing.Size(459, 21)
+        Me.TextBox5.TabIndex = 6
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(88, 84)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(75, 13)
+        Me.Label9.TabIndex = 5
+        Me.Label9.Text = "User Account:"
+        '
+        'TextBox4
+        '
+        Me.TextBox4.Location = New System.Drawing.Point(211, 54)
+        Me.TextBox4.Name = "TextBox4"
+        Me.TextBox4.Size = New System.Drawing.Size(459, 21)
+        Me.TextBox4.TabIndex = 6
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(88, 57)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(76, 13)
+        Me.Label8.TabIndex = 5
+        Me.Label8.Text = "Domain Name:"
+        '
+        'DSDomainConfigHeader
+        '
+        Me.DSDomainConfigHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DSDomainConfigHeader.AutoEllipsis = True
+        Me.DSDomainConfigHeader.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.DSDomainConfigHeader.Location = New System.Drawing.Point(24, 16)
+        Me.DSDomainConfigHeader.Name = "DSDomainConfigHeader"
+        Me.DSDomainConfigHeader.Size = New System.Drawing.Size(658, 23)
+        Me.DSDomainConfigHeader.TabIndex = 4
+        Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
+        '
         'HeaderPanel
         '
         Me.HeaderPanel.Controls.Add(Me.DS7_Description)
@@ -327,9 +430,9 @@ Partial Class ADDSJoinDialog
         Me.DS7_Description.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DS7_Description.AutoEllipsis = True
-        Me.DS7_Description.Location = New System.Drawing.Point(13, 34)
+        Me.DS7_Description.Location = New System.Drawing.Point(27, 34)
         Me.DS7_Description.Name = "DS7_Description"
-        Me.DS7_Description.Size = New System.Drawing.Size(657, 28)
+        Me.DS7_Description.Size = New System.Drawing.Size(643, 28)
         Me.DS7_Description.TabIndex = 5
         Me.DS7_Description.Text = "This wizard helps you set up your unattended answer file to make a device join a " & _
     "domain powered by Active Directory Domain Services (AD DS)."
@@ -368,6 +471,7 @@ Partial Class ADDSJoinDialog
         '
         'ExpressPanelFooter
         '
+        Me.ExpressPanelFooter.Controls.Add(Me.DNS_Explanation_Link)
         Me.ExpressPanelFooter.Controls.Add(Me.TableLayoutPanel1)
         Me.ExpressPanelFooter.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ExpressPanelFooter.Location = New System.Drawing.Point(0, 0)
@@ -442,107 +546,17 @@ Partial Class ADDSJoinDialog
         '
         Me.ADDSInitBW.WorkerReportsProgress = True
         '
-        'DSDomainConfigHeader
+        'DNS_Explanation_Link
         '
-        Me.DSDomainConfigHeader.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DSDomainConfigHeader.AutoEllipsis = True
-        Me.DSDomainConfigHeader.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DSDomainConfigHeader.Location = New System.Drawing.Point(24, 16)
-        Me.DSDomainConfigHeader.Name = "DSDomainConfigHeader"
-        Me.DSDomainConfigHeader.Size = New System.Drawing.Size(658, 23)
-        Me.DSDomainConfigHeader.TabIndex = 4
-        Me.DSDomainConfigHeader.Text = "Provide domain and authentication information"
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(88, 57)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(76, 13)
-        Me.Label8.TabIndex = 5
-        Me.Label8.Text = "Domain Name:"
-        '
-        'TextBox4
-        '
-        Me.TextBox4.Location = New System.Drawing.Point(211, 54)
-        Me.TextBox4.Name = "TextBox4"
-        Me.TextBox4.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox4.TabIndex = 6
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(88, 84)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(75, 13)
-        Me.Label9.TabIndex = 5
-        Me.Label9.Text = "User Account:"
-        '
-        'TextBox5
-        '
-        Me.TextBox5.Location = New System.Drawing.Point(211, 81)
-        Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox5.TabIndex = 6
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(88, 111)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(57, 13)
-        Me.Label10.TabIndex = 5
-        Me.Label10.Text = "Password:"
-        '
-        'TextBox6
-        '
-        Me.TextBox6.Location = New System.Drawing.Point(211, 108)
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
-        Me.TextBox6.Size = New System.Drawing.Size(459, 21)
-        Me.TextBox6.TabIndex = 6
-        '
-        'DSNoDomainPanel
-        '
-        Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
-        Me.DSNoDomainPanel.Controls.Add(Me.Label11)
-        Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 203)
-        Me.DSNoDomainPanel.Name = "DSNoDomainPanel"
-        Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 92)
-        Me.DSNoDomainPanel.TabIndex = 7
-        Me.DSNoDomainPanel.Visible = False
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.caution
-        Me.PictureBox2.Location = New System.Drawing.Point(12, 12)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(32, 32)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.PictureBox2.TabIndex = 0
-        Me.PictureBox2.TabStop = False
-        '
-        'Label11
-        '
-        Me.Label11.AutoEllipsis = True
-        Me.Label11.Location = New System.Drawing.Point(50, 12)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(517, 56)
-        Me.Label11.TabIndex = 5
-        Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
-    "long to a domain."
-        '
-        'Label12
-        '
-        Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(88, 383)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(582, 49)
-        Me.Label12.TabIndex = 5
-        Me.Label12.Text = "Contact your system administrator to provide authentication information used to j" & _
-    "oin the domain." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "To finish setting up target devices to join this domain, clic" & _
-    "k Finish."
+        Me.DNS_Explanation_Link.AutoSize = True
+        Me.DNS_Explanation_Link.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.DNS_Explanation_Link.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.DNS_Explanation_Link.Location = New System.Drawing.Point(12, 14)
+        Me.DNS_Explanation_Link.Name = "DNS_Explanation_Link"
+        Me.DNS_Explanation_Link.Size = New System.Drawing.Size(71, 13)
+        Me.DNS_Explanation_Link.TabIndex = 2
+        Me.DNS_Explanation_Link.TabStop = True
+        Me.DNS_Explanation_Link.Text = "What is DNS?"
         '
         'ADDSJoinDialog
         '
@@ -570,15 +584,16 @@ Partial Class ADDSJoinDialog
         Me.GroupBox1.PerformLayout()
         Me.DSDomainConfigPanel.ResumeLayout(False)
         Me.DSDomainConfigPanel.PerformLayout()
+        Me.DSNoDomainPanel.ResumeLayout(False)
+        Me.DSNoDomainPanel.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.HeaderPanel.ResumeLayout(False)
         Me.HeaderPanel.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FooterContainer.ResumeLayout(False)
         Me.ExpressPanelFooter.ResumeLayout(False)
+        Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.DSNoDomainPanel.ResumeLayout(False)
-        Me.DSNoDomainPanel.PerformLayout()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -626,4 +641,5 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents DNS_Explanation_Link As System.Windows.Forms.LinkLabel
 End Class
