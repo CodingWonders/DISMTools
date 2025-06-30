@@ -1084,7 +1084,7 @@ Enable-Networking
 
 Write-Host "Preparing to connect to the WDS server..."
 
-Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Web API on your WDS server. You can find it in the `"pxetools\wdshelper`" folder on the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
+Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Web API on your WDS server. You can find it in the `"pxehelpers\wds`" folder on the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
 
 $authInfo = Invoke-ServerAuthentication
 
