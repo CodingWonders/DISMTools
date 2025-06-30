@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.DirectoryServices.ActiveDirectory.Domain
 
 Module DomainServicesModule
 
@@ -84,7 +85,7 @@ Module DomainServicesModule
             Dim domain As IntPtr = GetDomainNameInformation()
             If domain <> IntPtr.Zero Then
                 DynaLog.LogMessage("GetDomainNameInformation did not return bogus data. Parsing...")
-                domainName = Marshal.PtrToStringAuto(domain)
+                domainName = GetComputerDomain().Name       ' Get it from AD DS .NET API
             End If
         End If
         DynaLog.LogMessage("Domain name: " & ControlChars.Quote & domainName & ControlChars.Quote & ". If it's empty, it could be because the device is not part of a domain.")
