@@ -149,6 +149,9 @@ Public Class ADDSJoinDialog
         Next
         ProgressReporter.Hide()
         DSNoDomainPanel.Visible = Not dsIsInDomain
+        If dsIsInDomain Then
+            TextBox4.Text = dsDomainName
+        End If
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
