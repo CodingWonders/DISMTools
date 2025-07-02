@@ -418,31 +418,6 @@ Public Class EnableFeat
             Text = ""
             Win10Title.Visible = True
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label2.Text &= " Only disabled features (" & ListView1.Items.Count & ") are shown"
-                    Case "ESN"
-                        Label2.Text &= " Solo las características deshabilitadas (" & ListView1.Items.Count & ") son mostradas"
-                    Case "FRA"
-                        Label2.Text &= " Seules les caractéristiques désactivées (" & ListView1.Items.Count & ") sont représentées"
-                    Case "PTB", "PTG"
-                        Label2.Text &= " Só são mostradas as características desactivadas (" & ListView1.Items.Count & ")"
-                    Case "ITA"
-                        Label2.Text &= " Vengono mostrate solo le caratteristiche disabilitate (" & ListView1.Items.Count & ")"
-                End Select
-            Case 1
-                Label2.Text &= " Only disabled features (" & ListView1.Items.Count & ") are shown"
-            Case 2
-                Label2.Text &= " Solo las características deshabilitadas (" & ListView1.Items.Count & ") son mostradas"
-            Case 3
-                Label2.Text &= " Seules les caractéristiques désactivées (" & ListView1.Items.Count & ") sont représentées"
-            Case 4
-                Label2.Text &= " Só são mostradas as características desactivadas (" & ListView1.Items.Count & ")"
-            Case 5
-                Label2.Text &= " Vengono mostrate solo le caratteristiche disabilitate (" & ListView1.Items.Count & ")"
-        End Select
         CheckBox5.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         DynaLog.LogMessage("Detecting ability to contact Windows Update (in the case of active installation management)...")
         DynaLog.LogMessage("Boot Mode of Host System: " & SystemInformation.BootMode.ToString())

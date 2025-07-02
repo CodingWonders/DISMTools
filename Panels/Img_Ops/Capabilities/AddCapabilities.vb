@@ -386,31 +386,6 @@ Public Class AddCapabilities
             Text = ""
             Win10Title.Visible = True
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label4.Text &= " Only not installed capabilities (" & ListView1.Items.Count & ") are shown"
-                    Case "ESN"
-                        Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
-                    Case "FRA"
-                        Label4.Text &= " Seules les capacités non installées (" & ListView1.Items.Count & ") sont représentées"
-                    Case "PTB", "PTG"
-                        Label4.Text &= " Só são mostradas as capacidades não instaladas (" & ListView1.Items.Count & ")"
-                    Case "ITA"
-                        Label4.Text &= " Sono mostrate solo le funzionalità non installate (" & ListView1.Items.Count & ")"
-                End Select
-            Case 1
-                Label4.Text &= " Only not installed capabilities (" & ListView1.Items.Count & ") are shown"
-            Case 2
-                Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
-            Case 3
-                Label4.Text &= " Seules les capacités non installées (" & ListView1.Items.Count & ") sont représentées"
-            Case 4
-                Label4.Text &= " Só são mostradas as capacidades não instaladas (" & ListView1.Items.Count & ")"
-            Case 5
-                Label4.Text &= " Sono mostrate solo le funzionalità non installate (" & ListView1.Items.Count & ")"
-        End Select
         Win10Title.BackColor = CurrentTheme.BackgroundColor
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

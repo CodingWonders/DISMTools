@@ -277,7 +277,6 @@ Public Class RemPackage
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
         If RadioButton1.Checked Then
             CheckedListBox1.Enabled = True
-            Label2.Enabled = True
             Label3.Enabled = False
             TextBox1.Enabled = False
             Button1.Enabled = False
@@ -285,7 +284,6 @@ Public Class RemPackage
             Label4.Enabled = False
         Else
             CheckedListBox1.Enabled = False
-            Label2.Enabled = False
             Label3.Enabled = True
             TextBox1.Enabled = True
             Button1.Enabled = True

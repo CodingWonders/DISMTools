@@ -136,8 +136,12 @@ Public Class MainForm
     Public imgPackageRelType(65535) As String
     Public imgPackageInstTime(65535) As String
 
+    Public imgPackages As New List(Of DismPackage)
+
     Public imgFeatureNames(65535) As String
     Public imgFeatureState(65535) As String
+
+    Public imgFeatures As New List(Of DismFeature)
 
     Public imgAppxDisplayNames(65535) As String
     Public imgAppxPackageNames(65535) As String
@@ -146,8 +150,12 @@ Public Class MainForm
     Public imgAppxResourceIds(65535) As String
     Public imgAppxRegions(65535) As String
 
+    Public imgAppxPackages As New List(Of DismAppxPackage)
+
     Public imgCapabilityIds(65535) As String
     Public imgCapabilityState(65535) As String
+
+    Public imgCapabilities As New List(Of DismCapability)
 
     Public imgDrvPublishedNames(65535) As String
     Public imgDrvOGFileNames(65535) As String
@@ -158,19 +166,16 @@ Public Class MainForm
     Public imgDrvVersions(65535) As String
     Public imgDrvBootCriticalStatus(65535) As Boolean
 
-    Public imgPackageNameLastEntry As String
+    Public imgDrivers As New List(Of DismDriverPackage)
 
     Public areBackgroundProcessesDone As Boolean
 
     Dim pbOpNums As Integer
-    Dim progressMax As Integer = 100
     Dim progressMin As Integer = 0
     Dim progressDivs As Double
     Dim progressLabel As String
     Dim regJumps As Boolean
     Dim irregVal As Integer = 0
-
-    Dim ElementCount As Integer = 0
 
     Public pinState As Integer
 
@@ -3646,6 +3651,8 @@ Public Class MainForm
                     imgPackageState = imgPackageStateList.ToArray()
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
+
+                    imgPackages = PackageCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
@@ -3803,6 +3810,8 @@ Public Class MainForm
                     DynaLog.LogMessage("Passing information to arrays...")
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
+
+                    imgFeatures = FeatureCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
@@ -3986,6 +3995,8 @@ Public Class MainForm
                     imgAppxPackageNames = imgAppxPackageNameList.ToArray()
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
+
+                    imgAppxPackages = AppxPackageCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
@@ -4222,6 +4233,8 @@ Public Class MainForm
                     DynaLog.LogMessage("Passing information to arrays...")
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
+
+                    imgCapabilities = CapabilityCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
@@ -4234,46 +4247,6 @@ Public Class MainForm
             CompletedTasks(3) = True
             PendingTasks(3) = False
             Exit Sub
-            'Try
-
-            '    If session IsNot Nothing Then
-            '        Dim imgCapabilityNameList As New List(Of String)
-            '        Dim imgCapabilityStateList As New List(Of String)
-            '        Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
-            '        For Each capability As DismCapability In CapabilityCollection
-            '            If ImgBW.CancellationPending Then
-            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '                Exit Sub
-            '            End If
-            '            imgCapabilityNameList.Add(capability.Name)
-            '            Select Case capability.State
-            '                Case DismPackageFeatureState.NotPresent
-            '                    imgCapabilityStateList.Add("Not present")
-            '                Case DismPackageFeatureState.UninstallPending
-            '                    imgCapabilityStateList.Add("Uninstall pending")
-            '                Case DismPackageFeatureState.Staged
-            '                    imgCapabilityStateList.Add("Uninstalled")
-            '                Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-            '                    imgCapabilityStateList.Add("Removed")
-            '                Case DismPackageFeatureState.Installed
-            '                    imgCapabilityStateList.Add("Installed")
-            '                Case DismPackageFeatureState.InstallPending
-            '                    imgCapabilityStateList.Add("Install Pending")
-            '                Case DismPackageFeatureState.Superseded
-            '                    imgCapabilityStateList.Add("Superseded")
-            '                Case DismPackageFeatureState.PartiallyInstalled
-            '                    imgCapabilityStateList.Add("Partially Installed")
-            '            End Select
-            '        Next
-            '        imgCapabilityIds = imgCapabilityNameList.ToArray()
-            '        imgCapabilityState = imgCapabilityStateList.ToArray()
-            '        Exit Sub
-            '    Else
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            'End Try
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
         ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
@@ -4402,6 +4375,8 @@ Public Class MainForm
                     imgDrvDates = imgDrvDateList.ToArray()
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
+
+                    imgDrivers = DriverCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
@@ -12539,371 +12514,89 @@ Public Class MainForm
 
     Private Sub RemovePackage_Click(sender As Object, e As EventArgs) Handles RemovePackage.Click
         DynaLog.LogMessage("Opening package removal dialog...")
-        ElementCount = 0
         RemPackage.CheckedListBox1.Items.Clear()
-        ProgressPanel.OperationNum = 993
-        PleaseWaitDialog.pkgSourceImgStr = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-        End Select
         If Not CompletedTasks(0) Then
             DynaLog.LogMessage("Package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
-        Try
-            DynaLog.LogMessage("Adding packages to arrays...")
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Continue For
-                End If
-                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+        DynaLog.LogMessage("Adding packages to arrays...")
+        If imgPackages.Count > 0 Then
+            For Each imgPackage In imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
+                RemPackage.CheckedListBox1.Items.Add(imgPackage.PackageName)
             Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-                    Case "ESN"
-                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-                    Case "FRA"
-                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB", "PTG"
-                        RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-                    Case "ITA"
-                        RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-                End Select
-            Case 1
-                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-            Case 2
-                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-            Case 3
-                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-            Case 4
-                RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-            Case 5
-                RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-        End Select
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                    If imgPackageNames(x) = "" Then
+                        Continue For
+                    End If
+                    RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
         RemPackage.ShowDialog()
     End Sub
 
     Private Sub EnableFeature_Click(sender As Object, e As EventArgs) Handles EnableFeature.Click
         DynaLog.LogMessage("Opening feature enablement dialog...")
-        ElementCount = 0
         EnableFeat.ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 0
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
+        If imgFeatures.Count > 0 Then
+            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(feature.State)).ToList()
+                EnableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                    If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                        Continue For
+                    End If
+                    EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
         EnableFeat.ShowDialog()
     End Sub
 
     Private Sub DisableFeature_Click(sender As Object, e As EventArgs) Handles DisableFeature.Click
         DynaLog.LogMessage("Opening feature disablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 1
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer = 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
+        If imgFeatures.Count > 0 Then
+            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).ToList()
+                DisableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                    If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                        Continue For
+                    End If
+                    DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
         DisableFeat.ShowDialog()
     End Sub
 
@@ -12974,102 +12667,48 @@ Public Class MainForm
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
         RemProvAppxPackage.ListView1.Items.Clear()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-        End Select
-        ProgressPanel.OperationNum = 994
         If Not CompletedTasks(2) Then
             DynaLog.LogMessage("AppX package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding AppX packages to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
-                    Continue For
-                Else
-                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & imgAppxPackageNames(x) & Quote & " = 0. This app is not registered to a user")
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        Else
-                            DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & imgAppxPackageNames(x) & Quote & " > 0. This app is registered to users")
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                        End If
+        If imgAppxPackageNames.Count > imgAppxPackages.Count Then
+            Try
+                For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                    If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
+                        Continue For
                     Else
-                        DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & imgAppxPackageNames(x) & Quote & " = 0. This app is not registered to a user")
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                        If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
+                            If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                            Else
+                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
+                            End If
+                        Else
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                        End If
                     End If
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+            End Try
+        Else
+            For Each imgAppxPackage In imgAppxPackages
+                Dim isRegistered As Boolean
+                If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
+                    If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                        isRegistered = False
+                    Else
+                        isRegistered = True
+                    End If
+                Else
+                    isRegistered = False
                 End If
+                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
             Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        ' Begin counting
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        If ElementCount <= 0 Then
-            ElementCount = RemProvAppxPackage.ListView1.Items.Count
         End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-                    Case "ESN"
-                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-                    Case "FRA"
-                        RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-                    Case "PTB", "PTG"
-                        RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-                    Case "ITA"
-                        RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-                End Select
-            Case 1
-                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-            Case 2
-                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-            Case 3
-                RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-            Case 4
-                RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-            Case 5
-                RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-        End Select
         RemProvAppxPackage.ShowDialog()
     End Sub
 
@@ -13309,85 +12948,29 @@ Public Class MainForm
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
         AddCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
         If Not CompletedTasks(3) Then
             DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
-                    Continue For
-                End If
-                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+        If imgCapabilities.Count > 0 Then
+            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).ToList()
+                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        AddCapabilities.Label4.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                AddCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                    If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
+                        Continue For
+                    End If
+                    AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
         AddCapabilities.ShowDialog()
     End Sub
 
@@ -13423,85 +13006,29 @@ Public Class MainForm
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
         RemCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
         If Not CompletedTasks(3) Then
             DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
-                    Continue For
-                End If
-                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+        If imgCapabilities.Count > 0 Then
+            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Removed, DismPackageFeatureState.NotPresent, DismPackageFeatureState.Staged}.Contains(capability.State)).ToList()
+                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                    If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
+                        Continue For
+                    End If
+                    RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
         RemCapabilities.ShowDialog()
     End Sub
 
@@ -13573,75 +13100,57 @@ Public Class MainForm
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         RemDrivers.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-        End Select
         If Not CompletedTasks(4) Then
             DynaLog.LogMessage("Device driver background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding device drivers to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
-                If RemDrivers.CheckBox1.Checked Then
-                    If imgDrvBootCriticalStatus(x) Then Continue For
-                End If
-                If RemDrivers.CheckBox2.Checked Then
-                    If CBool(imgDrvInbox(x)) Then Continue For
-                End If
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ESN"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "FRA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "PTB", "PTG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ITA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        End Select
-                    Case 1
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 2
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 3
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 4
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 5
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                End Select
+        If imgDrivers.Count > 0 Then
+            For Each imgDriver In imgDrivers
+                If RemDrivers.CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
+                If RemDrivers.CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
+                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
+                    If RemDrivers.CheckBox1.Checked Then
+                        If imgDrvBootCriticalStatus(x) Then Continue For
+                    End If
+                    If RemDrivers.CheckBox2.Checked Then
+                        If CBool(imgDrvInbox(x)) Then Continue For
+                    End If
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "ESN"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "FRA"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "PTB", "PTG"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "ITA"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            End Select
+                        Case 1
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 2
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 3
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 4
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 5
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    End Select
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
         RemDrivers.ShowDialog()
     End Sub
 
@@ -15595,88 +15104,30 @@ Public Class MainForm
 
     Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
         DynaLog.LogMessage("Opening package removal dialog...")
-        ElementCount = 0
         RemPackage.CheckedListBox1.Items.Clear()
-        ProgressPanel.OperationNum = 993
-        PleaseWaitDialog.pkgSourceImgStr = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-        End Select
         If Not CompletedTasks(0) Then
             DynaLog.LogMessage("Package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
-        Try
-            DynaLog.LogMessage("Adding packages to arrays...")
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Continue For
-                End If
-                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+        DynaLog.LogMessage("Adding packages to arrays...")
+        If imgPackages.Count > 0 Then
+            For Each imgPackage In imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
+                RemPackage.CheckedListBox1.Items.Add(imgPackage.PackageName)
             Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-                    Case "ESN"
-                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-                    Case "FRA"
-                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB", "PTG"
-                        RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-                    Case "ITA"
-                        RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-                End Select
-            Case 1
-                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-            Case 2
-                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-            Case 3
-                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-            Case 4
-                RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-            Case 5
-                RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-        End Select
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
+                    If imgPackageNames(x) = "" Then
+                        Continue For
+                    End If
+                    RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
         RemPackage.ShowDialog()
     End Sub
 
@@ -15749,284 +15200,60 @@ Public Class MainForm
 
     Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
         DynaLog.LogMessage("Opening feature disablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 1
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer = 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
+        If imgFeatures.Count > 0 Then
+            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).ToList()
+                DisableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                    If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                        Continue For
+                    End If
+                    DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
         DisableFeat.ShowDialog()
     End Sub
 
     Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
         DynaLog.LogMessage("Opening feature enablement dialog...")
-        ElementCount = 0
         EnableFeat.ListView1.Items.Clear()
         DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 0
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
+        If imgFeatures.Count > 0 Then
+            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(feature.State)).ToList()
+                EnableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
+                    If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
+                        Continue For
+                    End If
+                    EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
         EnableFeat.ShowDialog()
     End Sub
 
@@ -16080,99 +15307,48 @@ Public Class MainForm
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
         RemProvAppxPackage.ListView1.Items.Clear()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-        End Select
-        ProgressPanel.OperationNum = 994
         If Not CompletedTasks(2) Then
             DynaLog.LogMessage("AppX package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding AppX packages to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
-                    Continue For
-                Else
-                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                        End If
+        If imgAppxPackageNames.Count > imgAppxPackages.Count Then
+            Try
+                For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
+                    If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
+                        Continue For
                     Else
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                        If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
+                            If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                            Else
+                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
+                            End If
+                        Else
+                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
+                        End If
                     End If
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+            End Try
+        Else
+            For Each imgAppxPackage In imgAppxPackages
+                Dim isRegistered As Boolean
+                If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
+                    If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                        isRegistered = False
+                    Else
+                        isRegistered = True
+                    End If
+                Else
+                    isRegistered = False
                 End If
+                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
             Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        ' Begin counting
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        If ElementCount <= 0 Then
-            ElementCount = RemProvAppxPackage.ListView1.Items.Count
         End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-                    Case "ESN"
-                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-                    Case "FRA"
-                        RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-                    Case "PTB", "PTG"
-                        RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-                    Case "ITA"
-                        RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-                End Select
-            Case 1
-                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-            Case 2
-                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-            Case 3
-                RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-            Case 4
-                RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-            Case 5
-                RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-        End Select
         RemProvAppxPackage.ShowDialog()
     End Sub
 
@@ -16329,85 +15505,29 @@ Public Class MainForm
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
         RemCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
         If Not CompletedTasks(3) Then
             DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
-                    Continue For
-                End If
-                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+        If imgCapabilities.Count > 0 Then
+            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Removed, DismPackageFeatureState.NotPresent, DismPackageFeatureState.Staged}.Contains(capability.State)).ToList()
+                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                    If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
+                        Continue For
+                    End If
+                    RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
         RemCapabilities.ShowDialog()
     End Sub
 
@@ -16443,85 +15563,29 @@ Public Class MainForm
             Exit Sub
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
         AddCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
         If Not CompletedTasks(3) Then
             DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
-                    Continue For
-                End If
-                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+        If imgCapabilities.Count > 0 Then
+            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).ToList()
+                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        AddCapabilities.Label4.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                AddCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
+                    If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
+                        Continue For
+                    End If
+                    AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
         AddCapabilities.ShowDialog()
     End Sub
 
@@ -16643,75 +15707,57 @@ Public Class MainForm
         End If
         DynaLog.LogMessage("All requirements are met. Continuing with the task...")
         RemDrivers.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-        End Select
         If Not CompletedTasks(4) Then
             DynaLog.LogMessage("Device driver background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Adding device drivers to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
-                If RemDrivers.CheckBox1.Checked Then
-                    If imgDrvBootCriticalStatus(x) Then Continue For
-                End If
-                If RemDrivers.CheckBox2.Checked Then
-                    If CBool(imgDrvInbox(x)) Then Continue For
-                End If
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ESN"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "FRA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "PTB", "PTG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ITA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        End Select
-                    Case 1
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 2
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 3
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 4
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 5
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                End Select
+        If imgDrivers.Count > 0 Then
+            For Each imgDriver In imgDrivers
+                If RemDrivers.CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
+                If RemDrivers.CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
+                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
+                    If RemDrivers.CheckBox1.Checked Then
+                        If imgDrvBootCriticalStatus(x) Then Continue For
+                    End If
+                    If RemDrivers.CheckBox2.Checked Then
+                        If CBool(imgDrvInbox(x)) Then Continue For
+                    End If
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "ESN"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "FRA"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "PTB", "PTG"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
+                                Case "ITA"
+                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                            End Select
+                        Case 1
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 2
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 3
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 4
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
+                        Case 5
+                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
+                    End Select
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
         RemDrivers.ShowDialog()
     End Sub
 

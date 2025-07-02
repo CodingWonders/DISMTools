@@ -28,7 +28,6 @@ Partial Class RemCapabilities
         Me.Win10Title = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -106,22 +105,13 @@ Partial Class RemCapabilities
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Remove capabilities"
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 504)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(216, 13)
-        Me.Label2.TabIndex = 7
-        Me.Label2.Text = "This image contains <capNum> capabilities."
-        '
         'ListView1
         '
         Me.ListView1.CheckBoxes = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.Location = New System.Drawing.Point(12, 54)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(760, 444)
+        Me.ListView1.Size = New System.Drawing.Size(760, 460)
         Me.ListView1.TabIndex = 8
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -144,7 +134,6 @@ Partial Class RemCapabilities
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(784, 561)
         Me.Controls.Add(Me.ListView1)
-        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -160,7 +149,6 @@ Partial Class RemCapabilities
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -169,7 +157,6 @@ Partial Class RemCapabilities
     Friend WithEvents Win10Title As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader

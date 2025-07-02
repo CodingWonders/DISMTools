@@ -226,31 +226,6 @@ Public Class DisableFeat
             Text = ""
             Win10Title.Visible = True
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
-                    Case "ESN"
-                        Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
-                    Case "FRA"
-                        Label2.Text &= " Seules les caractéristiques activées (" & ListView1.Items.Count & ") sont présentées."
-                    Case "PTB", "PTG"
-                        Label2.Text &= " Só são mostradas as características activadas (" & ListView1.Items.Count & ")"
-                    Case "ITA"
-                        Label2.Text &= " Vengono mostrate solo le caratteristiche abilitate (" & ListView1.Items.Count & ")"
-                End Select
-            Case 1
-                Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
-            Case 2
-                Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
-            Case 3
-                Label2.Text &= " Seules les caractéristiques activées (" & ListView1.Items.Count & ") sont présentées."
-            Case 4
-                Label2.Text &= " Só são mostradas as características activadas (" & ListView1.Items.Count & ")"
-            Case 5
-                Label2.Text &= " Vengono mostrate solo le caratteristiche abilitate (" & ListView1.Items.Count & ")"
-        End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub

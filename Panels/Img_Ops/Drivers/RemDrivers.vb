@@ -380,42 +380,50 @@ Public Class RemDrivers
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        Try
-            For x = 0 To Array.LastIndexOf(MainForm.imgDrvPublishedNames, MainForm.imgDrvPublishedNames.Last)
-                If CheckBox1.Checked Then
-                    If MainForm.imgDrvBootCriticalStatus(x) Then Continue For
-                End If
-                If CheckBox2.Checked Then
-                    If CBool(MainForm.imgDrvInbox(x)) Then Continue For
-                End If
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Yes", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Yes", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                            Case "ESN"
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sí", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sí", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                            Case "FRA"
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Oui", "Non"), If(MainForm.imgDrvBootCriticalStatus(x), "Oui", "Non"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                            Case "PTB", "PTG"
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sim", "Não"), If(MainForm.imgDrvBootCriticalStatus(x), "Sim", "Não"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                            Case "ITA"
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sì", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sì", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                        End Select
-                    Case 1
-                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Yes", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Yes", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                    Case 2
-                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sí", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sí", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                    Case 3
-                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Oui", "Non"), If(MainForm.imgDrvBootCriticalStatus(x), "Oui", "Non"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                    Case 4
-                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sim", "Não"), If(MainForm.imgDrvBootCriticalStatus(x), "Sim", "Não"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                    Case 5
-                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sì", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sì", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
-                End Select
+        If MainForm.imgDrivers.Count > 0 Then
+            For Each imgDriver In MainForm.imgDrivers
+                If CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
+                If CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
+                ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
             Next
-        Catch ex As Exception
-            Exit Try
-        End Try
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(MainForm.imgDrvPublishedNames, MainForm.imgDrvPublishedNames.Last)
+                    If CheckBox1.Checked Then
+                        If MainForm.imgDrvBootCriticalStatus(x) Then Continue For
+                    End If
+                    If CheckBox2.Checked Then
+                        If CBool(MainForm.imgDrvInbox(x)) Then Continue For
+                    End If
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Yes", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Yes", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                                Case "ESN"
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sí", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sí", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                                Case "FRA"
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Oui", "Non"), If(MainForm.imgDrvBootCriticalStatus(x), "Oui", "Non"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                                Case "PTB", "PTG"
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sim", "Não"), If(MainForm.imgDrvBootCriticalStatus(x), "Sim", "Não"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                                Case "ITA"
+                                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sì", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sì", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                            End Select
+                        Case 1
+                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Yes", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Yes", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                        Case 2
+                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sí", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sí", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                        Case 3
+                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Oui", "Non"), If(MainForm.imgDrvBootCriticalStatus(x), "Oui", "Non"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                        Case 4
+                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sim", "Não"), If(MainForm.imgDrvBootCriticalStatus(x), "Sim", "Não"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                        Case 5
+                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgDrvPublishedNames(x), Path.GetFileName(MainForm.imgDrvOGFileNames(x)), MainForm.imgDrvProviderNames(x), MainForm.imgDrvClassNames(x), If(CBool(MainForm.imgDrvInbox(x)), "Sì", "No"), If(MainForm.imgDrvBootCriticalStatus(x), "Sì", "No"), MainForm.imgDrvVersions(x), MainForm.imgDrvDates(x)}))
+                    End Select
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
     End Sub
 End Class
