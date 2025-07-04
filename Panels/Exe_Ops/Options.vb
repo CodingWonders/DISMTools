@@ -142,6 +142,7 @@ Public Class Options
         Else
             MainForm.SysNoRestart = False
         End If
+        MainForm.NoNTSamMappings = Not CheckBox23.Checked
         If CheckBox4.Checked Then
             MainForm.UseScratch = True
         Else
@@ -1813,6 +1814,7 @@ Public Class Options
         CheckBox22.Checked = MainForm.AutoCleanMounts
         CheckBox7.Checked = MainForm.ExpandedProgressPanel
         CheckBox21.Checked = MainForm.ShowDateAndTime
+        CheckBox23.Checked = Not MainForm.NoNTSamMappings
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

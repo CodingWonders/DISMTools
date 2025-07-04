@@ -272,6 +272,8 @@ Public Class MainForm
     Public LightThemeIndex As Integer = 1           ' Color theme index for light color scheme
     Public ShowDateAndTime As Boolean = True        ' Whether to show the date and time on the project view
 
+    Public NoNTSamMappings As Boolean = False       ' Whether to map AppX pckgdep SIDs with SIDs from system's SAM file
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1309,6 +1311,7 @@ Public Class MainForm
                 Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
                 QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
                 SysNoRestart = (CInt(ImgOpKey.GetValue("NoRestart")) = 1)
+                NoNTSamMappings = (CInt(ImgOpKey.GetValue("NoNTSamMappings")) = 1)
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1529,6 +1532,12 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoRestart=1") Then
                     SysNoRestart = True
                 End If
+                ' Detect whether to map NT account info with pckgdeps
+                If DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=0") Then
+                    NoNTSamMappings = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=1") Then
+                    NoNTSamMappings = True
+                End If
                 ' Detect whether to use scratch directory
                 If DTSettingForm.RichTextBox1.Text.Contains("UseScratch=0") Then
                     UseScratch = False
@@ -1724,6 +1733,7 @@ Public Class MainForm
                            "EnableDynaLog              =    " & EnableDynaLog & CrLf &
                            "ImgOperationMode           =    " & ImgOperationMode & CrLf &
                            "Quiet                      =    " & QuietOperations & CrLf &
+                           "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
                            "NoRestart                  =    " & SysNoRestart & CrLf &
                            "UseScratch                 =    " & UseScratch & CrLf &
                            "AutoScratch                =    " & AutoScrDir & CrLf &
@@ -4584,6 +4594,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
@@ -4659,6 +4670,7 @@ Public Class MainForm
         Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
         ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("NoRestart", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("NoNTSamMappings", 0, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4814,6 +4826,11 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
                 End If
+                If NoNTSamMappings Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
                 If UseScratch Then
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
@@ -4958,6 +4975,7 @@ Public Class MainForm
                     Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
                     ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
                     ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("NoNTSamMappings", If(NoNTSamMappings, 1, 0), RegistryValueKind.DWord)
                     ImgOpKey.Close()
                     DynaLog.LogMessage("Configuring scratch directory settings...")
                     Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")

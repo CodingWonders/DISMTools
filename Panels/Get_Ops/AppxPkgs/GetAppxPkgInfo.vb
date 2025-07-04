@@ -425,6 +425,18 @@ Public Class GetAppxPkgInfoDlg
                         Case 5
                             Label42.Text = "Sì"
                     End Select
+                    If MainForm.OnlineManagement AndAlso Not MainForm.NoNTSamMappings Then
+                        DynaLog.LogMessage("Online installation management mode has been detected and we're expected to map SAM information. Proceeding...")
+                        Try
+                            Dim profileFiles As New List(Of String)
+                            profileFiles = My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").ToList()
+                            If profileFiles.Count > 0 Then
+                                Label42.Text &= ":" & CrLf & SamHelper.MapPckgdepsToSamProfiles(profileFiles)
+                            End If
+                        Catch ex As Exception
+
+                        End Try
+                    End If
                 End If
             Else
                 Select Case MainForm.Language

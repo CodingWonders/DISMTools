@@ -172,6 +172,10 @@ Package 1 of 128</value>
   <metadata name="LogSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>233, 17</value>
   </metadata>
+  <data name="Label32.Text" xml:space="preserve">
+    <value>This is only available when managing active installations.
+When getting information about AppX packages, DISMTools can map the IDs and names of the local accounts in this system to tell you which users an application is registered to more precisely.</value>
+  </data>
   <data name="Label62.Text" xml:space="preserve">
     <value>DynaLog logging provides a method for saving diagnostic logs that can be used to help fix program issues, in case you encounter them. You can disable the logger using the toggle below, but it's not recommended.
 

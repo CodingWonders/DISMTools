@@ -854,6 +854,7 @@
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
+    <Compile Include="Utilities\SamHelper.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
     <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\DarkModeRenderer.vb" />
     <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\LightModeRenderer.vb" />
@@ -862,6 +863,7 @@
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
+    <Compile Include="Utilities\WMIHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
