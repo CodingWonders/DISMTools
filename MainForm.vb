@@ -612,8 +612,11 @@ Public Class MainForm
                            "(c) " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
         DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
         DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
-        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov" & CrLf &
-                           "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
+        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2025) & " Igor Pavlov" & CrLf &
+                           "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc." & CrLf &
+                           "  ZSTD Data Decompression: (c) Facebook, Inc. All rights reserved, (c) " & GetCopyrightTimespan(2023, 2025) & " Igor Pavlov" & CrLf &
+                           "  XXH64 Code: (c) " & GetCopyrightTimespan(2012, 2021) & " Yann Collet, (c) " & GetCopyrightTimespan(2023, 2025) & " Igor Pavlov" & CrLf &
+                           "  unRAR: (c) Alexander Roshal")        ' ugggghhhhhhh, why meta for zstd???
         DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
         DynaLog.LogMessage("- UnattendGen: " &
                            "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
