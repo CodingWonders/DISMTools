@@ -258,7 +258,7 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Function ApplyDsSettings() As Boolean
-        DynaLog.LogMessage("Applying services for Domain Services...")
+        DynaLog.LogMessage("Applying settings for Domain Services...")
         Try
             DynaLog.LogMessage("Specified Domain Name System (DNS) information:" & CrLf &
                                "- Primary DNS Suffix: " & dnsInfo.Suffix & CrLf &
@@ -276,6 +276,7 @@ Public Class ADDSJoinDialog
             Dim dnsXml As String = String.Format("<DNSDomain>{0}</DNSDomain>" & CrLf &
                                                  "<DNSSuffixSearchOrder>" & CrLf &
                                                  "    <DomainName wcm:action=" & Quote & "add" & Quote & " wcm:keyValue=" & Quote & "1" & Quote & ">{0}</DomainName>" & CrLf &
+                                                 "    <!-- Copy the line above this one, increase the value in wcm:keyValue by 1, and put a suffix name if you want more suffixes -->" & CrLf &
                                                  "</DNSSuffixSearchOrder>" & CrLf &
                                                  "<UseDomainNameDevolution>true</UseDomainNameDevolution>" & CrLf &
                                                  "<Interfaces>" & CrLf &
@@ -286,6 +287,7 @@ Public Class ADDSJoinDialog
                                                  "        <EnableAdapterDomainNameRegistration>true</EnableAdapterDomainNameRegistration>" & CrLf &
                                                  "        <DisableDynamicUpdate>false</DisableDynamicUpdate>" & CrLf &
                                                  "    </Interface>" & CrLf &
+                                                 "    <!-- Copy the whole Interface block above this line and configure it if you want to add more network adapters for which you want to set up DNS -->" & CrLf &
                                                  "</Interfaces>", dnsInfo.Suffix, dnsInfo.NicAlias, dnsServerSearchOrder)
             Dim dsXml As String = String.Format("<Identification>" & CrLf &
                                                 "    <JoinDomain>{0}</JoinDomain>" & CrLf &

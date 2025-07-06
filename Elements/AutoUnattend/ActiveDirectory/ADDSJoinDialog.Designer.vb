@@ -60,13 +60,13 @@ Partial Class ADDSJoinDialog
         Me.DS7_Header = New System.Windows.Forms.Label()
         Me.FooterContainer = New System.Windows.Forms.Panel()
         Me.ExpressPanelFooter = New System.Windows.Forms.Panel()
+        Me.DNS_Explanation_Link = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.Back_Button = New System.Windows.Forms.Button()
         Me.Next_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
-        Me.DNS_Explanation_Link = New System.Windows.Forms.LinkLabel()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -211,7 +211,8 @@ Partial Class ADDSJoinDialog
         Me.Label7.Size = New System.Drawing.Size(660, 33)
         Me.Label7.TabIndex = 4
         Me.Label7.Text = "The address in the first line will be the primary DNS server address, and any oth" & _
-    "er addresses will become alternative server addresses."
+    "er addresses will become alternative server addresses. You can put both IPv4 and" & _
+    " IPv6 addresses."
         '
         'Label6
         '
@@ -479,6 +480,18 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.Size = New System.Drawing.Size(784, 40)
         Me.ExpressPanelFooter.TabIndex = 0
         '
+        'DNS_Explanation_Link
+        '
+        Me.DNS_Explanation_Link.AutoSize = True
+        Me.DNS_Explanation_Link.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.DNS_Explanation_Link.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.DNS_Explanation_Link.Location = New System.Drawing.Point(12, 14)
+        Me.DNS_Explanation_Link.Name = "DNS_Explanation_Link"
+        Me.DNS_Explanation_Link.Size = New System.Drawing.Size(71, 13)
+        Me.DNS_Explanation_Link.TabIndex = 2
+        Me.DNS_Explanation_Link.TabStop = True
+        Me.DNS_Explanation_Link.Text = "What is DNS?"
+        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -545,18 +558,6 @@ Partial Class ADDSJoinDialog
         'ADDSInitBW
         '
         Me.ADDSInitBW.WorkerReportsProgress = True
-        '
-        'DNS_Explanation_Link
-        '
-        Me.DNS_Explanation_Link.AutoSize = True
-        Me.DNS_Explanation_Link.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.DNS_Explanation_Link.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.DNS_Explanation_Link.Location = New System.Drawing.Point(12, 14)
-        Me.DNS_Explanation_Link.Name = "DNS_Explanation_Link"
-        Me.DNS_Explanation_Link.Size = New System.Drawing.Size(71, 13)
-        Me.DNS_Explanation_Link.TabIndex = 2
-        Me.DNS_Explanation_Link.TabStop = True
-        Me.DNS_Explanation_Link.Text = "What is DNS?"
         '
         'ADDSJoinDialog
         '
