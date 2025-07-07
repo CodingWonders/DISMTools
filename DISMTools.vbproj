@@ -1898,6 +1898,14 @@ IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
 	xcopy "$(SolutionDir)Tools\DynaViewer\out\*.exe" "Tools\DynaViewer" /cehyi
 )
 
+:: Copy Tour
+IF EXIST "$(SolutionDir)tour" (
+	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)tour" /cehyi
+	IF EXIST "$(TargetDir)tour\.git" (rd "$(TargetDir)tour\.git" /s /q)
+	IF EXIST "$(TargetDir)tour\.vscode" (rd "$(TargetDir)tour\.vscode" /s /q)
+	IF EXIST "$(TargetDir)tour\.git*" (del "$(TargetDir)tour\.git*" /f /s /q)
+)
+
 IF NOT EXIST AutoUnattend (
 	md AutoUnattend
 	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
