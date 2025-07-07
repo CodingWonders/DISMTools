@@ -1900,10 +1900,10 @@ IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
 
 :: Copy Tour
 IF EXIST "$(SolutionDir)tour" (
-	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)tour" /cehyi
-	IF EXIST "$(TargetDir)tour\.git" (rd "$(TargetDir)tour\.git" /s /q)
-	IF EXIST "$(TargetDir)tour\.vscode" (rd "$(TargetDir)tour\.vscode" /s /q)
-	IF EXIST "$(TargetDir)tour\.git*" (del "$(TargetDir)tour\.git*" /f /s /q)
+	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
+	IF EXIST "$(TargetDir)docs\tour\.git" (rd "$(TargetDir)docs\tour\.git" /s /q)
+	IF EXIST "$(TargetDir)docs\tour\.vscode" (rd "$(TargetDir)docstour\.vscode" /s /q)
+	IF EXIST "$(TargetDir)docs\tour\.git*" (del "$(TargetDir)docs\tour\.git*" /f /s /q)
 )
 
 IF NOT EXIST AutoUnattend (
