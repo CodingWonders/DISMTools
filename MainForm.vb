@@ -17620,4 +17620,11 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
     End Sub
+
+    Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click
+        If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+            DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+            Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+        End If
+    End Sub
 End Class
