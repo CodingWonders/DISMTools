@@ -50,6 +50,42 @@ function Invoke-ServerAuthentication {
     return [ServerAuthentication]::new($ip, $port, $user, $password)
 }
 
+function Get-SystemArchitecture
+{
+    # Detect CPU architecture and compare with list
+    switch (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture).ToString())
+    {
+        "0"{
+            return "i386"
+        }
+        "1"{
+            return "mips"
+        }
+        "2"{
+            return "alpha"
+        }
+        "3"{
+            return "powerpc"
+        }
+        "5"{
+            return "arm"
+        }
+        "6"{
+            return "ia64"
+        }
+        "9"{
+            return "amd64"
+        }
+        "12" {
+            return "aarch64"
+        }
+        default {
+            return ""
+        }
+    }
+    return ""
+}
+
 function Get-Disks
 {
     <#
