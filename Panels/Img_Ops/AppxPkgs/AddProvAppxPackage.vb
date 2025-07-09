@@ -6,6 +6,7 @@ Imports System.Xml
 Imports System.Xml.Serialization
 
 Public Class AddProvAppxPackage
+    Implements IImageTaskDialog
 
     ' Variables used by the AppX scanner component
     Dim AppxNameList As New List(Of String)
@@ -261,7 +262,46 @@ Public Class AddProvAppxPackage
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
+        If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+            Return True
+        Else
+            DynaLog.LogMessage("The image is not supported")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
+                        Case "ITA"
+                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
+                Case 5
+                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
+            End Select
+            Return False
+        End If
+    End Function
+
     Private Sub AddProvAppxPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         ComboBox1.Items.Clear()
         Select Case MainForm.Language
             Case 0

@@ -12534,202 +12534,22 @@ Public Class MainForm
     End Sub
 
     Private Sub RemovePackage_Click(sender As Object, e As EventArgs) Handles RemovePackage.Click
-        DynaLog.LogMessage("Opening package removal dialog...")
-        RemPackage.CheckedListBox1.Items.Clear()
-        If Not CompletedTasks(0) Then
-            DynaLog.LogMessage("Package background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding packages to arrays...")
-        If imgPackages.Count > 0 Then
-            For Each imgPackage In imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
-                RemPackage.CheckedListBox1.Items.Add(imgPackage.PackageName)
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                    If imgPackageNames(x) = "" Then
-                        Continue For
-                    End If
-                    RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
-        End If
         RemPackage.ShowDialog()
     End Sub
 
     Private Sub EnableFeature_Click(sender As Object, e As EventArgs) Handles EnableFeature.Click
-        DynaLog.LogMessage("Opening feature enablement dialog...")
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        If imgFeatures.Count > 0 Then
-            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(feature.State)).ToList()
-                EnableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                    If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                        Continue For
-                    End If
-                    EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
-        End If
         EnableFeat.ShowDialog()
     End Sub
 
     Private Sub DisableFeature_Click(sender As Object, e As EventArgs) Handles DisableFeature.Click
-        DynaLog.LogMessage("Opening feature disablement dialog...")
-        DisableFeat.ListView1.Items.Clear()
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        If imgFeatures.Count > 0 Then
-            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).ToList()
-                DisableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                    If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                        Continue For
-                    End If
-                    DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
-        End If
         DisableFeat.ShowDialog()
     End Sub
 
     Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-            AddProvAppxPackage.ShowDialog()
-        Else
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddProvAppxPackage.ShowDialog()
     End Sub
 
     Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        RemProvAppxPackage.ListView1.Items.Clear()
-        If Not CompletedTasks(2) Then
-            DynaLog.LogMessage("AppX package background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding AppX packages to arrays...")
-        If imgAppxPackageNames.Count > imgAppxPackages.Count Then
-            Try
-                For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                    If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
-                        Continue For
-                    Else
-                        If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                            If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                            Else
-                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                            End If
-                        Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        End If
-                    End If
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-            End Try
-        Else
-            For Each imgAppxPackage In imgAppxPackages
-                Dim isRegistered As Boolean
-                If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
-                    If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                        isRegistered = False
-                    Else
-                        isRegistered = True
-                    End If
-                Else
-                    isRegistered = False
-                End If
-                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
-            Next
-        End If
         RemProvAppxPackage.ShowDialog()
     End Sub
 
@@ -12938,209 +12758,18 @@ Public Class MainForm
     End Sub
 
     Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        AddCapabilities.ListView1.Items.Clear()
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        If imgCapabilities.Count > 0 Then
-            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).ToList()
-                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                    If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
-                        Continue For
-                    End If
-                    AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
         AddCapabilities.ShowDialog()
     End Sub
 
     Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        RemCapabilities.ListView1.Items.Clear()
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        If imgCapabilities.Count > 0 Then
-            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Removed, DismPackageFeatureState.NotPresent, DismPackageFeatureState.Staged}.Contains(capability.State)).ToList()
-                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                    If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
-                        Continue For
-                    End If
-                    RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
         RemCapabilities.ShowDialog()
     End Sub
 
     Private Sub AddDriver_Click(sender As Object, e As EventArgs) Handles AddDriver.Click
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If Not OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed. Continuing with the task...")
-            AddDrivers.ShowDialog()
-        Else
-            DynaLog.LogMessage("The active installation is being managed. This is not supported.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddDrivers.ShowDialog()
     End Sub
 
     Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
-        RemDrivers.ListView1.Items.Clear()
-        If Not CompletedTasks(4) Then
-            DynaLog.LogMessage("Device driver background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding device drivers to arrays...")
-        If imgDrivers.Count > 0 Then
-            For Each imgDriver In imgDrivers
-                If RemDrivers.CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
-                If RemDrivers.CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
-                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
-                    If RemDrivers.CheckBox1.Checked Then
-                        If imgDrvBootCriticalStatus(x) Then Continue For
-                    End If
-                    If RemDrivers.CheckBox2.Checked Then
-                        If CBool(imgDrvInbox(x)) Then Continue For
-                    End If
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "ESN"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "FRA"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "PTB", "PTG"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "ITA"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            End Select
-                        Case 1
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 2
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 3
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 4
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 5
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    End Select
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
         RemDrivers.ShowDialog()
     End Sub
 
@@ -14124,57 +13753,11 @@ Public Class MainForm
     End Sub
 
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
-        DynaLog.LogMessage("Opening volume image removal dialog...")
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
-        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-            If MountedImageMountDirs(x) = MountDir Then
-                ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
-                Exit For
-            End If
-        Next
         ImgIndexDelete.ShowDialog()
     End Sub
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
-        DynaLog.LogMessage("Opening image index switch dialog...")
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
-        DynaLog.LogMessage("Getting image indexes...")
-        ProgressPanel.OperationNum = 995
-        PleaseWaitDialog.indexesSourceImg = SourceImg
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-        End Select
-        PleaseWaitDialog.ShowDialog(Me)
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
-        If PleaseWaitDialog.imgIndexes > 1 Then
-            DynaLog.LogMessage("This image has more than 1 index. Switching is possible.")
-            ImgIndexSwitch.ShowDialog()
-        End If
+        ImgIndexSwitch.ShowDialog()
     End Sub
 
     Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
@@ -14677,32 +14260,14 @@ Public Class MainForm
     End Sub
 
     Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
-        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         GetWinPESettings.ShowDialog()
     End Sub
 
     Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
-        DynaLog.LogMessage("Opening target path configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPETargetPath.ShowDialog()
     End Sub
 
     Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
-        DynaLog.LogMessage("Opening scratch space configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPEScratchSpace.ShowDialog()
     End Sub
 
@@ -14936,43 +14501,7 @@ Public Class MainForm
 #Region "Common Task button functionality in new design"
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
-        DynaLog.LogMessage("Opening image index switch dialog...")
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
-        ProgressPanel.OperationNum = 995
-        PleaseWaitDialog.indexesSourceImg = SourceImg
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-        End Select
-        PleaseWaitDialog.ShowDialog(Me)
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
-        If PleaseWaitDialog.imgIndexes > 1 Then
-            DynaLog.LogMessage("This image has more than 1 index. Switching is possible.")
-            ImgIndexSwitch.ShowDialog()
-        End If
+        ImgIndexSwitch.ShowDialog()
     End Sub
 
     Private Sub Button25_Click(sender As Object, e As EventArgs) Handles Button25.Click
@@ -15093,31 +14622,6 @@ Public Class MainForm
     End Sub
 
     Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
-        DynaLog.LogMessage("Opening package removal dialog...")
-        RemPackage.CheckedListBox1.Items.Clear()
-        If Not CompletedTasks(0) Then
-            DynaLog.LogMessage("Package background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding packages to arrays...")
-        If imgPackages.Count > 0 Then
-            For Each imgPackage In imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
-                RemPackage.CheckedListBox1.Items.Add(imgPackage.PackageName)
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                    If imgPackageNames(x) = "" Then
-                        Continue For
-                    End If
-                    RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
-        End If
         RemPackage.ShowDialog()
     End Sub
 
@@ -15189,61 +14693,10 @@ Public Class MainForm
     End Sub
 
     Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
-        DynaLog.LogMessage("Opening feature disablement dialog...")
-        DisableFeat.ListView1.Items.Clear()
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        If imgFeatures.Count > 0 Then
-            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).ToList()
-                DisableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                    If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                        Continue For
-                    End If
-                    DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
-        End If
         DisableFeat.ShowDialog()
     End Sub
 
     Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
-        DynaLog.LogMessage("Opening feature enablement dialog...")
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        If imgFeatures.Count > 0 Then
-            For Each imgFeature In imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(feature.State)).ToList()
-                EnableFeat.ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                    If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                        Continue For
-                    End If
-                    EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
-        End If
         EnableFeat.ShowDialog()
     End Sub
 
@@ -15266,115 +14719,11 @@ Public Class MainForm
     End Sub
 
     Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        RemProvAppxPackage.ListView1.Items.Clear()
-        If Not CompletedTasks(2) Then
-            DynaLog.LogMessage("AppX package background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding AppX packages to arrays...")
-        If imgAppxPackageNames.Count > imgAppxPackages.Count Then
-            Try
-                For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                    If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
-                        Continue For
-                    Else
-                        If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                            If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                            Else
-                                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                            End If
-                        Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        End If
-                    End If
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-            End Try
-        Else
-            For Each imgAppxPackage In imgAppxPackages
-                Dim isRegistered As Boolean
-                If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
-                    If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                        isRegistered = False
-                    Else
-                        isRegistered = True
-                    End If
-                Else
-                    isRegistered = False
-                End If
-                RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
-            Next
-        End If
         RemProvAppxPackage.ShowDialog()
     End Sub
 
     Private Sub Button44_Click(sender As Object, e As EventArgs) Handles Button44.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-            AddProvAppxPackage.ShowDialog()
-        Else
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddProvAppxPackage.ShowDialog()
     End Sub
 
     Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
@@ -15464,118 +14813,10 @@ Public Class MainForm
     End Sub
 
     Private Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        RemCapabilities.ListView1.Items.Clear()
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        If imgCapabilities.Count > 0 Then
-            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Removed, DismPackageFeatureState.NotPresent, DismPackageFeatureState.Staged}.Contains(capability.State)).ToList()
-                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                    If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
-                        Continue For
-                    End If
-                    RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
         RemCapabilities.ShowDialog()
     End Sub
 
     Private Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        AddCapabilities.ListView1.Items.Clear()
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        If imgCapabilities.Count > 0 Then
-            For Each imgCapability In imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).ToList()
-                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                    If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
-                        Continue For
-                    End If
-                    AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
         AddCapabilities.ShowDialog()
     End Sub
 
@@ -15665,58 +14906,6 @@ Public Class MainForm
     End Sub
 
     Private Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
-        RemDrivers.ListView1.Items.Clear()
-        If Not CompletedTasks(4) Then
-            DynaLog.LogMessage("Device driver background processes haven't completed.")
-            BGProcsBusyDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding device drivers to arrays...")
-        If imgDrivers.Count > 0 Then
-            For Each imgDriver In imgDrivers
-                If RemDrivers.CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
-                If RemDrivers.CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
-                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
-                    If RemDrivers.CheckBox1.Checked Then
-                        If imgDrvBootCriticalStatus(x) Then Continue For
-                    End If
-                    If RemDrivers.CheckBox2.Checked Then
-                        If CBool(imgDrvInbox(x)) Then Continue For
-                    End If
-                    Select Case Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "ESN"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "FRA"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "PTB", "PTG"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                                Case "ITA"
-                                    RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            End Select
-                        Case 1
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 2
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 3
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 4
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                        Case 5
-                            RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    End Select
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
         RemDrivers.ShowDialog()
     End Sub
 
@@ -15759,38 +14948,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If Not OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed. Continuing with the task...")
-            AddDrivers.ShowDialog()
-        Else
-            DynaLog.LogMessage("The active installation is being managed. This is not supported.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddDrivers.ShowDialog()
     End Sub
 
     Private Sub Button54_Click(sender As Object, e As EventArgs) Handles Button54.Click
@@ -15814,12 +14972,6 @@ Public Class MainForm
     End Sub
 
     Private Sub Button55_Click(sender As Object, e As EventArgs) Handles Button55.Click
-        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         GetWinPESettings.ShowDialog()
     End Sub
 
@@ -15841,22 +14993,10 @@ Public Class MainForm
     End Sub
 
     Private Sub Button57_Click(sender As Object, e As EventArgs) Handles Button57.Click
-        DynaLog.LogMessage("Opening target path configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPETargetPath.ShowDialog()
     End Sub
 
     Private Sub Button58_Click(sender As Object, e As EventArgs) Handles Button58.Click
-        DynaLog.LogMessage("Opening scratch space configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPEScratchSpace.ShowDialog()
     End Sub
 
@@ -16194,37 +15334,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ImportDriver_Click(sender As Object, e As EventArgs) Handles ImportDriver.Click
-        If Not OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed right now. Continuing...")
-            ImportDrivers.ShowDialog()
-        Else
-            DynaLog.LogMessage("This image is not supported.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        ImportDrivers.ShowDialog()
     End Sub
 
     Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
@@ -16250,42 +15360,7 @@ Public Class MainForm
     End Function
 
     Private Sub SetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.Click
-        If OnlineManagement Then
-            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
-            If Not CheckOSUninstallCapability() Then
-                DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
-                OSNoRollbackErrorDlg.ShowDialog(Me)
-                Exit Sub
-            End If
-            SetOSUninstWindow.ShowDialog()
-        Else
-            DynaLog.LogMessage("The active installation is not being managed right now.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        SetOSUninstWindow.ShowDialog()
     End Sub
 
     Private Sub GetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.Click

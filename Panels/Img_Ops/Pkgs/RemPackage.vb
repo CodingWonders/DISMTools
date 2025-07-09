@@ -1,8 +1,10 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Public Class RemPackage
+    Implements IImageTaskDialog
 
     Public pkgRemovalCount As Integer
     Public pkgRemovalNames(65535) As String
@@ -130,7 +132,39 @@ Public Class RemPackage
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening package removal dialog...")
+        CheckedListBox1.Items.Clear()
+        If Not MainForm.CompletedTasks(0) Then
+            DynaLog.LogMessage("Package background processes haven't completed.")
+            BGProcsBusyDialog.ShowDialog(Me)
+            Return False
+        End If
+        DynaLog.LogMessage("Adding packages to arrays...")
+        If MainForm.imgPackages.Count > 0 Then
+            For Each imgPackage In MainForm.imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
+                CheckedListBox1.Items.Add(imgPackage.PackageName)
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(MainForm.imgPackageNames, MainForm.imgPackageNames.Last)
+                    If MainForm.imgPackageNames(x) = "" Then
+                        Continue For
+                    End If
+                    CheckedListBox1.Items.Add(MainForm.imgPackageNames(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
+        Return True
+    End Function
+
     Private Sub RemPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

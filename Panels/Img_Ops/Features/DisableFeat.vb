@@ -1,6 +1,9 @@
 ﻿Imports System.Windows.Forms
+Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class DisableFeat
+    Implements IImageTaskDialog
 
     Public featDisablementCount As Integer
     Public featDisablementNames(65535) As String
@@ -77,7 +80,39 @@ Public Class DisableFeat
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening feature disablement dialog...")
+        ListView1.Items.Clear()
+        If Not MainForm.CompletedTasks(1) Then
+            DynaLog.LogMessage("Feature background processes haven't completed.")
+            BGProcsBusyDialog.ShowDialog(Me)
+            Return False
+        End If
+        DynaLog.LogMessage("Adding features to arrays...")
+        If MainForm.imgFeatures.Count > 0 Then
+            For Each imgFeature In MainForm.imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).ToList()
+                ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(MainForm.imgFeatureNames, MainForm.imgFeatureNames.Last)
+                    If MainForm.imgFeatureState(x).Contains("Disable") Or MainForm.imgFeatureState(x) = "" Or MainForm.imgFeatureState(x) = "Nothing" Then
+                        Continue For
+                    End If
+                    ListView1.Items.Add(MainForm.imgFeatureNames(x)).SubItems.Add(MainForm.imgFeatureState(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
+        Return True
+    End Function
+
     Private Sub DisableFeat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

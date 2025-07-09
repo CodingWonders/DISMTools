@@ -1,7 +1,10 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.IO
+Imports DISMTools.Utilities
 
 Public Class RemProvAppxPackage
+    Implements IImageTaskDialog
 
     Public AppxRemovalPackages(65535) As String
     Public AppxRemovalFriendlyNames(65535) As String
@@ -122,7 +125,87 @@ Public Class RemProvAppxPackage
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
+        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
+                        Case "ITA"
+                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
+                Case 5
+                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
+            End Select
+            Return False
+        End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+        ListView1.Items.Clear()
+        If Not MainForm.CompletedTasks(2) Then
+            DynaLog.LogMessage("AppX package background processes haven't completed.")
+            BGProcsBusyDialog.ShowDialog(Me)
+            Return False
+        End If
+        DynaLog.LogMessage("Adding AppX packages to arrays...")
+        If MainForm.imgAppxPackageNames.Count > MainForm.imgAppxPackages.Count Then
+            Try
+                For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
+                    If MainForm.imgAppxPackageNames(x) = "" Or MainForm.imgAppxPackageNames(x) = "Nothing" Then
+                        Continue For
+                    Else
+                        If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)) Then
+                            If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "No"}))
+                            Else
+                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "Yes"}))
+                            End If
+                        Else
+                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "No"}))
+                        End If
+                    End If
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+            End Try
+        Else
+            For Each imgAppxPackage In MainForm.imgAppxPackages
+                Dim isRegistered As Boolean
+                If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
+                    If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                        isRegistered = False
+                    Else
+                        isRegistered = True
+                    End If
+                Else
+                    isRegistered = False
+                End If
+                ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
+            Next
+        End If
+        Return True
+    End Function
+
     Private Sub RemProvAppxPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

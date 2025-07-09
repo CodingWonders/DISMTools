@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 
 Public Class ImgIndexSwitch
+    Implements IImageTaskDialog
 
     Public indexNames(1024) As String
 
@@ -35,7 +36,47 @@ Public Class ImgIndexSwitch
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening image index switch dialog...")
+        DynaLog.LogMessage("Stopping mounted image detector...")
+        MainForm.StopMountedImageDetector()
+        DynaLog.LogMessage("Getting image indexes...")
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = MainForm.SourceImg
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
+                    Case "ITA"
+                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
+            Case 5
+                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
+        End Select
+        PleaseWaitDialog.ShowDialog(Me)
+        MainForm.StartMountedImageDetector()
+        Return (PleaseWaitDialog.imgIndexes > 1)
+    End Function
+
     Private Sub ImgIndexSwitch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

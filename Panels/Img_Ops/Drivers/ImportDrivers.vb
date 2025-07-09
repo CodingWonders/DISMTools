@@ -4,6 +4,7 @@ Imports DISMTools.Utilities
 Imports Microsoft.Dism
 
 Public Class ImportDrivers
+    Implements IImageTaskDialog
 
     Dim DIList As New List(Of DriveInfo)
     Dim ImportSourceInt As Integer = -1
@@ -103,7 +104,44 @@ Public Class ImportDrivers
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        If Not MainForm.OnlineManagement Then
+            DynaLog.LogMessage("The active installation is not being managed right now. Continuing...")
+        Else
+            DynaLog.LogMessage("This image is not supported.")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
+                        Case "ITA"
+                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
+                Case 5
+                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+        Return Not MainForm.OnlineManagement
+    End Function
+
     Private Sub ImportDrivers_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         ComboBox1.Items.Clear()
         ComboBox1.SelectedText = ""
         Select Case MainForm.Language
