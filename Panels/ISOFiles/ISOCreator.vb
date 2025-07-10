@@ -406,6 +406,10 @@ Public Class ISOCreator
                             Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
                     End Select
                     Close()
+                Else
+                    If MainForm.DetectPossibleADKs() = 1 Then
+                        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"), "/add HKLM\Software\Microsoft\WIMMount /v AdkInstallation /t REG_DWORD /d 1 /f").WaitForExit()
+                    End If
                 End If
             Else
                 Close()
