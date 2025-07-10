@@ -72,10 +72,13 @@ OutputBaseFilename=dt_setup
 Compression=lzma
 SolidCompression=yes
 DisableWelcomePage=no
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesInstallIn64BitMode=x64os
 CloseApplications=yes
 SetupIconFile=dt_inst.ico
 UninstallFilesDir={#pfDir}
+
+; Disable some warnings
+UsedUserAreasWarning=no
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
@@ -217,7 +220,7 @@ Filename: "{#pfDir}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringCh
 
 [UninstallRun]
 ; Ends wimserv, as it causes log files to not be deleted
-Filename: "{cmd}"; Parameters: "/C qprocess wimserv.exe && if %ERRORLEVEL% equ 0 (taskkill /f /im wimserv.exe /t) else (exit 0)"; Flags: waituntilterminated runhidden
+RunOnceId: "EndWimServ"; Filename: "{cmd}"; Parameters: "/C qprocess wimserv.exe && if %ERRORLEVEL% equ 0 (taskkill /f /im wimserv.exe /t) else (exit 0)"; Flags: waituntilterminated runhidden
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{#pfDir}\logs"
