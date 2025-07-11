@@ -45,4 +45,8 @@ Public Class SplashScreen
             WindowState = FormWindowState.Normal
         End If
     End Sub
+
+    Private Sub SplashScreen_Paint(sender As Object, e As PaintEventArgs) Handles MyBase.Paint
+        ControlPaint.DrawBorder(e.Graphics, ClientRectangle, Color.FromArgb(53, 153, 41), ButtonBorderStyle.Solid)
+    End Sub
 End Class
