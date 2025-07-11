@@ -983,21 +983,19 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where the PE Helper could apply the installation image to the wrong volume if it had been assigned drive letter C (#262, thanks @Real-MullaC for spotting)
-- Fixed an issue where the WDS Helper Server would not export installation images to "install.wim" if they were named differently in WDS
+- The fixed disk configuration routine code from the PE Helper has been ported to the WDS Helper Client
 
 New features:
 
-- The WDS Helper server component now offers a web dashboard
-- The ISO creator can now download and install the latest version of the Windows ADK (10.1.26100.2454) for you if it can't find it on your system
-- The default size of the ISO creator has been increased to 1280x720
-- The PE Helper now adds the `WinPE-StorageWMI` packages to the Preinstallation Environment
-- The command line can now be accessed from the main menu when you boot to the ISO file or when you start the boot image via WDS 
-- A new command-line alias, "netinit", now lets you initialize the networking stack and enable the firewall on demand; and other administration scripts are now included
-- DynaLog now logs process IDs
-- Markdig has been updated to version 0.41.3
-- CODE: more LINQ queries have been introduced
-- CODE: a new progress reporter module has been introduced. This is used by the ISO creator, but is expected to be used in other places as well</value>
+- A Web-based Tour has been introduced. With this tour, DISMTools now follows a more interactive approach for people that are getting started
+- The Driver Installation Module (DIM) is now added to the Windows PE image directly, allowing you to use it when booting to it via the network
+- You can now configure your answer file to make devices join an Active Directory domain more easily
+- DISMTools now uses PNPUTIL to remove drivers on active installations
+- DISMTools can now map AppX package registrations on active systems to local users in the system
+- CODE: background processes have been refactored to use new list items
+- CODE: startup code in most image task dialogs has been moved to "IImageTaskDialog" interface implementations
+- 7-Zip has been updated to version 25.00
+- The installer is now built using Inno Setup 6.4.3</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
