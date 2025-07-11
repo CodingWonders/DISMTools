@@ -11,7 +11,7 @@ Public Class SplashScreen
                                           MainForm.dtBranch,
                                           RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
         If MainForm.dtBranch.Contains("pre") Then
-            LogoPic.Image = My.Resources.dt_branding_preview
+            'LogoPic.Image = My.Resources.dt_branding_preview
             VersionLabel.Visible = True
         End If
         Try
