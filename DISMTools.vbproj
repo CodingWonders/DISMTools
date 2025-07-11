@@ -128,6 +128,7 @@
     <Reference Include="System.Design">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -216,6 +217,13 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
+      <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
     <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
@@ -846,6 +854,7 @@
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
+    <Compile Include="Utilities\SamHelper.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
     <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\DarkModeRenderer.vb" />
     <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\LightModeRenderer.vb" />
@@ -854,9 +863,13 @@
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
+    <Compile Include="Utilities\WMIHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
+      <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Help\HelpBrowserForm.resx">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1472,6 +1485,7 @@
     <None Include="Resources\last_element.png" />
     <None Include="Resources\add_element.png" />
     <None Include="Resources\remove_element.png" />
+    <None Include="Resources\ad_ds.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1935,6 +1949,14 @@ IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
 IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
 	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.*" "Tools\ThemeDesigner" /cehyi
 	del "Tools\ThemeDesigner\*.zip" /F /S /Q
+)
+
+:: Copy Tour
+IF EXIST "$(SolutionDir)tour" (
+	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
+	IF EXIST "$(TargetDir)docs\tour\.git" (rd "$(TargetDir)docs\tour\.git" /s /q)
+	IF EXIST "$(TargetDir)docs\tour\.vscode" (rd "$(TargetDir)docstour\.vscode" /s /q)
+	IF EXIST "$(TargetDir)docs\tour\.git*" (del "$(TargetDir)docs\tour\.git*" /f /s /q)
 )
 
 IF NOT EXIST AutoUnattend (

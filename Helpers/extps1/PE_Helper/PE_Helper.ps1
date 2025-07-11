@@ -633,6 +633,18 @@ function Start-PECustomization
             {
                 Write-Host "Could not prepare the system for graphical applications"
             }
+            try
+            {
+                Write-Host "CUSTOMIZATION STEP - Copy First-Party Tools" -BackgroundColor DarkGreen
+                Write-Host "Copying Driver Installation Module..."
+                New-Item -Path "$imagePath\Tools\DIM" -ItemType Directory | Out-Null
+                Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$imagePath\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                Write-Host "First-party tools have been successfully copied."
+            }
+            catch
+            {
+                Write-Host "Could not copy first-party tools."
+            }
         }
         try
         {

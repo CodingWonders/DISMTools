@@ -2,8 +2,11 @@
 Imports Microsoft.Win32
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class AddCapabilities
+    Implements IImageTaskDialog
 
     Dim capCount As Integer
     Dim capIds(65535) As String
@@ -206,7 +209,68 @@ Public Class AddCapabilities
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
+        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+            DynaLog.LogMessage("The image is not supported")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
+                        Case "ITA"
+                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
+                Case 5
+                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
+            End Select
+            Return False
+        End If
+        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
+        ListView1.Items.Clear()
+        If Not MainForm.CompletedTasks(3) Then
+            DynaLog.LogMessage("Capability background processes haven't completed.")
+            BGProcsBusyDialog.ShowDialog(Me)
+            Return False
+        End If
+        DynaLog.LogMessage("Adding capabilities to arrays...")
+        If MainForm.imgCapabilities.Count > 0 Then
+            For Each imgCapability In MainForm.imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).ToList()
+                ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(MainForm.imgCapabilityIds, MainForm.imgCapabilityIds.Last)
+                    If MainForm.imgCapabilityState(x) = "Installed" Or MainForm.imgCapabilityState(x) = "Install Pending" Then
+                        Continue For
+                    End If
+                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgCapabilityIds(x), MainForm.imgCapabilityState(x)}))
+                Next
+            Catch ex As Exception
+                Exit Try
+            End Try
+        End If
+        Return True
+    End Function
+
     Private Sub AddCapability_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -386,31 +450,6 @@ Public Class AddCapabilities
             Text = ""
             Win10Title.Visible = True
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label4.Text &= " Only not installed capabilities (" & ListView1.Items.Count & ") are shown"
-                    Case "ESN"
-                        Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
-                    Case "FRA"
-                        Label4.Text &= " Seules les capacités non installées (" & ListView1.Items.Count & ") sont représentées"
-                    Case "PTB", "PTG"
-                        Label4.Text &= " Só são mostradas as capacidades não instaladas (" & ListView1.Items.Count & ")"
-                    Case "ITA"
-                        Label4.Text &= " Sono mostrate solo le funzionalità non installate (" & ListView1.Items.Count & ")"
-                End Select
-            Case 1
-                Label4.Text &= " Only not installed capabilities (" & ListView1.Items.Count & ") are shown"
-            Case 2
-                Label4.Text &= " Solo las funcionalidades no instaladas (" & ListView1.Items.Count & ") son mostradas"
-            Case 3
-                Label4.Text &= " Seules les capacités non installées (" & ListView1.Items.Count & ") sont représentées"
-            Case 4
-                Label4.Text &= " Só são mostradas as capacidades não instaladas (" & ListView1.Items.Count & ")"
-            Case 5
-                Label4.Text &= " Sono mostrate solo le funzionalità non installate (" & ListView1.Items.Count & ")"
-        End Select
         Win10Title.BackColor = CurrentTheme.BackgroundColor
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

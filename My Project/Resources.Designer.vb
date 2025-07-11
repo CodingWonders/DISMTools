@@ -93,6 +93,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property ad_ds() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ad_ds", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property add_appxpkg() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("add_appxpkg", resourceCulture)
@@ -2071,13 +2081,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where the PE Helper could apply the installation image to the wrong volume if it had been assigned drive letter C (#262, thanks @Real-MullaC for spotting)
-        '''- Fixed an issue where the WDS Helper Server would not export installation images to &quot;install.wim&quot; if they were named differently in WDS
+        '''- The fixed disk configuration routine code from the PE Helper has been ported to the WDS Helper Client
         '''
         '''New features:
         '''
-        '''- The WDS Helper server component now offers a web dashboard
-        '''- The ISO creator can now download and install the latest version of the Windows ADK (10.1.26100.2454) for  [resto de la cadena truncado]&quot;;.
+        '''- A Web-based Tour has been introduced. With this tour, DISMTools now follows a more interactive approach for people that are getting started
+        '''- The Driver Installation Module (DIM) is now added to the Windows PE image directly, allowing you to use it when booting to it via the network
+        '''- You can now configure your answer file to make devices join an Active Directory domai [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

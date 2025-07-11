@@ -766,26 +766,34 @@ Public Class ProgressPanel
     ''' <param name="FilePath">The path of the file to run</param>
     ''' <param name="CommandArguments">The command-line arguments to pass to the file to run</param>
     ''' <param name="WorkingDirectory">The directory the file is in. This is optional and can be set to fix issues with the file to open</param>
+    ''' <param name="DoNotRedirect">Determines whether to redirect output to console text area</param>
     ''' <remarks>Any logging is done with DynaLog</remarks>
-    Sub RunProcess(FilePath As String, CommandArguments As String, Optional WorkingDirectory As String = "")
+    Sub RunProcess(FilePath As String, CommandArguments As String, Optional WorkingDirectory As String = "", Optional DoNotRedirect As Boolean = False)
         Try
             DynaLog.LogMessage("Preparing to run process...")
             DynaLog.LogMessage("- Process path: " & Quote & FilePath & Quote)
             DynaLog.LogMessage("- Arguments: " & CommandArguments)
             DynaLog.LogMessage("- Working directory: " & Quote & WorkingDirectory & Quote)
+            DynaLog.LogMessage("- Process command without redirecting output to console? " & If(DoNotRedirect, "Yes", "No"))
             DISMProc.StartInfo.FileName = FilePath
             DISMProc.StartInfo.Arguments = CommandArguments
             If WorkingDirectory <> "" Then
                 DISMProc.StartInfo.WorkingDirectory = WorkingDirectory
             End If
-            If Debugger.IsAttached Then
+            If Debugger.IsAttached Or DoNotRedirect Then
                 DISMProc.StartInfo.CreateNoWindow = False
                 DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Normal
             Else
                 DISMProc.StartInfo.CreateNoWindow = True
                 DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             End If
-            DismExitCode = DISM_LogView.StartProcess(DISMProc.StartInfo.FileName, DISMProc.StartInfo.Arguments)
+            If DoNotRedirect Then
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                DismExitCode = DISMProc.ExitCode
+            Else
+                DismExitCode = DISM_LogView.StartProcess(DISMProc.StartInfo.FileName, DISMProc.StartInfo.Arguments)
+            End If
             DynaLog.LogMessage("Process finished with exit code " & Hex(DismExitCode))
         Catch ex As Exception
             DynaLog.LogMessage("Could not run process. Error message: " & ex.Message)
@@ -5453,8 +5461,31 @@ Public Class ProgressPanel
                                "Driver " & (x + 1) & " of " & drvRemovalCount)
             ' Get driver information
             ShowDriverInformationForRemoval(driverRemovalPackage)
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-driver /driver=" & Quote & driverRemovalPackage & Quote
-            RunProcess(DismProgram, CommandArgs)
+            DynaLog.LogMessage("Checking current operating mode...")
+            If OnlineMgmt Then
+                DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to delete the driver...")
+                DynaLog.LogMessage("Checking pnputil version...")
+                Try
+                    Dim pnputilVersionInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"))
+                    DynaLog.LogMessage("PNPUTIL version info: " & pnputilVersionInfo.FileVersion)
+                    If pnputilVersionInfo.FileMajorPart >= 10 Then
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 10 or newer.")
+                        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                   "/delete-driver " & driverRemovalPackage & " /force", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                    Else
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 8.")
+                        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                   "-f -d " & driverRemovalPackage, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                    End If
+                Catch ex As Exception
+                    DynaLog.LogMessage("An error occurred with this method. Error message: " & ex.Message & " (exit code " & Hex(ex.HResult) & "). Since it's our only way of removing drivers in this mode, signal an error message")
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                DynaLog.LogMessage("Online installation management mode not detected. Using DISM to delete the driver...")
+                CommandArgs &= " /image=" & targetImage & " /remove-driver /driver=" & Quote & driverRemovalPackage & Quote
+                RunProcess(DismProgram, CommandArgs)
+            End If
             LogView.AppendText(CrLf & "Getting error level...")
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then

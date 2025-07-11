@@ -7,6 +7,8 @@ Module ProgressReporter
     Private progressBarContainer As Panel
     Private progressBarCompletedProgress As Panel
 
+    Private ProgressMessage As String = ""
+
     Private Sub InitializeForm()
         progressForm = New Form With {
             .StartPosition = FormStartPosition.CenterScreen,
@@ -19,7 +21,8 @@ Module ProgressReporter
             .BackColor = CurrentTheme.BackgroundColor,
             .ForeColor = CurrentTheme.ForegroundColor,
             .ShowIcon = False,
-            .ShowInTaskbar = False
+            .ShowInTaskbar = False,
+            .Cursor = Cursors.WaitCursor
         }
         progressLabel = New Label With {
             .Left = 4,
@@ -75,18 +78,27 @@ Module ProgressReporter
     End Sub
 
     Public Sub Hide()
+        ProgressMessage = ""
         progressForm.Close()
     End Sub
 
-    Public Sub ReportProgress(sender As Object, Message As String, Optional Percentage As Double = -1)
+    Public Sub ReportProgress(sender As Object, Optional Message As String = "", Optional Percentage As Double = -1)
         If progressForm Is Nothing OrElse Not progressForm.Visible Then
             Show(sender)
         End If
-        progressLabel.Text = Message
+        If ProgressMessage <> "" Then
+            progressLabel.Text = ProgressMessage
+        Else
+            progressLabel.Text = Message
+        End If
         If Percentage >= 0 AndAlso (Not Percentage > 100) Then
             progressBarCompletedProgress.Width = progressBarContainer.Width * (Percentage / 100)
         End If
         progressForm.Refresh()
+    End Sub
+
+    Public Sub SetMessage(message As String)
+        ProgressMessage = message
     End Sub
 
 End Module

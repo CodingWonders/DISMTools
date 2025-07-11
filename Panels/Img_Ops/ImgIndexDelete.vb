@@ -6,6 +6,7 @@ Imports Microsoft.Dism
 Imports System.Threading
 
 Public Class ImgIndexDelete
+    Implements IImageTaskDialog
 
     Public IndexPositions(65535) As String
     Public IndexNames(65535) As String
@@ -125,7 +126,27 @@ Public Class ImgIndexDelete
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        Try
+            DynaLog.LogMessage("Opening volume image removal dialog...")
+            DynaLog.LogMessage("Stopping mounted image detector...")
+            MainForm.StopMountedImageDetector()
+            For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                    TextBox1.Text = MainForm.MountedImageImgFiles(x)
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+    End Function
+
     Private Sub ImgIndexDelete_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

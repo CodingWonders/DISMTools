@@ -3,6 +3,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
 
 Public Class SetPETargetPath
+    Implements IImageTaskDialog
 
     Sub GetTargetPath()
         Using reg As New Process
@@ -206,7 +207,20 @@ Public Class SetPETargetPath
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening target path configuration dialog...")
+        If MainForm.ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
+            BGProcsBusyDialog.ShowDialog()
+            Return False
+        End If
+        Return True
+    End Function
+
     Private Sub SetTargetPath_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

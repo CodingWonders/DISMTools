@@ -180,6 +180,7 @@ Partial Class Options
         Me.Label17 = New System.Windows.Forms.Label()
         Me.LightThemesCB = New System.Windows.Forms.ComboBox()
         Me.DarkThemesCB = New System.Windows.Forms.ComboBox()
+        Me.CheckBox21 = New System.Windows.Forms.CheckBox()
         Me.Panel17 = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.Panel18 = New System.Windows.Forms.Panel()
@@ -236,7 +237,8 @@ Partial Class Options
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.CheckBox21 = New System.Windows.Forms.CheckBox()
+        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.Label32 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1861,10 +1863,10 @@ Partial Class Options
         '
         'ValueContainer
         '
+        Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_Personalization)
         Me.ValueContainer.Controls.Add(Me.Options_Program)
         Me.ValueContainer.Controls.Add(Me.Options_Logs)
-        Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
         Me.ValueContainer.Controls.Add(Me.Options_Scratch)
         Me.ValueContainer.Controls.Add(Me.Options_Output)
         Me.ValueContainer.Controls.Add(Me.Options_BgProcs)
@@ -1981,6 +1983,16 @@ Partial Class Options
         Me.DarkThemesCB.Name = "DarkThemesCB"
         Me.DarkThemesCB.Size = New System.Drawing.Size(570, 23)
         Me.DarkThemesCB.TabIndex = 3
+        '
+        'CheckBox21
+        '
+        Me.CheckBox21.AutoSize = True
+        Me.CheckBox21.Location = New System.Drawing.Point(366, 71)
+        Me.CheckBox21.Name = "CheckBox21"
+        Me.CheckBox21.Size = New System.Drawing.Size(235, 19)
+        Me.CheckBox21.TabIndex = 5
+        Me.CheckBox21.Text = "Show date and time on the project view"
+        Me.CheckBox21.UseVisualStyleBackColor = True
         '
         'Panel17
         '
@@ -2309,13 +2321,15 @@ Partial Class Options
         'Panel6
         '
         Me.Panel6.Controls.Add(Me.CheckBox2)
+        Me.Panel6.Controls.Add(Me.Label32)
         Me.Panel6.Controls.Add(Me.Label19)
+        Me.Panel6.Controls.Add(Me.CheckBox23)
         Me.Panel6.Controls.Add(Me.CheckBox3)
         Me.Panel6.Controls.Add(Me.Label18)
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(748, 175)
+        Me.Panel6.Size = New System.Drawing.Size(748, 239)
         Me.Panel6.TabIndex = 0
         '
         'Panel7
@@ -2324,7 +2338,7 @@ Partial Class Options
         Me.Panel7.Controls.Add(Me.CheckBox14)
         Me.Panel7.Controls.Add(Me.Label48)
         Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
-        Me.Panel7.Location = New System.Drawing.Point(0, 175)
+        Me.Panel7.Location = New System.Drawing.Point(0, 239)
         Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(748, 172)
@@ -2610,15 +2624,24 @@ Partial Class Options
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
         '
-        'CheckBox21
+        'CheckBox23
         '
-        Me.CheckBox21.AutoSize = True
-        Me.CheckBox21.Location = New System.Drawing.Point(366, 71)
-        Me.CheckBox21.Name = "CheckBox21"
-        Me.CheckBox21.Size = New System.Drawing.Size(235, 19)
-        Me.CheckBox21.TabIndex = 5
-        Me.CheckBox21.Text = "Show date and time on the project view"
-        Me.CheckBox21.UseVisualStyleBackColor = True
+        Me.CheckBox23.AutoSize = True
+        Me.CheckBox23.Location = New System.Drawing.Point(21, 167)
+        Me.CheckBox23.Name = "CheckBox23"
+        Me.CheckBox23.Size = New System.Drawing.Size(346, 19)
+        Me.CheckBox23.TabIndex = 6
+        Me.CheckBox23.Text = "Map system accounts to application registration information"
+        Me.CheckBox23.UseVisualStyleBackColor = True
+        '
+        'Label32
+        '
+        Me.Label32.AutoEllipsis = True
+        Me.Label32.Location = New System.Drawing.Point(38, 188)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(687, 51)
+        Me.Label32.TabIndex = 8
+        Me.Label32.Text = resources.GetString("Label32.Text")
         '
         'Options
         '
@@ -2985,5 +3008,7 @@ Partial Class Options
     Friend WithEvents LightThemesCB As System.Windows.Forms.ComboBox
     Friend WithEvents DarkThemesCB As System.Windows.Forms.ComboBox
     Friend WithEvents CheckBox21 As System.Windows.Forms.CheckBox
+    Friend WithEvents Label32 As System.Windows.Forms.Label
+    Friend WithEvents CheckBox23 As System.Windows.Forms.CheckBox
 
 End Class

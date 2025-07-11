@@ -4,6 +4,7 @@ Imports Microsoft.Win32
 Imports System.ComponentModel
 
 Public Class GetWinPESettings
+    Implements IImageTaskDialog
 
     Sub GetPESettings()
         ' Mount the SOFTWARE and SYSTEM keys
@@ -140,7 +141,21 @@ Public Class GetWinPESettings
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
+        If MainForm.ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
+            BGProcsBusyDialog.ShowDialog()
+            Return False
+        End If
+        Return True
+    End Function
+
     Private Sub GetWinPESettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+            Exit Sub
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

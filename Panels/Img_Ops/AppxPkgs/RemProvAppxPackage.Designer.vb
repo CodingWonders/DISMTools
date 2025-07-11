@@ -38,7 +38,6 @@ Partial Class RemProvAppxPackage
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
@@ -124,7 +123,7 @@ Partial Class RemProvAppxPackage
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(12, 58)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(920, 366)
+        Me.ListView1.Size = New System.Drawing.Size(920, 387)
         Me.ListView1.TabIndex = 6
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -191,15 +190,6 @@ Partial Class RemProvAppxPackage
         Me.Label5.Text = "Otherwise, the application will not be provisioned for new users. Check the ""Regi" & _
     "stered to any user?"" column for more details"
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 431)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(262, 13)
-        Me.Label2.TabIndex = 7
-        Me.Label2.Text = "This image contains <ElementCount> AppX packages"
-        '
         'LinkLabel1
         '
         Me.LinkLabel1.AutoSize = True
@@ -226,7 +216,6 @@ Partial Class RemProvAppxPackage
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
-        Me.Controls.Add(Me.Label2)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
@@ -258,7 +247,6 @@ Partial Class RemProvAppxPackage
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
 
