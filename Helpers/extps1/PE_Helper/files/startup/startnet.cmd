@@ -16,10 +16,7 @@ if %debug% equ 1 (
 powershell -command Set-ExecutionPolicy Unrestricted
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 	powershell -file "%sysdrive%\menu.ps1"
-	if exist "%sysdrive%\netinstall" (
-		cd /d "%sysdrive%"\
-		powershell -file ".\pxehelpers\wds\wdshelper.ps1"
-	) else if exist "%sysdrive%\cmdcons" (
+	if exist "%sysdrive%\cmdcons" (
 		set debug=2
 	)
 )
