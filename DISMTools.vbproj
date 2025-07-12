@@ -1200,6 +1200,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\scripts\fullcopy.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\imagecapture.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
