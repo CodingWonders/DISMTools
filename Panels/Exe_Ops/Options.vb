@@ -293,7 +293,7 @@ Public Class Options
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
                 ' Delete registry key remnants
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "delete HKCR\DISMTools.Project /f").WaitForExit()
+                RegistryHelper.RemoveRegistryItem("HKCR\DISMTools.Project", "/f")
         End Select
         ' Clear icon cache
         DynaLog.LogMessage("Clearing icon cache with ie4uinit...")

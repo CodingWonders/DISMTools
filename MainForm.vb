@@ -2660,33 +2660,22 @@ Public Class MainForm
     End Sub
 
     Sub GetOfflineEditionAndInstIdFromRegistry()
-        Using reg As New Process
-            DynaLog.LogMessage("Loading installation registry...")
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\IMG_SOFT " & Quote & MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-            If reg.ExitCode <> 0 Then
-                DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(reg.ExitCode))
-                imgEdition = ""
-            Else
-                DynaLog.LogMessage("Getting values...")
-                Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
-                imgEdition = edReg.GetValue("EditionID", "").ToString()
-                imgInstType = edReg.GetValue("InstallationType", "").ToString()
-                DynaLog.LogMessage("Edition: " & imgEdition)
-                DynaLog.LogMessage("Installation type: " & imgInstType)
-                edReg.Close()
-            End If
-            DynaLog.LogMessage("Unloading installation registry...")
-            reg.StartInfo.Arguments = "unload HKLM\IMG_SOFT"
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-        End Using
+        DynaLog.LogMessage("Loading installation registry...")
+        Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\IMG_SOFT")
+        If regExitCode <> 0 Then
+            DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(regExitCode))
+            imgEdition = ""
+        Else
+            DynaLog.LogMessage("Getting values...")
+            Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
+            imgEdition = edReg.GetValue("EditionID", "").ToString()
+            imgInstType = edReg.GetValue("InstallationType", "").ToString()
+            DynaLog.LogMessage("Edition: " & imgEdition)
+            DynaLog.LogMessage("Installation type: " & imgInstType)
+            edReg.Close()
+        End If
+        DynaLog.LogMessage("Unloading installation registry...")
+        RegistryHelper.UnloadRegistryHive("HKLM\IMG_SOFT")
     End Sub
 
     ''' <summary>

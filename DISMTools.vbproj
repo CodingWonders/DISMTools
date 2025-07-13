@@ -249,6 +249,7 @@
     <Compile Include="Elements\SearchBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </Compile>
@@ -854,6 +855,7 @@
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
+    <Compile Include="Utilities\RegistryHelper.vb" />
     <Compile Include="Utilities\SamHelper.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
     <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\DarkModeRenderer.vb" />

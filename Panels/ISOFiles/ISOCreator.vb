@@ -408,7 +408,7 @@ Public Class ISOCreator
                     Close()
                 Else
                     If MainForm.DetectPossibleADKs() = 1 Then
-                        Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"), "/add HKLM\Software\Microsoft\WIMMount /v AdkInstallation /t REG_DWORD /d 1 /f").WaitForExit()
+                        RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\Software\Microsoft\WIMMount", "AdkInstallation", RegistryItem.ValueType.RegDword, "1"))
                     End If
                 End If
             Else
