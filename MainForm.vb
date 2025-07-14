@@ -265,6 +265,8 @@ Public Class MainForm
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
     Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
 
+    Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -935,6 +937,18 @@ Public Class MainForm
             If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
                 BeginOnlineManagement(False)
+            End If
+        End If
+
+        If IsFirstTime Then
+            Dim tourMessage As String = "Is this your first time using DISMTools? If so, we can help you get started with the Tour." & CrLf & CrLf &
+                "With the Tour, you can make your first Windows image and test it afterwards. You can follow the tour at any pace you prefer, and you can access it at any time by going to the Help menu." & CrLf & CrLf &
+                "Do you want to launch the Tour now?"
+            If MsgBox(tourMessage, vbYesNo + vbQuestion, "Getting Started with DISMTools") = MsgBoxResult.Yes Then
+                If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+                    DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+                    Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+                End If
             End If
         End If
     End Sub
