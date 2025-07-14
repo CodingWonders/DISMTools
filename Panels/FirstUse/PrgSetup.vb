@@ -355,6 +355,8 @@ Public Class PrgSetup
         TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log"
         MainForm.LogFile = TextBox2.Text
 
+        MainForm.IsFirstTime = True
+
         Next_Button.Left = 998
 
         ' Set color modes
