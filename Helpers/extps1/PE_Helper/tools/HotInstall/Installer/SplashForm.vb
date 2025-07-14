@@ -10,12 +10,22 @@ Public Class SplashForm
     Public TestMode As Boolean = Environment.GetCommandLineArgs().Contains("/test")
     Public TestBCD As Boolean = Environment.GetCommandLineArgs().Contains("/bcdtest")
 
+    Sub ChangeLanguage(LanguageCode As String)
+        If Not File.Exists(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini")) Then
+            LanguageCode = "en"
+        End If
+        LoadLanguageFile(Path.Combine(Application.StartupPath, "Languages", "lang_" & LanguageCode & ".ini"))
+        Label1.Text = GetValueFromLanguageData("SplashScreen.OSInstTitle")
+        Label2.Text = GetValueFromLanguageData("SplashScreen.OSInstStatus_StartingUp")
+    End Sub
+
     Private Sub SplashForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Load background image
         If File.Exists(Application.StartupPath & "\Resources\SplashScreen\background.jpg") Then
             BackgroundPicture = Image.FromFile(Application.StartupPath & "\Resources\SplashScreen\background.jpg")
             ResizeImage()
         End If
+        ChangeLanguage(My.Computer.Info.InstalledUICulture.TwoLetterISOLanguageName)
         ' Change status font size
         Dim ReferenceSize As Size = New Size(1024, 768)
         If Width <= ReferenceSize.Width AndAlso Height <= ReferenceSize.Height Then
@@ -98,7 +108,7 @@ Public Class SplashForm
 
     Private Sub SplashForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If SetupSuccess Then
-            Label2.Text = "Setup will continue after restarting your computer"
+            Label2.Text = GetValueFromLanguageData("SplashScreen.OSInstStatus_Restarting")
             Label2.Visible = True
             Refresh()
             If Not TestMode Then
