@@ -5258,15 +5258,41 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf &
                                    "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
             End If
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
-            If drvAdditionForceUnsigned Then
-                CommandArgs &= " /forceunsigned"
+            DynaLog.LogMessage("Checking current operating mode...")
+            Dim isRecursive As Boolean = (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x))
+            If OnlineMgmt Then
+                DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to add the driver...")
+                ' Much like deleting drivers with PNPUTIL, said tool changed syntax in Windows 10
+                DynaLog.LogMessage("Checking pnputil version...")
+                Dim pnpUtilArgs As String = ""
+                Try
+                    Dim pnputilVersionInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"))
+                    DynaLog.LogMessage("PNPUTIL version info: " & pnputilVersionInfo.FileVersion)
+                    If pnputilVersionInfo.FileMajorPart >= 10 Then
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 10 or newer.")
+                        pnpUtilArgs = String.Format("/add-driver {0} /install", If(isRecursive, Quote & drvAdditionPkgs(x) & "\*.inf" & Quote & " /subdirs", Quote & drvAdditionPkgs(x) & Quote))
+                    Else
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 8.")
+                        pnpUtilArgs = String.Format("-i -a {0}", If(isRecursive, Quote & drvAdditionPkgs(x) & "\*.inf" & Quote, Quote & drvAdditionPkgs(x) & Quote))
+                    End If
+                    RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                               pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                Catch ex As Exception
+                    DynaLog.LogMessage("An error occurred with this method. Error message: " & ex.Message & " (exit code " & Hex(ex.HResult) & "). Since it's our only way of removing drivers in this mode, signal an error message")
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                DynaLog.LogMessage("Online installation management mode not detected. Using DISM to add the driver...")
+                CommandArgs &= " /image=" & targetImage & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
+                If drvAdditionForceUnsigned Then
+                    CommandArgs &= " /forceunsigned"
+                End If
+                If isRecursive Then
+                    LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
+                    CommandArgs &= " /recurse"
+                End If
+                RunProcess(DismProgram, CommandArgs)
             End If
-            If (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
-                LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
-                CommandArgs &= " /recurse"
-            End If
-            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
