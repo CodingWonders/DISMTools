@@ -1,6 +1,7 @@
 ﻿Imports System.Threading
 Imports System.Net.NetworkInformation
 Imports Microsoft.VisualBasic.ControlChars
+Imports System.Text.RegularExpressions
 
 Public Class ADDSJoinDialog
 
@@ -59,6 +60,8 @@ Public Class ADDSJoinDialog
 
     Private dnsInfo As DnsInformation
     Private dsInfo As DomainInformation
+
+    Private dnsAddresses As String()
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         DialogResult = Windows.Forms.DialogResult.Cancel
@@ -263,7 +266,7 @@ Public Class ADDSJoinDialog
             DynaLog.LogMessage("Specified Domain Name System (DNS) information:" & CrLf &
                                "- Primary DNS Suffix: " & dnsInfo.Suffix & CrLf &
                                "- NIC (Network Adapter) Alias: " & dnsInfo.NicAlias & CrLf &
-                               "- Addresses: " & String.Join(", ", dnsInfo.DnsAddresses))
+                               "- Addresses: " & String.Join(", ", dnsInfo.DnsAddresses.Where(Function(address) Not String.IsNullOrEmpty(address)).ToArray()))
             DynaLog.LogMessage("Specified DS information: " & dsInfo.ToString())
             Dim dnsServerSearchOrder As String = "        <DNSServerSearchOrder>" & CrLf
             For Each Address In dnsInfo.DnsAddresses
@@ -330,5 +333,115 @@ Public Class ADDSJoinDialog
         MsgBox("DNS (short for Domain Name System) is a server role that automatically translates IP addresses to human-readable names." & CrLf & CrLf &
                "When you use this wizard, DISMTools assumes that either you or your system administrator have set up DNS on your network. If not, cancel this wizard and set it up.",
                vbOKOnly + vbInformation)
+    End Sub
+
+    Private Sub DnsSyntaxCheckerBtn_Click(sender As Object, e As EventArgs) Handles DnsSyntaxCheckerBtn.Click
+        If DnsValidatorBW.IsBusy Then
+            Exit Sub
+        End If
+        DnsSyntaxCheckerBtn.Enabled = False
+        dnsAddresses = RichTextBox1.Lines.Where(Function(address) Not String.IsNullOrEmpty(address)).ToArray()
+        DnsValidatorBW.RunWorkerAsync()
+    End Sub
+
+    Private Sub DnsValidatorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles DnsValidatorBW.DoWork
+        If dnsAddresses Is Nothing Then
+            Throw New Exception("Please provide DNS addresses to test")
+        End If
+        ProgressReporter.SetMessage("Checking DNS addresses...")
+        DnsValidatorBW.ReportProgress(0)
+        Dim dnsAddressValidationInfo As String = ""
+        Dim current As Integer = 1
+        Dim total As Integer = dnsAddresses.Count
+
+        ' Variables used for statistics
+        Dim InvalidAddresses As Integer = 0,
+            IPv4Addresses As Integer = 0,
+            GlobalIPv6Addresses As Integer = 0,
+            LinkLocalIPv6Addresses As Integer = 0,
+            UniqueLocalIPv6Addresses As Integer = 0
+        ' Ratio of valid to invalid. Ratio is calculated using the following formula: 
+        ' ((IPv4 + IPv6 + Link-Local IPv6 + Unique Local IPv6) / Total Address Count) * 100
+        ' Any site-local addresses will be treated as invalid for compatibility reasons with operating systems.
+        Dim ValidToInvalidAddressRatio As Double = 0.0
+        Dim InvalidAddressList As New List(Of String)       ' We'll have this to explain why the addresses are invalid to the user
+
+        For Each dnsAddress In dnsAddresses
+            ' Start testing them with regex patterns to determine if they are valid IPv4 or IPv6 addresses
+            DynaLog.LogMessage(String.Format("Checking address {0} of {1}...", current, total))
+            ProgressReporter.SetMessage(String.Format("Verifying syntax of DNS address {0} of {1}...", current, total))
+            DnsValidatorBW.ReportProgress(((current - 1) / total) * 100)
+            If Regex.IsMatch(dnsAddress, "^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$") Then    ' First, let's check IPv4
+                DynaLog.LogMessage("This is an IPv4 address.")
+                IPv4Addresses += 1
+            ElseIf Regex.IsMatch(dnsAddress, "^((?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,7}:|:(?::[0-9A-Fa-f]{1,4}){1,7}|(?:[0-9A-Fa-f]{1,4}:){1,6}:[0-9A-Fa-f]{1,4}|(?:[0-9A-Fa-f]{1,4}:){1,5}(?::[0-9A-Fa-f]{1,4}){1,2}|(?:[0-9A-Fa-f]{1,4}:){1,4}(?::[0-9A-Fa-f]{1,4}){1,3}|(?:[0-9A-Fa-f]{1,4}:){1,3}(?::[0-9A-Fa-f]{1,4}){1,4}|(?:[0-9A-Fa-f]{1,4}:){1,2}(?::[0-9A-Fa-f]{1,4}){1,5}|[0-9A-Fa-f]{1,4}:(?:(?::[0-9A-Fa-f]{1,4}){1,6})|:(?:(?::[0-9A-Fa-f]{1,4}){1,6}))$") Then   ' If it's not IPv4, we'll check IPv6. The pattern is very long, but so are IPv6 addresses
+                DynaLog.LogMessage("This is an IPv6 address.")
+                ' Before increasing values, we'll check our 48-bit prefix to uniquely associate the IPv6 address with our categories declared above.
+                ' We don't care about the whole string now, so the pattern is incredibly shorter.
+                If Regex.IsMatch(dnsAddress, "^fe(8|9|a|b).*") Then     ' Link-Local pattern
+                    DynaLog.LogMessage("Address Type: Link-Local")
+                    LinkLocalIPv6Addresses += 1
+                ElseIf Regex.IsMatch(dnsAddress, "^fec.*") Then         ' Site-Local pattern. Invalid address in the program's perspective, and as per RFC 3879: https://datatracker.ietf.org/doc/html/rfc3879
+                    DynaLog.LogMessage("Address Type: Site-Local. For compatibility reasons, it will be treated as invalid")
+                    InvalidAddressList.Add(String.Format("- {0} -- Site-Local Address; it is no longer in use", dnsAddress))
+                    InvalidAddresses += 1
+                ElseIf Regex.IsMatch(dnsAddress, "^f(c|d).*") Then      ' Unique Local address pattern. It's our Site-Local replacement as per RFC 4193: https://datatracker.ietf.org/doc/html/rfc4193
+                    ' It can be either fc or fd depending on whether the prefix is locally assigned
+                    DynaLog.LogMessage("Address Type: Unique Local Address")
+                    UniqueLocalIPv6Addresses += 1
+                Else
+                    ' Outright add it
+                    GlobalIPv6Addresses += 1
+                End If
+            Else
+                DynaLog.LogMessage("This is an unrecognized address")
+                InvalidAddresses += 1
+                InvalidAddressList.Add(String.Format("- {0} -- Malformed Address", dnsAddress))
+            End If
+            current += 1
+        Next
+
+        ValidToInvalidAddressRatio = Math.Round(((IPv4Addresses + GlobalIPv6Addresses + LinkLocalIPv6Addresses + UniqueLocalIPv6Addresses) / total) * 100, 2)
+
+        ' Now let's report our info to the user
+        dnsAddressValidationInfo = String.Format("Address Syntax Validation Results:" & CrLf &
+                                                 "- Invalid Addresses: {0}" & CrLf &
+                                                 "- IPv4 Addresses: {1}" & CrLf &
+                                                 "- Global IPv6 Addresses: {2}" & CrLf &
+                                                 "- Link-Local IPv6 Addresses: {3}" & CrLf &
+                                                 "- Unique Local IPv6 Addresses: {4}" & CrLf & CrLf &
+                                                 "- Valid/Invalid Address Ratio: {5}%" & CrLf &
+                                                 "{6}" & CrLf &
+                                                 "These addresses will be configured in the unattended answer file.",
+                                                 InvalidAddresses,
+                                                 IPv4Addresses,
+                                                 GlobalIPv6Addresses,
+                                                 LinkLocalIPv6Addresses,
+                                                 UniqueLocalIPv6Addresses,
+                                                 ValidToInvalidAddressRatio,
+                                                 If(InvalidAddresses > 0,
+                                                    CrLf & "Some addresses are invalid. Here's why: " & CrLf & CrLf & String.Join(CrLf, InvalidAddressList) & CrLf,
+                                                    ""))
+
+        Throw New Exception("The verification has finished." & CrLf & CrLf & dnsAddressValidationInfo)
+    End Sub
+
+    Private Sub DnsValidatorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles DnsValidatorBW.ProgressChanged
+        ProgressReporter.ReportProgress(Me, "", e.ProgressPercentage)
+    End Sub
+
+    Private Sub DnsValidatorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles DnsValidatorBW.RunWorkerCompleted
+        ProgressReporter.Hide()
+        If e.Error IsNot Nothing Then
+            MessageBox.Show(e.Error.Message,
+                            "DNS Address Validation Results",
+                            MessageBoxButtons.OK,
+                            If(e.Error.Message.StartsWith("The verification has finished."), MessageBoxIcon.Information, MessageBoxIcon.Error))
+        End If
+        DnsSyntaxCheckerBtn.Enabled = True
+    End Sub
+
+    Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles RichTextBox1.TextChanged
+        DnsSyntaxCheckerBtn.Enabled = Not String.IsNullOrEmpty(RichTextBox1.Text)
     End Sub
 End Class

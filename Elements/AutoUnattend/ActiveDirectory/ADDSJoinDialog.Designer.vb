@@ -27,6 +27,7 @@ Partial Class ADDSJoinDialog
         Me.StepsContainer = New System.Windows.Forms.Panel()
         Me.DNSConfigPanel = New System.Windows.Forms.Panel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.DnsSyntaxCheckerBtn = New System.Windows.Forms.Button()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
@@ -67,6 +68,7 @@ Partial Class ADDSJoinDialog
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
+        Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -127,6 +129,7 @@ Partial Class ADDSJoinDialog
         '
         Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.DnsSyntaxCheckerBtn)
         Me.GroupBox1.Controls.Add(Me.RichTextBox1)
         Me.GroupBox1.Controls.Add(Me.TextBox2)
         Me.GroupBox1.Controls.Add(Me.TextBox3)
@@ -144,6 +147,17 @@ Partial Class ADDSJoinDialog
         Me.GroupBox1.TabIndex = 6
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "NIC Settings"
+        '
+        'DnsSyntaxCheckerBtn
+        '
+        Me.DnsSyntaxCheckerBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DnsSyntaxCheckerBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.DnsSyntaxCheckerBtn.Location = New System.Drawing.Point(492, 280)
+        Me.DnsSyntaxCheckerBtn.Name = "DnsSyntaxCheckerBtn"
+        Me.DnsSyntaxCheckerBtn.Size = New System.Drawing.Size(192, 23)
+        Me.DnsSyntaxCheckerBtn.TabIndex = 7
+        Me.DnsSyntaxCheckerBtn.Text = "Verify DNS Address Syntax"
+        Me.DnsSyntaxCheckerBtn.UseVisualStyleBackColor = True
         '
         'RichTextBox1
         '
@@ -208,7 +222,7 @@ Partial Class ADDSJoinDialog
         Me.Label7.AutoEllipsis = True
         Me.Label7.Location = New System.Drawing.Point(24, 280)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(660, 33)
+        Me.Label7.Size = New System.Drawing.Size(461, 33)
         Me.Label7.TabIndex = 4
         Me.Label7.Text = "The address in the first line will be the primary DNS server address, and any oth" & _
     "er addresses will become alternative server addresses. You can put both IPv4 and" & _
@@ -559,6 +573,10 @@ Partial Class ADDSJoinDialog
         '
         Me.ADDSInitBW.WorkerReportsProgress = True
         '
+        'DnsValidatorBW
+        '
+        Me.DnsValidatorBW.WorkerReportsProgress = True
+        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -643,4 +661,6 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents DNS_Explanation_Link As System.Windows.Forms.LinkLabel
+    Friend WithEvents DnsSyntaxCheckerBtn As System.Windows.Forms.Button
+    Friend WithEvents DnsValidatorBW As System.ComponentModel.BackgroundWorker
 End Class
