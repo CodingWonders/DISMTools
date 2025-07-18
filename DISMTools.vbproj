@@ -249,6 +249,9 @@
     <Compile Include="Elements\SearchBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
+    <Compile Include="Elements\ServiceManagement\WindowsService.vb" />
+    <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
     <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
