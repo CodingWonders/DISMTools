@@ -16705,4 +16705,29 @@ Public Class MainForm
             Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
         End If
     End Sub
+
+    Private Sub RemoveAppliedAnswerFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveAppliedAnswerFileToolStripMenuItem.Click
+        Dim pantherXml As String = Path.Combine(MountDir, "Windows", "Panther", "unattend.xml")
+        Dim sysprepXml As String = Path.Combine(MountDir, "Windows", "System32", "sysprep", "unattend.xml")
+        Dim nonExistentFiles As Integer = 0
+        Cursor = Cursors.WaitCursor
+        Refresh()
+        Try
+            If Not File.Exists(pantherXml) Then nonExistentFiles += 1
+            If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
+            DynaLog.LogMessage("Removing existing answer files...")
+            DynaLog.LogMessage("Removing answer file from Panther directory...")
+            File.Delete(pantherXml)
+            DynaLog.LogMessage("Removing answer file from Sysprep directory...")
+            File.Delete(sysprepXml)
+            If nonExistentFiles >= 2 Then
+                Throw New Exception("No answer files have been detected in the mounted image.")
+            End If
+            MsgBox("Answer file removed successfully.", vbOKOnly + vbInformation, "")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not remove answer files. Reason: " & ex.Message)
+            MsgBox(ex.Message, vbOKOnly + vbExclamation, "")
+        End Try
+        Cursor = Cursors.Arrow
+    End Sub
 End Class
