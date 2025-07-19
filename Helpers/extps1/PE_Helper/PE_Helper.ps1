@@ -1278,19 +1278,22 @@ function Write-DiskConfiguration
 
         # One of the three letters mentioned above may be already in use. Check these before assuming they're our targets.
         # This is more the case when you boot the ISO with Ventoy
-        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter }).Count -gt 0) {
+        # ---
+        # Preview 7 Edit -- powershell doesn't consider the count property until we select the object, therefore still causing the issue.
+        # Why, you stupid heap of C# junk?????
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter } | Select-Object -ExpandProperty DriveLetter).Count -gt 0) {
             Write-Host "The default letter for the EFI System Partition is already in use."
             $usedLetters++
             $espUsed = $true
         }
 
-        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter }).Count -gt 0) {
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter } | Select-Object -ExpandProperty DriveLetter).Count -gt 0) {
             Write-Host "The default letter for the boot partition is already in use."
             $usedLetters++
             $bootUsed = $true
         }
 
-        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter }).Count -gt 0) {
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter } | Select-Object -ExpandProperty DriveLetter).Count -gt 0) {
             Write-Host "The default letter for the Windows Recovery Environment partition is already in use."
             $usedLetters++
             $recoveryUsed = $true
