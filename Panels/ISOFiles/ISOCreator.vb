@@ -14,7 +14,6 @@ Public Class ISOCreator
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
     Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/2/d/9/2d9c8902-3fcd-48a6-a22a-432b08bed61e/ADK/adksetup.exe", "https://download.microsoft.com/download/5/5/6/556e01ec-9d78-417d-b1e1-d83a2eff20bc/ADKWinPEAddons/adkwinpesetup.exe"}
     Dim adkDownloadSuccess As Boolean
-    Dim adkDownloadMessage As String = ""
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -439,14 +438,14 @@ Public Class ISOCreator
 
     Private Sub DownloadADK()
         Try
-            adkDownloadMessage = "Preparing to download Assessment and Deployment Kit..."
+            ProgressReporter.SetMessage("Preparing to download Assessment and Deployment Kit...")
             ADKDownloaderBW.ReportProgress(0)
             Dim FileNames As New List(Of String)
             For Each downloadLocation In adkDownloadLocations
                 FileNames.Add(Path.GetFileName(downloadLocation))
                 Dim current As Integer = adkDownloadLocations.ToList().IndexOf(downloadLocation)
                 Dim count As Integer = adkDownloadLocations.Count
-                adkDownloadMessage = String.Format("Downloading ADK component {0} of {1}...", current + 1, count)
+                ProgressReporter.SetMessage(String.Format("Downloading ADK component {0} of {1}...", current + 1, count))
                 ADKDownloaderBW.ReportProgress(50 * (current / count))
                 Using client As New WebClient()
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
@@ -457,7 +456,7 @@ Public Class ISOCreator
             For Each FileName In FileNames
                 Dim current As Integer = FileNames.IndexOf(FileName)
                 Dim count As Integer = FileNames.Count
-                adkDownloadMessage = String.Format("Installing ADK component {0} of {1}...", current + 1, count)
+                ProgressReporter.SetMessage(String.Format("Installing ADK component {0} of {1}...", current + 1, count))
                 ADKDownloaderBW.ReportProgress(currentProgress)
                 Dim InstallerProcess As New Process()
                 InstallerProcess.StartInfo.WorkingDirectory = Application.StartupPath
@@ -479,7 +478,7 @@ Public Class ISOCreator
                 currentProgress += 25
             Next
             Try
-                adkDownloadMessage = "Deleting temporary files..."
+                ProgressReporter.SetMessage("Deleting temporary files...")
                 ADKDownloaderBW.ReportProgress(100)
                 For Each FileName In FileNames
                     File.Delete(Path.Combine(Application.StartupPath, FileName))
@@ -944,7 +943,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub ADKDownloaderBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKDownloaderBW.ProgressChanged
-        ProgressReporter.ReportProgress(Me, adkDownloadMessage, e.ProgressPercentage)
+        ProgressReporter.ReportProgress(Me, e.ProgressPercentage)
     End Sub
 
     Private Sub ADKDownloaderBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKDownloaderBW.RunWorkerCompleted

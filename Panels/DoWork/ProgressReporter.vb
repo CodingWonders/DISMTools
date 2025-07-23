@@ -82,15 +82,11 @@ Module ProgressReporter
         progressForm.Close()
     End Sub
 
-    Public Sub ReportProgress(sender As Object, Optional Message As String = "", Optional Percentage As Double = -1)
+    Public Sub ReportProgress(sender As Object, Optional Percentage As Double = -1)
         If progressForm Is Nothing OrElse Not progressForm.Visible Then
             Show(sender)
         End If
-        If ProgressMessage <> "" Then
-            progressLabel.Text = ProgressMessage
-        Else
-            progressLabel.Text = Message
-        End If
+        progressLabel.Text = ProgressMessage
         If Percentage >= 0 AndAlso (Not Percentage > 100) Then
             progressBarCompletedProgress.Width = progressBarContainer.Width * (Percentage / 100)
         End If

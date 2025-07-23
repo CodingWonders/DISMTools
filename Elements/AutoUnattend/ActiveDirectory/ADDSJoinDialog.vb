@@ -143,7 +143,7 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub ADDSInitBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADDSInitBW.ProgressChanged
-        ProgressReporter.ReportProgress(Me, "", e.ProgressPercentage)
+        ProgressReporter.ReportProgress(Me, e.ProgressPercentage)
     End Sub
 
     Private Sub ADDSInitBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADDSInitBW.RunWorkerCompleted
@@ -427,7 +427,7 @@ Public Class ADDSJoinDialog
     End Sub
 
     Private Sub DnsValidatorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles DnsValidatorBW.ProgressChanged
-        ProgressReporter.ReportProgress(Me, "", e.ProgressPercentage)
+        ProgressReporter.ReportProgress(Me, e.ProgressPercentage)
     End Sub
 
     Private Sub DnsValidatorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles DnsValidatorBW.RunWorkerCompleted
