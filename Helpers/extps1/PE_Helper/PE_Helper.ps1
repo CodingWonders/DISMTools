@@ -670,6 +670,19 @@ function Start-PECustomization
         }
         try
         {
+            Write-Host "CUSTOMIZATION STEP - Miscellaneous Registry Edits" -BackgroundColor DarkGreen
+            Write-Host "-- PowerShell Execution Policy --"
+            if (-not (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)) { throw }
+            reg add "HKLM\WINPESOFT\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f
+            Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
+            Write-Host "Registry changed."
+        }
+        catch
+        {
+            Write-Host "Could not change registry..."
+        }
+        try
+        {
             Write-Host "CUSTOMIZATION STEP - Prepare System for Network-based Installations" -BackgroundColor DarkGreen
             Write-Host "Preparing NetInstall..."
             New-Item -Path "$imagePath\pxehelpers" -ItemType Directory | Out-Null
