@@ -863,6 +863,9 @@ Public Class ISOCreator
             Graphics.FromImage(bm).Clear(ListView1.BackColor)
             ListView1.BackgroundImage = bm
         End If
+        If BackgroundWorker1.IsBusy Then
+            WindowHelper.DisableCloseCapability(Handle)
+        End If
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
