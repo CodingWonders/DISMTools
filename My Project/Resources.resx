@@ -983,19 +983,20 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The fixed disk configuration routine code from the PE Helper has been ported to the WDS Helper Client
+- Fixed an issue with the used volume letter checks in the PE Helper where they would not work correctly
 
 New features:
 
-- A Web-based Tour has been introduced. With this tour, DISMTools now follows a more interactive approach for people that are getting started
-- The Driver Installation Module (DIM) is now added to the Windows PE image directly, allowing you to use it when booting to it via the network
-- You can now configure your answer file to make devices join an Active Directory domain more easily
-- DISMTools now uses PNPUTIL to remove drivers on active installations
-- DISMTools can now map AppX package registrations on active systems to local users in the system
-- CODE: background processes have been refactored to use new list items
-- CODE: startup code in most image task dialogs has been moved to "IImageTaskDialog" interface implementations
-- 7-Zip has been updated to version 25.00
-- The installer is now built using Inno Setup 6.4.3</value>
+- The startup screen in HotInstall is now localized
+- The Driver Installation Module (DIM) has seen a minor design refresh to let you select items more easily, with grid lines
+- PowerShell script execution policy settings have been off-loaded from the DT PE startup code and put into the ISO creation script
+- UnattendGen has been updated to the latest version, providing cross-platform builds for Linux and macOS
+- When configuring DNS settings for Active Directory Domain Services join, you can now verify the syntax of DNS addresses
+- You can now remove the answer files from your image easily
+- The DISMTools Tour is now finalized. As a reminder, you can access it from the Help menu or the Getting Started page in the Help documentation
+- The Tour can now be launched automatically when you first set up DISMTools
+- DISMTools now uses "pnputil" to add drivers on active installations
+- CODE: Registry actions are now carried out by the new Registry Helper</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

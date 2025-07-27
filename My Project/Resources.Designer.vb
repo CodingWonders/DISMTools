@@ -2081,13 +2081,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The fixed disk configuration routine code from the PE Helper has been ported to the WDS Helper Client
+        '''- Fixed an issue with the used volume letter checks in the PE Helper where they would not work correctly
         '''
         '''New features:
         '''
-        '''- A Web-based Tour has been introduced. With this tour, DISMTools now follows a more interactive approach for people that are getting started
-        '''- The Driver Installation Module (DIM) is now added to the Windows PE image directly, allowing you to use it when booting to it via the network
-        '''- You can now configure your answer file to make devices join an Active Directory domai [resto de la cadena truncado]&quot;;.
+        '''- The startup screen in HotInstall is now localized
+        '''- The Driver Installation Module (DIM) has seen a minor design refresh to let you select items more easily, with grid lines
+        '''- PowerShell script execution policy settings have been off-loaded from the DT PE startup code and put into the ISO creation script
+        '''- UnattendGen has been updated to the latest version, providing [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
