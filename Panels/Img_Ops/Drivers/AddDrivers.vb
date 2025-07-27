@@ -286,38 +286,8 @@ Public Class AddDrivers
     End Sub
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If Not MainForm.OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed. Continuing with the task...")
-        Else
-            DynaLog.LogMessage("The active installation is being managed. This is not supported.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive. PNPUTIL mode coming soon!!!", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
-        Return Not MainForm.OnlineManagement
+        ' We'll outright return true, unless other things prevent this from opening
+        Return True
     End Function
 
     Private Sub AddDrivers_Load(sender As Object, e As EventArgs) Handles MyBase.Load

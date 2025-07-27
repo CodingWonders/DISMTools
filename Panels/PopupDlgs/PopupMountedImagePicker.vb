@@ -48,12 +48,18 @@ Public Class PopupMountedImagePicker
             .Anchor = CType((AnchorStyles.Bottom Or AnchorStyles.Right), AnchorStyles),
             .FlatStyle = FlatStyle.System
         }
+        Dim pmipRefreshButton As Button = New Button With {
+            .Location = New Point(0, 300),
+            .Size = New Size(75, 23),
+            .Anchor = CType((AnchorStyles.Bottom Or AnchorStyles.Right), AnchorStyles),
+            .FlatStyle = FlatStyle.System
+        }
         pmipMountedImageList.Columns.AddRange(New ColumnHeader() {
                                               New ColumnHeader With {
                                                   .Width = 434
                                               },
                                               New ColumnHeader With {
-                                                  .Width = 72
+                                                  .Width = 64
                                               },
                                               New ColumnHeader With {
                                                   .Width = 374
@@ -61,9 +67,10 @@ Public Class PopupMountedImagePicker
                                              })
         pmipForm.AcceptButton = pmipOkButton
         ' Add controls to form
-        pmipForm.Controls.AddRange(New Control() {pmipInstructionLabel, pmipMountedImageList, pmipOkButton, pmipCancelButton})
+        pmipForm.Controls.AddRange(New Control() {pmipInstructionLabel, pmipMountedImageList, pmipOkButton, pmipCancelButton, pmipRefreshButton})
         pmipOkButton.BringToFront()
         pmipCancelButton.BringToFront()
+        pmipRefreshButton.BringToFront()
 
         ' Event Handlers
         AddHandler pmipMountedImageList.SelectedIndexChanged, Sub(sender, e)
@@ -88,10 +95,29 @@ Public Class PopupMountedImagePicker
                                            pmipForm.DialogResult = DialogResult.OK
                                            pmipForm.Close()
                                        End Sub
+        AddHandler pmipMountedImageList.MouseDoubleClick, Sub(sender, e)
+                                                              If pmipMountedImageList.SelectedItems.Count <> 1 Then Exit Sub
+                                                              pmipForm.DialogResult = DialogResult.OK
+                                                              pmipForm.Close()
+                                                          End Sub
         AddHandler pmipCancelButton.Click, Sub(sender, e)
                                                pmipForm.DialogResult = DialogResult.Cancel
                                                pmipForm.Close()
                                            End Sub
+        AddHandler pmipRefreshButton.Click, Sub(sender, e)
+                                                pmipForm.Cursor = Cursors.WaitCursor
+                                                pmipMountedImageList.Items.Clear()
+                                                pmipForm.Refresh()
+                                                GetMountedImages()
+                                                pmipForm.Cursor = Cursors.Arrow
+                                                If mountedImages IsNot Nothing Then
+                                                    For Each mountedImage As DismMountedImageInfo In mountedImages
+                                                        pmipMountedImageList.Items.Add(New ListViewItem(New String() {mountedImage.ImageFilePath,
+                                                                                                                      mountedImage.ImageIndex,
+                                                                                                                      mountedImage.MountPath}))
+                                                    Next
+                                                End If
+                                            End Sub
 
         ' Translate
         Select Case MainForm.Language
@@ -101,6 +127,7 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Pick image"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Cancel"
+                        pmipRefreshButton.Text = "Refresh"
                         pmipInstructionLabel.Text = "Pick an image from the list below:"
                         pmipMountedImageList.Columns(0).Text = "Image file"
                         pmipMountedImageList.Columns(1).Text = "Index"
@@ -109,6 +136,7 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Escoger imagen"
                         pmipOkButton.Text = "Aceptar"
                         pmipCancelButton.Text = "Cancelar"
+                        pmipRefreshButton.Text = "Actualizar"
                         pmipInstructionLabel.Text = "Escoja una imagen de la lista de abajo:"
                         pmipMountedImageList.Columns(0).Text = "Archivo de imagen"
                         pmipMountedImageList.Columns(1).Text = "Índice"
@@ -117,6 +145,7 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Choisir l'image"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Annuler"
+                        pmipRefreshButton.Text = "Actualiser"
                         pmipInstructionLabel.Text = "Choisissez une image dans la liste ci-dessous :"
                         pmipMountedImageList.Columns(0).Text = "Fichier de l'image"
                         pmipMountedImageList.Columns(1).Text = "Index"
@@ -125,6 +154,7 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Escolher imagem"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Cancelar"
+                        pmipRefreshButton.Text = "Atualizar"
                         pmipInstructionLabel.Text = "Escolher uma imagem da lista abaixo:"
                         pmipMountedImageList.Columns(0).Text = "Ficheiro de imagem"
                         pmipMountedImageList.Columns(1).Text = "Índice"
@@ -133,6 +163,7 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Scegli immagine"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Annulla"
+                        pmipRefreshButton.Text = "Aggiorna"
                         pmipInstructionLabel.Text = "Scegli un'immagine dall'elenco sottostante:"
                         pmipMountedImageList.Columns(0).Text = "File immagine"
                         pmipMountedImageList.Columns(1).Text = "Indice"
@@ -142,6 +173,7 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Pick image"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Cancel"
+                pmipRefreshButton.Text = "Refresh"
                 pmipInstructionLabel.Text = "Pick an image from the list below:"
                 pmipMountedImageList.Columns(0).Text = "Image file"
                 pmipMountedImageList.Columns(1).Text = "Index"
@@ -150,6 +182,7 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Escoger imagen"
                 pmipOkButton.Text = "Aceptar"
                 pmipCancelButton.Text = "Cancelar"
+                pmipRefreshButton.Text = "Actualizar"
                 pmipInstructionLabel.Text = "Escoja una imagen de la lista de abajo:"
                 pmipMountedImageList.Columns(0).Text = "Archivo de imagen"
                 pmipMountedImageList.Columns(1).Text = "Índice"
@@ -158,6 +191,7 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Choisir l'image"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Annuler"
+                pmipRefreshButton.Text = "Actualiser"
                 pmipInstructionLabel.Text = "Choisissez une image dans la liste ci-dessous :"
                 pmipMountedImageList.Columns(0).Text = "Fichier de l'image"
                 pmipMountedImageList.Columns(1).Text = "Index"
@@ -166,6 +200,7 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Escolher imagem"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Cancelar"
+                pmipRefreshButton.Text = "Atualizar"
                 pmipInstructionLabel.Text = "Escolher uma imagem da lista abaixo:"
                 pmipMountedImageList.Columns(0).Text = "Ficheiro de imagem"
                 pmipMountedImageList.Columns(1).Text = "Índice"
@@ -174,6 +209,7 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Scegli immagine"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Annulla"
+                pmipRefreshButton.Text = "Aggiorna"
                 pmipInstructionLabel.Text = "Scegli un'immagine dall'elenco sottostante:"
                 pmipMountedImageList.Columns(0).Text = "File immagine"
                 pmipMountedImageList.Columns(1).Text = "Indice"

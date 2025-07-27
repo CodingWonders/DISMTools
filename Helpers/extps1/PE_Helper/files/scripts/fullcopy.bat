@@ -7,7 +7,7 @@ set waittime=5
 REM set this value to customize the number of retries on failed copies. Value of 0: no retries
 set numberofretries=2
 REM set this value to customize what to copy when copying files. Refer to robocopy documentation
-set filecopy_operation=DATSOU
+set filecopy_operation=DAT
 REM set this value to customize what to copy when copying directories. Refer to robocopy documentation
 set dircopy_operation=DAT
 

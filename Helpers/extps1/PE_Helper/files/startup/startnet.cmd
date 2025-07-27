@@ -13,12 +13,21 @@ if %debug% equ 1 (
 	echo Debug mode enabled.
 	taskmgr
 )
-powershell -command Set-ExecutionPolicy Unrestricted
+:: powershell -command Set-ExecutionPolicy Unrestricted
+:: We no longer do it like this for the sake of performance. If we could not set the ExecutionPolicy value in registry,
+:: we'll add it here. If we still couldn't do it, run PowerShell as a fallback
+reg query "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" >nul 2>&1
+if !ERRORLEVEL! equ 1 (
+	reg add "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f >nul 2>&1
+	if !ERRORLEVEL! equ 1 (
+		powershell -command Set-ExecutionPolicy Unrestricted
+	)
+)
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
-	powershell -file "%sysdrive%\menu.ps1"
+	powershell -noprofile -file "%sysdrive%\menu.ps1"
 	if exist "%sysdrive%\netinstall" (
 		cd /d "%sysdrive%"\
-		powershell -file ".\pxehelpers\wds\wdshelper.ps1"
+		powershell -noprofile -file ".\pxehelpers\wds\wdshelper.ps1"
 	) else if exist "%sysdrive%\cmdcons" (
 		set debug=2
 	)
@@ -43,7 +52,7 @@ if %debug% lss 2 (
 					if not exist "%sysdrive%\Tools\RestartDialog" (md "%sysdrive%\Tools\RestartDialog")
 					xcopy "%%D:\Tools\RestartDialog\*" "%sysdrive%\Tools\RestartDialog" /cehyi > nul
 				)
-				powershell .\PE_Helper.ps1 StartApply
+				powershell -noprofile .\PE_Helper.ps1 StartApply
 			)
 		)
 	)

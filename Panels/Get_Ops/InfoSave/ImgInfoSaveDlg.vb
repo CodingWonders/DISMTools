@@ -2617,97 +2617,84 @@ Public Class ImgInfoSaveDlg
         Else
             Contents &= GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
             Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
-            Using reg As New Process
-                Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
-                ReportChanges(msg, 0)
-                reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-                reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-                reg.StartInfo.CreateNoWindow = True
-                reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                reg.Start()
-                reg.WaitForExit()
-                If reg.ExitCode <> 0 Then
-                    Contents &= GetListItems(New String() {"Target path: could not get value"}.ToList()) & CrLf
-                End If
-                reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
-                reg.Start()
-                reg.WaitForExit()
-                If reg.ExitCode <> 0 Then
-                    Contents &= GetListItems(New String() {"Scratch space: could not get value"}.ToList()) & CrLf & CrLf
-                    Exit Sub
-                End If
-                Try
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Getting Windows PE target path..."
-                                Case "ESN"
-                                    msg = "Obteniendo la ruta de destino de Windows PE..."
-                                Case "FRA"
-                                    msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
-                                Case "PTB", "PTG"
-                                    msg = "Obter a localização do objetivo do Windows PE..."
-                                Case "ITA"
-                                    msg = "Ottenere il percorso di destinazione di Windows PE..."
-                            End Select
-                        Case 1
-                            msg = "Getting Windows PE target path..."
-                        Case 2
-                            msg = "Obteniendo la ruta de destino de Windows PE..."
-                        Case 3
-                            msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
-                        Case 4
-                            msg = "Obter a localização do objetivo do Windows PE..."
-                        Case 5
-                            msg = "Ottenere il percorso di destinazione di Windows PE..."
-                    End Select
-                    ReportChanges(msg, 50)
-                    ' Get target path first
-                    Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                    Contents &= GetListItems(New String() {"Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString()}.ToList()) & CrLf
-                    regKey.Close()
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Getting Windows PE scratch space..."
-                                Case "ESN"
-                                    msg = "Obteniendo espacio temporal de Windows PE..."
-                                Case "FRA"
-                                    msg = "Obtention de l'espace temporaire de Windows PE en cours..."
-                                Case "PTB", "PTG"
-                                    msg = "A obter espaço temporário do Windows PE..."
-                                Case "ITA"
-                                    msg = "Ottenere lo spazio temporaneo di Windows PE..."
-                            End Select
-                        Case 1
-                            msg = "Getting Windows PE scratch space..."
-                        Case 2
-                            msg = "Obteniendo espacio temporal de Windows PE..."
-                        Case 3
-                            msg = "Obtention de l'espace temporaire de Windows PE en cours..."
-                        Case 4
-                            msg = "A obter espaço temporário do Windows PE..."
-                        Case 5
-                            msg = "Ottenere lo spazio temporaneo di Windows PE..."
-                    End Select
-                    ReportChanges(msg, 75)
-                    regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                    Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
-                    Contents &= GetListItems(New String() {"Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value")}.ToList()) & CrLf & CrLf
-                    regKey.Close()
-                Catch ex As Exception
+            Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
+            ReportChanges(msg, 0)
+            Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
+            If regExitCode <> 0 Then
+                Contents &= GetListItems(New String() {"Target path: could not get value"}.ToList()) & CrLf
+            End If
+            regExitCode = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SYSTEM"), "HKLM\PE_SYS")
+            If regExitCode <> 0 Then
+                Contents &= GetListItems(New String() {"Scratch space: could not get value"}.ToList()) & CrLf & CrLf
+                Exit Sub
+            End If
+            Try
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Getting Windows PE target path..."
+                            Case "ESN"
+                                msg = "Obteniendo la ruta de destino de Windows PE..."
+                            Case "FRA"
+                                msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                            Case "PTB", "PTG"
+                                msg = "Obter a localização do objetivo do Windows PE..."
+                            Case "ITA"
+                                msg = "Ottenere il percorso di destinazione di Windows PE..."
+                        End Select
+                    Case 1
+                        msg = "Getting Windows PE target path..."
+                    Case 2
+                        msg = "Obteniendo la ruta de destino de Windows PE..."
+                    Case 3
+                        msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                    Case 4
+                        msg = "Obter a localização do objetivo do Windows PE..."
+                    Case 5
+                        msg = "Ottenere il percorso di destinazione di Windows PE..."
+                End Select
+                ReportChanges(msg, 50)
+                ' Get target path first
+                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+                Contents &= GetListItems(New String() {"Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString()}.ToList()) & CrLf
+                regKey.Close()
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Getting Windows PE scratch space..."
+                            Case "ESN"
+                                msg = "Obteniendo espacio temporal de Windows PE..."
+                            Case "FRA"
+                                msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                            Case "PTB", "PTG"
+                                msg = "A obter espaço temporário do Windows PE..."
+                            Case "ITA"
+                                msg = "Ottenere lo spazio temporaneo di Windows PE..."
+                        End Select
+                    Case 1
+                        msg = "Getting Windows PE scratch space..."
+                    Case 2
+                        msg = "Obteniendo espacio temporal de Windows PE..."
+                    Case 3
+                        msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                    Case 4
+                        msg = "A obter espaço temporário do Windows PE..."
+                    Case 5
+                        msg = "Ottenere lo spazio temporaneo di Windows PE..."
+                End Select
+                ReportChanges(msg, 75)
+                regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
+                Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
+                Contents &= GetListItems(New String() {"Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value")}.ToList()) & CrLf & CrLf
+                regKey.Close()
+            Catch ex As Exception
 
-                End Try
-                ' Unload registry hives
-                reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
-                reg.Start()
-                reg.WaitForExit()
-                reg.StartInfo.Arguments = "unload HKLM\PE_SYS"
-                reg.Start()
-                reg.WaitForExit()
-            End Using
+            End Try
+            ' Unload registry hives
+            RegistryHelper.UnloadRegistryHive("HKLM\PE_SOFT")
+            RegistryHelper.UnloadRegistryHive("HKLM\PE_SYS")
         End If
     End Sub
 

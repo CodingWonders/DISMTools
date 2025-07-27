@@ -274,6 +274,8 @@ Public Class MainForm
 
     Public NoNTSamMappings As Boolean = False       ' Whether to map AppX pckgdep SIDs with SIDs from system's SAM file
 
+    Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -950,6 +952,18 @@ Public Class MainForm
             If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
                 DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
                 BeginOnlineManagement(False)
+            End If
+        End If
+
+        If IsFirstTime Then
+            Dim tourMessage As String = "Is this your first time using DISMTools? If so, we can help you get started with the Tour." & CrLf & CrLf &
+                "With the Tour, you can make your first Windows image and test it afterwards. You can follow the tour at any pace you prefer, and you can access it at any time by going to the Help menu." & CrLf & CrLf &
+                "Do you want to launch the Tour now?"
+            If MsgBox(tourMessage, vbYesNo + vbQuestion, "Getting Started with DISMTools") = MsgBoxResult.Yes Then
+                If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+                    DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+                    Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+                End If
             End If
         End If
     End Sub
@@ -2660,33 +2674,22 @@ Public Class MainForm
     End Sub
 
     Sub GetOfflineEditionAndInstIdFromRegistry()
-        Using reg As New Process
-            DynaLog.LogMessage("Loading installation registry...")
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\IMG_SOFT " & Quote & MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-            If reg.ExitCode <> 0 Then
-                DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(reg.ExitCode))
-                imgEdition = ""
-            Else
-                DynaLog.LogMessage("Getting values...")
-                Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
-                imgEdition = edReg.GetValue("EditionID", "").ToString()
-                imgInstType = edReg.GetValue("InstallationType", "").ToString()
-                DynaLog.LogMessage("Edition: " & imgEdition)
-                DynaLog.LogMessage("Installation type: " & imgInstType)
-                edReg.Close()
-            End If
-            DynaLog.LogMessage("Unloading installation registry...")
-            reg.StartInfo.Arguments = "unload HKLM\IMG_SOFT"
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-        End Using
+        DynaLog.LogMessage("Loading installation registry...")
+        Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\IMG_SOFT")
+        If regExitCode <> 0 Then
+            DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(regExitCode))
+            imgEdition = ""
+        Else
+            DynaLog.LogMessage("Getting values...")
+            Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
+            imgEdition = edReg.GetValue("EditionID", "").ToString()
+            imgInstType = edReg.GetValue("InstallationType", "").ToString()
+            DynaLog.LogMessage("Edition: " & imgEdition)
+            DynaLog.LogMessage("Installation type: " & imgInstType)
+            edReg.Close()
+        End If
+        DynaLog.LogMessage("Unloading installation registry...")
+        RegistryHelper.UnloadRegistryHive("HKLM\IMG_SOFT")
     End Sub
 
     ''' <summary>
@@ -16701,5 +16704,30 @@ Public Class MainForm
             DynaLog.LogMessage("Tour directory exists. Starting the tour!")
             Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
         End If
+    End Sub
+
+    Private Sub RemoveAppliedAnswerFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveAppliedAnswerFileToolStripMenuItem.Click
+        Dim pantherXml As String = Path.Combine(MountDir, "Windows", "Panther", "unattend.xml")
+        Dim sysprepXml As String = Path.Combine(MountDir, "Windows", "System32", "sysprep", "unattend.xml")
+        Dim nonExistentFiles As Integer = 0
+        Cursor = Cursors.WaitCursor
+        Refresh()
+        Try
+            If Not File.Exists(pantherXml) Then nonExistentFiles += 1
+            If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
+            DynaLog.LogMessage("Removing existing answer files...")
+            DynaLog.LogMessage("Removing answer file from Panther directory...")
+            File.Delete(pantherXml)
+            DynaLog.LogMessage("Removing answer file from Sysprep directory...")
+            File.Delete(sysprepXml)
+            If nonExistentFiles >= 2 Then
+                Throw New Exception("No answer files have been detected in the mounted image.")
+            End If
+            MsgBox("Answer file removed successfully.", vbOKOnly + vbInformation, "")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not remove answer files. Reason: " & ex.Message)
+            MsgBox(ex.Message, vbOKOnly + vbExclamation, "")
+        End Try
+        Cursor = Cursors.Arrow
     End Sub
 End Class

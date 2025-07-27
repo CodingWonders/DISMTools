@@ -125,18 +125,10 @@ Namespace Elements
                 Try
                     DynaLog.LogMessage("Loading image SYSTEM registry hive...")
                     ' Load the registry key
-                    Dim RegProc As New Process()
-                    RegProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-                    RegProc.StartInfo.Arguments = "load HKLM\zSYS " & Quote & mountDir & "\Windows\system32\config\SYSTEM" & Quote
-                    If Not Debugger.IsAttached Then
-                        RegProc.StartInfo.CreateNoWindow = True
-                        RegProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                    End If
-                    RegProc.Start()
-                    RegProc.WaitForExit()
-                    DynaLog.LogMessage("REG process exited with error code " & Hex(RegProc.ExitCode))
-                    If RegProc.ExitCode <> 0 Then
-                        Throw New Exception("Process exited with code " & RegProc.ExitCode)
+                    Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(mountDir, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYS")
+                    DynaLog.LogMessage("REG process exited with error code " & Hex(regExitCode))
+                    If regExitCode <> 0 Then
+                        Throw New Exception("Process exited with code " & regExitCode)
                     End If
                     ' Grab override keyboard type from registry
                     Dim OverrideKeybReg As RegistryKey = Registry.LocalMachine.OpenSubKey("zSYS\ControlSet001\Services\i8042prt\Parameters", False)
@@ -144,12 +136,10 @@ Namespace Elements
                     OverrideKeybReg.Close()
                     DynaLog.LogMessage("Unloading image SYSTEM registry hive...")
                     ' Unload image registry
-                    RegProc.StartInfo.Arguments = "unload HKLM\zSYS"
-                    RegProc.Start()
-                    RegProc.WaitForExit()
-                    DynaLog.LogMessage("REG process exited with error code " & Hex(RegProc.ExitCode))
-                    If RegProc.ExitCode <> 0 Then
-                        Throw New Exception("Process exited with code " & RegProc.ExitCode)
+                    regExitCode = RegistryHelper.UnloadRegistryHive("HKLM\zSYS")
+                    DynaLog.LogMessage("REG process exited with error code " & Hex(regExitCode))
+                    If regExitCode <> 0 Then
+                        Throw New Exception("Process exited with code " & regExitCode)
                     End If
                     DynaLog.LogMessage("Override keyboard ID: " & OverrideKeybID)
                     DynaLog.LogMessage("Evaluating keyboard ID...")

@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2562_BETA1"
+    Const UnattendGenReleaseTag As String = "2572"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -1916,10 +1916,10 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
             End If
         End If
-        UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
+        UnattendGen.StartInfo.Arguments = "--target=" & Quote & SaveTarget & Quote
         If Debugger.IsAttached Then
             DynaLog.LogMessage("A debugger has been attached. Telling UnattendGen to show debug output...")
-            UnattendGen.StartInfo.Arguments &= " /debug"
+            UnattendGen.StartInfo.Arguments &= " --debug"
         End If
         Try
             ' Save settings to appropriate XML files
@@ -1934,7 +1934,7 @@ Public Class NewUnattendWiz
                 "   <TimeOffset Id=" & Quote & SelectedOffset.Id & Quote & " DisplayName=" & Quote & If(SelectedOffset.DisplayName.Contains("&"), SelectedOffset.DisplayName.Replace("&", "&amp;").Trim(), SelectedOffset.DisplayName) & Quote & "/>" & CrLf &
                 "</root>"
             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
-            UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
+            UnattendGen.StartInfo.Arguments &= " --regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
             ReportMessage("Saving user settings...", 4)
             DynaLog.LogMessage("Saving architecture settings...")
             ' Build architecture string for UnattendGen
@@ -1946,45 +1946,45 @@ Public Class NewUnattendWiz
                 End If
             Next
             ArchitectureString = String.Join(",", Architectures.ToArray())
-            UnattendGen.StartInfo.Arguments &= " /architecture=" & ArchitectureString
+            UnattendGen.StartInfo.Arguments &= " --architecture=" & ArchitectureString
             ReportMessage("Saving user settings...", 6)
             DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
-                UnattendGen.StartInfo.Arguments &= " /LabConfig"
+                UnattendGen.StartInfo.Arguments &= " --LabConfig"
             End If
             If Win11Config.OOBE_BypassNRO Then
-                UnattendGen.StartInfo.Arguments &= " /BypassNRO"
+                UnattendGen.StartInfo.Arguments &= " --BypassNRO"
             End If
             ReportMessage("Saving user settings...", 8)
             DynaLog.LogMessage("Saving computer settings...")
             If RadioButton28.Checked Then
                 If Not PCName.DefaultName Then
-                    UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+                    UnattendGen.StartInfo.Arguments &= " --computername=" & PCName.Name
                 End If
             Else
                 If Not String.IsNullOrEmpty(PCNameScript) Then
-                    UnattendGen.StartInfo.Arguments &= " /computername=script:" & Quote & PCNameScript & Quote
+                    UnattendGen.StartInfo.Arguments &= " --computername=script:" & Quote & PCNameScript & Quote
                 End If
             End If
             DynaLog.LogMessage("Saving configuration set/distribution share settings...")
             If UseConfigSet Then
-                UnattendGen.StartInfo.Arguments &= " /ConfigSet"
+                UnattendGen.StartInfo.Arguments &= " --ConfigSet"
             End If
             ReportMessage("Saving user settings...", 10)
             DynaLog.LogMessage("Saving time zone settings...")
             If TimeOffsetInteractive Then
-                UnattendGen.StartInfo.Arguments &= " /tzImplicit"
+                UnattendGen.StartInfo.Arguments &= " --tzImplicit"
             End If
             ReportMessage("Saving user settings...", 12)
             DynaLog.LogMessage("Saving disk configuration...")
             If DiskConfigurationInteractive Then
                 DynaLog.LogMessage("Disks will be configured interactively.")
-                UnattendGen.StartInfo.Arguments &= " /partmode=interactive"
+                UnattendGen.StartInfo.Arguments &= " --partmode=interactive"
             Else
                 DynaLog.LogMessage("Disks will be configured in an unattended manner.")
                 If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
                     DynaLog.LogMessage("Disk 0 will be configured automatically.")
-                    UnattendGen.StartInfo.Arguments &= " /partmode=unattended"
+                    UnattendGen.StartInfo.Arguments &= " --partmode=unattended"
                     Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
@@ -1992,7 +1992,7 @@ Public Class NewUnattendWiz
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
                 ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
                     DynaLog.LogMessage("Disks will be configured with a DiskPart script.")
-                    UnattendGen.StartInfo.Arguments &= " /partmode=custom"
+                    UnattendGen.StartInfo.Arguments &= " --partmode=custom"
                     Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <DiskPart ScriptFile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp") & Quote & " AutoInst=" & Quote & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "1", "0") & Quote & " Disk=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & Quote & " Partition=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & Quote & " />" & CrLf &
@@ -2005,10 +2005,10 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Saving edition settings...")
             If FirmwareChosen Then
                 DynaLog.LogMessage("The product key will be grabbed from firmware.")
-                UnattendGen.StartInfo.Arguments &= " /firmware"
+                UnattendGen.StartInfo.Arguments &= " --firmware"
             ElseIf GenericChosen Then
                 DynaLog.LogMessage("A generic product key has been chosen.")
-                UnattendGen.StartInfo.Arguments &= " /generic"
+                UnattendGen.StartInfo.Arguments &= " --generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
                     "   <Edition Id=" & Quote & EditionIDFromDisplayName(ComboBox6.SelectedItem) & Quote & " DisplayName=" & Quote & ComboBox6.SelectedItem & Quote & " Key=" & Quote & SelectedKey.Key & Quote & " />" & CrLf &
@@ -2016,12 +2016,12 @@ Public Class NewUnattendWiz
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
             Else
                 DynaLog.LogMessage("A custom product key has been chosen.")
-                UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
+                UnattendGen.StartInfo.Arguments &= " --customkey=" & SelectedKey.Key
             End If
             If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
                 ReportMessage("Saving user settings...", 16)
                 DynaLog.LogMessage("Saving user accounts...")
-                UnattendGen.StartInfo.Arguments &= " /customusers"
+                UnattendGen.StartInfo.Arguments &= " --customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
                 If UserAccountsList.Count > 0 Then
@@ -2034,9 +2034,9 @@ Public Class NewUnattendWiz
                     If AutoLogon.EnableAutoLogon Then
                         DynaLog.LogMessage("Automatic logon will be used. Saving auto-logon settings.")
                         If AutoLogon.LogonMode = AutoLogonMode.FirstAdmin Then
-                            UnattendGen.StartInfo.Arguments &= " /autologon=firstadmin"
+                            UnattendGen.StartInfo.Arguments &= " --autologon=firstadmin"
                         ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
-                            UnattendGen.StartInfo.Arguments &= " /autologon=builtinadmin"
+                            UnattendGen.StartInfo.Arguments &= " --autologon=builtinadmin"
                             Dim builtinAdminContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                                 "<root>" & CrLf &
                                 "   <BuiltInAdmin Password=" & Quote & If(AutoLogon.LogonPassword.Contains("&"), AutoLogon.LogonPassword.Replace("&", "&amp;").Trim(), AutoLogon.LogonPassword) & Quote & " />" & CrLf &
@@ -2046,7 +2046,7 @@ Public Class NewUnattendWiz
                     End If
                     If PasswordObfuscate Then
                         DynaLog.LogMessage("Passwords will be encoded with Base64.")
-                        UnattendGen.StartInfo.Arguments &= " /b64obscure"
+                        UnattendGen.StartInfo.Arguments &= " --b64obscure"
                     End If
                 Else
                     UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
@@ -2054,17 +2054,17 @@ Public Class NewUnattendWiz
             ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
                 DynaLog.LogMessage("A Microsoft account is expected to be used in the target installation.")
                 ReportMessage("Saving user settings...", 16)
-                UnattendGen.StartInfo.Arguments &= " /msa"
+                UnattendGen.StartInfo.Arguments &= " --msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
                 ReportMessage("Saving user settings...", 18)
                 DynaLog.LogMessage("Saving password expiration settings...")
-                UnattendGen.StartInfo.Arguments &= " /pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
+                UnattendGen.StartInfo.Arguments &= " --pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
             End If
             ReportMessage("Saving user settings...", 20)
             DynaLog.LogMessage("Saving Account Lockout settings...")
             If SelectedLockoutSettings.Enabled Then
-                UnattendGen.StartInfo.Arguments &= " /lockout=yes"
+                UnattendGen.StartInfo.Arguments &= " --lockout=yes"
                 Dim lockoutContents As String = ""
                 If SelectedLockoutSettings.DefaultPolicy Then
                     lockoutContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -2079,27 +2079,27 @@ Public Class NewUnattendWiz
                 End If
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockoutContents, UTF8)
             Else
-                UnattendGen.StartInfo.Arguments &= " /lockout=no"
+                UnattendGen.StartInfo.Arguments &= " --lockout=no"
             End If
             If VirtualMachineSupported Then
                 ReportMessage("Saving user settings...", 22)
                 DynaLog.LogMessage("Saving VM provider settings...")
                 Select Case SelectedVMSettings.Provider
                     Case VMProvider.VirtualBox_GAs
-                        UnattendGen.StartInfo.Arguments &= " /vm=vbox_gas"
+                        UnattendGen.StartInfo.Arguments &= " --vm=vbox_gas"
                     Case VMProvider.VMware_Tools
-                        UnattendGen.StartInfo.Arguments &= " /vm=vmware"
+                        UnattendGen.StartInfo.Arguments &= " --vm=vmware"
                     Case VMProvider.VirtIO_Guest_Tools
-                        UnattendGen.StartInfo.Arguments &= " /vm=virtio"
+                        UnattendGen.StartInfo.Arguments &= " --vm=virtio"
                 End Select
             End If
             If Not NetworkConfigInteractive Then
                 ReportMessage("Saving user settings...", 24)
                 DynaLog.LogMessage("Saving wireless settings...")
                 If NetworkConfigManualSkip Then
-                    UnattendGen.StartInfo.Arguments &= " /wifi=no"
+                    UnattendGen.StartInfo.Arguments &= " --wifi=no"
                 Else
-                    UnattendGen.StartInfo.Arguments &= " /wifi=yes"
+                    UnattendGen.StartInfo.Arguments &= " --wifi=yes"
                     Dim wirelessContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <WirelessNetwork Name=" & Quote & If(SelectedNetworkConfiguration.SSID.Contains("&"), SelectedNetworkConfiguration.SSID.Replace("&", "&amp;").Trim(), SelectedNetworkConfiguration.SSID) & Quote & " Password=" & Quote & If(SelectedNetworkConfiguration.Password.Contains("&"), SelectedNetworkConfiguration.Password.Replace("&", "&amp;").Trim(), SelectedNetworkConfiguration.Password) & Quote & " AuthMode=" & Quote & If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.Open, "Open", If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK, "WPA2", "WPA3")) & Quote & " NonBroadcast=" & Quote & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "1", "0") & Quote & " />" & CrLf &
@@ -2111,9 +2111,9 @@ Public Class NewUnattendWiz
                 ReportMessage("Saving user settings...", 24.5)
                 DynaLog.LogMessage("Saving system telemetry settings...")
                 If SelectedTelemetrySettings.Enabled Then
-                    UnattendGen.StartInfo.Arguments &= " /telem=yes"
+                    UnattendGen.StartInfo.Arguments &= " --telem=yes"
                 Else
-                    UnattendGen.StartInfo.Arguments &= " /telem=no"
+                    UnattendGen.StartInfo.Arguments &= " --telem=no"
                 End If
             End If
             If ConfiguredScripts.Count > 0 Then
@@ -2146,7 +2146,7 @@ Public Class NewUnattendWiz
                     File.WriteAllText(destinationFilePath, ConfiguredScript.ScriptContents, UTF8)
                 Next
                 DynaLog.LogMessage("Scripts were saved. Referencing them...")
-                UnattendGen.StartInfo.Arguments &= " /customscripts"
+                UnattendGen.StartInfo.Arguments &= " --customscripts"
                 Dim postInstallScriptContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
                     "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\specialize.ps1" & Quote & " Stage=" & Quote & "System" & Quote & " />" & CrLf &
@@ -2157,12 +2157,12 @@ Public Class NewUnattendWiz
                 DynaLog.LogMessage("Checking if Windows Explorer will be restarted after running scripts...")
                 If ScriptsRestartExplorer Then
                     DynaLog.LogMessage("Explorer will be restarted.")
-                    UnattendGen.StartInfo.Arguments &= " /restartexplorer"
+                    UnattendGen.StartInfo.Arguments &= " --restartexplorer"
                 End If
                 DynaLog.LogMessage("Checking if PowerShell windows will be hidden...")
                 If ScriptsHideWindow Then
                     DynaLog.LogMessage("Windows will be hidden.")
-                    UnattendGen.StartInfo.Arguments &= " /hidewindows"
+                    UnattendGen.StartInfo.Arguments &= " --hidewindows"
                 End If
             End If
             If SystemComponentsEx.Count > 0 Then
@@ -2173,7 +2173,7 @@ Public Class NewUnattendWiz
                     Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components"))
                 End If
                 DynaLog.LogMessage("Saving custom components...")
-                UnattendGen.StartInfo.Arguments &= " /customcomponents"
+                UnattendGen.StartInfo.Arguments &= " --customcomponents"
                 For Each SystemComponent As Component In SystemComponentsEx
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components", String.Format("{0}_{1}.xml", SystemComponent.Id, SystemComponent.Pass.Name)),
                                       SystemComponent.XmlData, UTF8)

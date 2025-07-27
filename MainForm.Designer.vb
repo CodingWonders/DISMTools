@@ -194,6 +194,7 @@ Partial Class MainForm
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DISMToolsTourToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GlossaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CommandHelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
@@ -477,7 +478,7 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.DISMToolsTourToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RemoveAppliedAnswerFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1305,7 +1306,7 @@ Partial Class MainForm
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend})
+        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
@@ -1591,6 +1592,12 @@ Partial Class MainForm
         Me.HelpTopicsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1
         Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.HelpTopicsToolStripMenuItem.Text = "Help Topics"
+        '
+        'DISMToolsTourToolStripMenuItem
+        '
+        Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
+        Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
         '
         'GlossaryToolStripMenuItem
         '
@@ -4395,11 +4402,11 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
-        'DISMToolsTourToolStripMenuItem
+        'RemoveAppliedAnswerFileToolStripMenuItem
         '
-        Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
-        Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Name = "RemoveAppliedAnswerFileToolStripMenuItem"
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = "Remove applied answer file"
         '
         'MainForm
         '
@@ -4965,4 +4972,5 @@ Partial Class MainForm
     Friend WithEvents LanguagesAndFODWin10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitFullScreenTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DISMToolsTourToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RemoveAppliedAnswerFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

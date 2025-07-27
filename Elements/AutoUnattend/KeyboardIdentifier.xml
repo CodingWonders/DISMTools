@@ -10,12 +10,12 @@
     <KeyboardIdentifier Id="0003042b" DisplayName="Armenian Typewriter" Type="Keyboard"/>
     <KeyboardIdentifier Id="0001042b" DisplayName="Armenian Western (Legacy)" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000044d" DisplayName="Assamese - INSCRIPT" Type="Keyboard"/>
-    <KeyboardIdentifier Id="0001042c" DisplayName="Azerbaijani/Azeri (Standard)" Type="Keyboard"/>
-    <KeyboardIdentifier Id="0000082c" DisplayName="Azerbaijani/Azeri Cyrillic" Type="Keyboard"/>
-    <KeyboardIdentifier Id="0000042c" DisplayName="Azerbaijani/Azeri Latin" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00000445" DisplayName="Bengali/Bangla" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00020445" DisplayName="Bengali/Bangla - INSCRIPT" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00010445" DisplayName="Bengali/Bangla - INSCRIPT (Legacy)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0001042c" DisplayName="Azerbaijani (Standard)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0000082c" DisplayName="Azerbaijani Cyrillic" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0000042c" DisplayName="Azerbaijani Latin" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00000445" DisplayName="Bangla" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00020445" DisplayName="Bangla - INSCRIPT" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00010445" DisplayName="Bangla - INSCRIPT (Legacy)" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000046d" DisplayName="Bashkir" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000423" DisplayName="Belarusian" Type="Keyboard"/>
     <KeyboardIdentifier Id="0001080c" DisplayName="Belgian (Comma)" Type="Keyboard"/>
@@ -40,6 +40,7 @@
     <KeyboardIdentifier Id="00000404" DisplayName="Chinese (Traditional) - US" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000c04" DisplayName="Chinese (Traditional, Hong Kong S.A.R.) - US" Type="Keyboard"/>
     <KeyboardIdentifier Id="00001404" DisplayName="Chinese (Traditional, Macao S.A.R.) - US" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00060409" DisplayName="Colemak" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000405" DisplayName="Czech" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010405" DisplayName="Czech (QWERTY)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020405" DisplayName="Czech Programmers" Type="Keyboard"/>
@@ -51,10 +52,12 @@
     <KeyboardIdentifier Id="00000c51" DisplayName="Dzongkha" Type="Keyboard"/>
     <KeyboardIdentifier Id="00004009" DisplayName="English (India)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000425" DisplayName="Estonian" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00000438" DisplayName="Faroese" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00000438" DisplayName="Faeroese" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000040b" DisplayName="Finnish" Type="Keyboard"/>
     <KeyboardIdentifier Id="0001083b" DisplayName="Finnish with Sami" Type="Keyboard"/>
-    <KeyboardIdentifier Id="0000040c" DisplayName="French" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0000040c" DisplayName="French (Legacy, AZERTY)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0001040c" DisplayName="French (Standard, AZERTY)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0002040c" DisplayName="French (Standard, BÉPO)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00120c00" DisplayName="Futhark" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020437" DisplayName="Georgian (Ergonomic)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000437" DisplayName="Georgian (Legacy)" Type="Keyboard"/>
@@ -63,6 +66,8 @@
     <KeyboardIdentifier Id="00010437" DisplayName="Georgian (QWERTY)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000407" DisplayName="German" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010407" DisplayName="German (IBM)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00020407" DisplayName="German Extended (E1)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00030407" DisplayName="German Extended (E2)" Type="Keyboard"/>
     <KeyboardIdentifier Id="000c0c00" DisplayName="Gothic" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000408" DisplayName="Greek" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010408" DisplayName="Greek (220)" Type="Keyboard"/>
@@ -78,6 +83,7 @@
     <KeyboardIdentifier Id="00000475" DisplayName="Hawaiian" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000040d" DisplayName="Hebrew" Type="Keyboard"/>
     <KeyboardIdentifier Id="0002040d" DisplayName="Hebrew (Standard)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0003040d" DisplayName="Hebrew (Standard, 2018)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010439" DisplayName="Hindi Traditional" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000040e" DisplayName="Hungarian" Type="Keyboard"/>
     <KeyboardIdentifier Id="0001040e" DisplayName="Hungarian 101-key" Type="Keyboard"/>
@@ -107,8 +113,8 @@
     <KeyboardIdentifier Id="00000427" DisplayName="Lithuanian IBM" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020427" DisplayName="Lithuanian Standard" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000046e" DisplayName="Luxembourgish" Type="Keyboard"/>
-    <KeyboardIdentifier Id="0000042f" DisplayName="Macedonian" Type="Keyboard"/>
-    <KeyboardIdentifier Id="0001042f" DisplayName="Macedonian - Standard" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0000042f" DisplayName="Macedonian (North Macedonia)" Type="Keyboard"/>
+    <KeyboardIdentifier Id="0001042f" DisplayName="Macedonian (North Macedonia) - Standard" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000044c" DisplayName="Malayalam" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000043a" DisplayName="Maltese 47-Key" Type="Keyboard"/>
     <KeyboardIdentifier Id="0001043a" DisplayName="Maltese 48-Key" Type="Keyboard"/>
@@ -118,12 +124,12 @@
     <KeyboardIdentifier Id="00000450" DisplayName="Mongolian Cyrillic" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010c00" DisplayName="Myanmar (Phonetic order)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00130c00" DisplayName="Myanmar (Visual order)" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00001409" DisplayName="NZ Aotearoa" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000461" DisplayName="Nepali" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020c00" DisplayName="New Tai Lue" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00090c00" DisplayName="N’Ko" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000414" DisplayName="Norwegian" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000043b" DisplayName="Norwegian with Sami" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00090c00" DisplayName="N’Ko" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00001409" DisplayName="NZ Aotearoa" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000448" DisplayName="Odia" Type="Keyboard"/>
     <KeyboardIdentifier Id="00040c00" DisplayName="Ogham" Type="Keyboard"/>
     <KeyboardIdentifier Id="000d0c00" DisplayName="Ol Chiki" Type="Keyboard"/>
@@ -144,8 +150,8 @@
     <KeyboardIdentifier Id="00020418" DisplayName="Romanian (Programmers)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010418" DisplayName="Romanian (Standard)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000419" DisplayName="Russian" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00010419" DisplayName="Russian (Typewriter)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020419" DisplayName="Russian - Mnemonic" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00010419" DisplayName="Russian (Typewriter)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000485" DisplayName="Sakha" Type="Keyboard"/>
     <KeyboardIdentifier Id="0002083b" DisplayName="Sami Extended Finland-Sweden" Type="Keyboard"/>
     <KeyboardIdentifier Id="0001043b" DisplayName="Sami Extended Norway" Type="Keyboard"/>
@@ -192,8 +198,6 @@
     <KeyboardIdentifier Id="0001041f" DisplayName="Turkish F" Type="Keyboard"/>
     <KeyboardIdentifier Id="0000041f" DisplayName="Turkish Q" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000442" DisplayName="Turkmen" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00000409" DisplayName="US" Type="Keyboard"/>
-    <KeyboardIdentifier Id="00050409" DisplayName="US English Table for IBM Arabic 238_L" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000422" DisplayName="Ukrainian" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020422" DisplayName="Ukrainian (Enhanced)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000809" DisplayName="United Kingdom" Type="Keyboard"/>
@@ -203,6 +207,8 @@
     <KeyboardIdentifier Id="00040409" DisplayName="United States-Dvorak for right hand" Type="Keyboard"/>
     <KeyboardIdentifier Id="00020409" DisplayName="United States-International" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000420" DisplayName="Urdu" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00000409" DisplayName="US" Type="Keyboard"/>
+    <KeyboardIdentifier Id="00050409" DisplayName="US English Table for IBM Arabic 238_L" Type="Keyboard"/>
     <KeyboardIdentifier Id="00010480" DisplayName="Uyghur" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000480" DisplayName="Uyghur (Legacy)" Type="Keyboard"/>
     <KeyboardIdentifier Id="00000843" DisplayName="Uzbek Cyrillic" Type="Keyboard"/>

@@ -1,36 +1,28 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports System.IO
 
 Public Class SetPETargetPath
     Implements IImageTaskDialog
 
     Sub GetTargetPath()
-        Using reg As New Process
-            DynaLog.LogMessage("Preparing to get Windows PE settings...")
-            DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
-            Try
-                DynaLog.LogMessage("Getting target path...")
-                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
-                TextBox1.Text = regKey.GetValue("InstRoot", "").ToString()
-                regKey.Close()
-            Catch ex As Exception
+        DynaLog.LogMessage("Preparing to get Windows PE settings...")
+        DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
+        Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
+        DynaLog.LogMessage("REG hive exit code: " & Hex(regExitCode))
+        Try
+            DynaLog.LogMessage("Getting target path...")
+            Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+            DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
+            TextBox1.Text = regKey.GetValue("InstRoot", "").ToString()
+            regKey.Close()
+        Catch ex As Exception
 
-            End Try
-            DynaLog.LogMessage("Unloading hives...")
-            ' Unload registry hives
-            reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
-            reg.Start()
-            reg.WaitForExit()
-        End Using
+        End Try
+        DynaLog.LogMessage("Unloading hives...")
+        ' Unload registry hives
+        RegistryHelper.UnloadRegistryHive("HKLM\PE_SOFT")
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
