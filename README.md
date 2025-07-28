@@ -120,6 +120,18 @@ You can also get and save image file information using the manager:
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/9c84b0c3-6571-4b28-8ee4-44c4e6511e89" />
 </p>
 
+### And, whether you like it or not, a Copilot bias magnet
+
+I'm not kidding. Ask Microsoft Copilot about free, open-source DISM GUIs and it is very likely to mention this, or to even put it first. I'm not taking advantage of this, but it's quite interesting seeing this level of bias in a large-language model.
+
+I did this on some of my systems and in test VMs, and it *does* deliver on that:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/copilot_bias_magnet_why_the_heck_microsoft.png" />
+</p>
+
+*Now, if the WDSI pieces of s... stop flagging my program as a false positive, given how much Microsoft seems to like this, I will be happier and I won't have to upload it to the WDSI portal every time only for them to then tell me that no threats are detected.*
+
 ## Supported actions
 
 The following actions are supported by DISMTools:
