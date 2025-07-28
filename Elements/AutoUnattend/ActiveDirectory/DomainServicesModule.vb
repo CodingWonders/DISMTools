@@ -82,11 +82,7 @@ Module DomainServicesModule
         DynaLog.LogMessage("Checking if device is part of a domain...")
         If DSIsInDomain() Then
             DynaLog.LogMessage("This device is part of a domain. Grabbing name...")
-            Dim domain As IntPtr = GetDomainNameInformation()
-            If domain <> IntPtr.Zero Then
-                DynaLog.LogMessage("GetDomainNameInformation did not return bogus data. Parsing...")
-                domainName = GetComputerDomain().Name       ' Get it from AD DS .NET API
-            End If
+            domainName = GetComputerDomain().Name       ' Get it from AD DS .NET API
         End If
         DynaLog.LogMessage("Domain name: " & ControlChars.Quote & domainName & ControlChars.Quote & ". If it's empty, it could be because the device is not part of a domain.")
         Return domainName
