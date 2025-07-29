@@ -40,6 +40,15 @@ Public Class HelpBrowserForm
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
         DynaLog.LogMessage("Navigating to page " & Quote & e.Url.AbsoluteUri & Quote & "...")
+        If e.Url.AbsoluteUri.Equals("https://dismtools.com/tour", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Tour imaginary site is present. Attempting to launch the tour...")
+            If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+                DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+                Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+            End If
+            WebBrowser1.Navigate(CurrentSite)
+            Exit Sub
+        End If
         If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
             DynaLog.LogMessage("HTML exists in Absolute URI path. Navigating...")
             WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")

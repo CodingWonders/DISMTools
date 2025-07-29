@@ -636,6 +636,18 @@ function Start-PECustomization
             {
                 Write-Host "Could not prepare the system for graphical applications"
             }
+            try
+            {
+                Write-Host "CUSTOMIZATION STEP - Copy First-Party Tools" -BackgroundColor DarkGreen
+                Write-Host "Copying Driver Installation Module..."
+                New-Item -Path "$imagePath\Tools\DIM" -ItemType Directory | Out-Null
+                Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$imagePath\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                Write-Host "First-party tools have been successfully copied."
+            }
+            catch
+            {
+                Write-Host "Could not copy first-party tools."
+            }
         }
         try
         {
@@ -649,12 +661,40 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
-            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat"
+            Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
+            New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
+            Copy-Item -Path "$((Get-Location).Path)\files\scripts\*" -Destination "$imagePath\scripts" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
             Write-Host "Startup commands changed"
         }
         catch
         {
             Write-Host "Could not change startup commands"
+        }
+        try
+        {
+            Write-Host "CUSTOMIZATION STEP - Miscellaneous Registry Edits" -BackgroundColor DarkGreen
+            Write-Host "-- PowerShell Execution Policy --"
+            if (-not (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)) { throw }
+            reg add "HKLM\WINPESOFT\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f
+            Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
+            Write-Host "Registry changed."
+        }
+        catch
+        {
+            Write-Host "Could not change registry..."
+        }
+        try
+        {
+            Write-Host "CUSTOMIZATION STEP - Prepare System for Network-based Installations" -BackgroundColor DarkGreen
+            Write-Host "Preparing NetInstall..."
+            New-Item -Path "$imagePath\pxehelpers" -ItemType Directory | Out-Null
+            Copy-Item -Path "$((Get-Location).Path)\pxehelpers\*" -Destination "$imagePath\pxehelpers" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+            Write-Host "The target system is now ready for network-based installations"
+        }
+        catch
+        {
+            Write-Host "Could not prepare the system for network-based installations"
         }
         Write-Host "CUSTOMIZATION STEP - Set Scratch Size" -BackgroundColor DarkGreen
         Write-Host "Setting scratch size..."
@@ -1251,19 +1291,22 @@ function Write-DiskConfiguration
 
         # One of the three letters mentioned above may be already in use. Check these before assuming they're our targets.
         # This is more the case when you boot the ISO with Ventoy
-        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter }).Count -gt 0) {
+        # ---
+        # Preview 7 Edit -- powershell doesn't consider the count property until we select the object, therefore still causing the issue.
+        # Why, you stupid heap of C# junk?????
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $espLetter } | Select-Object -ExpandProperty DriveLetter).Count -gt 0) {
             Write-Host "The default letter for the EFI System Partition is already in use."
             $usedLetters++
             $espUsed = $true
         }
 
-        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter }).Count -gt 0) {
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $bootLetter } | Select-Object -ExpandProperty DriveLetter).Count -gt 0) {
             Write-Host "The default letter for the boot partition is already in use."
             $usedLetters++
             $bootUsed = $true
         }
 
-        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter }).Count -gt 0) {
+        if ((Get-Volume | Where-Object { $_.DriveLetter -eq $recoveryLetter } | Select-Object -ExpandProperty DriveLetter).Count -gt 0) {
             Write-Host "The default letter for the Windows Recovery Environment partition is already in use."
             $usedLetters++
             $recoveryUsed = $true

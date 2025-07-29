@@ -13,7 +13,22 @@ if %debug% equ 1 (
 	echo Debug mode enabled.
 	taskmgr
 )
-powershell -command Set-ExecutionPolicy Unrestricted
+:: powershell -command Set-ExecutionPolicy Unrestricted
+:: We no longer do it like this for the sake of performance. If we could not set the ExecutionPolicy value in registry,
+:: we'll add it here. If we still couldn't do it, run PowerShell as a fallback
+reg query "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" >nul 2>&1
+if !ERRORLEVEL! equ 1 (
+	reg add "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f >nul 2>&1
+	if !ERRORLEVEL! equ 1 (
+		powershell -command Set-ExecutionPolicy Unrestricted
+	)
+)
+if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
+	powershell -noprofile -file "%sysdrive%\menu.ps1"
+	if exist "%sysdrive%\cmdcons" (
+		set debug=2
+	)
+)
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	echo Please insert the disc image and press ENTER...
 	pause > nul
@@ -34,23 +49,33 @@ if %debug% lss 2 (
 					if not exist "%sysdrive%\Tools\RestartDialog" (md "%sysdrive%\Tools\RestartDialog")
 					xcopy "%%D:\Tools\RestartDialog\*" "%sysdrive%\Tools\RestartDialog" /cehyi > nul
 				)
-				powershell .\PE_Helper.ps1 StartApply
+				powershell -noprofile .\PE_Helper.ps1 StartApply
 			)
 		)
 	)
 ) else (
 	echo.
 	echo.
-	echo You have been dropped to a command shell, in which you can test your applications for Windows PE compatibility.
+	if exist "%sysdrive%\cmdcons" ( cls )
+	echo You have been dropped to a command shell.
 	echo.
 	echo - To shut down the system, type "wpeutil shutdown" and press ENTER
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
+	echo - To initialize networking, type "netinit" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
 	echo - To start the Driver Installation Module in case you need to load drivers, type "StartDim" and press ENTER
 	echo.
+	echo Some administration scripts are included in the "scripts" directory, in "%sysdrive%". Type "cd %sysdrive%\scripts" to
+	echo go to this directory.
+	echo If you have a script that you think will be useful for this kind of environment, feel free to make it a contribution.
+	echo The more, the better.
+	echo.
+	echo This environment will automatically shut down in 72 hours.
+	echo.
 	doskey StartInstall=powershell -file "%sysdrive%\StartInstall.ps1"
 	doskey StartDim=cmd /c "%sysdrive%\dimstart.bat"
+	doskey netinit=cmd /c "%sysdrive%\scripts\initializenetwork.bat"
 	exit /b
 )

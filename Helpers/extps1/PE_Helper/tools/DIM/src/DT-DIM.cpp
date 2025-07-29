@@ -112,16 +112,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             InitCommonControls();
 
             hwndList = CreateWindow(WC_LISTVIEW, L"",
-                                    WS_CHILD | WS_VISIBLE | LVS_REPORT | LVS_EDITLABELS,
+                                    WS_CHILD | WS_VISIBLE | LVS_REPORT,
                                     10, 10, 560, 274, hwnd, (HMENU)IDC_DRIVER_LIST, NULL, NULL);
 
-            // Enable full row select
-            ListView_SetExtendedListViewStyle(hwndList, LVS_EX_FULLROWSELECT);
-
-            // Set listview to not edit labels by double-clicking them
-            LONG_PTR style = GetWindowLongPtr(hwndList, GWL_STYLE);
-            style &= ~LVS_EDITLABELS;
-            SetWindowLongPtr(hwndList, GWL_STYLE, style);
+            // Set some more styles
+            DWORD lvStyles = ListView_GetExtendedListViewStyle(hwndList);
+            lvStyles |= LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES;
+            ListView_SetExtendedListViewStyle(hwndList, lvStyles);
 
             LVCOLUMN lvColumn;
             lvColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
