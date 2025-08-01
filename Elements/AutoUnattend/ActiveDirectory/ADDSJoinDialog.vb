@@ -93,6 +93,7 @@ Public Class ADDSJoinDialog
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         VerifyInPages.AddRange(New WizardPage() {WizardPage.DnsConfigPage, WizardPage.DsConfigPage})
         ChangePage(WizardPage.DnsConfigPage)
+        dnsMappings.Clear()
         ComboBox1.Items.Clear()
         Visible = True
         ADDSInitBW.RunWorkerAsync()
