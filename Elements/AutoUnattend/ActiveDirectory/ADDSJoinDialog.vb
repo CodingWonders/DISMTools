@@ -63,6 +63,8 @@ Public Class ADDSJoinDialog
 
     Private dnsAddresses As String()
 
+    Private NtLogonPathStart As String = ""
+
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         DialogResult = Windows.Forms.DialogResult.Cancel
         Close()
@@ -123,6 +125,9 @@ Public Class ADDSJoinDialog
         ProgressReporter.SetMessage("Getting DNS addresses for each network adapter...")
         ADDSInitBW.ReportProgress(75)
         GetDnsAddresses()
+        ProgressReporter.SetMessage("Getting primary domain controller NetBIOS name...")
+        ADDSInitBW.ReportProgress(88)
+        NtLogonPathStart = DomainServicesModule.DSGetDomainControllerNetBIOSName()
         ProgressReporter.SetMessage("Initialization complete.")
         ADDSInitBW.ReportProgress(100)
     End Sub
@@ -155,7 +160,13 @@ Public Class ADDSJoinDialog
         DSNoDomainPanel.Visible = Not dsIsInDomain
         If dsIsInDomain Then
             TextBox4.Text = dsDomainName
+            If NtLogonPathStart = "" Then
+                NtLogonPathStart = "Primary DC NetBIOS"
+            End If
+        Else
+            NtLogonPathStart = "Primary DC NetBIOS"
         End If
+        AddsNtLogonPathText.Text = String.Format("{0}\", NtLogonPathStart)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -444,5 +455,14 @@ Public Class ADDSJoinDialog
 
     Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles RichTextBox1.TextChanged
         DnsSyntaxCheckerBtn.Enabled = Not String.IsNullOrEmpty(RichTextBox1.Text)
+    End Sub
+
+    Private Sub TextBox4_TextChanged(sender As Object, e As EventArgs) Handles TextBox4.TextChanged
+        AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
+    End Sub
+
+    Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
+        AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox5.Text)
     End Sub
 End Class

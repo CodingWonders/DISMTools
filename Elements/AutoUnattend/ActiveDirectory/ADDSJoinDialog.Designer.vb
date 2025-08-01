@@ -69,6 +69,10 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.AddsUpnPathText = New System.Windows.Forms.Label()
+        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -311,6 +315,10 @@ Partial Class ADDSJoinDialog
         '
         'DSDomainConfigPanel
         '
+        Me.DSDomainConfigPanel.Controls.Add(Me.AddsNtLogonPathText)
+        Me.DSDomainConfigPanel.Controls.Add(Me.Label14)
+        Me.DSDomainConfigPanel.Controls.Add(Me.AddsUpnPathText)
+        Me.DSDomainConfigPanel.Controls.Add(Me.Label13)
         Me.DSDomainConfigPanel.Controls.Add(Me.DSNoDomainPanel)
         Me.DSDomainConfigPanel.Controls.Add(Me.TextBox6)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label12)
@@ -359,7 +367,7 @@ Partial Class ADDSJoinDialog
         '
         'TextBox6
         '
-        Me.TextBox6.Location = New System.Drawing.Point(211, 108)
+        Me.TextBox6.Location = New System.Drawing.Point(211, 165)
         Me.TextBox6.Name = "TextBox6"
         Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox6.Size = New System.Drawing.Size(459, 21)
@@ -379,7 +387,7 @@ Partial Class ADDSJoinDialog
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(88, 111)
+        Me.Label10.Location = New System.Drawing.Point(88, 168)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(57, 13)
         Me.Label10.TabIndex = 5
@@ -577,6 +585,42 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
+        'Label13
+        '
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Location = New System.Drawing.Point(31, 116)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(293, 13)
+        Me.Label13.TabIndex = 8
+        Me.Label13.Text = "User Principal Name (Windows 2000):"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(31, 137)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(293, 13)
+        Me.Label14.TabIndex = 8
+        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'AddsUpnPathText
+        '
+        Me.AddsUpnPathText.AutoEllipsis = True
+        Me.AddsUpnPathText.Location = New System.Drawing.Point(327, 116)
+        Me.AddsUpnPathText.Name = "AddsUpnPathText"
+        Me.AddsUpnPathText.Size = New System.Drawing.Size(343, 13)
+        Me.AddsUpnPathText.TabIndex = 8
+        '
+        'AddsNtLogonPathText
+        '
+        Me.AddsNtLogonPathText.AutoEllipsis = True
+        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(327, 137)
+        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
+        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(343, 13)
+        Me.AddsNtLogonPathText.TabIndex = 8
+        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -663,4 +707,8 @@ Partial Class ADDSJoinDialog
     Friend WithEvents DNS_Explanation_Link As System.Windows.Forms.LinkLabel
     Friend WithEvents DnsSyntaxCheckerBtn As System.Windows.Forms.Button
     Friend WithEvents DnsValidatorBW As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents AddsNtLogonPathText As System.Windows.Forms.Label
+    Friend WithEvents AddsUpnPathText As System.Windows.Forms.Label
 End Class
