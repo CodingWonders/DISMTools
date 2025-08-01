@@ -76,7 +76,7 @@ function Show-SectionMessage {
     )
 
     Clear-Host
-    Write-Host "`n $global:product`n========================================`n"
+    Write-Host "`n $global:product`n$([String]::new("=", $global:product.Length))==`n"
 
     if ($sectionTitle -ne "") {
         Write-Host "  $sectionTitle" -ForegroundColor White
