@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2572"
+    Const UnattendGenReleaseTag As String = "2581_BETA1"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -1291,6 +1291,8 @@ Public Class NewUnattendWiz
                     TextBox13.AppendText("- Selected Hypervisor: VMware (VMware Tools)" & CrLf)
                 Case VMProvider.VirtIO_Guest_Tools
                     TextBox13.AppendText("- Selected Hypervisor: QEMU/Proxmox VE/etc. (VirtIO Guest Tools)" & CrLf)
+                Case VMProvider.Parallels
+                    TextBox13.AppendText("- Selected Hypervisor: Parallels (Parallels Tools)" & CrLf)
             End Select
         End If
         ' 8. -- WIRELESS NETWORKING
@@ -2091,6 +2093,8 @@ Public Class NewUnattendWiz
                         UnattendGen.StartInfo.Arguments &= " --vm=vmware"
                     Case VMProvider.VirtIO_Guest_Tools
                         UnattendGen.StartInfo.Arguments &= " --vm=virtio"
+                    Case VMProvider.Parallels
+                        UnattendGen.StartInfo.Arguments &= " --vm=parallels"
                 End Select
             End If
             If Not NetworkConfigInteractive Then

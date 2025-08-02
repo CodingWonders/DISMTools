@@ -122,6 +122,12 @@
 
 If you don't want to configure scripts, click Next.</value>
   </data>
+  <data name="Label46.Text" xml:space="preserve">
+    <value>- Use Guest Additions with Oracle VM VirtualBox
+- Use VMware Tools with VMware hypervisors
+- Use VirtIO Guest Tools with QEMU-based hypervisors
+- Use Parallels Tools with Parallels hypervisors on Macintosh computers</value>
+  </data>
   <data name="Scintilla2.Text" xml:space="preserve">
     <value>REM EXAMPLE SCRIPT. PLEASE MODIFY
 REM -----------------------------------------
@@ -152,9 +158,6 @@ Special thanks to Christoph Schneegans for making the library that makes this wi
 
 To begin creating your answer file, click Next.</value>
   </data>
-  <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
