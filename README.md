@@ -202,7 +202,7 @@ This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: April 5, 2025 (Roberto Zamfir)</i></p>
+	<p align="center"><i>Last updated: July 30, 2025</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
