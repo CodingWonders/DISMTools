@@ -195,7 +195,7 @@ DISMTools is compatible with the following operating systems:
 
 You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet:
 
-- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`)
+- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`) (available on the [Windows Utility](https://github.com/ChrisTitusTech/winutil))
 - Preview version: `winget install CodingWondersSoftware.DISMTools.Preview` (moniker: `DISMTools-pre`)
 
 This program is also 100% Free.
