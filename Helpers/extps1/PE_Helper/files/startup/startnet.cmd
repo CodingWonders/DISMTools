@@ -27,7 +27,7 @@ if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 	powershell -noprofile -file "%sysdrive%\menu.ps1"
 	if exist "%sysdrive%\netinstall" (
 		cd /d "%sysdrive%"\
-		powershell -noprofile -file ".\pxehelpers\wds\wdshelper.ps1"
+		powershell -noprofile -file ".\pxehelpers\PXEHelpers.Startup.ps1"
 	) else if exist "%sysdrive%\cmdcons" (
 		set debug=2
 	)

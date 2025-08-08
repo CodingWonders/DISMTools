@@ -16730,4 +16730,16 @@ Public Class MainForm
         End Try
         Cursor = Cursors.Arrow
     End Sub
+
+    Private Sub CommitImage_Click(sender As Object, e As EventArgs) Handles CommitImage.Click
+        Button27.PerformClick()
+    End Sub
+
+    Private Sub MountImage_Click(sender As Object, e As EventArgs) Handles MountImage.Click
+        Button26.PerformClick()
+    End Sub
+
+    Private Sub RemountImage_Click(sender As Object, e As EventArgs) Handles RemountImage.Click
+        Button25.PerformClick()
+    End Sub
 End Class

@@ -686,10 +686,8 @@ Public Class GetImgInfoDlg
                         FeatUpd = "24H2 (Germanium)"
                     Case 27501 To 27686
                         FeatUpd = "25H1 (Dilithium)"
-                    Case 27687 To 27858
+                    Case Is >= 27687
                         FeatUpd = "25H2 (Selenium)"
-                    Case Is >= 27859
-                        FeatUpd = "26H1 (Bromine)"
                 End Select
             Case Else
                 Exit Sub

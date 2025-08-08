@@ -30,7 +30,52 @@ Module DomainServicesModule
         Public Shared Function NetGetDCName(serverName As String, domainName As String, ByRef buffer As IntPtr) As NetApiStatus
         End Function
 
+        <DllImport("netapi32.dll", CharSet:=CharSet.Unicode)>
+        Public Shared Function NetWkstaGetInfo(<MarshalAs(UnmanagedType.LPWStr)> serverName As String, level As Integer, ByRef bufPtr As IntPtr) As Integer
+        End Function
+
     End Class
+
+    ''' <summary>
+    ''' Structure for workstation environment information obtained by NetWkstaGetInfo
+    ''' </summary>
+    ''' <remarks>Headers: lmwksta.h</remarks>
+    <StructLayout(LayoutKind.Sequential)>
+    Private Structure WKSTA_INFO_100
+        ''' <summary>
+        ''' Information level for platform-specific info
+        ''' </summary>
+        ''' <remarks>
+        ''' 300: MS-DOS;
+        ''' 400: OS/2;
+        ''' 500: Windows NT;
+        ''' 600: OSF/1;
+        ''' 700: VMS
+        ''' </remarks>
+        Public wki100_platform_id As Integer
+        ''' <summary>
+        ''' The name of the local computer
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MarshalAs(UnmanagedType.LPWStr)>
+        Public wki100_computer_name As String
+        ''' <summary>
+        ''' The name of the domain to which the PC belongs
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MarshalAs(UnmanagedType.LPWStr)>
+        Public wki100_langroup As String
+        ''' <summary>
+        ''' The major part of the version of running OS
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public wki100_ver_major As Integer
+        ''' <summary>
+        ''' The minor part of the version of running OS
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public wki100_ver_minor As Integer
+    End Structure
 
     ''' <summary>
     ''' Gets the information about the name of the domain the system has joined
@@ -82,14 +127,35 @@ Module DomainServicesModule
         DynaLog.LogMessage("Checking if device is part of a domain...")
         If DSIsInDomain() Then
             DynaLog.LogMessage("This device is part of a domain. Grabbing name...")
-            Dim domain As IntPtr = GetDomainNameInformation()
-            If domain <> IntPtr.Zero Then
-                DynaLog.LogMessage("GetDomainNameInformation did not return bogus data. Parsing...")
-                domainName = GetComputerDomain().Name       ' Get it from AD DS .NET API
-            End If
+            domainName = GetComputerDomain().Name       ' Get it from AD DS .NET API
         End If
         DynaLog.LogMessage("Domain name: " & ControlChars.Quote & domainName & ControlChars.Quote & ". If it's empty, it could be because the device is not part of a domain.")
         Return domainName
+    End Function
+
+    ''' <summary>
+    ''' Gets the NetBIOS name of the workstation/Primary Domain Controller (PDC)
+    ''' </summary>
+    ''' <returns>The NetBIOS name</returns>
+    ''' <remarks></remarks>
+    Public Function DSGetDomainControllerNetBIOSName() As String
+        Dim netbiosName As String = ""
+        DynaLog.LogMessage("Preparing to get the NetBIOS name of the DC...")
+        Dim pBuffer As IntPtr = IntPtr.Zero
+        Dim result As Integer = NativeMethods.NetWkstaGetInfo(Nothing, 100, pBuffer)
+        DynaLog.LogMessage("NETAPI::NetWkstaGetInfo exit code: " & result)
+        If result = 0 Then
+            DynaLog.LogMessage("NETAPI::NetWkstaGetInfo succeeded! Parsing pointer to struct...")
+            Try
+                netbiosName = Marshal.PtrToStructure(Of WKSTA_INFO_100)(pBuffer).wki100_langroup
+            Catch ex As Exception
+                DynaLog.LogMessage("Pointer could not be parsed to struct: " & ex.Message)
+            End Try
+            NativeMethods.NetApiBufferFree(pBuffer)
+        Else
+            DynaLog.LogMessage("NETAPI::NetWkstaGetInfo failed.")
+        End If
+        Return netbiosName
     End Function
 
 End Module
