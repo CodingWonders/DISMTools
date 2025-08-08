@@ -2081,14 +2081,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue with the used volume letter checks in the PE Helper where they would not work correctly
+        '''- Fixed an issue where DNS address mappings were not being cleared on closure of the AD DS join wizard
         '''
         '''New features:
         '''
-        '''- The startup screen in HotInstall is now localized
-        '''- The Driver Installation Module (DIM) has seen a minor design refresh to let you select items more easily, with grid lines
-        '''- PowerShell script execution policy settings have been off-loaded from the DT PE startup code and put into the ISO creation script
-        '''- UnattendGen has been updated to the latest version, providing [resto de la cadena truncado]&quot;;.
+        '''- The Preview Release Notice has been removed in favor of a new menu for the PXE Helpers
+        '''- When joining devices to an ADDS domain, you will now see user principal name and NT logon path representations of the user/domain combination
+        '''- UnattendGen has been updated to the latest version
+        '''- You can now configure guest virtual machine support for Parallels hypervisors on Maci [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
