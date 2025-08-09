@@ -479,6 +479,7 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1621,7 +1622,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -4442,6 +4443,12 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
+        'OpenDiagnosticLogsInLogViewerToolStripMenuItem
+        '
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Name = "OpenDiagnosticLogsInLogViewerToolStripMenuItem"
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = "Open diagnostic logs in log viewer"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -5007,4 +5014,5 @@ Partial Class MainForm
     Friend WithEvents ExitFullScreenTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents DISMToolsTourToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RemoveAppliedAnswerFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OpenDiagnosticLogsInLogViewerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

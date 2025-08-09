@@ -16742,4 +16742,11 @@ Public Class MainForm
     Private Sub RemountImage_Click(sender As Object, e As EventArgs) Handles RemountImage.Click
         Button25.PerformClick()
     End Sub
+
+    Private Sub OpenDiagnosticLogsInLogViewerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenDiagnosticLogsInLogViewerToolStripMenuItem.Click
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe"),
+                          Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log"))
+        End If
+    End Sub
 End Class
