@@ -2855,7 +2855,7 @@ Public Class NewUnattendWiz
                           Path.GetFileNameWithoutExtension(zip).ToLower().Contains("macos"))
                 DynaLog.LogMessage(String.Format("Copying {0} to destination...", Path.GetFileName(CrossPlatformZip)))
                 Try
-                    File.Copy(CrossPlatformZip, Path.Combine(CPUnattendGenFBD.SelectedPath, Path.GetFileName(CrossPlatformZip)))
+                    File.Copy(CrossPlatformZip, Path.Combine(CPUnattendGenFBD.SelectedPath, Path.GetFileName(CrossPlatformZip)), True)
                 Catch ex As Exception
                     DynaLog.LogMessage("Could not copy this file. Error message: " & ex.Message)
                 End Try
