@@ -2845,4 +2845,18 @@ Public Class NewUnattendWiz
     Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
         ADDSJoinDialog.ShowDialog(Me)
     End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        If CPUnattendGenFBD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            For Each CrossPlatformZip In Directory.GetFiles(Path.Combine(Application.StartupPath, "Tools", "UnattendGen"), "*.zip", SearchOption.TopDirectoryOnly).
+                Where(Function(zip) Path.GetFileNameWithoutExtension(zip).ToLower().Contains("linux") OrElse
+                          Path.GetFileNameWithoutExtension(zip).ToLower().Contains("macos"))
+                Try
+                    File.Copy(CrossPlatformZip, Path.Combine(CPUnattendGenFBD.SelectedPath, Path.GetFileName(CrossPlatformZip)))
+                Catch ex As Exception
+
+                End Try
+            Next
+        End If
+    End Sub
 End Class

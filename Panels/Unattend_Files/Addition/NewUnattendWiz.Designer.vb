@@ -49,6 +49,11 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
+        Me.WelcomePanel = New System.Windows.Forms.Panel()
+        Me.LinkLabel10 = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.WelcomeHeader = New System.Windows.Forms.Label()
+        Me.WelcomeDesc = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
@@ -313,10 +318,6 @@ Partial Class NewUnattendWiz
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.RegionalSettingsHeader = New System.Windows.Forms.Label()
-        Me.WelcomePanel = New System.Windows.Forms.Panel()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.WelcomeHeader = New System.Windows.Forms.Label()
-        Me.WelcomeDesc = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.EditorPanelContainer = New System.Windows.Forms.Panel()
         Me.Scintilla1 = New ScintillaNET.Scintilla()
@@ -354,6 +355,7 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.CPUnattendGenFBD = New System.Windows.Forms.FolderBrowserDialog()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -363,6 +365,7 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
+        Me.WelcomePanel.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
@@ -437,7 +440,6 @@ Partial Class NewUnattendWiz
         Me.WinSVSettingsPanel.SuspendLayout()
         Me.RegionalSettingsPanel.SuspendLayout()
         Me.RegionalSettings.SuspendLayout()
-        Me.WelcomePanel.SuspendLayout()
         Me.EditorPanelContainer.SuspendLayout()
         Me.DarkToolStrip1.SuspendLayout()
         Me.HeaderPanel.SuspendLayout()
@@ -618,6 +620,65 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(1008, 569)
         Me.StepsContainer.TabIndex = 1
+        '
+        'WelcomePanel
+        '
+        Me.WelcomePanel.Controls.Add(Me.LinkLabel10)
+        Me.WelcomePanel.Controls.Add(Me.LinkLabel1)
+        Me.WelcomePanel.Controls.Add(Me.WelcomeHeader)
+        Me.WelcomePanel.Controls.Add(Me.WelcomeDesc)
+        Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WelcomePanel.Location = New System.Drawing.Point(0, 0)
+        Me.WelcomePanel.Name = "WelcomePanel"
+        Me.WelcomePanel.Size = New System.Drawing.Size(1008, 569)
+        Me.WelcomePanel.TabIndex = 0
+        '
+        'LinkLabel10
+        '
+        Me.LinkLabel10.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LinkLabel10.AutoEllipsis = True
+        Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel10.Location = New System.Drawing.Point(205, 422)
+        Me.LinkLabel10.Name = "LinkLabel10"
+        Me.LinkLabel10.Size = New System.Drawing.Size(436, 13)
+        Me.LinkLabel10.TabIndex = 4
+        Me.LinkLabel10.TabStop = True
+        Me.LinkLabel10.Text = "Copy Linux and macOS versions of the unattended answer file generator program..."
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LinkLabel1.AutoEllipsis = True
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel1.Location = New System.Drawing.Point(205, 399)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(436, 13)
+        Me.LinkLabel1.TabIndex = 2
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Answer file generator (online version)"
+        '
+        'WelcomeHeader
+        '
+        Me.WelcomeHeader.AutoEllipsis = True
+        Me.WelcomeHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.WelcomeHeader.Location = New System.Drawing.Point(16, 17)
+        Me.WelcomeHeader.Name = "WelcomeHeader"
+        Me.WelcomeHeader.Size = New System.Drawing.Size(708, 51)
+        Me.WelcomeHeader.TabIndex = 14
+        Me.WelcomeHeader.Text = "Welcome to the unattended answer file creation wizard"
+        '
+        'WelcomeDesc
+        '
+        Me.WelcomeDesc.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.WelcomeDesc.AutoEllipsis = True
+        Me.WelcomeDesc.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.WelcomeDesc.Location = New System.Drawing.Point(206, 146)
+        Me.WelcomeDesc.Name = "WelcomeDesc"
+        Me.WelcomeDesc.Size = New System.Drawing.Size(596, 188)
+        Me.WelcomeDesc.TabIndex = 0
+        Me.WelcomeDesc.Text = resources.GetString("WelcomeDesc.Text")
         '
         'FinishPanel
         '
@@ -3607,51 +3668,6 @@ Partial Class NewUnattendWiz
         Me.RegionalSettingsHeader.TabIndex = 1
         Me.RegionalSettingsHeader.Text = "Configure your language, keyboard layout, and other regional settings"
         '
-        'WelcomePanel
-        '
-        Me.WelcomePanel.Controls.Add(Me.LinkLabel1)
-        Me.WelcomePanel.Controls.Add(Me.WelcomeHeader)
-        Me.WelcomePanel.Controls.Add(Me.WelcomeDesc)
-        Me.WelcomePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WelcomePanel.Location = New System.Drawing.Point(0, 0)
-        Me.WelcomePanel.Name = "WelcomePanel"
-        Me.WelcomePanel.Size = New System.Drawing.Size(1008, 569)
-        Me.WelcomePanel.TabIndex = 0
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.LinkLabel1.AutoEllipsis = True
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(205, 399)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(436, 13)
-        Me.LinkLabel1.TabIndex = 2
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Answer file generator (online version)"
-        '
-        'WelcomeHeader
-        '
-        Me.WelcomeHeader.AutoEllipsis = True
-        Me.WelcomeHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.WelcomeHeader.Location = New System.Drawing.Point(16, 17)
-        Me.WelcomeHeader.Name = "WelcomeHeader"
-        Me.WelcomeHeader.Size = New System.Drawing.Size(708, 51)
-        Me.WelcomeHeader.TabIndex = 14
-        Me.WelcomeHeader.Text = "Welcome to the unattended answer file creation wizard"
-        '
-        'WelcomeDesc
-        '
-        Me.WelcomeDesc.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.WelcomeDesc.AutoEllipsis = True
-        Me.WelcomeDesc.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.WelcomeDesc.Location = New System.Drawing.Point(206, 146)
-        Me.WelcomeDesc.Name = "WelcomeDesc"
-        Me.WelcomeDesc.Size = New System.Drawing.Size(596, 188)
-        Me.WelcomeDesc.TabIndex = 0
-        Me.WelcomeDesc.Text = resources.GetString("WelcomeDesc.Text")
-        '
         'Label5
         '
         Me.Label5.AutoEllipsis = True
@@ -3991,6 +4007,12 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt"
         Me.ScriptEditorOFD.Title = "Open script"
         '
+        'CPUnattendGenFBD
+        '
+        Me.CPUnattendGenFBD.Description = "Specify the path on which you want to store Linux and macOS versions of UnattendG" & _
+    "en:"
+        Me.CPUnattendGenFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
+        '
         'NewUnattendWiz
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4018,6 +4040,7 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
+        Me.WelcomePanel.ResumeLayout(False)
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.UnattendProgressPanel.ResumeLayout(False)
@@ -4136,7 +4159,6 @@ Partial Class NewUnattendWiz
         Me.RegionalSettingsPanel.ResumeLayout(False)
         Me.RegionalSettingsPanel.PerformLayout()
         Me.RegionalSettings.ResumeLayout(False)
-        Me.WelcomePanel.ResumeLayout(False)
         Me.EditorPanelContainer.ResumeLayout(False)
         Me.DarkToolStrip1.ResumeLayout(False)
         Me.DarkToolStrip1.PerformLayout()
@@ -4466,4 +4488,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents Button11 As System.Windows.Forms.Button
     Friend WithEvents LinkLabel9 As System.Windows.Forms.LinkLabel
     Friend WithEvents Button12 As System.Windows.Forms.Button
+    Friend WithEvents LinkLabel10 As System.Windows.Forms.LinkLabel
+    Friend WithEvents CPUnattendGenFBD As System.Windows.Forms.FolderBrowserDialog
 End Class
