@@ -6,7 +6,6 @@ Write-Host "  2 - Perform a Network Installation"
 Write-Host "      Choose this method if you started the Preinstallation Environment using a network-based"
 Write-Host "      deployment solution. This is recommended for system administrators that want to deploy a system"
 Write-Host "      image to multiple computers at once."
-Write-Host "      Note that WDS is only supported at the moment." -ForegroundColor White
 Write-Host "  C - Enter a command line"
 Write-Host "  S - Shut down my computer"
 Write-Host "  R - Restart my computer`n"
