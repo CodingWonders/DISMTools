@@ -22,6 +22,7 @@ Partial Class ADDSJoinDialog
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ADDSJoinDialog))
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
@@ -44,6 +45,10 @@ Partial Class ADDSJoinDialog
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DNSConfigHeader = New System.Windows.Forms.Label()
         Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
+        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.AddsUpnPathText = New System.Windows.Forms.Label()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.DSNoDomainPanel = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -69,10 +74,6 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.AddsUpnPathText = New System.Windows.Forms.Label()
-        Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -335,6 +336,42 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigPanel.TabIndex = 1
         Me.DSDomainConfigPanel.Visible = False
         '
+        'AddsNtLogonPathText
+        '
+        Me.AddsNtLogonPathText.AutoEllipsis = True
+        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(327, 137)
+        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
+        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(343, 13)
+        Me.AddsNtLogonPathText.TabIndex = 8
+        '
+        'Label14
+        '
+        Me.Label14.AutoEllipsis = True
+        Me.Label14.Location = New System.Drawing.Point(31, 137)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(293, 13)
+        Me.Label14.TabIndex = 8
+        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'AddsUpnPathText
+        '
+        Me.AddsUpnPathText.AutoEllipsis = True
+        Me.AddsUpnPathText.Location = New System.Drawing.Point(327, 116)
+        Me.AddsUpnPathText.Name = "AddsUpnPathText"
+        Me.AddsUpnPathText.Size = New System.Drawing.Size(343, 13)
+        Me.AddsUpnPathText.TabIndex = 8
+        '
+        'Label13
+        '
+        Me.Label13.AutoEllipsis = True
+        Me.Label13.Location = New System.Drawing.Point(31, 116)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(293, 13)
+        Me.Label13.TabIndex = 8
+        Me.Label13.Text = "User Principal Name (Windows 2000):"
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'DSNoDomainPanel
         '
         Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
@@ -376,13 +413,11 @@ Partial Class ADDSJoinDialog
         'Label12
         '
         Me.Label12.AutoEllipsis = True
-        Me.Label12.Location = New System.Drawing.Point(88, 383)
+        Me.Label12.Location = New System.Drawing.Point(88, 367)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(582, 49)
+        Me.Label12.Size = New System.Drawing.Size(582, 65)
         Me.Label12.TabIndex = 5
-        Me.Label12.Text = "Contact your system administrator to provide authentication information used to j" & _
-    "oin the domain." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "To finish setting up target devices to join this domain, clic" & _
-    "k Finish."
+        Me.Label12.Text = resources.GetString("Label12.Text")
         '
         'Label10
         '
@@ -584,42 +619,6 @@ Partial Class ADDSJoinDialog
         'DnsValidatorBW
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
-        '
-        'Label13
-        '
-        Me.Label13.AutoEllipsis = True
-        Me.Label13.Location = New System.Drawing.Point(31, 116)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(293, 13)
-        Me.Label13.TabIndex = 8
-        Me.Label13.Text = "User Principal Name (Windows 2000):"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'Label14
-        '
-        Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(31, 137)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(293, 13)
-        Me.Label14.TabIndex = 8
-        Me.Label14.Text = "Logon Path (pre-Windows 2000):"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'AddsUpnPathText
-        '
-        Me.AddsUpnPathText.AutoEllipsis = True
-        Me.AddsUpnPathText.Location = New System.Drawing.Point(327, 116)
-        Me.AddsUpnPathText.Name = "AddsUpnPathText"
-        Me.AddsUpnPathText.Size = New System.Drawing.Size(343, 13)
-        Me.AddsUpnPathText.TabIndex = 8
-        '
-        'AddsNtLogonPathText
-        '
-        Me.AddsNtLogonPathText.AutoEllipsis = True
-        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(327, 137)
-        Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
-        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(343, 13)
-        Me.AddsNtLogonPathText.TabIndex = 8
         '
         'ADDSJoinDialog
         '
