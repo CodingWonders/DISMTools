@@ -1,4 +1,6 @@
-# The DISMTools Preinstallation Environment Helper (PE Helper)
+<p align="center">
+  <img src="./logo.png" />
+</p>
 
 The Preinstallation Environment Helper is a set of scripts and applications designed to help during test deployments of your Windows images. It's used to create the ISO file and install your Windows image, whether it's a local deployment or a network-based one.
 
