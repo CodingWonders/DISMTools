@@ -127,7 +127,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_0.7"
+    Public dtBranch As String = "dt_pre_0.7_relcndid"
     Public dt_codeName As String = "DTVII"
 
     ' Arrays and other variables used on background processes
@@ -16741,5 +16741,12 @@ Public Class MainForm
 
     Private Sub RemountImage_Click(sender As Object, e As EventArgs) Handles RemountImage.Click
         Button25.PerformClick()
+    End Sub
+
+    Private Sub OpenDiagnosticLogsInLogViewerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenDiagnosticLogsInLogViewerToolStripMenuItem.Click
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe"),
+                          Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
+        End If
     End Sub
 End Class

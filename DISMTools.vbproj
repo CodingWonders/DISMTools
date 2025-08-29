@@ -129,6 +129,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -1239,6 +1240,15 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\common\PXEHelpers.Common.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghelper.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghelper_server.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\__ModuleSetup.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\PXEHelpers.Startup.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1282,6 +1292,10 @@
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
     <None Include="Tools\DT_WinADK.reg" />
+    <None Include="Tools\UnattendGen\UnattendGen-arm64-Linux.zip" />
+    <None Include="Tools\UnattendGen\UnattendGen-arm64-MacOS.zip" />
+    <None Include="Tools\UnattendGen\UnattendGen-x64-Linux.zip" />
+    <None Include="Tools\UnattendGen\UnattendGen-x64-MacOS.zip" />
     <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.deps.json" />
     <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.runtimeconfig.json" />
     <None Include="Tools\UnattendGen\win-arm64\UnattendGen.deps.json" />

@@ -7,7 +7,7 @@ on:
       - dt_rel*
     paths-ignore:
       - '.github/**'
-      - 'README.md'
+      - '**/README.md'
       - 'res/**'
   workflow_dispatch:
 env:

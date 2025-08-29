@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../../img/favicon.ico" />
+    <title>Creating ISO files - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Creating ISO files";
+        var mkdocs_page_input_path = "img_tasks\\tools\\isocreator\\isocreate.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../../..">
+          <img src="../../../../logo.png" class="logo" alt="Logo"/>
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/start/">Getting started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../whats_new/highlights/">What's new</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Image tasks</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../img_tasks/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../online_inst_mgmt/">Online installation management mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../offline_inst_mgmt/">Offline installation management mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Image management</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/append_image/">Appending to an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/apply_image/">Applying an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/capture_image/">Capturing an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/delete_image/">Removing volume images from an image file</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/export_image/">Exporting a Windows image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/list_image/">Listing the contents of Windows images</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/mount_image/">Mounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/remount_image/">Remounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/split_image/">Splitting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/unmount_image/">Unmounting an image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Image information dialogs</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/infodlgs/">Overview</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/img_info/">Image file information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/pkg_info/">Package information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/feat_info/">Feature information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/appxpkg_info/">AppX package information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/cap_info/">Capability information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/drv_info/">Driver information</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/winpe_info/">Windows PE configuration information</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >OS packages</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/pkgs/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/add_package/">Adding packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/remove_package/">Removing packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Features</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/features/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/enable_feature/">Enabling features</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/disable_feature/">Disabling features</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >AppX packages</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/appx/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/add_provisionedappxpackage/">Adding AppX packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/remove_provisionedappxpackage/">Removing AppX packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Edition servicing</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/editions/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/set_edition/">Upgrading an image to a higher edition</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/set_productkey/">Setting the product key</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Languages and regional servicing</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../langs/set_layereddriver/">Setting keyboard layered drivers</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capabilities</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/caps/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/add_capability/">Adding capabilities</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/remove_capability/">Removing capabilities</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Drivers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/drvs/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/add_driver/">Adding drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/export_driver/">Exporting drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/import_driver/">Importing drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/remove_driver/">Removing drivers</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tools</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../mimgmgr/">Mounted image manager</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../wim2esd/">Image conversion</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../swm2wim/">SWM file merger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../configlisteditor/">DISM Configuration List Editor</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >ISO creation tools</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../">Overview</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Creating ISO files</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#continuing-the-installation">Continuing the installation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#choosing-an-installation-method">Choosing an installation method</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#remarks">Remarks</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installing the operating system</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../install/localinstall/">Local installations</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Network-based installations</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/pxehelpers/">Overview</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/setup/">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/wds/">Windows Deployment Services (WDS) Helper</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../exttools/dim/">Driver Installation Module</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../exttools/dtpe_es/">Extensibility Suite</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../regcpl/">Image registry control panel</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Unattended answer files</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unattend/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_man/">Unattended answer file manager</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_create/">Unattended answer file creator</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_apply/">Applying unattended answer files</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >External tools</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/themedesigner/">Creating your themes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/dynaviewer/">Viewing diagnostic logs</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../..">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Tools</li>
+          <li class="breadcrumb-item">ISO creation tools</li>
+      <li class="breadcrumb-item active">Creating ISO files</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="creating-an-iso-file">Creating an ISO file</h1>
+<p>To create a new ISO file, do the following:</p>
+<ol>
+<li><strong>Pick your Windows image.</strong> You can either browse through your computer for a Windows image to copy, pick an image from the pop-up mounted image picker, or pick the currently loaded one. Once you pick a Windows image, you will see information about each index in the image</li>
+<li><strong>Choose the architecture for the Preinstallation Environment</strong> by using the architecture list. It is recommended to pick the one that the image supports</li>
+<li>(Optional, new in DISMTools 0.5.1) <strong>Choose an unattended answer file to apply</strong></li>
+<li><strong>Choose the target location of the ISO file.</strong> If the target image exists, you will be asked if you want to replace it when clicking Create</li>
+</ol>
+<p>With DISMTools 0.6.1 and later, you can also specify 2 options:</p>
+<ul>
+<li><strong>Copy to Ventoy drives</strong> lets you take advantage of your <a href="https://ventoy.net/en">Ventoy</a> drives for operating system installation. After the ISO is generated, it will be copied automatically to all Ventoy drives you have plugged into your computer</li>
+<li><strong>Use newly-signed boot binaries</strong> will make the ISO files that you create ship with EFI boot binaries signed with the <em>Windows UEFI CA 2023</em> code-signing certificate. This is not checked by default because of reasons that are mentioned later in this document</li>
+</ul>
+<p><strong>VERY, VERY IMPORTANT:</strong> recent reports indicate that Windows 11 24H2 updates KB5063878 and KB5062660 can cause issues with certain SSD drives that may lead to data loss when writing big files. Either uninstall either update or use a different drive to create your ISO file. If you can't uninstall this update, be cautious. These issues are manifested when around 50 GB of data is written to the drive.</p>
+<p>This process can take between 5 to 10 minutes, depending on the size of the Windows image and the speed of your computer's disk drive.</p>
+<h4 id="windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</h4>
+<p>The Windows UEFI CA 2023 certificate is now used to sign new EFI boot binaries. This is present in versions 10.1.26100.2454 and later of the Windows ADK as an option for ISO file creation.</p>
+<p>Some computers may not boot correctly using these new EFI boot binaries, and compatibility may depend on whether or not a device that uses UEFI contains this certificate. You can check if your computer contains this certificate by running the following PowerShell command as an administrator:</p>
+<pre><code class="language-powershell">[System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes) -match 'Windows UEFI CA 2023'
+</code></pre>
+<p align="center">
+    <img src="https://techcommunity.microsoft.com/t5/s/gxcuf89792/images/bS00MTIxNzM1LTU3MzgxN2kwQ0ZBNzNGQ0FEMjU2RTBE?revision=7" />   
+    <p align="center"><i>Example output of command. Source: Microsoft Tech Community</i></p>
+</p>
+
+<p>If the command returns <code>True</code>, your computer has this certificate. Otherwise, you may need updates to add support for this certificate. If you have doubts regarding the compatibility of your computer with this certificate, it is recommended to leave the option unchecked.</p>
+<p>BIOS-based systems are not affected by this change.</p>
+<p>You can learn more here: <a href="https://techcommunity.microsoft.com/blog/windows-itpro-blog/revoking-vulnerable-windows-boot-managers/4121735">Revoking vulnerable Windows boot managers</a></p>
+<h3 id="continuing-the-installation">Continuing the installation</h3>
+<p>Whether you've started the installation with HotInstall or by booting to installation media, the installation process will be the same. The Preinstallation Environment Helper will guide you through the installation process, which includes:</p>
+<ol>
+<li>Selecting the disk and partition where the operating system will be installed</li>
+<li>Choosing the index of the Windows image to apply</li>
+<li>Applying the Windows image</li>
+<li>Running serviceability tests</li>
+<li>Creating boot files</li>
+<li>Rebooting your system</li>
+</ol>
+<p>The installation process is different if you use the PXE Helpers.</p>
+<h3 id="choosing-an-installation-method">Choosing an installation method</h3>
+<p><strong>NOTE:</strong> the following screen will not appear if you started the installation with HotInstall</p>
+<p>When you boot up the Preinstallation Environment, you will be presented with a screen that lets you choose your preferred installation method, whether it is a local installation or a network-based one.</p>
+<ul>
+<li>Type <code>1</code> and press Enter to start a local installation</li>
+<li>Type <code>2</code> and press Enter to start a network-based installation</li>
+<li>Type <code>C</code> and press Enter to open the command line</li>
+<li>Type <code>S</code> and press Enter to shut down the computer</li>
+<li>Type <code>R</code> and press Enter to restart the computer</li>
+</ul>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_choose_install_option.png" />
+</p>
+
+<p>Refer to the <em>Installing the operating system</em> section for more information about the 2 installation modes.</p>
+<h2 id="remarks">Remarks</h2>
+<ul>
+<li><strong>Please make sure to commit your unsaved changes to your image before creating the ISO file</strong></li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../install/localinstall/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../../..";</script>
+    <script src="../../../../js/theme_extra.js"></script>
+    <script src="../../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

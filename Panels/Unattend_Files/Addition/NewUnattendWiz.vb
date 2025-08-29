@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2581_BETA1"
+    Const UnattendGenReleaseTag As String = "2582"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -2844,5 +2844,23 @@ Public Class NewUnattendWiz
 
     Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
         ADDSJoinDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        DynaLog.LogMessage("Preparing to copy non-Windows UnattendGen...")
+        If CPUnattendGenFBD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("FBD accepted. Copying non-Windows UnattendGen...")
+            For Each CrossPlatformZip In Directory.GetFiles(Path.Combine(Application.StartupPath, "Tools", "UnattendGen"), "*.zip", SearchOption.TopDirectoryOnly).
+                Where(Function(zip) Path.GetFileNameWithoutExtension(zip).ToLower().Contains("linux") OrElse
+                          Path.GetFileNameWithoutExtension(zip).ToLower().Contains("macos"))
+                DynaLog.LogMessage(String.Format("Copying {0} to destination...", Path.GetFileName(CrossPlatformZip)))
+                Try
+                    File.Copy(CrossPlatformZip, Path.Combine(CPUnattendGenFBD.SelectedPath, Path.GetFileName(CrossPlatformZip)), True)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not copy this file. Error message: " & ex.Message)
+                End Try
+            Next
+            MsgBox("Cross-platform versions of UnattendGen are now copied to " & CPUnattendGenFBD.SelectedPath, vbOKOnly + vbInformation)
+        End If
     End Sub
 End Class

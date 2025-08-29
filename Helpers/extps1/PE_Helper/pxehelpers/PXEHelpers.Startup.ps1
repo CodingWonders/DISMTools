@@ -68,7 +68,7 @@ function Show-PxeProviders {
         Write-Host "     " -NoNewline
         $csReqMessage = ""
         if ($provider.ProviderRequiresClientServer) {
-            $csReqMessage = "This provider requires a server component to be launched. You should find the server component of the matching provider. Otherwise, do not use this provider."
+            $csReqMessage = "This provider requires a server component to be launched. You should find the server component of the matching provider in this install disc. Otherwise, do not use this provider."
         } else {
             $csReqMessage = "This provider does not require a server component to be launched."
         }

@@ -314,6 +314,7 @@ Partial Class NewUnattendWiz
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.RegionalSettingsHeader = New System.Windows.Forms.Label()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
+        Me.LinkLabel10 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.WelcomeHeader = New System.Windows.Forms.Label()
         Me.WelcomeDesc = New System.Windows.Forms.Label()
@@ -354,6 +355,8 @@ Partial Class NewUnattendWiz
         Me.EditorModeSFD = New System.Windows.Forms.SaveFileDialog()
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.CPUnattendGenFBD = New System.Windows.Forms.FolderBrowserDialog()
+        Me.Label65 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -874,6 +877,7 @@ Partial Class NewUnattendWiz
         '
         'NoSpecifiedComponentsPanel
         '
+        Me.NoSpecifiedComponentsPanel.Controls.Add(Me.Label65)
         Me.NoSpecifiedComponentsPanel.Controls.Add(Me.Label15)
         Me.NoSpecifiedComponentsPanel.Controls.Add(Me.LinkLabel5)
         Me.NoSpecifiedComponentsPanel.Controls.Add(Me.PictureBox4)
@@ -3609,6 +3613,7 @@ Partial Class NewUnattendWiz
         '
         'WelcomePanel
         '
+        Me.WelcomePanel.Controls.Add(Me.LinkLabel10)
         Me.WelcomePanel.Controls.Add(Me.LinkLabel1)
         Me.WelcomePanel.Controls.Add(Me.WelcomeHeader)
         Me.WelcomePanel.Controls.Add(Me.WelcomeDesc)
@@ -3617,6 +3622,19 @@ Partial Class NewUnattendWiz
         Me.WelcomePanel.Name = "WelcomePanel"
         Me.WelcomePanel.Size = New System.Drawing.Size(1008, 569)
         Me.WelcomePanel.TabIndex = 0
+        '
+        'LinkLabel10
+        '
+        Me.LinkLabel10.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.LinkLabel10.AutoEllipsis = True
+        Me.LinkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel10.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel10.Location = New System.Drawing.Point(205, 422)
+        Me.LinkLabel10.Name = "LinkLabel10"
+        Me.LinkLabel10.Size = New System.Drawing.Size(436, 13)
+        Me.LinkLabel10.TabIndex = 4
+        Me.LinkLabel10.TabStop = True
+        Me.LinkLabel10.Text = "Copy Linux and macOS versions of the unattended answer file generator program..."
         '
         'LinkLabel1
         '
@@ -3990,6 +4008,24 @@ Partial Class NewUnattendWiz
         '
         Me.ScriptEditorOFD.Filter = "PowerShell scripts|*.ps1;*.psm1|Batch scripts|*.bat;*.cmd;*.nt"
         Me.ScriptEditorOFD.Title = "Open script"
+        '
+        'CPUnattendGenFBD
+        '
+        Me.CPUnattendGenFBD.Description = "Specify the path on which you want to store Linux and macOS versions of UnattendG" & _
+    "en:"
+        Me.CPUnattendGenFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
+        '
+        'Label65
+        '
+        Me.Label65.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label65.AutoEllipsis = True
+        Me.Label65.Location = New System.Drawing.Point(17, 336)
+        Me.Label65.Name = "Label65"
+        Me.Label65.Size = New System.Drawing.Size(866, 44)
+        Me.Label65.TabIndex = 1
+        Me.Label65.Text = "Don't want to add custom components? Click Next to skip this step."
+        Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'NewUnattendWiz
         '
@@ -4466,4 +4502,7 @@ Partial Class NewUnattendWiz
     Friend WithEvents Button11 As System.Windows.Forms.Button
     Friend WithEvents LinkLabel9 As System.Windows.Forms.LinkLabel
     Friend WithEvents Button12 As System.Windows.Forms.Button
+    Friend WithEvents LinkLabel10 As System.Windows.Forms.LinkLabel
+    Friend WithEvents CPUnattendGenFBD As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents Label65 As System.Windows.Forms.Label
 End Class
