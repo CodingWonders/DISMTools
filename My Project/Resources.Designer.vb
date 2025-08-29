@@ -2079,16 +2079,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''- Fixed an issue where DNS address mappings were not being cleared on closure of the AD DS join wizard
+        '''--- Bugfixes
         '''
-        '''New features:
-        '''
-        '''- The Preview Release Notice has been removed in favor of a new menu for the PXE Helpers
-        '''- When joining devices to an ADDS domain, you will now see user principal name and NT logon path representations of the user/domain combination
-        '''- UnattendGen has been updated to the latest version
-        '''- You can now configure guest virtual machine support for Parallels hypervisors on Maci [resto de la cadena truncado]&quot;;.
+        '''- Fixed a minor issue where DynaLog timestamps would not use a common format for time
+        '''- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
+        '''- Fixed an issue in the update checker
+        '''- Fixed a deployment issue in the Theme Designer. It will let you load and save themes now instead of throwing an exception
+        '''- Fixed an issue where people could write to the console output
+        '''- Fixed an issue where DISM woul [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
