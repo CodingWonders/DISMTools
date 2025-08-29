@@ -148,6 +148,7 @@ Partial Class MainForm
         Me.ImportDriver = New System.Windows.Forms.ToolStripMenuItem()
         Me.UnattendedAnswerFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ApplyUnattend = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RemoveAppliedAnswerFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowsPEServicingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetPESettings = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetScratchSpace = New System.Windows.Forms.ToolStripMenuItem()
@@ -194,6 +195,7 @@ Partial Class MainForm
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpTopicsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DISMToolsTourToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GlossaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CommandHelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
@@ -477,6 +479,7 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -782,6 +785,7 @@ Partial Class MainForm
         Me.ApplyFFU.Name = "ApplyFFU"
         Me.ApplyFFU.Size = New System.Drawing.Size(289, 22)
         Me.ApplyFFU.Text = "Apply FFU or SFU file..."
+        Me.ApplyFFU.Visible = False
         '
         'ApplyImage
         '
@@ -794,12 +798,14 @@ Partial Class MainForm
         Me.CaptureCustomImage.Name = "CaptureCustomImage"
         Me.CaptureCustomImage.Size = New System.Drawing.Size(289, 22)
         Me.CaptureCustomImage.Text = "Capture incremental changes to file..."
+        Me.CaptureCustomImage.Visible = False
         '
         'CaptureFFU
         '
         Me.CaptureFFU.Name = "CaptureFFU"
         Me.CaptureFFU.Size = New System.Drawing.Size(289, 22)
         Me.CaptureFFU.Text = "Capture partitions to FFU file..."
+        Me.CaptureFFU.Visible = False
         '
         'CaptureImage
         '
@@ -842,6 +848,7 @@ Partial Class MainForm
         Me.GetWIMBootEntry.Name = "GetWIMBootEntry"
         Me.GetWIMBootEntry.Size = New System.Drawing.Size(289, 22)
         Me.GetWIMBootEntry.Text = "Get WIMBoot configuration entries..."
+        Me.GetWIMBootEntry.Visible = False
         '
         'ListImage
         '
@@ -860,12 +867,14 @@ Partial Class MainForm
         Me.OptimizeFFU.Name = "OptimizeFFU"
         Me.OptimizeFFU.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeFFU.Text = "Optimize FFU file..."
+        Me.OptimizeFFU.Visible = False
         '
         'OptimizeImage
         '
         Me.OptimizeImage.Name = "OptimizeImage"
         Me.OptimizeImage.Size = New System.Drawing.Size(289, 22)
         Me.OptimizeImage.Text = "Optimize image..."
+        Me.OptimizeImage.Visible = False
         '
         'RemountImage
         '
@@ -878,6 +887,7 @@ Partial Class MainForm
         Me.SplitFFU.Name = "SplitFFU"
         Me.SplitFFU.Size = New System.Drawing.Size(289, 22)
         Me.SplitFFU.Text = "Splt FFU file into SFU files..."
+        Me.SplitFFU.Visible = False
         '
         'SplitImage
         '
@@ -896,12 +906,14 @@ Partial Class MainForm
         Me.UpdateWIMBootEntry.Name = "UpdateWIMBootEntry"
         Me.UpdateWIMBootEntry.Size = New System.Drawing.Size(289, 22)
         Me.UpdateWIMBootEntry.Text = "Update WIMBoot configuration entry..."
+        Me.UpdateWIMBootEntry.Visible = False
         '
         'ApplySiloedPackage
         '
         Me.ApplySiloedPackage.Name = "ApplySiloedPackage"
         Me.ApplySiloedPackage.Size = New System.Drawing.Size(289, 22)
         Me.ApplySiloedPackage.Text = "Apply siloed provisioning package..."
+        Me.ApplySiloedPackage.Visible = False
         '
         'ToolStripSeparator34
         '
@@ -986,12 +998,14 @@ Partial Class MainForm
         Me.GetProvisioningPackageInfo.Name = "GetProvisioningPackageInfo"
         Me.GetProvisioningPackageInfo.Size = New System.Drawing.Size(283, 22)
         Me.GetProvisioningPackageInfo.Text = "Get provisioning package information..."
+        Me.GetProvisioningPackageInfo.Visible = False
         '
         'ApplyCustomDataImage
         '
         Me.ApplyCustomDataImage.Name = "ApplyCustomDataImage"
         Me.ApplyCustomDataImage.Size = New System.Drawing.Size(283, 22)
         Me.ApplyCustomDataImage.Text = "Apply custom data image..."
+        Me.ApplyCustomDataImage.Visible = False
         '
         'AppPackagesToolStripMenuItem
         '
@@ -1023,12 +1037,14 @@ Partial Class MainForm
         Me.OptimizeProvisionedAppxPackages.Name = "OptimizeProvisionedAppxPackages"
         Me.OptimizeProvisionedAppxPackages.Size = New System.Drawing.Size(287, 22)
         Me.OptimizeProvisionedAppxPackages.Text = "Optimize provisioned packages..."
+        Me.OptimizeProvisionedAppxPackages.Visible = False
         '
         'SetProvisionedAppxDataFile
         '
         Me.SetProvisionedAppxDataFile.Name = "SetProvisionedAppxDataFile"
         Me.SetProvisionedAppxDataFile.Size = New System.Drawing.Size(287, 22)
         Me.SetProvisionedAppxDataFile.Text = "Add custom data file into app package..."
+        Me.SetProvisionedAppxDataFile.Visible = False
         '
         'AppPatchesToolStripMenuItem
         '
@@ -1036,6 +1052,7 @@ Partial Class MainForm
         Me.AppPatchesToolStripMenuItem.Name = "AppPatchesToolStripMenuItem"
         Me.AppPatchesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.AppPatchesToolStripMenuItem.Text = "App (MSP) servicing"
+        Me.AppPatchesToolStripMenuItem.Visible = False
         '
         'CheckAppPatch
         '
@@ -1073,6 +1090,7 @@ Partial Class MainForm
         Me.DefaultAppAssociationsToolStripMenuItem.Name = "DefaultAppAssociationsToolStripMenuItem"
         Me.DefaultAppAssociationsToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.DefaultAppAssociationsToolStripMenuItem.Text = "Default app associations"
+        Me.DefaultAppAssociationsToolStripMenuItem.Visible = False
         '
         'ExportDefaultAppAssociations
         '
@@ -1110,80 +1128,94 @@ Partial Class MainForm
         Me.GetIntl.Name = "GetIntl"
         Me.GetIntl.Size = New System.Drawing.Size(295, 22)
         Me.GetIntl.Text = "Get international settings and languages..."
+        Me.GetIntl.Visible = False
         '
         'SetUILang
         '
         Me.SetUILang.Name = "SetUILang"
         Me.SetUILang.Size = New System.Drawing.Size(295, 22)
         Me.SetUILang.Text = "Set UI language..."
+        Me.SetUILang.Visible = False
         '
         'SetUILangFallback
         '
         Me.SetUILangFallback.Name = "SetUILangFallback"
         Me.SetUILangFallback.Size = New System.Drawing.Size(295, 22)
         Me.SetUILangFallback.Text = "Set default UI fallback language..."
+        Me.SetUILangFallback.Visible = False
         '
         'SetSysUILang
         '
         Me.SetSysUILang.Name = "SetSysUILang"
         Me.SetSysUILang.Size = New System.Drawing.Size(295, 22)
         Me.SetSysUILang.Text = "Set system preferred UI language..."
+        Me.SetSysUILang.Visible = False
         '
         'SetSysLocale
         '
         Me.SetSysLocale.Name = "SetSysLocale"
         Me.SetSysLocale.Size = New System.Drawing.Size(295, 22)
         Me.SetSysLocale.Text = "Set system locale..."
+        Me.SetSysLocale.Visible = False
         '
         'SetUserLocale
         '
         Me.SetUserLocale.Name = "SetUserLocale"
         Me.SetUserLocale.Size = New System.Drawing.Size(295, 22)
         Me.SetUserLocale.Text = "Set user locale..."
+        Me.SetUserLocale.Visible = False
         '
         'SetInputLocale
         '
         Me.SetInputLocale.Name = "SetInputLocale"
         Me.SetInputLocale.Size = New System.Drawing.Size(295, 22)
         Me.SetInputLocale.Text = "Set input locale..."
+        Me.SetInputLocale.Visible = False
         '
         'ToolStripSeparator5
         '
         Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
         Me.ToolStripSeparator5.Size = New System.Drawing.Size(292, 6)
+        Me.ToolStripSeparator5.Visible = False
         '
         'SetAllIntl
         '
         Me.SetAllIntl.Name = "SetAllIntl"
         Me.SetAllIntl.Size = New System.Drawing.Size(295, 22)
         Me.SetAllIntl.Text = "Set UI language and locales..."
+        Me.SetAllIntl.Visible = False
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
         Me.ToolStripSeparator6.Size = New System.Drawing.Size(292, 6)
+        Me.ToolStripSeparator6.Visible = False
         '
         'SetTimeZone
         '
         Me.SetTimeZone.Name = "SetTimeZone"
         Me.SetTimeZone.Size = New System.Drawing.Size(295, 22)
         Me.SetTimeZone.Text = "Set default time zone..."
+        Me.SetTimeZone.Visible = False
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
         Me.ToolStripSeparator7.Size = New System.Drawing.Size(292, 6)
+        Me.ToolStripSeparator7.Visible = False
         '
         'SetSKUIntlDefaults
         '
         Me.SetSKUIntlDefaults.Name = "SetSKUIntlDefaults"
         Me.SetSKUIntlDefaults.Size = New System.Drawing.Size(295, 22)
         Me.SetSKUIntlDefaults.Text = "Set default languages and locales..."
+        Me.SetSKUIntlDefaults.Visible = False
         '
         'ToolStripSeparator8
         '
         Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
         Me.ToolStripSeparator8.Size = New System.Drawing.Size(292, 6)
+        Me.ToolStripSeparator8.Visible = False
         '
         'SetLayeredDriver
         '
@@ -1196,12 +1228,14 @@ Partial Class MainForm
         Me.GenLangINI.Name = "GenLangINI"
         Me.GenLangINI.Size = New System.Drawing.Size(295, 22)
         Me.GenLangINI.Text = "Generate Lang.ini file..."
+        Me.GenLangINI.Visible = False
         '
         'SetSetupUILang
         '
         Me.SetSetupUILang.Name = "SetSetupUILang"
         Me.SetSetupUILang.Size = New System.Drawing.Size(295, 22)
         Me.SetSetupUILang.Text = "Set default Setup language..."
+        Me.SetSetupUILang.Visible = False
         '
         'CapabilitiesToolStripMenuItem
         '
@@ -1221,6 +1255,7 @@ Partial Class MainForm
         Me.ExportSource.Name = "ExportSource"
         Me.ExportSource.Size = New System.Drawing.Size(258, 22)
         Me.ExportSource.Text = "Export capabilities into repository..."
+        Me.ExportSource.Visible = False
         '
         'GetCapabilities
         '
@@ -1304,7 +1339,7 @@ Partial Class MainForm
         '
         'UnattendedAnswerFilesToolStripMenuItem
         '
-        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend})
+        Me.UnattendedAnswerFilesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ApplyUnattend, Me.RemoveAppliedAnswerFileToolStripMenuItem})
         Me.UnattendedAnswerFilesToolStripMenuItem.Name = "UnattendedAnswerFilesToolStripMenuItem"
         Me.UnattendedAnswerFilesToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.UnattendedAnswerFilesToolStripMenuItem.Text = "Unattended answer files"
@@ -1314,6 +1349,12 @@ Partial Class MainForm
         Me.ApplyUnattend.Name = "ApplyUnattend"
         Me.ApplyUnattend.Size = New System.Drawing.Size(237, 22)
         Me.ApplyUnattend.Text = "Apply unattended answer file..."
+        '
+        'RemoveAppliedAnswerFileToolStripMenuItem
+        '
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Name = "RemoveAppliedAnswerFileToolStripMenuItem"
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Size = New System.Drawing.Size(237, 22)
+        Me.RemoveAppliedAnswerFileToolStripMenuItem.Text = "Remove applied answer file"
         '
         'WindowsPEServicingToolStripMenuItem
         '
@@ -1377,6 +1418,7 @@ Partial Class MainForm
         Me.ReservedStorageToolStripMenuItem.Name = "ReservedStorageToolStripMenuItem"
         Me.ReservedStorageToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.ReservedStorageToolStripMenuItem.Text = "Reserved storage"
+        Me.ReservedStorageToolStripMenuItem.Visible = False
         '
         'SetReservedStorageState
         '
@@ -1396,6 +1438,7 @@ Partial Class MainForm
         Me.MicrosoftEdgeToolStripMenuItem.Name = "MicrosoftEdgeToolStripMenuItem"
         Me.MicrosoftEdgeToolStripMenuItem.Size = New System.Drawing.Size(244, 22)
         Me.MicrosoftEdgeToolStripMenuItem.Text = "Microsoft Edge"
+        Me.MicrosoftEdgeToolStripMenuItem.Visible = False
         '
         'AddEdge
         '
@@ -1579,7 +1622,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1590,6 +1633,12 @@ Partial Class MainForm
         Me.HelpTopicsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1
         Me.HelpTopicsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.HelpTopicsToolStripMenuItem.Text = "Help Topics"
+        '
+        'DISMToolsTourToolStripMenuItem
+        '
+        Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
+        Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
         '
         'GlossaryToolStripMenuItem
         '
@@ -1605,6 +1654,7 @@ Partial Class MainForm
         Me.CommandHelpToolStripMenuItem.ShortcutKeys = CType((System.Windows.Forms.Keys.Shift Or System.Windows.Forms.Keys.F1), System.Windows.Forms.Keys)
         Me.CommandHelpToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.CommandHelpToolStripMenuItem.Text = "Command help..."
+        Me.CommandHelpToolStripMenuItem.Visible = False
         '
         'ToolStripSeparator10
         '
@@ -4393,6 +4443,12 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
+        'OpenDiagnosticLogsInLogViewerToolStripMenuItem
+        '
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Name = "OpenDiagnosticLogsInLogViewerToolStripMenuItem"
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = "Open diagnostic logs in log viewer"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -4956,4 +5012,7 @@ Partial Class MainForm
     Friend WithEvents LanguagesAndOptionalFeaturesISOToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents LanguagesAndFODWin10ToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitFullScreenTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DISMToolsTourToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RemoveAppliedAnswerFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OpenDiagnosticLogsInLogViewerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

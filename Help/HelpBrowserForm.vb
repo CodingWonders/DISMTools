@@ -34,12 +34,21 @@ Public Class HelpBrowserForm
                 TitleMsg = "Argomenti della guida di DISMTools"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Text = TitleMsg
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
         DynaLog.LogMessage("Navigating to page " & Quote & e.Url.AbsoluteUri & Quote & "...")
+        If e.Url.AbsoluteUri.Equals("https://dismtools.com/tour", StringComparison.OrdinalIgnoreCase) Then
+            DynaLog.LogMessage("Tour imaginary site is present. Attempting to launch the tour...")
+            If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+                DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+                Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+            End If
+            WebBrowser1.Navigate(CurrentSite)
+            Exit Sub
+        End If
         If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
             DynaLog.LogMessage("HTML exists in Absolute URI path. Navigating...")
             WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")
@@ -61,7 +70,7 @@ Public Class HelpBrowserForm
     Private Sub HelpBrowserForm_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
         If Visible Then
             Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
     End Sub
 End Class

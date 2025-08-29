@@ -432,37 +432,20 @@ Public Class ImgExport
                 CompressionTypeStrings(2) = "Verrà applicata la compressione massima. Questa opzione richiede più tempo, ma produce un'immagine più piccola"
                 CompressionTypeStrings(3) = "Verrà applicato il livello di compressione per le immagini con reset a pulsante. Ciò richiede l'esportazione dell'immagine come file ESD"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox3.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox4.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-            NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
-            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
-            StatusStrip1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox3.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox4.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-            NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
-            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
-            StatusStrip1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        StatusStrip1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -501,7 +484,7 @@ Public Class ImgExport
                 ToolStripStatusLabel1.Text = "Specificare il modello di denominazione dei file SWM"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             ' WIMBoot is only compatible with Windows 8.1
             DynaLog.LogMessage("Detecting if the Windows image that is being serviced supports WIMBoot...")
@@ -531,23 +514,7 @@ Public Class ImgExport
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("An image file has been specified and it exists in the file system. Getting information...")
             DynaLog.LogMessage("Checking if mounted image detector is busy...")
-            If MainForm.MountedImageDetectorBW.IsBusy Then
-                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                MainForm.MountedImageDetectorBW.CancelAsync()
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            DynaLog.LogMessage("Checking if image status watchers are busy...")
-            MainForm.WatcherTimer.Enabled = False
-            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-            While MainForm.WatcherBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            MainForm.StopMountedImageDetector()
             Try
                 ListView1.Items.Clear()
                 DismApi.Initialize(DismLogLevel.LogErrors)

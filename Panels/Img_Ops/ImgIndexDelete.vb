@@ -6,6 +6,7 @@ Imports Microsoft.Dism
 Imports System.Threading
 
 Public Class ImgIndexDelete
+    Implements IImageTaskDialog
 
     Public IndexPositions(65535) As String
     Public IndexNames(65535) As String
@@ -125,7 +126,27 @@ Public Class ImgIndexDelete
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        Try
+            DynaLog.LogMessage("Opening volume image removal dialog...")
+            DynaLog.LogMessage("Stopping mounted image detector...")
+            MainForm.StopMountedImageDetector()
+            For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
+                    TextBox1.Text = MainForm.MountedImageImgFiles(x)
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            Return False
+        End Try
+        Return True
+    End Function
+
     Private Sub ImgIndexDelete_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -296,28 +317,19 @@ Public Class ImgIndexDelete
             Win10Title.Visible = True
         End If
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then Button2.Enabled = False Else Button2.Enabled = True
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView2.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView2.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView2.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         ListView2.ForeColor = ForeColor
 
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
         ' Set disabled ListView's backcolor. Source: https://stackoverflow.com/questions/17461902/changing-background-color-of-listview-c-sharp-when-disabled
         Dim bm As New Bitmap(ListView2.ClientSize.Width, ListView2.ClientSize.Height)
@@ -328,19 +340,7 @@ Public Class ImgIndexDelete
     Sub GetImageIndexInfo(SourceImage As String)
         DynaLog.LogMessage("Preparing to get image file information...")
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
-        While MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         RemoveHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
         ' Clear arrays
         Array.Clear(IndexNames, 0, IndexNames.Length)
@@ -403,8 +403,7 @@ Public Class ImgIndexDelete
         OK_Button.Enabled = True
         Label4.Visible = False
         AddHandler ListView1.ItemChecked, AddressOf ListView1_ItemChecked
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged

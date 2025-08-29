@@ -142,6 +142,7 @@ Public Class Options
         Else
             MainForm.SysNoRestart = False
         End If
+        MainForm.NoNTSamMappings = Not CheckBox23.Checked
         If CheckBox4.Checked Then
             MainForm.UseScratch = True
         Else
@@ -174,6 +175,8 @@ Public Class Options
             MainForm.HelpToolStripMenuItem.Text = ti.ToTitleCase(MainForm.HelpToolStripMenuItem.Text.ToLower())
         End If
         MainForm.ReportView = ComboBox5.SelectedIndex
+        MainForm.DarkThemeIndex = DarkThemesCB.SelectedIndex
+        MainForm.LightThemeIndex = LightThemesCB.SelectedIndex
         MainForm.ChangePrgColors(MainForm.ColorMode)
         MainForm.ChangeLangs(MainForm.Language)
         If MountedImgMgr.Visible Then
@@ -209,14 +212,10 @@ Public Class Options
         MainForm.AutoCompleteInfo(2) = CheckBox17.Checked
         MainForm.AutoCompleteInfo(3) = CheckBox18.Checked
         MainForm.AutoCompleteInfo(4) = CheckBox19.Checked
-        MainForm.ColorSchemes = If(RadioButton1.Checked, 0, 1)
-        Select Case MainForm.ColorSchemes
-            Case 0
-                MainForm.StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
-            Case 1
-                MainForm.StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-        End Select
+        MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.ExpandedProgressPanel = CheckBox7.Checked
+        MainForm.ShowDateAndTime = CheckBox21.Checked
+        MainForm.TimeLabel.Visible = CheckBox21.Checked
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -294,7 +293,7 @@ Public Class Options
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c assoc .dtproj=").WaitForExit()
                 Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe", "/c ftype DISMTools.Project=").WaitForExit()
                 ' Delete registry key remnants
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "delete HKCR\DISMTools.Project /f").WaitForExit()
+                RegistryHelper.RemoveRegistryItem("HKCR\DISMTools.Project", "/f")
         End Select
         ' Clear icon cache
         DynaLog.LogMessage("Clearing icon cache with ie4uinit...")
@@ -398,7 +397,6 @@ Public Class Options
                         Label12.Text = "Operation log file:"
                         Label13.Text = "When performing image operations in the command line, specify the " & Quote & "/LogPath" & Quote & " argument to save the image operation log to the target log file."
                         Label14.Text = "Log file level:"
-                        Label17.Text = "Color scheme of status bar and panels:"
                         Label18.Text = "When quietly performing operations, the program will hide information and progress output. Error messages will still be shown." & CrLf & "This option will not be used when getting information of, for example, packages or features." & CrLf & "Also, when performing image servicing, your computer may restart automatically."
                         Label19.Text = "When this option is checked, your computer will not restart automatically; even when quietly performing operations"
                         Label20.Text = "Please specify the scratch directory to be used for DISM operations:"
@@ -409,10 +407,6 @@ Public Class Options
                         Label27.Text = "Some reports do not allow being shown as a table."
                         Label28.Text = "When should the program notify you about background processes being started?"
                         Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                        Label30.Text = "Previews:"
-                        Label31.Text = "Idle"
-                        Label32.Text = "Performing operations"
-                        Label33.Text = "Progress panel:"
                         Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                         Label36.Text = "Review the status of this background process:"
                         Label37.Text = "Status:"
@@ -465,8 +459,6 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(97, 100)
                         LinkLabel2.Text = "Learn more about background processes"
                         LogSFD.Title = "Specify the location of the log file"
-                        RadioButton1.Text = "DISMTools 0.5+ Color Scheme (Green)"
-                        RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
                         RadioButton3.Text = "Use the project or program scratch directory"
                         RadioButton4.Text = "Use the specified scratch directory"
                         RadioButton5.Text = "Modern"
@@ -502,13 +494,11 @@ Public Class Options
                         Label6.Text = "Cuando se está en el modo volátil, las configuraciones se restablecerán al cerrar el programa."
                         Label7.Text = "Modo de color:"
                         Label8.Text = "Idioma:"
-                        'Label9.Text = "Especifique las configuraciones para la ventana de registro:"
                         Label10.Text = "Fuente:"
                         Label11.Text = "Vista previa:"
                         Label12.Text = "Archivo de registro:"
                         Label13.Text = "Cuando se realizan operaciones en la línea de comandos, especifique el argumento " & Quote & "/LogPath" & Quote & " para guardar el registro de operaciones en el archivo de destino"
                         Label14.Text = "Nivel de registro:"
-                        Label17.Text = "Esquema de color de la barra de estado y los paneles:"
                         Label18.Text = "Cuando se realizan operaciones silenciosamente, el programa ocultará información y salida del progreso." & CrLf & "Esta opción no se usará al obtener información de, por ejemplo, paquetes o características." & CrLf & "También, al realizar un servicio de imágenes, su sistema podría reiniciarse automáticamente."
                         Label19.Text = "Cuando esta opción está marcada, su sistema no se reiniciará automáticamente; incluso si se realizan operaciones silenciosamente"
                         Label20.Text = "Especifique el directorio temporal a ser usado en operaciones de DISM:"
@@ -519,10 +509,6 @@ Public Class Options
                         Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                         Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                         Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                        Label30.Text = "Vistas previas:"
-                        Label31.Text = "En reposo"
-                        Label32.Text = "Realizando operaciones"
-                        Label33.Text = "Panel de progreso:"
                         Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                         Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                         Label37.Text = "Estado:"
@@ -575,8 +561,6 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(111, 88)
                         LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                         LogSFD.Title = "Especifique la ubicación del archivo de registro"
-                        RadioButton1.Text = "Esquema de color de DISMTools 0.5+ (Verde)"
-                        RadioButton2.Text = "Esquema de color de DISMTools 0.1.1-0.4.2 (Azul)"
                         RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                         RadioButton4.Text = "Utilizar el directorio temporal especificado"
                         RadioButton5.Text = "Moderno"
@@ -618,7 +602,6 @@ Public Class Options
                         Label12.Text = "Fichier journal des opérations :"
                         Label13.Text = "Lorsque vous effectuez des opérations sur les images dans la ligne de commande, spécifiez l'argument " & Quote & "/LogPath" & Quote & " pour sauvegarder le journal des opérations sur les images dans le fichier journal cible."
                         Label14.Text = "Niveau du fichier journal :"
-                        Label17.Text = "Schéma de couleurs de la barre d'état et des panneaux :"
                         Label18.Text = "Lors de l'exécution silencieuse d'une opération, le programme masquera les informations et la progression de l'opération. Les messages d'erreur seront toujours affichés." & CrLf & "Cette option ne sera pas utilisée pour obtenir des informations, par exemple, sur les paquets ou les caractéristiques." & CrLf & "En outre, lors de la maintenance de l'image, votre ordinateur peut redémarrer automatiquement."
                         Label19.Text = "Lorsque cette option est cochée, l'ordinateur ne redémarre pas automatiquement, même lorsqu'il effectue des opérations en silence."
                         Label20.Text = "Veuillez indiquer le répertoire temporaire à utiliser pour les opérations DISM :"
@@ -629,10 +612,6 @@ Public Class Options
                         Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                         Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                         Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                        Label30.Text = "Aperçu :"
-                        Label31.Text = "Oisiveté"
-                        Label32.Text = "Exécution des opérations"
-                        Label33.Text = "Panneau de progrès :"
                         Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
                         Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
                         Label37.Text = "État :"
@@ -685,8 +664,6 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(122, 126)
                         LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
                         LogSFD.Title = "Spécifier l'emplacement du fichier journal"
-                        RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5+ (vert)"
-                        RadioButton2.Text = "Schéma de couleurs de DISMTools 0.1.1-0.4.2 (bleu)"
                         RadioButton3.Text = "Utiliser le répertoire temporaire du projet ou du programme"
                         RadioButton4.Text = "Utiliser le répertoire temporaire spécifié"
                         RadioButton5.Text = "Moderne"
@@ -728,7 +705,6 @@ Public Class Options
                         Label12.Text = "Ficheiro de registo de operações:"
                         Label13.Text = "Quando efetuar operações de imagem na linha de comandos, especifique o argumento " & Quote & "/LogPath" & Quote & " para guardar o registo da operação de imagem no ficheiro de registo de destino."
                         Label14.Text = "Nível do ficheiro de registo:"
-                        Label17.Text = "Esquema de cores da barra de estado e dos painéis:"
                         Label18.Text = "Quando as operações são efectuadas em silêncio, o programa oculta as informações e o progresso. As mensagens de erro continuarão a ser mostradas." & CrLf & "Esta opção não será utilizada para obter informações sobre, por exemplo, pacotes ou funcionalidades." & CrLf & "Além disso, ao efetuar operações de imagem, o computador pode reiniciar-se automaticamente."
                         Label19.Text = "Se esta opção estiver selecionada, o computador não será reiniciado automaticamente, mesmo quando estiver a efetuar operações silenciosas"
                         Label20.Text = "Especifique o diretório de rascunho a utilizar para as operações DISM:"
@@ -739,10 +715,6 @@ Public Class Options
                         Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                         Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                         Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                        Label30.Text = "Pré-visualizações:"
-                        Label31.Text = "Inativo"
-                        Label32.Text = "Execução de operações"
-                        Label33.Text = "Painel de progresso:"
                         Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
                         Label36.Text = "Rever o estado deste processo em segundo plano:"
                         Label37.Text = "Estado:"
@@ -795,8 +767,6 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(107, 118)
                         LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                         LogSFD.Title = "Especificar a localização do ficheiro de registo"
-                        RadioButton1.Text = "Esquema de cores do DISMTools 0.5+ (verde)"
-                        RadioButton2.Text = "Esquema de cores do DISMTools 0.1.1-0.4.2 (azul)"
                         RadioButton3.Text = "Utilizar o diretório de rascunho do projeto ou do programa"
                         RadioButton4.Text = "Utilizar o diretório de rascunho especificado"
                         RadioButton5.Text = "Moderna"
@@ -838,7 +808,6 @@ Public Class Options
                         Label12.Text = "File registro operazioni:"
                         Label13.Text = "Quando si eseguono operazioni di immagine nella riga di comando, specificare l'argomento " & Quote & "/LogPath" & Quote & " per salvare il registro delle operazioni di immagine nel file di registro di destinazione"
                         Label14.Text = "Livello del file di registro:"
-                        Label17.Text = "Schema di colore della barra di stato e dei pannelli:"
                         Label18.Text = "Quando si eseguono tranquillamente le operazioni, il programma nasconde le informazioni e l'output di avanzamento. I messaggi di errore verranno comunque visualizzati." & CrLf & "Questa opzione non verrà utilizzata quando si ottengono informazioni, ad esempio, sui pacchetti o sulle funzioni." & CrLf & "Inoltre, quando si esegue la manutenzione delle immagini, il computer potrebbe riavviarsi automaticamente."
                         Label19.Text = "Quando questa opzione è selezionata, il computer non si riavvia automaticamente, anche quando si eseguono tranquillamente delle operazioni"
                         Label20.Text = "Specificare la cartella temporanea da utilizzare per le operazioni DISM:"
@@ -849,10 +818,6 @@ Public Class Options
                         Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                         Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                         Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
-                        Label30.Text = "Anteprime:"
-                        Label31.Text = "Inattivo"
-                        Label32.Text = "Esecuzione di operazioni"
-                        Label33.Text = "Pannello di avanzamento:"
                         Label35.Text = "Modificare queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato utilizzo della CPU"
                         Label36.Text = "Esaminare lo stato di questo processo in background:"
                         Label37.Text = "Stato:"
@@ -905,8 +870,6 @@ Public Class Options
                         LinkLabel1.LinkArea = New LinkArea(92, 100)
                         LinkLabel2.Text = "Ulteriori informazioni sui processi in background"
                         LogSFD.Title = "Specificare la posizione del file di log"
-                        RadioButton1.Text = "Schema di colore DISMTools 0.5+ (verde)"
-                        RadioButton2.Text = "Schema di colori DISMTools 0.1.1-0.4.2 (blu)"
                         RadioButton3.Text = "Utilizza la cartella temporanea del progetto o del programma"
                         RadioButton4.Text = "Utilizza la cartella temporanea specificata"
                         RadioButton5.Text = "Moderno"
@@ -949,7 +912,6 @@ Public Class Options
                 Label12.Text = "Operation log file:"
                 Label13.Text = "When performing image operations in the command line, specify the " & Quote & "/LogPath" & Quote & " argument to save the image operation log to the target log file."
                 Label14.Text = "Log file level:"
-                Label17.Text = "Color scheme of status bar and panels:"
                 Label18.Text = "When quietly performing operations, the program will hide information and progress output. Error messages will still be shown." & CrLf & "This option will not be used when getting information of, for example, packages or features." & CrLf & "Also, when performing image servicing, your computer may restart automatically."
                 Label19.Text = "When this option is checked, your computer will not restart automatically; even when quietly performing operations"
                 Label20.Text = "Please specify the scratch directory to be used for DISM operations:"
@@ -960,10 +922,6 @@ Public Class Options
                 Label27.Text = "Some reports do not allow being shown as a table."
                 Label28.Text = "When should the program notify you about background processes being started?"
                 Label29.Text = "The program uses background processes to gather complete image information, like modification dates, installed packages, features present; and more"
-                Label30.Text = "Previews:"
-                Label31.Text = "Idle"
-                Label32.Text = "Performing operations"
-                Label33.Text = "Progress panel:"
                 Label35.Text = "Modify these settings only if you experience constant program or system slowdowns due to high CPU usage"
                 Label36.Text = "Review the status of this background process:"
                 Label37.Text = "Status:"
@@ -1016,8 +974,6 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(97, 100)
                 LinkLabel2.Text = "Learn more about background processes"
                 LogSFD.Title = "Specify the location of the log file"
-                RadioButton1.Text = "DISMTools 0.5+ Color Scheme (Green)"
-                RadioButton2.Text = "DISMTools 0.1.1-0.4.2 Color Scheme (Blue)"
                 RadioButton3.Text = "Use the project or program scratch directory"
                 RadioButton4.Text = "Use the specified scratch directory"
                 RadioButton5.Text = "Modern"
@@ -1059,7 +1015,6 @@ Public Class Options
                 Label12.Text = "Archivo de registro:"
                 Label13.Text = "Cuando se realizan operaciones en la línea de comandos, especifique el argumento " & Quote & "/LogPath" & Quote & " para guardar el registro de operaciones en el archivo de destino"
                 Label14.Text = "Nivel de registro:"
-                Label17.Text = "Esquema de color de la barra de estado y los paneles:"
                 Label18.Text = "Cuando se realizan operaciones silenciosamente, el programa ocultará información y salida del progreso." & CrLf & "Esta opción no se usará al obtener información de, por ejemplo, paquetes o características." & CrLf & "También, al realizar un servicio de imágenes, su sistema podría reiniciarse automáticamente."
                 Label19.Text = "Cuando esta opción está marcada, su sistema no se reiniciará automáticamente; incluso si se realizan operaciones silenciosamente"
                 Label20.Text = "Especifique el directorio temporal a ser usado en operaciones de DISM:"
@@ -1070,10 +1025,6 @@ Public Class Options
                 Label27.Text = "Algunos informes no permiten ser mostrados como una tabla."
                 Label28.Text = "¿Cuándo debería el programa notificarle acerca de procesos en segundo plano siendo iniciados?"
                 Label29.Text = "El programa utiliza procesos en segundo plano para recopilar información completa de la imagen, como fechas de modificación, paquetes instalados, características presentes; y más"
-                Label30.Text = "Vistas previas:"
-                Label31.Text = "En reposo"
-                Label32.Text = "Realizando operaciones"
-                Label33.Text = "Panel de progreso:"
                 Label35.Text = "Modifique estas configuraciones solo si experimenta ralentizaciones constantes del programa o del sistema debido a un uso elevado de CPU"
                 Label36.Text = "Consulte el estado de este proceso en segundo plano:"
                 Label37.Text = "Estado:"
@@ -1126,8 +1077,6 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(111, 88)
                 LinkLabel2.Text = "Conocer más sobre los procesos en segundo plano"
                 LogSFD.Title = "Especifique la ubicación del archivo de registro"
-                RadioButton1.Text = "Esquema de color de DISMTools 0.5+ (Verde)"
-                RadioButton2.Text = "Esquema de color de DISMTools 0.1.1-0.4.2 (Azul)"
                 RadioButton3.Text = "Utilizar el directorio temporal del proyecto o del programa"
                 RadioButton4.Text = "Utilizar el directorio temporal especificado"
                 RadioButton5.Text = "Moderno"
@@ -1169,7 +1118,6 @@ Public Class Options
                 Label12.Text = "Fichier journal des opérations :"
                 Label13.Text = "Lorsque vous effectuez des opérations sur les images dans la ligne de commande, spécifiez l'argument " & Quote & "/LogPath" & Quote & " pour sauvegarder le journal des opérations sur les images dans le fichier journal cible."
                 Label14.Text = "Niveau du fichier journal :"
-                Label17.Text = "Schéma de couleurs de la barre d'état et des panneaux :"
                 Label18.Text = "Lors de l'exécution silencieuse d'une opération, le programme masquera les informations et la progression de l'opération. Les messages d'erreur seront toujours affichés." & CrLf & "Cette option ne sera pas utilisée pour obtenir des informations, par exemple, sur les paquets ou les caractéristiques." & CrLf & "En outre, lors de la maintenance de l'image, votre ordinateur peut redémarrer automatiquement."
                 Label19.Text = "Lorsque cette option est cochée, l'ordinateur ne redémarre pas automatiquement, même lorsqu'il effectue des opérations en silence."
                 Label20.Text = "Veuillez indiquer le répertoire temporaire à utiliser pour les opérations DISM :"
@@ -1180,10 +1128,6 @@ Public Class Options
                 Label27.Text = "Certains rapports ne permettent pas d'être présentés sous forme de tableau."
                 Label28.Text = "Quand le programme doit-il vous avertir du démarrage de processus en arrière plan ?"
                 Label29.Text = "Le programme utilise des processus en arrière plan pour recueillir des informations complètes sur l'image, comme les dates de modification, les paquets installés, les caractéristiques présentes, etc."
-                Label30.Text = "Aperçu :"
-                Label31.Text = "Oisiveté"
-                Label32.Text = "Exécution des opérations"
-                Label33.Text = "Panneau de progrès :"
                 Label35.Text = "Ne modifiez ces paramètres que si vous constatez des ralentissements constants du programme ou du système en raison d'une utilisation élevée de l'unité centrale."
                 Label36.Text = "Examiner l'état d'avancement de ce processus en arrière plan :"
                 Label37.Text = "État :"
@@ -1236,8 +1180,6 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(122, 126)
                 LinkLabel2.Text = "Savoir plus sur les processus en arrière plan"
                 LogSFD.Title = "Spécifier l'emplacement du fichier journal"
-                RadioButton1.Text = "Schéma de couleurs de DISMTools 0.5+ (vert)"
-                RadioButton2.Text = "Schéma de couleurs de DISMTools 0.1.1-0.4.2 (bleu)"
                 RadioButton3.Text = "Utiliser le répertoire temporaire du projet ou du programme"
                 RadioButton4.Text = "Utiliser le répertoire temporaire spécifié"
                 RadioButton5.Text = "Moderne"
@@ -1279,7 +1221,6 @@ Public Class Options
                 Label12.Text = "Ficheiro de registo de operações:"
                 Label13.Text = "Quando efetuar operações de imagem na linha de comandos, especifique o argumento " & Quote & "/LogPath" & Quote & " para guardar o registo da operação de imagem no ficheiro de registo de destino."
                 Label14.Text = "Nível do ficheiro de registo:"
-                Label17.Text = "Esquema de cores da barra de estado e dos painéis:"
                 Label18.Text = "Quando as operações são efectuadas em silêncio, o programa oculta as informações e o progresso. As mensagens de erro continuarão a ser mostradas." & CrLf & "Esta opção não será utilizada para obter informações sobre, por exemplo, pacotes ou funcionalidades." & CrLf & "Além disso, ao efetuar operações de imagem, o computador pode reiniciar-se automaticamente."
                 Label19.Text = "Se esta opção estiver selecionada, o computador não será reiniciado automaticamente, mesmo quando estiver a efetuar operações silenciosas"
                 Label20.Text = "Especifique o diretório de rascunho a utilizar para as operações DISM:"
@@ -1290,10 +1231,6 @@ Public Class Options
                 Label27.Text = "Alguns relatórios não permitem ser mostrados como uma tabela."
                 Label28.Text = "Quando é que o programa o deve notificar sobre os processos em segundo plano que estão a ser iniciados?"
                 Label29.Text = "O programa usa processos em segundo plano para reunir informações completas sobre a imagem, como datas de modificação, pacotes instalados, recursos presentes e muito mais"
-                Label30.Text = "Pré-visualizações:"
-                Label31.Text = "Inativo"
-                Label32.Text = "Execução de operações"
-                Label33.Text = "Painel de progresso:"
                 Label35.Text = "Modifique estas configurações apenas se o programa ou o sistema abrandar constantemente devido à elevada utilização da CPU"
                 Label36.Text = "Rever o estado deste processo em segundo plano:"
                 Label37.Text = "Estado:"
@@ -1346,8 +1283,6 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(107, 118)
                 LinkLabel2.Text = "Saiba mais sobre os processos em segundo plano"
                 LogSFD.Title = "Especificar a localização do ficheiro de registo"
-                RadioButton1.Text = "Esquema de cores do DISMTools 0.5+ (verde)"
-                RadioButton2.Text = "Esquema de cores do DISMTools 0.1.1-0.4.2 (azul)"
                 RadioButton3.Text = "Utilizar o diretório de rascunho do projeto ou do programa"
                 RadioButton4.Text = "Utilizar o diretório de rascunho especificado"
                 RadioButton5.Text = "Moderna"
@@ -1389,7 +1324,6 @@ Public Class Options
                 Label12.Text = "File registro operazioni:"
                 Label13.Text = "Quando si eseguono operazioni di immagine nella riga di comando, specificare l'argomento " & Quote & "/LogPath" & Quote & " per salvare il registro delle operazioni di immagine nel file di registro di destinazione"
                 Label14.Text = "Livello del file di registro:"
-                Label17.Text = "Schema di colore della barra di stato e dei pannelli:"
                 Label18.Text = "Quando si eseguono tranquillamente le operazioni, il programma nasconde le informazioni e l'output di avanzamento. I messaggi di errore verranno comunque visualizzati." & CrLf & "Questa opzione non verrà utilizzata quando si ottengono informazioni, ad esempio, sui pacchetti o sulle funzioni." & CrLf & "Inoltre, quando si esegue la manutenzione delle immagini, il computer potrebbe riavviarsi automaticamente."
                 Label19.Text = "Quando questa opzione è selezionata, il computer non si riavvia automaticamente, anche quando si eseguono tranquillamente delle operazioni"
                 Label20.Text = "Specificare la cartella temporanea da utilizzare per le operazioni DISM:"
@@ -1400,10 +1334,6 @@ Public Class Options
                 Label27.Text = "Alcuni rapporti non possono essere visualizzati come tabella"
                 Label28.Text = "Quando il programma dovrebbe notificare l'avvio dei processi in background?"
                 Label29.Text = "Il programma utilizza i processi in background per raccogliere informazioni complete sull'immagine, come le date di modifica, i pacchetti installati, le funzioni presenti e altro ancora"
-                Label30.Text = "Anteprime:"
-                Label31.Text = "Inattivo"
-                Label32.Text = "Esecuzione di operazioni"
-                Label33.Text = "Pannello di avanzamento:"
                 Label35.Text = "Modificare queste impostazioni solo se si verificano continui rallentamenti del programma o del sistema a causa dell'elevato utilizzo della CPU"
                 Label36.Text = "Esaminare lo stato di questo processo in background:"
                 Label37.Text = "Stato:"
@@ -1456,8 +1386,6 @@ Public Class Options
                 LinkLabel1.LinkArea = New LinkArea(92, 100)
                 LinkLabel2.Text = "Ulteriori informazioni sui processi in background"
                 LogSFD.Title = "Specificare la posizione del file di log"
-                RadioButton1.Text = "Schema di colore DISMTools 0.5+ (verde)"
-                RadioButton2.Text = "Schema di colori DISMTools 0.1.1-0.4.2 (blu)"
                 RadioButton3.Text = "Utilizza la cartella temporanea del progetto o del programma"
                 RadioButton4.Text = "Utilizza la cartella temporanea specificata"
                 RadioButton5.Text = "Moderno"
@@ -1661,81 +1589,50 @@ Public Class Options
         GatherCustomSettings()
 
         ' Set program colors
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox1.ForeColor = Color.White
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.ForeColor = Color.White
-            TextBox3.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox3.ForeColor = Color.White
-            TextBox4.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox4.ForeColor = Color.White
-            TextBox5.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox5.ForeColor = Color.White
-            LogPreview.BackColor = Color.FromArgb(31, 31, 31)
-            LogPreview.ForeColor = Color.White
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.ForeColor = Color.White
-            ComboBox2.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox2.ForeColor = Color.White
-            ComboBox3.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox3.ForeColor = Color.White
-            ComboBox4.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox4.ForeColor = Color.White
-            ComboBox5.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox5.ForeColor = Color.White
-            ComboBox6.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox6.ForeColor = Color.White
-            NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
-            NumericUpDown1.ForeColor = Color.White
-            'GroupBox1.ForeColor = Color.White
-            GroupBox5.ForeColor = Color.White
-            'GroupBox6.ForeColor = Color.White
-            TrackBar1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox1.ForeColor = Color.Black
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.ForeColor = Color.Black
-            TextBox3.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox3.ForeColor = Color.Black
-            TextBox4.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox4.ForeColor = Color.Black
-            TextBox5.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox5.ForeColor = Color.Black
-            LogPreview.BackColor = Color.FromArgb(238, 238, 242)
-            LogPreview.ForeColor = Color.Black
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.ForeColor = Color.Black
-            ComboBox2.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox2.ForeColor = Color.Black
-            ComboBox3.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox3.ForeColor = Color.Black
-            ComboBox4.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox4.ForeColor = Color.Black
-            ComboBox5.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox5.ForeColor = Color.Black
-            ComboBox6.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox6.ForeColor = Color.Black
-            NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
-            NumericUpDown1.ForeColor = Color.Black
-            GroupBox5.ForeColor = Color.Black
-            TrackBar1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
-        PictureBox10.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_program_dark, My.Resources.options_program_light)
-        PictureBox11.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_personalization_dark, My.Resources.options_personalization_light)
-        PictureBox12.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_logs_dark, My.Resources.options_logs_light)
-        PictureBox13.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.image_dark, My.Resources.image_light)
-        PictureBox14.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_scratch_dark, My.Resources.options_scratch_light)
-        PictureBox15.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_output_dark, My.Resources.options_output_light)
-        PictureBox16.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_bgprocs_dark, My.Resources.options_bgprocs_light)
-        PictureBox17.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.options_imgdetect_dark, My.Resources.options_imgdetect_light)
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox1.ForeColor = CurrentTheme.ForegroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.ForeColor = CurrentTheme.ForegroundColor
+        TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox3.ForeColor = CurrentTheme.ForegroundColor
+        TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox4.ForeColor = CurrentTheme.ForegroundColor
+        TextBox5.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox5.ForeColor = CurrentTheme.ForegroundColor
+        LogPreview.BackColor = CurrentTheme.SectionBackgroundColor
+        LogPreview.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox2.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox3.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox4.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox4.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox5.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox5.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox6.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox6.ForeColor = CurrentTheme.ForegroundColor
+        DarkThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
+        DarkThemesCB.ForeColor = CurrentTheme.ForegroundColor
+        LightThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
+        LightThemesCB.ForeColor = CurrentTheme.ForegroundColor
+        NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox5.ForeColor = CurrentTheme.ForegroundColor
+        TrackBar1.BackColor = CurrentTheme.SectionBackgroundColor
+        PictureBox10.Image = GetGlyphResource("options_program")
+        PictureBox11.Image = GetGlyphResource("options_personalization")
+        PictureBox12.Image = GetGlyphResource("options_logs")
+        PictureBox13.Image = GetGlyphResource("image_glyph")
+        PictureBox14.Image = GetGlyphResource("options_scratch")
+        PictureBox15.Image = GetGlyphResource("options_output")
+        PictureBox16.Image = GetGlyphResource("options_bgprocs")
+        PictureBox17.Image = GetGlyphResource("options_imgdetect")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1771,9 +1668,21 @@ Public Class Options
                 Label38.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "in esecuzione", "arrestato")
                 Button8.Text = If(MainForm.MountedImageDetectorBW.IsBusy, "Arresto", "Avvio")
         End Select
+        DarkThemesCB.Items.Clear()
+        LightThemesCB.Items.Clear()
+        For Each LoadedTheme In ThemeHelper.GetThemes()
+            DarkThemesCB.Items.Add(LoadedTheme.Name)
+            LightThemesCB.Items.Add(LoadedTheme.Name)
+        Next
+        Try
+            DarkThemesCB.SelectedIndex = MainForm.DarkThemeIndex
+            LightThemesCB.SelectedIndex = MainForm.LightThemeIndex
+        Catch ex As Exception
+
+        End Try
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         If Not File.Exists(Application.StartupPath & "\portable") Then
             Panel2.Enabled = False
             Panel3.Visible = True
@@ -1903,15 +1812,9 @@ Public Class Options
         CheckBox18.Checked = MainForm.AutoCompleteInfo(3)
         CheckBox19.Checked = MainForm.AutoCompleteInfo(4)
         CheckBox22.Checked = MainForm.AutoCleanMounts
-        Select Case MainForm.ColorSchemes
-            Case 0
-                RadioButton1.Checked = True
-                RadioButton2.Checked = False
-            Case 1
-                RadioButton1.Checked = False
-                RadioButton2.Checked = True
-        End Select
         CheckBox7.Checked = MainForm.ExpandedProgressPanel
+        CheckBox21.Checked = MainForm.ShowDateAndTime
+        CheckBox23.Checked = Not MainForm.NoNTSamMappings
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -3264,21 +3167,6 @@ Public Class Options
 
 #End Region
 
-    Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
-        DynaLog.LogMessage("Changing color scheme preview...")
-        If RadioButton1.Checked Then
-            DynaLog.LogMessage("New color scheme: DISMTools 0.5+")
-            StatusBar_Idle.Image = My.Resources.CS_Idle_Green
-            StatusBar_Ops.Image = My.Resources.CS_Ops_Green
-            ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Green
-        Else
-            DynaLog.LogMessage("New color scheme: DISMTools 0.1.1-0.4.2")
-            StatusBar_Idle.Image = My.Resources.CS_Idle_Blue
-            StatusBar_Ops.Image = My.Resources.CS_Ops_Blue
-            ProgressPanel_Ops.Image = My.Resources.CS_ProgressPanel_Blue
-        End If
-    End Sub
-
     Private Sub CheckBox7_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox7.CheckedChanged
         DynaLog.LogMessage("Toggling progress panel state preview...")
         ProgressPanelPic.Image = If(CheckBox7.Checked, My.Resources.progresspanel_logview_shown, My.Resources.progresspanel_logview_hidden)
@@ -3304,5 +3192,11 @@ Public Class Options
 
     Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
         Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe"), "/select," & Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"))
+        End If
     End Sub
 End Class

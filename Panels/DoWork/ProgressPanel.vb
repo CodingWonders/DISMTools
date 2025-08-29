@@ -766,26 +766,34 @@ Public Class ProgressPanel
     ''' <param name="FilePath">The path of the file to run</param>
     ''' <param name="CommandArguments">The command-line arguments to pass to the file to run</param>
     ''' <param name="WorkingDirectory">The directory the file is in. This is optional and can be set to fix issues with the file to open</param>
+    ''' <param name="DoNotRedirect">Determines whether to redirect output to console text area</param>
     ''' <remarks>Any logging is done with DynaLog</remarks>
-    Sub RunProcess(FilePath As String, CommandArguments As String, Optional WorkingDirectory As String = "")
+    Sub RunProcess(FilePath As String, CommandArguments As String, Optional WorkingDirectory As String = "", Optional DoNotRedirect As Boolean = False)
         Try
             DynaLog.LogMessage("Preparing to run process...")
             DynaLog.LogMessage("- Process path: " & Quote & FilePath & Quote)
             DynaLog.LogMessage("- Arguments: " & CommandArguments)
             DynaLog.LogMessage("- Working directory: " & Quote & WorkingDirectory & Quote)
+            DynaLog.LogMessage("- Process command without redirecting output to console? " & If(DoNotRedirect, "Yes", "No"))
             DISMProc.StartInfo.FileName = FilePath
             DISMProc.StartInfo.Arguments = CommandArguments
             If WorkingDirectory <> "" Then
                 DISMProc.StartInfo.WorkingDirectory = WorkingDirectory
             End If
-            If Debugger.IsAttached Then
+            If Debugger.IsAttached Or DoNotRedirect Then
                 DISMProc.StartInfo.CreateNoWindow = False
                 DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Normal
             Else
                 DISMProc.StartInfo.CreateNoWindow = True
                 DISMProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
             End If
-            DismExitCode = DISM_LogView.StartProcess(DISMProc.StartInfo.FileName, DISMProc.StartInfo.Arguments)
+            If DoNotRedirect Then
+                DISMProc.Start()
+                DISMProc.WaitForExit()
+                DismExitCode = DISMProc.ExitCode
+            Else
+                DismExitCode = DISM_LogView.StartProcess(DISMProc.StartInfo.FileName, DISMProc.StartInfo.Arguments)
+            End If
             DynaLog.LogMessage("Process finished with exit code " & Hex(DismExitCode))
         Catch ex As Exception
             DynaLog.LogMessage("Could not run process. Error message: " & ex.Message)
@@ -5041,7 +5049,7 @@ Public Class ProgressPanel
                            "- New edition: " & imgEditionNewEdition & CrLf &
                            "- Will the EULA be copied? " & If(imgEditionCopyEula, "Yes, to the following destination: " & imgEditionEulaDestination, "No") & CrLf &
                            "- Will the EULA be accepted? " & If(imgEditionAcceptEula, "Yes, with the following product key: " & imgEditionEditionKey, "No") & CrLf)
-        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /set-edition=" & imgEditionNewEdition
+        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /norestart /set-edition=" & imgEditionNewEdition
         DynaLog.LogMessage("Checking if the active installation is being managed...")
         If OnlineMgmt Then
             DynaLog.LogMessage("The active installation is being managed. Taking into account other settings the user may have specified...")
@@ -5076,7 +5084,7 @@ Public Class ProgressPanel
         LogView.AppendText(CrLf & "Setting the new product key..." & CrLf &
                            "Options:" & CrLf &
                            "- New product key: " & pkSetNewProductKey & CrLf)
-        CommandArgs &= " /image=" & targetImage & " /set-productkey=" & pkSetNewProductKey
+        CommandArgs &= " /image=" & targetImage & " /norestart /set-productkey=" & pkSetNewProductKey
         RunProcess(DismProgram, CommandArgs)
         LogView.AppendText(CrLf & "Getting error level...")
         If Hex(DismExitCode).Length < 8 Then
@@ -5250,15 +5258,41 @@ Public Class ProgressPanel
                 LogView.AppendText(CrLf & CrLf &
                                    "The driver package currently about to be processed is a folder, so information about it can't be obtained. Proceeding anyway...")
             End If
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
-            If drvAdditionForceUnsigned Then
-                CommandArgs &= " /forceunsigned"
+            DynaLog.LogMessage("Checking current operating mode...")
+            Dim isRecursive As Boolean = (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x))
+            If OnlineMgmt Then
+                DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to add the driver...")
+                ' Much like deleting drivers with PNPUTIL, said tool changed syntax in Windows 10
+                DynaLog.LogMessage("Checking pnputil version...")
+                Dim pnpUtilArgs As String = ""
+                Try
+                    Dim pnputilVersionInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"))
+                    DynaLog.LogMessage("PNPUTIL version info: " & pnputilVersionInfo.FileVersion)
+                    If pnputilVersionInfo.FileMajorPart >= 10 Then
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 10 or newer.")
+                        pnpUtilArgs = String.Format("/add-driver {0} /install", If(isRecursive, Quote & drvAdditionPkgs(x) & "\*.inf" & Quote & " /subdirs", Quote & drvAdditionPkgs(x) & Quote))
+                    Else
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 8.")
+                        pnpUtilArgs = String.Format("-i -a {0}", If(isRecursive, Quote & drvAdditionPkgs(x) & "\*.inf" & Quote, Quote & drvAdditionPkgs(x) & Quote))
+                    End If
+                    RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                               pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                Catch ex As Exception
+                    DynaLog.LogMessage("An error occurred with this method. Error message: " & ex.Message & " (exit code " & Hex(ex.HResult) & "). Since it's our only way of removing drivers in this mode, signal an error message")
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                DynaLog.LogMessage("Online installation management mode not detected. Using DISM to add the driver...")
+                CommandArgs &= " /image=" & targetImage & " /add-driver /driver=" & Quote & drvAdditionPkgs(x) & Quote
+                If drvAdditionForceUnsigned Then
+                    CommandArgs &= " /forceunsigned"
+                End If
+                If isRecursive Then
+                    LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
+                    CommandArgs &= " /recurse"
+                End If
+                RunProcess(DismProgram, CommandArgs)
             End If
-            If (File.GetAttributes(drvAdditionPkgs(x)) And FileAttributes.Directory) = FileAttributes.Directory And drvAdditionFolderRecursiveScan.Contains(drvAdditionPkgs(x)) Then
-                LogView.AppendText(CrLf & "This folder will be scanned recursively. Driver addition may take a longer time...")
-                CommandArgs &= " /recurse"
-            End If
-            RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
@@ -5453,8 +5487,31 @@ Public Class ProgressPanel
                                "Driver " & (x + 1) & " of " & drvRemovalCount)
             ' Get driver information
             ShowDriverInformationForRemoval(driverRemovalPackage)
-            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /remove-driver /driver=" & Quote & driverRemovalPackage & Quote
-            RunProcess(DismProgram, CommandArgs)
+            DynaLog.LogMessage("Checking current operating mode...")
+            If OnlineMgmt Then
+                DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to delete the driver...")
+                DynaLog.LogMessage("Checking pnputil version...")
+                Try
+                    Dim pnputilVersionInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"))
+                    DynaLog.LogMessage("PNPUTIL version info: " & pnputilVersionInfo.FileVersion)
+                    If pnputilVersionInfo.FileMajorPart >= 10 Then
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 10 or newer.")
+                        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                   "/delete-driver " & driverRemovalPackage & " /force", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                    Else
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 8.")
+                        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                   "-f -d " & driverRemovalPackage, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                    End If
+                Catch ex As Exception
+                    DynaLog.LogMessage("An error occurred with this method. Error message: " & ex.Message & " (exit code " & Hex(ex.HResult) & "). Since it's our only way of removing drivers in this mode, signal an error message")
+                    DismExitCode = ex.HResult
+                End Try
+            Else
+                DynaLog.LogMessage("Online installation management mode not detected. Using DISM to delete the driver...")
+                CommandArgs &= " /image=" & targetImage & " /remove-driver /driver=" & Quote & driverRemovalPackage & Quote
+                RunProcess(DismProgram, CommandArgs)
+            End If
             LogView.AppendText(CrLf & "Getting error level...")
             errCode = Hex(Decimal.ToInt32(DismExitCode))
             If DismExitCode = 0 Then
@@ -6648,21 +6705,51 @@ Public Class ProgressPanel
         Dim FileLength As Integer = 0
         FileLength = New FileInfo(LogFile).Length
         DynaLog.LogMessage("Size of log file in bytes: " & FileLength)
-        If FileLength <> 0 Then
-            File.AppendAllText(LogFile, CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================", ASCII)
-        Else
-            File.AppendAllText(LogFile, "======================== DISMTools Log File ========================" & CrLf &
-                                        "This is an automatically generated log file created by DISMTools." & CrLf &
-                                        "This file can be viewed at any time to view successful and/or" & CrLf &
-                                        "failed tasks." & CrLf & CrLf &
-                                        "This log file is updated every time an operation is performed." & CrLf &
-                                        "However, it does not contain the actual DISM log file, which is" & CrLf &
-                                        "also automatically generated each time DISM is run from this" & CrLf &
-                                        "program. These log files are named: " & CrLf &
-                                        "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf &
-                                        "====================================================================", ASCII)
+        Try
+            If FileLength <> 0 Then
+                File.AppendAllText(LogFile, CrLf & "==================== DISMTools Log Window Contents (" & DateTime.Now.ToString() & ") ====================", ASCII)
+            Else
+                File.AppendAllText(LogFile, "======================== DISMTools Log File ========================" & CrLf &
+                                            "This is an automatically generated log file created by DISMTools." & CrLf &
+                                            "This file can be viewed at any time to view successful and/or" & CrLf &
+                                            "failed tasks." & CrLf & CrLf &
+                                            "This log file is updated every time an operation is performed." & CrLf &
+                                            "However, it does not contain the actual DISM log file, which is" & CrLf &
+                                            "also automatically generated each time DISM is run from this" & CrLf &
+                                            "program. These log files are named: " & CrLf &
+                                            "                    " & Quote & "DISMTools-<date/time>.log" & Quote & "                    " & CrLf &
+                                            "====================================================================", ASCII)
+            End If
+            File.AppendAllText(LogFile, CrLf & LogView.Text, ASCII)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not log this operation. Error message: " & ex.Message)
+        End Try
+    End Sub
+
+    Sub SaveDismOutput(OutputFile As String)
+        DynaLog.LogMessage("Saving DISM output to a file...")
+        DynaLog.LogMessage("- Log destination: " & Quote & OutputFile & Quote)
+        If String.IsNullOrEmpty(DISM_LogView.RichTextBox1.Text) Then
+            DynaLog.LogMessage("There is no content to save.")
+            Exit Sub
         End If
-        File.AppendAllText(LogFile, CrLf & LogView.Text, ASCII)
+        Try
+            If Not File.Exists(OutputFile) Then
+                DynaLog.LogMessage("Attempting to create output file...")
+                ' Create file
+                Try
+                    File.WriteAllText(OutputFile, String.Empty)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not create log file. Error message: " & ex.Message)
+                    LogView.AppendText(CrLf &
+                                       "Warning: the contents of the log window could not be saved to the log file. Reason: " & ex.Message)
+                    Exit Sub
+                End Try
+            End If
+            File.AppendAllText(OutputFile, DISM_LogView.RichTextBox1.Text, ASCII)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not log this operation. Error message: " & ex.Message)
+        End Try
     End Sub
 
     Private Sub ProgressBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ProgressBW.RunWorkerCompleted
@@ -6674,6 +6761,7 @@ Public Class ProgressPanel
                                "  dism /mount-image /imagefile:" & Quote & imgIndexDeletionSourceImg & Quote & " /index:<preferred index> /mountdir:<preferred mountpoint>")
             DynaLog.LogMessage("Saving operation logs...")
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
+            SaveDismOutput(Application.StartupPath & "\logs\DISM_Output_" & Date.Now.ToString("yy-MM-dd-HH-mm-ss") & ".log")
             Try
                 CurrentPB.Value = 100
             Catch ex As Exception
@@ -6918,10 +7006,9 @@ Public Class ProgressPanel
                     MainForm.MenuDesc.Text = "Pronto"
             End Select
             TaskList.Clear()
-            MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+            MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             MainForm.ToolStripButton4.Visible = False
-            If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-            MainForm.WatcherTimer.Enabled = True
+            MainForm.StartMountedImageDetector()
             Close()
         Else
             DynaLog.LogMessage("Tasks have not been successful.")
@@ -7104,8 +7191,9 @@ Public Class ProgressPanel
                 Case 5
                     MainForm.MenuDesc.Text = "Pronto"
             End Select
-            MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+            MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
             SaveLog(Application.StartupPath & "\logs\DISMTools.log")
+            SaveDismOutput(Application.StartupPath & "\logs\DISM_Output_" & Date.Now.ToString("yy-MM-dd-HH-mm-ss") & ".log")
         End If
     End Sub
 
@@ -7232,37 +7320,20 @@ Public Class ProgressPanel
         BodyPanel.BorderStyle = BorderStyle.None
         ImgVersion = MainForm.imgVersionInfo
         ' Determine program colors
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BodyPanel.BackColor = Color.FromArgb(37, 37, 38)
-            BodyPanel.ForeColor = Color.White
-            LogView.BackColor = Color.FromArgb(37, 37, 38)
-            LogView.ForeColor = Color.White
-            DISM_LogView.RichTextBox1.BackColor = Color.FromArgb(37, 37, 38)
-            DISM_LogView.RichTextBox1.ForeColor = Color.White
-            LogSwitcherPic1.Image = My.Resources.options_logs_dark
-            LogSwitcherPic2.Image = My.Resources.options_output_dark
-            LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.DarkGray
-            LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.DimGray
-            LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.DarkGray
-            LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.DimGray
-            LogSwitcherPic1.FlatAppearance.BorderColor = Color.White
-            LogSwitcherPic2.FlatAppearance.BorderColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BodyPanel.BackColor = Color.FromArgb(246, 246, 246)
-            BodyPanel.ForeColor = Color.Black
-            LogView.BackColor = Color.FromArgb(246, 246, 246)
-            LogView.ForeColor = Color.Black
-            DISM_LogView.RichTextBox1.BackColor = Color.FromArgb(246, 246, 246)
-            DISM_LogView.RichTextBox1.ForeColor = Color.Black
-            LogSwitcherPic1.Image = My.Resources.options_logs_light
-            LogSwitcherPic2.Image = My.Resources.options_output_light
-            LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
-            LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.Gray
-            LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
-            LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.Gray
-            LogSwitcherPic1.FlatAppearance.BorderColor = Color.Black
-            LogSwitcherPic2.FlatAppearance.BorderColor = Color.Black
-        End If
+        BodyPanel.BackColor = CurrentTheme.BackgroundColor
+        BodyPanel.ForeColor = CurrentTheme.ForegroundColor
+        LogView.BackColor = CurrentTheme.BackgroundColor
+        LogView.ForeColor = CurrentTheme.ForegroundColor
+        DISM_LogView.RichTextBox1.BackColor = CurrentTheme.BackgroundColor
+        DISM_LogView.RichTextBox1.ForeColor = CurrentTheme.ForegroundColor
+        LogSwitcherPic1.Image = GetGlyphResource("options_logs")
+        LogSwitcherPic2.Image = GetGlyphResource("options_output")
+        LogSwitcherPic1.FlatAppearance.MouseOverBackColor = Color.DarkGray
+        LogSwitcherPic1.FlatAppearance.MouseDownBackColor = Color.DimGray
+        LogSwitcherPic2.FlatAppearance.MouseOverBackColor = Color.DarkGray
+        LogSwitcherPic2.FlatAppearance.MouseDownBackColor = Color.DimGray
+        LogSwitcherPic1.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
+        LogSwitcherPic2.FlatAppearance.BorderColor = CurrentTheme.ForegroundColor
         CurrentPB.Value = 0
         AllPB.Value = 0
         If LogView.Text <> "" Then LogView.Clear()
@@ -7286,19 +7357,7 @@ Public Class ProgressPanel
         End If
         ' Cancel detector background worker which can interfere with image operations and cause crashes due to access violations
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
-        While MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         DynaLog.LogMessage("Setting mount directory target for operations...")
         DynaLog.LogMessage("Images mounted in this system: " & MainForm.MountedImageMountDirs.Count)
         If MainForm.MountedImageMountDirs.Count > 0 Then
@@ -7352,7 +7411,7 @@ Public Class ProgressPanel
             Case 5
                 MainForm.MenuDesc.Text = "Esecuzione di operazioni sulle immagini. Attendere..."
         End Select
-        MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(18, 51, 14), Color.FromArgb(14, 99, 156))
+        MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(3)
         If Debugger.IsAttached Then
             IsDebugged = True
         Else
@@ -7464,7 +7523,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub BodyPanel_Paint(sender As Object, e As PaintEventArgs) Handles BodyPanel.Paint
-        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204)), ButtonBorderStyle.Solid)
+        ControlPaint.DrawBorder(e.Graphics, BodyPanel.ClientRectangle, CurrentTheme.AccentColors(1), ButtonBorderStyle.Solid)
     End Sub
 
     Private Sub ProgressPanel_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -7493,10 +7552,9 @@ Public Class ProgressPanel
             Case 5
                 MainForm.MenuDesc.Text = "Pronto"
         End Select
-        MainForm.StatusStrip.BackColor = If(MainForm.ColorSchemes = 0, Color.FromArgb(53, 153, 41), Color.FromArgb(0, 122, 204))
+        MainForm.StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         MainForm.ToolStripButton4.Visible = False
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Sub SwitchLogContext(Context As Integer)

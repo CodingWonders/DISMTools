@@ -355,16 +355,13 @@ Public Class PrgSetup
         TextBox2.Text = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\Logs\DISM\DISM.log"
         MainForm.LogFile = TextBox2.Text
 
+        MainForm.IsFirstTime = True
+
         Next_Button.Left = 998
 
         ' Set color modes
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BodyPanelContainer.BackColor = Color.FromArgb(48, 48, 48)
-            BodyPanelContainer.ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BodyPanelContainer.BackColor = Color.FromArgb(239, 239, 242)
-            BodyPanelContainer.ForeColor = Color.Black
-        End If
+        BodyPanelContainer.BackColor = CurrentTheme.BackgroundColor
+        BodyPanelContainer.ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = BodyPanelContainer.BackColor
         ComboBox2.BackColor = BodyPanelContainer.BackColor
         ComboBox3.BackColor = BodyPanelContainer.BackColor

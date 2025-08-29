@@ -1,8 +1,10 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports DISMTools.Utilities
+Imports Microsoft.Dism
 
 Public Class ImportDrivers
+    Implements IImageTaskDialog
 
     Dim DIList As New List(Of DriveInfo)
     Dim ImportSourceInt As Integer = -1
@@ -102,7 +104,44 @@ Public Class ImportDrivers
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        If Not MainForm.OnlineManagement Then
+            DynaLog.LogMessage("The active installation is not being managed right now. Continuing...")
+        Else
+            DynaLog.LogMessage("This image is not supported.")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
+                        Case "ITA"
+                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
+                Case 5
+                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
+            End Select
+        End If
+        Return Not MainForm.OnlineManagement
+    End Function
+
     Private Sub ImportDrivers_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         ComboBox1.Items.Clear()
         ComboBox1.SelectedText = ""
         Select Case MainForm.Language
@@ -376,19 +415,11 @@ Public Class ImportDrivers
             Text = ""
             Win10Title.Visible = True
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.ForeColor = Color.Black
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
         TextBox2.BackColor = BackColor
@@ -398,14 +429,12 @@ Public Class ImportDrivers
         DynaLog.LogMessage("Getting disks...")
         ListView1.Items.Clear()
         DIList.Clear()
-        DIList = DriveInfo.GetDrives().ToList()
+        DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
         For Each DI As DriveInfo In DIList
-            If DI.IsReady Then
-                ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-            End If
+            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
         Next
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -459,12 +488,12 @@ Public Class ImportDrivers
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button1.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Information will be obtained from the popup mounted image manager...")
-            TextBox1.Text = PopupImageManager.selectedMntDir
+            TextBox1.Text = selectedImage.MountPath
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
-            Label10.Text = PopupImageManager.selectedImgFile
+            Label10.Text = selectedImage.ImageFilePath
             Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub
@@ -473,11 +502,9 @@ Public Class ImportDrivers
         DynaLog.LogMessage("Refreshing disk listings...")
         ListView1.Items.Clear()
         DIList.Clear()
-        DIList = DriveInfo.GetDrives().ToList()
+        DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
         For Each DI As DriveInfo In DIList
-            If DI.IsReady Then
-                ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-            End If
+            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
         Next
     End Sub
 

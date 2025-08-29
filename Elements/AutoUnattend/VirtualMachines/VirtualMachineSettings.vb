@@ -32,6 +32,12 @@
         ''' <remarks></remarks>
         VirtIO_Guest_Tools = 2
 
+        ''' <summary>
+        ''' Parallels (macOS)
+        ''' </summary>
+        ''' <remarks></remarks>
+        Parallels = 3
+
     End Enum
 
 End Namespace

@@ -161,20 +161,15 @@ Public Class RegistryControlPanel
         Button10.Text = LoadButtonText
         Button11.Text = LoadButtonText
         Button12.Text = LoadButtonText
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             DynaLog.LogMessage("Getting last key that was opened in the Registry Editor...")
             Dim LastKeyReg As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Applets\Regedit")
@@ -195,23 +190,18 @@ Public Class RegistryControlPanel
         DynaLog.LogMessage("Modifying the state of the registry hives...")
         DynaLog.LogMessage("- Type of operation: " & If(Load, "load hive", "unload hive"))
         DynaLog.LogMessage("- Hive that will be affected by this operation: " & Path.GetFileName(HiveLocation))
-        Dim regLoaderProc As New Process()
-        regLoaderProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
         Dim regName As String = "z" & Path.GetFileNameWithoutExtension(HiveLocation)
+        Dim regExitCode As Integer
         If Load Then
-            regLoaderProc.StartInfo.Arguments = "load HKLM\" & regName & " " & Quote & HiveLocation & Quote
+            regExitCode = RegistryHelper.LoadRegistryHive(HiveLocation, String.Format("HKLM\{0}", regName))
         Else
-            regLoaderProc.StartInfo.Arguments = "unload HKLM\" & regName
+            regExitCode = RegistryHelper.UnloadRegistryHive(String.Format("HKLM\{0}", regName))
         End If
-        regLoaderProc.StartInfo.CreateNoWindow = True
-        regLoaderProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        regLoaderProc.Start()
-        regLoaderProc.WaitForExit()
-        DynaLog.LogMessage("The REG process finished with exit code " & Hex(regLoaderProc.ExitCode))
-        If regLoaderProc.ExitCode = 0 Then
+        DynaLog.LogMessage("The REG process finished with exit code " & Hex(regExitCode))
+        If regExitCode = 0 Then
             Return True
         Else
-            Debug.WriteLine("The registry process failed with exit code " & Hex(regLoaderProc.ExitCode))
+            Debug.WriteLine("The registry process failed with exit code " & Hex(regExitCode))
             Return False
         End If
     End Function
@@ -271,7 +261,7 @@ Public Class RegistryControlPanel
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Try
             DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zSOFTWARE" & Quote & " /f").WaitForExit()
+            RegistryHelper.AddRegistryItem(New RegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit", "LastKey", RegistryItem.ValueType.RegSz, Quote & "HKEY_LOCAL_MACHINE\zSOFTWARE" & Quote))
         Catch ex As Exception
 
         End Try
@@ -281,7 +271,7 @@ Public Class RegistryControlPanel
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Try
             DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zSYSTEM" & Quote & " /f").WaitForExit()
+            RegistryHelper.AddRegistryItem(New RegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit", "LastKey", RegistryItem.ValueType.RegSz, Quote & "HKEY_LOCAL_MACHINE\zSYSTEM" & Quote))
         Catch ex As Exception
 
         End Try
@@ -291,7 +281,7 @@ Public Class RegistryControlPanel
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Try
             DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zDEFAULT" & Quote & " /f").WaitForExit()
+            RegistryHelper.AddRegistryItem(New RegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit", "LastKey", RegistryItem.ValueType.RegSz, Quote & "HKEY_LOCAL_MACHINE\zDEFAULT" & Quote))
         Catch ex As Exception
 
         End Try
@@ -301,7 +291,7 @@ Public Class RegistryControlPanel
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
         Try
             DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & "HKEY_LOCAL_MACHINE\zNTUSER" & Quote & " /f").WaitForExit()
+            RegistryHelper.AddRegistryItem(New RegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit", "LastKey", RegistryItem.ValueType.RegSz, Quote & "HKEY_LOCAL_MACHINE\zNTUSER" & Quote))
         Catch ex As Exception
 
         End Try
@@ -386,7 +376,7 @@ Public Class RegistryControlPanel
         If PreviouslyLoadedKey <> "" Then
             DynaLog.LogMessage("Setting last key that was opened in the Registry Editor to be the key to open...")
             Try
-                Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & PreviouslyLoadedKey & Quote & " /f")
+                RegistryHelper.AddRegistryItem(New RegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit", "LastKey", RegistryItem.ValueType.RegSz, Quote & PreviouslyLoadedKey & Quote))
             Catch ex As Exception
                 ' Could not grab Last Key
             End Try
@@ -420,7 +410,7 @@ Public Class RegistryControlPanel
         ' Launch regedit on the loaded Hive
         Try
             DynaLog.LogMessage("Setting registry key to be opened by the Registry Editor...")
-            Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe", "add HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit /v LastKey /t REG_SZ /d " & Quote & TextBox2.Text & Quote & " /f").WaitForExit()
+            RegistryHelper.AddRegistryItem(New RegistryItem("HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit", "LastKey", RegistryItem.ValueType.RegSz, Quote & TextBox2.Text & Quote))
         Catch ex As Exception
 
         End Try

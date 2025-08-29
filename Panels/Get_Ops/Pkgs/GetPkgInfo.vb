@@ -10,30 +10,21 @@ Public Class GetPkgInfoDlg
     Dim PackageInfoExList As New List(Of DismPackageInfoEx)
     Dim PackageInfoList As New List(Of DismPackageInfo)
     Public InstalledPkgInfo As DismPackageCollection
+    Dim OSVer As Version
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ListBox2.BackColor = Color.FromArgb(31, 31, 31)
-            cPropPathView.BackColor = Color.FromArgb(31, 31, 31)
-            cPropValue.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ListBox2.BackColor = Color.FromArgb(238, 238, 242)
-            cPropPathView.BackColor = Color.FromArgb(238, 238, 242)
-            cPropValue.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        cPropPathView.BackColor = CurrentTheme.SectionBackgroundColor
+        cPropValue.BackColor = CurrentTheme.SectionBackgroundColor
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         cPropPathView.ForeColor = ForeColor
         cPropValue.ForeColor = ForeColor
-        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
+        SearchPic.Image = GetGlyphResource("search")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -666,7 +657,7 @@ Public Class GetPkgInfoDlg
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
         ' Populate installed package listing
         DynaLog.LogMessage("Updating items in list...")
@@ -681,6 +672,8 @@ Public Class GetPkgInfoDlg
         Panel4.Visible = False
         Panel7.Visible = True
         SearchBox1.Text = ""
+
+        OSVer = Environment.OSVersion.Version
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -705,6 +698,7 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
+        WindowHelper.DisableCloseCapability(Handle)
         Try
             If ListBox2.SelectedItems.Count = 1 Then
                 ' Background processes need to have completed before showing information
@@ -768,24 +762,7 @@ Public Class GetPkgInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
-                DynaLog.LogMessage("Checking if mounted image detector is busy...")
-                If MainForm.MountedImageDetectorBW.IsBusy Then
-                    DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                    While MainForm.MountedImageDetectorBW.IsBusy
-                        Application.DoEvents()
-                        Thread.Sleep(500)
-                    End While
-                End If
-                DynaLog.LogMessage("Checking if image status watchers are busy...")
-                MainForm.WatcherTimer.Enabled = False
-                DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-                If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-                While MainForm.WatcherBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(100)
-                End While
+                MainForm.StopMountedImageDetector()
                 cPropPathView.Nodes.Clear()
                 cPropName.Text = ""
                 cPropValue.Text = ""
@@ -851,34 +828,34 @@ Public Class GetPkgInfoDlg
                         ' On Windows 10 and later, use the extended version, as DISM gets extended package information.
                         ' Windows 8 and earlier cannot use the extended type, as no "Ex" function is declared in their DISM API DLL
                         DynaLog.LogMessage("Detecting conditions imposed by host system...")
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
                             PkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, ListBox2.SelectedItem)
                         Else
                             DynaLog.LogMessage("Host system is running Windows 8. Capability information cannot be obtained alongside the package.")
                             PkgInfo = DismApi.GetPackageInfoByName(imgSession, ListBox2.SelectedItem)
                         End If
-                        Label23.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
-                        Label25.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
-                        Label35.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Copyright, PkgInfo.Copyright)
-                        Label32.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Company, PkgInfo.Company)
-                        Label40.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CreationTime, PkgInfo.CreationTime)
-                        Label42.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
-                        Label46.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
-                        Label34.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
-                        Label27.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime)
-                        Label29.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
-                        Label38.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
-                        Label44.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
-                        Label15.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
-                        Label21.Text = Casters.CastDismReleaseType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.ReleaseType, PkgInfo.ReleaseType), True)
-                        Label13.Text = Casters.CastDismRestartType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
-                        Label49.Text = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
-                        Label51.Text = Casters.CastDismPackageState(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.PackageState, PkgInfo.PackageState), True)
-                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
-                        If Environment.OSVersion.Version.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
+                        Label23.Text = If(OSVer.Major >= 10, PkgInfoEx.PackageName, PkgInfo.PackageName)
+                        Label25.Text = Casters.CastDismApplicabilityStatus(If(OSVer.Major >= 10, PkgInfoEx.Applicable, PkgInfo.Applicable), True)
+                        Label35.Text = If(OSVer.Major >= 10, PkgInfoEx.Copyright, PkgInfo.Copyright)
+                        Label32.Text = If(OSVer.Major >= 10, PkgInfoEx.Company, PkgInfo.Company)
+                        Label40.Text = If(OSVer.Major >= 10, PkgInfoEx.CreationTime, PkgInfo.CreationTime)
+                        Label42.Text = If(OSVer.Major >= 10, PkgInfoEx.Description, PkgInfo.Description)
+                        Label46.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallClient, PkgInfo.InstallClient)
+                        Label34.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallPackageName, PkgInfo.InstallPackageName)
+                        Label27.Text = If(OSVer.Major >= 10, PkgInfoEx.InstallTime, PkgInfo.InstallTime)
+                        Label29.Text = If(OSVer.Major >= 10, PkgInfoEx.LastUpdateTime, PkgInfo.LastUpdateTime)
+                        Label38.Text = If(OSVer.Major >= 10, PkgInfoEx.DisplayName, PkgInfo.DisplayName)
+                        Label44.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductName, PkgInfo.ProductName)
+                        Label15.Text = If(OSVer.Major >= 10, PkgInfoEx.ProductVersion.ToString(), PkgInfo.ProductVersion.ToString())
+                        Label21.Text = Casters.CastDismReleaseType(If(OSVer.Major >= 10, PkgInfoEx.ReleaseType, PkgInfo.ReleaseType), True)
+                        Label13.Text = Casters.CastDismRestartType(If(OSVer.Major >= 10, PkgInfoEx.RestartRequired, PkgInfo.RestartRequired), True)
+                        Label49.Text = If(OSVer.Major >= 10, PkgInfoEx.SupportInformation, PkgInfo.SupportInformation)
+                        Label51.Text = Casters.CastDismPackageState(If(OSVer.Major >= 10, PkgInfoEx.PackageState, PkgInfo.PackageState), True)
+                        Label53.Text = Casters.CastDismFullyOfflineInstallationType(If(OSVer.Major >= 10, PkgInfoEx.FullyOffline, PkgInfo.FullyOffline), True)
+                        If OSVer.Major >= 10 Then Label56.Text = PkgInfoEx.CapabilityId Else Label56.Text = ""
                         Label57.Text = ""
-                        Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
+                        Dim cProps As DismCustomPropertyCollection = If(OSVer.Major >= 10, PkgInfoEx.CustomProperties, PkgInfo.CustomProperties)
                         DynaLog.LogMessage("Custom property count: " & cProps.Count)
                         If cProps.Count > 0 Then
                             DynaLog.LogMessage("This package has custom properties.")
@@ -945,7 +922,7 @@ Public Class GetPkgInfoDlg
                             CPropViewer.Visible = False
                         End If
                         Label59.Text = ""
-                        Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
+                        Dim pkgFeats As DismFeatureCollection = If(OSVer.Major >= 10, PkgInfoEx.Features, PkgInfo.Features)
                         DynaLog.LogMessage("Feature count: " & pkgFeats.Count)
                         If pkgFeats.Count > 0 Then
                             DynaLog.LogMessage("This package has features.")
@@ -1025,6 +1002,7 @@ Public Class GetPkgInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)
@@ -1102,6 +1080,7 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Sub GetPackageFileInformation()
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Clearing information lists...")
         PackageInfoList.Clear()
         PackageInfoExList.Clear()
@@ -1167,24 +1146,7 @@ Public Class GetPkgInfoDlg
                     Thread.Sleep(500)
                 End While
             End If
-            DynaLog.LogMessage("Checking if mounted image detector is busy...")
-            If MainForm.MountedImageDetectorBW.IsBusy Then
-                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                MainForm.MountedImageDetectorBW.CancelAsync()
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            DynaLog.LogMessage("Checking if image status watchers are busy...")
-            MainForm.WatcherTimer.Enabled = False
-            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-            While MainForm.WatcherBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            MainForm.StopMountedImageDetector()
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -1249,7 +1211,7 @@ Public Class GetPkgInfoDlg
                             Dim pkgInfoEx As DismPackageInfoEx = Nothing
                             Dim pkgInfo As DismPackageInfo = Nothing
                             DynaLog.LogMessage("Detecting conditions imposed by host system...")
-                            If Environment.OSVersion.Version.Major >= 10 Then
+                            If OSVer.Major >= 10 Then
                                 DynaLog.LogMessage("Host system is running Windows 10 or 11. Capability information can be obtained alongside the package.")
                                 pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
                             Else
@@ -1300,32 +1262,33 @@ Public Class GetPkgInfoDlg
             Case 5
                 Label5.Text = "Pronto"
         End Select
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Sub DisplayPackageFileInformation(PkgFile As Integer)
         DynaLog.LogMessage("Displaying information of a specific package file...")
         DynaLog.LogMessage("Index of Selected Package File: " & PkgFile)
-        Label9.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageName, PackageInfoList(PkgFile).PackageName)
-        Label11.Text = Casters.CastDismApplicabilityStatus(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
-        Label17.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Copyright, PackageInfoList(PkgFile).Copyright)
-        Label19.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Company, PackageInfoList(PkgFile).Company)
-        Label62.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CreationTime, PackageInfoList(PkgFile).CreationTime)
-        Label64.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Description, PackageInfoList(PkgFile).Description)
-        Label66.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallClient, PackageInfoList(PkgFile).InstallClient)
-        Label68.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallPackageName, PackageInfoList(PkgFile).InstallPackageName)
-        Label70.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).InstallTime, PackageInfoList(PkgFile).InstallTime)
-        Label72.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).LastUpdateTime, PackageInfoList(PkgFile).LastUpdateTime)
-        Label74.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).DisplayName, PackageInfoList(PkgFile).DisplayName)
-        Label76.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ProductName, PackageInfoList(PkgFile).ProductName)
-        Label78.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ProductVersion.ToString(), PackageInfoList(PkgFile).ProductVersion.ToString())
-        Label80.Text = Casters.CastDismReleaseType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).ReleaseType, PackageInfoList(PkgFile).ReleaseType), True)
-        Label82.Text = Casters.CastDismRestartType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).RestartRequired, PackageInfoList(PkgFile).RestartRequired), True)
-        Label84.Text = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).SupportInformation, PackageInfoList(PkgFile).SupportInformation)
-        Label86.Text = Casters.CastDismPackageState(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).PackageState, PackageInfoList(PkgFile).PackageState), True)
-        Label88.Text = Casters.CastDismFullyOfflineInstallationType(If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).FullyOffline, PackageInfoList(PkgFile).FullyOffline), True)
-        If Environment.OSVersion.Version.Major >= 10 Then Label90.Text = PackageInfoExList(PkgFile).CapabilityId Else Label90.Text = ""
+        Label9.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).PackageName, PackageInfoList(PkgFile).PackageName)
+        Label11.Text = Casters.CastDismApplicabilityStatus(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Applicable, PackageInfoList(PkgFile).Applicable), True)
+        Label17.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Copyright, PackageInfoList(PkgFile).Copyright)
+        Label19.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Company, PackageInfoList(PkgFile).Company)
+        Label62.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).CreationTime, PackageInfoList(PkgFile).CreationTime)
+        Label64.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Description, PackageInfoList(PkgFile).Description)
+        Label66.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).InstallClient, PackageInfoList(PkgFile).InstallClient)
+        Label68.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).InstallPackageName, PackageInfoList(PkgFile).InstallPackageName)
+        Label70.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).InstallTime, PackageInfoList(PkgFile).InstallTime)
+        Label72.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).LastUpdateTime, PackageInfoList(PkgFile).LastUpdateTime)
+        Label74.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).DisplayName, PackageInfoList(PkgFile).DisplayName)
+        Label76.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).ProductName, PackageInfoList(PkgFile).ProductName)
+        Label78.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).ProductVersion.ToString(), PackageInfoList(PkgFile).ProductVersion.ToString())
+        Label80.Text = Casters.CastDismReleaseType(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).ReleaseType, PackageInfoList(PkgFile).ReleaseType), True)
+        Label82.Text = Casters.CastDismRestartType(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).RestartRequired, PackageInfoList(PkgFile).RestartRequired), True)
+        Label84.Text = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).SupportInformation, PackageInfoList(PkgFile).SupportInformation)
+        Label86.Text = Casters.CastDismPackageState(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).PackageState, PackageInfoList(PkgFile).PackageState), True)
+        Label88.Text = Casters.CastDismFullyOfflineInstallationType(If(OSVer.Major >= 10, PackageInfoExList(PkgFile).FullyOffline, PackageInfoList(PkgFile).FullyOffline), True)
+        If OSVer.Major >= 10 Then Label90.Text = PackageInfoExList(PkgFile).CapabilityId Else Label90.Text = ""
         Label92.Text = ""
-        Dim cProps As DismCustomPropertyCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).CustomProperties, PackageInfoList(PkgFile).CustomProperties)
+        Dim cProps As DismCustomPropertyCollection = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).CustomProperties, PackageInfoList(PkgFile).CustomProperties)
         DynaLog.LogMessage("Custom property count: " & cProps.Count)
         If cProps.Count > 0 Then
             DynaLog.LogMessage("This package has custom properties.")
@@ -1361,7 +1324,7 @@ Public Class GetPkgInfoDlg
             End Select
         End If
         Label94.Text = ""
-        Dim pkgFeats As DismFeatureCollection = If(Environment.OSVersion.Version.Major >= 10, PackageInfoExList(PkgFile).Features, PackageInfoList(PkgFile).Features)
+        Dim pkgFeats As DismFeatureCollection = If(OSVer.Major >= 10, PackageInfoExList(PkgFile).Features, PackageInfoList(PkgFile).Features)
         DynaLog.LogMessage("Feature count: " & pkgFeats.Count)
         If pkgFeats.Count > 0 Then
             DynaLog.LogMessage("This package has features.")
@@ -1490,8 +1453,7 @@ Public Class GetPkgInfoDlg
     End Sub
 
     Private Sub GetPkgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click

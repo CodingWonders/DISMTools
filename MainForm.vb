@@ -127,8 +127,8 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "stable"
-    Public dt_codeName As String = "DTVI_MK3"
+    Public dtBranch As String = "dt_pre_0.7_relcndid"
+    Public dt_codeName As String = "DTVII"
 
     ' Arrays and other variables used on background processes
     Public imgPackageNames(65535) As String
@@ -136,8 +136,12 @@ Public Class MainForm
     Public imgPackageRelType(65535) As String
     Public imgPackageInstTime(65535) As String
 
+    Public imgPackages As New List(Of DismPackage)
+
     Public imgFeatureNames(65535) As String
     Public imgFeatureState(65535) As String
+
+    Public imgFeatures As New List(Of DismFeature)
 
     Public imgAppxDisplayNames(65535) As String
     Public imgAppxPackageNames(65535) As String
@@ -146,8 +150,12 @@ Public Class MainForm
     Public imgAppxResourceIds(65535) As String
     Public imgAppxRegions(65535) As String
 
+    Public imgAppxPackages As New List(Of DismAppxPackage)
+
     Public imgCapabilityIds(65535) As String
     Public imgCapabilityState(65535) As String
+
+    Public imgCapabilities As New List(Of DismCapability)
 
     Public imgDrvPublishedNames(65535) As String
     Public imgDrvOGFileNames(65535) As String
@@ -158,19 +166,16 @@ Public Class MainForm
     Public imgDrvVersions(65535) As String
     Public imgDrvBootCriticalStatus(65535) As Boolean
 
-    Public imgPackageNameLastEntry As String
+    Public imgDrivers As New List(Of DismDriverPackage)
 
     Public areBackgroundProcessesDone As Boolean
 
     Dim pbOpNums As Integer
-    Dim progressMax As Integer = 100
     Dim progressMin As Integer = 0
     Dim progressDivs As Double
     Dim progressLabel As String
     Dim regJumps As Boolean
     Dim irregVal As Integer = 0
-
-    Dim ElementCount As Integer = 0
 
     Public pinState As Integer
 
@@ -240,8 +245,6 @@ Public Class MainForm
     Public SkipQuestions As Boolean             ' Skips questions in the info saver
     Public AutoCompleteInfo(4) As Boolean       ' Skips questions for specific info categories
 
-    Public ColorSchemes As Integer = 0           ' Color scheme for the status bar and panels. 0 = green (v0.5+); 1 = blue (v0.1.1-v0.4.2)
-
     Public AutoCleanMounts As Boolean
 
     Public ExpandedProgressPanel As Boolean      ' Determine whether to show the progress panel in its expanded form
@@ -264,6 +267,14 @@ Public Class MainForm
 
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
     Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
+
+    Public DarkThemeIndex As Integer = 0            ' Color theme index for dark color scheme
+    Public LightThemeIndex As Integer = 1           ' Color theme index for light color scheme
+    Public ShowDateAndTime As Boolean = True        ' Whether to show the date and time on the project view
+
+    Public NoNTSamMappings As Boolean = False       ' Whether to map AppX pckgdep SIDs with SIDs from system's SAM file
+
+    Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
 
     Friend NotInheritable Class NativeMethods
 
@@ -383,14 +394,14 @@ Public Class MainForm
                         If arg.Replace("/offline:", "").Trim() <> "" Then
                             DynaLog.LogMessage("Getting all disks...")
                             Dim diList As New List(Of DriveInfo)
-                            diList = DriveInfo.GetDrives().ToList()
+                            diList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
                             Dim diPaths As New List(Of String)
                             DynaLog.LogMessage("Disks have been obtained. Preparing list...")
                             For Each di As DriveInfo In diList
                                 DynaLog.LogMessage("Essential disk information:" & CrLf &
                                                    "- Is disk ready? " & If(di.IsReady, "Yes", "No. Skipping...") & CrLf &
                                                    "- Drive letter: " & If(di.IsReady, di.Name, "Disk is not ready"))
-                                If di.IsReady Then diPaths.Add(di.Name)
+                                diPaths.Add(di.Name)
                             Next
                             If Path.GetPathRoot(arg.Replace("/offline:", "").Trim()) = arg.Replace("/offline:", "").Trim() And diPaths.Contains(arg.Replace("/offline:", "").Trim()) Then
                                 DynaLog.LogMessage("Disk specified satisfies all requirements (disk is ready, path is only path root). Passing to load...")
@@ -605,15 +616,19 @@ Public Class MainForm
         DynaLog.LogMessage("- PE Helper: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
                            "  Compilation Preprocessor by og-mrk (https://github.com/og-mrk), modified from WinUtil: (c) " & GetCopyrightTimespan(2022, 2022) & " CT Tech Group LLC" & CrLf &
                            "  Driver Installation Module: (c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software" & CrLf &
-                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
+                           "  HotInstall: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software" & CrLf &
+                           "  Preboot eXecution Environment (PXE) Helpers: (c) " & GetCopyrightTimespan(2025, Date.Now.Year) & " CodingWonders Software")
         DynaLog.LogMessage("- Scintilla.NET: " &
                            "(c) " & GetCopyrightTimespan(2017, 2017) & " Jacob Slusser, " &
                            "(c) " & GetCopyrightTimespan(2020, 2022) & " VPKSoft, " &
                            "(c) " & GetCopyrightTimespan(2023, 2023) & " desjarlais")
         DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
         DynaLog.LogMessage("- DarkUI: (c) " & GetCopyrightTimespan(2017, 2017) & " Robin Perris")
-        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2023) & " Igor Pavlov" & CrLf &
-                           "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc.")
+        DynaLog.LogMessage("- 7-Zip: (c) " & GetCopyrightTimespan(1999, 2025) & " Igor Pavlov" & CrLf &
+                           "  LZFSE Compression Library: (c) " & GetCopyrightTimespan(2015, 2016) & " Apple Inc." & CrLf &
+                           "  ZSTD Data Decompression: (c) Facebook, Inc. All rights reserved, (c) " & GetCopyrightTimespan(2023, 2025) & " Igor Pavlov" & CrLf &
+                           "  XXH64 Code: (c) " & GetCopyrightTimespan(2012, 2021) & " Yann Collet, (c) " & GetCopyrightTimespan(2023, 2025) & " Igor Pavlov" & CrLf &
+                           "  unRAR: (c) Alexander Roshal")        ' ugggghhhhhhh, why meta for zstd???
         DynaLog.LogMessage("- UnpEax: (c) " & GetCopyrightTimespan(2020, 2020) & " LioneL Christopher Chetty")
         DynaLog.LogMessage("- UnattendGen: " &
                            "(c) " & GetCopyrightTimespan(2024, Date.Now.Year) & " CodingWonders Software, " &
@@ -623,11 +638,13 @@ Public Class MainForm
                            "(c) " & GetCopyrightTimespan(2009, 2010) & " Microsoft Corporation, " &
                            "modifications by Jacob Slusser (" & GetCopyrightTimespan(2014, 2014) & "), and by " &
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
+        DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.BeginLogging()
     End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
+        LoadThemes(True)
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
             DynaLog.LogMessage("Windows 7 or an earlier version has been detected on this system. Program incompatible -- aborting any future procedures!")
@@ -688,6 +705,8 @@ Public Class MainForm
             BranchTSMI.Visible = True
             Text &= " (debug mode)"
         End If
+        ' Load theme files (EXPERIMENTS ONLY)
+        ThemeHelper.LoadThemes()
         ' Read settings file
         If File.Exists(Application.StartupPath & "\settings.ini") Then
             DynaLog.LogMessage("A settings file has been found. Loading settings...")
@@ -707,6 +726,7 @@ Public Class MainForm
             LoadDTSettings(1)
         End If
         imgStatus = 0
+        TimeLabel.Visible = ShowDateAndTime
         ChangeImgStatus()
         If DismExe <> "" Then
             DynaLog.LogMessage("Checking version of DISM executable...")
@@ -734,7 +754,7 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.RunWorkerAsync()
         DynaLog.LogMessage("Enabling image status watchers...")
         WatcherTimer.Enabled = True
-        If dtBranch.Contains("preview") And Not Debugger.IsAttached Then
+        If dtBranch.Contains("pre") And Not Debugger.IsAttached Then
             VersionTSMI.Visible = True
         Else
             VersionTSMI.Visible = False
@@ -766,24 +786,24 @@ Public Class MainForm
             BeginOfflineManagement(drivePath)
         End If
         Timer1.Enabled = True
-        LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
-        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel12.LinkColor = CurrentTheme.ForegroundColor
+        LinkLabel13.LinkColor = CurrentTheme.DisabledForegroundColor
         DynaLog.LogMessage("Getting official news...")
         FeedWorker.RunWorkerAsync()
         Timer2.Enabled = True
         LinkLabel22.LinkColor = ForeColor
         If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = ForeColor
-            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
+            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
         ElseIf LatestNewsPanel.Visible Then
-            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel23.LinkColor = ForeColor
-            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
+            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
         ElseIf TutorialVideoPanel.Visible Then
-            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel24.LinkColor = ForeColor
+            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
         End If
         If Not File.Exists(Application.StartupPath & "\recents.xml") Then
             DynaLog.LogMessage("The recents list file does not exist. Creating...")
@@ -795,7 +815,7 @@ Public Class MainForm
                 If RecentList.Count > 0 Then
                     DynaLog.LogMessage("Showing items...")
                     For Each Project In RecentList
-                        RecentsLV.Items.Add(If(Project.ProjName <> "", Project.ProjName, _
+                        RecentsLV.Items.Add(If(Project.ProjName <> "", Project.ProjName,
                                                                        Path.GetFileNameWithoutExtension(Project.ProjPath)))
                     Next
                     Try
@@ -919,6 +939,31 @@ Public Class MainForm
                 Catch ex As Exception
 
                 End Try
+            End If
+        End If
+
+        DynaLog.LogMessage("Checking boot mode...")
+        DynaLog.LogMessage(SystemInformation.BootMode)
+        If SystemInformation.BootMode <> BootMode.Normal Then
+            DynaLog.LogMessage("This system is in limp home mode. Offering choice to enter online installation management mode...")
+            Dim safeModeMessage As String = "This computer has booted into Safe Mode. This mode is designed for live operating system recovery." & CrLf & CrLf &
+                "DISMTools can automatically load the online installation management mode so that you can start attempting repairs." & CrLf & CrLf &
+                "Do you want to load the online installation management mode?"
+            If MsgBox(safeModeMessage, vbYesNo + vbQuestion, "Windows is in Safe Mode") = MsgBoxResult.Yes Then
+                DynaLog.LogMessage("It is official. We are entering online installation management mode to (try to) save this installation...")
+                BeginOnlineManagement(False)
+            End If
+        End If
+
+        If IsFirstTime Then
+            Dim tourMessage As String = "Is this your first time using DISMTools? If so, we can help you get started with the Tour." & CrLf & CrLf &
+                "With the Tour, you can make your first Windows image and test it afterwards. You can follow the tour at any pace you prefer, and you can access it at any time by going to the Help menu." & CrLf & CrLf &
+                "Do you want to launch the Tour now?"
+            If MsgBox(tourMessage, vbYesNo + vbQuestion, "Getting Started with DISMTools") = MsgBoxResult.Yes Then
+                If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+                    DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+                    Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+                End If
             End If
         End If
     End Sub
@@ -1053,11 +1098,7 @@ Public Class MainForm
         DynaLog.LogMessage("Do we REALLY have to do this? Let's find out!")
         Dim NeedToRemount As Boolean = False
         If MountedImageImgStatuses.Count > 0 Then
-            For x = 0 To Array.LastIndexOf(MountedImageImgStatuses, MountedImageImgStatuses.Last)
-                If MountedImageImgStatuses(x) = 1 Then
-                    NeedToRemount = True
-                End If
-            Next
+            NeedToRemount = MountedImageImgStatuses.Where(Function(status) status = 1).Any()
         End If
         DynaLog.LogMessage(If(NeedToRemount, "Remounting any orphaned images...", "There is no need to do this. Skipping..."))
         If NeedToRemount Then AutoReloadForm.ShowDialog()
@@ -1097,7 +1138,7 @@ Public Class MainForm
             DynaLog.LogMessage("Downloading update information from DISMTools repository...")
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
             Try
-                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt-update-files/refs/heads/main/" & If(branch.Contains("preview"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
+                client.DownloadFile("https://raw.githubusercontent.com/CodingWonders/dt-update-files/refs/heads/main/" & If(branch.Contains("pre"), "preview.ini", "stable.ini"), Application.StartupPath & "\info.ini")
             Catch ex As WebException
                 DynaLog.LogMessage("Could not grab update info. Well, I guess that we can't update!")
                 Debug.WriteLine("We couldn't fetch the necessary update information. Reason:" & CrLf & ex.Status.ToString())
@@ -1236,354 +1277,6 @@ Public Class MainForm
         End If
     End Sub
 
-    Public Class DarkModeRenderer
-        Inherits ToolStripProfessionalRenderer
-
-        Public Sub New()
-            MyBase.New(New DarkModeColorTable())
-        End Sub
-
-        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
-            e.ArrowColor = Color.White
-            MyBase.OnRenderArrow(e)
-        End Sub
-    End Class
-
-    Public Class LightModeRenderer
-        Inherits ToolStripProfessionalRenderer
-
-        Public Sub New()
-            MyBase.New(New LightModeColorTable())
-        End Sub
-
-        Protected Overrides Sub OnRenderArrow(e As ToolStripArrowRenderEventArgs)
-            e.ArrowColor = Color.Black
-            MyBase.OnRenderArrow(e)
-        End Sub
-    End Class
-
-    ''' <summary>
-    ''' Set colors on any surface with the "Professional" RenderMode in dark mode
-    ''' </summary>
-    ''' <remarks></remarks>
-    Public Class DarkModeColorTable
-        Inherits ProfessionalColorTable
-
-        Public Overrides ReadOnly Property ToolStripBorder As Color
-            Get
-                Return Color.FromArgb(32, 32, 32)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripDropDownBackground As Color
-            Get
-                Return Color.FromArgb(32, 32, 32)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripGradientBegin As Color
-            Get
-                Return Color.FromArgb(32, 32, 32)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripGradientMiddle As Color
-            Get
-                Return Color.FromArgb(32, 32, 32)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripGradientEnd As Color
-            Get
-                Return Color.FromArgb(32, 32, 32)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemSelected As Color
-            Get
-                Return Color.FromArgb(39, 39, 39)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemBorder As Color
-            Get
-                Return Color.FromArgb(39, 39, 39)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuBorder As Color
-            Get
-                Return Color.FromArgb(39, 39, 39)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemSelectedGradientBegin As Color
-            Get
-                Return Color.FromArgb(62, 62, 64)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemSelectedGradientEnd As Color
-            Get
-                Return Color.FromArgb(62, 62, 64)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemPressedGradientBegin As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemPressedGradientEnd As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemPressedGradientMiddle As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripContentPanelGradientBegin As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripContentPanelGradientEnd As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ImageMarginGradientBegin As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ImageMarginGradientEnd As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ImageMarginGradientMiddle As Color
-            Get
-                Return Color.FromArgb(27, 27, 28)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripPanelGradientBegin As Color
-            Get
-                Return Color.FromArgb(48, 48, 48)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedGradientBegin As Color
-            Get
-                Return Color.FromArgb(62, 62, 64)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedGradientMiddle As Color
-            Get
-                Return Color.FromArgb(62, 62, 64)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedGradientEnd As Color
-            Get
-                Return Color.FromArgb(62, 62, 64)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedBorder As Color
-            Get
-                Return Color.FromArgb(62, 62, 64)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonPressedGradientBegin As Color
-            Get
-                Return Color.FromArgb(0, 122, 204)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonPressedGradientMiddle As Color
-            Get
-                Return Color.FromArgb(0, 122, 204)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonPressedGradientEnd As Color
-            Get
-                Return Color.FromArgb(0, 122, 204)
-            End Get
-        End Property
-    End Class
-
-    ''' <summary>
-    ''' Set colors on any surface with the "Professional" RenderMode in light mode
-    ''' </summary>
-    ''' <remarks></remarks>
-    Public Class LightModeColorTable
-        Inherits ProfessionalColorTable
-
-        Public Overrides ReadOnly Property ToolStripBorder As Color
-            Get
-                Return Color.FromArgb(239, 239, 242)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripDropDownBackground As Color
-            Get
-                Return Color.FromArgb(239, 239, 242)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripGradientBegin As Color
-            Get
-                Return Color.FromArgb(239, 239, 242)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripGradientMiddle As Color
-            Get
-                Return Color.FromArgb(239, 239, 242)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripGradientEnd As Color
-            Get
-                Return Color.FromArgb(239, 239, 242)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemSelected As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemBorder As Color
-            Get
-                Return Color.FromArgb(239, 239, 239)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuBorder As Color
-            Get
-                Return Color.FromArgb(239, 239, 239)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemSelectedGradientBegin As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemSelectedGradientEnd As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemPressedGradientBegin As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemPressedGradientEnd As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property MenuItemPressedGradientMiddle As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripContentPanelGradientBegin As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ToolStripContentPanelGradientEnd As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ImageMarginGradientBegin As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ImageMarginGradientEnd As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ImageMarginGradientMiddle As Color
-            Get
-                Return Color.FromArgb(231, 232, 236)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedGradientBegin As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedGradientMiddle As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedGradientEnd As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonSelectedBorder As Color
-            Get
-                Return Color.FromArgb(254, 254, 254)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonPressedGradientBegin As Color
-            Get
-                Return Color.FromArgb(0, 122, 204)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonPressedGradientMiddle As Color
-            Get
-                Return Color.FromArgb(0, 122, 204)
-            End Get
-        End Property
-
-        Public Overrides ReadOnly Property ButtonPressedGradientEnd As Color
-            Get
-                Return Color.FromArgb(0, 122, 204)
-            End Get
-        End Property
-    End Class
-
     Sub LoadDTSettings(LoadMode As Integer, Optional ForceINILoad As Boolean = False)
         ' LoadMode = 0; load from registry
         ' LoadMode = 1; load from INI file
@@ -1598,7 +1291,7 @@ Public Class MainForm
             End If
             Try
                 DynaLog.LogMessage("Preparing to grab values...")
-                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                 Dim Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyStr)
                 Dim PrgKey As RegistryKey = Key.OpenSubKey("Program")
                 If CInt(PrgKey.GetValue("Volatile")) = 1 Then
@@ -1613,14 +1306,16 @@ Public Class MainForm
                 PrgKey.Close()
                 Dim PersKey As RegistryKey = Key.OpenSubKey("Personalization")
                 ColorMode = PersKey.GetValue("ColorMode")
+                DarkThemeIndex = PersKey.GetValue("ColorTheme_Dark")
+                LightThemeIndex = PersKey.GetValue("ColorTheme_Light")
                 Language = PersKey.GetValue("Language")
                 LogFont = PersKey.GetValue("LogFont").ToString()
                 LogFontSize = CInt(PersKey.GetValue("LogFontSi"))
                 LogFontIsBold = (CInt(PersKey.GetValue("LogFontBold")) = 1)
                 ProgressPanelStyle = CInt(PersKey.GetValue("SecondaryProgressPanelStyle"))
                 AllCaps = (CInt(PersKey.GetValue("AllCaps")) = 1)
-                ColorSchemes = PersKey.GetValue("ColorSchemes")
                 ExpandedProgressPanel = (CInt(PersKey.GetValue("ExpandedProgressPanel")) = 1)
+                ShowDateAndTime = (CInt(PersKey.GetValue("ShowDateAndTime")) = 1)
                 ProjectView.Visible = True
                 PersKey.Close()
                 Dim LogKey As RegistryKey = Key.OpenSubKey("Logs")
@@ -1633,6 +1328,7 @@ Public Class MainForm
                 Dim ImgOpKey As RegistryKey = Key.OpenSubKey("ImgOps")
                 QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
                 SysNoRestart = (CInt(ImgOpKey.GetValue("NoRestart")) = 1)
+                NoNTSamMappings = (CInt(ImgOpKey.GetValue("NoNTSamMappings")) = 1)
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1728,8 +1424,6 @@ Public Class MainForm
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorMode=2") Then
                     ColorMode = 2
                 End If
-                ' Apply program colors immediately
-                ChangePrgColors(ColorMode)
                 ' Detect language settings: 0 - Detect system language (using "ThreeLetterWindowsLanguageName")
                 '                         nnn - Apply specific language
                 If DTSettingForm.RichTextBox1.Text.Contains("Language=0") Then
@@ -1749,7 +1443,11 @@ Public Class MainForm
                 ' Detect log font setting. Do note that, if a system does not contain the font set in this program,
                 ' it will revert to "Consolas"
                 For Each line In DTSettingForm.RichTextBox1.Lines
-                    If line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
+                    If line.StartsWith("ColorTheme_Light=", StringComparison.OrdinalIgnoreCase) Then
+                        LightThemeIndex = CInt(line.Replace("ColorTheme_Light=", "").Trim())
+                    ElseIf line.StartsWith("ColorTheme_Dark=", StringComparison.OrdinalIgnoreCase) Then
+                        DarkThemeIndex = CInt(line.Replace("ColorTheme_Dark=", "").Trim())
+                    ElseIf line.StartsWith("LogFont=", StringComparison.OrdinalIgnoreCase) Then
                         LogFont = line.Replace("LogFont=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("LogFontSi=", StringComparison.OrdinalIgnoreCase) Then
                         LogFontSize = CInt(line.Replace("LogFontSi=", "").Trim())
@@ -1775,6 +1473,8 @@ Public Class MainForm
                         If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
                     End If
                 Next
+                ' Apply program colors immediately
+                ChangePrgColors(ColorMode)
                 If DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=0") Then
                     LogFontIsBold = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("LogFontBold=1") Then
@@ -1795,15 +1495,15 @@ Public Class MainForm
                     ToolsToolStripMenuItem.Text = ToolsToolStripMenuItem.Text.ToUpper()
                     HelpToolStripMenuItem.Text = HelpToolStripMenuItem.Text.ToUpper()
                 End If
-                If DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=0") Then
-                    ColorSchemes = 0
-                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ColorSchemes=1") Then
-                    ColorSchemes = 1
-                End If
                 If DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=0") Then
                     ExpandedProgressPanel = 0
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("ExpandedProgressPanel=1") Then
                     ExpandedProgressPanel = 1
+                End If
+                If DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=0") Then
+                    ShowDateAndTime = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("ShowDateAndTime=1") Then
+                    ShowDateAndTime = True
                 End If
                 ProjectView.Visible = True
                 ' Detect log file level: 1 - Errors only
@@ -1848,6 +1548,12 @@ Public Class MainForm
                     SysNoRestart = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoRestart=1") Then
                     SysNoRestart = True
+                End If
+                ' Detect whether to map NT account info with pckgdeps
+                If DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=0") Then
+                    NoNTSamMappings = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=1") Then
+                    NoNTSamMappings = True
                 End If
                 ' Detect whether to use scratch directory
                 If DTSettingForm.RichTextBox1.Text.Contains("UseScratch=0") Then
@@ -1968,12 +1674,7 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
-        Select Case ColorSchemes
-            Case 0
-                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
-            Case 1
-                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-        End Select
+        StatusStrip.BackColor = CurrentTheme.AccentColors(1)
         ShowDTSettings()
         If Not EnableDynaLog Then
             DynaLog.LogMessage("DynaLog Logger will be ultimately disabled")
@@ -2028,52 +1729,55 @@ Public Class MainForm
     ''' </summary>
     ''' <remarks></remarks>
     Sub ShowDTSettings()
-        DynaLog.LogMessage("Program Settings:" & CrLf & _
-                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf & _
-                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf & _
-                           "ColorMode                  =    " & ColorMode & CrLf & _
-                           "Language                   =    " & Language & CrLf & _
-                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf & _
-                           "LogFontSi                  =    " & LogFontSize & CrLf & _
-                           "LogFontBold                =    " & LogFontIsBold & CrLf & _
-                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf & _
-                           "AllCaps                    =    " & AllCaps & CrLf & _
-                           "ColorSchemes               =    " & ColorSchemes & CrLf & _
-                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf & _
-                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf & _
-                           "LogLevel                   =    " & LogLevel & CrLf & _
-                           "AutoLogs                   =    " & AutoLogs & CrLf & _
-                           "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf & _
-                           "EnableDynaLog              =    " & EnableDynaLog & CrLf & _
-                           "ImgOperationMode           =    " & ImgOperationMode & CrLf & _
-                           "Quiet                      =    " & QuietOperations & CrLf & _
-                           "NoRestart                  =    " & SysNoRestart & CrLf & _
-                           "UseScratch                 =    " & UseScratch & CrLf & _
-                           "AutoScratch                =    " & AutoScrDir & CrLf & _
-                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf & _
-                           "EnglishOutput              =    " & EnglishOutput & CrLf & _
-                           "ReportView                 =    " & ReportView & CrLf & _
-                           "ShowNotification           =    " & NotificationShow & CrLf & _
-                           "NotifyFrequency            =    " & NotificationFrequency & CrLf & _
-                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf & _
-                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf & _
-                           "DetectAllDrivers           =    " & AllDrivers & CrLf & _
-                           "SkipFrameworks             =    " & SkipFrameworks & CrLf & _
-                           "RunAllProcs                =    " & RunAllProcs & CrLf & _
-                           "RemountImages              =    " & StartupRemount & CrLf & _
-                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf & _
-                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf & _
-                           "WndWidth                   =    " & WndWidth & CrLf & _
-                           "WndHeight                  =    " & WndHeight & CrLf & _
-                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf & _
-                           "WndLeft                    =    " & WndLeft & CrLf & _
-                           "WndTop                     =    " & WndTop & CrLf & _
-                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf & _
-                           "SkipQuestions              =    " & SkipQuestions & CrLf & _
-                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf & _
-                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf & _
-                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf & _
-                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf & _
+        DynaLog.LogMessage("Program Settings:" & CrLf &
+                           "DISMExe                    =    " & Quote & DismExe & Quote & CrLf &
+                           "SaveOnSettingsIni          =    " & SaveOnSettingsIni & CrLf &
+                           "ColorMode                  =    " & ColorMode & CrLf &
+                           "ColorTheme_Light           =    " & LightThemeIndex & CrLf &
+                           "ColorTheme_Dark            =    " & DarkThemeIndex & CrLf &
+                           "Language                   =    " & Language & CrLf &
+                           "LogFont                    =    " & Quote & LogFont & Quote & CrLf &
+                           "LogFontSi                  =    " & LogFontSize & CrLf &
+                           "LogFontBold                =    " & LogFontIsBold & CrLf &
+                           "SecondaryProgressPanelStyle=    " & ProgressPanelStyle & CrLf &
+                           "AllCaps                    =    " & AllCaps & CrLf &
+                           "ExpandedProgressPanel      =    " & ExpandedProgressPanel & CrLf &
+                           "ShowDateAndTime            =    " & ShowDateAndTime & CrLf &
+                           "LogFile                    =    " & Quote & LogFile & Quote & CrLf &
+                           "LogLevel                   =    " & LogLevel & CrLf &
+                           "AutoLogs                   =    " & AutoLogs & CrLf &
+                           "SystemEditor               =    " & Quote & SystemEditor & Quote & CrLf &
+                           "EnableDynaLog              =    " & EnableDynaLog & CrLf &
+                           "ImgOperationMode           =    " & ImgOperationMode & CrLf &
+                           "Quiet                      =    " & QuietOperations & CrLf &
+                           "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
+                           "NoRestart                  =    " & SysNoRestart & CrLf &
+                           "UseScratch                 =    " & UseScratch & CrLf &
+                           "AutoScratch                =    " & AutoScrDir & CrLf &
+                           "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf &
+                           "EnglishOutput              =    " & EnglishOutput & CrLf &
+                           "ReportView                 =    " & ReportView & CrLf &
+                           "ShowNotification           =    " & NotificationShow & CrLf &
+                           "NotifyFrequency            =    " & NotificationFrequency & CrLf &
+                           "EnhancedAppxGetter         =    " & ExtAppxGetter & CrLf &
+                           "SkipNonRemovable           =    " & SkipNonRemovable & CrLf &
+                           "DetectAllDrivers           =    " & AllDrivers & CrLf &
+                           "SkipFrameworks             =    " & SkipFrameworks & CrLf &
+                           "RunAllProcs                =    " & RunAllProcs & CrLf &
+                           "RemountImages              =    " & StartupRemount & CrLf &
+                           "CheckForUpdates            =    " & StartupUpdateCheck & CrLf &
+                           "AutoCleanMounts            =    " & AutoCleanMounts & CrLf &
+                           "WndWidth                   =    " & WndWidth & CrLf &
+                           "WndHeight                  =    " & WndHeight & CrLf &
+                           "WndCenter                  =    " & (StartPosition = FormStartPosition.CenterScreen) & CrLf &
+                           "WndLeft                    =    " & WndLeft & CrLf &
+                           "WndTop                     =    " & WndTop & CrLf &
+                           "WndMaximized               =    " & (WindowState = FormWindowState.Maximized) & CrLf &
+                           "SkipQuestions              =    " & SkipQuestions & CrLf &
+                           "Pkg_CompleteInfo           =    " & AutoCompleteInfo(0) & CrLf &
+                           "Feat_CompleteInfo          =    " & AutoCompleteInfo(1) & CrLf &
+                           "AppX_CompleteInfo          =    " & AutoCompleteInfo(2) & CrLf &
+                           "Cap_CompleteInfo           =    " & AutoCompleteInfo(3) & CrLf &
                            "Drv_CompleteInfo           =    " & AutoCompleteInfo(4))
     End Sub
 
@@ -2134,7 +1838,7 @@ Public Class MainForm
         Array.Clear(CompletedTasks, 0, CompletedTasks.Length)
         ' Let user know things are working
         BackgroundProcessesButton.Visible = False
-        BackgroundProcessesButton.Image = My.Resources.bg_ops
+        BackgroundProcessesButton.Image = GetGlyphResource("bg_ops")
         BackgroundProcessesButton.Visible = True
         If UseApi Then DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         areBackgroundProcessesDone = False
@@ -2970,33 +2674,22 @@ Public Class MainForm
     End Sub
 
     Sub GetOfflineEditionAndInstIdFromRegistry()
-        Using reg As New Process
-            DynaLog.LogMessage("Loading installation registry...")
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\IMG_SOFT " & Quote & MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-            If reg.ExitCode <> 0 Then
-                DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(reg.ExitCode))
-                imgEdition = ""
-            Else
-                DynaLog.LogMessage("Getting values...")
-                Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
-                imgEdition = edReg.GetValue("EditionID", "").ToString()
-                imgInstType = edReg.GetValue("InstallationType", "").ToString()
-                DynaLog.LogMessage("Edition: " & imgEdition)
-                DynaLog.LogMessage("Installation type: " & imgInstType)
-                edReg.Close()
-            End If
-            DynaLog.LogMessage("Unloading installation registry...")
-            reg.StartInfo.Arguments = "unload HKLM\IMG_SOFT"
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-        End Using
+        DynaLog.LogMessage("Loading installation registry...")
+        Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\IMG_SOFT")
+        If regExitCode <> 0 Then
+            DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(regExitCode))
+            imgEdition = ""
+        Else
+            DynaLog.LogMessage("Getting values...")
+            Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
+            imgEdition = edReg.GetValue("EditionID", "").ToString()
+            imgInstType = edReg.GetValue("InstallationType", "").ToString()
+            DynaLog.LogMessage("Edition: " & imgEdition)
+            DynaLog.LogMessage("Installation type: " & imgInstType)
+            edReg.Close()
+        End If
+        DynaLog.LogMessage("Unloading installation registry...")
+        RegistryHelper.UnloadRegistryHive("HKLM\IMG_SOFT")
     End Sub
 
     ''' <summary>
@@ -3258,83 +2951,83 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                                  "@echo off" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf &
                                                   "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                             Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                                  "@echo off" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf &
                                                   "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                          "@echo off" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf &
                                           "dism /English /image=" & Quote & MountDir & Quote & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                 End Select
 
@@ -3974,8 +3667,10 @@ Public Class MainForm
                     imgPackageState = imgPackageStateList.ToArray()
                     imgPackageRelType = imgPackageRelTypeList.ToArray()
                     imgPackageInstTime = imgPackageInstTimeList.ToArray()
+
+                    imgPackages = PackageCollection.ToList()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4021,21 +3716,21 @@ Public Class MainForm
         Debug.WriteLine("[GetImagePackages] Running function...")
         Debug.WriteLine("[GetImagePackages] Writing getter scripts...")
         Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgnames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\tempinfo\pkgnames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgnames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Package Identity : " & Quote & " > .\tempinfo\pkgnames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgstate.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\pkgstate", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgstate.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\pkgstate",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgreltype.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Release Type : " & Quote & " > .\tempinfo\pkgreltype", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkgreltype.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Release Type : " & Quote & " > .\tempinfo\pkgreltype",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkginsttime.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Install Time : " & Quote & " > .\tempinfo\pkginsttime", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\pkginsttime.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-packages | findstr /c:" & Quote & "Install Time : " & Quote & " > .\tempinfo\pkginsttime",
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImagePackages] Failed writing getter scripts. Reason: " & ex.Message)
@@ -4131,8 +3826,10 @@ Public Class MainForm
                     DynaLog.LogMessage("Passing information to arrays...")
                     imgFeatureNames = imgFeatureNameList.ToArray()
                     imgFeatureState = imgFeatureStateList.ToArray()
+
+                    imgFeatures = FeatureCollection.ToList()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4158,13 +3855,13 @@ Public Class MainForm
         Debug.WriteLine("[GetImageFeatures] Running function...")
         Debug.WriteLine("[GetImageFeatures] Writing getter scripts...")
         Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featnames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\tempinfo\featnames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featnames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "Feature Name : " & Quote & " > .\tempinfo\featnames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featstate.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\featstate", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\featstate.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-features | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\featstate",
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageFeatures] Failed writing getter scripts. Reason: " & ex.Message)
@@ -4314,8 +4011,10 @@ Public Class MainForm
                     imgAppxPackageNames = imgAppxPackageNameList.ToArray()
                     imgAppxResourceIds = imgAppxResourceIdList.ToArray()
                     imgAppxVersions = imgAppxVersionList.ToArray()
+
+                    imgAppxPackages = AppxPackageCollection.ToList()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4344,22 +4043,22 @@ Public Class MainForm
         End Select
         DynaLog.LogMessage("Writing getter scripts...")
         Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxnames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf & _
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxnames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf &
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxversions.bat", _
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxversions.bat",
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxarches.bat", _
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxarches.bat",
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxresids.bat", _
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxresids.bat",
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxregions.bat", _
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxregions.bat",
+                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions",
                               ASCII)
         Catch ex As Exception
             DynaLog.LogMessage("Failed writing getter scripts. Reason: " & ex.Message)
@@ -4550,8 +4249,10 @@ Public Class MainForm
                     DynaLog.LogMessage("Passing information to arrays...")
                     imgCapabilityIds = imgCapabilityNameList.ToArray()
                     imgCapabilityState = imgCapabilityStateList.ToArray()
+
+                    imgCapabilities = CapabilityCollection.ToList()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4562,46 +4263,6 @@ Public Class MainForm
             CompletedTasks(3) = True
             PendingTasks(3) = False
             Exit Sub
-            'Try
-
-            '    If session IsNot Nothing Then
-            '        Dim imgCapabilityNameList As New List(Of String)
-            '        Dim imgCapabilityStateList As New List(Of String)
-            '        Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
-            '        For Each capability As DismCapability In CapabilityCollection
-            '            If ImgBW.CancellationPending Then
-            '                If UseApi And session IsNot Nothing Then DismApi.CloseSession(session)
-            '                Exit Sub
-            '            End If
-            '            imgCapabilityNameList.Add(capability.Name)
-            '            Select Case capability.State
-            '                Case DismPackageFeatureState.NotPresent
-            '                    imgCapabilityStateList.Add("Not present")
-            '                Case DismPackageFeatureState.UninstallPending
-            '                    imgCapabilityStateList.Add("Uninstall pending")
-            '                Case DismPackageFeatureState.Staged
-            '                    imgCapabilityStateList.Add("Uninstalled")
-            '                Case DismPackageFeatureState.Removed Or DismPackageFeatureState.Resolved
-            '                    imgCapabilityStateList.Add("Removed")
-            '                Case DismPackageFeatureState.Installed
-            '                    imgCapabilityStateList.Add("Installed")
-            '                Case DismPackageFeatureState.InstallPending
-            '                    imgCapabilityStateList.Add("Install Pending")
-            '                Case DismPackageFeatureState.Superseded
-            '                    imgCapabilityStateList.Add("Superseded")
-            '                Case DismPackageFeatureState.PartiallyInstalled
-            '                    imgCapabilityStateList.Add("Partially Installed")
-            '            End Select
-            '        Next
-            '        imgCapabilityIds = imgCapabilityNameList.ToArray()
-            '        imgCapabilityState = imgCapabilityStateList.ToArray()
-            '        Exit Sub
-            '    Else
-            '        Throw New Exception("No valid DISM session has been provided")
-            '    End If
-            'Catch ex As Exception
-            '    DismApi.CloseSession(session)
-            'End Try
         End If
         Debug.WriteLine("[GetImageCapabilities] Running function...")
         ' The image may be Windows 10/11, but DISM may not be from Windows 10/11. Get this information before running this procedure
@@ -4614,13 +4275,13 @@ Public Class MainForm
         End Select
         Debug.WriteLine("[GetImageCapabilities] Writing getter scripts...")
         Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capids.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "Capability Identity : " & Quote & " > .\tempinfo\capids", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capids.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "Capability Identity : " & Quote & " > .\tempinfo\capids",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capstate.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\capstate", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\capstate.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-capabilities | findstr /c:" & Quote & "State : " & Quote & " > .\tempinfo\capstate",
                               ASCII)
         Catch ex As Exception
             Debug.WriteLine("[GetImageCapabilities] Failed writing getter scripts. Reason: " & ex.Message)
@@ -4730,8 +4391,10 @@ Public Class MainForm
                     imgDrvDates = imgDrvDateList.ToArray()
                     imgDrvVersions = imgDrvVersionList.ToArray()
                     imgDrvBootCriticalStatus = imgDrvBootCriticalStatusList.ToArray()
+
+                    imgDrivers = DriverCollection.ToList()
                 End Using
-            Catch ex As DismException
+            Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
                 ThrowAPIException(ex)
             Finally
@@ -4746,9 +4409,9 @@ Public Class MainForm
         DynaLog.LogMessage("Running function...")
         DynaLog.LogMessage("Determining whether there are third-party drivers in image...")
         Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvnums.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvnums.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums",
                               ASCII)
         Catch ex As Exception
             DynaLog.LogMessage("Failed writing getter scripts. Reason: " & ex.Message)
@@ -4771,33 +4434,33 @@ Public Class MainForm
         End If
         DynaLog.LogMessage("Writing getter scripts...")
         Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvpublishednames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvpublishednames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvogfilenames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvogfilenames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvinbox.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvinbox.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvclassnames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvclassnames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvprovnames.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvprovnames.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvdates.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvdates.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates",
                               ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvversions.bat", _
-                              "@echo off" & CrLf & _
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions", _
+            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvversions.bat",
+                              "@echo off" & CrLf &
+                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions",
                               ASCII)
         Catch ex As Exception
             DynaLog.LogMessage("Failed writing getter scripts. Reason: " & ex.Message)
@@ -4900,7 +4563,7 @@ Public Class MainForm
 
     Sub GenerateDTSettings()
         DynaLog.LogMessage("Generating new settings file...")
-        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.7) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & "{common:WinDir}\system32\dism.exe" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Volatile=0")
@@ -4916,15 +4579,17 @@ Public Class MainForm
             DynaLog.LogMessage("Auto Coloring from System is not supported. Falling back to light mode (hopefully you're not using this at night)...")
             DTSettingForm.RichTextBox2.AppendText("ColorMode=1")
         End Try
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Light=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Dark=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & "Consolas" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=11")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontBold=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "SecondaryProgressPanelStyle=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
-        DTSettingForm.RichTextBox2.AppendText(CrLf & "NewDesign=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & "{common:WinDir}\Logs\DISM\DISM.log" & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "LogLevel=3")
@@ -4935,6 +4600,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText("ImgOperationMode=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
@@ -4971,7 +4637,7 @@ Public Class MainForm
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
-        Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+        Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
         Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
         Dim PrgKey As RegistryKey = Key.CreateSubKey("Program")
         PrgKey.SetValue("DismExe", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\dism.exe" & Quote, RegistryValueKind.ExpandString)
@@ -4988,15 +4654,17 @@ Public Class MainForm
             ' Rollback to light theme
             PersKey.SetValue("ColorMode", 1, RegistryValueKind.DWord)
         End Try
+        PersKey.SetValue("ColorTheme_Light", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("ColorTheme_Dark", 0, RegistryValueKind.DWord)
         PersKey.SetValue("Language", 0, RegistryValueKind.DWord)
         PersKey.SetValue("LogFont", "Consolas", RegistryValueKind.String)
         PersKey.SetValue("LogFontSi", 11, RegistryValueKind.DWord)
         PersKey.SetValue("LogFontBold", 0, RegistryValueKind.DWord)
         PersKey.SetValue("SecondaryProgressPanelStyle", 1, RegistryValueKind.DWord)
         PersKey.SetValue("AllCaps", 0, RegistryValueKind.DWord)
-        PersKey.SetValue("NewDesign", 1, RegistryValueKind.DWord)
         PersKey.SetValue("ColorSchemes", 0, RegistryValueKind.DWord)
         PersKey.SetValue("ExpandedProgressPanel", 1, RegistryValueKind.DWord)
+        PersKey.SetValue("ShowDateAndTime", 1, RegistryValueKind.DWord)
         PersKey.Close()
         Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
         LogKey.SetValue("LogFile", Quote & Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\logs\DISM\DISM.log" & Quote, RegistryValueKind.ExpandString)
@@ -5008,6 +4676,7 @@ Public Class MainForm
         Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
         ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("NoRestart", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("NoNTSamMappings", 0, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -5071,7 +4740,7 @@ Public Class MainForm
                 End If
                 DynaLog.LogMessage("Writing to INI...")
                 DTSettingForm.RichTextBox2.Clear()
-                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.6.2) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("# DISMTools (version 0.7) configuration file" & CrLf & CrLf & "[Program]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("DismExe=" & Quote & DismExe & Quote)
                 If SaveOnSettingsIni Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "SaveOnSettingsIni=1")
@@ -5092,6 +4761,8 @@ Public Class MainForm
                     Case 2
                         DTSettingForm.RichTextBox2.AppendText("ColorMode=2")
                 End Select
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Light=" & LightThemeIndex)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorTheme_Dark=" & DarkThemeIndex)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "Language=" & Language)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFont=" & Quote & LogFont & Quote)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "LogFontSi=" & LogFontSize)
@@ -5111,16 +4782,15 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "AllCaps=0")
                 End If
-                Select Case ColorSchemes
-                    Case 0
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=0")
-                    Case 1
-                        DTSettingForm.RichTextBox2.AppendText(CrLf & "ColorSchemes=1")
-                End Select
                 If ExpandedProgressPanel Then
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "ExpandedProgressPanel=0")
+                End If
+                If ShowDateAndTime Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "ShowDateAndTime=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[Logs]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("LogFile=" & Quote & LogFile & Quote)
@@ -5161,6 +4831,11 @@ Public Class MainForm
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=1")
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
+                End If
+                If NoNTSamMappings Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
                 End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
                 If UseScratch Then
@@ -5271,7 +4946,7 @@ Public Class MainForm
                     SettingRtb.Text = SettingRtb.Text.Replace("SaveOnSettingsIni=1", "SaveOnSettingsIni=0").Trim()
                     File.WriteAllText(Application.StartupPath & "\settings.ini", SettingRtb.Text, ASCII)
                     DynaLog.LogMessage("Setting key values...")
-                    Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("preview"), "Preview", "Stable")
+                    Dim KeyStr As String = "Software\DISMTools\" & If(dtBranch.Contains("pre"), "Preview", "Stable")
                     DynaLog.LogMessage("Destination path in registry: HKCU\" & KeyStr)
                     Dim Key As RegistryKey = Registry.CurrentUser.CreateSubKey(KeyStr)
                     DynaLog.LogMessage("Configuring program settings...")
@@ -5283,14 +4958,16 @@ Public Class MainForm
                     DynaLog.LogMessage("Configuring personalization settings...")
                     Dim PersKey As RegistryKey = Key.CreateSubKey("Personalization")
                     PersKey.SetValue("ColorMode", ColorMode, RegistryValueKind.DWord)
+                    PersKey.SetValue("ColorTheme_Light", LightThemeIndex, RegistryValueKind.DWord)
+                    PersKey.SetValue("ColorTheme_Dark", DarkThemeIndex, RegistryValueKind.DWord)
                     PersKey.SetValue("Language", Language, RegistryValueKind.DWord)
                     PersKey.SetValue("LogFont", LogFont, RegistryValueKind.String)
                     PersKey.SetValue("LogFontSi", LogFontSize, RegistryValueKind.DWord)
                     PersKey.SetValue("LogFontBold", If(LogFontIsBold, 1, 0), RegistryValueKind.DWord)
                     PersKey.SetValue("SecondaryProgressPanelStyle", ProgressPanelStyle, RegistryValueKind.DWord)
                     PersKey.SetValue("AllCaps", If(AllCaps, 1, 0), RegistryValueKind.DWord)
-                    PersKey.SetValue("ColorSchemes", If(ColorSchemes = 0, 0, 1), RegistryValueKind.DWord)
                     PersKey.SetValue("ExpandedProgressPanel", If(ExpandedProgressPanel, 1, 0), RegistryValueKind.DWord)
+                    PersKey.SetValue("ShowDateAndTime", If(ShowDateAndTime, 1, 0), RegistryValueKind.DWord)
                     PersKey.Close()
                     DynaLog.LogMessage("Configuring log settings...")
                     Dim LogKey As RegistryKey = Key.CreateSubKey("Logs")
@@ -5304,6 +4981,7 @@ Public Class MainForm
                     Dim ImgOpKey As RegistryKey = Key.CreateSubKey("ImgOps")
                     ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
                     ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("NoNTSamMappings", If(NoNTSamMappings, 1, 0), RegistryValueKind.DWord)
                     ImgOpKey.Close()
                     DynaLog.LogMessage("Configuring scratch directory settings...")
                     Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
@@ -5440,287 +5118,100 @@ Public Class MainForm
                     DynaLog.LogMessage("Color Mode is " & CInt(ColorMode) & ". Changing accordingly...")
                     If ColorMode = "0" Then
                         If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
-                        BackColor = Color.FromArgb(48, 48, 48)
-                        ForeColor = Color.White
-                        HomePanel.BackColor = Color.FromArgb(40, 40, 43)
-                        HomePanel.ForeColor = Color.White
-                        SidePanel.BackColor = Color.FromArgb(31, 31, 34)
-                        SidePanel.ForeColor = Color.White
-                        WelcomePanel.BackColor = Color.FromArgb(40, 40, 43)
-                        WelcomePanel.ForeColor = Color.White
-                        PrjPanel.BackColor = Color.FromArgb(40, 40, 43)
-                        PrjPanel.ForeColor = Color.White
-                        MenuStrip1.BackColor = Color.FromArgb(48, 48, 48)
-                        MenuStrip1.ForeColor = Color.White
-                        ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, MenuStrip1.Items)
-                        PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
-                        ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
-                        ToolStrip1.ForeColor = Color.White
-                        ToolStrip2.BackColor = Color.FromArgb(48, 48, 48)
-                        ToolStrip2.ForeColor = Color.White
-                        prjTreeView.BackColor = Color.FromArgb(37, 37, 38)
-                        prjTreeView.ForeColor = Color.White
-                        ToolStripButton2.Image = New Bitmap(My.Resources.save_glyph_dark)
-                        ToolStripButton3.Image = New Bitmap(My.Resources.prj_unload_glyph_dark)
-                        ToolStripButton4.Image = New Bitmap(My.Resources.progress_window_dark)
-                        RefreshViewTSB.Image = New Bitmap(My.Resources.refresh_glyph_dark)
-                        Try
-                            If prjTreeView.SelectedNode.IsExpanded Then
-                                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
-                            Else
-                                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-                            End If
-                        Catch ex As Exception
-                            ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-                        End Try
-                        MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New DarkModeRenderer()
-                        ToolStrip1.Renderer = New DarkModeRenderer()
-                        ToolStrip2.Renderer = New DarkModeRenderer()
-                        PkgInfoCMS.Renderer = New DarkModeRenderer()
-                        ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
-                        AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
-                        AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
-                        TreeViewCMS.Renderer = New DarkModeRenderer()
-                        AppxResCMS.Renderer = New DarkModeRenderer()
-                        ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
-                        PkgInfoCMS.ForeColor = Color.White
-                        ImgUMountPopupCMS.ForeColor = Color.White
-                        AppxPackagePopupCMS.ForeColor = Color.White
-                        AppxRelatedLinksCMS.ForeColor = Color.White
-                        TreeViewCMS.ForeColor = Color.White
-                        AppxResCMS.ForeColor = Color.White
-                        ImgSpecialToolsCMS.ForeColor = Color.White
-                        ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
-                        InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
-                        ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph_dark)
-                        BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
-                        ' New design stuff
-                        FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
-                        GroupBox4.ForeColor = Color.White
-                        GroupBox5.ForeColor = Color.White
-                        GroupBox6.ForeColor = Color.White
-                        GroupBox7.ForeColor = Color.White
-                        GroupBox8.ForeColor = Color.White
-                        GroupBox9.ForeColor = Color.White
-                        GroupBox10.ForeColor = Color.White
+                        ThemeHelper.ChangeCurrentTheme(DarkThemeIndex, True)
                     ElseIf ColorMode = "1" Then
                         If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
-                        BackColor = Color.FromArgb(239, 239, 242)
-                        ForeColor = Color.Black
-                        HomePanel.BackColor = Color.White
-                        HomePanel.ForeColor = Color.Black
-                        SidePanel.BackColor = Color.FromArgb(230, 230, 230)
-                        SidePanel.ForeColor = Color.Black
-                        WelcomePanel.BackColor = Color.White
-                        WelcomePanel.ForeColor = Color.Black
-                        PrjPanel.BackColor = Color.FromArgb(240, 240, 240)
-                        PrjPanel.ForeColor = Color.Black
-                        MenuStrip1.BackColor = Color.FromArgb(239, 239, 242)
-                        MenuStrip1.ForeColor = Color.Black
-                        ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, MenuStrip1.Items)
-                        PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
-                        ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
-                        ToolStrip1.ForeColor = Color.Black
-                        ToolStrip2.BackColor = Color.FromArgb(239, 239, 242)
-                        ToolStrip2.ForeColor = Color.Black
-                        prjTreeView.BackColor = Color.FromArgb(246, 246, 246)
-                        prjTreeView.ForeColor = Color.Black
-                        ToolStripButton2.Image = New Bitmap(My.Resources.save_glyph)
-                        ToolStripButton3.Image = New Bitmap(My.Resources.prj_unload_glyph)
-                        ToolStripButton4.Image = New Bitmap(My.Resources.progress_window)
-                        RefreshViewTSB.Image = New Bitmap(My.Resources.refresh_glyph)
-                        Try
-                            If prjTreeView.SelectedNode.IsExpanded Then
-                                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
-                            Else
-                                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-                            End If
-                        Catch ex As Exception
-                            ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-                        End Try
-                        MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                        MenuStrip1.Renderer = New LightModeRenderer()
-                        ToolStrip1.Renderer = New LightModeRenderer()
-                        ToolStrip2.Renderer = New LightModeRenderer()
-                        PkgInfoCMS.Renderer = New LightModeRenderer()
-                        ImgUMountPopupCMS.Renderer = New LightModeRenderer()
-                        AppxPackagePopupCMS.Renderer = New LightModeRenderer()
-                        AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
-                        TreeViewCMS.Renderer = New LightModeRenderer()
-                        AppxResCMS.Renderer = New LightModeRenderer()
-                        ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
-                        PkgInfoCMS.ForeColor = Color.Black
-                        ImgUMountPopupCMS.ForeColor = Color.Black
-                        AppxPackagePopupCMS.ForeColor = Color.Black
-                        AppxRelatedLinksCMS.ForeColor = Color.Black
-                        TreeViewCMS.ForeColor = Color.Black
-                        AppxResCMS.ForeColor = Color.Black
-                        ImgSpecialToolsCMS.ForeColor = Color.Black
-                        ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
-                        InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
-                        ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph)
-                        BranchTSMI.Image = New Bitmap(My.Resources.branch)
-                        ' New design stuff
-                        FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
-                        GroupBox4.ForeColor = Color.Black
-                        GroupBox5.ForeColor = Color.Black
-                        GroupBox6.ForeColor = Color.Black
-                        GroupBox7.ForeColor = Color.Black
-                        GroupBox8.ForeColor = Color.Black
-                        GroupBox9.ForeColor = Color.Black
-                        GroupBox10.ForeColor = Color.Black
+                        ThemeHelper.ChangeCurrentTheme(LightThemeIndex, False)
                     End If
                 Catch ex As Exception
                     ChangePrgColors(1)
+                    Exit Sub
                 End Try
             Case 1
                 DynaLog.LogMessage("Color Code is 1. Switching to light theme...")
                 If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
-                BackColor = Color.FromArgb(239, 239, 242)
-                ForeColor = Color.Black
-                HomePanel.BackColor = Color.White
-                HomePanel.ForeColor = Color.Black
-                SidePanel.BackColor = Color.FromArgb(230, 230, 230)
-                SidePanel.ForeColor = Color.Black
-                WelcomePanel.BackColor = Color.White
-                WelcomePanel.ForeColor = Color.Black
-                PrjPanel.BackColor = Color.FromArgb(240, 240, 240)
-                PrjPanel.ForeColor = Color.Black
-                MenuStrip1.BackColor = Color.FromArgb(239, 239, 242)
-                MenuStrip1.ForeColor = Color.Black
-                ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, MenuStrip1.Items)
-                PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_light)
-                ToolStrip1.BackColor = Color.FromArgb(239, 239, 242)
-                ToolStrip1.ForeColor = Color.Black
-                ToolStrip2.BackColor = Color.FromArgb(239, 239, 242)
-                ToolStrip2.ForeColor = Color.Black
-                prjTreeView.BackColor = Color.FromArgb(246, 246, 246)
-                prjTreeView.ForeColor = Color.Black
-                ToolStripButton2.Image = New Bitmap(My.Resources.save_glyph)
-                ToolStripButton3.Image = New Bitmap(My.Resources.prj_unload_glyph)
-                ToolStripButton4.Image = New Bitmap(My.Resources.progress_window)
-                RefreshViewTSB.Image = New Bitmap(My.Resources.refresh_glyph)
-                Try
-                    If prjTreeView.SelectedNode.IsExpanded Then
-                        ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
-                    Else
-                        ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-                    End If
-                Catch ex As Exception
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-                End Try
-                MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New LightModeRenderer()
-                ToolStrip1.Renderer = New LightModeRenderer()
-                ToolStrip2.Renderer = New LightModeRenderer()
-                PkgInfoCMS.Renderer = New LightModeRenderer()
-                ImgUMountPopupCMS.Renderer = New LightModeRenderer()
-                AppxPackagePopupCMS.Renderer = New LightModeRenderer()
-                AppxRelatedLinksCMS.Renderer = New LightModeRenderer()
-                TreeViewCMS.Renderer = New LightModeRenderer()
-                AppxResCMS.Renderer = New LightModeRenderer()
-                ImgSpecialToolsCMS.Renderer = New LightModeRenderer()
-                PkgInfoCMS.ForeColor = Color.Black
-                ImgUMountPopupCMS.ForeColor = Color.Black
-                AppxPackagePopupCMS.ForeColor = Color.Black
-                AppxRelatedLinksCMS.ForeColor = Color.Black
-                TreeViewCMS.ForeColor = Color.Black
-                AppxResCMS.ForeColor = Color.Black
-                ImgSpecialToolsCMS.ForeColor = Color.Black
-                ChangeMenuItemColors(Color.FromArgb(231, 232, 236), Color.Black, TreeViewCMS.Items)
-                InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph)
-                ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph)
-                BranchTSMI.Image = New Bitmap(My.Resources.branch)
-                ' New design stuff
-                FlowLayoutPanel1.BackColor = Color.FromArgb(239, 239, 242)
-                GroupBox4.ForeColor = Color.Black
-                GroupBox5.ForeColor = Color.Black
-                GroupBox6.ForeColor = Color.Black
-                GroupBox7.ForeColor = Color.Black
-                GroupBox8.ForeColor = Color.Black
-                GroupBox9.ForeColor = Color.Black
-                GroupBox10.ForeColor = Color.Black
+                ThemeHelper.ChangeCurrentTheme(LightThemeIndex, False)
             Case 2
                 DynaLog.LogMessage("Color Code is 1. Switching to dark theme...")
                 If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
-                BackColor = Color.FromArgb(48, 48, 48)
-                ForeColor = Color.White
-                HomePanel.BackColor = Color.FromArgb(40, 40, 43)
-                HomePanel.ForeColor = Color.White
-                SidePanel.BackColor = Color.FromArgb(31, 31, 34)
-                SidePanel.ForeColor = Color.White
-                WelcomePanel.BackColor = Color.FromArgb(40, 40, 43)
-                WelcomePanel.ForeColor = Color.White
-                PrjPanel.BackColor = Color.FromArgb(40, 40, 43)
-                PrjPanel.ForeColor = Color.White
-                MenuStrip1.BackColor = Color.FromArgb(48, 48, 48)
-                MenuStrip1.ForeColor = Color.White
-                ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, MenuStrip1.Items)
-                PictureBox5.Image = New Bitmap(My.Resources.logo_mainscr_dark)
-                ToolStrip1.BackColor = Color.FromArgb(48, 48, 48)
-                ToolStrip1.ForeColor = Color.White
-                ToolStrip2.BackColor = Color.FromArgb(48, 48, 48)
-                ToolStrip2.ForeColor = Color.White
-                prjTreeView.BackColor = Color.FromArgb(37, 37, 38)
-                prjTreeView.ForeColor = Color.White
-                ToolStripButton2.Image = New Bitmap(My.Resources.save_glyph_dark)
-                ToolStripButton3.Image = New Bitmap(My.Resources.prj_unload_glyph_dark)
-                ToolStripButton4.Image = New Bitmap(My.Resources.progress_window_dark)
-                RefreshViewTSB.Image = New Bitmap(My.Resources.refresh_glyph_dark)
-                Try
-                    If prjTreeView.SelectedNode.IsExpanded Then
-                        ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
-                    Else
-                        ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-                    End If
-                Catch ex As Exception
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-                End Try
-                MenuStrip1.RenderMode = ToolStripRenderMode.Professional
-                MenuStrip1.Renderer = New DarkModeRenderer()
-                ToolStrip1.Renderer = New DarkModeRenderer()
-                ToolStrip2.Renderer = New DarkModeRenderer()
-                PkgInfoCMS.Renderer = New DarkModeRenderer()
-                ImgUMountPopupCMS.Renderer = New DarkModeRenderer()
-                AppxPackagePopupCMS.Renderer = New DarkModeRenderer()
-                AppxRelatedLinksCMS.Renderer = New DarkModeRenderer()
-                TreeViewCMS.Renderer = New DarkModeRenderer()
-                AppxResCMS.Renderer = New DarkModeRenderer()
-                ImgSpecialToolsCMS.Renderer = New DarkModeRenderer()
-                PkgInfoCMS.ForeColor = Color.White
-                ImgUMountPopupCMS.ForeColor = Color.White
-                AppxPackagePopupCMS.ForeColor = Color.White
-                AppxRelatedLinksCMS.ForeColor = Color.White
-                TreeViewCMS.ForeColor = Color.White
-                AppxResCMS.ForeColor = Color.White
-                ImgSpecialToolsCMS.ForeColor = Color.White
-                ChangeMenuItemColors(Color.FromArgb(27, 27, 28), Color.White, TreeViewCMS.Items)
-                InvalidSettingsTSMI.Image = New Bitmap(My.Resources.setting_error_glyph_dark)
-                ExitFullScreenTSMI.Image = New Bitmap(My.Resources.exit_full_screen_glyph_dark)
-                BranchTSMI.Image = New Bitmap(My.Resources.branch_dark)
-                ' New design stuff
-                FlowLayoutPanel1.BackColor = Color.FromArgb(48, 48, 48)
-                GroupBox4.ForeColor = Color.White
-                GroupBox5.ForeColor = Color.White
-                GroupBox6.ForeColor = Color.White
-                GroupBox7.ForeColor = Color.White
-                GroupBox8.ForeColor = Color.White
-                GroupBox9.ForeColor = Color.White
-                GroupBox10.ForeColor = Color.White
+                ThemeHelper.ChangeCurrentTheme(DarkThemeIndex, True)
         End Select
+        BackColor = CurrentTheme.BackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        HomePanel.BackColor = CurrentTheme.BackgroundColor
+        HomePanel.ForeColor = CurrentTheme.ForegroundColor
+        SidePanel.BackColor = CurrentTheme.SectionBackgroundColor
+        SidePanel.ForeColor = CurrentTheme.ForegroundColor
+        WelcomePanel.BackColor = CurrentTheme.BackgroundColor
+        WelcomePanel.ForeColor = CurrentTheme.ForegroundColor
+        PrjPanel.BackColor = CurrentTheme.BackgroundColor
+        PrjPanel.ForeColor = CurrentTheme.ForegroundColor
+        MenuStrip1.BackColor = CurrentTheme.SectionBackgroundColor
+        MenuStrip1.ForeColor = CurrentTheme.ForegroundColor
+        ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, MenuStrip1.Items)
+        PictureBox5.Image = GetGlyphResource("logo_mainscr")
+        ToolStrip1.BackColor = CurrentTheme.SectionBackgroundColor
+        ToolStrip1.ForeColor = CurrentTheme.ForegroundColor
+        ToolStrip2.BackColor = CurrentTheme.SectionBackgroundColor
+        ToolStrip2.ForeColor = CurrentTheme.ForegroundColor
+        prjTreeView.BackColor = CurrentTheme.SectionBackgroundColor
+        prjTreeView.ForeColor = CurrentTheme.ForegroundColor
+        ToolStripButton2.Image = GetGlyphResource("save_glyph")
+        ToolStripButton3.Image = GetGlyphResource("prj_unload_glyph")
+        ToolStripButton4.Image = GetGlyphResource("progress_window")
+        RefreshViewTSB.Image = My.Resources.refresh_glyph_dark
+        Try
+            If prjTreeView.SelectedNode.IsExpanded Then
+                ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
+            Else
+                ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
+            End If
+        Catch ex As Exception
+            ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
+        End Try
+        MenuStrip1.RenderMode = ToolStripRenderMode.Professional
+        MenuStrip1.Renderer = GetProfessionalRenderer()
+        ToolStrip1.Renderer = GetProfessionalRenderer()
+        ToolStrip2.Renderer = GetProfessionalRenderer()
+        PkgInfoCMS.Renderer = GetProfessionalRenderer()
+        ImgUMountPopupCMS.Renderer = GetProfessionalRenderer()
+        AppxPackagePopupCMS.Renderer = GetProfessionalRenderer()
+        AppxRelatedLinksCMS.Renderer = GetProfessionalRenderer()
+        TreeViewCMS.Renderer = GetProfessionalRenderer()
+        AppxResCMS.Renderer = GetProfessionalRenderer()
+        ImgSpecialToolsCMS.Renderer = GetProfessionalRenderer()
+        PkgInfoCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgUMountPopupCMS.ForeColor = CurrentTheme.ForegroundColor
+        AppxPackagePopupCMS.ForeColor = CurrentTheme.ForegroundColor
+        AppxRelatedLinksCMS.ForeColor = CurrentTheme.ForegroundColor
+        TreeViewCMS.ForeColor = CurrentTheme.ForegroundColor
+        AppxResCMS.ForeColor = CurrentTheme.ForegroundColor
+        ImgSpecialToolsCMS.ForeColor = CurrentTheme.ForegroundColor
+        ChangeMenuItemColors(CurrentTheme.SectionBackgroundColor, CurrentTheme.ForegroundColor, TreeViewCMS.Items)
+        InvalidSettingsTSMI.Image = GetGlyphResource("setting_error_glyph")
+        ExitFullScreenTSMI.Image = GetGlyphResource("exit_full_screen_glyph")
+        BranchTSMI.Image = GetGlyphResource("branch")
+        ' New design stuff
+        FlowLayoutPanel1.BackColor = CurrentTheme.BackgroundColor
+        GroupBox4.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox5.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox6.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox7.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox8.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox9.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox10.ForeColor = CurrentTheme.ForegroundColor
         If GetStartedPanel.Visible Then
-            LinkLabel22.LinkColor = ForeColor
-            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
+            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
         ElseIf LatestNewsPanel.Visible Then
-            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel23.LinkColor = ForeColor
-            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
+            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
         ElseIf TutorialVideoPanel.Visible Then
-            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
-            LinkLabel24.LinkColor = ForeColor
+            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
+            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
         End If
         ListView1.BackColor = LatestNewsPanel.BackColor
         ListView1.ForeColor = LatestNewsPanel.ForeColor
@@ -5732,27 +5223,15 @@ Public Class MainForm
         TextBox2.BackColor = BackColor
         TextBox2.ForeColor = ForeColor
         ' New project view header and side panel tints
-        If BackColor = Color.FromArgb(48, 48, 48) Then
-            ProjectViewHeader.BackColor = Color.FromArgb(32, 90, 25)
-            ProjectSidePanel.BackColor = Color.FromArgb(32, 90, 25)
-            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241)
-            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241)
-            PictureBox9.Image = My.Resources.info_glyph_dark
-            PictureBox10.Image = My.Resources.explorer_view_glyph_dark
-            PictureBox11.Image = My.Resources.prj_unload_glyph_dark
-            PictureBox14.Image = My.Resources.info_glyph_dark
-            PictureBox15.Image = My.Resources.openfile_dark
-        ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
-            ProjectViewHeader.BackColor = Color.FromArgb(196, 229, 192)
-            ProjectSidePanel.BackColor = Color.FromArgb(196, 229, 192)
-            If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = ForeColor
-            If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = ForeColor
-            PictureBox9.Image = My.Resources.info_glyph
-            PictureBox10.Image = My.Resources.explorer_view_glyph
-            PictureBox11.Image = My.Resources.prj_unload_glyph
-            PictureBox14.Image = My.Resources.info_glyph
-            PictureBox15.Image = My.Resources.openfile
-        End If
+        ProjectViewHeader.BackColor = CurrentTheme.AccentColors(0)
+        ProjectSidePanel.BackColor = CurrentTheme.AccentColors(0)
+        If SidePanel_ProjectView.Visible Then LinkLabel12.LinkColor = CurrentTheme.ForegroundColor
+        If SidePanel_ImageView.Visible Then LinkLabel13.LinkColor = CurrentTheme.ForegroundColor
+        PictureBox9.Image = GetGlyphResource("info_glyph")
+        PictureBox10.Image = GetGlyphResource("explorer_view_glyph")
+        PictureBox11.Image = GetGlyphResource("prj_unload_glyph")
+        PictureBox14.Image = GetGlyphResource("info_glyph")
+        PictureBox15.Image = GetGlyphResource("openfile")
         ProjectViewHeader.ForeColor = ForeColor
         ProjectSidePanel.ForeColor = ForeColor
         For Each LinkCtrl As LinkLabel In ImgTasks.Controls.OfType(Of LinkLabel)()
@@ -5764,13 +5243,13 @@ Public Class MainForm
         For Each LinkCtrl As LinkLabel In TableLayoutPanel7.Controls.OfType(Of LinkLabel)()
             LinkCtrl.LinkColor = ForeColor
         Next
-        Select Case ColorSchemes
-            Case 0
-                StatusStrip.BackColor = Color.FromArgb(53, 153, 41)
-            Case 1
-                StatusStrip.BackColor = Color.FromArgb(0, 122, 204)
-        End Select
-        StatusStrip.ForeColor = Color.White
+        StatusStrip.BackColor = CurrentTheme.AccentColors(1)
+        StatusStrip.ForeColor = CurrentTheme.ForegroundColor
+        If ImgBW.IsBusy Then
+            BackgroundProcessesButton.Image = GetGlyphResource("bg_ops")
+        Else
+            BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
+        End If
     End Sub
 
     Sub ChangeLangs(LangCode As Integer)
@@ -9233,42 +8712,6 @@ Public Class MainForm
         End If
     End Sub
 
-    'Sub GenReportTab(ReportType As Integer, TableFormat As Integer)            ' Hold this for a future release
-    '    ' Create new tab and switch to it
-    '    TabControl2.TabPages.Add("Operation report")
-    '    TabControl2.SelectedIndex = TabControl2.TabPages.Count - 1
-
-    '    ' Add stuff to the selected tab
-    '    Dim HeaderPanel As New Panel()
-    '    With HeaderPanel
-    '        .BorderStyle = BorderStyle.Fixed3D
-    '        .Parent = TabControl2.SelectedTab
-    '        .Dock = DockStyle.Top
-    '        Dim HeaderPic As New PictureBox()
-    '        With HeaderPic
-    '            .Location = New Point(12, 12)
-    '            .SizeMode = PictureBoxSizeMode.AutoSize
-    '            .Image = New Bitmap(My.Resources.report_tab_header_pic)
-    '            .Parent = HeaderPanel
-    '        End With
-    '        Dim HeaderLabel As New Label()
-    '        With HeaderLabel
-    '            .Location = New Point((HeaderPanel.Left + HeaderPic.Left + HeaderPic.Width + 4), 12)
-    '            .Font = New Font("Tahoma", 14.25)
-    '            .Text = "Operation report"
-    '            .Parent = HeaderPanel
-    '        End With
-    '        Dim DescriptionLabel As New Label()
-    '        With DescriptionLabel
-    '            .Location = New Point((HeaderPanel.Left + HeaderPic.Left + HeaderPic.Width + 4), (HeaderPanel.Top + HeaderLabel.Top + HeaderLabel.Height + 4))
-    '            .Font = New Font("Tahoma", 8.25)
-    '            .Text = "This is an automatically generated report using the data obtained from the action's results."
-    '            .Parent = HeaderPanel
-    '        End With
-    '    End With
-
-    'End Sub
-
     Sub CheckDTProjHeaders(DTFileName As String)
         DynaLog.LogMessage("Getting header of project file " & Quote & DTFileName & Quote & "...")
         Dim ProjHeaderTest As String
@@ -9916,7 +9359,7 @@ Public Class MainForm
                 End Select
                 Focus()
             End If
-            BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
+            BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
         Else
             DynaLog.LogMessage("Project file doesn't exist.")
             MessageBox.Show("Cannot load the project. Reason: the project was not found. It may have been moved or its folder may have been deleted.", "Project load error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1)
@@ -10010,27 +9453,27 @@ Public Class MainForm
         ProjectValueLoadForm.RichTextBox24.Text = imgLangs
         ProjectValueLoadForm.RichTextBox25.Text = imgRW
         ProjectValueLoadForm.RichTextBox26.Text = ""
-        ProjectValueLoadForm.RichTextBox26.AppendText("[ProjOptions]" & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(1) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(2) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(3) & CrLf & CrLf & _
-                                                      "[ImageOptions]" & CrLf & _
-                                                      "ImageFile=" & ProjectValueLoadForm.RichTextBox5.Text & CrLf & _
-                                                      "ImageIndex=" & ProjectValueLoadForm.RichTextBox6.Text & CrLf & _
-                                                      "ImageMountPoint=" & ProjectValueLoadForm.RichTextBox7.Text & CrLf & _
-                                                      "ImageVersion=" & ProjectValueLoadForm.RichTextBox8.Text & CrLf & _
-                                                      "ImageName=" & ProjectValueLoadForm.RichTextBox9.Text & CrLf & _
-                                                      "ImageDescription=" & ProjectValueLoadForm.RichTextBox10.Text & CrLf & _
-                                                      "ImageWIMBoot=" & ProjectValueLoadForm.RichTextBox11.Text & CrLf & _
-                                                      "ImageArch=" & ProjectValueLoadForm.RichTextBox12.Text & CrLf & _
-                                                      "ImageHal=" & ProjectValueLoadForm.RichTextBox13.Text & CrLf & _
-                                                      "ImageSPBuild=" & ProjectValueLoadForm.RichTextBox14.Text & CrLf & _
-                                                      "ImageSPLevel=" & ProjectValueLoadForm.RichTextBox15.Text & CrLf & _
-                                                      "ImageEdition=" & ProjectValueLoadForm.RichTextBox16.Text & CrLf & _
-                                                      "ImagePType=" & ProjectValueLoadForm.RichTextBox17.Text & CrLf & _
-                                                      "ImagePSuite=" & ProjectValueLoadForm.RichTextBox18.Text & CrLf & _
-                                                      "ImageSysRoot=" & ProjectValueLoadForm.RichTextBox19.Text & CrLf & _
-                                                      "ImageDirCount=" & ProjectValueLoadForm.RichTextBox20.Text & CrLf & _
-                                                      "ImageFileCount=" & ProjectValueLoadForm.RichTextBox21.Text & CrLf & _
-                                                      "ImageEpochCreate=" & ProjectValueLoadForm.RichTextBox22.Text & CrLf & _
-                                                      "ImageEpochModify=" & ProjectValueLoadForm.RichTextBox23.Text & CrLf & _
+        ProjectValueLoadForm.RichTextBox26.AppendText("[ProjOptions]" & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(1) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(2) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(3) & CrLf & CrLf &
+                                                      "[ImageOptions]" & CrLf &
+                                                      "ImageFile=" & ProjectValueLoadForm.RichTextBox5.Text & CrLf &
+                                                      "ImageIndex=" & ProjectValueLoadForm.RichTextBox6.Text & CrLf &
+                                                      "ImageMountPoint=" & ProjectValueLoadForm.RichTextBox7.Text & CrLf &
+                                                      "ImageVersion=" & ProjectValueLoadForm.RichTextBox8.Text & CrLf &
+                                                      "ImageName=" & ProjectValueLoadForm.RichTextBox9.Text & CrLf &
+                                                      "ImageDescription=" & ProjectValueLoadForm.RichTextBox10.Text & CrLf &
+                                                      "ImageWIMBoot=" & ProjectValueLoadForm.RichTextBox11.Text & CrLf &
+                                                      "ImageArch=" & ProjectValueLoadForm.RichTextBox12.Text & CrLf &
+                                                      "ImageHal=" & ProjectValueLoadForm.RichTextBox13.Text & CrLf &
+                                                      "ImageSPBuild=" & ProjectValueLoadForm.RichTextBox14.Text & CrLf &
+                                                      "ImageSPLevel=" & ProjectValueLoadForm.RichTextBox15.Text & CrLf &
+                                                      "ImageEdition=" & ProjectValueLoadForm.RichTextBox16.Text & CrLf &
+                                                      "ImagePType=" & ProjectValueLoadForm.RichTextBox17.Text & CrLf &
+                                                      "ImagePSuite=" & ProjectValueLoadForm.RichTextBox18.Text & CrLf &
+                                                      "ImageSysRoot=" & ProjectValueLoadForm.RichTextBox19.Text & CrLf &
+                                                      "ImageDirCount=" & ProjectValueLoadForm.RichTextBox20.Text & CrLf &
+                                                      "ImageFileCount=" & ProjectValueLoadForm.RichTextBox21.Text & CrLf &
+                                                      "ImageEpochCreate=" & ProjectValueLoadForm.RichTextBox22.Text & CrLf &
+                                                      "ImageEpochModify=" & ProjectValueLoadForm.RichTextBox23.Text & CrLf &
                                                       "ImageLang=" & ProjectValueLoadForm.RichTextBox24.Text)
         Try
             ProjectValueLoadForm.EpochRTB2.Text = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
@@ -10937,83 +10380,83 @@ Public Class MainForm
                     Case 6
                         Select Case DismVersionChecker.ProductMinorPart
                             Case 1
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                                  "@echo off" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf &
+                                                  "dism /English /get-mountedwiminfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf &
+                                                  "dism /English /get-wiminfo /wimfile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf &
                                                   "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                             Case Is >= 2
-                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                                  "@echo off" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf &
+                                                  "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf &
                                                   "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                         End Select
                     Case 10
-                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat", _
-                                          "@echo off" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf & _
-                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf & _
-                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf & _
+                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                          "@echo off" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mount Dir" & Quote & " /b > " & projPath & "\tempinfo\mountdir" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image File" & Quote & " /b > " & projPath & "\tempinfo\imgfile" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Image Index" & Quote & " /b > " & projPath & "\tempinfo\imgindex" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Mounted Read/Write" & Quote & " /b > " & projPath & "\tempinfo\imgrw" & CrLf &
+                                          "dism /English /get-mountedimageinfo | findstr /c:" & Quote & "Status" & Quote & " /b > " & projPath & "\tempinfo\imgmountedstatus" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Name" & Quote & " /b > " & projPath & "\tempinfo\imgmountedname" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Description" & Quote & " /b > " & projPath & "\tempinfo\imgmounteddesc" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Size" & Quote & " /b > " & projPath & "\tempinfo\imgsize" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Architecture" & Quote & " /b > " & projPath & "\tempinfo\imgarch" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Hal" & Quote & " /b > " & projPath & "\tempinfo\imghal" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Build" & Quote & " /b > " & projPath & "\tempinfo\imgspbuild" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ServicePack Level" & Quote & " /b > " & projPath & "\tempinfo\imgsplevel" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Edition" & Quote & " /b > " & projPath & "\tempinfo\imgedition" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Installation" & Quote & " /b > " & projPath & "\tempinfo\imginst" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductType" & Quote & " /b > " & projPath & "\tempinfo\imgptype" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "ProductSuite" & Quote & " /b > " & projPath & "\tempinfo\imgpsuite" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "System Root" & Quote & " /b > " & projPath & "\tempinfo\imgsysroot" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Directories" & Quote & " /b > " & projPath & "\tempinfo\imgdirs" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Files" & Quote & " /b > " & projPath & "\tempinfo\imgfiles" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Created" & Quote & " /b > " & projPath & "\tempinfo\imgcreation" & CrLf &
+                                          "dism /English /get-imageinfo /imagefile=" & SourceImg & " /index=" & ImgIndex & " | findstr /c:" & Quote & "Modified" & Quote & " /b > " & projPath & "\tempinfo\imgmodification" & CrLf &
                                           "dism /English /image=" & MountDir & " /get-intl | findstr /c:" & Quote & "Installed language(s):" & Quote & " /b > " & projPath & "\tempinfo\imglangs", ASCII)
                 End Select
 
@@ -11052,11 +10495,6 @@ Public Class MainForm
                     imgLangs = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imglangs", ASCII).Replace("Installed language(s): ", "").Trim()
                     imgFormat = Path.GetExtension(SourceImg).Replace(".", "").Trim().ToUpper() & " file"
                     imgRW = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgrw", ASCII).Replace("Mounted Read/Write : ", "").Trim()
-                    'If imgRW = "Yes" Then
-                    '    RWRemountBtn.Visible = False
-                    'ElseIf imgRW = "No" Then
-                    '    RWRemountBtn.Visible = True
-                    'End If
                     For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
                         File.Delete(foundFile)
                     Next
@@ -11126,35 +10564,8 @@ Public Class MainForm
             Catch ex As Exception
 
             End Try
-            'Label4.Visible = False
         Else
             MountDir = "N/A"
-            'Label19 = "No"
-            'imgMountDir = "Not available"
-            'ImgIndex = "Not available"
-            'imgName = "Not available"
-            'imgMountedStatus = "Not available"
-            'imgVersion = "Not available"
-            'imgMountedName = "Not available"
-            'imgMountedDesc = "Not available"
-            'imgSize = "Not available"
-            'imgWimBootStatus = "Not available"
-            'imgArch = "Not available"
-            'imgHal = "Not available"
-            'imgSPBuild = "Not available"
-            'imgSPLvl = "Not available"
-            'imgEdition = "Not available"
-            'imgPType = "Not available"
-            'imgPSuite = "Not available"
-            'imgSysRoot = "Not available"
-            'imgDirs = "Not available"
-            'imgFiles = "Not available"
-            'imgCreation = "Not available"
-            'imgModification = "Not available"
-            'imgFormat = "Not available"
-            'imgRW = "Not available"
-            'Panel3.Visible = True
-            'Label4.Visible = False
             ' Update the buttons in the new design accordingly
             Button26.Enabled = True
             Button27.Enabled = False
@@ -11783,10 +11194,6 @@ Public Class MainForm
         ShowChildDescs(True, 11)
     End Sub
 
-    Private Sub GetMountedImageInfo_MouseEnter(sender As Object, e As EventArgs)
-        ShowChildDescs(True, 12)
-    End Sub
-
     Private Sub GetWIMBootEntry_MouseEnter(sender As Object, e As EventArgs) Handles GetWIMBootEntry.MouseEnter
         ShowChildDescs(True, 13)
     End Sub
@@ -11833,10 +11240,6 @@ Public Class MainForm
 
     Private Sub GetPackages_MouseEnter(sender As Object, e As EventArgs) Handles GetPackages.MouseEnter
         ShowChildDescs(True, 24)
-    End Sub
-
-    Private Sub GetPackageInfo_MouseEnter(sender As Object, e As EventArgs)
-        ShowChildDescs(True, 25)
     End Sub
 
     Private Sub AddPackage_MouseEnter(sender As Object, e As EventArgs) Handles AddPackage.MouseEnter
@@ -12280,19 +11683,7 @@ Public Class MainForm
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -12330,19 +11721,7 @@ Public Class MainForm
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -12407,32 +11786,12 @@ Public Class MainForm
         If OnlineManagement Then
             DynaLog.LogMessage("DISMTools is managing the active installation at this time. Ending this mode...")
             EndOnlineManagement()
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
-            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
-            While MountedImgMgr.DetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            StopMountedImageDetector()
         End If
         If OfflineManagement Then
             DynaLog.LogMessage("DISMTools is managing an offline installation at this time. Ending this mode...")
             EndOfflineManagement()
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
-            If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
-            While MountedImgMgr.DetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            StopMountedImageDetector()
         End If
         If isProjectLoaded And (Not OnlineManagement Or Not OfflineManagement) Then
             DynaLog.LogMessage("DISMTools is managing a project at this time. Unloading project...")
@@ -12497,24 +11856,7 @@ Public Class MainForm
             DynaLog.EnableLogging()
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        If MountedImgMgr.DetectorBW.IsBusy Then MountedImgMgr.DetectorBW.CancelAsync()
-        While MountedImgMgr.DetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Stopping detection of news...")
         If FeedWorker.IsBusy Then FeedWorker.CancelAsync()
         While FeedWorker.IsBusy
@@ -12652,11 +11994,7 @@ Public Class MainForm
                         ExpandCollapseTSB.Text = "Collassare"
                         ExpandToolStripMenuItem.Text = "Collassare elemento"
                 End Select
-                If BackColor = Color.FromArgb(48, 48, 48) Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
-                ElseIf BackColor = Color.White Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
-                End If
+                ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
             Else
                 Select Case Language
                     Case 0
@@ -12693,11 +12031,7 @@ Public Class MainForm
                         ExpandCollapseTSB.Text = "Espandi"
                         ExpandToolStripMenuItem.Text = "Espandi elemento"
                 End Select
-                If BackColor = Color.FromArgb(48, 48, 48) Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-                ElseIf BackColor = Color.White Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-                End If
+                ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
             End If
         Catch ex As Exception
             ExpandCollapseTSB.Enabled = False
@@ -12743,11 +12077,7 @@ Public Class MainForm
                         ExpandCollapseTSB.Text = "Collassare"
                         ExpandToolStripMenuItem.Text = "Collassare elemento"
                 End Select
-                If BackColor = Color.FromArgb(48, 48, 48) Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
-                ElseIf BackColor = Color.White Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
-                End If
+                ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
             Else
                 Select Case Language
                     Case 0
@@ -12784,11 +12114,7 @@ Public Class MainForm
                         ExpandCollapseTSB.Text = "Espandi"
                         ExpandToolStripMenuItem.Text = "Espandi elemento"
                 End Select
-                If BackColor = Color.FromArgb(48, 48, 48) Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-                ElseIf BackColor = Color.White Then
-                    ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-                End If
+                ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
             End If
         Catch ex As Exception
             Select Case Language
@@ -12826,11 +12152,7 @@ Public Class MainForm
                     ExpandCollapseTSB.Text = "Espandi"
                     ExpandToolStripMenuItem.Text = "Espandi elemento"
             End Select
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-            ElseIf BackColor = Color.White Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-            End If
+            ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
         End Try
     End Sub
 
@@ -12871,11 +12193,7 @@ Public Class MainForm
                     ExpandCollapseTSB.Text = "Collassare"
                     ExpandToolStripMenuItem.Text = "Collassare elemento"
             End Select
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph_dark)
-            ElseIf BackColor = Color.White Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.collapse_glyph)
-            End If
+            ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
         Else
             Select Case Language
                 Case 0
@@ -12912,11 +12230,7 @@ Public Class MainForm
                     ExpandCollapseTSB.Text = "Espandi"
                     ExpandToolStripMenuItem.Text = "Espandi elemento"
             End Select
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph_dark)
-            ElseIf BackColor = Color.White Then
-                ExpandCollapseTSB.Image = New Bitmap(My.Resources.expand_glyph)
-            End If
+            ExpandCollapseTSB.Image = GetGlyphResource("expand_glyph")
         End If
         If prjTreeView.SelectedNode.Nodes.Count = 0 Then
             ExpandCollapseTSB.Enabled = False
@@ -12948,11 +12262,6 @@ Public Class MainForm
         AddPackageDlg.ShowDialog()
     End Sub
 
-    Private Sub Button5_Click(sender As Object, e As EventArgs)
-        DynaLog.LogMessage("Opening package addition dialog...")
-        AddPackageDlg.ShowDialog()
-    End Sub
-
     Private Sub AboutDISMToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.Click, VersionTSMI.Click
         DynaLog.LogMessage("Showing program information...")
         PrgAbout.ShowDialog()
@@ -12966,14 +12275,6 @@ Public Class MainForm
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
         DynaLog.LogMessage("Opening image capture dialog...")
         ImgCapture.ShowDialog()
-    End Sub
-
-    Private Sub Button11_Click(sender As Object, e As EventArgs)
-        DynaLog.LogMessage("Reloading servicing session of image...")
-        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-        ProgressPanel.MountDir = MountDir
-        ProgressPanel.OperationNum = 18
-        ProgressPanel.ShowDialog(Me)
     End Sub
 
     Private Sub MergeSWM_Click(sender As Object, e As EventArgs) Handles MergeSWM.Click
@@ -12991,94 +12292,6 @@ Public Class MainForm
         SaveDTProj()
     End Sub
 
-    Private Sub Button7_Click(sender As Object, e As EventArgs)
-        DynaLog.LogMessage("Opening package removal dialog...")
-        ElementCount = 0
-        RemPackage.CheckedListBox1.Items.Clear()
-        ProgressPanel.OperationNum = 993
-        PleaseWaitDialog.pkgSourceImgStr = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-        End Select
-        If Not CompletedTasks(0) Then
-            DynaLog.LogMessage("Package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        Try
-            DynaLog.LogMessage("Adding packages to arrays...")
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Continue For
-                End If
-                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Try
-            DynaLog.LogMessage("Adding packages to arrays...")
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-                    Case "ESN"
-                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-                    Case "FRA"
-                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB", "PTG"
-                        RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-                    Case "ITA"
-                        RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-                End Select
-            Case 1
-                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-            Case 2
-                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-            Case 3
-                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-            Case 4
-                RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-            Case 5
-                RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-        End Select
-        RemPackage.ShowDialog()
-    End Sub
-
     Private Sub ImgBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ImgBW.DoWork
         DynaLog.LogMessage("Preparing background processes...")
         DynaLog.LogMessage("- Run all background processes? " & If(bwAllBackgroundProcesses, "Yes", "No"))
@@ -13086,19 +12299,7 @@ Public Class MainForm
         DynaLog.LogMessage("- Get basic image information? " & If(bwGetImageInfo, "Yes", "No"))
         DynaLog.LogMessage("- Get advanced image information? " & If(bwGetAdvImgInfo, "Yes", "No"))
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Starting background processes...")
         If bwAllBackgroundProcesses Then
             If bwGetImageInfo Then
@@ -13113,265 +12314,6 @@ Public Class MainForm
         Else
 
         End If
-    End Sub
-
-    Private Sub Button10_Click(sender As Object, e As EventArgs)
-        DynaLog.LogMessage("Opening feature enablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 0
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
-        EnableFeat.ShowDialog()
-    End Sub
-
-    Private Sub Button9_Click(sender As Object, e As EventArgs)
-        DynaLog.LogMessage("Opening feature disablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 1
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer = 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Or imgFeatureState(x) = "Removed" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
-        DisableFeat.ShowDialog()
     End Sub
 
     Private Sub UnloadBtn_Click(sender As Object, e As EventArgs) Handles Button21.Click
@@ -13437,7 +12379,7 @@ Public Class MainForm
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
         areBackgroundProcessesDone = True
-        BackgroundProcessesButton.Image = New Bitmap(My.Resources.bg_ops_complete)
+        BackgroundProcessesButton.Image = GetGlyphResource("bg_ops_complete")
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -13595,538 +12537,22 @@ Public Class MainForm
     End Sub
 
     Private Sub RemovePackage_Click(sender As Object, e As EventArgs) Handles RemovePackage.Click
-        DynaLog.LogMessage("Opening package removal dialog...")
-        ElementCount = 0
-        RemPackage.CheckedListBox1.Items.Clear()
-        ProgressPanel.OperationNum = 993
-        PleaseWaitDialog.pkgSourceImgStr = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-        End Select
-        If Not CompletedTasks(0) Then
-            DynaLog.LogMessage("Package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        Try
-            DynaLog.LogMessage("Adding packages to arrays...")
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Continue For
-                End If
-                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-                    Case "ESN"
-                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-                    Case "FRA"
-                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB", "PTG"
-                        RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-                    Case "ITA"
-                        RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-                End Select
-            Case 1
-                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-            Case 2
-                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-            Case 3
-                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-            Case 4
-                RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-            Case 5
-                RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-        End Select
         RemPackage.ShowDialog()
     End Sub
 
     Private Sub EnableFeature_Click(sender As Object, e As EventArgs) Handles EnableFeature.Click
-        DynaLog.LogMessage("Opening feature enablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 0
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
         EnableFeat.ShowDialog()
     End Sub
 
     Private Sub DisableFeature_Click(sender As Object, e As EventArgs) Handles DisableFeature.Click
-        DynaLog.LogMessage("Opening feature disablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 1
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer = 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
         DisableFeat.ShowDialog()
     End Sub
 
     Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-            AddProvAppxPackage.ShowDialog()
-        Else
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddProvAppxPackage.ShowDialog()
     End Sub
 
     Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
-        RemProvAppxPackage.ListView1.Items.Clear()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-        End Select
-        ProgressPanel.OperationNum = 994
-        If Not CompletedTasks(2) Then
-            DynaLog.LogMessage("AppX package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding AppX packages to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
-                    Continue For
-                Else
-                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & imgAppxPackageNames(x) & Quote & " = 0. This app is not registered to a user")
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        Else
-                            DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & imgAppxPackageNames(x) & Quote & " > 0. This app is registered to users")
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                        End If
-                    Else
-                        DynaLog.LogMessage(".pckgdep files for AppX package " & Quote & imgAppxPackageNames(x) & Quote & " = 0. This app is not registered to a user")
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                    End If
-                End If
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        ' Begin counting
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        If ElementCount <= 0 Then
-            ElementCount = RemProvAppxPackage.ListView1.Items.Count
-        End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-                    Case "ESN"
-                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-                    Case "FRA"
-                        RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-                    Case "PTB", "PTG"
-                        RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-                    Case "ITA"
-                        RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-                End Select
-            Case 1
-                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-            Case 2
-                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-            Case 3
-                RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-            Case 4
-                RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-            Case 5
-                RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-        End Select
         RemProvAppxPackage.ShowDialog()
     End Sub
 
@@ -14248,11 +12674,6 @@ Public Class MainForm
         ImgCleanup.ShowDialog()
     End Sub
 
-    Private Sub Button12_Click(sender As Object, e As EventArgs)
-        DynaLog.LogMessage("Opening image cleanup dialog...")
-        ImgCleanup.ShowDialog()
-    End Sub
-
     Private Sub NewProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewProjectToolStripMenuItem.Click
         DynaLog.LogMessage("Opening project creation dialog...")
         NewProj.ShowDialog()
@@ -14340,370 +12761,18 @@ Public Class MainForm
     End Sub
 
     Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
-        AddCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
-                    Continue For
-                End If
-                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        AddCapabilities.Label4.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                AddCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
         AddCapabilities.ShowDialog()
     End Sub
 
     Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
-        RemCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
-                    Continue For
-                End If
-                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
         RemCapabilities.ShowDialog()
     End Sub
 
     Private Sub AddDriver_Click(sender As Object, e As EventArgs) Handles AddDriver.Click
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If Not OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed. Continuing with the task...")
-            AddDrivers.ShowDialog()
-        Else
-            DynaLog.LogMessage("The active installation is being managed. This is not supported.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddDrivers.ShowDialog()
     End Sub
 
     Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If OnlineManagement Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        RemDrivers.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-        End Select
-        If Not CompletedTasks(4) Then
-            DynaLog.LogMessage("Device driver background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding device drivers to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
-                If RemDrivers.CheckBox1.Checked Then
-                    If imgDrvBootCriticalStatus(x) Then Continue For
-                End If
-                If RemDrivers.CheckBox2.Checked Then
-                    If CBool(imgDrvInbox(x)) Then Continue For
-                End If
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ESN"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "FRA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "PTB", "PTG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ITA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        End Select
-                    Case 1
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 2
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 3
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 4
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 5
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                End Select
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
         RemDrivers.ShowDialog()
     End Sub
 
@@ -15675,19 +13744,7 @@ Public Class MainForm
     Private Sub MountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MountImageToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image mount dialog...")
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ImgMount.ShowDialog()
     End Sub
 
@@ -15699,81 +13756,11 @@ Public Class MainForm
     End Sub
 
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
-        DynaLog.LogMessage("Opening volume image removal dialog...")
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-            If MountedImageMountDirs(x) = MountDir Then
-                ImgIndexDelete.TextBox1.Text = MountedImageImgFiles(x)
-                Exit For
-            End If
-        Next
         ImgIndexDelete.ShowDialog()
     End Sub
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
-        DynaLog.LogMessage("Opening image index switch dialog...")
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Getting image indexes...")
-        ProgressPanel.OperationNum = 995
-        PleaseWaitDialog.indexesSourceImg = SourceImg
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-        End Select
-        PleaseWaitDialog.ShowDialog(Me)
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
-        If PleaseWaitDialog.imgIndexes > 1 Then
-            DynaLog.LogMessage("This image has more than 1 index. Switching is possible.")
-            ImgIndexSwitch.ShowDialog()
-        End If
+        ImgIndexSwitch.ShowDialog()
     End Sub
 
     Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
@@ -15908,18 +13895,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
@@ -15979,18 +13955,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
@@ -16059,18 +14024,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -16108,20 +14062,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If MountedImageDetectorBW.IsBusy Then
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
@@ -16322,32 +14263,14 @@ Public Class MainForm
     End Sub
 
     Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
-        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         GetWinPESettings.ShowDialog()
     End Sub
 
     Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
-        DynaLog.LogMessage("Opening target path configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPETargetPath.ShowDialog()
     End Sub
 
     Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
-        DynaLog.LogMessage("Opening scratch space configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPEScratchSpace.ShowDialog()
     End Sub
 
@@ -16416,15 +14339,15 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel12_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel12.LinkClicked
-        LinkLabel12.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), Color.Black)
-        LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel12.LinkColor = CurrentTheme.ForegroundColor
+        LinkLabel13.LinkColor = CurrentTheme.DisabledForegroundColor
         SidePanel_ProjectView.Visible = True
         SidePanel_ImageView.Visible = False
     End Sub
 
     Private Sub LinkLabel13_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel13.LinkClicked
-        LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
-        LinkLabel13.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), Color.Black)
+        LinkLabel12.LinkColor = CurrentTheme.DisabledForegroundColor
+        LinkLabel13.LinkColor = CurrentTheme.ForegroundColor
         SidePanel_ProjectView.Visible = False
         SidePanel_ImageView.Visible = True
     End Sub
@@ -16433,19 +14356,7 @@ Public Class MainForm
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -16492,12 +14403,11 @@ Public Class MainForm
 
     Private Sub LinkLabel18_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel18.LinkClicked
         DynaLog.LogMessage("Opening popup mounted image picker...")
-        PopupImageManager.Location = LinkLabel18.PointToScreen(Point.Empty)
-        PopupImageManager.Top -= PopupImageManager.Height
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(LinkLabel18.PointToScreen(Point.Empty), True)
+        If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("User accepted the popup.")
             If MountedImageMountDirs.Count > 0 Then
-                MountDir = PopupImageManager.selectedMntDir
+                MountDir = selectedImage.MountPath
                 If MountedImageMountDirs.Count > 0 Then
                     Try
                         For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
@@ -16548,19 +14458,7 @@ Public Class MainForm
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
         DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watcher...")
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -16606,51 +14504,7 @@ Public Class MainForm
 #Region "Common Task button functionality in new design"
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
-        DynaLog.LogMessage("Opening image index switch dialog...")
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        MountedImageDetectorBW.CancelAsync()
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Stopping watchers...")
-        ProgressPanel.OperationNum = 995
-        PleaseWaitDialog.indexesSourceImg = SourceImg
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
-        End Select
-        PleaseWaitDialog.ShowDialog(Me)
-        If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
-        WatcherTimer.Enabled = True
-        If PleaseWaitDialog.imgIndexes > 1 Then
-            DynaLog.LogMessage("This image has more than 1 index. Switching is possible.")
-            ImgIndexSwitch.ShowDialog()
-        End If
+        ImgIndexSwitch.ShowDialog()
     End Sub
 
     Private Sub Button25_Click(sender As Object, e As EventArgs) Handles Button25.Click
@@ -16663,18 +14517,7 @@ Public Class MainForm
 
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
         DynaLog.LogMessage("Opening image mount dialog...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         ImgMount.ShowDialog()
     End Sub
 
@@ -16776,108 +14619,12 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If MountedImageDetectorBW.IsBusy Then
-            MountedImageDetectorBWRestarterTimer.Enabled = False
-            MountedImageDetectorBW.CancelAsync()
-            While MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
 
     Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
-        DynaLog.LogMessage("Opening package removal dialog...")
-        ElementCount = 0
-        RemPackage.CheckedListBox1.Items.Clear()
-        ProgressPanel.OperationNum = 993
-        PleaseWaitDialog.pkgSourceImgStr = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting package names..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting package names..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de paquetes..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms de paquets en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
-        End Select
-        If Not CompletedTasks(0) Then
-            DynaLog.LogMessage("Package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        Try
-            DynaLog.LogMessage("Adding packages to arrays...")
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Continue For
-                End If
-                RemPackage.CheckedListBox1.Items.Add(imgPackageNames(x))
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgPackageNames, imgPackageNames.Last)
-                If imgPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-                    Case "ESN"
-                        RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-                    Case "FRA"
-                        RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-                    Case "PTB", "PTG"
-                        RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-                    Case "ITA"
-                        RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-                End Select
-            Case 1
-                RemPackage.Label2.Text = "This image contains " & ElementCount & " packages"
-            Case 2
-                RemPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes"
-            Case 3
-                RemPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets"
-            Case 4
-                RemPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes"
-            Case 5
-                RemPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti"
-        End Select
         RemPackage.ShowDialog()
     End Sub
 
@@ -16943,302 +14690,16 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
     Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
-        DynaLog.LogMessage("Opening feature disablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 1
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer = 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        DisableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
         DisableFeat.ShowDialog()
     End Sub
 
     Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
-        DynaLog.LogMessage("Opening feature enablement dialog...")
-        ElementCount = 0
-        EnableFeat.ListView1.Items.Clear()
-        DisableFeat.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        PleaseWaitDialog.featOpType = 0
-        PleaseWaitDialog.featSourceImg = MountDir
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de características y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des caractéristiques et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
-        End Select
-        If Not CompletedTasks(1) Then
-            DynaLog.LogMessage("Feature background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding features to arrays...")
-        Select Case PleaseWaitDialog.featOpType
-            Case 0
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Enable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        EnableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        EnableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        EnableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        EnableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        EnableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-            Case 1
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureState(x).Contains("Disable") Or imgFeatureState(x) = "" Or imgFeatureState(x) = "Nothing" Then
-                            Continue For
-                        End If
-                        DisableFeat.ListView1.Items.Add(imgFeatureNames(x)).SubItems.Add(imgFeatureState(x))
-                    Next
-                Catch ex As Exception
-                    ' We should have enough with the entries already added.
-                    Exit Try
-                End Try
-                ' Get number of available elements
-                Dim ElementCount As Integer
-                Try
-                    For x = 0 To Array.LastIndexOf(imgFeatureNames, imgFeatureNames.Last)
-                        If imgFeatureNames(x) = "" Then
-                            Exit For
-                        End If
-                        ElementCount += 1
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                            Case "ESN"
-                                DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                            Case "FRA"
-                                EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                            Case "PTB", "PTG"
-                                DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                            Case "ITA"
-                                DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                        End Select
-                    Case 1
-                        DisableFeat.Label2.Text = "This image contains " & ElementCount & " features."
-                    Case 2
-                        DisableFeat.Label2.Text = "Esta imagen contiene " & ElementCount & " características."
-                    Case 3
-                        EnableFeat.Label2.Text = "Cette image contient " & ElementCount & " caractéristiques."
-                    Case 4
-                        DisableFeat.Label2.Text = "Esta imagem contém " & ElementCount & " características."
-                    Case 5
-                        DisableFeat.Label2.Text = "Questa immagine contiene " & ElementCount & " caratteristiche"
-                End Select
-        End Select
         EnableFeat.ShowDialog()
     End Sub
 
@@ -17261,166 +14722,11 @@ Public Class MainForm
     End Sub
 
     Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
-        RemProvAppxPackage.ListView1.Items.Clear()
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting provisioned AppX packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes aprovisionados AppX..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets AppX provisionnés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes AppX provisionados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti AppX approvvigionati..."
-        End Select
-        ProgressPanel.OperationNum = 994
-        If Not CompletedTasks(2) Then
-            DynaLog.LogMessage("AppX package background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding AppX packages to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Or imgAppxPackageNames(x) = "Nothing" Then
-                    Continue For
-                Else
-                    If Directory.Exists(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x)) Then
-                        If My.Computer.FileSystem.GetFiles(MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                        Else
-                            RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "Yes"}))
-                        End If
-                    Else
-                        RemProvAppxPackage.ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackageNames(x), imgAppxDisplayNames(x), imgAppxArchitectures(x), imgAppxResourceIds(x), imgAppxVersions(x), "No"}))
-                    End If
-                End If
-            Next
-        Catch ex As Exception
-            ' We should have enough with the entries already added.
-            Exit Try
-        End Try
-        ' Begin counting
-        Try
-            For x = 0 To Array.LastIndexOf(imgAppxPackageNames, imgAppxPackageNames.Last)
-                If imgAppxPackageNames(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        If ElementCount <= 0 Then
-            ElementCount = RemProvAppxPackage.ListView1.Items.Count
-        End If
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-                    Case "ESN"
-                        RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-                    Case "FRA"
-                        RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-                    Case "PTB", "PTG"
-                        RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-                    Case "ITA"
-                        RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-                End Select
-            Case 1
-                RemProvAppxPackage.Label2.Text = "This image contains " & ElementCount & " AppX packages."
-            Case 2
-                RemProvAppxPackage.Label2.Text = "Esta imagen contiene " & ElementCount & " paquetes AppX."
-            Case 3
-                RemProvAppxPackage.Label2.Text = "Cette image contient " & ElementCount & " paquets AppX."
-            Case 4
-                RemProvAppxPackage.Label2.Text = "Esta imagem contém " & ElementCount & " pacotes AppX."
-            Case 5
-                RemProvAppxPackage.Label2.Text = "Questa immagine contiene " & ElementCount & " pacchetti AppX"
-        End Select
         RemProvAppxPackage.ShowDialog()
     End Sub
 
     Private Sub Button44_Click(sender As Object, e As EventArgs) Handles Button44.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-            AddProvAppxPackage.ShowDialog()
-        Else
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddProvAppxPackage.ShowDialog()
     End Sub
 
     Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
@@ -17510,230 +14816,10 @@ Public Class MainForm
     End Sub
 
     Private Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
-        RemCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Removed" Or imgCapabilityState(x) = "Not present" Or imgCapabilityState(x) = "Uninstalled" Then
-                    Continue For
-                End If
-                RemCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                RemCapabilities.Label2.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                RemCapabilities.Label2.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                RemCapabilities.Label2.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                RemCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                RemCapabilities.Label2.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
         RemCapabilities.ShowDialog()
     End Sub
 
     Private Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
-        DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on this image", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en esta imagen", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge sur cette image", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada nesta imagem", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata su questa immagine", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        ElementCount = 0
-        AddCapabilities.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting capability names and their state..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo nombres de funcionalidades y sus estados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des noms des capacités et de leur état en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter os nomes das capacidades e o seu estado..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle capacità e il loro stato..."
-        End Select
-        If Not CompletedTasks(3) Then
-            DynaLog.LogMessage("Capability background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding capabilities to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityState(x) = "Installed" Or imgCapabilityState(x) = "Install Pending" Then
-                    Continue For
-                End If
-                AddCapabilities.ListView1.Items.Add(New ListViewItem(New String() {imgCapabilityIds(x), imgCapabilityState(x)}))
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Try
-            For x = 0 To Array.LastIndexOf(imgCapabilityIds, imgCapabilityIds.Last)
-                If imgCapabilityIds(x) = "" Then
-                    Exit For
-                End If
-                ElementCount += 1
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-                    Case "ESN"
-                        AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-                    Case "FRA"
-                        AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-                    Case "PTB", "PTG"
-                        AddCapabilities.Label4.Text = "Esta imagem contém " & ElementCount & " capacidades."
-                    Case "ITA"
-                        AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-                End Select
-            Case 1
-                AddCapabilities.Label4.Text = "This image contains " & ElementCount & " capabilities."
-            Case 2
-                AddCapabilities.Label4.Text = "Esta imagen contiene " & ElementCount & " funcionalidades."
-            Case 3
-                AddCapabilities.Label4.Text = "Cette image contient " & ElementCount & " capacités."
-            Case 4
-                AddCapabilities.Label2.Text = "Esta imagem contém " & ElementCount & " capacidades."
-            Case 5
-                AddCapabilities.Label4.Text = "Questa immagine contiene " & ElementCount & " capacità"
-        End Select
         AddCapabilities.ShowDialog()
     End Sub
 
@@ -17799,18 +14885,7 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
@@ -17834,107 +14909,6 @@ Public Class MainForm
     End Sub
 
     Private Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If OnlineManagement Then
-            DynaLog.LogMessage("The image is not supported")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-            Exit Sub
-        End If
-        DynaLog.LogMessage("All requirements are met. Continuing with the task...")
-        RemDrivers.ListView1.Items.Clear()
-        ProgressPanel.OperationNum = 994
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-                    Case "ESN"
-                        PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-                    Case "FRA"
-                        PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-                    Case "PTB", "PTG"
-                        PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-                    Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-                End Select
-            Case 1
-                PleaseWaitDialog.Label2.Text = "Getting installed driver packages..."
-            Case 2
-                PleaseWaitDialog.Label2.Text = "Obteniendo paquetes de controladores instalados..."
-            Case 3
-                PleaseWaitDialog.Label2.Text = "Obtention des paquets de pilotes installés en cours..."
-            Case 4
-                PleaseWaitDialog.Label2.Text = "Obter pacotes de controladores instalados..."
-            Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i pacchetti dei driver installati..."
-        End Select
-        If Not CompletedTasks(4) Then
-            DynaLog.LogMessage("Device driver background processes haven't completed.")
-            PleaseWaitDialog.ShowDialog(Me)
-            Exit Sub
-        End If
-        DynaLog.LogMessage("Adding device drivers to arrays...")
-        Try
-            For x = 0 To Array.LastIndexOf(imgDrvPublishedNames, imgDrvPublishedNames.Last)
-                If RemDrivers.CheckBox1.Checked Then
-                    If imgDrvBootCriticalStatus(x) Then Continue For
-                End If
-                If RemDrivers.CheckBox2.Checked Then
-                    If CBool(imgDrvInbox(x)) Then Continue For
-                End If
-                Select Case Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ESN"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "FRA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "PTB", "PTG"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                            Case "ITA"
-                                RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                        End Select
-                    Case 1
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Yes", "No"), If(imgDrvBootCriticalStatus(x), "Yes", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 2
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sí", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 3
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Oui", "Non"), If(imgDrvBootCriticalStatus(x), "Oui", "Non"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 4
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sim", "Não"), If(imgDrvBootCriticalStatus(x), "Sim", "Não"), imgDrvVersions(x), imgDrvDates(x)}))
-                    Case 5
-                        RemDrivers.ListView1.Items.Add(New ListViewItem(New String() {imgDrvPublishedNames(x), Path.GetFileName(imgDrvOGFileNames(x)), imgDrvProviderNames(x), imgDrvClassNames(x), If(CBool(imgDrvInbox(x)), "Sí", "No"), If(imgDrvBootCriticalStatus(x), "Sì", "No"), imgDrvVersions(x), imgDrvDates(x)}))
-                End Select
-            Next
-        Catch ex As Exception
-            Exit Try
-        End Try
         RemDrivers.ShowDialog()
     End Sub
 
@@ -17971,55 +14945,13 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog()
     End Sub
 
     Private Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
-        DynaLog.LogMessage("Checking program mode for any unmet requirements...")
-        If Not OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed. Continuing with the task...")
-            AddDrivers.ShowDialog()
-        Else
-            DynaLog.LogMessage("The active installation is being managed. This is not supported.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        AddDrivers.ShowDialog()
     End Sub
 
     Private Sub Button54_Click(sender As Object, e As EventArgs) Handles Button54.Click
@@ -18043,12 +14975,6 @@ Public Class MainForm
     End Sub
 
     Private Sub Button55_Click(sender As Object, e As EventArgs) Handles Button55.Click
-        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         GetWinPESettings.ShowDialog()
     End Sub
 
@@ -18070,22 +14996,10 @@ Public Class MainForm
     End Sub
 
     Private Sub Button57_Click(sender As Object, e As EventArgs) Handles Button57.Click
-        DynaLog.LogMessage("Opening target path configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPETargetPath.ShowDialog()
     End Sub
 
     Private Sub Button58_Click(sender As Object, e As EventArgs) Handles Button58.Click
-        DynaLog.LogMessage("Opening scratch space configuration dialog...")
-        If ImgBW.IsBusy Then
-            DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
-            Exit Sub
-        End If
         SetPEScratchSpace.ShowDialog()
     End Sub
 
@@ -18120,25 +15034,25 @@ Public Class MainForm
         LatestNewsPanel.Visible = False
         TutorialVideoPanel.Visible = False
         LinkLabel22.LinkColor = ForeColor
-        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
-        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
+        LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
     End Sub
 
     Private Sub LinkLabel23_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel23.LinkClicked
         GetStartedPanel.Visible = False
         LatestNewsPanel.Visible = True
         TutorialVideoPanel.Visible = False
-        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
         LinkLabel23.LinkColor = ForeColor
-        LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
     End Sub
 
     Private Sub LinkLabel24_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel24.LinkClicked
         GetStartedPanel.Visible = False
         LatestNewsPanel.Visible = False
         TutorialVideoPanel.Visible = True
-        LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
-        LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+        LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
+        LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
         LinkLabel24.LinkColor = ForeColor
     End Sub
 
@@ -18168,43 +15082,35 @@ Public Class MainForm
 
     Private Sub LinkLabel12_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel12.MouseLeave
         If SidePanel_ProjectView.Visible Then
-            LinkLabel12.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), ForeColor)
+            LinkLabel12.LinkColor = CurrentTheme.ForegroundColor
         Else
-            LinkLabel12.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel12.LinkColor = CurrentTheme.DisabledForegroundColor
         End If
     End Sub
 
     Private Sub LinkLabel13_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel13.MouseLeave
         If SidePanel_ImageView.Visible Then
-            LinkLabel13.LinkColor = If(BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(241, 241, 241), ForeColor)
+            LinkLabel13.LinkColor = CurrentTheme.ForegroundColor
         Else
-            LinkLabel13.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel13.LinkColor = CurrentTheme.DisabledForegroundColor
         End If
     End Sub
 
     Private Sub LinkLabel12_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel12.MouseEnter
-        If LinkLabel12.LinkColor = Color.FromArgb(241, 241, 241) Or LinkLabel12.LinkColor = ForeColor Then
+        If LinkLabel12.LinkColor = CurrentTheme.ForegroundColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                LinkLabel12.LinkColor = Color.FromArgb(0, 251, 99)
-            Else
-                LinkLabel12.LinkColor = Color.FromArgb(0, 123, 48)
-            End If
+            LinkLabel12.LinkColor = CurrentTheme.AccentColors(2)
         End If
     End Sub
 
     Private Sub LinkLabel13_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel13.MouseEnter
-        If LinkLabel13.LinkColor = Color.FromArgb(241, 241, 241) Or LinkLabel13.LinkColor = ForeColor Then
+        If LinkLabel13.LinkColor = CurrentTheme.ForegroundColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                LinkLabel13.LinkColor = Color.FromArgb(0, 251, 99)
-            Else
-                LinkLabel13.LinkColor = Color.FromArgb(0, 123, 48)
-            End If
+            LinkLabel13.LinkColor = CurrentTheme.AccentColors(2)
         End If
     End Sub
 
@@ -18218,9 +15124,9 @@ Public Class MainForm
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
             For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, _
-                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, _
-                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), _
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text,
+                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime,
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
                                                                                             TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
                 FeedLinks.Add(item.Links(0).Uri)
             Next
@@ -18251,9 +15157,9 @@ Public Class MainForm
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
             For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text, _
-                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime, _
-                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"), _
+                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text,
+                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime,
+                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
                                                                                             TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
                 FeedLinks.Add(item.Links(0).Uri)
             Next
@@ -18327,65 +15233,53 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel22_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel22.MouseEnter
-        If LinkLabel22.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel22.LinkColor = CurrentTheme.ForegroundColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel22.LinkColor = Color.FromArgb(0, 123, 48)
+            LinkLabel22.LinkColor = CurrentTheme.AccentColors(2)
         End If
     End Sub
 
     Private Sub LinkLabel22_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel22.MouseLeave
         If GetStartedPanel.Visible Then
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                LinkLabel22.LinkColor = Color.FromArgb(241, 241, 241)
-            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
-                LinkLabel22.LinkColor = Color.Black
-            End If
+            LinkLabel22.LinkColor = CurrentTheme.ForegroundColor
         Else
-            LinkLabel22.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel22.LinkColor = CurrentTheme.DisabledForegroundColor
         End If
     End Sub
 
     Private Sub LinkLabel23_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel23.MouseEnter
-        If LinkLabel23.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel23.LinkColor = CurrentTheme.ForegroundColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel23.LinkColor = Color.FromArgb(0, 123, 48)
+            LinkLabel23.LinkColor = CurrentTheme.AccentColors(2)
         End If
     End Sub
 
     Private Sub LinkLabel23_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel23.MouseLeave
         If LatestNewsPanel.Visible Then
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                LinkLabel23.LinkColor = Color.FromArgb(241, 241, 241)
-            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
-                LinkLabel23.LinkColor = Color.Black
-            End If
+            LinkLabel23.LinkColor = CurrentTheme.ForegroundColor
         Else
-            LinkLabel23.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel23.LinkColor = CurrentTheme.DisabledForegroundColor
         End If
     End Sub
 
     Private Sub LinkLabel24_MouseEnter(sender As Object, e As EventArgs) Handles LinkLabel24.MouseEnter
-        If LinkLabel24.LinkColor = Color.FromArgb(241, 241, 241) Then
+        If LinkLabel24.LinkColor = CurrentTheme.ForegroundColor Then
             Cursor = Cursors.Arrow
             Exit Sub
         Else
-            LinkLabel24.LinkColor = Color.FromArgb(0, 123, 48)
+            LinkLabel24.LinkColor = CurrentTheme.AccentColors(2)
         End If
     End Sub
 
     Private Sub LinkLabel24_MouseLeave(sender As Object, e As EventArgs) Handles LinkLabel24.MouseLeave
         If TutorialVideoPanel.Visible Then
-            If BackColor = Color.FromArgb(48, 48, 48) Then
-                LinkLabel24.LinkColor = Color.FromArgb(241, 241, 241)
-            ElseIf BackColor = Color.FromArgb(239, 239, 242) Then
-                LinkLabel24.LinkColor = Color.Black
-            End If
+            LinkLabel24.LinkColor = CurrentTheme.ForegroundColor
         Else
-            LinkLabel24.LinkColor = Color.FromArgb(153, 153, 153)
+            LinkLabel24.LinkColor = CurrentTheme.DisabledForegroundColor
         End If
     End Sub
 
@@ -18402,15 +15296,7 @@ Public Class MainForm
         Debug.WriteLine("Detected image status: " & ImageStatus.ToString())
         If Not ImageStatus = ImageWatcher.Status.OK Then
             DynaLog.LogMessage("Image status is not OK. Stopping mounted image detector to step in...")
-            WatcherTimer.Enabled = False
-            If MountedImageDetectorBW.IsBusy Then
-                MountedImageDetectorBWRestarterTimer.Enabled = False
-                MountedImageDetectorBW.CancelAsync()
-                While MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
+            StopMountedImageDetector()
         End If
         Select Case ImageStatus
             Case ImageWatcher.Status.NeedsRemount
@@ -18451,37 +15337,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ImportDriver_Click(sender As Object, e As EventArgs) Handles ImportDriver.Click
-        If Not OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed right now. Continuing...")
-            ImportDrivers.ShowDialog()
-        Else
-            DynaLog.LogMessage("This image is not supported.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        ImportDrivers.ShowDialog()
     End Sub
 
     Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
@@ -18507,42 +15363,7 @@ Public Class MainForm
     End Function
 
     Private Sub SetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.Click
-        If OnlineManagement Then
-            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
-            If Not CheckOSUninstallCapability() Then
-                DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
-                OSNoRollbackErrorDlg.ShowDialog(Me)
-                Exit Sub
-            End If
-            SetOSUninstWindow.ShowDialog()
-        Else
-            DynaLog.LogMessage("The active installation is not being managed right now.")
-            Select Case Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
+        SetOSUninstWindow.ShowDialog()
     End Sub
 
     Private Sub GetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.Click
@@ -18563,55 +15384,55 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf & _
-                                      "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf & _
-                                      "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf & _
+                                msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf &
+                                      "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf &
+                                      "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf &
                                       "- To remove the ability to revert to the old version, go to Commands -> OS uninstall -> Remove roll back ability..."
                             Case "ESN"
-                                msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf & _
-                                      "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf & _
-                                      "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf & _
+                                msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf &
+                                      "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf &
+                                      "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf &
                                       "- Para eliminar la habilidad de revertir a la versión anterior, vaya a Comandos -> Desinstalación del sistema operativo -> Eliminar habilidad de desinstalación..."
                             Case "FRA"
-                                msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf & _
-                                      "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf & _
-                                      "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf & _
+                                msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf &
+                                      "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf &
+                                      "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf &
                                       "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
                             Case "PTB", "PTG"
-                                msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf & _
-                                      "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf & _
-                                      "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf & _
+                                msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf &
+                                      "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf &
+                                      "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf &
                                       "- Para remover a capacidade de reverter para a versão antiga, vá para Comandos -> Desinstalação do sistema operacional -> Remover capacidade de reversão..."
                             Case "ITA"
-                                msg = "Si dispone di " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf & _
-                                      "- Per aumentare o diminuire questa finestra di disinstallazione, andare su Comandi -> Disinstallazione OS -> Imposta finestra di disinstallazione..." & CrLf & _
-                                      "- Per avviare il rollback del sistema operativo, andare su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf & _
+                                msg = "Si dispone di " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf &
+                                      "- Per aumentare o diminuire questa finestra di disinstallazione, andare su Comandi -> Disinstallazione OS -> Imposta finestra di disinstallazione..." & CrLf &
+                                      "- Per avviare il rollback del sistema operativo, andare su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf &
                                       "- Per rimuovere la possibilità di tornare alla vecchia versione, andare su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di ritorno..."
                         End Select
                     Case 1
-                        msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf & _
-                              "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf & _
-                              "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf & _
+                        msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf &
+                              "- To increase or decrease this uninstall window, go to Commands -> OS uninstall -> Set uninstall window..." & CrLf &
+                              "- To initiate the OS rollback, go to Commands -> OS uninstall -> Initiate uninstall..." & CrLf &
                               "- To remove the ability to revert to the old version, go to Commands -> OS uninstall -> Remove roll back ability..."
                     Case 2
-                        msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf & _
-                              "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf & _
-                              "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf & _
+                        msg = "Tiene " & RollbackDays & " días para volver a la versión anterior de Windows." & CrLf & CrLf &
+                              "- Para aumentar o reducir este margen de desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Establecer margen de desinstalación..." & CrLf &
+                              "- Para iniciar la desinstalación, vaya a Comandos -> Desinstalación del sistema operativo -> Iniciar desinstalación..." & CrLf &
                               "- Para eliminar la habilidad de revertir a la versión anterior, vaya a Comandos -> Desinstalación del sistema operativo -> Eliminar habilidad de desinstalación..."
                     Case 3
-                        msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf & _
-                              "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf & _
-                              "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf & _
+                        msg = "Vous avez " & RollbackDays & " jours pour revenir à l'ancienne version de Windows." & CrLf & CrLf &
+                              "- Pour augmenter ou réduire cette créneau de désinstallation, allez dans Commandes -> Désinstallation du système d'exploitation -> Définir la créneau de désinstallation..." & CrLf &
+                              "- Pour démarrer le retour en arrière du système d'exploitation, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Démarrer la désinstallation..." & CrLf &
                               "- Pour supprimer la possibilité de revenir à l'ancienne version, cliquez sur Commandes -> Désinstallation du système d'exploitation -> Supprimer la possibilité de revenir en arrière..."
                     Case 4
-                        msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf & _
-                              "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf & _
-                              "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf & _
+                        msg = "Tem " & RollbackDays & " dias para voltar à versão antiga do Windows." & CrLf & CrLf &
+                              "- Para aumentar ou diminuir esta janela de desinstalação, aceda a Comandos -> Desinstalação do sistema operativo -> Definir janela de desinstalação..." & CrLf &
+                              "- Para iniciar a reversão do SO, aceda a Comandos -> Desinstalação do sistema operativo -> Iniciar desinstalação..." & CrLf &
                               "- Para remover a capacidade de reverter para a versão antiga, vá para Comandos -> Desinstalação do sistema operacional -> Remover capacidade de reversão..."
                     Case 5
-                        msg = "Si dispone di " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf & _
-                              "- Per aumentare o diminuire questa finestra di disinstallazione, andare su Comandi -> Disinstallazione OS -> Imposta finestra di disinstallazione..." & CrLf & _
-                              "- Per avviare il rollback del sistema operativo, andare su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf & _
+                        msg = "Si dispone di " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf &
+                              "- Per aumentare o diminuire questa finestra di disinstallazione, andare su Comandi -> Disinstallazione OS -> Imposta finestra di disinstallazione..." & CrLf &
+                              "- Per avviare il rollback del sistema operativo, andare su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf &
                               "- Per rimuovere la possibilità di tornare alla vecchia versione, andare su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di ritorno..."
                 End Select
                 MsgBox(msg, vbOKOnly + vbInformation, Text)
@@ -18662,65 +15483,65 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
-                                      "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf & _
-                                      "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf & _
-                                      "Finally, thanks for trying this version of Windows." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
+                                      "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf &
+                                      "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf &
+                                      "Finally, thanks for trying this version of Windows." & CrLf & CrLf &
                                       "Do you want to start the rollback process?"
                             Case "ESN"
-                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
-                                      "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf & _
-                                      "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf & _
-                                      "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
+                                      "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf &
+                                      "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf &
+                                      "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf &
                                       "¿Desea iniciar el proceso de desinstalación?"
                             Case "FRA"
-                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
-                                      "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf & _
-                                      "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf & _
-                                      "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
+                                      "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf &
+                                      "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf &
+                                      "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf &
                                       "Souhaitez-vous démarrer le processus de retour en arrière ?"
                             Case "PTB", "PTG"
-                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
-                                      "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf & _
-                                      "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf & _
-                                      "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
+                                      "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf &
+                                      "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf &
+                                      "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf &
                                       "Pretende iniciar o processo de reversão?"
                             Case "ITA"
-                                msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf & _
-                                      "Se sono stati installati dei programmi dopo l'aggiornamento, procedere con il processo di rollback potrebbe rimuoverli. Assicurarsi di aver eseguito il backup delle impostazioni nel caso in cui sia necessario reinstallarli in seguito. Inoltre, eseguire il backup dei file nel caso in cui siano interessati dal processo di ritorno." & CrLf & CrLf & _
-                                      "Poi, non rimanete chiusi fuori. Se è stata impostata una password per l'utente corrente, assicurarsi di conoscerla. In caso contrario, potreste non essere in grado di accedere" & CrLf & CrLf & _
-                                      "Infine, grazie per aver provato questa versione di Windows." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf &
+                                      "Se sono stati installati dei programmi dopo l'aggiornamento, procedere con il processo di rollback potrebbe rimuoverli. Assicurarsi di aver eseguito il backup delle impostazioni nel caso in cui sia necessario reinstallarli in seguito. Inoltre, eseguire il backup dei file nel caso in cui siano interessati dal processo di ritorno." & CrLf & CrLf &
+                                      "Poi, non rimanete chiusi fuori. Se è stata impostata una password per l'utente corrente, assicurarsi di conoscerla. In caso contrario, potreste non essere in grado di accedere" & CrLf & CrLf &
+                                      "Infine, grazie per aver provato questa versione di Windows." & CrLf & CrLf &
                                       "Volete avviare il processo di ritorno?"
                         End Select
                     Case 1
-                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
-                              "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf & _
-                              "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf & _
-                              "Finally, thanks for trying this version of Windows." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
+                              "If you have installed programs after the upgrade, proceeding with the rollback process may remove them. Make sure you have backed up their settings in case you need to reinstall them later on. Also, back up your files in case they are affected by the rollback process." & CrLf & CrLf &
+                              "Next, don't get locked out. If you have set a password for your current user, make sure you know it. Otherwise, you may not be able to log in." & CrLf & CrLf &
+                              "Finally, thanks for trying this version of Windows." & CrLf & CrLf &
                               "Do you want to start the rollback process?"
                     Case 2
-                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
-                              "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf & _
-                              "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf & _
-                              "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
+                              "Si ha instalado programas tras la actualización, este proceso podría eliminarlos. Asegúrese de hacer una copia de seguridad de sus configuraciones en el caso de que deba reinstalarlos después. También, haga una copia de seguridad de sus archivos en el caso de que se vean afectados por este proceso." & CrLf & CrLf &
+                              "Después, si ha establecido una contraseña, asegúrese de recordarla para ser capaz de iniciar sesión." & CrLf & CrLf &
+                              "Finalmente, gracias por probar esta versión de Windows." & CrLf & CrLf &
                               "¿Desea iniciar el proceso de desinstalación?"
                     Case 3
-                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
-                              "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf & _
-                              "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf & _
-                              "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
+                              "Si vous avez installé des programmes après la mise à niveau, le processus de retour en arrière risque de les supprimer. Assurez-vous d'avoir sauvegardé leurs paramètres au cas où vous devriez les réinstaller ultérieurement. Sauvegardez également vos fichiers au cas où ils seraient affectés par le processus de retour en arrière." & CrLf & CrLf &
+                              "Ensuite, ne vous laissez pas bloquer. Si vous avez défini un mot de passe pour votre utilisateur actuel, assurez-vous de le connaître. Sinon, vous risquez de ne pas pouvoir vous connecter." & CrLf & CrLf &
+                              "Enfin, merci d'avoir essayé cette version de Windows." & CrLf & CrLf &
                               "Souhaitez-vous démarrer le processus de retour en arrière ?"
                     Case 4
-                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
-                              "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf & _
-                              "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf & _
-                              "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
+                              "Se tiver instalado programas após a atualização, o processo de reversão poderá removê-los. Certifique-se de que efectuou uma cópia de segurança das respectivas definições para o caso de ter de os reinstalar mais tarde. Além disso, faça uma cópia de segurança dos seus ficheiros para o caso de serem afectados pelo processo de reversão." & CrLf & CrLf &
+                              "De seguida, não obtenha o seu acesso bloqueado. Se tiver definido uma palavra-passe para o seu utilizador atual, certifique-se de que a sabe. Caso contrário, poderá não conseguir iniciar sessão." & CrLf & CrLf &
+                              "Por fim, obrigado por experimentar esta versão do Windows." & CrLf & CrLf &
                               "Pretende iniciar o processo de reversão?"
                     Case 5
-                        msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf & _
-                              "Se sono stati installati dei programmi dopo l'aggiornamento, procedere con il processo di rollback potrebbe rimuoverli. Assicurarsi di aver eseguito il backup delle impostazioni nel caso in cui sia necessario reinstallarli in seguito. Inoltre, eseguire il backup dei file nel caso in cui siano interessati dal processo di ritorno." & CrLf & CrLf & _
-                              "Poi, non rimanete chiusi fuori. Se è stata impostata una password per l'utente corrente, assicurarsi di conoscerla. In caso contrario, potreste non essere in grado di accedere" & CrLf & CrLf & _
-                              "Infine, grazie per aver provato questa versione di Windows." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf &
+                              "Se sono stati installati dei programmi dopo l'aggiornamento, procedere con il processo di rollback potrebbe rimuoverli. Assicurarsi di aver eseguito il backup delle impostazioni nel caso in cui sia necessario reinstallarli in seguito. Inoltre, eseguire il backup dei file nel caso in cui siano interessati dal processo di ritorno." & CrLf & CrLf &
+                              "Poi, non rimanete chiusi fuori. Se è stata impostata una password per l'utente corrente, assicurarsi di conoscerla. In caso contrario, potreste non essere in grado di accedere" & CrLf & CrLf &
+                              "Infine, grazie per aver provato questa versione di Windows." & CrLf & CrLf &
                               "Volete avviare il processo di ritorno?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
@@ -18781,55 +15602,55 @@ Public Class MainForm
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
-                                      "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf & _
-                                      "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
+                                      "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf &
+                                      "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf &
                                       "Do you want to remove the ability to roll back to an older version of Windows?"
                             Case "ESN"
-                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
-                                      "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf & _
-                                      "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
+                                      "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf &
+                                      "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf &
                                       "¿Desea eliminar la habilidad para revertir a una versión anterior de Windows?"
                             Case "FRA"
-                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
-                                      "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf & _
-                                      "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
+                                      "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf &
+                                      "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf &
                                       "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
                             Case "PTB", "PTG"
-                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
-                                      "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf & _
-                                      "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
+                                      "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf &
+                                      "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf &
                                       "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
                             Case "ITA"
-                                msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf & _
-                                      "Se si utilizza la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ritorno." & CrLf & CrLf & _
-                                      "Questa operazione non cancellerà i file della vecchia installazione, quindi è necessario utilizzare Pulizia disco (cleanmgr) se si vuole liberare un po' di spazio." & CrLf & CrLf & _
+                                msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf &
+                                      "Se si utilizza la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ritorno." & CrLf & CrLf &
+                                      "Questa operazione non cancellerà i file della vecchia installazione, quindi è necessario utilizzare Pulizia disco (cleanmgr) se si vuole liberare un po' di spazio." & CrLf & CrLf &
                                       "Volete rimuovere la possibilità di tornare a una versione precedente di Windows?"
                         End Select
                     Case 1
-                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf & _
-                              "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf & _
-                              "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", please read this message carefully before proceeding." & CrLf & CrLf &
+                              "If you have used this new Windows version for some time and have determined that no issues are present, you can remove the ability to initiate a rollback." & CrLf & CrLf &
+                              "This won't delete the files from the old installation, so you need to use Disk Cleanup (cleanmgr) if you want to free up some space." & CrLf & CrLf &
                               "Do you want to remove the ability to roll back to an older version of Windows?"
                     Case 2
-                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf & _
-                              "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf & _
-                              "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", lea este mensaje antes de proceder." & CrLf & CrLf &
+                              "Si ha utilizado esta versión nueva de Windows por un rato y ha determinado que no hay errores, puede eliminar la habilidad para iniciar un restablecimiento a una versión anterior." & CrLf & CrLf &
+                              "Esto no eliminará los archivos de la instalación anterior, así que debe utilizar la herramienta de Limpieza de Disco (cleanmgr) si desea liberar algo de espacio." & CrLf & CrLf &
                               "¿Desea eliminar la habilidad para revertir a una versión anterior de Windows?"
                     Case 3
-                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf & _
-                              "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf & _
-                              "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", veuillez lire attentivement ce message avant de poursuivre." & CrLf & CrLf &
+                              "Si vous avez utilisé cette nouvelle version de Windows pendant un certain temps et que vous avez déterminé qu'il n'y a pas de problème, vous pouvez supprimer la possibilité de lancer un retour en arrière." & CrLf & CrLf &
+                              "Cette opération ne supprime pas les fichiers de l'ancienne installation ; vous devez donc utiliser l'outil de nettoyage de disque (cleanmgr) si vous souhaitez libérer de l'espace." & CrLf & CrLf &
                               "Voulez-vous supprimer la possibilité de revenir à une ancienne version de Windows ?"
                     Case 4
-                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf & _
-                              "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf & _
-                              "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", leia atentamente esta mensagem antes de prosseguir." & CrLf & CrLf &
+                              "Se já utilizou esta nova versão do Windows durante algum tempo e determinou que não existem problemas, pode remover a capacidade de iniciar uma reversão." & CrLf & CrLf &
+                              "Isto não eliminará os ficheiros da instalação antiga, pelo que terá de utilizar a Limpeza de disco (cleanmgr) se pretender libertar algum espaço." & CrLf & CrLf &
                               "Pretende remover a capacidade de retroceder para uma versão mais antiga do Windows?"
                     Case 5
-                        msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf & _
-                              "Se si utilizza la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ritorno." & CrLf & CrLf & _
-                              "Questa operazione non cancellerà i file della vecchia installazione, quindi è necessario utilizzare Pulizia disco (cleanmgr) se si vuole liberare un po' di spazio." & CrLf & CrLf & _
+                        msg = Environment.UserName & ", leggere attentamente questo messaggio prima di procedere." & CrLf & CrLf &
+                              "Se si utilizza la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ritorno." & CrLf & CrLf &
+                              "Questa operazione non cancellerà i file della vecchia installazione, quindi è necessario utilizzare Pulizia disco (cleanmgr) se si vuole liberare un po' di spazio." & CrLf & CrLf &
                               "Volete rimuovere la possibilità di tornare a una versione precedente di Windows?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
@@ -18888,10 +15709,10 @@ Public Class MainForm
                 DynaLog.LogMessage("Reordering projects in recents list...")
                 ChangeRecentListOrder(recentProj, itmOrder)
                 ProgressPanel.OperationNum = 990
-                LoadDTProj(recentProj.ProjPath, _
-                           If(recentProj.ProjName <> "", _
-                              recentProj.ProjName, _
-                              Path.GetFileNameWithoutExtension(recentProj.ProjPath)), _
+                LoadDTProj(recentProj.ProjPath,
+                           If(recentProj.ProjName <> "",
+                              recentProj.ProjName,
+                              Path.GetFileNameWithoutExtension(recentProj.ProjPath)),
                            True, False)
             End If
             RecentRemoveLink.Visible = False
@@ -19027,7 +15848,7 @@ Public Class MainForm
             vidPlayRTB.Text = vidPlayRTB.Text.Replace("{#REPLACEME}", ID).Trim().Replace("{#NAME}", Name).Trim().Replace("{#DESCRIPTION}", Description).Trim()
             ' Set appropriate color mode in light theme
             DynaLog.LogMessage("Setting colors...")
-            If BackColor = Color.FromArgb(239, 239, 242) Then
+            If Not CurrentTheme.IsDark Then
                 vidPlayRTB.Text = vidPlayRTB.Text.Replace("<body class=" & Quote & "pagebody-dark" & Quote & ">", "<body class=" & Quote & "pagebody" & Quote & ">").Trim()
             End If
             File.WriteAllText(Application.StartupPath & "\videos\videoplay.html", vidPlayRTB.Text, UTF8)
@@ -19170,10 +15991,10 @@ Public Class MainForm
             DynaLog.LogMessage("Reordering projects in recents list...")
             ChangeRecentListOrder(recentProj, itmOrder)
             ProgressPanel.OperationNum = 990
-            LoadDTProj(recentProj.ProjPath, _
-                       If(recentProj.ProjName <> "", _
-                          recentProj.ProjName, _
-                          Path.GetFileNameWithoutExtension(recentProj.ProjPath)), _
+            LoadDTProj(recentProj.ProjPath,
+                       If(recentProj.ProjName <> "",
+                          recentProj.ProjName,
+                          Path.GetFileNameWithoutExtension(recentProj.ProjPath)),
                        True, False)
         End If
         RecentRemoveLink.Visible = False
@@ -19701,18 +16522,7 @@ Public Class MainForm
 
     Private Sub GetTargetEditions_Click(sender As Object, e As EventArgs) Handles GetTargetEditions.Click
         DynaLog.LogMessage("Preparing to get target editions...")
-        MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
-        While MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(500)
-        End While
-        WatcherTimer.Enabled = False
-        If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
-        While WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        StopMountedImageDetector()
         DynaLog.LogMessage("Getting target editions...")
         Dim msg As String = ""
         Dim msgSuccess As Boolean
@@ -19867,12 +16677,14 @@ Public Class MainForm
     End Sub
 
     Sub StopMountedImageDetector()
+        DynaLog.LogMessage("Stopping mounted image detector...")
         MountedImageDetectorBWRestarterTimer.Enabled = False
         If MountedImageDetectorBW.IsBusy Then MountedImageDetectorBW.CancelAsync()
         While MountedImageDetectorBW.IsBusy
             Application.DoEvents()
             Thread.Sleep(500)
         End While
+        DynaLog.LogMessage("Stopping image status watchers...")
         WatcherTimer.Enabled = False
         If WatcherBW.IsBusy Then WatcherBW.CancelAsync()
         While WatcherBW.IsBusy
@@ -19882,8 +16694,59 @@ Public Class MainForm
     End Sub
 
     Sub StartMountedImageDetector()
-        DynaLog.LogMessage("Restarting mounted image detector...")
+        DynaLog.LogMessage("Restarting mounted image detector and watchers...")
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()
         WatcherTimer.Enabled = True
+    End Sub
+
+    Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click
+        If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
+            DynaLog.LogMessage("Tour directory exists. Starting the tour!")
+            Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+        End If
+    End Sub
+
+    Private Sub RemoveAppliedAnswerFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveAppliedAnswerFileToolStripMenuItem.Click
+        Dim pantherXml As String = Path.Combine(MountDir, "Windows", "Panther", "unattend.xml")
+        Dim sysprepXml As String = Path.Combine(MountDir, "Windows", "System32", "sysprep", "unattend.xml")
+        Dim nonExistentFiles As Integer = 0
+        Cursor = Cursors.WaitCursor
+        Refresh()
+        Try
+            If Not File.Exists(pantherXml) Then nonExistentFiles += 1
+            If Not File.Exists(sysprepXml) Then nonExistentFiles += 1
+            DynaLog.LogMessage("Removing existing answer files...")
+            DynaLog.LogMessage("Removing answer file from Panther directory...")
+            File.Delete(pantherXml)
+            DynaLog.LogMessage("Removing answer file from Sysprep directory...")
+            File.Delete(sysprepXml)
+            If nonExistentFiles >= 2 Then
+                Throw New Exception("No answer files have been detected in the mounted image.")
+            End If
+            MsgBox("Answer file removed successfully.", vbOKOnly + vbInformation, "")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not remove answer files. Reason: " & ex.Message)
+            MsgBox(ex.Message, vbOKOnly + vbExclamation, "")
+        End Try
+        Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub CommitImage_Click(sender As Object, e As EventArgs) Handles CommitImage.Click
+        Button27.PerformClick()
+    End Sub
+
+    Private Sub MountImage_Click(sender As Object, e As EventArgs) Handles MountImage.Click
+        Button26.PerformClick()
+    End Sub
+
+    Private Sub RemountImage_Click(sender As Object, e As EventArgs) Handles RemountImage.Click
+        Button25.PerformClick()
+    End Sub
+
+    Private Sub OpenDiagnosticLogsInLogViewerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenDiagnosticLogsInLogViewerToolStripMenuItem.Click
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe"),
+                          Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
+        End If
     End Sub
 End Class

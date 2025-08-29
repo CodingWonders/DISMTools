@@ -11,7 +11,20 @@ Namespace Elements
         <XmlAttribute("Id")>
         Public Property Id As String
 
+        Public Property Pass As Pass
+
         Public Property Passes As New List(Of Pass)
+
+        Public Property XmlData As String
+
+        Public Sub New()
+
+        End Sub
+
+        Public Sub New(id As String, pass As Pass)
+            Me.Id = id
+            Me.Pass = pass
+        End Sub
 
         Public Overrides Function ToString() As String
             Dim passList As String = ""
@@ -24,7 +37,7 @@ Namespace Elements
                     End If
                 Next
             End If
-            Return "Component, with ID: " & Me.Id & "; Passes: " & passList
+            Return "Component, with ID: " & Me.Id & "; Pass: " & Pass.Name
         End Function
 
         Public Shared Function LoadItems(filePath As String) As List(Of Component)

@@ -117,15 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Label52.Text" xml:space="preserve">
-    <value>In this screen you can add placeholders to additional components that you want to configure in your unattended answer file. Select the passes for the components you want to configure and click Next. Then, once your file is created, fill in the placeholder values with your settings in the Editor mode.
-
-To skip this process, click Next without configuring any component.</value>
-  </data>
   <data name="Label51.Text" xml:space="preserve">
     <value>In this screen you can configure scripts that will be run during a specific stage of Windows installation. Use the sections below to specify the code for the scripts.
 
 If you don't want to configure scripts, click Next.</value>
+  </data>
+  <data name="Label46.Text" xml:space="preserve">
+    <value>- Use Guest Additions with Oracle VM VirtualBox
+- Use VMware Tools with VMware hypervisors
+- Use VirtIO Guest Tools with QEMU-based hypervisors
+- Use Parallels Tools with Parallels hypervisors on Macintosh computers</value>
   </data>
   <data name="Scintilla2.Text" xml:space="preserve">
     <value>REM EXAMPLE SCRIPT. PLEASE MODIFY
@@ -152,14 +153,11 @@ GPT ATTRIBUTES=0x8000000000000001</value>
 
 In this wizard, you will be able to configure regional settings, user accounts, wireless settings, virtual machine support, and more. If you need to add more functionality to your file after creating it, you can use the Editor mode, which you can access by clicking the button on the bottom left.
 
-Special thanks to Christoph Schneegans for making the library that makes this wizard possible. You can also use his generator website to configure more settings, like post-installation scripts or Windows Defender Application Control rules.
+Special thanks to Christoph Schneegans for making the library that makes this wizard possible. You can also use his generator website to configure more settings, like tweaks or Windows Defender Application Control rules.
 
 
 To begin creating your answer file, click Next.</value>
   </data>
-  <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="DarkToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
@@ -464,6 +462,9 @@ To begin creating your answer file, click Next.</value>
   </metadata>
   <metadata name="ScriptEditorOFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 56</value>
+  </metadata>
+  <metadata name="CPUnattendGenFBD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>271, 56</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

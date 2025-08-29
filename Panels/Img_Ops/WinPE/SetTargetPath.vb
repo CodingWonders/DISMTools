@@ -1,35 +1,28 @@
 ﻿Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
+Imports System.IO
 
 Public Class SetPETargetPath
+    Implements IImageTaskDialog
 
     Sub GetTargetPath()
-        Using reg As New Process
-            DynaLog.LogMessage("Preparing to get Windows PE settings...")
-            DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
-            Try
-                DynaLog.LogMessage("Getting target path...")
-                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
-                TextBox1.Text = regKey.GetValue("InstRoot", "").ToString()
-                regKey.Close()
-            Catch ex As Exception
+        DynaLog.LogMessage("Preparing to get Windows PE settings...")
+        DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
+        Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
+        DynaLog.LogMessage("REG hive exit code: " & Hex(regExitCode))
+        Try
+            DynaLog.LogMessage("Getting target path...")
+            Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+            DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
+            TextBox1.Text = regKey.GetValue("InstRoot", "").ToString()
+            regKey.Close()
+        Catch ex As Exception
 
-            End Try
-            DynaLog.LogMessage("Unloading hives...")
-            ' Unload registry hives
-            reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
-            reg.Start()
-            reg.WaitForExit()
-        End Using
+        End Try
+        DynaLog.LogMessage("Unloading hives...")
+        ' Unload registry hives
+        RegistryHelper.UnloadRegistryHive("HKLM\PE_SOFT")
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -206,7 +199,20 @@ Public Class SetPETargetPath
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening target path configuration dialog...")
+        If MainForm.ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
+            BGProcsBusyDialog.ShowDialog()
+            Return False
+        End If
+        Return True
+    End Function
+
     Private Sub SetTargetPath_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -286,21 +292,14 @@ Public Class SetPETargetPath
             Text = ""
             Win10Title.Visible = True
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
 
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         GetTargetPath()
     End Sub
 End Class

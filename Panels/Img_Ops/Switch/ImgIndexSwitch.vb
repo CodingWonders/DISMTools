@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 
 Public Class ImgIndexSwitch
+    Implements IImageTaskDialog
 
     Public indexNames(1024) As String
 
@@ -35,7 +36,47 @@ Public Class ImgIndexSwitch
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening image index switch dialog...")
+        DynaLog.LogMessage("Stopping mounted image detector...")
+        MainForm.StopMountedImageDetector()
+        DynaLog.LogMessage("Getting image indexes...")
+        ProgressPanel.OperationNum = 995
+        PleaseWaitDialog.indexesSourceImg = MainForm.SourceImg
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+                    Case "ESN"
+                        PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+                    Case "FRA"
+                        PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+                    Case "PTB", "PTG"
+                        PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
+                    Case "ITA"
+                        PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
+                End Select
+            Case 1
+                PleaseWaitDialog.Label2.Text = "Getting image indexes..."
+            Case 2
+                PleaseWaitDialog.Label2.Text = "Obteniendo índices de la imagen..."
+            Case 3
+                PleaseWaitDialog.Label2.Text = "Obtention des index de l'image en cours..."
+            Case 4
+                PleaseWaitDialog.Label2.Text = "Obter índices de imagem..."
+            Case 5
+                PleaseWaitDialog.Label2.Text = "Ottenere gli indici delle immagini..."
+        End Select
+        PleaseWaitDialog.ShowDialog(Me)
+        MainForm.StartMountedImageDetector()
+        Return (PleaseWaitDialog.imgIndexes > 1)
+    End Function
+
     Private Sub ImgIndexSwitch_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -161,21 +202,12 @@ Public Class ImgIndexSwitch
                 RadioButton1.Text = "Salva le modifiche all'indice"
                 RadioButton2.Text = "Smonta scartando le modifiche"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
-            NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
-            NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         NumericUpDown1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
@@ -191,7 +223,7 @@ Public Class ImgIndexSwitch
             OK_Button.Enabled = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged

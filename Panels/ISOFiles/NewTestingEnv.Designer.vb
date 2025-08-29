@@ -139,7 +139,7 @@ Partial Class NewTestingEnv
         Me.ComboBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"x86", "amd64", "arm", "arm64"})
+        Me.ComboBox1.Items.AddRange(New Object() {"x86", "amd64", "arm64"})
         Me.ComboBox1.Location = New System.Drawing.Point(119, 5)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(638, 21)

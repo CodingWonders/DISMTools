@@ -3,6 +3,7 @@ Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
+Imports System.Net
 
 Public Class ISOCreator
 
@@ -10,7 +11,9 @@ Public Class ISOCreator
     Dim ISOMsg As String = ""
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
-    Dim architectures() As String = New String(3) {"x86", "amd64", "arm", "arm64"}
+    Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
+    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/2/d/9/2d9c8902-3fcd-48a6-a22a-432b08bed61e/ADK/adksetup.exe", "https://download.microsoft.com/download/5/5/6/556e01ec-9d78-417d-b1e1-d83a2eff20bc/ADKWinPEAddons/adkwinpesetup.exe"}
+    Dim adkDownloadSuccess As Boolean
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -328,25 +331,14 @@ Public Class ISOCreator
                 CheckBox2.Text = "Copia su unità Ventoy"
                 CheckBox3.Text = "Utilizzare binari di avvio con firma recente"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox3.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox4.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox3.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox4.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -360,7 +352,7 @@ Public Class ISOCreator
         Else
             Button4.Enabled = True
         End If
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -379,32 +371,49 @@ Public Class ISOCreator
         ' Check ADK status
         If Not Directory.Exists(ADKPath) Then
             DynaLog.LogMessage("ADK installation directory " & Quote & ADKPath & Quote & " is not found in this system. Either it has not been installed or it has been installed somewhere else.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
+            If MsgBox("The Windows ADK was not found on your system. Do you want DISMTools to download and install the latest one for you? Note that you'll need around 4 GB on your system.", vbYesNo + vbQuestion, "") = MsgBoxResult.Yes Then
+                Visible = True
+                ADKDownloaderBW.RunWorkerAsync()
+                Do Until Not ADKDownloaderBW.IsBusy
+                    Application.DoEvents()
+                    Thread.Sleep(100)
+                Loop
+                If Not adkDownloadSuccess Then
+                    Select Case MainForm.Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
+                                Case "ESN"
+                                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
+                                Case "FRA"
+                                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
+                                Case "PTB", "PTG"
+                                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
+                                Case "ITA"
+                                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
+                            End Select
+                        Case 1
                             Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                        Case "ESN"
+                        Case 2
                             Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                        Case "FRA"
+                        Case 3
                             Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                        Case "PTB", "PTG"
+                        Case 4
                             Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                        Case "ITA"
+                        Case 5
                             Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
                     End Select
-                Case 1
-                    Process.Start("https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install")
-                Case 2
-                    Process.Start("https://learn.microsoft.com/es-es/windows-hardware/get-started/adk-install")
-                Case 3
-                    Process.Start("https://learn.microsoft.com/fr-fr/windows-hardware/get-started/adk-install")
-                Case 4
-                    Process.Start("https://learn.microsoft.com/pt-pt/windows-hardware/get-started/adk-install")
-                Case 5
-                    Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
-            End Select
-            Close()
+                    Close()
+                Else
+                    If MainForm.DetectPossibleADKs() = 1 Then
+                        RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\Software\Microsoft\WIMMount", "AdkInstallation", RegistryItem.ValueType.RegDword, "1"))
+                    End If
+                End If
+            Else
+                Close()
+            End If
+
         End If
 
         ' Restore combobox architecture items
@@ -427,6 +436,61 @@ Public Class ISOCreator
         ComboBox1.SelectedIndex = 0
     End Sub
 
+    Private Sub DownloadADK()
+        Try
+            ProgressReporter.SetMessage("Preparing to download Assessment and Deployment Kit...")
+            ADKDownloaderBW.ReportProgress(0)
+            Dim FileNames As New List(Of String)
+            For Each downloadLocation In adkDownloadLocations
+                FileNames.Add(Path.GetFileName(downloadLocation))
+                Dim current As Integer = adkDownloadLocations.ToList().IndexOf(downloadLocation)
+                Dim count As Integer = adkDownloadLocations.Count
+                ProgressReporter.SetMessage(String.Format("Downloading ADK component {0} of {1}...", current + 1, count))
+                ADKDownloaderBW.ReportProgress(50 * (current / count))
+                Using client As New WebClient()
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
+                    client.DownloadFile(downloadLocation, Path.Combine(Application.StartupPath, Path.GetFileName(downloadLocation)))
+                End Using
+            Next
+            Dim currentProgress As Integer = 50
+            For Each FileName In FileNames
+                Dim current As Integer = FileNames.IndexOf(FileName)
+                Dim count As Integer = FileNames.Count
+                ProgressReporter.SetMessage(String.Format("Installing ADK component {0} of {1}...", current + 1, count))
+                ADKDownloaderBW.ReportProgress(currentProgress)
+                Dim InstallerProcess As New Process()
+                InstallerProcess.StartInfo.WorkingDirectory = Application.StartupPath
+                If File.Exists(Path.Combine(Application.StartupPath, FileName)) Then
+                    InstallerProcess.StartInfo.FileName = FileName
+                    ' Guess command-line options. Source of necessary options comes from remediation script Microsoft published
+                    ' during the CrowdStrike incident.
+                    InstallerProcess.StartInfo.Arguments = String.Format("/features {0} /q /ceip off",
+                                                                         If(FileName.Contains("winpe"),
+                                                                            "OptionId.WindowsPreinstallationEnvironment",
+                                                                            "OptionId.DeploymentTools")
+                                                                        )
+                    InstallerProcess.Start()
+                    InstallerProcess.WaitForExit()
+                    If Not InstallerProcess.ExitCode = 0 Then
+                        Throw New Exception("One of the ADK component installers has finished with exit code " & InstallerProcess.ExitCode)
+                    End If
+                End If
+                currentProgress += 25
+            Next
+            Try
+                ProgressReporter.SetMessage("Deleting temporary files...")
+                ADKDownloaderBW.ReportProgress(100)
+                For Each FileName In FileNames
+                    File.Delete(Path.Combine(Application.StartupPath, FileName))
+                Next
+            Catch ex As Exception
+
+            End Try
+        Catch ex As Exception
+            Throw
+        End Try
+    End Sub
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         OpenFileDialog1.ShowDialog()
     End Sub
@@ -444,23 +508,7 @@ Public Class ISOCreator
         DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
         DynaLog.LogMessage("Checking if mounted image detector is busy...")
         ListView1.Items.Clear()
-        If MainForm.MountedImageDetectorBW.IsBusy Then
-            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-            MainForm.MountedImageDetectorBW.CancelAsync()
-            While MainForm.MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        DynaLog.LogMessage("Checking if image status watchers are busy...")
-        MainForm.WatcherTimer.Enabled = False
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         Try
             DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
@@ -516,7 +564,7 @@ Public Class ISOCreator
             End Try
         End Try
         DynaLog.LogMessage("This process has finished.")
-        Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
@@ -686,10 +734,12 @@ Public Class ISOCreator
         IdlePanel.Visible = False
         ISOProgressPanel.Visible = True
         If e.ProgressPercentage < 100 Then
+            WindowHelper.DisableCloseCapability(Handle)
             Label8.Text = progressMessages(1)
             ProgressBar1.Style = ProgressBarStyle.Marquee
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
         Else
+            WindowHelper.EnableCloseCapability(Handle)
             If success Then Label8.Text = progressMessages(2)
             ProgressBar1.Style = ProgressBarStyle.Blocks
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.None, MainForm.Handle)
@@ -743,10 +793,10 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        PopupImageManager.Location = Button2.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
-            DynaLog.LogMessage("Selected image: " & PopupImageManager.selectedImgFile)
-            TextBox1.Text = PopupImageManager.selectedImgFile
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button2.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
+            DynaLog.LogMessage("Selected image: " & selectedImage.ImageFilePath)
+            TextBox1.Text = selectedImage.ImageFilePath
         End If
     End Sub
 
@@ -812,6 +862,9 @@ Public Class ISOCreator
             Dim bm As New Bitmap(ListView1.ClientSize.Width, ListView1.ClientSize.Height)
             Graphics.FromImage(bm).Clear(ListView1.BackColor)
             ListView1.BackgroundImage = bm
+        End If
+        If BackgroundWorker1.IsBusy Then
+            WindowHelper.DisableCloseCapability(Handle)
         End If
     End Sub
 
@@ -886,5 +939,18 @@ Public Class ISOCreator
         If CheckBox3.Checked Then
             MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, uefiCA2023_Title)
         End If
+    End Sub
+
+    Private Sub ADKDownloaderBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles ADKDownloaderBW.DoWork
+        DownloadADK()
+    End Sub
+
+    Private Sub ADKDownloaderBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles ADKDownloaderBW.ProgressChanged
+        ProgressReporter.ReportProgress(Me, e.ProgressPercentage)
+    End Sub
+
+    Private Sub ADKDownloaderBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKDownloaderBW.RunWorkerCompleted
+        ProgressReporter.Hide()
+        adkDownloadSuccess = e.Error Is Nothing
     End Sub
 End Class

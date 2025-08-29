@@ -31,7 +31,6 @@ Partial Class RemPackage
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox()
@@ -118,7 +117,6 @@ Partial Class RemPackage
         '
         Me.GroupBox1.Controls.Add(Me.Button1)
         Me.GroupBox1.Controls.Add(Me.TextBox1)
-        Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.Label3)
         Me.GroupBox1.Controls.Add(Me.CheckedListBox2)
@@ -150,15 +148,6 @@ Partial Class RemPackage
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(505, 21)
         Me.TextBox1.TabIndex = 3
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(42, 208)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(205, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "This image contains <pkgNum> packages"
         '
         'Label4
         '
@@ -196,7 +185,7 @@ Partial Class RemPackage
         Me.CheckedListBox1.IntegralHeight = False
         Me.CheckedListBox1.Location = New System.Drawing.Point(42, 55)
         Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(684, 148)
+        Me.CheckedListBox1.Size = New System.Drawing.Size(684, 171)
         Me.CheckedListBox1.TabIndex = 1
         '
         'RadioButton2
@@ -263,7 +252,6 @@ Partial Class RemPackage
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents CheckedListBox2 As System.Windows.Forms.CheckedListBox

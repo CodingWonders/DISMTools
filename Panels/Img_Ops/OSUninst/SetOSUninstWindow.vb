@@ -4,6 +4,7 @@ Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 
 Public Class SetOSUninstWindow
+    Implements IImageTaskDialog
 
     Dim uninstWindow As Integer
 
@@ -24,7 +25,51 @@ Public Class SetOSUninstWindow
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        If MainForm.OnlineManagement Then
+            DynaLog.LogMessage("The active installation is being managed right now. Checking if it can uninstall an OS...")
+            If Not MainForm.CheckOSUninstallCapability() Then
+                DynaLog.LogMessage("No rollbacks/uninstallations can be performed.")
+                OSNoRollbackErrorDlg.ShowDialog(MainForm)
+                Return False
+            End If
+        Else
+            DynaLog.LogMessage("The active installation is not being managed right now.")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                        Case "ESN"
+                            MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                        Case "FRA"
+                            MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                        Case "PTB", "PTG"
+                            MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
+                        Case "ITA"
+                            MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
+                    End Select
+                Case 1
+                    MsgBox("This action is only supported on online installations", vbOKOnly + vbCritical, Text)
+                Case 2
+                    MsgBox("Esta acción solo está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
+                Case 3
+                    MsgBox("Cette action est seulement prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
+                Case 4
+                    MsgBox("Esta ação só é suportada em instalações online", vbOKOnly + vbCritical, Text)
+                Case 5
+                    MsgBox("Questa azione è supportata solo su installazioni attive", vbOKOnly + vbCritical, Text)
+            End Select
+            Return False
+        End If
+        Return True
+    End Function
+
     Private Sub SetOSUninstWindow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+            Exit Sub
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -127,16 +172,10 @@ Public Class SetOSUninstWindow
             Text = ""
             Win10Title.Visible = True
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 End Class

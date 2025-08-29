@@ -1,6 +1,9 @@
 ﻿Imports System.Windows.Forms
+Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Public Class DisableFeat
+    Implements IImageTaskDialog
 
     Public featDisablementCount As Integer
     Public featDisablementNames(65535) As String
@@ -77,7 +80,39 @@ Public Class DisableFeat
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening feature disablement dialog...")
+        ListView1.Items.Clear()
+        If Not MainForm.CompletedTasks(1) Then
+            DynaLog.LogMessage("Feature background processes haven't completed.")
+            BGProcsBusyDialog.ShowDialog(Me)
+            Return False
+        End If
+        DynaLog.LogMessage("Adding features to arrays...")
+        If MainForm.imgFeatures.Count > 0 Then
+            For Each imgFeature In MainForm.imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).ToList()
+                ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
+            Next
+        Else
+            Try
+                For x = 0 To Array.LastIndexOf(MainForm.imgFeatureNames, MainForm.imgFeatureNames.Last)
+                    If MainForm.imgFeatureState(x).Contains("Disable") Or MainForm.imgFeatureState(x) = "" Or MainForm.imgFeatureState(x) = "Nothing" Then
+                        Continue For
+                    End If
+                    ListView1.Items.Add(MainForm.imgFeatureNames(x)).SubItems.Add(MainForm.imgFeatureState(x))
+                Next
+            Catch ex As Exception
+                ' We should have enough with the entries already added.
+                Exit Try
+            End Try
+        End If
+        Return True
+    End Function
+
     Private Sub DisableFeat_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -213,56 +248,21 @@ Public Class DisableFeat
                 CheckBox1.Text = "Specificare il nome del pacchetto padre per le caratteristiche"
                 CheckBox2.Text = "Rimuovi la caratteristica senza rimuovere il manifesto"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
-                    Case "ESN"
-                        Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
-                    Case "FRA"
-                        Label2.Text &= " Seules les caractéristiques activées (" & ListView1.Items.Count & ") sont présentées."
-                    Case "PTB", "PTG"
-                        Label2.Text &= " Só são mostradas as características activadas (" & ListView1.Items.Count & ")"
-                    Case "ITA"
-                        Label2.Text &= " Vengono mostrate solo le caratteristiche abilitate (" & ListView1.Items.Count & ")"
-                End Select
-            Case 1
-                Label2.Text &= " Only enabled features (" & ListView1.Items.Count & ") are shown"
-            Case 2
-                Label2.Text &= " Solo las características habilitadas (" & ListView1.Items.Count & ") son mostradas"
-            Case 3
-                Label2.Text &= " Seules les caractéristiques activées (" & ListView1.Items.Count & ") sont présentées."
-            Case 4
-                Label2.Text &= " Só são mostradas as características activadas (" & ListView1.Items.Count & ")"
-            Case 5
-                Label2.Text &= " Vengono mostrate solo le caratteristiche abilitate (" & ListView1.Items.Count & ")"
-        End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged

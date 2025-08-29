@@ -472,33 +472,24 @@ Public Class GetDriverInfo
                 OpenFileDialog1.Title = "Individuazione dei file di driver"
                 SearchBox1.Text = "Digitare qui per cercare un driver..."
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
-        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
+        SearchPic.Image = GetGlyphResource("search")
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Updating items in list...")
         InstalledDriverList.Clear()
         SearchedDriverList.Clear()
@@ -573,6 +564,7 @@ Public Class GetDriverInfo
     End Sub
 
     Sub GetDriverInformation()
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Clearing information lists...")
         DriverInfoList.Clear()
         Try
@@ -637,24 +629,7 @@ Public Class GetDriverInfo
                     Thread.Sleep(500)
                 End While
             End If
-            DynaLog.LogMessage("Checking if mounted image detector is busy...")
-            If MainForm.MountedImageDetectorBW.IsBusy Then
-                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                MainForm.MountedImageDetectorBW.CancelAsync()
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            DynaLog.LogMessage("Checking if image status watchers are busy...")
-            MainForm.WatcherTimer.Enabled = False
-            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-            While MainForm.WatcherBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            MainForm.StopMountedImageDetector()
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -758,6 +733,7 @@ Public Class GetDriverInfo
             Case 5
                 Label5.Text = "Pronto"
         End Select
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Sub DisplayDriverInformation(HWTarget As Integer)
@@ -872,9 +848,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub GetDriverInfo_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged

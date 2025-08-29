@@ -183,18 +183,13 @@ Public Class MountedImgMgr
                 LinkLabel1.LinkArea = New LinkArea(97, 59)
         End Select
         Control.CheckForIllegalCrossThreadCalls = False
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
         ListView1.Items.Clear()
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         DetectorBW.RunWorkerAsync()
     End Sub
 
@@ -395,7 +390,6 @@ Public Class MountedImgMgr
                     If ListView1.Items.Count <> MainForm.MountedImageImgFiles.Count Then
                         DynaLog.LogMessage("There is a different amount of images mounted now. Forcing refresh of lists...")
                         ListView1.Items.Clear()
-                        PopupImageManager.ListView1.Items.Clear()
                         ignoreRepeats = False
                         Exit Sub
                     End If
@@ -407,35 +401,25 @@ Public Class MountedImgMgr
                                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                         Case "ENU", "ENG"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                                            PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                                         Case "ESN"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                                            PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
                                         Case "FRA"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                                            PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
                                         Case "PTB", "PTG"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                                            PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                                         Case "ITA"
                                             ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                                            PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                                     End Select
                                 Case 1
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                                    PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                                 Case 2
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                                    PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
                                 Case 3
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                                    PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
                                 Case 4
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                                    PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                                 Case 5
                                     ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                                    PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                             End Select
                         End If
                     Next
@@ -445,35 +429,25 @@ Public Class MountedImgMgr
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                                If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                             Case "ESN"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                                If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
                             Case "FRA"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                                If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
                             Case "PTB", "PTG"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                                If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                             Case "ITA"
                                 If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                                If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                         End Select
                     Case 1
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                        If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
                     Case 2
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                        If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
                     Case 3
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                        If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
                     Case 4
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                        If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
                     Case 5
                         If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                        If Not ignoreRepeats Then PopupImageManager.ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
                 End Select
             Next
             ignoreRepeats = True
@@ -495,19 +469,7 @@ Public Class MountedImgMgr
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         DynaLog.LogMessage("Preparing to remove volume images from selected image file...")
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
-        While MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         ImgIndexDelete.TextBox1.Text = ListView1.FocusedItem.SubItems(0).Text
         ImgIndexDelete.ShowDialog()
     End Sub

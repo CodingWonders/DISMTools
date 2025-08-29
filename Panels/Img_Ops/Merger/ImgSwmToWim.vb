@@ -226,29 +226,16 @@ Public Class ImgSwmToWim
                 OpenFileDialog1.Title = "Specificare il file SWM di origine da unire"
                 SaveFileDialog1.Title = "Specificare il file WIM di destinazione in cui unire i file SWM di origine"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            GroupBox3.ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
-            NumericUpDown1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            GroupBox3.ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
-            NumericUpDown1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox3.ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        NumericUpDown1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         NumericUpDown1.ForeColor = ForeColor
@@ -258,7 +245,7 @@ Public Class ImgSwmToWim
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -269,23 +256,7 @@ Public Class ImgSwmToWim
         If TextBox1.Text <> "" And File.Exists(TextBox1.Text) Then
             DynaLog.LogMessage("Getting and displaying information of specified image file...")
             DynaLog.LogMessage("Image file to get information about: " & Quote & TextBox1.Text & Quote)
-            If MainForm.MountedImageDetectorBW.IsBusy Then
-                DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                MainForm.MountedImageDetectorBW.CancelAsync()
-                While MainForm.MountedImageDetectorBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(500)
-                End While
-            End If
-            DynaLog.LogMessage("Checking if image status watchers are busy...")
-            MainForm.WatcherTimer.Enabled = False
-            DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-            If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-            While MainForm.WatcherBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(100)
-            End While
+            MainForm.StopMountedImageDetector()
             Try
                 DynaLog.LogMessage("Getting information about the image file...")
                 ListView1.Items.Clear()

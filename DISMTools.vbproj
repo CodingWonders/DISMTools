@@ -77,11 +77,14 @@
     <Reference Include="DarkUI, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\DarkUI.2.0.2\lib\DarkUI.dll</HintPath>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
     <Reference Include="Markdig, Version=0.41.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.41.0\lib\net462\Markdig.dll</HintPath>
+      <HintPath>packages\Markdig.0.41.3\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.3.3.0\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.3.3.12\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Core, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Core.dll</HintPath>
@@ -125,6 +128,8 @@
     <Reference Include="System.Design">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
@@ -213,6 +218,13 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Elements\AppxPackage.vb" />
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.Designer.vb">
+      <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Elements\AutoUnattend\ActiveDirectory\DomainServicesModule.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Component.vb" />
     <Compile Include="Elements\AutoUnattend\Components\Pass.vb" />
     <Compile Include="Elements\AutoUnattend\DiskConfig\DiskConfiguration.vb" />
@@ -238,6 +250,10 @@
     <Compile Include="Elements\SearchBox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
+    <Compile Include="Elements\ServiceManagement\WindowsService.vb" />
+    <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
+    <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </Compile>
@@ -296,6 +312,7 @@
     <Compile Include="Panels\DoWork\ProgressPanel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\DoWork\ProgressReporter.vb" />
     <Compile Include="Panels\Exceptions\ExceptionForm.Designer.vb">
       <DependentUpon>ExceptionForm.vb</DependentUpon>
     </Compile>
@@ -735,12 +752,7 @@
     <Compile Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\PopupDlgs\PopupImageManager.Designer.vb">
-      <DependentUpon>PopupImageManager.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\PopupDlgs\PopupImageManager.vb">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Panels\PopupDlgs\PopupMountedImagePicker.vb" />
     <Compile Include="Panels\Prj_Ops\NewProj.Designer.vb">
       <DependentUpon>NewProj.vb</DependentUpon>
     </Compile>
@@ -842,14 +854,28 @@
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
+    <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
     <Compile Include="Utilities\PlaybookDetector.vb" />
     <Compile Include="Utilities\PriReader.vb" />
+    <Compile Include="Utilities\RegistryHelper.vb" />
+    <Compile Include="Utilities\SamHelper.vb" />
     <Compile Include="Utilities\TaskbarHelper.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\DarkModeRenderer.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorModeRenderers\LightModeRenderer.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorTables\DarkModeColorTable.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
+    <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
+    <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
+    <Compile Include="Utilities\WindowHelper.vb" />
+    <Compile Include="Utilities\WMIHelper.vb" />
     <Compile Include="Videos\Video.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Elements\AutoUnattend\ActiveDirectory\ADDSJoinDialog.resx">
+      <DependentUpon>ADDSJoinDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Help\HelpBrowserForm.resx">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1096,9 +1122,6 @@
     <EmbeddedResource Include="Panels\Img_Ops\OSUninst\SetOSUninstWindow.resx">
       <DependentUpon>SetOSUninstWindow.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\PopupDlgs\PopupImageManager.resx">
-      <DependentUpon>PopupImageManager.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Prj_Ops\NewProj.resx">
       <DependentUpon>NewProj.vb</DependentUpon>
     </EmbeddedResource>
@@ -1187,13 +1210,22 @@
     <None Include="Helpers\extps1\PE_Helper\files\dim_start\dimstart.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Helpers\extps1\PE_Helper\files\diskpart\dp_listdisk.dp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Helpers\extps1\PE_Helper\files\DISMTools-PE.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\fullcopy.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\imagecapture.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
@@ -1203,6 +1235,30 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\PE_Helper.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\common\PXEHelpers.Common.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghelper.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghelper_server.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\__ModuleSetup.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\PXEHelpers.Startup.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\prepare_wds.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper_server.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Installer\Default.isl" />
@@ -1236,6 +1292,10 @@
     </None>
     <None Include="Tools\DT_IEConfig.reg" />
     <None Include="Tools\DT_WinADK.reg" />
+    <None Include="Tools\UnattendGen\UnattendGen-arm64-Linux.zip" />
+    <None Include="Tools\UnattendGen\UnattendGen-arm64-MacOS.zip" />
+    <None Include="Tools\UnattendGen\UnattendGen-x64-Linux.zip" />
+    <None Include="Tools\UnattendGen\UnattendGen-x64-MacOS.zip" />
     <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.deps.json" />
     <None Include="Tools\UnattendGen\win-arm64\publish\UnattendGen.runtimeconfig.json" />
     <None Include="Tools\UnattendGen\win-arm64\UnattendGen.deps.json" />
@@ -1248,6 +1308,12 @@
     <None Include="Tools\UnattendGen\win-x86\publish\UnattendGen.runtimeconfig.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.deps.json" />
     <None Include="Tools\UnattendGen\win-x86\UnattendGen.runtimeconfig.json" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\default_dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\default_light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT04Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT04Light.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Dark.ini" />
+    <None Include="Utilities\ThemeUtilities\ThemeFiles\DT05Light.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Panels\readme.md" />
@@ -1402,9 +1468,6 @@
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_amd64.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Helpers\extps1\PE_Helper\backgrounds\winpe_arm64.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1423,15 +1486,6 @@
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\i386\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\aarch64\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\amd64\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Helpers\extps1\PE_Helper\tools\RestartDialog\i386\DTPE-RestartDialog.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Installer\dt.iss" />
     <Content Include="Installer\ISCC.exe" />
     <Content Include="Installer\ISCmplr.dll" />
@@ -1444,6 +1498,16 @@
     <Content Include="logo.ico" />
     <None Include="Resources\menus\exit_full_screen_glyph.png" />
     <None Include="Resources\menus\exit_full_screen_glyph_dark.png" />
+    <None Include="Resources\startup\dt_branding_preview.png" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_light.gif" />
+    <None Include="Resources\progress\bg_ops_gif\bg_ops_complete_light.png" />
+    <None Include="Resources\glyphs\cmps_addfirstcomponent_dark.png" />
+    <None Include="Resources\glyphs\cmps_addfirstcomponent_light.png" />
+    <None Include="Resources\first_element.png" />
+    <None Include="Resources\last_element.png" />
+    <None Include="Resources\add_element.png" />
+    <None Include="Resources\remove_element.png" />
+    <None Include="Resources\ad_ds.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1797,9 +1861,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Debug\" />
+    <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
+    <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
+    <Folder Include="Utilities\LanguageUtilities\LanguageFiles\" />
     <Folder Include="wimlib\" />
   </ItemGroup>
   <ItemGroup>
@@ -1817,7 +1884,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
 ECHO Generating program structure...
@@ -1886,6 +1953,32 @@ IF EXIST "$(SolutionDir)Tools\UnpEax-Bin\UnpEax.exe" (
 IF EXIST "$(SolutionDir)Tools\UnattendGen" (
 	md "Tools\UnattendGen"
 	xcopy "$(SolutionDir)Tools\UnattendGen\*" "Tools\UnattendGen" /cehyi
+)
+
+:: Copy DynaViewer
+IF EXIST "$(SolutionDir)Tools\DynaViewer\out\*.exe" (
+	md "Tools\DynaViewer"
+	xcopy "$(SolutionDir)Tools\DynaViewer\out\*.exe" "Tools\DynaViewer" /cehyi
+)
+
+:: Copy themes over to bin directory
+IF EXIST "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" (
+	md "bin\themes"
+	xcopy "$(SolutionDir)Utilities\ThemeUtilities\ThemeFiles\*.ini" "bin\themes" /cehyi
+)
+
+:: Copy Theme Designer
+IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
+	xcopy "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.*" "Tools\ThemeDesigner" /cehyi
+	del "Tools\ThemeDesigner\*.zip" /F /S /Q
+)
+
+:: Copy Tour
+IF EXIST "$(SolutionDir)tour" (
+	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
+	IF EXIST "$(TargetDir)docs\tour\.git" (rd "$(TargetDir)docs\tour\.git" /s /q)
+	IF EXIST "$(TargetDir)docs\tour\.vscode" (rd "$(TargetDir)docstour\.vscode" /s /q)
+	IF EXIST "$(TargetDir)docs\tour\.git*" (del "$(TargetDir)docs\tour\.git*" /f /s /q)
 )
 
 IF NOT EXIST AutoUnattend (

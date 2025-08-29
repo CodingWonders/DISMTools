@@ -93,6 +93,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property ad_ds() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("ad_ds", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property add_appxpkg() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("add_appxpkg", resourceCulture)
@@ -126,6 +136,16 @@ Namespace My.Resources
         Friend ReadOnly Property add_edgewebview() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("add_edgewebview", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property add_element() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("add_element", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -193,9 +213,9 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property bg_ops() As System.Drawing.Bitmap
+        Friend ReadOnly Property bg_ops_complete_dark() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("bg_ops", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("bg_ops_complete_dark", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -203,9 +223,29 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property bg_ops_complete() As System.Drawing.Bitmap
+        Friend ReadOnly Property bg_ops_complete_light() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("bg_ops_complete", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("bg_ops_complete_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property bg_ops_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("bg_ops_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property bg_ops_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("bg_ops_light", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -346,6 +386,26 @@ Namespace My.Resources
         Friend ReadOnly Property closebox_focus() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("closebox_focus", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property cmps_addfirstcomponent_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("cmps_addfirstcomponent_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property cmps_addfirstcomponent_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("cmps_addfirstcomponent_light", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -584,6 +644,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property dt_branding_preview() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("dt_branding_preview", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         '''</summary>
         Friend ReadOnly Property dtproj() As System.Drawing.Icon
@@ -786,6 +856,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property first_element() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("first_element", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property get_appxpkg_info() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("get_appxpkg_info", resourceCulture)
@@ -936,9 +1016,9 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property image_dark() As System.Drawing.Bitmap
+        Friend ReadOnly Property image_glyph_dark() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("image_dark", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("image_glyph_dark", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -946,9 +1026,9 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property image_light() As System.Drawing.Bitmap
+        Friend ReadOnly Property image_glyph_light() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("image_light", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("image_glyph_light", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1049,6 +1129,16 @@ Namespace My.Resources
         Friend ReadOnly Property jumpto_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("jumpto_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property last_element() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("last_element", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -1691,6 +1781,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property remove_element() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("remove_element", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property report_glyph() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("report_glyph", resourceCulture)
@@ -1979,21 +2079,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Changes made since last preview:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''-- Bugfixes
+        '''--- Bugfixes
         '''
-        '''- Fixed an issue where the program would throw encoding-related exceptions when trying to redirect DISM output in some systems (#239, thanks Vincent Långström (@vinicentus) for spotting)
-        '''- The background process notification dialog no longer steals focus from the main window
-        '''- Image size reporting has been fixed for HotInstall
-        '''
-        '''-- New features
-        '''
-        '''- The documentation has been updated to reflect the changes in this version
-        '''
-        '''Overall changes:
-        '''
-        '''-- Bugfix [resto de la cadena truncado]&quot;;.
+        '''- Fixed a minor issue where DynaLog timestamps would not use a common format for time
+        '''- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
+        '''- Fixed an issue in the update checker
+        '''- Fixed a deployment issue in the Theme Designer. It will let you load and save themes now instead of throwing an exception
+        '''- Fixed an issue where people could write to the console output
+        '''- Fixed an issue where DISM woul [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

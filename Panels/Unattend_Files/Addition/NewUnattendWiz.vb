@@ -6,6 +6,7 @@ Imports ScintillaNET
 Imports DISMTools.Elements
 Imports Microsoft.Dism
 Imports System.Net
+Imports System.Net.NetworkInformation
 Imports System.Text.RegularExpressions
 Imports System.Text
 
@@ -18,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2543"
+    Const UnattendGenReleaseTag As String = "2582"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -79,6 +80,7 @@ Public Class NewUnattendWiz
     Dim ConfiguredScripts As New List(Of PostInstallScript)
     Dim CurrentlyEditedStage As Integer = 0
     Dim ScriptsRestartExplorer As Boolean
+    Dim ScriptsHideWindow As Boolean
     ' -- Variables for special scripts
     ' --- Join Path cmdlet constants
     ' We put the directory separator character next to the environment variable as homedrive and systemdrive don't end with a backslash.
@@ -108,7 +110,10 @@ Public Class NewUnattendWiz
 
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
-    Dim FinalComponents As New List(Of Component)
+    Dim SystemComponentsEx As New List(Of Component)
+    Dim ReservedComponents As New List(Of Component)
+    Dim ComponentIndex As Integer
+    Dim IsComponentBeingLoaded As Boolean
 
     ' Default Settings
     Dim DefaultLanguage As New ImageLanguage()
@@ -122,7 +127,6 @@ Public Class NewUnattendWiz
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
     Dim DefaultPostInstallScripts As New List(Of PostInstallScript)
-    Dim DefaultSystemComponents As New List(Of Component)
 
     ' Progress info
     Dim ProgressMessage As String = ""
@@ -148,16 +152,19 @@ Public Class NewUnattendWiz
         Scintilla1.StyleResetDefault()
         Scintilla2.StyleResetDefault()
         Scintilla3.StyleResetDefault()
+        Scintilla4.StyleResetDefault()
         ' Use VS's selection color, as I find it the most natural
         DynaLog.LogMessage("Setting colors for selection...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+        If CurrentTheme.IsDark Then
             Scintilla1.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla2.SelectionBackColor = Color.FromArgb(38, 79, 120)
             Scintilla3.SelectionBackColor = Color.FromArgb(38, 79, 120)
+            Scintilla4.SelectionBackColor = Color.FromArgb(38, 79, 120)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla2.SelectionBackColor = Color.FromArgb(153, 201, 239)
             Scintilla3.SelectionBackColor = Color.FromArgb(153, 201, 239)
+            Scintilla4.SelectionBackColor = Color.FromArgb(153, 201, 239)
         End If
         Scintilla1.Styles(Style.Default).Font = fntName
         Scintilla1.Styles(Style.Default).Size = fntSize
@@ -165,37 +172,31 @@ Public Class NewUnattendWiz
         Scintilla2.Styles(Style.Default).Size = fntSize
         Scintilla3.Styles(Style.Default).Font = fntName
         Scintilla3.Styles(Style.Default).Size = fntSize
+        Scintilla4.Styles(Style.Default).Font = fntName
+        Scintilla4.Styles(Style.Default).Size = fntSize
 
         ' Set background and foreground colors (from Visual Studio)
         DynaLog.LogMessage("Setting colors for styles...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla1.Styles(Style.Default).ForeColor = Color.White
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla2.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla2.Styles(Style.Default).ForeColor = Color.White
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla3.Styles(Style.Default).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla3.Styles(Style.Default).ForeColor = Color.White
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.Default).BackColor = Color.White
-            Scintilla1.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla2.Styles(Style.Default).BackColor = Color.White
-            Scintilla2.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla3.Styles(Style.Default).BackColor = Color.White
-            Scintilla3.Styles(Style.Default).ForeColor = Color.Black
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.White
-        End If
+        Scintilla1.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla1.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla2.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla2.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla3.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla3.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla4.Styles(Style.Default).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla4.Styles(Style.Default).ForeColor = CurrentTheme.ForegroundColor
+        Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.StyleClearAll()
         Scintilla2.StyleClearAll()
         Scintilla3.StyleClearAll()
+        Scintilla4.StyleClearAll()
 
         ' Use Notepad++'s lexer style colors
         DynaLog.LogMessage("Setting colors for XML and PowerShell lexers...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
+        If CurrentTheme.IsDark Then
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla1.Styles(Style.Xml.Default).ForeColor = Color.FromArgb(220, 220, 204)
@@ -210,6 +211,20 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
             Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
+            Scintilla4.Styles(Style.Xml.XmlStart).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla4.Styles(Style.Xml.XmlEnd).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla4.Styles(Style.Xml.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla4.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla4.Styles(Style.Xml.Number).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla4.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla4.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla4.Styles(Style.Xml.Tag).ForeColor = Color.FromArgb(227, 206, 171)
+            Scintilla4.Styles(Style.Xml.TagEnd).ForeColor = Color.FromArgb(227, 206, 171)
+            Scintilla4.Styles(Style.Xml.TagUnknown).ForeColor = Color.FromArgb(237, 214, 237)
+            Scintilla4.Styles(Style.Xml.Attribute).ForeColor = Color.FromArgb(190, 200, 158)
+            Scintilla4.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.FromArgb(223, 223, 223)
+            Scintilla4.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(200, 145, 145)
+            Scintilla4.Styles(Style.Xml.Entity).ForeColor = Color.FromArgb(207, 191, 175)
             Scintilla3.Styles(Style.PowerShell.Default).ForeColor = Color.FromArgb(220, 220, 204)
             Scintilla3.Styles(Style.PowerShell.Comment).ForeColor = Color.FromArgb(127, 159, 127)
             Scintilla3.Styles(Style.PowerShell.String).ForeColor = Color.FromArgb(204, 147, 147)
@@ -242,6 +257,20 @@ Public Class NewUnattendWiz
             Scintilla1.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
             Scintilla1.Styles(Style.Xml.Entity).ForeColor = Color.Black
+            Scintilla4.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.Default).ForeColor = Color.Black
+            Scintilla4.Styles(Style.Xml.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla4.Styles(Style.Xml.Number).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.DoubleString).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla4.Styles(Style.Xml.SingleString).ForeColor = Color.FromArgb(128, 0, 255)
+            Scintilla4.Styles(Style.Xml.Tag).ForeColor = Color.Blue
+            Scintilla4.Styles(Style.Xml.TagEnd).ForeColor = Color.Blue
+            Scintilla4.Styles(Style.Xml.TagUnknown).ForeColor = Color.Blue
+            Scintilla4.Styles(Style.Xml.Attribute).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.AttributeUnknown).ForeColor = Color.Red
+            Scintilla4.Styles(Style.Xml.CData).ForeColor = Color.FromArgb(255, 128, 0)
+            Scintilla4.Styles(Style.Xml.Entity).ForeColor = Color.Black
             Scintilla3.Styles(Style.PowerShell.Default).ForeColor = Color.Black
             Scintilla3.Styles(Style.PowerShell.Comment).ForeColor = Color.FromArgb(0, 128, 0)
             Scintilla3.Styles(Style.PowerShell.String).ForeColor = Color.FromArgb(128, 128, 128)
@@ -263,21 +292,18 @@ Public Class NewUnattendWiz
         ' Set lexer
         Scintilla1.LexerName = "xml"
         Scintilla3.LexerName = "powershell"
+        Scintilla4.LexerName = "xml"
 
         ' Set line number margin properties
         DynaLog.LogMessage("Setting colors for line margin...")
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.FromArgb(30, 30, 30)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Scintilla1.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla2.Styles(Style.LineNumber).BackColor = Color.White
-            Scintilla3.Styles(Style.LineNumber).BackColor = Color.White
-        End If
+        Scintilla1.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla2.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla3.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
+        Scintilla4.Styles(Style.LineNumber).BackColor = CurrentTheme.SectionBackgroundColor
         Scintilla1.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla2.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Scintilla3.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
+        Scintilla4.Styles(Style.LineNumber).ForeColor = Color.FromArgb(165, 165, 165)
         Dim Margin = Scintilla1.Margins(1)
         Margin.Width = 48
         Margin.Type = MarginType.Number
@@ -289,6 +315,11 @@ Public Class NewUnattendWiz
         Margin.Sensitive = True
         Margin.Mask = 0
         Margin = Scintilla3.Margins(1)
+        Margin.Width = 48
+        Margin.Type = MarginType.Number
+        Margin.Sensitive = True
+        Margin.Mask = 0
+        Margin = Scintilla4.Margins(1)
         Margin.Width = 48
         Margin.Type = MarginType.Number
         Margin.Sensitive = True
@@ -308,6 +339,10 @@ Public Class NewUnattendWiz
         Scintilla3.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
         Scintilla3.SetProperty("fold", "1")
         Scintilla3.SetProperty("fold.compact", "1")
+        Scintilla4.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
+        Scintilla4.SetFoldMarginColor(True, Scintilla3.Styles(Style.Default).BackColor)
+        Scintilla4.SetProperty("fold", "1")
+        Scintilla4.SetProperty("fold.compact", "1")
 
         ' Configure bookmark margins
         DynaLog.LogMessage("Seting bookmark margins...")
@@ -341,12 +376,23 @@ Public Class NewUnattendWiz
         Marker.SetBackColor(Color.FromArgb(255, 0, 59))
         Marker.SetForeColor(Color.Black)
         Marker.SetAlpha(100)
+        Bookmarks = Scintilla4.Margins(2)
+        Bookmarks.Width = 20
+        Bookmarks.Sensitive = True
+        Bookmarks.Type = MarginType.Symbol
+        Bookmarks.Mask = (1 << 2)
+        Marker = Scintilla4.Markers(2)
+        Marker.Symbol = MarkerSymbol.Circle
+        Marker.SetBackColor(Color.FromArgb(255, 0, 59))
+        Marker.SetForeColor(Color.Black)
+        Marker.SetAlpha(100)
 
         ' Set editor caret settings
         DynaLog.LogMessage("Setting colors for editor caret...")
         Scintilla1.CaretForeColor = ForeColor
         Scintilla2.CaretForeColor = ForeColor
         Scintilla3.CaretForeColor = ForeColor
+        Scintilla4.CaretForeColor = ForeColor
 
 
         ' Configure code folding margins
@@ -363,6 +409,10 @@ Public Class NewUnattendWiz
         Scintilla3.Margins(3).Mask = Marker.MaskFolders
         Scintilla3.Margins(3).Sensitive = True
         Scintilla3.Margins(3).Width = 1
+        Scintilla4.Margins(3).Type = MarginType.Symbol
+        Scintilla4.Margins(3).Mask = Marker.MaskFolders
+        Scintilla4.Margins(3).Sensitive = True
+        Scintilla4.Margins(3).Width = 1
 
         ' Set colors for all folding markers
         DynaLog.LogMessage("Setting colors for folding markers...")
@@ -373,6 +423,8 @@ Public Class NewUnattendWiz
             Scintilla2.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
             Scintilla3.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
             Scintilla3.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
+            Scintilla4.Markers(x).SetForeColor(Scintilla1.Styles(Style.Default).BackColor)
+            Scintilla4.Markers(x).SetBackColor(Scintilla1.Styles(Style.Default).ForeColor)
         Next
 
         ' Folding marker configuration
@@ -398,12 +450,20 @@ Public Class NewUnattendWiz
         Scintilla3.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
         Scintilla3.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
         Scintilla3.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
+        Scintilla4.Markers(Marker.Folder).Symbol = MarkerSymbol.BoxPlus
+        Scintilla4.Markers(Marker.FolderOpen).Symbol = MarkerSymbol.BoxMinus
+        Scintilla4.Markers(Marker.FolderEnd).Symbol = MarkerSymbol.BoxPlusConnected
+        Scintilla4.Markers(Marker.FolderMidTail).Symbol = MarkerSymbol.TCorner
+        Scintilla4.Markers(Marker.FolderOpenMid).Symbol = MarkerSymbol.BoxMinusConnected
+        Scintilla4.Markers(Marker.FolderSub).Symbol = MarkerSymbol.VLine
+        Scintilla4.Markers(Marker.FolderTail).Symbol = MarkerSymbol.LCorner
 
         ' Enable folding
         DynaLog.LogMessage("Enabling folding...")
         Scintilla1.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla2.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
         Scintilla3.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
+        Scintilla4.AutomaticFold = (AutomaticFold.Show Or AutomaticFold.Click Or AutomaticFold.Show)
 
         ' Add Keywords
         DynaLog.LogMessage("Adding keywords to editors...")
@@ -569,15 +629,9 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub NewUnattendWiz_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            StepsTreeView.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            StepsTreeView.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        StepsTreeView.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.BackColor = BackColor
         ComboBox2.BackColor = BackColor
         ComboBox3.BackColor = BackColor
@@ -592,7 +646,6 @@ Public Class NewUnattendWiz
         ComboBox12.BackColor = BackColor
         ComboBox13.BackColor = BackColor
         CheckedListBox1.BackColor = BackColor
-        ListBox2.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox3.BackColor = BackColor
@@ -634,7 +687,6 @@ Public Class NewUnattendWiz
         ComboBox12.ForeColor = ForeColor
         ComboBox13.ForeColor = ForeColor
         CheckedListBox1.ForeColor = ForeColor
-        ListBox2.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -663,11 +715,12 @@ Public Class NewUnattendWiz
         NumericUpDown8.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
-        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
+        PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
+        PictureBox4.Image = If(CurrentTheme.IsDark, My.Resources.cmps_addfirstcomponent_dark, My.Resources.cmps_addfirstcomponent_light)
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -738,13 +791,20 @@ Public Class NewUnattendWiz
         ' System components
         If File.Exists(Application.StartupPath & "\AutoUnattend\Component.xml") Then
             SystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
-            DefaultSystemComponents = Component.LoadItems(Application.StartupPath & "\AutoUnattend\Component.xml")
             If SystemComponents IsNot Nothing Then
                 For Each SystemComponent As Component In SystemComponents
-                    ListBox2.Items.Add(SystemComponent.Id)
+                    ComboBox14.Items.Add(SystemComponent.Id)
                 Next
             End If
         End If
+        ' Begin reserving components for proper OS installation
+        If ReservedComponents.Count > 0 Then ReservedComponents.Clear()
+        ReservedComponents.Add(New Component("Microsoft-Windows-Deployment", New Pass("specialize")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-International-Core", New Pass("oobeSystem")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-International-Core-WinPE", New Pass("windowsPE")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-Setup", New Pass("windowsPE")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-Shell-Setup", New Pass("specialize")))
+        ReservedComponents.Add(New Component("Microsoft-Windows-Shell-Setup", New Pass("oobeSystem")))
         CheckedListBox1.SelectedIndex = 1
         ChangePage(UnattendedWizardPage.Page.WelcomePage)
         VerifyInPages.AddRange(New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage, UnattendedWizardPage.Page.DiskConfigPage, UnattendedWizardPage.Page.ProductKeyPage, UnattendedWizardPage.Page.UserAccountsPage, UnattendedWizardPage.Page.NetworkConnectionsPage})
@@ -893,7 +953,16 @@ Public Class NewUnattendWiz
         ' Restore default script settings
         CheckBox20.Checked = False
         ' Restore default selections for components
-        SystemComponents = DefaultSystemComponents
+        SystemComponentsEx.Clear()
+        NoSpecifiedComponentsPanel.Visible = True
+        ComponentEditorPanel.Visible = False
+        Label60.Visible = False
+        Button10.Enabled = False
+        Button6.Enabled = False
+        Button7.Enabled = False
+        Button8.Enabled = False
+        Button9.Enabled = False
+        LinkLabel9.Visible = False
 
         ' Restore variables
         UserAccountsList.Clear()
@@ -942,6 +1011,9 @@ Public Class NewUnattendWiz
         Next_Button.Enabled = (Not NewPage <> UnattendedWizardPage.Page.FinishPage) OrElse (Not NewPage + 1 >= UnattendedWizardPage.PageCount)
         Cancel_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.FinishPage)
         Back_Button.Enabled = Not (NewPage = UnattendedWizardPage.Page.WelcomePage) And Not (NewPage = UnattendedWizardPage.Page.FinishPage)
+        Button12.Visible = New UnattendedWizardPage.Page() {UnattendedWizardPage.Page.SysConfigPage,
+                                                            UnattendedWizardPage.Page.UserAccountsPage,
+                                                            UnattendedWizardPage.Page.ComponentPage}.Contains(NewPage)
 
         Next_Button.Text = If(NewPage = UnattendedWizardPage.Page.FinishPage, "Close", "Next")
 
@@ -1219,6 +1291,8 @@ Public Class NewUnattendWiz
                     TextBox13.AppendText("- Selected Hypervisor: VMware (VMware Tools)" & CrLf)
                 Case VMProvider.VirtIO_Guest_Tools
                     TextBox13.AppendText("- Selected Hypervisor: QEMU/Proxmox VE/etc. (VirtIO Guest Tools)" & CrLf)
+                Case VMProvider.Parallels
+                    TextBox13.AppendText("- Selected Hypervisor: Parallels (Parallels Tools)" & CrLf)
             End Select
         End If
         ' 8. -- WIRELESS NETWORKING
@@ -1246,20 +1320,13 @@ Public Class NewUnattendWiz
         End If
         ' Post Install Scripts and Component Manager will be added in a future release
         ' 11. -- COMPONENTS
-        TextBox13.AppendText("Additional components: " & If(Not AreComponentListsEqual(SystemComponents, DefaultSystemComponents), "", "none") & CrLf)
-        If Not AreComponentListsEqual(SystemComponents, DefaultSystemComponents) Then
-            FinalComponents = GetComponentDifferences(SystemComponents, DefaultSystemComponents)
-            If FinalComponents.Count > 0 Then
-                For Each systemComponent As Component In FinalComponents
-                    TextBox13.AppendText("- Component name: " & Quote & systemComponent.Id & Quote & CrLf &
-                                         "  - Passes:" & CrLf)
-                    If systemComponent.Passes.Count > 0 Then
-                        For Each systemPass As Pass In systemComponent.Passes
-                            TextBox13.AppendText("    - " & Quote & systemPass.Name & Quote & CrLf)
-                        Next
-                    End If
-                Next
-            End If
+        TextBox13.AppendText("Additional components: " & If(Not SystemComponentsEx.Count = 0, SystemComponentsEx.Count, "none") & CrLf)
+        If SystemComponentsEx.Count > 0 Then
+            For Each SpecifiedComponent As Component In SystemComponentsEx
+                TextBox13.AppendText("Component Details:" & CrLf &
+                                     "  - Component ID: " & SpecifiedComponent.Id & CrLf &
+                                     "  - Pass: " & SpecifiedComponent.Pass.Name & CrLf)
+            Next
         End If
     End Sub
 
@@ -1267,7 +1334,7 @@ Public Class NewUnattendWiz
         If ExpressPanelContainer.Visible Then
             ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            ExpressPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
+            ExpressPanelTrigger.BackColor = If(CurrentTheme.IsDark, CurrentTheme.BackgroundColor, Color.Gainsboro)
         End If
     End Sub
 
@@ -1301,11 +1368,11 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = False
         ExpressPanelContainer.Visible = True
         ExpressPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        ExpressPanelTrigger.ForeColor = Color.White
+        ExpressPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox1.Image = My.Resources.express_mode_select
         EditorPanelTrigger.BackColor = SidePanel.BackColor
-        EditorPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
-        PictureBox2.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.editor_mode_select, My.Resources.editor_mode)
+        EditorPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
+        PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox3.Image = My.Resources.express_mode_fc
         Label3.Text = "Express mode"
         Label4.Text = "If you haven't created unattended answer files before, use this wizard to create one"
@@ -1316,7 +1383,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
+            EditorPanelTrigger.BackColor = If(CurrentTheme.IsDark, CurrentTheme.BackgroundColor, Color.Gainsboro)
         End If
     End Sub
 
@@ -1332,7 +1399,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.SteelBlue
         Else
-            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(36, 36, 36), Color.Silver)
+            EditorPanelTrigger.BackColor = If(CurrentTheme.IsDark, Color.FromArgb(36, 36, 36), Color.Silver)
         End If
     End Sub
 
@@ -1340,7 +1407,7 @@ Public Class NewUnattendWiz
         If EditorPanelContainer.Visible Then
             EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.HotTrack)
         Else
-            EditorPanelTrigger.BackColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(48, 48, 48), Color.Gainsboro)
+            EditorPanelTrigger.BackColor = If(CurrentTheme.IsDark, CurrentTheme.BackgroundColor, Color.Gainsboro)
         End If
     End Sub
 
@@ -1350,10 +1417,10 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
-        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        ExpressPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
+        PictureBox1.Image = If(CurrentTheme.IsDark, My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        EditorPanelTrigger.ForeColor = Color.White
+        EditorPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox2.Image = My.Resources.editor_mode_select
         PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
@@ -1851,10 +1918,10 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
             End If
         End If
-        UnattendGen.StartInfo.Arguments = "/target=" & Quote & SaveTarget & Quote
+        UnattendGen.StartInfo.Arguments = "--target=" & Quote & SaveTarget & Quote
         If Debugger.IsAttached Then
             DynaLog.LogMessage("A debugger has been attached. Telling UnattendGen to show debug output...")
-            UnattendGen.StartInfo.Arguments &= " /debug"
+            UnattendGen.StartInfo.Arguments &= " --debug"
         End If
         Try
             ' Save settings to appropriate XML files
@@ -1869,7 +1936,7 @@ Public Class NewUnattendWiz
                 "   <TimeOffset Id=" & Quote & SelectedOffset.Id & Quote & " DisplayName=" & Quote & If(SelectedOffset.DisplayName.Contains("&"), SelectedOffset.DisplayName.Replace("&", "&amp;").Trim(), SelectedOffset.DisplayName) & Quote & "/>" & CrLf &
                 "</root>"
             File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml"), regSetContents, UTF8)
-            UnattendGen.StartInfo.Arguments &= " /regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
+            UnattendGen.StartInfo.Arguments &= " --regionfile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "region.xml") & Quote
             ReportMessage("Saving user settings...", 4)
             DynaLog.LogMessage("Saving architecture settings...")
             ' Build architecture string for UnattendGen
@@ -1881,45 +1948,45 @@ Public Class NewUnattendWiz
                 End If
             Next
             ArchitectureString = String.Join(",", Architectures.ToArray())
-            UnattendGen.StartInfo.Arguments &= " /architecture=" & ArchitectureString
+            UnattendGen.StartInfo.Arguments &= " --architecture=" & ArchitectureString
             ReportMessage("Saving user settings...", 6)
             DynaLog.LogMessage("Saving Windows 11 settings...")
             If Win11Config.LabConfig_BypassRequirements Then
-                UnattendGen.StartInfo.Arguments &= " /LabConfig"
+                UnattendGen.StartInfo.Arguments &= " --LabConfig"
             End If
             If Win11Config.OOBE_BypassNRO Then
-                UnattendGen.StartInfo.Arguments &= " /BypassNRO"
+                UnattendGen.StartInfo.Arguments &= " --BypassNRO"
             End If
             ReportMessage("Saving user settings...", 8)
             DynaLog.LogMessage("Saving computer settings...")
             If RadioButton28.Checked Then
                 If Not PCName.DefaultName Then
-                    UnattendGen.StartInfo.Arguments &= " /computername=" & PCName.Name
+                    UnattendGen.StartInfo.Arguments &= " --computername=" & PCName.Name
                 End If
             Else
                 If Not String.IsNullOrEmpty(PCNameScript) Then
-                    UnattendGen.StartInfo.Arguments &= " /computername=script:" & Quote & PCNameScript & Quote
+                    UnattendGen.StartInfo.Arguments &= " --computername=script:" & Quote & PCNameScript & Quote
                 End If
             End If
             DynaLog.LogMessage("Saving configuration set/distribution share settings...")
             If UseConfigSet Then
-                UnattendGen.StartInfo.Arguments &= " /ConfigSet"
+                UnattendGen.StartInfo.Arguments &= " --ConfigSet"
             End If
             ReportMessage("Saving user settings...", 10)
             DynaLog.LogMessage("Saving time zone settings...")
             If TimeOffsetInteractive Then
-                UnattendGen.StartInfo.Arguments &= " /tzImplicit"
+                UnattendGen.StartInfo.Arguments &= " --tzImplicit"
             End If
             ReportMessage("Saving user settings...", 12)
             DynaLog.LogMessage("Saving disk configuration...")
             If DiskConfigurationInteractive Then
                 DynaLog.LogMessage("Disks will be configured interactively.")
-                UnattendGen.StartInfo.Arguments &= " /partmode=interactive"
+                UnattendGen.StartInfo.Arguments &= " --partmode=interactive"
             Else
                 DynaLog.LogMessage("Disks will be configured in an unattended manner.")
                 If SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.AutoDisk0 Then
                     DynaLog.LogMessage("Disk 0 will be configured automatically.")
-                    UnattendGen.StartInfo.Arguments &= " /partmode=unattended"
+                    UnattendGen.StartInfo.Arguments &= " --partmode=unattended"
                     Dim diskZeroContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <DiskZero PartitionStyle=" & Quote & If(SelectedDiskConfiguration.PartStyle = PartitionStyle.GPT, "GPT", "MBR") & Quote & " RecoveryEnvironment=" & Quote & If(SelectedDiskConfiguration.InstallRecEnv, If(SelectedDiskConfiguration.RecEnvPartition = RecoveryEnvironmentLocation.WinREPartition, "WinRE", "Windows"), "No") & Quote & " ESPSize=" & Quote & SelectedDiskConfiguration.ESPSize & Quote & " RESize=" & Quote & SelectedDiskConfiguration.RecEnvSize & Quote & " />" & CrLf &
@@ -1927,7 +1994,7 @@ Public Class NewUnattendWiz
                     File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "unattPartSettings.xml"), diskZeroContents, UTF8)
                 ElseIf SelectedDiskConfiguration.DiskConfigMode = DiskConfigurationMode.DiskPart Then
                     DynaLog.LogMessage("Disks will be configured with a DiskPart script.")
-                    UnattendGen.StartInfo.Arguments &= " /partmode=custom"
+                    UnattendGen.StartInfo.Arguments &= " --partmode=custom"
                     Dim diskPartContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <DiskPart ScriptFile=" & Quote & Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "diskpart.dp") & Quote & " AutoInst=" & Quote & If(SelectedDiskConfiguration.DiskPartScriptConfig.AutomaticInstall, "1", "0") & Quote & " Disk=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.DiskNum & Quote & " Partition=" & Quote & SelectedDiskConfiguration.DiskPartScriptConfig.TargetDisk.PartNum & Quote & " />" & CrLf &
@@ -1940,10 +2007,10 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Saving edition settings...")
             If FirmwareChosen Then
                 DynaLog.LogMessage("The product key will be grabbed from firmware.")
-                UnattendGen.StartInfo.Arguments &= " /firmware"
+                UnattendGen.StartInfo.Arguments &= " --firmware"
             ElseIf GenericChosen Then
                 DynaLog.LogMessage("A generic product key has been chosen.")
-                UnattendGen.StartInfo.Arguments &= " /generic"
+                UnattendGen.StartInfo.Arguments &= " --generic"
                 Dim genericEditionContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
                     "   <Edition Id=" & Quote & EditionIDFromDisplayName(ComboBox6.SelectedItem) & Quote & " DisplayName=" & Quote & ComboBox6.SelectedItem & Quote & " Key=" & Quote & SelectedKey.Key & Quote & " />" & CrLf &
@@ -1951,12 +2018,12 @@ Public Class NewUnattendWiz
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "edition.xml"), genericEditionContents, UTF8)
             Else
                 DynaLog.LogMessage("A custom product key has been chosen.")
-                UnattendGen.StartInfo.Arguments &= " /customkey=" & SelectedKey.Key
+                UnattendGen.StartInfo.Arguments &= " --customkey=" & SelectedKey.Key
             End If
             If Not UserAccountsInteractive And Not MicrosoftAccountInteractive Then
                 ReportMessage("Saving user settings...", 16)
                 DynaLog.LogMessage("Saving user accounts...")
-                UnattendGen.StartInfo.Arguments &= " /customusers"
+                UnattendGen.StartInfo.Arguments &= " --customusers"
                 Dim customUserContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf
                 If UserAccountsList.Count > 0 Then
@@ -1969,9 +2036,9 @@ Public Class NewUnattendWiz
                     If AutoLogon.EnableAutoLogon Then
                         DynaLog.LogMessage("Automatic logon will be used. Saving auto-logon settings.")
                         If AutoLogon.LogonMode = AutoLogonMode.FirstAdmin Then
-                            UnattendGen.StartInfo.Arguments &= " /autologon=firstadmin"
+                            UnattendGen.StartInfo.Arguments &= " --autologon=firstadmin"
                         ElseIf AutoLogon.LogonMode = AutoLogonMode.WindowsAdmin Then
-                            UnattendGen.StartInfo.Arguments &= " /autologon=builtinadmin"
+                            UnattendGen.StartInfo.Arguments &= " --autologon=builtinadmin"
                             Dim builtinAdminContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                                 "<root>" & CrLf &
                                 "   <BuiltInAdmin Password=" & Quote & If(AutoLogon.LogonPassword.Contains("&"), AutoLogon.LogonPassword.Replace("&", "&amp;").Trim(), AutoLogon.LogonPassword) & Quote & " />" & CrLf &
@@ -1981,7 +2048,7 @@ Public Class NewUnattendWiz
                     End If
                     If PasswordObfuscate Then
                         DynaLog.LogMessage("Passwords will be encoded with Base64.")
-                        UnattendGen.StartInfo.Arguments &= " /b64obscure"
+                        UnattendGen.StartInfo.Arguments &= " --b64obscure"
                     End If
                 Else
                     UnattendGen.StartInfo.Arguments = UnattendGen.StartInfo.Arguments.Replace(" /customusers", "").Trim()
@@ -1989,17 +2056,17 @@ Public Class NewUnattendWiz
             ElseIf (Not UserAccountsInteractive) And MicrosoftAccountInteractive Then
                 DynaLog.LogMessage("A Microsoft account is expected to be used in the target installation.")
                 ReportMessage("Saving user settings...", 16)
-                UnattendGen.StartInfo.Arguments &= " /msa"
+                UnattendGen.StartInfo.Arguments &= " --msa"
             End If
             If SelectedExpirationSettings.Mode = PasswordExpirationMode.NIST_Limited Then
                 ReportMessage("Saving user settings...", 18)
                 DynaLog.LogMessage("Saving password expiration settings...")
-                UnattendGen.StartInfo.Arguments &= " /pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
+                UnattendGen.StartInfo.Arguments &= " --pwExpire=" & If(SelectedExpirationSettings.WindowsDefault, 42, SelectedExpirationSettings.Days)
             End If
             ReportMessage("Saving user settings...", 20)
             DynaLog.LogMessage("Saving Account Lockout settings...")
             If SelectedLockoutSettings.Enabled Then
-                UnattendGen.StartInfo.Arguments &= " /lockout=yes"
+                UnattendGen.StartInfo.Arguments &= " --lockout=yes"
                 Dim lockoutContents As String = ""
                 If SelectedLockoutSettings.DefaultPolicy Then
                     lockoutContents = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
@@ -2014,27 +2081,29 @@ Public Class NewUnattendWiz
                 End If
                 File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "lockout.xml"), lockoutContents, UTF8)
             Else
-                UnattendGen.StartInfo.Arguments &= " /lockout=no"
+                UnattendGen.StartInfo.Arguments &= " --lockout=no"
             End If
             If VirtualMachineSupported Then
                 ReportMessage("Saving user settings...", 22)
                 DynaLog.LogMessage("Saving VM provider settings...")
                 Select Case SelectedVMSettings.Provider
                     Case VMProvider.VirtualBox_GAs
-                        UnattendGen.StartInfo.Arguments &= " /vm=vbox_gas"
+                        UnattendGen.StartInfo.Arguments &= " --vm=vbox_gas"
                     Case VMProvider.VMware_Tools
-                        UnattendGen.StartInfo.Arguments &= " /vm=vmware"
+                        UnattendGen.StartInfo.Arguments &= " --vm=vmware"
                     Case VMProvider.VirtIO_Guest_Tools
-                        UnattendGen.StartInfo.Arguments &= " /vm=virtio"
+                        UnattendGen.StartInfo.Arguments &= " --vm=virtio"
+                    Case VMProvider.Parallels
+                        UnattendGen.StartInfo.Arguments &= " --vm=parallels"
                 End Select
             End If
             If Not NetworkConfigInteractive Then
                 ReportMessage("Saving user settings...", 24)
                 DynaLog.LogMessage("Saving wireless settings...")
                 If NetworkConfigManualSkip Then
-                    UnattendGen.StartInfo.Arguments &= " /wifi=no"
+                    UnattendGen.StartInfo.Arguments &= " --wifi=no"
                 Else
-                    UnattendGen.StartInfo.Arguments &= " /wifi=yes"
+                    UnattendGen.StartInfo.Arguments &= " --wifi=yes"
                     Dim wirelessContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                         "<root>" & CrLf &
                         "   <WirelessNetwork Name=" & Quote & If(SelectedNetworkConfiguration.SSID.Contains("&"), SelectedNetworkConfiguration.SSID.Replace("&", "&amp;").Trim(), SelectedNetworkConfiguration.SSID) & Quote & " Password=" & Quote & If(SelectedNetworkConfiguration.Password.Contains("&"), SelectedNetworkConfiguration.Password.Replace("&", "&amp;").Trim(), SelectedNetworkConfiguration.Password) & Quote & " AuthMode=" & Quote & If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.Open, "Open", If(SelectedNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK, "WPA2", "WPA3")) & Quote & " NonBroadcast=" & Quote & If(SelectedNetworkConfiguration.ConnectWithoutBroadcast, "1", "0") & Quote & " />" & CrLf &
@@ -2046,9 +2115,9 @@ Public Class NewUnattendWiz
                 ReportMessage("Saving user settings...", 24.5)
                 DynaLog.LogMessage("Saving system telemetry settings...")
                 If SelectedTelemetrySettings.Enabled Then
-                    UnattendGen.StartInfo.Arguments &= " /telem=yes"
+                    UnattendGen.StartInfo.Arguments &= " --telem=yes"
                 Else
-                    UnattendGen.StartInfo.Arguments &= " /telem=no"
+                    UnattendGen.StartInfo.Arguments &= " --telem=no"
                 End If
             End If
             If ConfiguredScripts.Count > 0 Then
@@ -2081,7 +2150,7 @@ Public Class NewUnattendWiz
                     File.WriteAllText(destinationFilePath, ConfiguredScript.ScriptContents, UTF8)
                 Next
                 DynaLog.LogMessage("Scripts were saved. Referencing them...")
-                UnattendGen.StartInfo.Arguments &= " /customscripts"
+                UnattendGen.StartInfo.Arguments &= " --customscripts"
                 Dim postInstallScriptContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
                     "<root>" & CrLf &
                     "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\specialize.ps1" & Quote & " Stage=" & Quote & "System" & Quote & " />" & CrLf &
@@ -2092,27 +2161,28 @@ Public Class NewUnattendWiz
                 DynaLog.LogMessage("Checking if Windows Explorer will be restarted after running scripts...")
                 If ScriptsRestartExplorer Then
                     DynaLog.LogMessage("Explorer will be restarted.")
-                    UnattendGen.StartInfo.Arguments &= " /restartexplorer"
+                    UnattendGen.StartInfo.Arguments &= " --restartexplorer"
+                End If
+                DynaLog.LogMessage("Checking if PowerShell windows will be hidden...")
+                If ScriptsHideWindow Then
+                    DynaLog.LogMessage("Windows will be hidden.")
+                    UnattendGen.StartInfo.Arguments &= " --hidewindows"
                 End If
             End If
-            If FinalComponents.Count > 0 Then
+            If SystemComponentsEx.Count > 0 Then
                 ReportMessage("Saving user settings...", 24.75)
+                DynaLog.LogMessage("Checking if components directory exists...")
+                If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components")) Then
+                    DynaLog.LogMessage("Components directory does not exist. Attempting to create it...")
+                    Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components"))
+                End If
                 DynaLog.LogMessage("Saving custom components...")
-                UnattendGen.StartInfo.Arguments &= " /customcomponents"
-                Dim customComponentContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                    "<root>" & CrLf
-                For Each systemComponent As Component In FinalComponents
-                    Dim passName As String = ""
-                    If systemComponent.Passes.Count > 0 Then
-                        For Each systemPass As Pass In systemComponent.Passes
-                            passName &= systemPass.Name & ","
-                        Next
-                        passName = passName.TrimEnd(",")
-                    End If
-                    customComponentContents &= "    <Component Id=" & Quote & systemComponent.Id.Replace("&", "&amp;").Trim() & Quote & " Passes=" & Quote & passName.Replace("&", "&amp;").Trim() & Quote & " />" & CrLf
+                UnattendGen.StartInfo.Arguments &= " --customcomponents"
+                For Each SystemComponent As Component In SystemComponentsEx
+                    File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Components", String.Format("{0}_{1}.xml", SystemComponent.Id, SystemComponent.Pass.Name)),
+                                      SystemComponent.XmlData, UTF8)
                 Next
-                customComponentContents &= "</root>"
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "components.xml"), customComponentContents, UTF8)
+                DynaLog.LogMessage("Components were saved.")
             End If
             ReportMessage("Generating unattended answer file...", 25)
             DynaLog.LogMessage("Starting UnattendGen...")
@@ -2202,10 +2272,10 @@ Public Class NewUnattendWiz
 
     Private Sub StepsTreeView_DrawNode(sender As Object, e As DrawTreeNodeEventArgs) Handles StepsTreeView.DrawNode
         ' Determine the custom background color
-        Dim customBackColor As Color = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.FromArgb(31, 31, 31), Color.FromArgb(239, 239, 242))
+        Dim customBackColor As Color = CurrentTheme.SectionBackgroundColor
 
         ' Determine the custom foreground color based on the custom background color
-        Dim customForeColor As Color = If(customBackColor = Color.FromArgb(31, 31, 31), Color.White, Color.Black)
+        Dim customForeColor As Color = CurrentTheme.ForegroundColor
 
         ' Check if the node is selected
         If (e.State And TreeNodeStates.Selected) <> 0 Then
@@ -2353,179 +2423,9 @@ Public Class NewUnattendWiz
         WirelessNetworkSettingsPanel.Width = ManualNetworkConfigPanel.Width - (WirelessNetworkSettingsPanel.Margin.Left * 2) - 4
     End Sub
 
-    Private Sub ListBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox2.SelectedIndexChanged
-        PassConfigurationPanel.Visible = (ListBox2.SelectedItems.Count = 1)
-        If ListBox2.SelectedItems.Count = 1 Then
-            For Each configurationPass As Pass In SystemComponents(ListBox2.SelectedIndex).Passes
-                Select Case configurationPass.Name
-                    Case "windowsPE"
-                        windowsPE.Enabled = configurationPass.Compatible
-                        windowsPE.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "offlineServicing"
-                        offlineServicing.Enabled = configurationPass.Compatible
-                        offlineServicing.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "specialize"
-                        specialize.Enabled = configurationPass.Compatible
-                        specialize.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "generalize"
-                        generalize.Enabled = configurationPass.Compatible
-                        generalize.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "auditSystem"
-                        auditSystem.Enabled = configurationPass.Compatible
-                        auditSystem.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "auditUser"
-                        auditUser.Enabled = configurationPass.Compatible
-                        auditUser.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                    Case "oobeSystem"
-                        oobeSystem.Enabled = configurationPass.Compatible
-                        oobeSystem.Checked = If(configurationPass.Compatible, configurationPass.Enabled, False)
-                End Select
-            Next
-        End If
-    End Sub
-
     Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
         Process.Start("https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/components-b-unattend")
     End Sub
-
-    Sub ConfigureComponent(componentName As String, componentPass As String, componentPassEnabled As Boolean)
-        DynaLog.LogMessage("Configuring system component...")
-        DynaLog.LogMessage("- Component name: " & componentName)
-        DynaLog.LogMessage("- Component pass: " & componentPass)
-        DynaLog.LogMessage("- New state: " & If(componentPassEnabled, "enabled", "disabled"))
-        If String.IsNullOrWhiteSpace(componentName) Then Exit Sub
-        If String.IsNullOrWhiteSpace(componentPass) Then Exit Sub
-        Dim componentNames As New List(Of String)
-        Dim knownPasses As New Dictionary(Of String, Boolean)
-        knownPasses.Add("offlineServicing", False)
-        knownPasses.Add("windowsPE", False)
-        knownPasses.Add("generalize", False)
-        knownPasses.Add("specialize", False)
-        knownPasses.Add("auditSystem", False)
-        knownPasses.Add("auditUser", False)
-        knownPasses.Add("oobeSystem", False)
-        For Each systemComponent As Component In SystemComponents
-            componentNames.Add(systemComponent.Id)
-        Next
-        ' Determine if the passed component ID "componentName" exists in the grabbed components
-        If componentNames.Contains(componentName) Then
-            DynaLog.LogMessage("The specified component exists in the component list.")
-            Dim placementIndex As Integer = componentNames.IndexOf(componentName)
-            ' Grab pass to configure and configure it
-            If Not knownPasses.ContainsKey(componentPass) Then
-                DynaLog.LogMessage("The specified pass does not exist in the pass list.")
-                MsgBox("The component pass " & componentPass & " does not exist in the pass list", vbOKOnly + vbCritical, Text)
-                Exit Sub
-            End If
-            Dim editedPass As Pass = SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass)
-            If editedPass IsNot Nothing Then
-                editedPass.Enabled = componentPassEnabled
-                DynaLog.LogMessage("The pass " & Quote & componentPass & Quote & " of the component " & Quote & SystemComponents(placementIndex).Id & Quote & " has been " & If(SystemComponents(placementIndex).Passes.FirstOrDefault(Function(p) p.Name = componentPass).Enabled, "enabled", "disabled"))
-            Else
-                DynaLog.LogMessage("Could not edit the specified pass.")
-            End If
-        Else
-            DynaLog.LogMessage("The specified component does not exist in the component list.")
-            MsgBox("The component " & componentName & " does not exist in the component list", vbOKOnly + vbCritical, Text)
-            Exit Sub
-        End If
-    End Sub
-
-    Private Sub oobeSystem_CheckedChanged(sender As Object, e As EventArgs) Handles oobeSystem.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "oobeSystem", oobeSystem.Checked)
-    End Sub
-
-    Private Sub auditUser_CheckedChanged(sender As Object, e As EventArgs) Handles auditUser.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "auditUser", auditUser.Checked)
-    End Sub
-
-    Private Sub auditSystem_CheckedChanged(sender As Object, e As EventArgs) Handles auditSystem.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "auditSystem", auditSystem.Checked)
-    End Sub
-
-    Private Sub generalize_CheckedChanged(sender As Object, e As EventArgs) Handles generalize.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "generalize", generalize.Checked)
-    End Sub
-
-    Private Sub specialize_CheckedChanged(sender As Object, e As EventArgs) Handles specialize.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "specialize", specialize.Checked)
-    End Sub
-
-    Private Sub offlineServicing_CheckedChanged(sender As Object, e As EventArgs) Handles offlineServicing.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "offlineServicing", offlineServicing.Checked)
-    End Sub
-
-    Private Sub windowsPE_CheckedChanged(sender As Object, e As EventArgs) Handles windowsPE.CheckedChanged
-        ConfigureComponent(ListBox2.SelectedItem, "windowsPE", windowsPE.Checked)
-    End Sub
-
-    Function AreComponentListsEqual(list1 As List(Of Component), list2 As List(Of Component)) As Boolean
-        ' Check if the counts of both lists are the same
-        If list1.Count <> list2.Count Then Return False
-
-        ' Iterate through components in both lists
-        For i As Integer = 0 To list1.Count - 1
-            Dim component1 As Component = list1(i)
-            Dim component2 As Component = list2(i)
-
-            ' Compare component IDs
-            If component1.Id <> component2.Id Then Return False
-
-            ' Compare the number of passes in each component
-            If component1.Passes.Count <> component2.Passes.Count Then Return False
-
-            ' Compare each pass
-            For j As Integer = 0 To component1.Passes.Count - 1
-                Dim pass1 As Pass = component1.Passes(j)
-                Dim pass2 As Pass = component2.Passes(j)
-
-                ' Compare pass names and compatible states
-                If pass1.Name <> pass2.Name OrElse pass1.Enabled <> pass2.Enabled Then
-                    Return False
-                End If
-            Next
-        Next
-
-        ' If all comparisons pass, the lists are equal
-        Return True
-    End Function
-
-    Function GetComponentDifferences(list1 As List(Of Component), list2 As List(Of Component)) As List(Of Component)
-        Dim differences As New List(Of Component)
-
-        ' Combine both lists to check for differences in either
-        Dim allComponents As List(Of Component) = list1.Concat(list2).GroupBy(Function(c) c.Id).Select(Function(g) g.First()).ToList()
-
-        For Each component In allComponents
-            ' Find the component in both lists
-            Dim component1 As Component = list1.FirstOrDefault(Function(c) c.Id = component.Id)
-            Dim component2 As Component = list2.FirstOrDefault(Function(c) c.Id = component.Id)
-
-            If component1 Is Nothing OrElse component2 Is Nothing Then
-                ' If a component is missing in one of the lists, it's different
-                differences.Add(component)
-            Else
-                ' Compare passes if the component exists in both lists
-                Dim differingComponent As New Component() With {.Id = component.Id}
-                For Each pass1 In component1.Passes
-                    ' Find corresponding pass in component2
-                    Dim pass2 As Pass = component2.Passes.FirstOrDefault(Function(p) p.Name = pass1.Name)
-
-                    If pass2 Is Nothing OrElse pass1.Enabled <> pass2.Enabled Then
-                        ' If pass is missing or its status is different, mark it as different
-                        differingComponent.Passes.Add(pass1)
-                    End If
-                Next
-
-                ' Only add the component if there are differing passes
-                If differingComponent.Passes.Count > 0 Then
-                    differences.Add(differingComponent)
-                End If
-            End If
-        Next
-
-        Return differences
-    End Function
 
     Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
         If File.Exists(Path.Combine(Environment.GetFolderPath(If(Environment.Is64BitOperatingSystem, Environment.SpecialFolder.ProgramFilesX86, Environment.SpecialFolder.ProgramFiles)),
@@ -2551,10 +2451,10 @@ Public Class NewUnattendWiz
         EditorPanelContainer.Visible = True
         ExpressPanelContainer.Visible = False
         ExpressPanelTrigger.BackColor = SidePanel.BackColor
-        ExpressPanelTrigger.ForeColor = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), Color.LightGray, Color.Black)
-        PictureBox1.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.express_mode_select, My.Resources.express_mode)
+        ExpressPanelTrigger.ForeColor = If(CurrentTheme.IsDark, Color.LightGray, Color.Black)
+        PictureBox1.Image = If(CurrentTheme.IsDark, My.Resources.express_mode_select, My.Resources.express_mode)
         EditorPanelTrigger.BackColor = Color.FromKnownColor(KnownColor.Highlight)
-        EditorPanelTrigger.ForeColor = Color.White
+        EditorPanelTrigger.ForeColor = CurrentTheme.ForegroundColor
         PictureBox2.Image = My.Resources.editor_mode_select
         PictureBox3.Image = My.Resources.editor_mode_fc
         Label3.Text = "Editor mode"
@@ -2770,5 +2670,197 @@ Public Class NewUnattendWiz
         CNameTTip.Show("Choose this option if the unattended answer file will be used on multiple computers on the same network." & CrLf &
                        "The default script will return a random computer name similar to " & Quote & ExampleName & Quote & CrLf &
                        "This can avoid name resolution conflicts.", sender)
+    End Sub
+
+    Private Sub CheckBox22_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox22.CheckedChanged
+        ScriptsHideWindow = CheckBox22.Checked
+    End Sub
+
+    Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
+        Dim IpGateway As IPAddress = NetworkInterface.GetAllNetworkInterfaces().
+            Where(Function(nic) nic.OperationalStatus = OperationalStatus.Up).
+            Where(Function(nic) nic.NetworkInterfaceType = NetworkInterfaceType.Wireless80211).
+            SelectMany(Function(nic) nic.GetIPProperties().GatewayAddresses).
+            Select(Function(gateway) gateway.Address).
+            Where(Function(address) address IsNot Nothing And Not address.IsIPv6LinkLocal).
+            FirstOrDefault()
+        If IpGateway IsNot Nothing Then
+            Process.Start(String.Format("http://{0}", IpGateway.ToString()))
+        End If
+    End Sub
+
+    Private Sub Button11_Click(sender As Object, e As EventArgs) Handles Button11.Click
+        If SystemComponentsEx.Count = 0 Then
+            NoSpecifiedComponentsPanel.Visible = False
+            ComponentEditorPanel.Visible = True
+            Label60.Visible = True
+            Button10.Enabled = True
+            LinkLabel9.Visible = True
+        End If
+        SystemComponentsEx.Add(New Component(SystemComponents(0).Id, SystemComponents(0).Passes(0)))
+        ComponentIndex = SystemComponentsEx.Count - 1
+        LoadCustomComponent(ComponentIndex, True)
+    End Sub
+
+    Sub LoadCustomComponent(Index As Integer, Optional NewItem As Boolean = False)
+        DynaLog.LogMessage("Loading custom component item...")
+        DynaLog.LogMessage("Index: " & Index)
+        Label60.Text = String.Format("Component {0} of {1}", Index + 1, SystemComponentsEx.Count)
+        If SystemComponentsEx(Index) IsNot Nothing Then
+            If Not NewItem Then IsComponentBeingLoaded = True
+            ComboBox14.SelectedItem = SystemComponentsEx(Index).Id
+            If NewItem Then
+                ComboBox15.SelectedIndex = 0
+            Else
+                ComboBox15.SelectedIndex = ComboBox15.Items.IndexOf(SystemComponentsEx(Index).Pass.Name)
+            End If
+            IsComponentBeingLoaded = False
+
+            Scintilla4.Text = SystemComponentsEx(Index).XmlData
+            Button6.Enabled = Not (Index = SystemComponentsEx.Count - 1)
+            Button7.Enabled = Not (Index = 0)
+            Button8.Enabled = Not (Index = 0)
+            Button9.Enabled = Not (Index = SystemComponentsEx.Count - 1)
+
+            ShowReservedComponentStatusMessage(Index)
+        End If
+    End Sub
+
+    Private Function IsAReservedComponent(cmpName As String, cmpPass As Pass) As Boolean
+        Return ReservedComponents.Where(Function(component) component.Id = cmpName And component.Pass.Equals(cmpPass))(0) IsNot Nothing
+    End Function
+
+    Sub ShowReservedComponentStatusMessage(SelectedComponentIndex As Integer)
+        If IsAReservedComponent(SystemComponentsEx(SelectedComponentIndex).Id, SystemComponentsEx(SelectedComponentIndex).Pass) Then
+            MessageBox.Show("This component is already reserved for proper OS installation. If you overwrite this component with your data, OS installation may not give you expected results.", "Component in use", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+    End Sub
+
+    Private Sub ComboBox14_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox14.SelectedIndexChanged
+        ComboBox15.Items.Clear()
+        For Each componentPass As Pass In SystemComponents(ComboBox14.SelectedIndex).Passes.Where(Function(pass) pass.Compatible)
+            ComboBox15.Items.Add(componentPass.Name)
+        Next
+        SystemComponentsEx(ComponentIndex).Id = ComboBox14.SelectedItem
+        If Not IsComponentBeingLoaded Then
+            If ComboBox15.Items.Count > 0 Then
+                ComboBox15.SelectedIndex = 0
+            End If
+        End If
+        If Not IsComponentBeingLoaded Then ShowReservedComponentStatusMessage(ComponentIndex)
+    End Sub
+
+    Private Sub ComboBox15_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox15.SelectedIndexChanged
+        SystemComponentsEx(ComponentIndex).Pass = SystemComponents(ComponentIndex).Passes.Where(Function(pass) pass.Name = ComboBox15.SelectedItem)(0)
+        If Not IsComponentBeingLoaded Then ShowReservedComponentStatusMessage(ComponentIndex)
+    End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        ComponentIndex = SystemComponentsEx.Count - 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
+        ComponentIndex += 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
+        ' Don't do it if there are no items
+        If SystemComponentsEx.Count = 0 Then Exit Sub
+
+        SystemComponentsEx.RemoveAt(ComponentIndex)
+        ' Check again if there are no items
+        If SystemComponentsEx.Count = 0 Then
+            NoSpecifiedComponentsPanel.Visible = True
+            ComponentEditorPanel.Visible = False
+            Label60.Visible = False
+            Button10.Enabled = False
+            Button6.Enabled = False
+            Button7.Enabled = False
+            Button8.Enabled = False
+            Button9.Enabled = False
+            LinkLabel9.Visible = False
+        Else
+            If ComponentIndex > SystemComponentsEx.Count - 1 Then
+                ComponentIndex = SystemComponentsEx.Count - 1
+            End If
+            LoadCustomComponent(ComponentIndex)
+        End If
+    End Sub
+
+    Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
+        ComponentIndex -= 1
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
+        ComponentIndex = 0
+        LoadCustomComponent(ComponentIndex)
+    End Sub
+
+    Sub AddComponent(ComponentName As String, ComponentPass As String, ComponentData As String)
+        DynaLog.LogMessage("Adding data to component...")
+        DynaLog.LogMessage("- Component name: " & ComponentName)
+        DynaLog.LogMessage("- Component pass: " & ComponentPass)
+        If Not ComboBox14.Items.Contains(ComponentName) Then
+            DynaLog.LogMessage("Component list does not contain component name. Leaving...")
+            Exit Sub
+        End If
+        Dim component = SystemComponents.Where(Function(cmp) cmp.Id.Equals(ComponentName, StringComparison.InvariantCultureIgnoreCase))
+        Dim pass = component(0).Passes.Where(Function(systemPass) systemPass.Name.Equals(ComponentPass))
+        If pass Is Nothing Then
+            DynaLog.LogMessage("Pass is not supported by this component. Leaving...")
+            Exit Sub
+        End If
+
+        ' Clicking the Add button won't trigger the event when hidden
+        If SystemComponentsEx.Count = 0 Then
+            NoSpecifiedComponentsPanel.Visible = False
+            ComponentEditorPanel.Visible = True
+            Label60.Visible = True
+            Button10.Enabled = True
+            LinkLabel9.Visible = True
+        End If
+        SystemComponentsEx.Add(New Component(SystemComponents(0).Id, SystemComponents(0).Passes(0)))
+        ComponentIndex = SystemComponentsEx.Count - 1
+        LoadCustomComponent(ComponentIndex, True)
+
+        ComboBox14.SelectedIndex = ComboBox14.Items.IndexOf(ComponentName)
+        ComboBox15.SelectedIndex = ComboBox15.Items.IndexOf(ComponentPass)
+        Scintilla4.Text = ComponentData
+    End Sub
+
+    Private Sub Scintilla4_TextChanged(sender As Object, e As EventArgs) Handles Scintilla4.TextChanged
+        SystemComponentsEx(ComponentIndex).XmlData = Scintilla4.Text
+    End Sub
+
+    Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
+        If ComboBox14.SelectedItem IsNot Nothing Then
+            ' Perform a Google search (yes, Google is not my favorite search engine, but this takes advantage of the Web tab)
+            Process.Start(String.Format("https://www.google.com/search?q={0}+site:learn.microsoft.com&udm=14", ComboBox14.SelectedItem))
+        End If
+    End Sub
+
+    Private Sub Button12_Click(sender As Object, e As EventArgs) Handles Button12.Click
+        ADDSJoinDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
+        DynaLog.LogMessage("Preparing to copy non-Windows UnattendGen...")
+        If CPUnattendGenFBD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("FBD accepted. Copying non-Windows UnattendGen...")
+            For Each CrossPlatformZip In Directory.GetFiles(Path.Combine(Application.StartupPath, "Tools", "UnattendGen"), "*.zip", SearchOption.TopDirectoryOnly).
+                Where(Function(zip) Path.GetFileNameWithoutExtension(zip).ToLower().Contains("linux") OrElse
+                          Path.GetFileNameWithoutExtension(zip).ToLower().Contains("macos"))
+                DynaLog.LogMessage(String.Format("Copying {0} to destination...", Path.GetFileName(CrossPlatformZip)))
+                Try
+                    File.Copy(CrossPlatformZip, Path.Combine(CPUnattendGenFBD.SelectedPath, Path.GetFileName(CrossPlatformZip)), True)
+                Catch ex As Exception
+                    DynaLog.LogMessage("Could not copy this file. Error message: " & ex.Message)
+                End Try
+            Next
+            MsgBox("Cross-platform versions of UnattendGen are now copied to " & CPUnattendGenFBD.SelectedPath, vbOKOnly + vbInformation)
+        End If
     End Sub
 End Class

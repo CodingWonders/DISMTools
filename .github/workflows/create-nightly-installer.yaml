@@ -3,11 +3,11 @@ name: Create Nightly Installer
 on:
   push:
     branches:
-      - dt_pre_*
+      - dt_prerel_*
       - dt_rel*
     paths-ignore:
       - '.github/**'
-      - 'README.md'
+      - '**/README.md'
       - 'res/**'
   workflow_dispatch:
 env:
@@ -21,6 +21,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}
+        submodules: 'true'
     - name: Set up MSBuild
       uses: microsoft/Setup-MSBuild@v2
     - name: Prepare NuGet packages
@@ -34,12 +35,11 @@ jobs:
         $targetDir = (Get-Location).Path + "\bin\Debug\"
         iex "$($solutionDir)CheckMissingDlls.ps1"
         msbuild DISMTools.vbproj /p:Configuration=Debug /p:DeployOnBuild=true /p:SolutionDir=$solutionDir /p:ProjectDir=$projectDir /p:TargetDir=$targetDir
-        Move-Item -Path "$($solutionDir.TrimEnd("\"))\Installer\Output\dt_setup.exe" -Destination "$($solutionDir.TrimEnd("\"))\Installer\Nightly\dt_setup.exe" -Force
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: build-result
-        path: ${{ github.workspace }}\Installer\Nightly\dt_setup.exe
+        path: ${{ github.workspace }}\Installer\Output\dt_setup.exe
   upload-installer:
     runs-on: ubuntu-latest
     needs: build-runspace

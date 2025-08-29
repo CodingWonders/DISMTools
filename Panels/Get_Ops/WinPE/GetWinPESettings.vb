@@ -2,137 +2,126 @@
 Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Win32
 Imports System.ComponentModel
+Imports System.IO
 
 Public Class GetWinPESettings
+    Implements IImageTaskDialog
 
     Sub GetPESettings()
         ' Mount the SOFTWARE and SYSTEM keys
-        Using reg As New Process
-            DynaLog.LogMessage("Preparing to get Windows PE settings...")
-            DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
-            reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-            reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-            reg.StartInfo.CreateNoWindow = True
-            reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            reg.Start()
-            reg.WaitForExit()
-            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
-            If reg.ExitCode <> 0 Then
-                DynaLog.LogMessage("Could not load the hive.")
-                DynaLog.LogMessage("Error message: " & New Win32Exception(reg.ExitCode).Message)
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label5.Text = "Could not get value"
-                            Case "ESN"
-                                Label5.Text = "No se pudo obtener el valor"
-                            Case "FRA"
-                                Label5.Text = "Impossible d'obtenir la valeur"
-                            Case "PTB", "PTG"
-                                Label5.Text = "Não foi possível obter o valor"
-                            Case "ITA"
-                                Label5.Text = "Impossibile ottenere il valore"
-                        End Select
-                    Case 1
-                        Label5.Text = "Could not get value"
-                    Case 2
-                        Label5.Text = "No se pudo obtener el valor"
-                    Case 3
-                        Label5.Text = "Impossible d'obtenir la valeur"
-                    Case 4
-                        Label5.Text = "Não foi possível obter o valor"
-                    Case 5
-                        Label5.Text = "Impossibile ottenere il valore"
-                End Select
-                Button1.Visible = False
-            End If
-            DynaLog.LogMessage("Loading SYSTEM hive of WinPE image...")
-            reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
-            reg.Start()
-            reg.WaitForExit()
-            DynaLog.LogMessage("REG hive exit code: " & Hex(reg.ExitCode))
-            If reg.ExitCode <> 0 Then
-                DynaLog.LogMessage("Could not load the hive.")
-                DynaLog.LogMessage("Error message: " & New Win32Exception(reg.ExitCode).Message)
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                Label6.Text = "Could not get value"
-                            Case "ESN"
-                                Label6.Text = "No se pudo obtener el valor"
-                            Case "FRA"
-                                Label6.Text = "Impossible d'obtenir la valeur"
-                            Case "PTB", "PTG"
-                                Label6.Text = "Não foi possível obter o valor"
-                            Case "ITA"
-                                Label6.Text = "Impossibile ottenere il valore"
-                        End Select
-                    Case 1
-                        Label6.Text = "Could not get value"
-                    Case 2
-                        Label6.Text = "No se pudo obtener el valor"
-                    Case 3
-                        Label6.Text = "Impossible d'obtenir la valeur"
-                    Case 4
-                        Label6.Text = "Não foi possível obter o valor"
-                    Case 5
-                        Label6.Text = "Impossibile ottenere il valore"
-                End Select
-                Button2.Visible = False
-            End If
-            Try
-                Dim msg As String = ""
-                Select Case MainForm.Language
-                    Case 0
-                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                            Case "ENU", "ENG"
-                                msg = "Could not get value"
-                            Case "ESN"
-                                msg = "No se pudo obtener el valor"
-                            Case "FRA"
-                                msg = "Impossible d'obtenir la valeur"
-                            Case "PTB", "PTG"
-                                msg = "Não foi possível obter o valor"
-                            Case "ITA"
-                                msg = "Impossibile ottenere il valore"
-                        End Select
-                    Case 1
-                        msg = "Could not get value"
-                    Case 2
-                        msg = "No se pudo obtener el valor"
-                    Case 3
-                        msg = "Impossible d'obtenir la valeur"
-                    Case 4
-                        msg = "Não foi possível obter o valor"
-                    Case 5
-                        msg = "Impossibile ottenere il valore"
-                End Select
-                DynaLog.LogMessage("Getting target path...")
-                ' Get target path first
-                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
-                Label5.Text = regKey.GetValue("InstRoot", msg).ToString()
-                regKey.Close()
-                DynaLog.LogMessage("Getting scratch space...")
-                regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                DynaLog.LogMessage("Scratch space: " & regKey.GetValue("WinPECacheThreshold", 0) & " MB")
-                Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
-                Label6.Text = If(Not scSize = "", scSize & " MB", msg)
-                regKey.Close()
-            Catch ex As Exception
+        DynaLog.LogMessage("Preparing to get Windows PE settings...")
+        DynaLog.LogMessage("Loading SOFTWARE hive of WinPE image...")
+        Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
+        DynaLog.LogMessage("REG hive exit code: " & Hex(regExitCode))
+        If regExitCode <> 0 Then
+            DynaLog.LogMessage("Could not load the hive.")
+            DynaLog.LogMessage("Error message: " & New Win32Exception(regExitCode).Message)
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label5.Text = "Could not get value"
+                        Case "ESN"
+                            Label5.Text = "No se pudo obtener el valor"
+                        Case "FRA"
+                            Label5.Text = "Impossible d'obtenir la valeur"
+                        Case "PTB", "PTG"
+                            Label5.Text = "Não foi possível obter o valor"
+                        Case "ITA"
+                            Label5.Text = "Impossibile ottenere il valore"
+                    End Select
+                Case 1
+                    Label5.Text = "Could not get value"
+                Case 2
+                    Label5.Text = "No se pudo obtener el valor"
+                Case 3
+                    Label5.Text = "Impossible d'obtenir la valeur"
+                Case 4
+                    Label5.Text = "Não foi possível obter o valor"
+                Case 5
+                    Label5.Text = "Impossibile ottenere il valore"
+            End Select
+            Button1.Visible = False
+        End If
+        DynaLog.LogMessage("Loading SYSTEM hive of WinPE image...")
+        regExitCode = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SYSTEM"), "HKLM\PE_SYS")
+        DynaLog.LogMessage("REG hive exit code: " & Hex(regExitCode))
+        If regExitCode <> 0 Then
+            DynaLog.LogMessage("Could not load the hive.")
+            DynaLog.LogMessage("Error message: " & New Win32Exception(regExitCode).Message)
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            Label6.Text = "Could not get value"
+                        Case "ESN"
+                            Label6.Text = "No se pudo obtener el valor"
+                        Case "FRA"
+                            Label6.Text = "Impossible d'obtenir la valeur"
+                        Case "PTB", "PTG"
+                            Label6.Text = "Não foi possível obter o valor"
+                        Case "ITA"
+                            Label6.Text = "Impossibile ottenere il valore"
+                    End Select
+                Case 1
+                    Label6.Text = "Could not get value"
+                Case 2
+                    Label6.Text = "No se pudo obtener el valor"
+                Case 3
+                    Label6.Text = "Impossible d'obtenir la valeur"
+                Case 4
+                    Label6.Text = "Não foi possível obter o valor"
+                Case 5
+                    Label6.Text = "Impossibile ottenere il valore"
+            End Select
+            Button2.Visible = False
+        End If
+        Try
+            Dim msg As String = ""
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            msg = "Could not get value"
+                        Case "ESN"
+                            msg = "No se pudo obtener el valor"
+                        Case "FRA"
+                            msg = "Impossible d'obtenir la valeur"
+                        Case "PTB", "PTG"
+                            msg = "Não foi possível obter o valor"
+                        Case "ITA"
+                            msg = "Impossibile ottenere il valore"
+                    End Select
+                Case 1
+                    msg = "Could not get value"
+                Case 2
+                    msg = "No se pudo obtener el valor"
+                Case 3
+                    msg = "Impossible d'obtenir la valeur"
+                Case 4
+                    msg = "Não foi possível obter o valor"
+                Case 5
+                    msg = "Impossibile ottenere il valore"
+            End Select
+            DynaLog.LogMessage("Getting target path...")
+            ' Get target path first
+            Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+            DynaLog.LogMessage("Target path: " & Quote & regKey.GetValue("InstRoot", "") & Quote)
+            Label5.Text = regKey.GetValue("InstRoot", msg).ToString()
+            regKey.Close()
+            DynaLog.LogMessage("Getting scratch space...")
+            regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
+            DynaLog.LogMessage("Scratch space: " & regKey.GetValue("WinPECacheThreshold", 0) & " MB")
+            Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
+            Label6.Text = If(Not scSize = "", scSize & " MB", msg)
+            regKey.Close()
+        Catch ex As Exception
 
-            End Try
-            DynaLog.LogMessage("Unloading hives...")
-            ' Unload registry hives
-            reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
-            reg.Start()
-            reg.WaitForExit()
-            reg.StartInfo.Arguments = "unload HKLM\PE_SYS"
-            reg.Start()
-            reg.WaitForExit()
-        End Using
+        End Try
+        DynaLog.LogMessage("Unloading hives...")
+        ' Unload registry hives
+        RegistryHelper.UnloadRegistryHive("HKLM\PE_SOFT")
+        RegistryHelper.UnloadRegistryHive("HKLM\PE_SYS")
     End Sub
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -140,7 +129,21 @@ Public Class GetWinPESettings
         Me.Close()
     End Sub
 
+    Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        DynaLog.LogMessage("Opening WinPE configuration observation dialog...")
+        If MainForm.ImgBW.IsBusy Then
+            DynaLog.LogMessage("Background processes are still busy.")
+            BGProcsBusyDialog.ShowDialog()
+            Return False
+        End If
+        Return True
+    End Function
+
     Private Sub GetWinPESettings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If Not Initialize() Then
+            Close()
+            Exit Sub
+        End If
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -250,18 +253,12 @@ Public Class GetWinPESettings
             Text = ""
             Win10Title.Visible = True
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
 
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
         Button1.Visible = True
         Button2.Visible = True

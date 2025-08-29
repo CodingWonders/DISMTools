@@ -405,37 +405,20 @@ Public Class ImgApply
                 GroupBox3.Text = "Destinazione"
                 GroupBox4.Text = "Schema di file SWM"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox2.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox3.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox4.BackColor = Color.FromArgb(31, 31, 31)
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-            GroupBox3.ForeColor = Color.White
-            GroupBox4.ForeColor = Color.White
-            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
-            StatusStrip1.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox2.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox3.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox4.BackColor = Color.FromArgb(238, 238, 242)
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-            GroupBox3.ForeColor = Color.Black
-            GroupBox4.ForeColor = Color.Black
-            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
-            StatusStrip1.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox2.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox3.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox4.BackColor = CurrentTheme.SectionBackgroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox3.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox4.ForeColor = CurrentTheme.ForegroundColor
+        ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        StatusStrip1.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
@@ -477,7 +460,7 @@ Public Class ImgApply
             UseMountedImgBtn.Enabled = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -499,18 +482,7 @@ Public Class ImgApply
     Sub GetIndexes(ImgFile As String)
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
-        While MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         Dim imgInfo As DismImageInfoCollection = Nothing
         ComboBox1.Items.Clear()
         ImageVersions.Clear()
@@ -565,8 +537,7 @@ Public Class ImgApply
                 ' Don't do anything
             End Try
         End Try
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
         If ComboBox1.Items.Count > 0 Then
             ComboBox1.SelectedIndex = 0
         End If

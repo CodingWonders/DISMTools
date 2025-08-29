@@ -28,19 +28,7 @@ Public Class ProjProperties
     ''' <remarks></remarks>
     Sub DetectImageProperties()
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
-        MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-        If MainForm.MountedImageDetectorBW.IsBusy Then MainForm.MountedImageDetectorBW.CancelAsync()
-        While MainForm.MountedImageDetectorBW.IsBusy
-            Application.DoEvents()
-            Threading.Thread.Sleep(100)
-        End While
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         ' Detect mounted images to find the loaded one
         Try
             DynaLog.LogMessage("Initializing API...")
@@ -882,23 +870,14 @@ Public Class ProjProperties
                 Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
         End Select
         ' Set program colors
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TabPage1.BackColor = Color.FromArgb(31, 31, 31)
-            TabPage2.BackColor = Color.FromArgb(31, 31, 31)
-            LanguageList.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TabPage1.BackColor = Color.FromArgb(238, 238, 242)
-            TabPage2.BackColor = Color.FromArgb(238, 238, 242)
-            LanguageList.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TabPage1.BackColor = CurrentTheme.SectionBackgroundColor
+        TabPage2.BackColor = CurrentTheme.SectionBackgroundColor
+        LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""
@@ -1479,8 +1458,12 @@ Public Class ProjProperties
                         FeatUpd = "24H2 (Germanium)"
                     Case 27501 To 27686
                         FeatUpd = "25H1 (Dilithium)"
-                    Case Is >= 27687
+                    Case 27687 To 27788
                         FeatUpd = "25H2 (Selenium)"
+                    Case 27789 To 28999
+                        FeatUpd = "26H1 (Bromine)"
+                    Case Is >= 29000
+                        FeatUpd = "26H2 (Krypton)"
                 End Select
             Case Else
                 Exit Sub
@@ -1514,8 +1497,7 @@ Public Class ProjProperties
     End Sub
 
     Private Sub ProjProperties_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub Label37_MouseHover(sender As Object, e As EventArgs) Handles Label37.MouseHover

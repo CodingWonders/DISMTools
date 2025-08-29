@@ -253,20 +253,13 @@ Public Class UnattendMgr
                 ListView1.Columns(2).Text = "Ultima modifica"
                 ListView1.Columns(3).Text = "Ultimo accesso"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 End Class

@@ -340,26 +340,17 @@ Public Class GetImgInfoDlg
                 ListView1.Columns(1).Text = "Nome dell'immagine"
                 OpenFileDialog1.Title = "Specificare l'immagine da cui ottenere le informazioni"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-            LanguageList.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-            LanguageList.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
+        LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         LanguageList.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -385,24 +376,7 @@ Public Class GetImgInfoDlg
 
     Sub GetImageInfo(ImageFile As String)
         DynaLog.LogMessage("Image file to get information about: " & Quote & ImageFile & Quote)
-        DynaLog.LogMessage("Checking if mounted image detector is busy...")
-        If MainForm.MountedImageDetectorBW.IsBusy Then
-            DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-            MainForm.MountedImageDetectorBW.CancelAsync()
-            While MainForm.MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        DynaLog.LogMessage("Checking if image status watchers are busy...")
-        MainForm.WatcherTimer.Enabled = False
-        DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
         ImageInfoList.Clear()
         ListView1.Items.Clear()
         Try
@@ -712,8 +686,12 @@ Public Class GetImgInfoDlg
                         FeatUpd = "24H2 (Germanium)"
                     Case 27501 To 27686
                         FeatUpd = "25H1 (Dilithium)"
-                    Case Is >= 27687
+                    Case 27687 To 27788
                         FeatUpd = "25H2 (Selenium)"
+                    Case 27789 To 28999
+                        FeatUpd = "26H1 (Bromine)"
+                    Case Is >= 29000
+                        FeatUpd = "26H2 (Krypton)"
                 End Select
             Case Else
                 Exit Sub
@@ -823,9 +801,9 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        PopupImageManager.Location = Button3.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
-            TextBox1.Text = PopupImageManager.selectedImgFile
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button3.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
+            TextBox1.Text = selectedImage.ImageFilePath
         End If
     End Sub
 End Class

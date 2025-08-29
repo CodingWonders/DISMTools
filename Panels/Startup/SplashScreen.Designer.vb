@@ -36,9 +36,9 @@ Partial Class SplashScreen
         Me.LogoPic.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.LogoPic.BackColor = System.Drawing.Color.Transparent
         Me.LogoPic.Image = Global.DISMTools.My.Resources.Resources.dt_branding
-        Me.LogoPic.Location = New System.Drawing.Point(144, 34)
+        Me.LogoPic.Location = New System.Drawing.Point(12, 41)
         Me.LogoPic.Name = "LogoPic"
-        Me.LogoPic.Size = New System.Drawing.Size(512, 133)
+        Me.LogoPic.Size = New System.Drawing.Size(776, 119)
         Me.LogoPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
         Me.LogoPic.TabIndex = 0
         Me.LogoPic.TabStop = False
@@ -51,7 +51,7 @@ Partial Class SplashScreen
         Me.PreviewFlag.Anchor = System.Windows.Forms.AnchorStyles.None
         Me.PreviewFlag.BackColor = System.Drawing.Color.Transparent
         Me.PreviewFlag.Image = Global.DISMTools.My.Resources.Resources.preview_flag
-        Me.PreviewFlag.Location = New System.Drawing.Point(512, 121)
+        Me.PreviewFlag.Location = New System.Drawing.Point(513, 130)
         Me.PreviewFlag.Name = "PreviewFlag"
         Me.PreviewFlag.Size = New System.Drawing.Size(112, 48)
         Me.PreviewFlag.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize

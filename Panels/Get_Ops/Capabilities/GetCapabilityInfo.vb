@@ -10,21 +10,14 @@ Public Class GetCapabilityInfoDlg
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ListView1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ListView1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
-        SearchPic.Image = If(MainForm.BackColor = Color.FromArgb(48, 48, 48), My.Resources.search_dark, My.Resources.search_light)
+        SearchPic.Image = GetGlyphResource("search")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -195,7 +188,7 @@ Public Class GetCapabilityInfoDlg
             Win10Title.Visible = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
@@ -209,6 +202,7 @@ Public Class GetCapabilityInfoDlg
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        WindowHelper.DisableCloseCapability(Handle)
         DynaLog.LogMessage("Selected items: " & ListView1.SelectedItems.Count)
         Try
             If ListView1.SelectedItems.Count = 1 Then
@@ -273,24 +267,7 @@ Public Class GetCapabilityInfoDlg
                         Thread.Sleep(500)
                     End While
                 End If
-                DynaLog.LogMessage("Checking if mounted image detector is busy...")
-                If MainForm.MountedImageDetectorBW.IsBusy Then
-                    DynaLog.LogMessage("Mounted image detector is busy. Stopping it...")
-                    MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-                    MainForm.MountedImageDetectorBW.CancelAsync()
-                    While MainForm.MountedImageDetectorBW.IsBusy
-                        Application.DoEvents()
-                        Thread.Sleep(500)
-                    End While
-                End If
-                DynaLog.LogMessage("Checking if image status watchers are busy...")
-                MainForm.WatcherTimer.Enabled = False
-                DynaLog.LogMessage("Image status watchers might be busy. Stopping them if they are...")
-                If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-                While MainForm.WatcherBW.IsBusy
-                    Application.DoEvents()
-                    Thread.Sleep(100)
-                End While
+                MainForm.StopMountedImageDetector()
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -466,12 +443,11 @@ Public Class GetCapabilityInfoDlg
             Panel4.Visible = False
             Panel7.Visible = True
         End Try
+        WindowHelper.EnableCloseCapability(Handle)
     End Sub
 
     Private Sub GetCapabilityInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        DynaLog.LogMessage("Restarting mounted image detector...")
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click

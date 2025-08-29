@@ -1,9 +1,12 @@
 ﻿Imports Microsoft.VisualBasic.ControlChars
+Imports System.IO
 
 Public Class ExceptionForm
 
     Dim copySuccess As String = "This information has been copied to the clipboard."
     Dim copyFail As String = "You'll need to copy this information manually."
+
+    Dim dvPath As String = Path.Combine(Application.StartupPath, "Tools", "DynaViewer", "DynaViewer.exe")
 
     Private Sub Issue_Btn_Click(sender As Object, e As EventArgs) Handles Issue_Btn.Click
         DialogResult = Windows.Forms.DialogResult.None
@@ -84,17 +87,12 @@ Public Class ExceptionForm
                 copySuccess = "Queste informazioni sono state copiate negli appunti"
                 copyFail = "È necessario copiare queste informazioni manualmente"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
-        ErrorText.BackColor = BackColor
-        ErrorText.ForeColor = ForeColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ErrorText.BackColor = CurrentTheme.BackgroundColor
+        ErrorText.ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             Dim data As New DataObject()
             data.SetText(ErrorText.Text, TextDataFormat.Text)
@@ -104,5 +102,22 @@ Public Class ExceptionForm
             ErrorText.AppendText(CrLf & CrLf & copyFail)
         End Try
         Beep()
+    End Sub
+
+    Private Sub DynaViewer_Button_Click(sender As Object, e As EventArgs) Handles DynaViewer_Button.Click
+        DialogResult = Windows.Forms.DialogResult.None
+        If Not File.Exists(dvPath) Then
+            Exit Sub
+        End If
+        Try
+            ' Copy logs first
+            File.Copy(Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log"),
+                      Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DynaLog_Trace.log"))
+            Process.Start(dvPath, Quote & Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DynaLog_Trace.log") & Quote & _
+                          " /selectlast=10")
+        Catch ex As Exception
+            Process.Start(dvPath, Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote & _
+                          " /selectlast=10")
+        End Try
     End Sub
 End Class

@@ -165,17 +165,10 @@ Public Class PkgParentNameLookupDlg
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Annullare"
         End Select
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            ListBox1.BackColor = Color.FromArgb(31, 31, 31)
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            ListBox1.BackColor = Color.FromArgb(238, 238, 242)
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-        End If
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        ListBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         Control.CheckForIllegalCrossThreadCalls = False
@@ -197,7 +190,7 @@ Public Class PkgParentNameLookupDlg
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub PackageListerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles PackageListerBW.DoWork

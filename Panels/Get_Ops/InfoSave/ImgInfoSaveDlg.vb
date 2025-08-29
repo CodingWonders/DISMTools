@@ -52,6 +52,8 @@ Public Class ImgInfoSaveDlg
 
     Const CodeBlockChar As String = " ` "       ' It is " ` " to prevent Markdig problem "Markdown elements in the input are too deeply nested - depth limit exceeded. Input is most likely not sensible or is a very large table."
 
+    Dim OSVer As Version
+
     Sub ReportChanges(Message As String, ProgressPercentage As Double)
         Label2.Text = Message
         ProgressBar1.Value = ProgressPercentage
@@ -336,7 +338,7 @@ Public Class ImgInfoSaveDlg
                         Dim cProps As DismCustomPropertyCollection = Nothing
 
                         ' Determine Windows version, as capability identity information can't be obtained in Windows versions older than 10
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             pkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, installedPackage.PackageName)
                         Else
                             pkgInfo = DismApi.GetPackageInfoByName(imgSession, installedPackage.PackageName)
@@ -486,7 +488,7 @@ Public Class ImgInfoSaveDlg
                         Dim cProps As DismCustomPropertyCollection = Nothing
 
                         ' Determine Windows version, as capability identity information can't be obtained in Windows versions older than 10
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             pkgInfoEx = DismApi.GetPackageInfoExByName(imgSession, installedPackage.PackageName)
                         Else
                             pkgInfo = DismApi.GetPackageInfoByName(imgSession, installedPackage.PackageName)
@@ -724,7 +726,7 @@ Public Class ImgInfoSaveDlg
                         Dim cProps As DismCustomPropertyCollection = Nothing
 
                         ' Determine Windows version
-                        If Environment.OSVersion.Version.Major >= 10 Then
+                        If OSVer.Major >= 10 Then
                             pkgInfoEx = DismApi.GetPackageInfoExByPath(imgSession, pkgFile)
                         Else
                             pkgInfo = DismApi.GetPackageInfoByPath(imgSession, pkgFile)
@@ -2615,97 +2617,84 @@ Public Class ImgInfoSaveDlg
         Else
             Contents &= GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
             Debug.WriteLine("[GetWinPEConfiguration] Starting task...")
-            Using reg As New Process
-                Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
-                ReportChanges(msg, 0)
-                reg.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\reg.exe"
-                reg.StartInfo.Arguments = "load HKLM\PE_SOFT " & Quote & MainForm.MountDir & "\Windows\system32\config\SOFTWARE" & Quote
-                reg.StartInfo.CreateNoWindow = True
-                reg.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                reg.Start()
-                reg.WaitForExit()
-                If reg.ExitCode <> 0 Then
-                    Contents &= GetListItems(New String() {"Target path: could not get value"}.ToList()) & CrLf
-                End If
-                reg.StartInfo.Arguments = "load HKLM\PE_SYS " & Quote & MainForm.MountDir & "\Windows\system32\config\SYSTEM" & Quote
-                reg.Start()
-                reg.WaitForExit()
-                If reg.ExitCode <> 0 Then
-                    Contents &= GetListItems(New String() {"Scratch space: could not get value"}.ToList()) & CrLf & CrLf
-                    Exit Sub
-                End If
-                Try
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Getting Windows PE target path..."
-                                Case "ESN"
-                                    msg = "Obteniendo la ruta de destino de Windows PE..."
-                                Case "FRA"
-                                    msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
-                                Case "PTB", "PTG"
-                                    msg = "Obter a localização do objetivo do Windows PE..."
-                                Case "ITA"
-                                    msg = "Ottenere il percorso di destinazione di Windows PE..."
-                            End Select
-                        Case 1
-                            msg = "Getting Windows PE target path..."
-                        Case 2
-                            msg = "Obteniendo la ruta de destino de Windows PE..."
-                        Case 3
-                            msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
-                        Case 4
-                            msg = "Obter a localização do objetivo do Windows PE..."
-                        Case 5
-                            msg = "Ottenere il percorso di destinazione di Windows PE..."
-                    End Select
-                    ReportChanges(msg, 50)
-                    ' Get target path first
-                    Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
-                    Contents &= GetListItems(New String() {"Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString()}.ToList()) & CrLf
-                    regKey.Close()
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    msg = "Getting Windows PE scratch space..."
-                                Case "ESN"
-                                    msg = "Obteniendo espacio temporal de Windows PE..."
-                                Case "FRA"
-                                    msg = "Obtention de l'espace temporaire de Windows PE en cours..."
-                                Case "PTB", "PTG"
-                                    msg = "A obter espaço temporário do Windows PE..."
-                                Case "ITA"
-                                    msg = "Ottenere lo spazio temporaneo di Windows PE..."
-                            End Select
-                        Case 1
-                            msg = "Getting Windows PE scratch space..."
-                        Case 2
-                            msg = "Obteniendo espacio temporal de Windows PE..."
-                        Case 3
-                            msg = "Obtention de l'espace temporaire de Windows PE en cours..."
-                        Case 4
-                            msg = "A obter espaço temporário do Windows PE..."
-                        Case 5
-                            msg = "Ottenere lo spazio temporaneo di Windows PE..."
-                    End Select
-                    ReportChanges(msg, 75)
-                    regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
-                    Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
-                    Contents &= GetListItems(New String() {"Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value")}.ToList()) & CrLf & CrLf
-                    regKey.Close()
-                Catch ex As Exception
+            Debug.WriteLine("[GetWinPEConfiguration] Detecting target path...")
+            ReportChanges(msg, 0)
+            Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\PE_SOFT")
+            If regExitCode <> 0 Then
+                Contents &= GetListItems(New String() {"Target path: could not get value"}.ToList()) & CrLf
+            End If
+            regExitCode = RegistryHelper.LoadRegistryHive(Path.Combine(MainForm.MountDir, "Windows", "system32", "config", "SYSTEM"), "HKLM\PE_SYS")
+            If regExitCode <> 0 Then
+                Contents &= GetListItems(New String() {"Scratch space: could not get value"}.ToList()) & CrLf & CrLf
+                Exit Sub
+            End If
+            Try
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Getting Windows PE target path..."
+                            Case "ESN"
+                                msg = "Obteniendo la ruta de destino de Windows PE..."
+                            Case "FRA"
+                                msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                            Case "PTB", "PTG"
+                                msg = "Obter a localização do objetivo do Windows PE..."
+                            Case "ITA"
+                                msg = "Ottenere il percorso di destinazione di Windows PE..."
+                        End Select
+                    Case 1
+                        msg = "Getting Windows PE target path..."
+                    Case 2
+                        msg = "Obteniendo la ruta de destino de Windows PE..."
+                    Case 3
+                        msg = "Obtention du chemin d'accès cible de Windows PE en cours..."
+                    Case 4
+                        msg = "Obter a localização do objetivo do Windows PE..."
+                    Case 5
+                        msg = "Ottenere il percorso di destinazione di Windows PE..."
+                End Select
+                ReportChanges(msg, 50)
+                ' Get target path first
+                Dim regKey As RegistryKey = Registry.LocalMachine.OpenSubKey("PE_SOFT\Microsoft\Windows NT\CurrentVersion\WinPE", False)
+                Contents &= GetListItems(New String() {"Target path: " & regKey.GetValue("InstRoot", "could not get value").ToString()}.ToList()) & CrLf
+                regKey.Close()
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg = "Getting Windows PE scratch space..."
+                            Case "ESN"
+                                msg = "Obteniendo espacio temporal de Windows PE..."
+                            Case "FRA"
+                                msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                            Case "PTB", "PTG"
+                                msg = "A obter espaço temporário do Windows PE..."
+                            Case "ITA"
+                                msg = "Ottenere lo spazio temporaneo di Windows PE..."
+                        End Select
+                    Case 1
+                        msg = "Getting Windows PE scratch space..."
+                    Case 2
+                        msg = "Obteniendo espacio temporal de Windows PE..."
+                    Case 3
+                        msg = "Obtention de l'espace temporaire de Windows PE en cours..."
+                    Case 4
+                        msg = "A obter espaço temporário do Windows PE..."
+                    Case 5
+                        msg = "Ottenere lo spazio temporaneo di Windows PE..."
+                End Select
+                ReportChanges(msg, 75)
+                regKey = Registry.LocalMachine.OpenSubKey("PE_SYS\ControlSet001\Services\FBWF", False)
+                Dim scSize As String = regKey.GetValue("WinPECacheThreshold", "").ToString()
+                Contents &= GetListItems(New String() {"Scratch space: " & If(Not scSize = "", scSize & " MB", "could not get value")}.ToList()) & CrLf & CrLf
+                regKey.Close()
+            Catch ex As Exception
 
-                End Try
-                ' Unload registry hives
-                reg.StartInfo.Arguments = "unload HKLM\PE_SOFT"
-                reg.Start()
-                reg.WaitForExit()
-                reg.StartInfo.Arguments = "unload HKLM\PE_SYS"
-                reg.Start()
-                reg.WaitForExit()
-            End Using
+            End Try
+            ' Unload registry hives
+            RegistryHelper.UnloadRegistryHive("HKLM\PE_SOFT")
+            RegistryHelper.UnloadRegistryHive("HKLM\PE_SYS")
         End If
     End Sub
 
@@ -2714,15 +2703,11 @@ Public Class ImgInfoSaveDlg
             InfoSaveResults.Close()
             InfoSaveResults.Dispose()
         End If
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-        End If
+        OSVer = Environment.OSVersion.Version
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Visible = True
         Select Case MainForm.Language
             Case 0
@@ -2830,20 +2815,7 @@ Public Class ImgInfoSaveDlg
         End If
 
         ' Stop the mounted image detector, as it makes the program crash when performing DISM API operations
-        If MainForm.MountedImageDetectorBW.IsBusy Then
-            MainForm.MountedImageDetectorBWRestarterTimer.Enabled = False
-            MainForm.MountedImageDetectorBW.CancelAsync()
-            While MainForm.MountedImageDetectorBW.IsBusy
-                Application.DoEvents()
-                Thread.Sleep(500)
-            End While
-        End If
-        MainForm.WatcherTimer.Enabled = False
-        If MainForm.WatcherBW.IsBusy Then MainForm.WatcherBW.CancelAsync()
-        While MainForm.WatcherBW.IsBusy
-            Application.DoEvents()
-            Thread.Sleep(100)
-        End While
+        MainForm.StopMountedImageDetector()
 
         ' Close the image registry control panel before continuing. Operations with the DISM API open the image registry hives, something
         ' the control panel already loads. This causes the program to freeze for around a minute and then create a report with an
@@ -2995,8 +2967,7 @@ Public Class ImgInfoSaveDlg
         If Contents <> "" And File.Exists(SaveTarget) Then File.WriteAllText(SaveTarget, Contents, UTF8)
         If Debugger.IsAttached Then Process.Start(SaveTarget)
         InfoSaveResults.FilePath = SaveTarget
-        If Not MainForm.MountedImageDetectorBW.IsBusy Then Call MainForm.MountedImageDetectorBW.RunWorkerAsync()
-        MainForm.WatcherTimer.Enabled = True
+        MainForm.StartMountedImageDetector()
         Close()
     End Sub
 End Class

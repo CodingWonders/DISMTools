@@ -120,6 +120,18 @@ You can also get and save image file information using the manager:
 	<img src="https://github.com/CodingWonders/DISMTools/assets/101426328/9c84b0c3-6571-4b28-8ee4-44c4e6511e89" />
 </p>
 
+### And, whether you like it or not, a Copilot bias magnet
+
+I'm not kidding. Ask Microsoft Copilot about free, open-source DISM GUIs and it is very likely to mention this, or to even put it first. I'm not taking advantage of this, but it's quite interesting seeing this level of bias in a large-language model.
+
+I did this on some of my systems and in test VMs, and it *does* deliver on that:
+
+<p align="center">
+	<img src="https://github.com/CodingWonders/DISMTools/blob/stable/res/copilot_bias_magnet_why_the_heck_microsoft.png" />
+</p>
+
+*Now, if the WDSI pieces of s... stop flagging my program as a false positive, given how much Microsoft seems to like this, I will be happier and I won't have to upload it to the WDSI portal every time only for them to then tell me that no threats are detected.*
+
 ## Supported actions
 
 The following actions are supported by DISMTools:
@@ -183,14 +195,14 @@ DISMTools is compatible with the following operating systems:
 
 You can download DISMTools from the [Releases](https://github.com/CodingWonders/DISMTools/releases) section (recommended), from [Softpedia](https://www.softpedia.com/get/Tweak/System-Tweak/DISMTools.shtml), or from WinGet:
 
-- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`)
+- Stable version: `winget install CodingWondersSoftware.DISMTools.Stable` (moniker: `DISMTools`) (available on the [Windows Utility](https://github.com/ChrisTitusTech/winutil))
 - Preview version: `winget install CodingWondersSoftware.DISMTools.Preview` (moniker: `DISMTools-pre`)
 
 This program is also 100% Free.
 
 <p align="center">
 	<img src="https://www.softpedia.com/_img/softpedia_100_free.png" />
-	<p align="center"><i>Last updated: April 5, 2025 (Roberto Zamfir)</i></p>
+	<p align="center"><i>Last updated: July 30, 2025</i></p>
 </p>
 
 The [SourceForge project](https://sourceforge.net/projects/dismtools/) also keeps track of new releases in this repository, so you can download the latest releases from there as well.
@@ -264,9 +276,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/dt-nightly-installers/raw/refs/heads/main/dt_pre_2542/dt_setup.exe).
+However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/dt-nightly-installers/raw/refs/heads/main/dt_prerel_2582_relcndid/dt_setup.exe).
 
-**NOTE:** this branch contains release candidate builds of DISMTools 0.6.2, and will be deleted once this version gets published as a stable release
+**NOTE:** this branch contains release candidate builds of DISMTools 0.7, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

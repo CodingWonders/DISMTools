@@ -32,7 +32,6 @@ Partial Class AddCapabilities
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -138,7 +137,6 @@ Partial Class AddCapabilities
         'GroupBox1
         '
         Me.GroupBox1.Controls.Add(Me.TableLayoutPanel2)
-        Me.GroupBox1.Controls.Add(Me.Label4)
         Me.GroupBox1.Controls.Add(Me.ListView1)
         Me.GroupBox1.Location = New System.Drawing.Point(13, 55)
         Me.GroupBox1.Name = "GroupBox1"
@@ -182,16 +180,6 @@ Partial Class AddCapabilities
         Me.Button3.Size = New System.Drawing.Size(98, 23)
         Me.Button3.TabIndex = 1
         Me.Button3.Text = "Select none"
-        '
-        'Label4
-        '
-        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.Label4.AutoEllipsis = True
-        Me.Label4.Location = New System.Drawing.Point(6, 281)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(533, 25)
-        Me.Label4.TabIndex = 9
-        Me.Label4.Text = "This image contains <capNum> capabilities."
         '
         'ListView1
         '
@@ -366,7 +354,7 @@ Partial Class AddCapabilities
         'PictureBox2
         '
         Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.image_light
+        Me.PictureBox2.Image = Global.DISMTools.My.Resources.Resources.image_glyph_light
         Me.PictureBox2.Location = New System.Drawing.Point(3, 3)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
@@ -444,7 +432,6 @@ Partial Class AddCapabilities
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button3 As System.Windows.Forms.Button

@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Public Class ImgUMount
 
@@ -315,23 +316,13 @@ Public Class ImgUMount
         End Select
         ComboBox1.Items.AddRange(UMountOperations)
         ComboBox1.SelectedIndex = 0
-        If MainForm.BackColor = Color.FromArgb(48, 48, 48) Then
-            Win10Title.BackColor = Color.FromArgb(48, 48, 48)
-            BackColor = Color.FromArgb(31, 31, 31)
-            ForeColor = Color.White
-            TextBox1.BackColor = Color.FromArgb(31, 31, 31)
-            ComboBox1.BackColor = Color.FromArgb(31, 31, 31)
-            GroupBox1.ForeColor = Color.White
-            GroupBox2.ForeColor = Color.White
-        ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
-            Win10Title.BackColor = Color.White
-            BackColor = Color.FromArgb(238, 238, 242)
-            ForeColor = Color.Black
-            TextBox1.BackColor = Color.FromArgb(238, 238, 242)
-            ComboBox1.BackColor = Color.FromArgb(238, 238, 242)
-            GroupBox1.ForeColor = Color.Black
-            GroupBox2.ForeColor = Color.Black
-        End If
+        Win10Title.BackColor = CurrentTheme.BackgroundColor
+        BackColor = CurrentTheme.SectionBackgroundColor
+        ForeColor = CurrentTheme.ForegroundColor
+        TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
+        GroupBox1.ForeColor = CurrentTheme.ForegroundColor
+        GroupBox2.ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         If Environment.OSVersion.Version.Major = 10 Then
@@ -348,7 +339,7 @@ Public Class ImgUMount
             Button1.Enabled = True
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -364,9 +355,9 @@ Public Class ImgUMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        PopupImageManager.Location = Button1.PointToScreen(Point.Empty)
-        If PopupImageManager.ShowDialog() = DialogResult.OK Then
-            TextBox1.Text = PopupImageManager.selectedMntDir
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button1.PointToScreen(Point.Empty))
+        If selectedImage IsNot Nothing Then
+            TextBox1.Text = selectedImage.MountPath
             DynaLog.LogMessage("Checking if selected item is the mount directory of the project...")
             If TextBox1.Text = MainForm.MountDir Then
                 DynaLog.LogMessage("The selected item is the mount directory of the project.")

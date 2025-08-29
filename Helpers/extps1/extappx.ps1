@@ -1,4 +1,4 @@
-﻿# DISMTools 0.6.2 - Extended AppX package getter for online installations
+﻿# DISMTools 0.7 - Extended AppX package getter for online installations
 
 Import-Module Appx
 

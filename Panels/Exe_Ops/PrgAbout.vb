@@ -18,7 +18,7 @@ Public Class PrgAbout
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
                         Text = "About this program"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                         Label3.Text = "These resources and components were used in the creation of this program:"
                         Label4.Text = "Resources"
@@ -29,7 +29,7 @@ Public Class PrgAbout
                         Label10.Text = "Help documentation"
                         Label11.Text = "Command Help source"
                         Label13.Text = "Scintilla.NET (NuGet package)"
-                        If Not MainForm.dtBranch.Contains("preview") Then
+                        If Not MainForm.dtBranch.Contains("pre") Then
                             Label15.Text = "Built on " & RetrieveLinkerTimestamp() & " by msbuild"
                             Label15.Visible = True
                         End If
@@ -49,7 +49,7 @@ Public Class PrgAbout
                         OK_Button.Text = "OK"
                     Case "ESN"
                         Text = "Acerca de este programa"
-                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                         Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                         Label4.Text = "Recursos"
@@ -60,7 +60,7 @@ Public Class PrgAbout
                         Label10.Text = "Documentación de ayuda"
                         Label11.Text = "Fuente de ayuda de comandos"
                         Label13.Text = "Scintilla.NET (paquete NuGet)"
-                        If Not MainForm.dtBranch.Contains("preview") Then
+                        If Not MainForm.dtBranch.Contains("pre") Then
                             Label15.Text = "Compilado el " & RetrieveLinkerTimestamp() & " por msbuild"
                             Label15.Visible = True
                         End If
@@ -81,7 +81,7 @@ Public Class PrgAbout
                         UpdCheckBtn.Text = "Comprobar actualizaciones"
                     Case "FRA"
                         Text = "À propos de ce programme"
-                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
                         Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                         Label4.Text = "Ressources"
@@ -92,7 +92,7 @@ Public Class PrgAbout
                         Label10.Text = "Documentation d'aide"
                         Label11.Text = "Source d'aide à la commande"
                         Label13.Text = "Scintilla.NET (paquet NuGet)"
-                        If Not MainForm.dtBranch.Contains("preview") Then
+                        If Not MainForm.dtBranch.Contains("pre") Then
                             Label15.Text = "Construit le " & RetrieveLinkerTimestamp() & " par msbuild"
                             Label15.Visible = True
                         End If
@@ -113,7 +113,7 @@ Public Class PrgAbout
                         UpdCheckBtn.Text = "Vérifier les mises à jour"
                     Case "PTB", "PTG"
                         Text = "Acerca deste programa"
-                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                         Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                         Label4.Text = "Recursos"
@@ -124,7 +124,7 @@ Public Class PrgAbout
                         Label10.Text = "Documentação de ajuda"
                         Label11.Text = "Fonte da Ajuda do Comando"
                         Label13.Text = "Scintilla.NET (pacote NuGet)"
-                        If Not MainForm.dtBranch.Contains("preview") Then
+                        If Not MainForm.dtBranch.Contains("pre") Then
                             Label15.Text = "Construído em " & RetrieveLinkerTimestamp() & " por msbuild"
                             Label15.Visible = True
                         End If
@@ -145,7 +145,7 @@ Public Class PrgAbout
                         UpdCheckBtn.Text = "Verificar actualizações"
                     Case "ITA"
                         Text = "Informazioni su questo programma"
-                        Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                        Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                         Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
                         Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
                         Label4.Text = "Risorse"
@@ -156,7 +156,7 @@ Public Class PrgAbout
                         Label10.Text = "Documentazione di aiuto"
                         Label11.Text = "Fonte della guida ai comandi"
                         Label13.Text = "Scintilla.NET (pacchetto NuGet)"
-                        If Not MainForm.dtBranch.Contains("preview") Then
+                        If Not MainForm.dtBranch.Contains("pre") Then
                             Label15.Text = "Costruito su " & RetrieveLinkerTimestamp() & " da msbuild"
                             Label15.Visible = True
                         End If
@@ -178,7 +178,7 @@ Public Class PrgAbout
                 End Select
             Case 1
                 Text = "About this program"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools lets you deploy, manage, and service Windows images with ease, thanks to a GUI"
                 Label3.Text = "These resources and components were used in the creation of this program:"
                 Label4.Text = "Resources"
@@ -189,7 +189,7 @@ Public Class PrgAbout
                 Label10.Text = "Help documentation"
                 Label11.Text = "Command Help source"
                 Label13.Text = "Scintilla.NET (NuGet package)"
-                If Not MainForm.dtBranch.Contains("preview") Then
+                If Not MainForm.dtBranch.Contains("pre") Then
                     Label15.Text = "Built on " & RetrieveLinkerTimestamp() & " by msbuild"
                     Label15.Visible = True
                 End If
@@ -210,7 +210,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Check for updates"
             Case 2
                 Text = "Acerca de este programa"
-                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versión " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools le permite implementar, administrar, y ofrecer servicio a imágenes de Windows con facilidad, gracias a una GUI"
                 Label3.Text = "Estos recursos y componentes fueron utilizados en la creación de este programa:"
                 Label4.Text = "Recursos"
@@ -221,7 +221,7 @@ Public Class PrgAbout
                 Label10.Text = "Documentación de ayuda"
                 Label11.Text = "Fuente de ayuda de comandos"
                 Label13.Text = "Scintilla.NET (paquete NuGet)"
-                If Not MainForm.dtBranch.Contains("preview") Then
+                If Not MainForm.dtBranch.Contains("pre") Then
                     Label15.Text = "Compilado el " & RetrieveLinkerTimestamp() & " por msbuild"
                     Label15.Visible = True
                 End If
@@ -242,7 +242,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Comprobar actualizaciones"
             Case 3
                 Text = "À propos de ce programme"
-                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - version " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools vous permet de déployer, de gérer et d'entretenir des images Windows en toute simplicité, grâce à une interface graphique."
                 Label3.Text = "Ces ressources et éléments ont été utilisés pour la création de ce programme :"
                 Label4.Text = "Ressources"
@@ -253,7 +253,7 @@ Public Class PrgAbout
                 Label10.Text = "Documentation d'aide"
                 Label11.Text = "Source d'aide à la commande"
                 Label13.Text = "Scintilla.NET (paquet NuGet)"
-                If Not MainForm.dtBranch.Contains("preview") Then
+                If Not MainForm.dtBranch.Contains("pre") Then
                     Label15.Text = "Construit le " & RetrieveLinkerTimestamp() & " par msbuild"
                     Label15.Visible = True
                 End If
@@ -274,7 +274,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Vérifier les mises à jour"
             Case 4
                 Text = "Acerca deste programa"
-                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versão " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools permite-lhe implementar, gerir e efetuar a manutenção de imagens do Windows com facilidade, graças a uma GUI"
                 Label3.Text = "Estes recursos e componentes foram utilizados na criação deste programa:"
                 Label4.Text = "Recursos"
@@ -285,7 +285,7 @@ Public Class PrgAbout
                 Label10.Text = "Documentação de ajuda"
                 Label11.Text = "Fonte da Ajuda do Comando"
                 Label13.Text = "Scintilla.NET (pacote NuGet)"
-                If Not MainForm.dtBranch.Contains("preview") Then
+                If Not MainForm.dtBranch.Contains("pre") Then
                     Label15.Text = "Construído em " & RetrieveLinkerTimestamp() & " por msbuild"
                     Label15.Visible = True
                 End If
@@ -306,7 +306,7 @@ Public Class PrgAbout
                 UpdCheckBtn.Text = "Verificar actualizações"
             Case 5
                 Text = "Informazioni su questo programma"
-                Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("preview"), "." & MainForm.dtBranch & "_" & MainForm.dt_codeName.ToLower() & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
+                Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
                 Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
                 Label4.Text = "Risorse"
@@ -317,7 +317,7 @@ Public Class PrgAbout
                 Label10.Text = "Documentazione di aiuto"
                 Label11.Text = "Fonte della guida ai comandi"
                 Label13.Text = "Scintilla.NET (pacchetto NuGet)"
-                If Not MainForm.dtBranch.Contains("preview") Then
+                If Not MainForm.dtBranch.Contains("pre") Then
                     Label15.Text = "Costruito su " & RetrieveLinkerTimestamp() & " da msbuild"
                     Label15.Visible = True
                 End If
@@ -341,7 +341,7 @@ Public Class PrgAbout
         RichTextBox2.Text = My.Resources.WhatsNew
         ForeColor = Color.White
         Label15.ForeColor = Color.Black
-        PictureBox1.Image = If(MainForm.dtBranch.Contains("preview"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
+        PictureBox1.Image = If(MainForm.dtBranch.Contains("pre"), My.Resources.logo_preview, My.Resources.logo_aboutdlg_dark)
         If CreditsPanel.Visible Then
             LinkLabel1.LinkColor = Color.FromArgb(241, 241, 241)
             LinkLabel2.LinkColor = Color.FromArgb(153, 153, 153)
@@ -359,7 +359,7 @@ Public Class PrgAbout
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        MainForm.EnableDarkTitleBar(handle, MainForm.BackColor = Color.FromArgb(48, 48, 48))
+        MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         UpdCheckBtn.Enabled = Not MainForm.SkipUpdates
     End Sub
 

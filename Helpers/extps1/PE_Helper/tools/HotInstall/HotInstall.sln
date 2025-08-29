@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Installer", "Installer\Installer.vbproj", "{1A6D20C4-4CF3-478F-A292-21A90B64C1B6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A6D20C4-4CF3-478F-A292-21A90B64C1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A6D20C4-4CF3-478F-A292-21A90B64C1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A6D20C4-4CF3-478F-A292-21A90B64C1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A6D20C4-4CF3-478F-A292-21A90B64C1B6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6178AAAF-4196-4AA9-B4BD-761B42B01FB8}
+	EndGlobalSection
+EndGlobal

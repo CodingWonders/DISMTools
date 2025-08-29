@@ -32,7 +32,6 @@ Partial Class DisableFeat
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -147,7 +146,6 @@ Partial Class DisableFeat
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.Label2)
         Me.GroupBox1.Controls.Add(Me.ListView1)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 54)
         Me.GroupBox1.Name = "GroupBox1"
@@ -156,22 +154,13 @@ Partial Class DisableFeat
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Features"
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(7, 297)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(204, 13)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "This image contains <featNum> features"
-        '
         'ListView1
         '
         Me.ListView1.CheckBoxes = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.Location = New System.Drawing.Point(7, 21)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(747, 268)
+        Me.ListView1.Size = New System.Drawing.Size(747, 311)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -242,7 +231,6 @@ Partial Class DisableFeat
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
@@ -259,7 +247,6 @@ Partial Class DisableFeat
     Friend WithEvents CheckBox2 As System.Windows.Forms.CheckBox
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
