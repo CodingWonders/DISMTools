@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - WDS Helper Web-based API for Servers      |
@@ -81,7 +81,7 @@ function Get-WindowsRole {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7"
+$version = "0.7.1"
 
 Clear-Host
 
