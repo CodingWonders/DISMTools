@@ -5,14 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>ISO creation tools - DISMTools Help Documentation</title>
+    <title>Overview - DISMTools Help Documentation</title>
     <link rel="stylesheet" href="../../../css/theme.css" />
     <link rel="stylesheet" href="../../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "ISO creation tools";
+        var mkdocs_page_name = "Overview";
         var mkdocs_page_input_path = "img_tasks\\tools\\isocreator.md";
         var mkdocs_page_url = null;
       </script>
@@ -30,7 +30,8 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../../.." class="icon icon-home"> DISMTools Help Documentation
+          <a href="../../..">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
@@ -184,62 +185,38 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../configlisteditor/">DISM Configuration List Editor</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">ISO creation tools</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" >ISO creation tools</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#starting-installation-local-only">Starting installation (local-only)</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#starting-from-a-full-windows-environment">Starting from a full Windows environment</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#continuing-the-installation">Continuing the installation</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#selecting-the-disk-and-partition">Selecting the disk and partition</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#choosing-the-index-of-the-windows-image">Choosing the index of the Windows image</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#driver-installation-module">Driver Installation Module</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#usage_1">Usage</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#practical-use-computers-with-third-party-disk-controllers">Practical use: computers with third-party disk controllers</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#serviceability-tests">Serviceability tests</a>
-    </li>
-        </ul>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#network-based-installations">Network-based installations</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#preparing-your-server">Preparing your server</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#checking-server-roles">Checking Server Roles</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#preparing-the-network-infrastructure">Preparing the network infrastructure</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#configuring-the-wds-server-and-dhcp-scopes">Configuring the WDS server and DHCP Scopes</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#adding-the-windows-images">Adding the Windows images</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#beginning-installation-via-pxe">Beginning installation via PXE</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#extensibility-suite">Extensibility Suite</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#usage_2">Usage</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#remarks">Remarks</a>
-    </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Overview</a>
+    <ul class="current">
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="isocreate/">Creating ISO files</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installing the operating system</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="install/localinstall/">Local installations</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Network-based installations</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="install/netinst/pxehelpers/">Overview</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="install/netinst/setup/">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="install/netinst/wds/">Windows Deployment Services (WDS) Helper</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="exttools/dim/">Driver Installation Module</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="exttools/dtpe_es/">Extensibility Suite</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../regcpl/">Image registry control panel</a>
@@ -253,6 +230,14 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_create/">Unattended answer file creator</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../unattend/unatt_apply/">Applying unattended answer files</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >External tools</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../exttools/themedesigner/">Creating your themes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../exttools/dynaviewer/">Viewing diagnostic logs</a>
                 </li>
     </ul>
                   </li>
@@ -272,7 +257,8 @@
   <ul class="wy-breadcrumbs">
     <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Tools</li>
-      <li class="breadcrumb-item active">ISO creation tools</li>
+          <li class="breadcrumb-item">ISO creation tools</li>
+      <li class="breadcrumb-item active">Overview</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -289,379 +275,23 @@
 <p>If you want to test the changes made to a Windows image, you can easily do so with the ISO creation tools, which include the <strong>ISO creator</strong> and the <strong>Preinstallation Environment (PE) Helper</strong>.</p>
 <p>You will need the Windows Assessment and Deployment Kit (ADK), which you can download using the convenient link on the bottom left.</p>
 <p><em>This tool is available in DISMTools 0.5 and later.</em></p>
-<h2 id="usage">Usage</h2>
-<p>To create a new ISO file, do the following:</p>
+<p>In DISMTools 0.7 and later, each of the sections have been split into their own pages. Follow these links in the following order:</p>
 <ol>
-<li><strong>Pick your Windows image.</strong> You can either browse through your computer for a Windows image to copy, pick an image from the pop-up mounted image picker, or pick the currently loaded one. Once you pick a Windows image, you will see information about each index in the image</li>
-<li><strong>Choose the architecture for the Preinstallation Environment</strong> by using the architecture list. It is recommended to pick the one that the image supports</li>
-<li>(Optional, new in DISMTools 0.5.1) <strong>Choose an unattended answer file to apply</strong></li>
-<li><strong>Choose the target location of the ISO file.</strong> If the target image exists, you will be asked if you want to replace it when clicking Create</li>
-</ol>
-<p>With DISMTools 0.6.1 and later, you can also specify 2 options:</p>
-<ul>
-<li><strong>Copy to Ventoy drives</strong> lets you take advantage of your <a href="https://ventoy.net/en">Ventoy</a> drives for operating system installation. After the ISO is generated, it will be copied automatically to all Ventoy drives you have plugged into your computer</li>
-<li><strong>Use newly-signed boot binaries</strong> will make the ISO files that you create ship with EFI boot binaries signed with the <em>Windows UEFI CA 2023</em> code-signing certificate. This is not checked by default because of reasons that are mentioned later in this document</li>
-</ul>
-<p>This process can take between 5 to 10 minutes, depending on the size of the Windows image and the speed of your computer's disk drive.</p>
-<h2 id="starting-installation-local-only">Starting installation (local-only)</h2>
-<p>You can start the installation of your operating system in 2 ways:</p>
-<ul>
-<li>By booting to installation media,</li>
-<li>By starting the installation from within a full Windows environment (DISMTools 0.6.1 and later), or</li>
-<li>By booting to the boot image of the installation disc file via the <strong>Preboot eXecution Environment</strong> (PXE) (DISMTools 0.7 and later)</li>
-</ul>
-<h3 id="starting-from-a-full-windows-environment">Starting from a full Windows environment</h3>
-<p>DISMTools 0.6.1 and later come with a program that prepares your computer for OS installation. This is called <em>HotInstall</em>, and the process of computer preparation is as follows:</p>
-<p><strong>NOTE:</strong> HotInstall does not support Ventoy drives, due to the way they work</p>
-<ol>
-<li>
-<p>Start <code>setup.exe</code> in the root of the DVD or USB drive. If you see a notification when inserting the installation media, you can also click on it to start the installer, effectively taking advantage of AutoRun:</p>
-<p><img alt="HotInstall start" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_dvdstart.png" /></p>
-</li>
-<li>
-<p>Accept the disclaimers and click Next:</p>
-<p><img alt="HotInstall disclaimer" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_disclaimers.png" /></p>
-</li>
-<li>
-<p>Review that the ISO file contains the installation image you want to test, and click Next. On this screen, you can also export all your third-party drivers to a folder, in case you need them later:</p>
-<p><img alt="HotInstall image review" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_review_image_info.png" /></p>
-</li>
-<li>
-<p>Wait for your computer to be prepared for installation. This process will take some time, depending on your computer's performance:</p>
-<p><img alt="HotInstall progress" src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_progress.png" /></p>
-</li>
-</ol>
-<p>After restarting your computer, choose "DISMTools Operating System Installation" (if it is not selected by default) and press Enter. The first stage of the installation will start:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_bootmgr.png" />
-</p>
-
-<h3 id="continuing-the-installation">Continuing the installation</h3>
-<p>Whether you've started the installation with HotInstall or by booting to installation media, the installation process will be the same. The Preinstallation Environment Helper will guide you through the installation process, which includes:</p>
-<ol>
-<li>Selecting the disk and partition where the operating system will be installed</li>
-<li>Choosing the index of the Windows image to apply</li>
-<li>Applying the Windows image</li>
-<li>Running serviceability tests</li>
-<li>Creating boot files</li>
-<li>Rebooting your system</li>
-</ol>
-<p>Let's go over these steps in more detail:</p>
-<p><strong>NOTE:</strong> if you started installation of the Windows image from USB by booting to it, choose option 1 for a local installation</p>
-<h4 id="selecting-the-disk-and-partition">Selecting the disk and partition</h4>
-<p>The PE Helper will get the disks that are available on your computer:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_disk_chooser.png" />
-</p>
-
-<p>On this screen, you can also stop for a moment to take actions if something does not look right with the disk listing, or if you want to see what disks have enough free space for the installation of your Windows image:</p>
-<ul>
-<li>If you don't see the disk you want to use, it could be because your computer uses a third-party disk controller. If that is the case, type <code>DIM</code> and press Enter to open the Driver Installation Module. More information on how to use this tool can be found later in this document</li>
-<li>(<strong>Only for installations started with HotInstall</strong>) If you want to see the free space on your disks, type <code>DSCR</code> and press Enter. This will show you the Disk Space Checker report generated by HotInstall:</li>
-</ul>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/hotinstall/hotinstall_dscr.png" />
-</p>
-
-<p>After selecting the disk, you will be asked to select the partition where the operating system will be installed. You can choose to clean all the partitions of your disk, or you can choose to format a specific partition:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_part_chooser.png" />
-</p>
-
-<p><strong>IMPORTANT:</strong> all actions past this point are irreversible. Make sure that you have backed up your data, and that you have selected the correct disk, before proceeding.</p>
-<h4 id="choosing-the-index-of-the-windows-image">Choosing the index of the Windows image</h4>
-<p>After selecting the disk and partition, you will be asked to choose the index of the Windows image that you want to apply. The PE Helper will show you basic index information, including the name you have given to the image:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_image_chooser.png" />
-</p>
-
-<p>You can also see more information about the image by typing <code>INFO</code> and pressing Enter:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/DT_PE_ImageInfo.png" />
-</p>
-
-<p>After choosing the index, the PE Helper will apply the image to the selected disk or partition, will run serviceability tests, and will create boot files.</p>
-<p>After everything is done, your computer will restart automatically in 10 seconds:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_comp_restart.png" />
-</p>
-
-<p>From this point, you can remove the installation media and let your computer finish operating system configuration.</p>
-<h4 id="windows-uefi-ca-2023-information">Windows UEFI CA 2023 information</h4>
-<p>The Windows UEFI CA 2023 certificate is now used to sign new EFI boot binaries. This is present in versions 10.1.26100.2454 and later of the Windows ADK as an option for ISO file creation.</p>
-<p>Some computers may not boot correctly using these new EFI boot binaries, and compatibility may depend on whether or not a device that uses UEFI contains this certificate. You can check if your computer contains this certificate by running the following PowerShell command as an administrator:</p>
-<pre><code class="language-powershell">[System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI db).bytes) -match 'Windows UEFI CA 2023'
-</code></pre>
-<p>If the command returns <code>True</code>, your computer has this certificate. Otherwise, you may need updates to add support for this certificate. If you have doubts regarding the compatibility of your computer with this certificate, it is recommended to leave the option unchecked.</p>
-<p>MBR systems are not affected by this change.</p>
-<p>You can learn more here: <a href="https://techcommunity.microsoft.com/blog/windows-itpro-blog/revoking-vulnerable-windows-boot-managers/4121735">Revoking vulnerable Windows boot managers</a></p>
-<h3 id="driver-installation-module">Driver Installation Module</h3>
-<p>The <strong>Driver Installation Module</strong> (DIM) is a quick and easy way of adding device drivers to booted Windows Preinstallation Environments:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dim/DIM_MainScreen.png" />
-</p>
-
-<p>While full functionality is achieved with the DISMTools Preinstallation Environment, you can still use the DIM in every Preinstallation Environment. This is compatible with the x86, amd64, and arm64 architectures.</p>
-<p><em>NOTE: arm64 support for the DIM arrived in version 0.6.2.</em></p>
-<h4 id="usage_1">Usage</h4>
-<ol>
-<li>
-<p>Click the "Add" button and choose between a single driver file or an entire folder</p>
-<ul>
-<li>If you choose a folder, the Driver Installation Module will perform a recursive scan for INF files. This may pick up invalid INF files you may have</li>
+<li><a href="../isocreator/isocreate">Creating an ISO file</a></li>
+<li>Installing Operating Systems:<ul>
+<li><a href="../isocreator/install/localinstall">Locally</a></li>
+<li><a href="../isocreator/install/netinst/pxehelpers">Using networks</a></li>
 </ul>
 </li>
-<li>
-<p>Perform any changes with the "Edit" and "Remove" buttons</p>
-</li>
-<li>Click the "Install" button and let the program add the drivers</li>
 </ol>
-<p>After driver installation, you will see an installation summary:</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dim/DIM_Summary.png" />
-</p>
-
-<p>Later, after applying your Windows image, the Preinstallation Environment Helper will add those drivers to the target image.</p>
-<h4 id="practical-use-computers-with-third-party-disk-controllers">Practical use: computers with third-party disk controllers</h4>
-<p>A practical use of the Driver Installation Module is to add compatibility for disk controllers that are not shipped with Windows PEs by default. This is the case if the test system is relatively new.</p>
-<p align="center">
-    <img src="../../../res/img_tasks/tools/isocreator/dim/practical_use/disk_before.jpg" />
-</p>
-
-<p>Here's how you can proceed:</p>
-<ol>
-<li>
-<p>Boot to a live Linux environment and use the partition manager that may come with it to grab the model of the desired drive. If you don't have a Linux ISO available, we recommend <a href="https://gparted.org/livecd.php">GParted Live</a> for its simplicity and its small size</p>
-<p><img alt="GParted" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/diskinfo.jpg" /></p>
-</li>
-<li>
-<p>Additionally, you may want to get information about the model of the computer. In most Linux systems, you can run <code>sudo lshw</code> in the terminal</p>
-<p><img alt="Computer info" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/compinfo.jpg" /></p>
-<p>After getting the model of the computer, go to the computer manufacturer's website to download compatible drivers. <strong>Make sure that you extract them and that you DON'T install them to your system by accident</strong>. After that, copy the drivers to wherever you want</p>
-</li>
-<li>
-<p>Open the Driver Installation Module, add the folder containing the drivers and click Install</p>
-<p><img alt="DIM Installation" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/dim_install.jpg" /></p>
-</li>
-<li>
-<p>Check disks once again</p>
-<p><img alt="Disk Listing" src="../../../res/img_tasks/tools/isocreator/dim/practical_use/disk_after.jpg" /></p>
-</li>
-</ol>
-<!-- And, yes, I know how to make screenshots -->
-
-<h4 id="serviceability-tests">Serviceability tests</h4>
-<p>Serviceability tests are performed during OS installation to make sure that the image that has been applied is valid. They are only run if the architectures of the PE and the image are the same, and must pass in order to successfully complete the installation of the operating system.</p>
-<p>If these tests fail, you may need to repair the component store of your Windows image.</p>
-<h2 id="network-based-installations">Network-based installations</h2>
-<p>If you want to deploy your installation image to several computers at once with a deployment server, you can follow this guide.</p>
-<p><strong>NOTE:</strong> the only supported platform is Windows Deployment Services (WDS). Additional platforms might be supported in the future.</p>
-<h3 id="preparing-your-server">Preparing your server</h3>
-<p>The first step is to prepare your server for Windows Deployment Services and, if not set up, your network infrastructure. This section will cover both tasks.</p>
-<h4 id="checking-server-roles">Checking Server Roles</h4>
-<p>To successfully deploy operating systems via the network, you will need the following server roles:</p>
+<p>Additional Tools:</p>
 <ul>
-<li>DHCP (Dynamic Host Configuration Protocol)</li>
-<li>Windows Deployment Services</li>
-</ul>
-<p><strong>NOTE:</strong> you can have a different server that acts as the DHCP server. In that case, you only need the WDS role</p>
-<p>You should be able to determine whether they are installed by simply searching for the management tools:</p>
-<p><img alt="DHCP Requirement" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_req.png" /></p>
-<p><img alt="WDS Requirement" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_req.png" /></p>
-<p>If not present, it's time to assess the current situation of the server. To do this:</p>
-<ol>
-<li>Go to Server Manager</li>
-<li>Click "Add roles and features", and perform a role-based or feature-based installation</li>
-<li>
-<p>Select your server, and check which roles are present. Both must be installed:</p>
-<p><img alt="Server Roles" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/roles.png" /></p>
-</li>
-</ol>
-<p>Based on this:</p>
-<ul>
-<li>
-<p><em>If they are not installed:</em></p>
-<ol>
-<li>Check both DHCP and WDS and continue installation, whilst including management tools</li>
-<li>Continue without modifying any features, unless you want to enable or disable some of them</li>
-<li>Read the instructions for DHCP carefully</li>
-<li>In the configuration of the WDS role, leave both servers (deployment and transport) checked</li>
-<li>Proceed with the installation. After installing the roles, you will see that a role needs configuration. That is the DHCP role.</li>
-<li>
-<p>As stated earlier, perform the configuration of the DHCP server</p>
-<p><img alt="DHCP Configuration" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_config.png" /></p>
-</li>
-<li>
-<p>Click "Commit" and "Close":</p>
-<p><img alt="DHCP Configuration 2" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_postconfig_commit.png" /></p>
-</li>
-</ol>
-</li>
-<li>
-<p><em>If they are installed, but the management tools are not present:</em></p>
-<p>You will have to enable the <code>DHCPServer-Tools</code> and <code>Microsoft-Windows-Deployment-Services-Admin-Pack</code> features. You can do this by <a href="../../features/enable_feature">enabling the features</a> from within the <a href="../../online_inst_mgmt">online installation management mode</a>.</p>
-<p>You may have to restart the server after enabling the features.</p>
-</li>
-</ul>
-<h4 id="preparing-the-network-infrastructure">Preparing the network infrastructure</h4>
-<p>If you already have a network infrastructure set up for remote deployment, feel free to skip this step. However, if you just want to tinker with remote installations at home with a wireless connection, you can do the following steps to create a virtual switch (<em>vSwitch</em>).</p>
-<p><strong>Notes:</strong> </p>
-<ul>
-<li>These steps only work with Hyper-V</li>
-<li>After rebooting your host computer, your virtual machines connected to your switch may lose connection to the Internet. However, the switch will still function for remote OS installation</li>
-<li>Additional data consumption may occur</li>
-</ul>
-<p>To set up the virtual switch:</p>
-<ol>
-<li>
-<p>In Hyper-V Manager, open the virtual switch manager and set up a new <strong>Internal</strong> switch. Give it the name you want, and click OK. You should have the following settings:</p>
-<p><img alt="vSwitch" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_new_vswitch.png" /></p>
-</li>
-<li>
-<p>After creating the switch, press <kbd>Win</kbd> + <kbd>R</kbd> and run <code>ncpa.cpl</code>. Then, double-click your wireless NIC (<em>Network Interface Card</em>) and go to the adapter settings</p>
-</li>
-<li>Set up Internet Connection Sharing using the newly created switch. The resulting IP address from ICS is usually <code>192.168.137.1</code></li>
-</ol>
-<p>Finally, configure the server to use the new switch:</p>
-<p><img alt="Connect To Switch" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_connect_to_switch.png" /></p>
-<p>Turn on the server VM and run <code>ipconfig /all</code> to make sure the virtual network adapter is detecting the address used by Internet Connection Sharing as the default gateway. If so, then try pinging it:</p>
-<p><img alt="Connect To Switch" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_ipconfig.png" /></p>
-<p><strong>Tip:</strong> if you want to make sure the IP address of the server doesn't change (remains static), or if it can't pick up the default gateway address, go to the network adapter properties of the virtual network adapter, and configure IPv4 to use the following values:</p>
-<p><img alt="Static IP" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_static_ip.png" /></p>
-<p>If the server can ping your computer, then you have a working vSwitch. You can now hook up the rest of the virtual machines you would like to use to that vSwitch.</p>
-<h4 id="configuring-the-wds-server-and-dhcp-scopes">Configuring the WDS server and DHCP Scopes</h4>
-<p>Now that the server can use your switch, we'll need to configure it so that it can work with WDS. To do this, open the WDS management tool, and select your server. Then, right-click it and select "Configure Server":</p>
-<p><img alt="Configure Server" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_configure_server.png" /></p>
-<p>Next, select the mode in which the server will operate. This cannot be changed afterwards without removing the server and reconfiguring it, so make sure that you select the correct mode.</p>
-<p>If you have a different server that acts as a Domain Controller (DC) using Active Directory, or if the current server already acts as the DC, leave the first option checked. Otherwise, if you don't have a Domain Controller, or if you just want to tinker with network-based deployment, choose Standalone mode:</p>
-<p><img alt="Server Modes" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_modes.png" /></p>
-<p><em>For this guide, we'll go with the Standalone mode, since we don't have a domain controller</em></p>
-<p>Afterwards, select the path in which the remote installation files will be stored. By default, the <code>RemoteInstall</code> folder will be stored on the root of the system drive. Change it if it's necessary, but for our case it's fine:</p>
-<p><img alt="Remote Install Location" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_remoteinstall.png" /></p>
-<p>The following step is very important, and depends on where you configured the DHCP server. If the WDS server is also the DHCP server, then leave both options checked. Otherwise, only leave the first option checked, and configure DHCP option 60 on the DHCP server. More on these options later in the guide:</p>
-<p><img alt="Proxy DHCP" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_proxy_dhcp.png" /></p>
-<p>Finally, you need to configure initial PXE settings to respond to both known and unknown client computers. Additionally, you can choose to require administrator approval for unknown clients. This gives you greater control over which devices can connect and which ones can't. You can modify the initial PXE settings later if you wish:</p>
-<p><img alt="Initial PXE Settings" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_pxe_initial_settings.png" /></p>
-<p>After clicking Next, the server will be configured and the WDS service will start. However, you may encounter this problem when trying to start the service:</p>
-<p><img alt="WDS Service Startup Error" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_startup_error.png" /></p>
-<p>If this happens, you can try starting the service manually by going here:</p>
-<p><img alt="Service Manual Startup" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_manual_start.png" /></p>
-<p>Now that you have WDS set up, we'll talk about the other half of the server.</p>
-<p>A DHCP server, in order to automatically assign IP addresses to clients, needs to have scopes with lengths that can contain the maximum amount of clients to use. If you already configured scopes, you can skip this step. Otherwise, keep reading.</p>
-<p>Open the DHCP management tool, select your server, then go to IPv4. We'll create a basic IPv4 scope using a unicast transmission (more common).</p>
-<p><img alt="DHCPv4 panel" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_panel.png" /></p>
-<p>Right-click IPv4 and select New scope. In the wizard, follow these steps:</p>
-<ol>
-<li>
-<p>Give your scope a name and an optional description to better identify it:</p>
-<p><img alt="Scope Identification" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_name.png" /></p>
-</li>
-<li>
-<p>Next, provide an IP address range that will be used to provide addresses to clients (this is known as the <strong>address pool</strong>). It should have the same subnet mask you have configured in your server. For this guide, we'll create a scope that can host addresses to 51 clients:</p>
-<p><img alt="Address Pool" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_addressrange.png" /></p>
-</li>
-<li>
-<p>If you don't want to assign addresses within a certain range, you can add exclusions to the scope. For this guide, we won't exclude addresses:</p>
-<p><img alt="Address Pool Exclusions" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_excludedrange.png" /></p>
-</li>
-<li>
-<p>Configure the scope lease duration. A DHCP lease to a client can last for a given time before the server gives a different IP address to said client. The default of 8 days is usually fine, unless it is meant to be something else in your environment:</p>
-<p><img alt="Address Lease Duration" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_leases.png" /></p>
-</li>
-<li>
-<p>When asked to configure more details about the scope, select Yes and click Next. Then, specify the default gateway address for the scope. If you followed the guide on setting up the vSwitch, the gateway address you need to enter is the IP address offered by your host as part of Internet Connection Sharing. This is also the DNS address to add in the next screen if you set it up earlier:</p>
-<p><img alt="Gateway" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_gateway.png" /></p>
-</li>
-<li>
-<p>After configuring the gateway address and the DNS server address, leave the WINS server section as is and click Next. When you're asked to activate the scope, select No and click Next:</p>
-<p><img alt="Activation" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_activate.png" /></p>
-</li>
-<li>
-<p>In the newly created scope, right-click Scope Options, and select "Configure Options...":</p>
-<p><img alt="Configure Options" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_scope_options_menu_item.png" /></p>
-</li>
-<li>
-<p>Then, configure the following options as follows:</p>
-<ul>
-<li>DHCP Option 66 (<em>Boot Server Host Name</em>): the IP address of the WDS server</li>
-<li>DHCP Option 67 (<em>Bootfile Name</em>): <code>boot\x64\wdsnbp.com</code> (do this if all your machines use the amd64 architecture)</li>
-</ul>
-<p>For example:</p>
-<p><img alt="Required scopes" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_scope_options_required.png" /></p>
-</li>
-<li>
-<p>Finally, right-click the scope and click "Activate"</p>
-</li>
-</ol>
-<h3 id="adding-the-windows-images">Adding the Windows images</h3>
-<p>Before booting the clients to perform network-based deployments, we'll first need to add the Windows images. Here's how you can do it:</p>
-<ol>
-<li>
-<p>Insert or mount the ISO file that was just created, and copy all the WIM files to any folder on your server:</p>
-<p><img alt="Copy Files" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_copy_images.png" /></p>
-</li>
-<li>
-<p>Then, in WDS, go to "(Your Server) -&gt; Boot images", right-click the empty area and select "Add boot image..."</p>
-<p><img alt="Add Boot Image" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_add_boot_image.png" /></p>
-</li>
-<li>
-<p>Next, select the boot image (<code>boot.wim</code>) and finish the wizard:</p>
-<p><img alt="Boot Image Location" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_boot_image_location.png" /></p>
-</li>
-<li>
-<p>Afterwards, go to "(Your Server) -&gt; Install Images", right-click the empty area and select "Add install image..."</p>
-<p><img alt="Add Install Image" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_add_install_image.png" /></p>
-</li>
-<li>
-<p>This will require the creation of an image group. Name it however you want, and then specify the install image to add (<code>install.wim</code>):</p>
-<p><img alt="Image Group" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_add_image_group.png" /></p>
-<p><img alt="Install Image Location" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_install_image_location.png" /></p>
-</li>
-<li>
-<p>The install image may contain more than 1 index. Check the ones that you want to deploy using WDS and finish the wizard. You can also provide custom names and descriptions for each of the indexes when deploying them through the network:</p>
-<p><img alt="Indexes" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_install_image_indexes.png" /></p>
-</li>
-</ol>
-<p>Finally, you should have this setup:</p>
-<p><img alt="Image Setup" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_final_image_config.png" /></p>
-<p>You can now start the PXE clients. In the server, you also need to start the server component of the WDS Helper. To do this, right-click <code>wdshelper_server.ps1</code> in <code>&lt;Drive Root&gt;\pxehelpers\wds</code>, and select "Run with PowerShell"</p>
-<p><img alt="WDSH Server Startup" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_server_startup.png" /></p>
-<h3 id="beginning-installation-via-pxe">Beginning installation via PXE</h3>
-<p>If you followed each step right, you should now see a screen like the following one:</p>
-<p><img alt="WDS Startup" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_startup.png" /></p>
-<p>If so, press <kbd>ENTER</kbd> now and wait for the DISMTools PE to start up. Once it starts up, select option 2 for network installation:</p>
-<p><img alt="DT PE Network" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/dt_pe_netinstall.png" /></p>
-<p>Eventually, you'll arrive at this screen. Provide the server IP address, the port to which the server is listening (usually port 8080), the name of the user that's hosting the images (in most cases, <code>Administrator</code>), and the password:</p>
-<p><img alt="WDSHC AuthInfo" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_authinfo.png" /></p>
-<p>Choose your image from the list that will then appear, and the group it's in; and press ENTER:</p>
-<p><img alt="WDSHC Install Images" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_install_images.png" /></p>
-<p>After preparing the deployment of the image file, configure your disks accordingly:</p>
-<p><img alt="WDSHC Disk Configuration" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_diskconfig.png" /></p>
-<p>Then, select the index:</p>
-<p><img alt="WDSHC Install Image Index" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_select_image_index.png" /></p>
-<p>And, finally, wait for the image to be applied:</p>
-<p><img alt="WDSHC Applying Image" src="../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_apply_image.png" /></p>
-<h2 id="extensibility-suite">Extensibility Suite</h2>
-<p>The Extensibility Suite lets you expand the DISMTools Preinstallation Environment even further by letting you modify its functionality and add applications. You can add to the Preinstallation Environment applications that you may find useful, or applications that you have worked on.</p>
-<p><em>This task is available in DISMTools 0.5.1 and later.</em></p>
-<h3 id="usage_2">Usage</h3>
-<ol>
-<li>Go to Tools &gt; Create a testing environment...</li>
-<li>Specify the architecture and target location</li>
-<li>Click Create</li>
-</ol>
-<p>Then, you can look at the README file in the target directory to learn more.</p>
-<h2 id="remarks">Remarks</h2>
-<ul>
-<li><strong>Please make sure to commit your unsaved changes to your image before creating the ISO file</strong></li>
+<li><a href="../isocreator/exttools/dim">Driver Installation Module</a></li>
+<li><a href="../isocreator/exttools/dtpe_es">Extensibility Suite</a></li>
 </ul>
               
             </div>
           </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../configlisteditor/" class="btn btn-neutral float-left" title="DISM Configuration List Editor"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../regcpl/" class="btn btn-neutral float-right" title="Image registry control panel">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
 
   <hr/>
 
@@ -686,7 +316,7 @@
       <span><a href="../configlisteditor/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../regcpl/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="isocreate/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -694,6 +324,7 @@
     <script>var base_url = "../../..";</script>
     <script src="../../../js/theme_extra.js"></script>
     <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       <script src="../../../search/main.js"></script>
     <script>
         jQuery(function () {

@@ -30,7 +30,8 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> DISMTools Help Documentation
+          <a href="../..">
+          <img src="../../logo.png" class="logo" alt="Logo"/>
         </a><div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
@@ -50,11 +51,11 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">What's new</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#upgrade-the-editions-of-windows-images">Upgrade the editions of Windows images</a>
+    <li class="toctree-l2"><a class="reference internal" href="#a-new-coat-of-paint">A new coat of paint</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#new-features-for-your-unattended-answer-files">New features for your unattended answer files</a>
+    <li class="toctree-l2"><a class="reference internal" href="#network-based-deployment-made-easy-and-more-preinstallation-environment-features">Network-based deployment made easy, and more Preinstallation Environment features</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#improvements-for-arm64-based-preinstallation-environments">Improvements for ARM64-based Preinstallation Environments</a>
+    <li class="toctree-l2"><a class="reference internal" href="#new-unattended-answer-file-features-suitable-for-both-consumers-and-businesses">New unattended answer file features suitable for both consumers and businesses</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#overall-refinements">Overall refinements</a>
     </li>
@@ -194,7 +195,37 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/configlisteditor/">DISM Configuration List Editor</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/isocreator/">ISO creation tools</a>
+                  <li class="toctree-l1"><a class="reference internal" >ISO creation tools</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/isocreator/">Overview</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/tools/isocreator/isocreate/">Creating ISO files</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installing the operating system</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../img_tasks/tools/isocreator/install/localinstall/">Local installations</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Network-based installations</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/install/netinst/pxehelpers/">Overview</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/install/netinst/setup/">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/install/netinst/wds/">Windows Deployment Services (WDS) Helper</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/exttools/dim/">Driver Installation Module</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/exttools/dtpe_es/">Extensibility Suite</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/regcpl/">Image registry control panel</a>
                   </li>
@@ -207,6 +238,14 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/unattend/unatt_create/">Unattended answer file creator</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/unattend/unatt_apply/">Applying unattended answer files</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >External tools</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/exttools/themedesigner/">Creating your themes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../img_tasks/exttools/dynaviewer/">Viewing diagnostic logs</a>
                 </li>
     </ul>
                   </li>
@@ -237,55 +276,33 @@
                 <h1 id="release-highlights">Release highlights</h1>
 <p>This new version of DISMTools comes with new features that enhance image management and servicing tasks. Here are some of its key changes.</p>
 <p>If you want to take a look at everything that has changed though, check out the <a href="https://github.com/CodingWonders/DISMTools/releases/latest">release notes page</a> for more information.</p>
-<h2 id="upgrade-the-editions-of-windows-images">Upgrade the editions of Windows images</h2>
-<p>DISMTools 0.6.2 features new tasks that let you get and set the edition of your Windows image or installation. You can also set the product key of your Windows image.</p>
+<h2 id="a-new-coat-of-paint">A new coat of paint</h2>
+<p>DISMTools 0.7 includes refined default themes, with darker dark colors and lighter light colors. Using its new <strong>theme engine</strong>, you can customize it even more with more colors, including a revamped color scheme inspired on older releases of DISMTools. It also features a new editor with which you can make your own themes.</p>
 <p align="center">
-    <img src="../../res/whats_new/WhatsNew_1.png" />
+  <img src="../../res/whats_new/WhatsNew_1.png">
 </p>
 
-<p><a href="../../img_tasks/tools/isocreator">Learn more about the new ISO creation features</a></p>
-<h2 id="new-features-for-your-unattended-answer-files">New features for your unattended answer files</h2>
-<p>The unattended answer file features now let you import Batch script contents into your post-installation script:</p>
+<h2 id="network-based-deployment-made-easy-and-more-preinstallation-environment-features">Network-based deployment made easy, and more Preinstallation Environment features</h2>
+<p>The DISMTools Preinstallation Environment now includes support for PXE providers with the new PXE Helpers. In this version, support for the <a href="https://en.wikipedia.org/wiki/Windows_Deployment_Services">Windows Deployment Services</a> is included, though additional providers will be supported in the future.</p>
 <p align="center">
-    <img src="../../res/whats_new/WhatsNew_2.png" />
+  <img src="../../res/whats_new/WhatsNew_2.png">
 </p>
 
-<p>These are run as always:</p>
-<p align="center">
-    <img src="../../res/whats_new/WhatsNew_2.1.png" />
-</p>
-
-<p>Additionally, you can now have a script configure the computer name based on a pattern:</p>
-<p align="center">
-    <img src="../../res/whats_new/WhatsNew_2.2.png" />
-</p>
-
-<p><a href="../../img_tasks/unattend/unatt_create">Learn more about the new unattended answer file features</a></p>
-<h2 id="improvements-for-arm64-based-preinstallation-environments">Improvements for ARM64-based Preinstallation Environments</h2>
-<p>The toolkit designed for Windows Preinstallation Environments (WinPE), which includes the Driver Installation Module, now supports the ARM64 architecture. This makes it compatible with such Preinstallation Environments. Here is a screenshot of the Driver Installation Module running on a Raspberry Pi:</p>
-<p align="center">
-    <img src="../../res/whats_new/WhatsNew_3.png" />
-</p>
-
-<p>Additional improvements were also done to the overall ISO cration tools and the Preinstallation Environment Helper.</p>
-<p><a href="../../img_tasks/tools/isocreator">Learn more about the new features</a></p>
+<p>The DISMTools PE also includes a new menu from which you can perform local or network-based deployments. It also lets you access a command line with built-in scripts that allow you to initialize networking stacks, capture sysprepped installations to Windows images, and more.</p>
+<h2 id="new-unattended-answer-file-features-suitable-for-both-consumers-and-businesses">New unattended answer file features suitable for both consumers and businesses</h2>
+<p>DISMTools 0.7 includes new features in the unattended answer file creation wizard. If you ever need to specify more settings for specific components, you can now make these changes using the wizard, and not the Editor mode. It also allows you to make devices join a domain powered by Active Directory Domain Services (AD DS) using a convenient wizard.</p>
+<p>The underlying generator program (<a href="https://github.com/CodingWonders/UnattendGen"><em>UnattendGen</em></a>) has also become cross-platform, with support for Linux and macOS (<em>command-line only</em>).</p>
 <h2 id="overall-refinements">Overall refinements</h2>
 <p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, more items have received translations, the program is more reliable, and components have been updated to their latest versions.</p>
 <!-- Room for more features -->
 
 <h1 id="thanks-to-the-contributors">Thanks to the contributors</h1>
 <p>The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:</p>
-<ul>
-<li>Vincent Långström (<a href="https://github.com/vinicentus">vinicentus</a>) for spotting issues with output redirection</li>
-</ul>
+<p><a href="https://github.com/MTTGamer">MTTGamer</a> and <a href="https://github.com/Real-MullaC">Real-MullaC</a></p>
 <p>If you want to appear in this list, you can report issues or suggestions in any channel you prefer (via the <a href="https://forums.mydigitallife.net/threads/dismtools.87263/">MDL forum thread</a>, via the <a href="https://github.com/CodingWonders/DISMTools">GitHub repository</a>, or via any announcements on the <a href="https://reddit.com/r/DISMTools">DISMTools subreddit</a> or on the <a href="https://reddit.com/r/Windows">Windows</a>, <a href="https://reddit.com/r/Windows11">Windows11</a> and <a href="https://reddit.com/r/Windows10">Windows10</a> subreddits (as comments)) or submit new code changes (read the <a href="https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md">contribution guidelines</a> for more information).</p>
               
             </div>
           </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../../getting_started/start/" class="btn btn-neutral float-left" title="Getting started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../../img_tasks/img_tasks/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
 
   <hr/>
 
@@ -318,6 +335,7 @@
     <script>var base_url = "../..";</script>
     <script src="../../js/theme_extra.js"></script>
     <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       <script src="../../search/main.js"></script>
     <script>
         jQuery(function () {
