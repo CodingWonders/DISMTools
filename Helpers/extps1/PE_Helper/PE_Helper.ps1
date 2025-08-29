@@ -256,6 +256,10 @@ function Start-PEGeneration
                         Write-Host "HotInstall could not be copied."
                     }
                 }
+                if (Test-Path -Path "$((Get-Location).Path)\tools\MainMenu") {
+                    Write-Host "The main menu has been detected. Adding to ISO file..."
+                    Copy-Item -Path "$((Get-Location).Path)\tools\MainMenu\*.*" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -Recurse -Verbose
+                }
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
                 Write-Host "Creating ISO file..."

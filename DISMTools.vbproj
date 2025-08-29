@@ -1973,6 +1973,11 @@ IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
 	del "Tools\ThemeDesigner\*.zip" /F /S /Q
 )
 
+:: Copy PE Helper Main Menu
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.exe" (
+	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
+)
+
 :: Copy Tour
 IF EXIST "$(SolutionDir)tour" (
 	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
