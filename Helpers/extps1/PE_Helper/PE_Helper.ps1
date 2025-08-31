@@ -256,9 +256,22 @@ function Start-PEGeneration
                         Write-Host "HotInstall could not be copied."
                     }
                 }
+                # Detect if Sysprep Preparator is present in the working directory and copy it to the ISO file
+                if (Test-Path -Path "$((Get-Location).Path)\files\SysprepPreparator.zip" -PathType Leaf) {
+                    Write-Host "Sysprep Preparation Tool has been detected. Adding to ISO file..."
+                    New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\SysprepPreparator" -ItemType Directory | Out-Null
+                    Expand-Archive -Path "$((Get-Location).Path)\files\SysprepPreparator.zip" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\SysprepPreparator" -Force -ErrorAction SilentlyContinue
+                }
                 if (Test-Path -Path "$((Get-Location).Path)\tools\MainMenu") {
                     Write-Host "The main menu has been detected. Adding to ISO file..."
                     Copy-Item -Path "$((Get-Location).Path)\tools\MainMenu\*.*" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -Recurse -Verbose
+                    $autorunContents = @'
+
+[autorun]
+open=autorun.exe
+icon=autorun.ico
+'@
+                    $autoRunContents | Out-File -FilePath "$((Get-Location).Path)\ISOTEMP\media\autorun.inf" -Encoding utf8 -Force
                 }
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
