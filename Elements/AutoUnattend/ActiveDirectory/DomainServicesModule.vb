@@ -166,40 +166,52 @@ Module DomainServicesModule
     ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
     ''' <param name="dsDomainControllerNetBios">The NetBIOS name of the domain controller (eg: DISMTOOLS-DC)</param>
     ''' <returns>The mapping between organizational units and users in each OU</returns>
-    ''' <remarks>
-    ''' Unimplemented in 0.7, to be implemented in a future release of DISMTools. Keys are the organizational unit names,
-    ''' and values are all the users in each of the OUs. To access the value, use the organizational unit name as the key.
-    ''' Do note that this ONLY works with organizational units in a domain, and NOT sites.
-    ''' </remarks>
+    ''' <remarks>The directory searcher needs to be disposed of because of quirks in .NET that cause memory leaks</remarks>
     Public Function DSMapOrganizationalUnitsAndUsers(dsDomainDnsName As String, dsDomainControllerNetBios As String) As Dictionary(Of String, List(Of Principal))
+        DynaLog.LogMessage("Preparing to map organizational units and users in organizational units...")
+        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
+        DynaLog.LogMessage("- Domain Name (NetBIOS/pre-2000 ): " & dsDomainControllerNetBios)
         Dim principalMappings As New Dictionary(Of String, List(Of Principal))
         Dim orgUnitPaths As New List(Of String), orgUnits As New List(Of String)
 
+        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
         Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
 
         Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
         Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
         searcher.Filter = "(objectCategory=organizationalUnit)"
 
-        For Each result As SearchResult In searcher.FindAll()
-            orgUnitPaths.Add(result.Path)
-            orgUnits.Add(result.GetDirectoryEntry().Properties("ou").Value.ToString())
-        Next
+        Try
+            DynaLog.LogMessage("Beginning to find paths for organizational units...")
+            For Each result As SearchResult In searcher.FindAll()
+                orgUnitPaths.Add(result.Path)
+                orgUnits.Add(result.GetDirectoryEntry().Properties("ou").Value.ToString())
+            Next
+        Catch ex As Exception
+            Return Nothing
+        End Try
 
-        searcher.Dispose()      ' We need to call this due to some implementation quirks in the directory searcher
+        searcher.Dispose()
 
         For i = 0 To orgUnits.Count - 1
-            Dim allUsers As New List(Of String)
-            Dim ctx As PrincipalContext = New PrincipalContext(ContextType.Domain, dsDomainControllerNetBios, orgUnitPaths(i).Replace("LDAP://", ""))
-            Dim qbeUser As UserPrincipal = New UserPrincipal(ctx)
+            Try
+                DynaLog.LogMessage("Getting users in organizational unit (LDAP path " & orgUnits(i) & ")...")
+                Dim allUsers As New List(Of String)
+                Dim ctx As PrincipalContext = New PrincipalContext(ContextType.Domain, dsDomainControllerNetBios, orgUnitPaths(i).Replace("LDAP://", ""))
+                Dim qbeUser As UserPrincipal = New UserPrincipal(ctx)
 
-            Dim srch As PrincipalSearcher = New PrincipalSearcher(qbeUser)
-            Dim principals As New List(Of Principal)
-            principals = srch.FindAll().ToList()
+                Dim srch As PrincipalSearcher = New PrincipalSearcher(qbeUser)
+                Dim principals As New List(Of Principal)
+                principals = srch.FindAll().ToList()
 
-            If principals.Count > 0 Then
-                principalMappings.Add(orgUnits(i), principals)
-            End If
+                DynaLog.LogMessage("Amount of principals for organizational unit: " & principals.Count)
+                If principals.Count > 0 Then
+                    DynaLog.LogMessage("We have principals in this OU. Adding them to mapping...")
+                    principalMappings.Add(orgUnits(i), principals)
+                End If
+            Catch ex As Exception
+                Continue For
+            End Try
         Next
 
         Return principalMappings
@@ -212,6 +224,7 @@ Module DomainServicesModule
     ''' <returns>A LDAP representation</returns>
     ''' <remarks>LDAP representation of, for example, dismtools.local: DC=dismtools, DC=local</remarks>
     Private Function GetLdapPathFromDnsName(dnsName As String) As String
+        DynaLog.LogMessage("Parsing DNS path to LDAP...")
         Dim pathParts() As String = dnsName.Split(".")
 
         For i = 0 To pathParts.Length - 1
@@ -219,6 +232,45 @@ Module DomainServicesModule
         Next
 
         Return String.Join(",", pathParts)
+    End Function
+
+    ''' <summary>
+    ''' Determines whether an account in a domain is enabled
+    ''' </summary>
+    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
+    ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
+    ''' <returns>Whether the account is enabled or disabled based on a property flag</returns>
+    ''' <remarks>The directory searcher needs to be disposed of because of quirks in .NET that cause memory leaks</remarks>
+    Public Function DSAccountIsEnabled(dsDomainDnsName As String, accName As String) As Boolean
+        DynaLog.LogMessage("Preparing to determine if the specified account is enabled...")
+        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
+        DynaLog.LogMessage("- SAM account name: " & accName)
+        If dsDomainDnsName = "" Or accName = "" Then Return False
+        Dim enabledStatus As Boolean = False
+
+        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
+        Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
+
+        Try
+            DynaLog.LogMessage("Beginning to search user...")
+            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
+            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
+            searcher.Filter = String.Format("(&(objectCategory=user)(objectClass=user)(samAccountName={0}))", accName)
+
+            For Each result As SearchResult In searcher.FindAll()
+                DynaLog.LogMessage("Getting a directory entry of the user...")
+                Dim dirEntry As DirectoryEntry = result.GetDirectoryEntry()
+                If dirEntry.NativeGuid = "" Then Return False
+
+                enabledStatus = Not Convert.ToBoolean(CInt(dirEntry.Properties("userAccountControl").Value) And &H2)
+            Next
+            searcher.Dispose()
+        Catch ex As Exception
+
+        End Try
+
+        DynaLog.LogMessage("Account Enabled? (Bitwise-AND): " & enabledStatus)
+        Return enabledStatus
     End Function
 
 End Module

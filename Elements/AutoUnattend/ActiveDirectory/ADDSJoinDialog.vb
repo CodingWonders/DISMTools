@@ -509,5 +509,9 @@ Public Class ADDSJoinDialog
         AddsUpnPathText.Text = String.Format("{0}@{1}", userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName, TextBox4.Text)
         AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName)
         initialUserName = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName
+
+        If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName) Then
+            MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
+        End If
     End Sub
 End Class
