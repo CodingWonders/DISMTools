@@ -188,7 +188,7 @@ Module DomainServicesModule
 
         searcher.Dispose()      ' We need to call this due to some implementation quirks in the directory searcher
 
-        For i = 0 To orgUnits.Count
+        For i = 0 To orgUnits.Count - 1
             Dim allUsers As New List(Of String)
             Dim ctx As PrincipalContext = New PrincipalContext(ContextType.Domain, dsDomainControllerNetBios, orgUnitPaths(i).Replace("LDAP://", ""))
             Dim qbeUser As UserPrincipal = New UserPrincipal(ctx)
@@ -214,7 +214,7 @@ Module DomainServicesModule
     Private Function GetLdapPathFromDnsName(dnsName As String) As String
         Dim pathParts() As String = dnsName.Split(".")
 
-        For i = 0 To pathParts.Length
+        For i = 0 To pathParts.Length - 1
             pathParts(i) = String.Format("DC={0}", pathParts(i))
         Next
 
