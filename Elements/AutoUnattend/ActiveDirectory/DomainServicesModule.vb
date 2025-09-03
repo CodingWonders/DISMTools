@@ -235,6 +235,12 @@ Module DomainServicesModule
     End Function
 
     ''' <summary>
+    ''' The user account is disabled
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const ADS_UF_ACCOUNTDISABLE As Integer = &H2
+
+    ''' <summary>
     ''' Determines whether an account in a domain is enabled
     ''' </summary>
     ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
@@ -262,7 +268,7 @@ Module DomainServicesModule
                 Dim dirEntry As DirectoryEntry = result.GetDirectoryEntry()
                 If dirEntry.NativeGuid = "" Then Return False
 
-                enabledStatus = Not Convert.ToBoolean(CInt(dirEntry.Properties("userAccountControl").Value) And &H2)
+                enabledStatus = Not Convert.ToBoolean(CInt(dirEntry.Properties("userAccountControl").Value) And ADS_UF_ACCOUNTDISABLE)
             Next
             searcher.Dispose()
         Catch ex As Exception
