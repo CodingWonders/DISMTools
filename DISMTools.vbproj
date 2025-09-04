@@ -1511,6 +1511,8 @@
     <None Include="Resources\add_element.png" />
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
+    <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
+    <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
