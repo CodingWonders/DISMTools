@@ -72,6 +72,7 @@ Partial Class NewUnattendWiz
         Me.SystemComponentPanel = New System.Windows.Forms.Panel()
         Me.ComponentBodyPanel = New System.Windows.Forms.Panel()
         Me.NoSpecifiedComponentsPanel = New System.Windows.Forms.Panel()
+        Me.Label65 = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
@@ -356,7 +357,6 @@ Partial Class NewUnattendWiz
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.CPUnattendGenFBD = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Label65 = New System.Windows.Forms.Label()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -887,6 +887,18 @@ Partial Class NewUnattendWiz
         Me.NoSpecifiedComponentsPanel.Size = New System.Drawing.Size(901, 391)
         Me.NoSpecifiedComponentsPanel.TabIndex = 0
         '
+        'Label65
+        '
+        Me.Label65.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label65.AutoEllipsis = True
+        Me.Label65.Location = New System.Drawing.Point(17, 336)
+        Me.Label65.Name = "Label65"
+        Me.Label65.Size = New System.Drawing.Size(866, 44)
+        Me.Label65.TabIndex = 1
+        Me.Label65.Text = "Don't want to add custom components? Click Next to skip this step."
+        Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Label15
         '
         Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.None
@@ -937,6 +949,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla4
         '
+        Me.Scintilla4.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla4.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla4.LexerName = Nothing
@@ -1206,6 +1219,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla3
         '
+        Me.Scintilla3.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla3.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla3.LexerName = ""
@@ -2913,6 +2927,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla2
         '
+        Me.Scintilla2.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla2.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla2.LexerName = Nothing
@@ -3695,6 +3710,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla1
         '
+        Me.Scintilla1.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla1.LexerName = Nothing
@@ -4014,18 +4030,6 @@ Partial Class NewUnattendWiz
         Me.CPUnattendGenFBD.Description = "Specify the path on which you want to store Linux and macOS versions of UnattendG" & _
     "en:"
         Me.CPUnattendGenFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
-        '
-        'Label65
-        '
-        Me.Label65.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label65.AutoEllipsis = True
-        Me.Label65.Location = New System.Drawing.Point(17, 336)
-        Me.Label65.Name = "Label65"
-        Me.Label65.Size = New System.Drawing.Size(866, 44)
-        Me.Label65.TabIndex = 1
-        Me.Label65.Text = "Don't want to add custom components? Click Next to skip this step."
-        Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'NewUnattendWiz
         '
