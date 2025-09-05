@@ -155,6 +155,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\BgProcesses"; ValueType: dword; 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "NoNTSamMappings"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "NoRestart"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: string; ValueName: "PEHelper.UnattendedFile"; ValueData: ""; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.CopyToVentoy"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.Use2023EFI"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
