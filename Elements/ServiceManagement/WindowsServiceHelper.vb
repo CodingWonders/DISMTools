@@ -1,4 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.ControlChars
+Imports System.IO
+Imports Microsoft.Win32
 
 Module WindowsServiceHelper
 
@@ -6,6 +8,8 @@ Module WindowsServiceHelper
     Private PrivilegeMappingDictionary As New Dictionary(Of String, String)
 
     Sub FillInConstants()
+        PrivilegeConstantDictionary.Clear()
+        PrivilegeMappingDictionary.Clear()
         PrivilegeConstantDictionary.Add("SE_ASSIGNPRIMARYTOKEN_NAME",
                                         New NTSecurityPrivilegeConstant(
                                             "SeAssignPrimaryTokenPrivilege",
@@ -192,5 +196,102 @@ Module WindowsServiceHelper
             PrivilegeMappingDictionary.Add(privilegeConstant.ConstantNameText, key)
         Next
     End Sub
+
+    Function GetServiceList(MountPath As String) As List(Of WindowsService)
+        ' For the required privileges a service may have, we have to fill in the constants first so that we don't have things like
+        ' "SeUndockPrivilege", "SeShutdownPrivilege"; but rather "Remove computer from docking station", and so on... we want the
+        ' friendly things.
+        FillInConstants()
+        Dim serviceList As New List(Of WindowsService)
+
+        ' Time to load up a registry hive
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYS") = 0 Then
+            Try
+                ' First we need to grab the default control set of the target image
+                Dim DefaultControlSet As Integer = RegistryHelper.GetDefaultControlSet("zSYS")
+                If DefaultControlSet = -1 Then
+                    Throw New Exception("Registry control set could not be obtained")
+                End If
+                ' We only document a maximum of 999 control sets. CurrentControlSet is not a thing in an offline system, as the registry
+                ' subsystems guess the control set to use based on values in HKLM\SYSTEM\Select.
+                Dim ServiceRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services", DefaultControlSet.ToString().PadLeft(3, "0")), False)
+                ' For some stupid reason, .NET keys are stored in HKLM\SYSTEM\ControlSet<nnn>\Services. GUID keys are also not allowed
+                Dim ServiceNames() As String = ServiceRk.GetSubKeyNames().Where(Function(serviceName) Not serviceName.StartsWith(".NET", StringComparison.OrdinalIgnoreCase) AndAlso Not serviceName.StartsWith("{")).ToArray()
+                ServiceRk.Close()
+
+                ' Now we have to grab as much information as we can
+                For Each ServiceName In ServiceNames
+                    Dim serviceImagePath As String = "",
+                        serviceEntryName As String = "",
+                        serviceDisplayName As String = "",
+                        serviceDescription As String = "",
+                        serviceObjectName As String = "",
+                        serviceStartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Unknown,
+                        serviceDelayedStart As Boolean = False,
+                        serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
+                        serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
+                        serviceRequiredPrivilegesString() As String = New String() {}
+                    Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
+                        serviceImagePath = ServiceInfoRk.GetValue("ImagePath", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
+                        If serviceImagePath = "" Then
+                            ' This "service" is bogus
+                            Continue For
+                        End If
+                        ' TODO: display names and descriptions can also be pulled from resources that are embedded in executables or libraries.
+                        ' TODO: failure/recovery actions need to be implemented, which will require us to understand binary data
+                        ' TODO: relationships with services a service depends on or services that depend on a service need to be implemented
+
+                        serviceEntryName = ServiceName
+
+                        ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
+                        ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
+                        ' it will show that value. This is true FOR THE IMAGE PATH, but we'll also do it for the display name and the description,
+                        ' just in case.
+                        serviceDisplayName = ServiceInfoRk.GetValue("DisplayName", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
+                        serviceDescription = ServiceInfoRk.GetValue("Description", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
+                        serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
+                        serviceStartType = ServiceInfoRk.GetValue("Start", -1)
+                        serviceDelayedStart = (ServiceInfoRk.GetValue("DelayedAutoStart", 0) = 1)
+                        serviceType = ServiceInfoRk.GetValue("Type", -1)
+                        serviceErrorControl = ServiceInfoRk.GetValue("ErrorControl", -1)
+                        ' The required privileges property is a multi-value registry value, so we need an array
+                        serviceRequiredPrivilegesString = ServiceInfoRk.GetValue("RequiredPrivileges", New String() {})
+
+                        Dim serviceRequiredPrivilegeList As New List(Of NTSecurityPrivilegeConstant)
+
+                        If serviceRequiredPrivilegesString.Count > 0 Then
+                            ' Parse the items themselves to keys that are available in the dictionary we filled
+                            ' stuff in
+                            For Each serviceRequiredPrivilegeString In serviceRequiredPrivilegesString
+                                If PrivilegeMappingDictionary.Keys.Contains(serviceRequiredPrivilegeString) Then
+                                    ' Then add it
+                                    Dim constantInHeader As String = PrivilegeMappingDictionary(serviceRequiredPrivilegeString)
+                                    serviceRequiredPrivilegeList.Add(PrivilegeConstantDictionary(constantInHeader))
+                                End If
+                            Next
+                        End If
+
+                        serviceList.Add(New WindowsService(serviceEntryName,
+                                                           serviceDisplayName,
+                                                           serviceDescription,
+                                                           serviceObjectName,
+                                                           serviceImagePath,
+                                                           serviceStartType,
+                                                           serviceDelayedStart,
+                                                           serviceType,
+                                                           serviceErrorControl,
+                                                           serviceRequiredPrivilegeList))
+                    End Using
+                Next
+            Catch ex As Exception
+
+            End Try
+
+            ' Now we unload that hive
+            RegistryHelper.UnloadRegistryHive("HKLM\zSYS")
+        End If
+
+        Return serviceList
+    End Function
 
 End Module

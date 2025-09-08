@@ -202,6 +202,7 @@ Partial Class MainForm
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator35 = New System.Windows.Forms.ToolStripSeparator()
         Me.ContributeToTheHelpSystemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BranchTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -479,7 +480,7 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
-        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ManageSystemServicesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -1460,7 +1461,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1677,6 +1678,12 @@ Partial Class MainForm
         Me.ReportFeedbackToolStripMenuItem.Name = "ReportFeedbackToolStripMenuItem"
         Me.ReportFeedbackToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
+        '
+        'OpenDiagnosticLogsInLogViewerToolStripMenuItem
+        '
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Name = "OpenDiagnosticLogsInLogViewerToolStripMenuItem"
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = "Open diagnostic logs in log viewer"
         '
         'ToolStripSeparator35
         '
@@ -4443,11 +4450,11 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
-        'OpenDiagnosticLogsInLogViewerToolStripMenuItem
+        'ManageSystemServicesToolStripMenuItem
         '
-        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Name = "OpenDiagnosticLogsInLogViewerToolStripMenuItem"
-        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
-        Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem.Text = "Open diagnostic logs in log viewer"
+        Me.ManageSystemServicesToolStripMenuItem.Name = "ManageSystemServicesToolStripMenuItem"
+        Me.ManageSystemServicesToolStripMenuItem.Size = New System.Drawing.Size(280, 22)
+        Me.ManageSystemServicesToolStripMenuItem.Text = "Manage system services..."
         '
         'MainForm
         '
@@ -5015,4 +5022,5 @@ Partial Class MainForm
     Friend WithEvents DISMToolsTourToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents RemoveAppliedAnswerFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OpenDiagnosticLogsInLogViewerToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ManageSystemServicesToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

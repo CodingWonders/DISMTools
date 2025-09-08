@@ -16794,4 +16794,8 @@ Public Class MainForm
                           Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
         End If
     End Sub
+
+    Private Sub ManageSystemServicesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageSystemServicesToolStripMenuItem.Click
+        ServiceManagementForm.Show()
+    End Sub
 End Class
