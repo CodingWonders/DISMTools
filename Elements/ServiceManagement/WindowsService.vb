@@ -50,4 +50,38 @@
         Me.RequiredPrivileges = ntPrivileges
     End Sub
 
+    Public Function StartTypeToString() As String
+        Select Case StartType
+            Case WindowsService.ServiceStartType.BootLoader
+                Return "Boot Loader"
+            Case WindowsService.ServiceStartType.IOSystem
+                Return "I/O System"
+            Case WindowsService.ServiceStartType.Automatic
+                Return "Automatic"
+            Case WindowsService.ServiceStartType.Manual
+                Return "Manual"
+            Case WindowsService.ServiceStartType.Disabled
+                Return "Disabled"
+            Case Else
+                Return String.Format("Unknown (Type {0})", StartType)
+        End Select
+    End Function
+
+    Public Function TypeToString() As String
+        Select Case Type
+            Case WindowsService.ServiceType.KernelDeviceDriver
+                Return "Kernel Device Driver"
+            Case WindowsService.ServiceType.FileSystemDriver
+                Return "File System Driver"
+            Case WindowsService.ServiceType.Adapter
+                Return "Adapter"
+            Case WindowsService.ServiceType.WindowsApplication
+                Return "Windows Application"
+            Case WindowsService.ServiceType.WindowsService
+                Return "Windows Service"
+            Case Else
+                Return String.Format("Unknown (Type {0})", Type)
+        End Select
+    End Function
+
 End Class

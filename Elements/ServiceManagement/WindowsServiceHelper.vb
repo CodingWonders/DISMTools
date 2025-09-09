@@ -1,8 +1,21 @@
 ﻿Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
 Imports Microsoft.Win32
+Imports System.Runtime.InteropServices
+Imports System.Text
 
 Module WindowsServiceHelper
+
+    NotInheritable Class NativeMethods
+
+        Private Sub New()
+        End Sub
+
+        <DllImport("shlwapi.dll", BestFitMapping:=False, CharSet:=CharSet.Unicode, ExactSpelling:=True, SetLastError:=False, ThrowOnUnmappableChar:=True)>
+        Shared Function SHLoadIndirectString(pszSource As String, pszOutBuf As StringBuilder, cchOutBuf As Integer, ppvReserved As IntPtr) As Integer
+        End Function
+
+    End Class
 
     Private PrivilegeConstantDictionary As New Dictionary(Of String, NTSecurityPrivilegeConstant)
     Private PrivilegeMappingDictionary As New Dictionary(Of String, String)
@@ -197,6 +210,16 @@ Module WindowsServiceHelper
         Next
     End Sub
 
+    Private Function ResolveIndirectString(source As String) As String
+        Dim buffer As New StringBuilder(260)
+        Dim hr As Integer = NativeMethods.SHLoadIndirectString(source, buffer, buffer.Capacity, IntPtr.Zero)
+        If hr = 0 Then
+            Return buffer.ToString()
+        Else
+            Return source
+        End If
+    End Function
+
     Function GetServiceList(MountPath As String) As List(Of WindowsService)
         ' For the required privileges a service may have, we have to fill in the constants first so that we don't have things like
         ' "SeUndockPrivilege", "SeShutdownPrivilege"; but rather "Remove computer from docking station", and so on... we want the
@@ -232,23 +255,27 @@ Module WindowsServiceHelper
                         serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
                         serviceRequiredPrivilegesString() As String = New String() {}
                     Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
+                        ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
+                        ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
+                        ' it will show that value.
                         serviceImagePath = ServiceInfoRk.GetValue("ImagePath", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
                         If serviceImagePath = "" Then
                             ' This "service" is bogus
                             Continue For
                         End If
-                        ' TODO: display names and descriptions can also be pulled from resources that are embedded in executables or libraries.
+                        ' TODO: for devices, tweak the indirect string resolver to like INF files
                         ' TODO: failure/recovery actions need to be implemented, which will require us to understand binary data
                         ' TODO: relationships with services a service depends on or services that depend on a service need to be implemented
 
                         serviceEntryName = ServiceName
-
-                        ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
-                        ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
-                        ' it will show that value. This is true FOR THE IMAGE PATH, but we'll also do it for the display name and the description,
-                        ' just in case.
-                        serviceDisplayName = ServiceInfoRk.GetValue("DisplayName", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
-                        serviceDescription = ServiceInfoRk.GetValue("Description", "", RegistryValueOptions.DoNotExpandEnvironmentNames)
+                        serviceDisplayName = ServiceInfoRk.GetValue("DisplayName", "")
+                        If serviceDisplayName.StartsWith("@") Then
+                            serviceDisplayName = ResolveIndirectString(serviceDisplayName)
+                        End If
+                        serviceDescription = ServiceInfoRk.GetValue("Description", "")
+                        If serviceDescription.StartsWith("@") Then
+                            serviceDescription = ResolveIndirectString(serviceDescription)
+                        End If
                         serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
                         serviceStartType = ServiceInfoRk.GetValue("Start", -1)
                         serviceDelayedStart = (ServiceInfoRk.GetValue("DelayedAutoStart", 0) = 1)
