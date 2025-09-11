@@ -84,4 +84,19 @@
         End Select
     End Function
 
+    Public Function ErrorControlToString() As String
+        Select Case ErrorControl
+            Case ServiceErrorControl.Ignore
+                Return "The startup program ignores the error and continues the startup operation."
+            Case ServiceErrorControl.Normal
+                Return "The startup program logs the error in the event log but continues the startup operation."
+            Case ServiceErrorControl.Severe
+                Return "The startup program logs the error in the event log. If the last-known-good configuration is being started, the startup operation continues. Otherwise, the system is restarted with the last-known-good configuration."
+            Case ServiceErrorControl.Critical
+                Return "The startup program logs the error in the event log, if possible. If the last-known-good configuration is being started, the startup operation fails. Otherwise, the system is restarted with the last-known good configuration."
+            Case Else
+                Return String.Format("Unknown (Type {0})", ErrorControl)
+        End Select
+    End Function
+
 End Class

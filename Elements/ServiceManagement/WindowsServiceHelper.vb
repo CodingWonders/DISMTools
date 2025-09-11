@@ -37,7 +37,7 @@ Module WindowsServiceHelper
                                         New NTSecurityPrivilegeConstant(
                                             "SeBackupPrivilege",
                                             "Back up files and directories",
-                                            "Required to perform backup operations. This privilege causes the system to grant all read access control to any file, regardless of the\nRegSaveKeyEx functions. The following access rights are granted if this privilege is held:\n\n - READ_CONTROL\n - ACCESS_SYSTEM_SECURITY\n - FILE_GENERIC_READ\n - FILE_TRAVERSE"))
+                                            "Required to perform backup operations. This privilege causes the system to grant all read access control to any file, regardless of the RegSaveKeyEx functions. The following access rights are granted if this privilege is held: READ_CONTROL, ACCESS_SYSTEM_SECURITY, FILE_GENERIC_READ, FILE_TRAVERSE"))
         PrivilegeConstantDictionary.Add("SE_CHANGE_NOTIFY_NAME",
                                         New NTSecurityPrivilegeConstant(
                                             "SeChangeNotifyPrivilege",
@@ -67,7 +67,7 @@ Module WindowsServiceHelper
                                         New NTSecurityPrivilegeConstant(
                                             "SeCreateTokenPrivilege",
                                             "Create a token object",
-                                            "Required to create a primary token.\nYou cannot add this privilege to a user account with the " & Quote & "Create a token object" & Quote & " policy. Additionally, you cannot add this privilege to an owned process using Windows APIs. Windows Server 2003 and Windows XP with SP1 and earlier: Windows APIs can add this privilege to an owned process."))
+                                            "Required to create a primary token. You cannot add this privilege to a user account with the " & Quote & "Create a token object" & Quote & " policy. Additionally, you cannot add this privilege to an owned process using Windows APIs. Windows Server 2003 and Windows XP with SP1 and earlier: Windows APIs can add this privilege to an owned process."))
         PrivilegeConstantDictionary.Add("SE_DEBUG_NAME",
                                         New NTSecurityPrivilegeConstant(
                                             "SeDebugPrivilege",
@@ -142,7 +142,7 @@ Module WindowsServiceHelper
                                         New NTSecurityPrivilegeConstant(
                                             "SeRestorePrivilege",
                                             "Restore files and directories",
-                                            "Required to perform restore operations. This privilege causes the system to grant all write access control to any file, regardless of the ACL specified for the file. Any access request other than write is still evaluated with the ACL. Additionally, this privilege enables you to set any valid user or group SID as the owner of a file. This privilege is required by the\nRegLoadKey function. The following access rights are granted if this privilege is held:\n\n - WRITE_DAC\n - WRITE_OWNER\n - ACCESS_SYSTEM_SECURITY\n - FILE_GENERIC_WRITE\n - FILE_ADD_FILE\n - FILE_ADD_SUBDIRECTORY\n - DELETE"))
+                                            "Required to perform restore operations. This privilege causes the system to grant all write access control to any file, regardless of the ACL specified for the file. Any access request other than write is still evaluated with the ACL. Additionally, this privilege enables you to set any valid user or group SID as the owner of a file. This privilege is required by the RegLoadKey function. The following access rights are granted if this privilege is held: WRITE_DAC, WRITE_OWNER, ACCESS_SYSTEM_SECURITY, FILE_GENERIC_WRITE, FILE_ADD_FILE, FILE_ADD_SUBDIRECTORY, DELETE"))
         PrivilegeConstantDictionary.Add("SE_SECURITY_NAME",
                                         New NTSecurityPrivilegeConstant(
                                             "SeSecurityPrivilege",

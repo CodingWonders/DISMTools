@@ -16796,6 +16796,19 @@ Public Class MainForm
     End Sub
 
     Private Sub ManageSystemServicesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageSystemServicesToolStripMenuItem.Click
+        If isProjectLoaded Then
+            If IsImageMounted AndAlso OnlineManagement Then
+                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "services.msc"))
+                Exit Sub
+            End If
+        Else
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "services.msc"))
+            Exit Sub
+        End If
+        If ImgBW.IsBusy Then
+            MsgBox("Background processes need to finish before loading the service manager.", vbOKOnly + vbExclamation)
+            Exit Sub
+        End If
         ServiceManagementForm.Show()
     End Sub
 End Class
