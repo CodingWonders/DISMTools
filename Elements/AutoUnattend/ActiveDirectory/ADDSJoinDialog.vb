@@ -2,6 +2,7 @@
 Imports System.Net.NetworkInformation
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.RegularExpressions
+Imports System.DirectoryServices.AccountManagement
 
 Public Class ADDSJoinDialog
 
@@ -65,6 +66,9 @@ Public Class ADDSJoinDialog
 
     Private NtLogonPathStart As String = ""
 
+    Private userMappings As Dictionary(Of String, List(Of Principal))
+    Private initialUserName As String = ""
+
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         DialogResult = Windows.Forms.DialogResult.Cancel
         Close()
@@ -74,6 +78,8 @@ Public Class ADDSJoinDialog
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ComboBox1.BackColor = BackColor
+        ComboBox2.BackColor = BackColor
+        ComboBox3.BackColor = BackColor
         TextBox1.BackColor = BackColor
         TextBox2.BackColor = BackColor
         TextBox3.BackColor = BackColor
@@ -83,6 +89,8 @@ Public Class ADDSJoinDialog
         GroupBox1.BackColor = BackColor
         RichTextBox1.BackColor = BackColor
         ComboBox1.ForeColor = ForeColor
+        ComboBox2.ForeColor = ForeColor
+        ComboBox3.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         TextBox3.ForeColor = ForeColor
@@ -97,6 +105,8 @@ Public Class ADDSJoinDialog
         ChangePage(WizardPage.DnsConfigPage)
         dnsMappings.Clear()
         ComboBox1.Items.Clear()
+        ComboBox2.Items.Clear()
+        ComboBox3.Items.Clear()
         Visible = True
         ADDSInitBW.RunWorkerAsync()
         Do Until Not ADDSInitBW.IsBusy
@@ -116,18 +126,30 @@ Public Class ADDSJoinDialog
         dsIsInDomain = DomainServicesModule.DSIsInDomain()
         If dsIsInDomain Then
             ProgressReporter.SetMessage("Getting name of assigned domain...")
-            ADDSInitBW.ReportProgress(25)
+            ADDSInitBW.ReportProgress(20)
             dsDomainName = DomainServicesModule.DSGetDomainName()
         End If
         ProgressReporter.SetMessage("Getting network adapters...")
-        ADDSInitBW.ReportProgress(50)
+        ADDSInitBW.ReportProgress(40)
         GetNetworkAdapters()
         ProgressReporter.SetMessage("Getting DNS addresses for each network adapter...")
-        ADDSInitBW.ReportProgress(75)
+        ADDSInitBW.ReportProgress(60)
         GetDnsAddresses()
         ProgressReporter.SetMessage("Getting primary domain controller NetBIOS name...")
-        ADDSInitBW.ReportProgress(88)
+        ADDSInitBW.ReportProgress(80)
         NtLogonPathStart = DomainServicesModule.DSGetDomainControllerNetBIOSName()
+        If dsIsInDomain Then
+            ProgressReporter.SetMessage("Mapping organizational units and users...")
+            ADDSInitBW.ReportProgress(90)
+            userMappings = DomainServicesModule.DSMapOrganizationalUnitsAndUsers(dsDomainName, NtLogonPathStart)
+            If userMappings IsNot Nothing Then
+                ComboBox2.Items.AddRange(userMappings.Keys.ToArray())
+                ComboBox2.SelectedIndex = 0
+            End If
+        Else
+            DomainAutoUserPanel.Enabled = False
+            RadioButton3.Enabled = False
+        End If
         ProgressReporter.SetMessage("Initialization complete.")
         ADDSInitBW.ReportProgress(100)
     End Sub
@@ -257,7 +279,7 @@ Public Class ADDSJoinDialog
                 DialogResult = Windows.Forms.DialogResult.None
                 Exit Sub
             Else
-                dsInfo = New DomainInformation(TextBox4.Text, TextBox5.Text, TextBox6.Text)
+                dsInfo = New DomainInformation(TextBox4.Text, initialUserName, TextBox6.Text)
             End If
             If ApplyDsSettings() Then
                 MsgBox("Domain settings were added successfully to the answer file. You can further modify these components in the System components section.")
@@ -464,5 +486,32 @@ Public Class ADDSJoinDialog
     Private Sub TextBox5_TextChanged(sender As Object, e As EventArgs) Handles TextBox5.TextChanged
         AddsUpnPathText.Text = String.Format("{0}@{1}", TextBox5.Text, TextBox4.Text)
         AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, TextBox5.Text)
+        initialUserName = TextBox5.Text
+    End Sub
+
+    Private Sub RadioButton3_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton3.CheckedChanged
+        DomainAutoUserPanel.Enabled = RadioButton3.Checked
+        TextBox5.Enabled = Not RadioButton3.Checked
+        TextBox4.Enabled = Not RadioButton3.Checked
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+        Try
+            ComboBox3.Items.Clear()
+            ComboBox3.Items.AddRange(userMappings(ComboBox2.SelectedItem).Select(Function(adUser) adUser.DisplayName).ToArray())
+            ComboBox3.SelectedIndex = 0
+        Catch ex As Exception
+
+        End Try
+    End Sub
+
+    Private Sub ComboBox3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox3.SelectedIndexChanged
+        AddsUpnPathText.Text = String.Format("{0}@{1}", userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName, TextBox4.Text)
+        AddsNtLogonPathText.Text = String.Format("{0}\{1}", NtLogonPathStart, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName)
+        initialUserName = userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName
+
+        If Not DomainServicesModule.DSAccountIsEnabled(dsDomainName, userMappings(ComboBox2.SelectedItem)(ComboBox3.SelectedIndex).SamAccountName) Then
+            MsgBox("The selected user is not enabled in the domain. The user will not be able to sign into target devices unless it's re-enabled.", vbOKOnly + vbExclamation, "Account Disabled")
+        End If
     End Sub
 End Class

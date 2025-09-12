@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "2582"
+    Const UnattendGenReleaseTag As String = "2591"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -77,36 +77,16 @@ Public Class NewUnattendWiz
     Dim SelectedTelemetrySettings As New SystemTelemetry()
 
     ' Scripts Panel
-    Dim ConfiguredScripts As New List(Of PostInstallScript)
+    Dim ConfiguredScripts As New Dictionary(Of PostInstallScript.Stage, List(Of PostInstallScript)) From {
+        {PostInstallScript.Stage.Specialize, New List(Of PostInstallScript)},
+        {PostInstallScript.Stage.FirstRun, New List(Of PostInstallScript)},
+        {PostInstallScript.Stage.UserFirstLogon, New List(Of PostInstallScript)}
+    }
+    Dim CurrentlyConfiguredScripts As New List(Of PostInstallScript)
     Dim CurrentlyEditedStage As Integer = 0
+    Dim CurrentlyEditedScript As Integer = 0
     Dim ScriptsRestartExplorer As Boolean
     Dim ScriptsHideWindow As Boolean
-    ' -- Variables for special scripts
-    ' --- Join Path cmdlet constants
-    ' We put the directory separator character next to the environment variable as homedrive and systemdrive don't end with a backslash.
-    ' Interestingly though, not doing this works fine on PowerShell 7, but not on Windows PowerShell.
-    Const ParentScriptDir As String = "$([IO.Path]::Combine(" & Quote & "$env:SYSTEMDRIVE$([IO.Path]::DirectorySeparatorChar)" & Quote & ", " & Quote & "DISMTools" & Quote & ", " & Quote & "scripts" & Quote & "))"
-    Const ScriptDir As String = "[IO.Path]::Combine(" & Quote & "$DT_TempScriptDir" & Quote & ", " & Quote & "<FILENAME_REPLACE>" & Quote & ")"
-    Const ScriptFile As String = "[IO.Path]::Combine(" & Quote & "$DT_TempScriptDir" & Quote & ", " & Quote & "<FILENAME_REPLACE>" & Quote & ", " & Quote & "<FILENAME_REPLACE>.<EXT_REPLACE>" & Quote & ")"
-    ' --- Snippet constants for script directory creation and deletion
-    Const ScriptDirCreationSnippet As String = CrLf & CrLf & "$DT_TempScriptDir = " & Quote & ParentScriptDir & Quote & CrLf &
-                                               "New-Item -Path " & Quote & "$DT_TempScriptDir" & Quote & " -ItemType Directory -Force | Out-Null"
-    Const ScriptDirDeletionSnippet As String = CrLf & CrLf & "if (Test-Path -Path " & Quote & "$env:SYSTEMDRIVE\DISMTools" & Quote & ") {" & CrLf &
-                                               "    Remove-Item -Path " & Quote & "$env:SYSTEMDRIVE\DISMTools" & Quote & " -Recurse -Force" & CrLf &
-                                               "}"
-    ' --- Template constants for script creation and execution
-    Const ScriptContentTemplateVariable As String = CrLf & CrLf &
-                                                    "New-Item -Path " & Quote & "$(" & ScriptDir & ")" & Quote & " -ItemType Directory -Force | Out-Null" & CrLf &
-                                                    "$<FILENAME_REPLACE> = @'" & CrLf &
-                                                    "<CONTENT_REPLACE>" & CrLf &
-                                                    "'@" & CrLf & CrLf &
-                                                    Quote & "$<FILENAME_REPLACE>" & Quote & " | Out-File -FilePath " & Quote & "$(" & ScriptFile & ")" & Quote & " -Encoding ascii -Force"
-    Const ScriptExecutionTemplateSnippet As String = CrLf & CrLf &
-                                                     "Push-Location " & Quote & "$(" & ScriptDir & ")" & Quote & CrLf &
-                                                     "<EXECUTION_REPLACE>" & CrLf &
-                                                     "Pop-Location"
-    ' --- Snippet constants for script execution, depending on file type
-    Const Cmd_ExecutionSnippet As String = "Start-Process -FilePath " & Quote & "$env:WINDIR\system32\cmd.exe" & Quote & " -ArgumentList " & Quote & "/c .\<FILENAME_REPLACE>.<EXT_REPLACE>" & Quote & " -Wait -NoNewWindow"
 
     ' Component Panel
     Dim SystemComponents As New List(Of Component)
@@ -126,7 +106,7 @@ Public Class NewUnattendWiz
     Dim DefaultLockoutSettings As New AccountLockoutSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
-    Dim DefaultPostInstallScripts As New List(Of PostInstallScript)
+    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell)
 
     ' Progress info
     Dim ProgressMessage As String = ""
@@ -242,6 +222,14 @@ Public Class NewUnattendWiz
             Scintilla3.Styles(Style.PowerShell.HereString).ForeColor = Color.FromArgb(204, 147, 147)
             Scintilla3.Styles(Style.PowerShell.HereCharacter).ForeColor = Color.FromArgb(204, 147, 147)
             Scintilla3.Styles(Style.PowerShell.CommentDocKeyword).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla3.Styles(Style.Batch.Default).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.Batch.Comment).ForeColor = Color.FromArgb(127, 159, 127)
+            Scintilla3.Styles(Style.Batch.Word).ForeColor = Color.FromArgb(220, 220, 204)
+            Scintilla3.Styles(Style.Batch.Label).ForeColor = Color.FromArgb(223, 196, 125)
+            Scintilla3.Styles(Style.Batch.Hide).ForeColor = Color.FromArgb(140, 208, 211)
+            Scintilla3.Styles(Style.Batch.Command).ForeColor = Color.FromArgb(255, 207, 175)
+            Scintilla3.Styles(Style.Batch.Identifier).ForeColor = Color.FromArgb(204, 147, 147)
+            Scintilla3.Styles(Style.Batch.Operator).ForeColor = Color.FromArgb(159, 157, 109)
         ElseIf MainForm.BackColor = Color.FromArgb(239, 239, 242) Then
             Scintilla1.Styles(Style.Xml.XmlStart).ForeColor = Color.Red
             Scintilla1.Styles(Style.Xml.XmlEnd).ForeColor = Color.Red
@@ -288,6 +276,14 @@ Public Class NewUnattendWiz
             Scintilla3.Styles(Style.PowerShell.HereString).ForeColor = Color.FromArgb(128, 128, 128)
             Scintilla3.Styles(Style.PowerShell.HereCharacter).ForeColor = Color.FromArgb(128, 128, 128)
             Scintilla3.Styles(Style.PowerShell.CommentDocKeyword).ForeColor = Color.FromArgb(0, 128, 128)
+            Scintilla3.Styles(Style.Batch.Default).ForeColor = Color.Black
+            Scintilla3.Styles(Style.Batch.Comment).ForeColor = Color.FromArgb(0, 128, 0)
+            Scintilla3.Styles(Style.Batch.Word).ForeColor = Color.Blue
+            Scintilla3.Styles(Style.Batch.Label).ForeColor = Color.Red
+            Scintilla3.Styles(Style.Batch.Hide).ForeColor = Color.Magenta
+            Scintilla3.Styles(Style.Batch.Command).ForeColor = Color.FromArgb(0, 128, 255)
+            Scintilla3.Styles(Style.Batch.Identifier).ForeColor = Color.FromArgb(255, 128, 0)
+            Scintilla3.Styles(Style.Batch.Operator).ForeColor = Color.Red
         End If
         ' Set lexer
         Scintilla1.LexerName = "xml"
@@ -484,12 +480,20 @@ Public Class NewUnattendWiz
         If Language <> "" Then
             DynaLog.LogMessage("Language is not nothing. Proceeding to add keywords...")
             Select Case Language
-                Case "powershell"
+                Case "powershell", "batch"
                     Scintilla3.SetKeywords(Index, KeywordSet)
                 Case "xml"
                     Scintilla1.SetKeywords(Index, KeywordSet)
             End Select
         End If
+    End Sub
+
+    Sub ClearScriptEditorKeywords()
+        ' The maximum amount of keyword sets is 4 at this point
+        Const MaxKeywordSets As Integer = 4
+        For x = 0 To MaxKeywordSets
+            Scintilla3.SetKeywords(x, "")
+        Next
     End Sub
 
     Function NewKeyVar(key As String) As ProductKey
@@ -567,9 +571,6 @@ Public Class NewUnattendWiz
         DefaultNetworkConfiguration.Authentication = WiFiAuthenticationMode.WPA2_PSK
         DefaultNetworkConfiguration.Password = ""
         DynaLog.LogMessage("Setting default post-install scripts...")
-        DefaultPostInstallScripts.Add(New PostInstallScript("# Write your code here", PostInstallScript.Stage.Specialize))
-        DefaultPostInstallScripts.Add(New PostInstallScript("# Write your code here", PostInstallScript.Stage.FirstRun))
-        DefaultPostInstallScripts.Add(New PostInstallScript("# Write your code here", PostInstallScript.Stage.UserFirstLogon))
 
 
         SelectedLanguage = DefaultLanguage
@@ -583,8 +584,14 @@ Public Class NewUnattendWiz
         SelectedLockoutSettings = DefaultLockoutSettings
         SelectedVMSettings = DefaultVMSettings
         SelectedNetworkConfiguration = DefaultNetworkConfiguration
-        ConfiguredScripts = DefaultPostInstallScripts
+        'ConfiguredScripts = DefaultPostInstallScripts
 
+        ConfiguredScripts(PostInstallScript.Stage.FirstRun).Add(DefaultPostInstallScript)
+        ConfiguredScripts(PostInstallScript.Stage.Specialize).Add(DefaultPostInstallScript)
+        ConfiguredScripts(PostInstallScript.Stage.UserFirstLogon).Add(DefaultPostInstallScript)
+
+        CurrentlyConfiguredScripts.Add(DefaultPostInstallScript)
+        SwitchStages(0, True)
     End Sub
 
     Sub DetectDotNetRuntime(SDKVersion As String, RuntimeVersion As String)
@@ -721,6 +728,7 @@ Public Class NewUnattendWiz
         StepsTreeView.ForeColor = ForeColor
         PictureBox2.Image = If(CurrentTheme.IsDark, My.Resources.editor_mode_select, My.Resources.editor_mode)
         PictureBox4.Image = If(CurrentTheme.IsDark, My.Resources.cmps_addfirstcomponent_dark, My.Resources.cmps_addfirstcomponent_light)
+        PictureBox5.Image = If(CurrentTheme.IsDark, My.Resources.scripts_addfirstscript_dark, My.Resources.scripts_addfirstscript_light)
         ' Fill in font combinations
         FontFamilyTSCB.Items.Clear()
         For Each fntFamily As FontFamily In FontFamily.Families
@@ -818,7 +826,7 @@ Public Class NewUnattendWiz
 
         DynaLog.EnableLogging()
 
-        LoadConfiguredScript(0)
+        SwitchScript(0)
 
         ' Detect .NET runtimes/SDKs
         DetectDotNetRuntime("9.0.100", "9.0")
@@ -974,7 +982,7 @@ Public Class NewUnattendWiz
         CheckedListBox1.SetItemChecked(1, True)
         CheckedListBox1.SetItemChecked(2, False)
 
-        LoadConfiguredScript(0)
+        SwitchScript(0)
     End Sub
 
     Sub SelectTreeNode(NodeIndex As Integer)
@@ -1059,7 +1067,7 @@ Public Class NewUnattendWiz
         If CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ProgressPage Then
             ' Save post-install scripts
             DynaLog.LogMessage("Saving post-install script configuration...")
-            SaveConfiguredScript(CurrentlyEditedStage, Scintilla3.Text)
+            SaveConfiguredScripts(CurrentlyEditedStage)
             DynaLog.LogMessage("Configuring save dialog initial location depending on whether or not a project is loaded...")
             ' Detect if a project has been loaded
             If MainForm.isProjectLoaded And Not (MainForm.OnlineManagement Or MainForm.OfflineManagement) Then
@@ -2120,54 +2128,60 @@ Public Class NewUnattendWiz
                     UnattendGen.StartInfo.Arguments &= " --telem=no"
                 End If
             End If
-            If ConfiguredScripts.Count > 0 Then
-                ReportMessage("Saving user settings...", 24.625)
-                DynaLog.LogMessage("Checking if scripts directory exists...")
-                If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts")) Then
-                    DynaLog.LogMessage("Scripts directory does not exist. Attempting to create it...")
-                    Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts"))
+            ReportMessage("Saving user settings...", 24.625)
+            DynaLog.LogMessage("Checking if scripts directory exists...")
+            If Not Directory.Exists(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts")) Then
+                DynaLog.LogMessage("Scripts directory does not exist. Attempting to create it...")
+                Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts"))
+            End If
+            DynaLog.LogMessage("Saving and referencing scripts...")
+            Dim postInstallScriptContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
+                "<root>" & CrLf
+            For Each Stage In ConfiguredScripts.Keys
+                Dim xmlPart As String = ""
+                Dim StageString As String = ""
+                Select Case Stage
+                    Case PostInstallScript.Stage.Specialize
+                        StageString = "System"
+                    Case PostInstallScript.Stage.FirstRun
+                        StageString = "FirstLogon"
+                    Case PostInstallScript.Stage.UserFirstLogon
+                        StageString = "FirstTimeUserLogon"
+                End Select
+                If ConfiguredScripts(Stage).Count > 0 Then
+                    DynaLog.LogMessage("Saving scripts...")
+                    Directory.CreateDirectory(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", StageString))
+                    Dim scriptCountFlag As Integer = 1
+                    ' The name of the destination script will be "Scriptnnnn.ext"
+                    For Each Script As PostInstallScript In ConfiguredScripts(Stage)
+                        Dim scriptExt As String = ""
+                        Select Case Script.ScriptExtension
+                            Case PostInstallScript.Extension.PowerShell
+                                scriptExt = "ps1"
+                            Case PostInstallScript.Extension.Batch
+                                scriptExt = "bat"
+                        End Select
+                        Dim scriptFile As String = String.Format("Script{0}.{1}", scriptCountFlag.ToString().PadLeft(4, "0"), scriptExt)
+                        File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", StageString, scriptFile),
+                                          Script.ScriptContents, UTF8)
+                        xmlPart &= String.Format("    <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\{0}\{1}" & Quote & " Stage=" & Quote & "{0}" & Quote & " />", StageString, scriptFile) & CrLf
+                        scriptCountFlag += 1
+                    Next
+                    postInstallScriptContents &= xmlPart
                 End If
-                DynaLog.LogMessage("Saving post-installation scripts...")
-                For Each ConfiguredScript As PostInstallScript In ConfiguredScripts
-                    DynaLog.LogMessage(ConfiguredScript.ToString())
-                    DynaLog.LogMessage("Checking if Batch or other special scripts were imported...")
-                    If ConfiguredScript.ScriptContents.IndexOf(ScriptDirCreationSnippet, StringComparison.OrdinalIgnoreCase) <> -1 Then
-                        DynaLog.LogMessage("User has imported special scripts, for which a directory will be created. Since it's temporary, signaling deletion of directory after finishing stage...")
-                        ConfiguredScript.ScriptContents &= ScriptDirDeletionSnippet
-                    End If
-                    DynaLog.LogMessage("Saving contents to script directory...")
-                    Dim destinationFileName As String = ""
-                    Select Case ConfiguredScript.ScriptStage
-                        Case PostInstallScript.Stage.Specialize
-                            destinationFileName = "specialize.ps1"
-                        Case PostInstallScript.Stage.FirstRun
-                            destinationFileName = "firstrun.ps1"
-                        Case PostInstallScript.Stage.UserFirstLogon
-                            destinationFileName = "userfirstlogon.ps1"
-                    End Select
-                    Dim destinationFilePath As String = Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "Scripts", destinationFileName)
-                    DynaLog.LogMessage("Saving post-installation script to " & Quote & destinationFilePath & Quote & "...")
-                    File.WriteAllText(destinationFilePath, ConfiguredScript.ScriptContents, UTF8)
-                Next
-                DynaLog.LogMessage("Scripts were saved. Referencing them...")
-                UnattendGen.StartInfo.Arguments &= " --customscripts"
-                Dim postInstallScriptContents As String = "<?xml version=" & Quote & "1.0" & Quote & " ?>" & CrLf &
-                    "<root>" & CrLf &
-                    "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\specialize.ps1" & Quote & " Stage=" & Quote & "System" & Quote & " />" & CrLf &
-                    "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\firstrun.ps1" & Quote & " Stage=" & Quote & "FirstLogon" & Quote & " />" & CrLf &
-                    "   <PostInstallScript ScriptContent=" & Quote & "file:.\Scripts\userfirstlogon.ps1" & Quote & " Stage=" & Quote & "FirstTimeUserLogon" & Quote & " />" & CrLf &
-                    "</root>"
-                File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "scripts.xml"), postInstallScriptContents, UTF8)
-                DynaLog.LogMessage("Checking if Windows Explorer will be restarted after running scripts...")
-                If ScriptsRestartExplorer Then
-                    DynaLog.LogMessage("Explorer will be restarted.")
-                    UnattendGen.StartInfo.Arguments &= " --restartexplorer"
-                End If
-                DynaLog.LogMessage("Checking if PowerShell windows will be hidden...")
-                If ScriptsHideWindow Then
-                    DynaLog.LogMessage("Windows will be hidden.")
-                    UnattendGen.StartInfo.Arguments &= " --hidewindows"
-                End If
+            Next
+            postInstallScriptContents &= CrLf & "</root>"
+            UnattendGen.StartInfo.Arguments &= " --customscripts"
+            File.WriteAllText(Path.Combine(UnattendGen.StartInfo.WorkingDirectory, "scripts.xml"), postInstallScriptContents, UTF8)
+            DynaLog.LogMessage("Checking if Windows Explorer will be restarted after running scripts...")
+            If ScriptsRestartExplorer Then
+                DynaLog.LogMessage("Explorer will be restarted.")
+                UnattendGen.StartInfo.Arguments &= " --restartexplorer"
+            End If
+            DynaLog.LogMessage("Checking if script windows will be hidden...")
+            If ScriptsHideWindow Then
+                DynaLog.LogMessage("Windows will be hidden.")
+                UnattendGen.StartInfo.Arguments &= " --hidewindows"
             End If
             If SystemComponentsEx.Count > 0 Then
                 ReportMessage("Saving user settings...", 24.75)
@@ -2475,36 +2489,53 @@ Public Class NewUnattendWiz
         UseConfigSet = CheckBox19.Checked
     End Sub
 
-    Sub LoadConfiguredScript(Stage As Integer)
+    Sub SaveConfiguredScripts(Stage As Integer)
+        DynaLog.LogMessage("Saving scripts...")
+        DynaLog.LogMessage("- Stage Number: " & Stage)
+        DynaLog.LogMessage("Determining status of stage number...")
+        If Stage > ConfiguredScripts.Keys.Count - 1 Then
+            DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
+            Exit Sub
+        End If
+        DynaLog.LogMessage("Stage Number is fine. Saving contents...")
+        SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
+        ConfiguredScripts(Stage) = New List(Of PostInstallScript)(CurrentlyConfiguredScripts)
+    End Sub
+
+    Sub LoadConfiguredScripts(Stage As Integer)
         Try
             DynaLog.LogMessage("Loading script contents...")
             DynaLog.LogMessage("- Stage Number: " & Stage)
             DynaLog.LogMessage("Determining status of stage number...")
-            If Stage > ConfiguredScripts.Count - 1 Then
+            If Stage > ConfiguredScripts.Keys.Count - 1 Then
                 DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
                 Exit Sub
             End If
             DynaLog.LogMessage("Stage Number is fine. Loading contents...")
-            Scintilla3.Text = ConfiguredScripts(Stage).ScriptContents
+            CurrentlyConfiguredScripts = ConfiguredScripts(Stage)
         Catch ex As Exception
             ' For some reason, Scintilla causes an access violation
         End Try
     End Sub
 
-    Sub SaveConfiguredScript(Stage As Integer, Contents As String)
+    Sub SaveConfiguredScript(ScriptIndex As Integer, Contents As String)
         DynaLog.LogMessage("Saving script contents...")
-        DynaLog.LogMessage("- Stage Number: " & Stage)
+        DynaLog.LogMessage("- Script Index: " & ScriptIndex)
         DynaLog.LogMessage("- Script Contents to Save:" & CrLf & Contents)
         DynaLog.LogMessage("Determining status of stage number...")
-        If Stage > ConfiguredScripts.Count - 1 Then
+        If ScriptIndex > CurrentlyConfiguredScripts.Count - 1 Then
             DynaLog.LogMessage("A bogus stage integer has been passed. Exiting...")
             Exit Sub
         End If
         DynaLog.LogMessage("Stage Number is fine. Saving contents...")
-        ConfiguredScripts(Stage).ScriptContents = Contents
+        ' We have to clone the item first. Otherwise, every item in our list will be updated,
+        ' and we don't want this.
+        Dim newScript As PostInstallScript = CurrentlyConfiguredScripts(ScriptIndex).Clone()
+        newScript.ScriptContents = Contents
+        CurrentlyConfiguredScripts(ScriptIndex) = newScript
     End Sub
 
-    Sub SwitchStages(NewStage As Integer)
+    Sub SwitchStages(NewStage As Integer, Optional DontSave As Boolean = False)
         DynaLog.LogMessage("Switching stages...")
         DynaLog.LogMessage("- Current stage: " & CurrentlyEditedStage)
         DynaLog.LogMessage("- New Stage to change to: " & NewStage)
@@ -2512,12 +2543,43 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("The same stage has been changed to")
             Exit Sub
         End If
-        DynaLog.LogMessage("Saving contents of script to scripts in current stage...")
-        SaveConfiguredScript(CurrentlyEditedStage, Scintilla3.Text)
-        DynaLog.LogMessage("Loading contents of script from scripts in new stage...")
-        LoadConfiguredScript(NewStage)
+        If Not DontSave Then
+            DynaLog.LogMessage("Saving current scripts to list...")
+            SaveConfiguredScripts(CurrentlyEditedStage)
+        End If
+        DynaLog.LogMessage("Loading scripts in new stage...")
+        LoadConfiguredScripts(NewStage)
         DynaLog.LogMessage("Configuring stages...")
         CurrentlyEditedStage = NewStage
+        If CurrentlyConfiguredScripts.Count > 0 Then
+            SwitchScript(0)
+        Else
+            Button13.Enabled = False
+            Button14.Enabled = False
+            Button15.Enabled = False
+            Button17.Enabled = False
+            Button18.Enabled = False
+        End If
+        NoSpecifiedScriptsPanel.Visible = (CurrentlyConfiguredScripts.Count = 0)
+        ScriptEditorPanel.Visible = (CurrentlyConfiguredScripts.Count > 0)
+        Label66.Visible = (CurrentlyConfiguredScripts.Count > 0)
+    End Sub
+
+    Sub SwitchScript(NewIndex As Integer)
+        DynaLog.LogMessage("Switching scripts...")
+        DynaLog.LogMessage("- Current Script: " & CurrentlyEditedScript)
+        DynaLog.LogMessage("- New Script to change to: " & NewIndex)
+        Label66.Text = String.Format("Script {0} of {1}", NewIndex + 1, CurrentlyConfiguredScripts.Count)
+        Scintilla3.Text = CurrentlyConfiguredScripts(NewIndex).ScriptContents
+        CurrentlyEditedScript = NewIndex
+
+        Button13.Enabled = True
+        Button14.Enabled = Not (NewIndex = 0)
+        Button15.Enabled = Not (NewIndex = 0)
+        Button17.Enabled = Not (NewIndex = CurrentlyConfiguredScripts.Count - 1)
+        Button18.Enabled = Not (NewIndex = CurrentlyConfiguredScripts.Count - 1)
+
+        ComboBox16.SelectedItem = ComboBox16.Items(CurrentlyConfiguredScripts(NewIndex).ScriptExtension)
     End Sub
 
     Private Sub StageLink1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles StageLink1.LinkClicked
@@ -2545,45 +2607,7 @@ Public Class NewUnattendWiz
         ScriptEditorOFD.ShowDialog()
     End Sub
 
-    Sub InsertSpecialScript(ScriptFile As String)
-        DynaLog.LogMessage("Preparing to insert script contents...")
-        DynaLog.LogMessage("- Script to insert: " & Quote & ScriptFile & Quote)
-        DynaLog.LogMessage("Checking if directory creation snippet exists...")
-        If Not Scintilla3.Text.Contains(ScriptDirCreationSnippet) Then
-            DynaLog.LogMessage("Adding PowerShell directory creation script snippet...")
-            Scintilla3.AppendText(ScriptDirCreationSnippet)
-        End If
-        ' We will check if the file extension matches those used by other interpreters, like cmd. If that is the case, we will
-        ' prepare directories for those scripts in a parent directory, located in "\DISMTools\scripts"
-        DynaLog.LogMessage("Grabbing file properties...")
-        Dim FileName As String = Path.GetFileNameWithoutExtension(ScriptFile)
-        Dim FileExtension As String = Path.GetExtension(ScriptFile).Replace(".", "")
-        Dim FileContents As String = ""
-        DynaLog.LogMessage("Grabbed Properties:")
-        DynaLog.LogMessage("- File Name: " & Quote & FileName & Quote)
-        DynaLog.LogMessage("- File Extension: " & Quote & FileExtension & Quote)
-        DynaLog.LogMessage("File Properties grabbed. Attempting to grab contents...")
-        Try
-            FileContents = File.ReadAllText(ScriptFile)
-            DynaLog.LogMessage("Contents grabbed. Putting in script...")
-            Dim ScriptContentVariable As String = ScriptContentTemplateVariable.
-                Replace("<FILENAME_REPLACE>", FileName).
-                Replace("<CONTENT_REPLACE>", FileContents).
-                Replace("<EXT_REPLACE>", FileExtension)
-            ' We only support CMD for now, so we only replace the execution template with the cmd snippet
-            Dim ScriptExecutionSnippet As String = ScriptExecutionTemplateSnippet.
-                Replace("<FILENAME_REPLACE>", FileName).
-                Replace("<EXECUTION_REPLACE>", Cmd_ExecutionSnippet.
-                        Replace("<FILENAME_REPLACE>", FileName).
-                        Replace("<EXT_REPLACE>", FileExtension))
-            Scintilla3.AppendText(ScriptContentVariable & ScriptExecutionSnippet)
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not grab file contents. Error Message: " & ex.Message)
-        End Try
-    End Sub
-
     Private Sub ScriptEditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptEditorOFD.FileOk
-        Dim AllowedBatchExtensions As String() = New String(2) {".bat", ".cmd", ".nt"}
         DynaLog.LogMessage("Opening contents of script...")
         DynaLog.LogMessage("- Script to open: " & Quote & ScriptEditorOFD.FileName & Quote)
         DynaLog.LogMessage("Checking if file exists...")
@@ -2591,9 +2615,9 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("File exists. Attempting to read...")
             Try
                 DynaLog.LogMessage("Checking file extension for special files...")
-                If AllowedBatchExtensions.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
-                    InsertSpecialScript(ScriptEditorOFD.FileName)
-                    Exit Sub
+                If {".bat", ".cmd", ".nt"}.Contains(Path.GetExtension(ScriptEditorOFD.FileName).ToLower()) Then
+                    ' We'll set it to Batch
+                    ComboBox16.SelectedIndex = 1
                 End If
                 Scintilla3.Text = File.ReadAllText(ScriptEditorOFD.FileName)
             Catch ex As Exception
@@ -2862,5 +2886,94 @@ Public Class NewUnattendWiz
             Next
             MsgBox("Cross-platform versions of UnattendGen are now copied to " & CPUnattendGenFBD.SelectedPath, vbOKOnly + vbInformation)
         End If
+    End Sub
+
+    Private Sub Button16_Click(sender As Object, e As EventArgs) Handles Button16.Click
+        If CurrentlyConfiguredScripts.Count = 0 Then
+            NoSpecifiedScriptsPanel.Visible = False
+            ScriptEditorPanel.Visible = True
+            Label66.Visible = True
+            Button13.Enabled = True
+        Else
+            SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
+        End If
+        CurrentlyConfiguredScripts.Add(New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell))
+        CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
+        SwitchScript(CurrentlyEditedScript)
+    End Sub
+
+    Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
+        SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
+        SwitchScript(CurrentlyEditedScript + 1)
+    End Sub
+
+    Private Sub Button18_Click(sender As Object, e As EventArgs) Handles Button18.Click
+        SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
+        SwitchScript(CurrentlyConfiguredScripts.Count - 1)
+    End Sub
+
+    Private Sub Button14_Click(sender As Object, e As EventArgs) Handles Button14.Click
+        SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
+        SwitchScript(CurrentlyEditedScript - 1)
+    End Sub
+
+    Private Sub Button15_Click(sender As Object, e As EventArgs) Handles Button15.Click
+        SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
+        SwitchScript(0)
+    End Sub
+
+    Private Sub Button13_Click(sender As Object, e As EventArgs) Handles Button13.Click
+        ' Don't do it if there are no items
+        If CurrentlyConfiguredScripts.Count = 0 Then Exit Sub
+
+        CurrentlyConfiguredScripts.RemoveAt(CurrentlyEditedScript)
+        ' Check again if there are no items
+        If CurrentlyConfiguredScripts.Count = 0 Then
+            NoSpecifiedScriptsPanel.Visible = True
+            ScriptEditorPanel.Visible = False
+            Label66.Visible = False
+            Button13.Enabled = False
+            Button14.Enabled = False
+            Button15.Enabled = False
+            Button17.Enabled = False
+            Button18.Enabled = False
+        Else
+            If CurrentlyEditedScript > CurrentlyConfiguredScripts.Count - 1 Then
+                CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
+            End If
+            SwitchScript(CurrentlyEditedScript)
+        End If
+    End Sub
+
+    Sub UpdateScriptEditorLexer(LexerName As String)
+        If {"powershell", "batch"}.Contains(LexerName) Then
+            ClearScriptEditorKeywords()
+
+            ' I want a correct set of keywords whenever we switch the lexer language.
+            Scintilla3.LexerName = LexerName
+            Select Case LexerName
+                Case "powershell"
+                    AddScintillaKeywords("powershell", 0, "begin break catch class continue data do dynamicparam else elseif end enum exit filter finally for foreach function hidden if in inlinescript parallel param process return sequence static switch throw trap try until using while workflow")
+                    AddScintillaKeywords("powershell", 1, "add-appprovisionedsharedpackagecontainer add-appsharedpackagecontainer add-appvclientconnectiongroup add-appvclientpackage add-appvpublishingserver add-appxpackage add-appxprovisionedpackage add-appxvolume add-bitsfile add-certificateenrollmentpolicyserver add-computer add-content add-history add-jobtrigger add-kdsrootkey add-localgroupmember add-member add-pssnapin add-signerrule add-type add-windowscapability add-windowsdriver add-windowsimage add-windowspackage checkpoint-computer clear-content clear-eventlog clear-history clear-item clear-itemproperty clear-kdscache clear-recyclebin clear-tpm clear-uevappxpackage clear-uevconfiguration clear-variable clear-windowscorruptmountpoint compare-object complete-bitstransfer complete-dtcdiagnostictransaction complete-transaction confirm-securebootuefi connect-pssession connect-wsman convert-path convert-string convertfrom-cipolicy convertfrom-csv convertfrom-json convertfrom-securestring convertfrom-string convertfrom-stringdata convertto-csv convertto-html convertto-json convertto-processmitigationpolicy convertto-securestring convertto-tpmownerauth convertto-xml copy-bcdentry copy-item copy-itemproperty copy-userinternationalsettingstosystem debug-job debug-process debug-runspace disable-appbackgroundtaskdiagnosticlog disable-appv disable-appvclientconnectiongroup disable-bcdelementbootdebug disable-bcdelementbootems disable-bcdelementdebug disable-bcdelementems disable-bcdelementeventlogging disable-bcdelementhypervisordebug disable-computerrestore disable-jobtrigger disable-localuser disable-psbreakpoint disable-psremoting disable-pssessionconfiguration disable-runspacedebug disable-scheduledjob disable-tlsciphersuite disable-tlsecccurve disable-tlssessionticketkey disable-tpmautoprovisioning disable-uev disable-uevappxpackage disable-uevtemplate disable-wsmancredssp disable-windowserrorreporting disable-windowsoptionalfeature disconnect-pssession disconnect-wsman dismount-appxvolume dismount-windowsimage edit-cipolicyrule enable-appbackgroundtaskdiagnosticlog enable-appv enable-appvclientconnectiongroup enable-bcdelementbootdebug enable-bcdelementbootems enable-bcdelementdebug enable-bcdelementems enable-bcdelementeventlogging enable-bcdelementhypervisordebug enable-computerrestore enable-jobtrigger enable-localuser enable-psbreakpoint enable-psremoting enable-pssessionconfiguration enable-runspacedebug enable-scheduledjob enable-tlsciphersuite enable-tlsecccurve enable-tlssessionticketkey enable-tpmautoprovisioning enable-uev enable-uevappxpackage enable-uevtemplate enable-wsmancredssp enable-windowserrorreporting enable-windowsoptionalfeature enter-pshostprocess enter-pssession exit-pshostprocess exit-pssession expand-windowscustomdataimage expand-windowsimage export-alias export-bcdstore export-binarymilog export-certificate export-clixml export-console export-counter export-csv export-formatdata export-modulemember export-pssession export-pfxcertificate export-provisioningpackage export-startlayout export-startlayoutedgeassets export-tlssessionticketkey export-trace export-uevconfiguration export-uevpackage export-windowscapabilitysource export-windowsdriver export-windowsimage find-package find-packageprovider foreach-object format-custom format-list format-securebootuefi format-table format-wide get-acl get-alias get-applockerfileinformation get-applockerpolicy get-appprovisionedsharedpackagecontainer get-appsharedpackagecontainer get-appvclientapplication get-appvclientconfiguration get-appvclientconnectiongroup get-appvclientmode get-appvclientpackage get-appvpublishingserver get-appvstatus get-appxdefaultvolume get-appxpackage get-appxpackageautoupdatesettings get-appxpackagemanifest get-appxprovisionedpackage get-appxvolume get-authenticodesignature get-bcdentry get-bcdentrydebugsettings get-bcdentryhypervisorsettings get-bcdstore get-bitstransfer get-cipolicy get-cipolicyidinfo get-cipolicyinfo get-certificate get-certificateautoenrollmentpolicy get-certificateenrollmentpolicyserver get-certificatenotificationtask get-childitem get-cimassociatedinstance get-cimclass get-ciminstance get-cimsession get-clipboard get-cmsmessage get-command get-computerinfo get-computerrestorepoint get-content get-controlpanelitem get-counter get-credential get-culture get-dapolicychange get-date get-deliveryoptimizationlog get-deliveryoptimizationloganalysis get-event get-eventlog get-eventsubscriber get-executionpolicy get-formatdata get-help get-history get-host get-hotfix get-installedlanguage get-item get-itemproperty get-itempropertyvalue get-job get-jobtrigger get-kdsconfiguration get-kdsrootkey get-localgroup get-localgroupmember get-localuser get-location get-member get-module get-nonremovableappspolicy get-psbreakpoint get-pscallstack get-psdrive get-pshostprocessinfo get-psprovider get-psreadlinekeyhandler get-psreadlineoption get-pssession get-pssessioncapability get-pssessionconfiguration get-pssnapin get-package get-packageprovider get-packagesource get-pfxcertificate get-pfxdata get-pmemdedicatedmemory get-pmemdisk get-pmemphysicaldevice get-pmemunusedregion get-process get-processmitigation get-provisioningpackage get-random get-runspace get-runspacedebug get-scheduledjob get-scheduledjoboption get-securebootpolicy get-securebootuefi get-service get-systemdriver get-systempreferreduilanguage get-timezone get-tlsciphersuite get-tlsecccurve get-tpm get-tpmendorsementkeyinfo get-tpmsupportedfeature get-tracesource get-transaction get-troubleshootingpack get-trustedprovisioningcertificate get-typedata get-uiculture get-uevappxpackage get-uevconfiguration get-uevstatus get-uevtemplate get-uevtemplateprogram get-unique get-variable get-wimbootentry get-wsmancredssp get-wsmaninstance get-wheamemorypolicy get-winacceptlanguagefromlanguagelistoptout get-winculturefromlanguagelistoptout get-windefaultinputmethodoverride get-winevent get-winhomelocation get-winlanguagebaroption get-winsystemlocale get-winuilanguageoverride get-winuserlanguagelist get-windowscapability get-windowsdeveloperlicense get-windowsdriver get-windowsedition get-windowserrorreporting get-windowsimage get-windowsimagecontent get-windowsoptionalfeature get-windowspackage get-windowsreservedstoragestate get-windowssearchsetting get-wmiobject group-object import-alias import-bcdstore import-binarymilog import-certificate import-clixml import-counter import-csv import-localizeddata import-module import-pssession import-packageprovider import-pfxcertificate import-startlayout import-tpmownerauth import-uevconfiguration initialize-pmemphysicaldevice initialize-tpm install-language install-package install-packageprovider install-provisioningpackage install-trustedprovisioningcertificate invoke-cimmethod invoke-command invoke-commandindesktoppackage invoke-dscresource invoke-expression invoke-history invoke-item invoke-restmethod invoke-troubleshootingpack invoke-wsmanaction invoke-webrequest invoke-wmimethod join-dtcdiagnosticresourcemanager join-path limit-eventlog measure-command measure-object merge-cipolicy mount-appvclientconnectiongroup mount-appvclientpackage mount-appxvolume mount-windowsimage move-appxpackage move-item move-itemproperty new-alias new-applockerpolicy new-bcdentry new-bcdstore new-cipolicy new-cipolicyrule new-certificatenotificationtask new-ciminstance new-cimsession new-cimsessionoption new-dtcdiagnostictransaction new-event new-eventlog new-filecatalog new-item new-itemproperty new-jobtrigger new-localgroup new-localuser new-module new-modulemanifest new-netipsecauthproposal new-netipsecmainmodecryptoproposal new-netipsecquickmodecryptoproposal new-object new-psdrive new-psrolecapabilityfile new-pssession new-pssessionconfigurationfile new-pssessionoption new-pstransportoption new-psworkflowexecutionoption new-pmemdedicatedmemory new-pmemdisk new-provisioningrepro new-scheduledjoboption new-selfsignedcertificate new-service new-timespan new-tlssessionticketkey new-variable new-wsmaninstance new-wsmansessionoption new-webserviceproxy new-winevent new-winuserlanguagelist new-windowscustomimage new-windowsimage optimize-appxprovisionedpackages optimize-windowsimage out-default out-file out-gridview out-host out-null out-printer out-string pop-location protect-cmsmessage publish-appvclientpackage publish-dscconfiguration push-location read-host receive-dtcdiagnostictransaction receive-job receive-pssession register-argumentcompleter register-cimindicationevent register-engineevent register-objectevent register-pssessionconfiguration register-packagesource register-scheduledjob register-uevtemplate register-wmievent remove-appprovisionedsharedpackagecontainer remove-appsharedpackagecontainer remove-appvclientconnectiongroup remove-appvclientpackage remove-appvpublishingserver remove-appxpackage remove-appxpackageautoupdatesettings remove-appxprovisionedpackage remove-appxvolume remove-bcdelement remove-bcdentry remove-bitstransfer remove-cipolicyrule remove-certificateenrollmentpolicyserver remove-certificatenotificationtask remove-ciminstance remove-cimsession remove-computer remove-event remove-eventlog remove-item remove-itemproperty remove-job remove-jobtrigger remove-localgroup remove-localgroupmember remove-localuser remove-module remove-psbreakpoint remove-psdrive remove-psreadlinekeyhandler remove-pssession remove-pssnapin remove-pmemdedicatedmemory remove-pmemdisk remove-typedata remove-variable remove-wsmaninstance remove-windowscapability remove-windowsdriver remove-windowsimage remove-windowspackage remove-wmiobject rename-computer rename-item rename-itemproperty rename-localgroup rename-localuser repair-appvclientconnectiongroup repair-appvclientpackage repair-uevtemplateindex repair-windowsimage reset-appsharedpackagecontainer reset-appxpackage reset-computermachinepassword resolve-dnsname resolve-path restart-computer restart-service restore-computer restore-uevbackup restore-uevusersetting resume-bitstransfer resume-job resume-provisioningsession resume-service save-help save-package save-windowsimage select-object select-string select-xml send-appvclientreport send-dtcdiagnostictransaction send-mailmessage set-acl set-alias set-appbackgroundtaskresourcepolicy set-applockerpolicy set-appxprovisioneddatafile set-appvclientconfiguration set-appvclientmode set-appvclientpackage set-appvpublishingserver set-appxdefaultvolume set-appxpackageautoupdatesettings set-authenticodesignature set-bcdbootdefault set-bcdbootdisplayorder set-bcdbootsequence set-bcdboottimeout set-bcdboottoolsdisplayorder set-bcddebugsettings set-bcdelement set-bcdhypervisorsettings set-bitstransfer set-cipolicyidinfo set-cipolicysetting set-cipolicyversion set-certificateautoenrollmentpolicy set-ciminstance set-clipboard set-content set-culture set-date set-dsclocalconfigurationmanager set-executionpolicy set-hvcioptions set-item set-itemproperty set-jobtrigger set-kdsconfiguration set-localgroup set-localuser set-location set-nonremovableappspolicy set-psbreakpoint set-psdebug set-psreadlinekeyhandler set-psreadlineoption set-pssessionconfiguration set-packagesource set-processmitigation set-ruleoption set-scheduledjob set-scheduledjoboption set-securebootuefi set-service set-strictmode set-systempreferreduilanguage set-timezone set-tpmownerauth set-tracesource set-uevconfiguration set-uevtemplateprofile set-variable set-wsmaninstance set-wsmanquickconfig set-wheamemorypolicy set-winacceptlanguagefromlanguagelistoptout set-winculturefromlanguagelistoptout set-windefaultinputmethodoverride set-winhomelocation set-winlanguagebaroption set-winsystemlocale set-winuilanguageoverride set-winuserlanguagelist set-windowsedition set-windowsproductkey set-windowsreservedstoragestate set-windowssearchsetting set-wmiinstance show-command show-controlpanelitem show-eventlog show-windowsdeveloperlicenseregistration sort-object split-path split-windowsimage start-bitstransfer start-dscconfiguration start-dtcdiagnosticresourcemanager start-job start-osuninstall start-process start-service start-sleep start-transaction start-transcript stop-appvclientconnectiongroup stop-appvclientpackage stop-computer stop-dtcdiagnosticresourcemanager stop-job stop-process stop-service stop-transcript suspend-bitstransfer suspend-job suspend-service switch-certificate sync-appvpublishingserver tee-object test-applockerpolicy test-certificate test-computersecurechannel test-connection test-dscconfiguration test-filecatalog test-kdsrootkey test-modulemanifest test-pssessionconfigurationfile test-path test-uevtemplate test-wsman trace-command unblock-file unblock-tpm undo-dtcdiagnostictransaction undo-transaction uninstall-language uninstall-package uninstall-provisioningpackage uninstall-trustedprovisioningcertificate unprotect-cmsmessage unpublish-appvclientpackage unregister-event unregister-pssessionconfiguration unregister-packagesource unregister-scheduledjob unregister-uevtemplate unregister-windowsdeveloperlicense update-dscconfiguration update-formatdata update-help update-list update-typedata update-uevtemplate update-wimbootentry use-transaction use-windowsunattend wait-debugger wait-event wait-job wait-process where-object write-debug write-error write-eventlog write-host write-information write-output write-progress write-verbose write-warning")
+                    AddScintillaKeywords("powershell", 2, "% ? add-apppackage add-apppackagevolume add-appprovisionedpackage add-provisionedapppackage add-provisionedappsharedpackagecontainer add-provisionedappxpackage add-provisioningpackage add-trustedprovisioningcertificate apply-windowsunattend cfs disable-physicaldiskindication disable-storagediagnosticlog dismount-apppackagevolume enable-physicaldiskindication enable-storagediagnosticlog flush-volume get-apppackage get-apppackageautoupdatesettings get-apppackagedefaultvolume get-apppackagelasterror get-apppackagelog get-apppackagemanifest get-apppackagevolume get-appprovisionedpackage get-disksnv get-language get-physicaldisksnv get-preferredlanguage get-provisionedapppackage get-provisionedappsharedpackagecontainer get-provisionedappxpackage get-storageenclosuresnv get-systemlanguage initialize-volume mount-apppackagevolume move-apppackage move-smbclient optimize-appprovisionedpackages optimize-provisionedapppackages optimize-provisionedappxpackages remove-apppackage remove-apppackageautoupdatesettings remove-apppackagevolume remove-appprovisionedpackage remove-etwtracesession remove-provisionedapppackage remove-provisionedappsharedpackagecontainer remove-provisionedappxpackage remove-provisioningpackage remove-trustedprovisioningcertificate reset-apppackage set-apppackageautoupdatesettings set-apppackagedefaultvolume set-apppackageprovisioneddatafile set-autologgerconfig set-etwtracesession set-preferredlanguage set-provisionedapppackagedatafile set-provisionedappxdatafile set-systemlanguage tnc write-filesystemcache ac algm asnp blsmba cat cd chdir clc clear clhy cli clp cls clv cnsn compare copy cp cpi cpp cssmbo cssmbse curl cvpa dbp del diff dir dlu dnsn dsmbd ebp echo elu epal epcsv epsn erase esmbd etsn exsn fc fhx fimo fl foreach ft fw gal gbp gc gcai gcb gcfg gcfgs gci gcim gcls gcm gcms gcs gdr ghy gi gin gip gjb gl glcm glg glgm glu gm gmo gp gps gpv group grsmba gsmba gsmbb gsmbc gsmbcc gsmbcn gsmbd gsmbgm gsmbm gsmbmc gsmbo gsmbs gsmbsc gsmbscm gsmbscp gsmbse gsmbsn gsmbt gsmbw gsn gsnp gsv gtz gu gv gwmi h history icim icm iex ihy ii inmo ipal ipcsv ipmo ipsn irm ise iwmi iwr kill lp ls man md measure mi mount move mp msmbw mv nal ncim ncms ncso ndr ni nlg nlu nmo npssc nsmbgm nsmbm nsmbs nsmbscm nsmbt nsn nv nwsn ogv oh pbcfg popd ps pumo pushd pwd r rbp rcie rcim rcjb rcms rcsn rd rdr ren ri rjb rksmba rlg rlgm rlu rm rmdir rmo rni rnlg rnlu rnp rp rsmbb rsmbc rsmbcc rsmbgm rsmbm rsmbs rsmbsc rsmbscm rsmbt rsn rsnp rtcfg rujb rv rvpa rwmi sacfg sajb sal saps sasv sbp sc scb scim select set shcm si sl slcm sleep slg sls slu sort sp spjb spps spsv ssmbb ssmbcc ssmbp ssmbs ssmbsc ssmbscm start stz sujb sv swmi tcfg tee trcm type udsmbmc ulsmba upcfg upmo wget where wjb write")
+                    AddScintillaKeywords("powershell", 3, "a: add-bcdatacacheextension add-bitlockerkeyprotector add-dnsclientdohserveraddress add-dnsclientnrptrule add-dtcclustertmmapping add-etwtraceprovider add-initiatoridtomaskingset add-mppreference add-neteventnetworkadapter add-neteventpacketcaptureprovider add-neteventprovider add-neteventvfpprovider add-neteventvmnetworkadapter add-neteventvmswitch add-neteventvmswitchprovider add-neteventwfpcaptureprovider add-netiphttpscertbinding add-netlbfoteammember add-netlbfoteamnic add-netnatexternaladdress add-netnatstaticmapping add-netswitchteammember add-odbcdsn add-partitionaccesspath add-physicaldisk add-printer add-printerdriver add-printerport add-storagefaultdomain add-targetporttomaskingset add-vmdirectvirtualdisk add-virtualdisktomaskingset add-vpnconnection add-vpnconnectionroute add-vpnconnectiontriggerapplication add-vpnconnectiontriggerdnsconfiguration add-vpnconnectiontriggertrustednetwork afterall aftereach assert-mockcalled assert-verifiablemocks b: backup-bitlockerkeyprotector backuptoaad-bitlockerkeyprotector beforeall beforeeach block-fileshareaccess block-smbshareaccess c: clear-assignedaccess clear-bccache clear-bitlockerautounlock clear-disk clear-dnsclientcache clear-filestoragetier clear-host clear-pcsvdevicelog clear-storagebusdisk clear-storagediagnosticinfo close-smbopenfile close-smbsession compress-archive configuration connect-iscsitarget connect-virtualdisk context convertfrom-sddlstring copy-netfirewallrule copy-netipsecmainmodecryptoset copy-netipsecmainmoderule copy-netipsecphase1authset copy-netipsecphase2authset copy-netipsecquickmodecryptoset copy-netipsecrule d: debug-fileshare debug-mmappprelaunch debug-storagesubsystem debug-volume delete-deliveryoptimizationcache describe disable-bc disable-bcdowngrading disable-bcserveonbattery disable-bitlocker disable-bitlockerautounlock disable-damanualentrypointselection disable-deliveryoptimizationverboselogs disable-dscdebug disable-mmagent disable-netadapter disable-netadapterbinding disable-netadapterchecksumoffload disable-netadapterencapsulatedpackettaskoffload disable-netadapteripsecoffload disable-netadapterlso disable-netadapterpacketdirect disable-netadapterpowermanagement disable-netadapterqos disable-netadapterrdma disable-netadapterrsc disable-netadapterrss disable-netadaptersriov disable-netadapteruso disable-netadaptervmq disable-netdnstransitionconfiguration disable-netfirewallrule disable-netiphttpsprofile disable-netipsecmainmoderule disable-netipsecrule disable-netnattransitionconfiguration disable-networkswitchethernetport disable-networkswitchfeature disable-networkswitchvlan disable-odbcperfcounter disable-pstrace disable-pswsmancombinedtrace disable-physicaldiskidentification disable-pnpdevice disable-scheduledtask disable-smbdelegation disable-storagebuscache disable-storagebusdisk disable-storagedatacollection disable-storageenclosureidentification disable-storageenclosurepower disable-storagehighavailability disable-storagemaintenancemode disable-wsmantrace disable-wdacbidtrace disconnect-iscsitarget disconnect-virtualdisk dismount-diskimage e: enable-bcdistributed enable-bcdowngrading enable-bchostedclient enable-bchostedserver enable-bclocal enable-bcserveonbattery enable-bitlocker enable-bitlockerautounlock enable-damanualentrypointselection enable-deliveryoptimizationverboselogs enable-dscdebug enable-mmagent enable-netadapter enable-netadapterbinding enable-netadapterchecksumoffload enable-netadapterencapsulatedpackettaskoffload enable-netadapteripsecoffload enable-netadapterlso enable-netadapterpacketdirect enable-netadapterpowermanagement enable-netadapterqos enable-netadapterrdma enable-netadapterrsc enable-netadapterrss enable-netadaptersriov enable-netadapteruso enable-netadaptervmq enable-netdnstransitionconfiguration enable-netfirewallrule enable-netiphttpsprofile enable-netipsecmainmoderule enable-netipsecrule enable-netnattransitionconfiguration enable-networkswitchethernetport enable-networkswitchfeature enable-networkswitchvlan enable-odbcperfcounter enable-pstrace enable-pswsmancombinedtrace enable-physicaldiskidentification enable-pnpdevice enable-scheduledtask enable-smbdelegation enable-storagebuscache enable-storagebusdisk enable-storagedatacollection enable-storageenclosureidentification enable-storageenclosurepower enable-storagehighavailability enable-storagemaintenancemode enable-wsmantrace enable-wdacbidtrace expand-archive export-bccachepackage export-bcsecretkey export-odataendpointproxy export-scheduledtask export-winhttpproxy f: find-command find-dscresource find-module find-netipsecrule find-netroute find-rolecapability find-script flush-etwtracesession format-hex format-volume g: get-appbackgroundtask get-appvvirtualprocess get-appxlasterror get-appxlog get-assignedaccess get-autologgerconfig get-bcclientconfiguration get-bccontentserverconfiguration get-bcdatacache get-bcdatacacheextension get-bchashcache get-bchostedcacheserverconfiguration get-bcnetworkconfiguration get-bcstatus get-bitlockervolume get-clusteredscheduledtask get-daclientexperienceconfiguration get-daconnectionstatus get-daentrypointtableitem get-doconfig get-dodownloadmode get-dopercentagemaxbackgroundbandwidth get-dopercentagemaxforegroundbandwidth get-dedupproperties get-deliveryoptimizationperfsnap get-deliveryoptimizationperfsnapthismonth get-deliveryoptimizationstatus get-disk get-diskimage get-diskstoragenodeview get-dnsclient get-dnsclientcache get-dnsclientdohserveraddress get-dnsclientglobalsetting get-dnsclientnrptglobal get-dnsclientnrptpolicy get-dnsclientnrptrule get-dnsclientserveraddress get-dscconfiguration get-dscconfigurationstatus get-dsclocalconfigurationmanager get-dscresource get-dtc get-dtcadvancedhostsetting get-dtcadvancedsetting get-dtcclusterdefault get-dtcclustertmmapping get-dtcdefault get-dtclog get-dtcnetworksetting get-dtctransaction get-dtctransactionsstatistics get-dtctransactionstracesession get-dtctransactionstracesetting get-etwtraceprovider get-etwtracesession get-filehash get-fileintegrity get-fileshare get-fileshareaccesscontrolentry get-filestoragetier get-initiatorid get-initiatorport get-installedmodule get-installedscript get-iscsiconnection get-iscsisession get-iscsitarget get-iscsitargetportal get-isesnippet get-logproperties get-mmagent get-maskingset get-mockdynamicparameters get-mpcomputerstatus get-mpperformancereport get-mppreference get-mpthreat get-mpthreatcatalog get-mpthreatdetection get-ncsipolicyconfiguration get-net6to4configuration get-netadapter get-netadapteradvancedproperty get-netadapterbinding get-netadapterchecksumoffload get-netadapterdatapathconfiguration get-netadapterencapsulatedpackettaskoffload get-netadapterhardwareinfo get-netadapteripsecoffload get-netadapterlso get-netadapterpacketdirect get-netadapterpowermanagement get-netadapterqos get-netadapterrdma get-netadapterrsc get-netadapterrss get-netadaptersriov get-netadaptersriovvf get-netadapterstatistics get-netadapteruso get-netadaptervmqqueue get-netadaptervport get-netadaptervmq get-netcompartment get-netconnectionprofile get-netdnstransitionconfiguration get-netdnstransitionmonitoring get-neteventnetworkadapter get-neteventpacketcaptureprovider get-neteventprovider get-neteventsession get-neteventvfpprovider get-neteventvmnetworkadapter get-neteventvmswitch get-neteventvmswitchprovider get-neteventwfpcaptureprovider get-netfirewalladdressfilter get-netfirewallapplicationfilter get-netfirewalldynamickeywordaddress get-netfirewallinterfacefilter get-netfirewallinterfacetypefilter get-netfirewallportfilter get-netfirewallprofile get-netfirewallrule get-netfirewallsecurityfilter get-netfirewallservicefilter get-netfirewallsetting get-netipaddress get-netipconfiguration get-netiphttpsconfiguration get-netiphttpsstate get-netipinterface get-netipsecdospsetting get-netipsecmainmodecryptoset get-netipsecmainmoderule get-netipsecmainmodesa get-netipsecphase1authset get-netipsecphase2authset get-netipsecquickmodecryptoset get-netipsecquickmodesa get-netipsecrule get-netipv4protocol get-netipv6protocol get-netisatapconfiguration get-netlbfoteam get-netlbfoteammember get-netlbfoteamnic get-netnat get-netnatexternaladdress get-netnatglobal get-netnatsession get-netnatstaticmapping get-netnattransitionconfiguration get-netnattransitionmonitoring get-netneighbor get-netoffloadglobalsetting get-netprefixpolicy get-netqospolicy get-netroute get-netswitchteam get-netswitchteammember get-nettcpconnection get-nettcpsetting get-netteredoconfiguration get-netteredostate get-nettransportfilter get-netudpendpoint get-netudpsetting get-netview get-networkswitchethernetport get-networkswitchfeature get-networkswitchglobaldata get-networkswitchvlan get-odbcdriver get-odbcdsn get-odbcperfcounter get-offloaddatatransfersetting get-operationvalidation get-psrepository get-partition get-partitionsupportedsize get-pcsvdevice get-pcsvdevicelog get-physicaldisk get-physicaldiskstoragenodeview get-physicalextent get-physicalextentassociation get-pnpdevice get-pnpdeviceproperty get-printconfiguration get-printjob get-printer get-printerdriver get-printerport get-printerproperty get-resiliencysetting get-scheduledtask get-scheduledtaskinfo get-smbbandwidthlimit get-smbclientconfiguration get-smbclientnetworkinterface get-smbconnection get-smbdelegation get-smbglobalmapping get-smbmapping get-smbmultichannelconnection get-smbmultichannelconstraint get-smbopenfile get-smbservercertprops get-smbservercertificatemapping get-smbserverconfiguration get-smbservernetworkinterface get-smbsession get-smbshare get-smbshareaccess get-smbwitnessclient get-startapps get-storageadvancedproperty get-storagebusbinding get-storagebuscache get-storagebusclientdevice get-storagebusdisk get-storagebustargetcachestore get-storagebustargetcachestoresinstance get-storagebustargetdevice get-storagebustargetdeviceinstance get-storagechassis get-storagedatacollection get-storagediagnosticinfo get-storageenclosure get-storageenclosurestoragenodeview get-storageenclosurevendordata get-storageextendedstatus get-storagefaultdomain get-storagefileserver get-storagefirmwareinformation get-storagehealthaction get-storagehealthreport get-storagehealthsetting get-storagehistory get-storagejob get-storagenode get-storagepool get-storageprovider get-storagerack get-storagereliabilitycounter get-storagescaleunit get-storagesetting get-storagesite get-storagesubsystem get-storagetier get-storagetiersupportedsize get-supportedclustersizes get-supportedfilesystems get-targetport get-targetportal get-testdriveitem get-vmdirectvirtualdisk get-verb get-virtualdisk get-virtualdisksupportedsize get-volume get-volumecorruptioncount get-volumescrubpolicy get-vpnconnection get-vpnconnectiontrigger get-wdacbidtrace get-windowsupdatelog get-winhttpproxy grant-fileshareaccess grant-smbshareaccess h: hide-virtualdisk i: import-bccachepackage import-bcsecretkey import-isesnippet import-powershelldatafile import-winhttpproxy importsystemmodules in inmodulescope initialize-disk install-dtc install-module install-script invoke-asworkflow invoke-mock invoke-operationvalidation invoke-pester it j: k: l: lock-bitlocker m: mock mount-diskimage move-smbwitnessclient n: new-autologgerconfig new-daentrypointtableitem new-dscchecksum new-eapconfiguration new-etwtracesession new-fileshare new-fixture new-guid new-iscsitargetportal new-isesnippet new-maskingset new-mpperformancerecording new-netadapteradvancedproperty new-neteventsession new-netfirewalldynamickeywordaddress new-netfirewallrule new-netipaddress new-netiphttpsconfiguration new-netipsecdospsetting new-netipsecmainmodecryptoset new-netipsecmainmoderule new-netipsecphase1authset new-netipsecphase2authset new-netipsecquickmodecryptoset new-netipsecrule new-netlbfoteam new-netnat new-netnattransitionconfiguration new-netneighbor new-netqospolicy new-netroute new-netswitchteam new-nettransportfilter new-networkswitchvlan new-psworkflowsession new-partition new-pesteroption new-scheduledtask new-scheduledtaskaction new-scheduledtaskprincipal new-scheduledtasksettingsset new-scheduledtasktrigger new-scriptfileinfo new-smbglobalmapping new-smbmapping new-smbmultichannelconstraint new-smbservercertificatemapping new-smbshare new-storagebusbinding new-storagebuscachestore new-storagefileserver new-storagepool new-storagesubsystemvirtualdisk new-storagetier new-temporaryfile new-virtualdisk new-virtualdiskclone new-virtualdisksnapshot new-volume new-vpnserveraddress o: open-netgpo optimize-storagepool optimize-volume p: psconsolehostreadline pause publish-bcfilecontent publish-bcwebcontent publish-module publish-script q: r: read-printernfctag register-clusteredscheduledtask register-dnsclient register-iscsisession register-psrepository register-scheduledtask register-storagesubsystem remove-autologgerconfig remove-bcdatacacheextension remove-bitlockerkeyprotector remove-daentrypointtableitem remove-dnsclientdohserveraddress remove-dnsclientnrptrule remove-dscconfigurationdocument remove-dtcclustertmmapping remove-etwtraceprovider remove-fileshare remove-initiatorid remove-initiatoridfrommaskingset remove-iscsitargetportal remove-maskingset remove-mppreference remove-mpthreat remove-netadapteradvancedproperty remove-neteventnetworkadapter remove-neteventpacketcaptureprovider remove-neteventprovider remove-neteventsession remove-neteventvfpprovider remove-neteventvmnetworkadapter remove-neteventvmswitch remove-neteventvmswitchprovider remove-neteventwfpcaptureprovider remove-netfirewalldynamickeywordaddress remove-netfirewallrule remove-netipaddress remove-netiphttpscertbinding remove-netiphttpsconfiguration remove-netipsecdospsetting remove-netipsecmainmodecryptoset remove-netipsecmainmoderule remove-netipsecmainmodesa remove-netipsecphase1authset remove-netipsecphase2authset remove-netipsecquickmodecryptoset remove-netipsecquickmodesa remove-netipsecrule remove-netlbfoteam remove-netlbfoteammember remove-netlbfoteamnic remove-netnat remove-netnatexternaladdress remove-netnatstaticmapping remove-netnattransitionconfiguration remove-netneighbor remove-netqospolicy remove-netroute remove-netswitchteam remove-netswitchteammember remove-nettransportfilter remove-networkswitchethernetportipaddress remove-networkswitchvlan remove-odbcdsn remove-partition remove-partitionaccesspath remove-physicaldisk remove-printjob remove-printer remove-printerdriver remove-printerport remove-smbbandwidthlimit remove-smbcomponent remove-smbglobalmapping remove-smbmapping remove-smbmultichannelconstraint remove-smbservercertificatemapping remove-smbshare remove-storagebusbinding remove-storagefaultdomain remove-storagefileserver remove-storagehealthintent remove-storagehealthsetting remove-storagepool remove-storagetier remove-targetportfrommaskingset remove-vmdirectvirtualdisk remove-virtualdisk remove-virtualdiskfrommaskingset remove-vpnconnection remove-vpnconnectionroute remove-vpnconnectiontriggerapplication remove-vpnconnectiontriggerdnsconfiguration remove-vpnconnectiontriggertrustednetwork rename-daentrypointtableitem rename-maskingset rename-netadapter rename-netfirewallrule rename-netiphttpsconfiguration rename-netipsecmainmodecryptoset rename-netipsecmainmoderule rename-netipsecphase1authset rename-netipsecphase2authset rename-netipsecquickmodecryptoset rename-netipsecrule rename-netlbfoteam rename-netswitchteam rename-printer repair-fileintegrity repair-virtualdisk repair-volume reset-bc reset-daclientexperienceconfiguration reset-daentrypointtableitem reset-dtclog reset-ncsipolicyconfiguration reset-net6to4configuration reset-netadapteradvancedproperty reset-netdnstransitionconfiguration reset-netiphttpsconfiguration reset-netisatapconfiguration reset-netteredoconfiguration reset-physicaldisk reset-smbclientconfiguration reset-smbserverconfiguration reset-storagereliabilitycounter reset-winhttpproxy resize-partition resize-storagetier resize-virtualdisk restart-netadapter restart-pcsvdevice restart-printjob restore-dscconfiguration restore-networkswitchconfiguration resume-bitlocker resume-printjob resume-storagebusdisk revoke-fileshareaccess revoke-smbshareaccess s: safegetcommand save-etwtracesession save-module save-netgpo save-networkswitchconfiguration save-script save-storagedatacollection send-etwtracesession set-assignedaccess set-bcauthentication set-bccache set-bcdatacacheentrymaxage set-bcminsmblatency set-bcsecretkey set-clusteredscheduledtask set-daclientexperienceconfiguration set-daentrypointtableitem set-dodownloadmode set-domaxbackgroundbandwidth set-domaxforegroundbandwidth set-dopercentagemaxbackgroundbandwidth set-dopercentagemaxforegroundbandwidth set-deliveryoptimizationstatus set-disk set-dnsclient set-dnsclientdohserveraddress set-dnsclientglobalsetting set-dnsclientnrptglobal set-dnsclientnrptrule set-dnsclientserveraddress set-dtcadvancedhostsetting set-dtcadvancedsetting set-dtcclusterdefault set-dtcclustertmmapping set-dtcdefault set-dtclog set-dtcnetworksetting set-dtctransaction set-dtctransactionstracesession set-dtctransactionstracesetting set-dynamicparametervariables set-etwtraceprovider set-fileintegrity set-fileshare set-filestoragetier set-initiatorport set-iscsichapsecret set-logproperties set-mmagent set-mppreference set-ncsipolicyconfiguration set-net6to4configuration set-netadapter set-netadapteradvancedproperty set-netadapterbinding set-netadapterchecksumoffload set-netadapterdatapathconfiguration set-netadapterencapsulatedpackettaskoffload set-netadapteripsecoffload set-netadapterlso set-netadapterpacketdirect set-netadapterpowermanagement set-netadapterqos set-netadapterrdma set-netadapterrsc set-netadapterrss set-netadaptersriov set-netadapteruso set-netadaptervmq set-netconnectionprofile set-netdnstransitionconfiguration set-neteventpacketcaptureprovider set-neteventprovider set-neteventsession set-neteventvfpprovider set-neteventvmswitchprovider set-neteventwfpcaptureprovider set-netfirewalladdressfilter set-netfirewallapplicationfilter set-netfirewallinterfacefilter set-netfirewallinterfacetypefilter set-netfirewallportfilter set-netfirewallprofile set-netfirewallrule set-netfirewallsecurityfilter set-netfirewallservicefilter set-netfirewallsetting set-netipaddress set-netiphttpsconfiguration set-netipinterface set-netipsecdospsetting set-netipsecmainmodecryptoset set-netipsecmainmoderule set-netipsecphase1authset set-netipsecphase2authset set-netipsecquickmodecryptoset set-netipsecrule set-netipv4protocol set-netipv6protocol set-netisatapconfiguration set-netlbfoteam set-netlbfoteammember set-netlbfoteamnic set-netnat set-netnatglobal set-netnattransitionconfiguration set-netneighbor set-netoffloadglobalsetting set-netqospolicy set-netroute set-nettcpsetting set-netteredoconfiguration set-netudpsetting set-networkswitchethernetportipaddress set-networkswitchportmode set-networkswitchportproperty set-networkswitchvlanproperty set-odbcdriver set-odbcdsn set-psrepository set-partition set-pcsvdevicebootconfiguration set-pcsvdevicenetworkconfiguration set-pcsvdeviceuserpassword set-physicaldisk set-printconfiguration set-printer set-printerproperty set-resiliencysetting set-scheduledtask set-smbbandwidthlimit set-smbclientconfiguration set-smbpathacl set-smbservercertificatemapping set-smbserverconfiguration set-smbshare set-storagebuscache set-storagebusprofile set-storagefileserver set-storagehealthsetting set-storagepool set-storageprovider set-storagesetting set-storagesubsystem set-storagetier set-testinconclusive set-virtualdisk set-volume set-volumescrubpolicy set-vpnconnection set-vpnconnectionipsecconfiguration set-vpnconnectionproxy set-vpnconnectiontriggerdnsconfiguration set-vpnconnectiontriggertrustednetwork set-winhttpproxy setup should show-netfirewallrule show-netipsecrule show-storagehistory show-virtualdisk start-appbackgroundtask start-appvvirtualprocess start-autologgerconfig start-dtc start-dtctransactionstracesession start-etwtracesession start-mprollback start-mpscan start-mpwdoscan start-neteventsession start-pcsvdevice start-scheduledtask start-storagediagnosticlog start-trace stop-dscconfiguration stop-dtc stop-dtctransactionstracesession stop-etwtracesession stop-neteventsession stop-pcsvdevice stop-scheduledtask stop-storagediagnosticlog stop-storagejob stop-trace suspend-bitlocker suspend-printjob suspend-storagebusdisk sync-netipsecrule t: tabexpansion2 test-dtc test-netconnection test-scriptfileinfo u: unblock-fileshareaccess unblock-smbshareaccess uninstall-dtc uninstall-module uninstall-script unlock-bitlocker unregister-appbackgroundtask unregister-clusteredscheduledtask unregister-iscsisession unregister-psrepository unregister-scheduledtask unregister-storagesubsystem update-autologgerconfig update-disk update-etwtracesession update-hoststoragecache update-iscsitarget update-iscsitargetportal update-module update-modulemanifest update-mpsignature update-netfirewalldynamickeywordaddress update-netipsecrule update-script update-scriptfileinfo update-smbmultichannelconnection update-storagebuscache update-storagefirmware update-storagepool update-storageprovidercache v: w: write-dtctransactionstracesession write-printernfctag write-volumecache x: y: z: cd.. cd\ help mkdir more oss prompt")
+                Case "batch"
+                    AddScintillaKeywords("batch", 0, "assoc aux break call cd chdir cls cmdextversion color com com1 com2 com3 com4 con copy country ctty date defined del dir do dpath echo else endlocal erase errorlevel exist exit for ftype goto if in loadfix loadhigh lpt lpt1 lpt2 lpt3 lpt4 md mkdir move not nul path pause popd prn prompt pushd rd rem ren rename rmdir set setlocal shift start time title type ver verify vol")
+            End Select
+        End If
+    End Sub
+
+    Private Sub ComboBox16_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox16.SelectedIndexChanged
+        Try
+            CurrentlyConfiguredScripts(CurrentlyEditedScript).ScriptExtension = ComboBox16.SelectedIndex
+            Select Case ComboBox16.SelectedIndex
+                Case 0
+                    UpdateScriptEditorLexer("powershell")
+                Case 1
+                    UpdateScriptEditorLexer("batch")
+            End Select
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class

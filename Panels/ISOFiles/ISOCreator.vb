@@ -434,6 +434,26 @@ Public Class ISOCreator
             ComboBox1.Items.AddRange(architectures)
         End If
         ComboBox1.SelectedIndex = 0
+
+        ' Apply PE Helper settings
+        DynaLog.LogMessage("Getting ISO creation settings...")
+        DynaLog.LogMessage("- Unattended answer file (overrides existing answer files in an image): " & MainForm.PEHelper_UnattendedFile)
+        DynaLog.LogMessage("- Copy to Ventoy? " & MainForm.PEHelper_CopyToVentoy)
+        DynaLog.LogMessage("- Use new EFI boot binaries? " & MainForm.PEHelper_Use2023EFI)
+
+        If MainForm.PEHelper_UnattendedFile <> "" AndAlso File.Exists(MainForm.PEHelper_UnattendedFile) Then
+            DynaLog.LogMessage("Unattended answer file has been specified and exists. Using it...")
+            CheckBox1.Checked = True
+            TextBox4.Text = MainForm.PEHelper_UnattendedFile
+        Else
+            DynaLog.LogMessage("Either no answer file was specified or it was specified, but doesn't exist...")
+            CheckBox1.Checked = False
+            TextBox4.Text = ""
+        End If
+        CheckBox2.Checked = MainForm.PEHelper_CopyToVentoy
+        CheckBox3.Checked = MainForm.PEHelper_Use2023EFI
+
+        AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
     End Sub
 
     Private Sub DownloadADK()
@@ -789,7 +809,18 @@ Public Class ISOCreator
             DynaLog.LogMessage("The PE Helper is busy. Cancelling exit...")
             e.Cancel = True
             Beep()
+            Exit Sub
         End If
+        DynaLog.LogMessage("Saving settings...")
+        If CheckBox1.Checked Then
+            MainForm.PEHelper_UnattendedFile = TextBox4.Text
+        Else
+            MainForm.PEHelper_UnattendedFile = ""
+        End If
+        MainForm.PEHelper_CopyToVentoy = CheckBox2.Checked
+        MainForm.PEHelper_Use2023EFI = CheckBox3.Checked
+
+        RemoveHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -868,7 +899,7 @@ Public Class ISOCreator
         End If
     End Sub
 
-    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox3.CheckedChanged
+    Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs)
         Dim uefiCA2023_Message As String = ""
         Dim uefiCA2023_Title As String = ""
         Select Case MainForm.Language

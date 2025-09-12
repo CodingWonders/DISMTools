@@ -276,6 +276,11 @@ Public Class MainForm
 
     Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
 
+    ' Preinstallation Environment Helper Settings
+    Public PEHelper_UnattendedFile As String = ""   ' A default unattended answer file for new ISOs
+    Public PEHelper_CopyToVentoy As Boolean = False ' Whether to copy new ISO files to Ventoy drives automatically
+    Public PEHelper_Use2023EFI As Boolean = False   ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1329,6 +1334,9 @@ Public Class MainForm
                 QuietOperations = (CInt(ImgOpKey.GetValue("Quiet")) = 1)
                 SysNoRestart = (CInt(ImgOpKey.GetValue("NoRestart")) = 1)
                 NoNTSamMappings = (CInt(ImgOpKey.GetValue("NoNTSamMappings")) = 1)
+                PEHelper_UnattendedFile = ImgOpKey.GetValue("PEHelper.UnattendedFile").ToString().Replace(Quote, "").Trim()
+                PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
+                PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1460,6 +1468,8 @@ Public Class MainForm
                         If SystemEditor.StartsWith("{common:WinDir}", StringComparison.OrdinalIgnoreCase) Then SystemEditor = SystemEditor.Replace("{common:WinDir}", Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Trim()
                     ElseIf line.StartsWith("ScratchDirLocation=", StringComparison.OrdinalIgnoreCase) Then
                         ScratchDir = line.Replace("ScratchDirLocation=", "").Trim().Replace(Quote, "").Trim()
+                    ElseIf line.StartsWith("PEHelper.UnattendedFile=", StringComparison.OrdinalIgnoreCase) Then
+                        PEHelper_UnattendedFile = line.Replace("PEHelper.UnattendedFile=", "").Trim().Replace(Quote, "").Trim()
                     ElseIf line.StartsWith("WndWidth=", StringComparison.OrdinalIgnoreCase) Then
                         Width = CInt(line.Replace("WndWidth=", "").Trim())
                     ElseIf line.StartsWith("WndHeight=", StringComparison.OrdinalIgnoreCase) Then
@@ -1554,6 +1564,18 @@ Public Class MainForm
                     NoNTSamMappings = False
                 ElseIf DTSettingForm.RichTextBox1.Text.Contains("NoNTSamMappings=1") Then
                     NoNTSamMappings = True
+                End If
+                ' Detect whether to copy ISOs to Ventoy drives
+                If DTSettingForm.RichTextBox1.Text.Contains("PEHelper.CopyToVentoy=0") Then
+                    PEHelper_CopyToVentoy = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("PEHelper.CopyToVentoy=1") Then
+                    PEHelper_CopyToVentoy = True
+                End If
+                ' Detect whether to use new EFI boot binaries for new ISOs
+                If DTSettingForm.RichTextBox1.Text.Contains("PEHelper.Use2023EFI=0") Then
+                    PEHelper_Use2023EFI = False
+                ElseIf DTSettingForm.RichTextBox1.Text.Contains("PEHelper.Use2023EFI=1") Then
+                    PEHelper_Use2023EFI = True
                 End If
                 ' Detect whether to use scratch directory
                 If DTSettingForm.RichTextBox1.Text.Contains("UseScratch=0") Then
@@ -1751,6 +1773,9 @@ Public Class MainForm
                            "ImgOperationMode           =    " & ImgOperationMode & CrLf &
                            "Quiet                      =    " & QuietOperations & CrLf &
                            "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
+                           "PEHelper_UnattendedFile    =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
+                           "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
+                           "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
                            "NoRestart                  =    " & SysNoRestart & CrLf &
                            "UseScratch                 =    " & UseScratch & CrLf &
                            "AutoScratch                =    " & AutoScrDir & CrLf &
@@ -4601,6 +4626,9 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Quiet=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NoRestart=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
@@ -4677,6 +4705,9 @@ Public Class MainForm
         ImgOpKey.SetValue("Quiet", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("NoRestart", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("NoNTSamMappings", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PEHelper.UnattendedFile", "", RegistryValueKind.String)
+        ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4837,6 +4868,17 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "NoNTSamMappings=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & PEHelper_UnattendedFile & Quote)
+                If PEHelper_CopyToVentoy Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
+                End If
+                If PEHelper_Use2023EFI Then
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=1")
+                Else
+                    DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
+                End If
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
                 If UseScratch Then
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
@@ -4982,6 +5024,9 @@ Public Class MainForm
                     ImgOpKey.SetValue("Quiet", If(QuietOperations, 1, 0), RegistryValueKind.DWord)
                     ImgOpKey.SetValue("NoRestart", If(SysNoRestart, 1, 0), RegistryValueKind.DWord)
                     ImgOpKey.SetValue("NoNTSamMappings", If(NoNTSamMappings, 1, 0), RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("PEHelper.UnattendedFile", PEHelper_UnattendedFile, RegistryValueKind.String)
+                    ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
                     ImgOpKey.Close()
                     DynaLog.LogMessage("Configuring scratch directory settings...")
                     Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
@@ -16748,5 +16793,22 @@ Public Class MainForm
             Process.Start(Path.Combine(Application.StartupPath, "tools", "DynaViewer", "DynaViewer.exe"),
                           Quote & Path.Combine(Application.StartupPath, "logs", "DT_DynaLog.log") & Quote)
         End If
+    End Sub
+
+    Private Sub ManageSystemServicesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageSystemServicesToolStripMenuItem.Click
+        If isProjectLoaded Then
+            If IsImageMounted AndAlso OnlineManagement Then
+                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "services.msc"))
+                Exit Sub
+            End If
+        Else
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "services.msc"))
+            Exit Sub
+        End If
+        If ImgBW.IsBusy Then
+            MsgBox("Background processes need to finish before loading the service manager.", vbOKOnly + vbExclamation)
+            Exit Sub
+        End If
+        ServiceManagementForm.Show()
     End Sub
 End Class

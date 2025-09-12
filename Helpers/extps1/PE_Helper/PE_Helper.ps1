@@ -86,7 +86,7 @@ function Start-PEGeneration
     $architecture = [PE_Arch]::($arch)
     $version = "0.7.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
@@ -255,6 +255,23 @@ function Start-PEGeneration
                     {
                         Write-Host "HotInstall could not be copied."
                     }
+                }
+                # Detect if Sysprep Preparator is present in the working directory and copy it to the ISO file
+                if (Test-Path -Path "$((Get-Location).Path)\files\SysprepPreparator.zip" -PathType Leaf) {
+                    Write-Host "Sysprep Preparation Tool has been detected. Adding to ISO file..."
+                    New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\SysprepPreparator" -ItemType Directory | Out-Null
+                    Expand-Archive -Path "$((Get-Location).Path)\files\SysprepPreparator.zip" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\SysprepPreparator" -Force -ErrorAction SilentlyContinue
+                }
+                if (Test-Path -Path "$((Get-Location).Path)\tools\MainMenu") {
+                    Write-Host "The main menu has been detected. Adding to ISO file..."
+                    Copy-Item -Path "$((Get-Location).Path)\tools\MainMenu\*.*" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -Recurse -Verbose
+                    $autorunContents = @'
+
+[autorun]
+open=autorun.exe
+icon=autorun.ico
+'@
+                    $autoRunContents | Out-File -FilePath "$((Get-Location).Path)\ISOTEMP\media\autorun.inf" -Encoding utf8 -Force
                 }
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
@@ -1923,7 +1940,7 @@ function Start-ProjectDevelopment {
     $version = "0.7.1"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"

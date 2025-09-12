@@ -74,6 +74,13 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.DomainAutoUserPanel = New System.Windows.Forms.Panel()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -87,6 +94,7 @@ Partial Class ADDSJoinDialog
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.DomainAutoUserPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -316,6 +324,9 @@ Partial Class ADDSJoinDialog
         '
         'DSDomainConfigPanel
         '
+        Me.DSDomainConfigPanel.Controls.Add(Me.DomainAutoUserPanel)
+        Me.DSDomainConfigPanel.Controls.Add(Me.RadioButton4)
+        Me.DSDomainConfigPanel.Controls.Add(Me.RadioButton3)
         Me.DSDomainConfigPanel.Controls.Add(Me.AddsNtLogonPathText)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label14)
         Me.DSDomainConfigPanel.Controls.Add(Me.AddsUpnPathText)
@@ -339,7 +350,7 @@ Partial Class ADDSJoinDialog
         'AddsNtLogonPathText
         '
         Me.AddsNtLogonPathText.AutoEllipsis = True
-        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(327, 137)
+        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(327, 221)
         Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
         Me.AddsNtLogonPathText.Size = New System.Drawing.Size(343, 13)
         Me.AddsNtLogonPathText.TabIndex = 8
@@ -347,7 +358,7 @@ Partial Class ADDSJoinDialog
         'Label14
         '
         Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(31, 137)
+        Me.Label14.Location = New System.Drawing.Point(31, 221)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(293, 13)
         Me.Label14.TabIndex = 8
@@ -357,7 +368,7 @@ Partial Class ADDSJoinDialog
         'AddsUpnPathText
         '
         Me.AddsUpnPathText.AutoEllipsis = True
-        Me.AddsUpnPathText.Location = New System.Drawing.Point(327, 116)
+        Me.AddsUpnPathText.Location = New System.Drawing.Point(327, 200)
         Me.AddsUpnPathText.Name = "AddsUpnPathText"
         Me.AddsUpnPathText.Size = New System.Drawing.Size(343, 13)
         Me.AddsUpnPathText.TabIndex = 8
@@ -365,7 +376,7 @@ Partial Class ADDSJoinDialog
         'Label13
         '
         Me.Label13.AutoEllipsis = True
-        Me.Label13.Location = New System.Drawing.Point(31, 116)
+        Me.Label13.Location = New System.Drawing.Point(31, 200)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(293, 13)
         Me.Label13.TabIndex = 8
@@ -376,9 +387,9 @@ Partial Class ADDSJoinDialog
         '
         Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
         Me.DSNoDomainPanel.Controls.Add(Me.Label11)
-        Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 203)
+        Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 295)
         Me.DSNoDomainPanel.Name = "DSNoDomainPanel"
-        Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 92)
+        Me.DSNoDomainPanel.Size = New System.Drawing.Size(579, 61)
         Me.DSNoDomainPanel.TabIndex = 7
         Me.DSNoDomainPanel.Visible = False
         '
@@ -397,14 +408,14 @@ Partial Class ADDSJoinDialog
         Me.Label11.AutoEllipsis = True
         Me.Label11.Location = New System.Drawing.Point(50, 12)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(517, 56)
+        Me.Label11.Size = New System.Drawing.Size(517, 32)
         Me.Label11.TabIndex = 5
         Me.Label11.Text = "A domain name could not be obtained automatically because this device does not be" & _
     "long to a domain."
         '
         'TextBox6
         '
-        Me.TextBox6.Location = New System.Drawing.Point(211, 165)
+        Me.TextBox6.Location = New System.Drawing.Point(211, 257)
         Me.TextBox6.Name = "TextBox6"
         Me.TextBox6.PasswordChar = Global.Microsoft.VisualBasic.ChrW(9679)
         Me.TextBox6.Size = New System.Drawing.Size(459, 21)
@@ -422,7 +433,7 @@ Partial Class ADDSJoinDialog
         'Label10
         '
         Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(88, 168)
+        Me.Label10.Location = New System.Drawing.Point(88, 260)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(57, 13)
         Me.Label10.TabIndex = 5
@@ -430,9 +441,9 @@ Partial Class ADDSJoinDialog
         '
         'TextBox5
         '
-        Me.TextBox5.Location = New System.Drawing.Point(211, 81)
+        Me.TextBox5.Location = New System.Drawing.Point(251, 170)
         Me.TextBox5.Name = "TextBox5"
-        Me.TextBox5.Size = New System.Drawing.Size(459, 21)
+        Me.TextBox5.Size = New System.Drawing.Size(419, 21)
         Me.TextBox5.TabIndex = 6
         '
         'Label9
@@ -620,6 +631,73 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
+        'RadioButton3
+        '
+        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Checked = True
+        Me.RadioButton3.Location = New System.Drawing.Point(103, 109)
+        Me.RadioButton3.Name = "RadioButton3"
+        Me.RadioButton3.Size = New System.Drawing.Size(216, 17)
+        Me.RadioButton3.TabIndex = 9
+        Me.RadioButton3.TabStop = True
+        Me.RadioButton3.Text = "Pick the following user from the domain:"
+        Me.RadioButton3.UseVisualStyleBackColor = True
+        '
+        'RadioButton4
+        '
+        Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Location = New System.Drawing.Point(103, 171)
+        Me.RadioButton4.Name = "RadioButton4"
+        Me.RadioButton4.Size = New System.Drawing.Size(142, 17)
+        Me.RadioButton4.TabIndex = 9
+        Me.RadioButton4.Text = "Specify a user manually:"
+        Me.RadioButton4.UseVisualStyleBackColor = True
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(7, 8)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(26, 13)
+        Me.Label15.TabIndex = 5
+        Me.Label15.Text = "OU:"
+        '
+        'ComboBox2
+        '
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Location = New System.Drawing.Point(40, 5)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(263, 21)
+        Me.ComboBox2.TabIndex = 10
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(309, 8)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(33, 13)
+        Me.Label16.TabIndex = 5
+        Me.Label16.Text = "User:"
+        '
+        'ComboBox3
+        '
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Location = New System.Drawing.Point(348, 5)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(209, 21)
+        Me.ComboBox3.TabIndex = 10
+        '
+        'DomainAutoUserPanel
+        '
+        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox3)
+        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox2)
+        Me.DomainAutoUserPanel.Controls.Add(Me.Label16)
+        Me.DomainAutoUserPanel.Controls.Add(Me.Label15)
+        Me.DomainAutoUserPanel.Location = New System.Drawing.Point(117, 132)
+        Me.DomainAutoUserPanel.Name = "DomainAutoUserPanel"
+        Me.DomainAutoUserPanel.Size = New System.Drawing.Size(565, 32)
+        Me.DomainAutoUserPanel.TabIndex = 11
+        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -656,6 +734,8 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.DomainAutoUserPanel.ResumeLayout(False)
+        Me.DomainAutoUserPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -710,4 +790,11 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label13 As System.Windows.Forms.Label
     Friend WithEvents AddsNtLogonPathText As System.Windows.Forms.Label
     Friend WithEvents AddsUpnPathText As System.Windows.Forms.Label
+    Friend WithEvents DomainAutoUserPanel As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox3 As System.Windows.Forms.ComboBox
+    Friend WithEvents ComboBox2 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label16 As System.Windows.Forms.Label
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
 End Class
