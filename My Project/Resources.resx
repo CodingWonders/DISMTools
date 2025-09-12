@@ -981,95 +981,19 @@ SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Overall changes:
+    <value>New features:
 
---- Bugfixes
-
-- Fixed a minor issue where DynaLog timestamps would not use a common format for time
-- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
-- Fixed an issue in the update checker
-- Fixed a deployment issue in the Theme Designer. It will let you load and save themes now instead of throwing an exception
-- Fixed an issue where people could write to the console output
-- Fixed an issue where DISM would never finish after edition servicing tasks due to a computer restart prompt
-- Fixed an issue where exceptions that aren't related to the DISM API were not being logged when running background processes
-- (External) Fixed an issue where background processes would abruptly stop when getting package information due to specific time representations
-- Fixed an issue where the popup mounted image picker would not show any results if the mounted image manager was already open
-- Fixed an issue where connecting to a WDS server would fail if it didn't have a Pending Devices policy set up
-- Fixed an issue where the WDS Helper client would not get the installation images in some cases
-- Fixed an issue where the PE Helper could apply the installation image to the wrong volume if it had been assigned drive letter C
-- Fixed an issue where the WDS Helper Server would not export installation images to "install.wim" if they were named differently in WDS
-- The fixed disk configuration routine code from the PE Helper has been ported to the WDS Helper Client
-- Fixed an issue with the used volume letter checks in the PE Helper where they would not work correctly
-- Fixed an issue where DNS address mappings were not being cleared on closure of the AD DS join wizard
-
---- New features
-
-- Massive improvements were made to the DISMTools PE on network environments using WDS
-- The restart message is now shown in a cleaner way
-- CODE: the PE Helper no longer requires "dp_listdisk.dp" to be present in order to list disks, as it's now generated automatically
-- When starting up the DISMTools Preinstallation Environment, you will now see a menu from which you can choose the installation type
-- HotInstall now uses the latest version of the DISM API
-- HotInstall now creates a removal script that's launched on system startup to revert installation changes, in case the target system boots to the full Windows installation instead of the DISMTools PE
-- The ISO creator can now download and install the latest version of the Windows ADK (10.1.26100.2454) for you if it can't find it on your system
-- The default size of the ISO creator has been increased to 1280x720
-- The PE Helper now adds the "WinPE-StorageWMI" packages to the Preinstallation Environment
-- A new command-line alias, "netinit", now lets you initialize the networking stack and enable the firewall on demand; and other administration scripts are now included
-- The Driver Installation Module (DIM) is now added to the Windows PE image directly, allowing you to use it when booting to it via the network
-- The startup screen in HotInstall is now localized
-- The Driver Installation Module (DIM) has seen a minor design refresh to let you select items more easily, with grid lines
-- PowerShell script execution policy settings have been off-loaded from the DT PE startup code and put into the ISO creation script. This can present startup time improvements
-- UnattendGen has been updated to the latest version, making it cross-platform and compatible with Linux and macOS
-- You can now hide post-installation script windows when creating answer files
-- When configuring the wireless network, a link to go to your router's gateway page has been added
-- The system component screen has been fully revamped
-- You can now configure your answer file to make devices join an Active Directory domain more easily
-- You can now remove the answer files from your image easily
-- You can now configure guest virtual machine support for Parallels hypervisors on Macintosh computers
-- DISMTools now uses "pnputil" to add and remove drivers on active installations
-- DISMTools can now map AppX package registrations on active systems to local users in the system
-- The DISMTools Tour is now available so you can get started more easily. It can be launched automatically when you first set up DISMTools
-- The program now uses a theme engine that makes it easy for you to make your own themes
-- DISMTools now includes a log viewer
-- DynaLog now logs process IDs, which can help you tell multiple DISMTools processes apart more easily
-- CODE: the language engine, first introduced in HotInstall, has been ported to DISMTools. It will be used in the future
-- CODE: information dialogs are now able to disable the close button when getting information using Windows APIs
-- The managed DISM API was updated from version 3.3.0 to 3.3.12
-- Markdig has been updated from version 0.41.0 to 0.41.3
-- CODE: more LINQ queries have been introduced
-- CODE: a new progress reporter module has been introduced
-- CODE: background processes have been refactored to use new list items
-- CODE: startup code in most image task dialogs has been moved to "IImageTaskDialog" interface implementations
-- 7-Zip has been updated to version 25.01
-- The installer is now built using Inno Setup 6.4.3
-- CODE: Registry actions are now carried out by the new Registry Helper
-- DISMTools now detects if the computer has booted into Safe Mode and offers you the choice to load the online installation management mode
-- DISMTools now features a revamped popup mounted image picker
-- You can now hide the clock in the project view
-- DISM output is now saved to log files after operations are complete
-
---- Removed features
-
-- The restart dialog in the DISMTools Preinstallation Environment has been removed due to false positives in antivirus software other than Windows Defender
-- 32-bit ARM support has been fully removed from the PE Helper
-
-Changes made since last preview:
-
---- Bugfixes
-
-- Fixed an issue where DynaViewer would not parse some messages correctly
-
---- New features
-
-- DISMTools now includes the Linux and macOS versions of UnattendGen, and also lets you copy them to any folder
-- Commands in the Help menu and the Personalization settings have been added to launch DynaViewer and the Theme Designer respectively
-- Some of the messaging in the PXE Helpers menu has been slightly improved
-- Bromine feature update detection has been re-implemented with correct data this time
+- A new tool has been added to view and manage the services of the Windows image
+- A new autorun window has been added to allow you to access the items you want more easily
+- A new tool designed to prepare computers for Sysprep generalization has been added, called the *Sysprep Preparation Tool* (special thanks to @Real-MullaC for helping with testing and expansion of this tool)
+- Some of the PE Helper's settings now persist
+- A new PXE Helper has been added to add support for FOG
+- The PXE Helpers main menu now detects network adapters and offers you the ability to install new network adapters by leveraging the Driver Installation Module (DIM)
+- You can now specify the initial user to join an Active Directory domain with more easily
+- When selecting a user, DISMTools will now check if the account is disabled and will show a warning if it is
 - UnattendGen has been updated to the latest version
-- Help documentation has been updated
-
---- Removed features
-
-- **CODE:** non-WQL functions of HotInstall's Disk Space Checker have been removed in favor of WQL counterparts</value>
+- Batch scripts are now added as is, without wrappers (thanks @cschneegans for suggesting). Multiple scripts per stage can now be added as well. Editor syntax highlighting is also dynamically adjusted based on the language
+- Markdig was updated to version 0.42.0</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
