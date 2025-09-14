@@ -628,6 +628,12 @@ function New-MulticastTransmission {
 
 Clear-Host
 
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    return $false
+}
+
 Write-Host "DISMTools $version - PE Helper WDS Preparation Scripts"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
