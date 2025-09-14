@@ -2121,6 +2121,12 @@ function Start-ProjectDevelopment {
 
 $host.UI.RawUI.WindowTitle = "DISMTools - Preinstallation Environment Helper"
 
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    exit 1
+}
+
 if ($cmd -eq "StartApply")
 {
     Start-OSApplication

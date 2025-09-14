@@ -132,6 +132,13 @@ Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
+
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    return $false
+}
+
 $compInfo = Get-ComputerInfo
 if ($compInfo.WindowsInstallationType -ne "Server") {
     Write-LogMessage -message "This computer is not running Windows Server."
