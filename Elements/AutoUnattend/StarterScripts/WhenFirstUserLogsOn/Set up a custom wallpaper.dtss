@@ -1,0 +1,24 @@
+﻿Language: PowerShell
+
+Add-Type -Language CSharp -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+
+    public class WinAPI {
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+    }
+"@
+
+$SPI_SETDESKWALLPAPER = 0x0014          # This sets the desktop wallpaper
+$SPIF_UPDATEINIFILE = 0x01              # This writes the change to the user profile
+$SPIF_SENDCHANGE = 0x02                 # This broadcasts a WM_SETTINGCHANGE message
+
+# More information about the SystemParametersInfo API:
+# https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa
+
+# NOTE: the wallpaper path must be either an absolute path or a relative path to the picture
+# file in **the target Windows installation**. DO NOT PUT A PATH TO YOUR CURRENT WALLPAPER IF
+# IT DOESN'T EXIST ON THE TARGET INSTALLATION. If the file does not exist, you will see a
+# black desktop background.
+[WinAPI]::SystemParametersInfo($SPI_SETDESKWALLPAPER, 0, "<path to your wallpaper here>", $SPIF_UPDATEINIFILE -bor $SPIF_SENDCHANGE)
