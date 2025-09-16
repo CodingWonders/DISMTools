@@ -29,29 +29,39 @@
 #
 # Exposed APIs:
 #
-#   - /api/installimages --> Gets the install images in the FOG store
-#   - /api/connect       --> Connects a client to a server
+#   - /api/foghome          --> The Control Panel
+#   - /api/fogsetup         --> Configures the FOG PowerShell module to communicate with the FOG server
+#   - /api/hosts            --> Gets all the registered hosts in the FOG server
+#   - /api/getImagesForHost --> Gets all the images that are associated to a given host
 #
-#         A client must send data to /api/connect like this (example in PowerShell):
+#         A client must send data to /api/getImagesForHost like this (example in PowerShell):
 #
 #         $json = @{
-#             deviceId = "<Device ID>"
+#             hostId = "<Host ID in FOG server>"
 #         } | ConvertTo-Json
 #
-#   - /api/deploy        --> Prepares a server for image deployment to a client
+#   - /api/getAllImages     --> Gets all the registered images in the FOG server
+#   - /api/deploy           --> Initiates a deployment task on the FOG server
 #
 #         A client must send data to /api/deploy like this (example in PowerShell):
 #
 #         $json = @{
-#             shareGuid = "<GUID for share, obtained with /api/connect>"
-#             image_name = "<File name of image in FOG>"
-#             image_group = "<FOG image group>"
+#             hostId = "<Host ID in FOG server>"
+#             imageId = "<Image ID in FOG server>"
 #         } | ConvertTo-Json
 #
-#         This must then be sent as part of the body. Then, mount a network share that will be created to the WinPE
+#   - /api/setDhcp          --> (Windows Server ONLY) Sets the IP address in the DHCP server to initiate the second stage of image deployment (Linux-based)
 #
-#   - /api/clearfiles    --> Clears all the files created during deployment preparation
-#   - /api/exit          --> Gracefully close the program
+#         A client must send data to /api/setDhcp like this (example in PowerShell):
+#
+#         $json = @{
+#             fogIp = "<IP of underlying FOG server>"
+#         } | ConvertTo-Json
+#
+#         This is only valid when starting the WINDOWS version of this script.
+#
+#   - /api/viewlogs         --> Views the logs recorded by the script (ONLY ACCESSIBLE BY SERVERS. DO NOT ACCESS ON CLIENTS!)#
+#   - /api/exit             --> Gracefully close the program
 #
 #   Settings for the server are declared in the Server Options section.
 
@@ -60,8 +70,6 @@
 # ----------------------- Server Options -----------------------
 $webHost = "*"
 $port = 8080
-$tmpImageFolderPath = "$env:SystemDrive\NetInstallFOGTemp"
-$shareName = "NetInstallTemp"
 # --------------------------------------------------------------
 
 function Write-LogMessage {
@@ -132,13 +140,6 @@ Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
-
-if ([Environment]::OSVersion.Platform -ne "Win32NT") {
-    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
-    Read-Host | Out-Null
-    return $false
-}
-
 $compInfo = Get-ComputerInfo
 if ($compInfo.WindowsInstallationType -ne "Server") {
     Write-LogMessage -message "This computer is not running Windows Server."
@@ -165,8 +166,6 @@ Write-LogMessage -message "Starting FOG Helper Web API..."
 Write-LogMessage -message "Server Options:"
 Write-LogMessage -message " - Web API Host: $webHost"
 Write-LogMessage -message " - Web API Port to listen to: $port"
-Write-LogMessage -message " - Temporary directory for deployment operations: $tmpImageFolderPath"
-Write-LogMessage -message " - Name for SMB network share: $shareName"
 Write-LogMessage -message "Creating firewall rules..."
 $fwRule = $null
 try {
@@ -390,14 +389,6 @@ try {
                                     <tr>
                                         <td colspan="2" class="super_duper_important_tab">IMPORTANT! You will need to provide the aforementioned information when connecting from clients</td>
                                     </tr>
-                                    <tr>
-                                        <td class="important_tab">Temporary folder for network shares:</td>
-                                        <td>$tmpImageFolderPath</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Share Name:</td>
-                                        <td>$shareName</td>
-                                    </tr>
                                 </table>
                             </fieldset>
                             <fieldset>
@@ -581,36 +572,6 @@ try {
                     }
                 } else {
                     $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
-                }
-            }
-            "/api/installimages" {
-                if ($request.HttpMethod -eq "GET") {
-                    try {
-                        $images = Get-FOGInstallImages
-                        $sendJson.Invoke(@{ success = $true; images = $images })
-                    } catch {
-                        Write-LogMessage -message "Exception caught: $_"
-                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
-                    }
-                } else {
-                    $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
-                }
-            }
-            "/api/connect" {
-                if ($request.HttpMethod -eq "POST") {
-                    try {
-                        $reader = New-Object IO.StreamReader $request.InputStream
-                        $body = $reader.ReadToEnd() | ConvertFrom-Json
-                        $deviceId = $body.deviceId
-
-                        $result = Start-ServerConnection -deviceId $deviceId
-                        if ($result -ne $null) {
-                            $sendJson.Invoke(@{ success = $result.successful; output = $result })
-                        }
-                    } catch {
-                        Write-LogMessage -message "Exception caught: $_"
-                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
-                    }
                 }
             }
             "/api/deploy" {
