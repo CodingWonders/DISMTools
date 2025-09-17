@@ -253,7 +253,8 @@ Module WindowsServiceHelper
                         serviceDelayedStart As Boolean = False,
                         serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
                         serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
-                        serviceRequiredPrivilegesString() As String = New String() {}
+                        serviceRequiredPrivilegesString() As String = New String() {},
+                        serviceDependencies() As String = New String() {}
                     Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
                         ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
                         ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
@@ -283,6 +284,8 @@ Module WindowsServiceHelper
                         serviceErrorControl = ServiceInfoRk.GetValue("ErrorControl", -1)
                         ' The required privileges property is a multi-value registry value, so we need an array
                         serviceRequiredPrivilegesString = ServiceInfoRk.GetValue("RequiredPrivileges", New String() {})
+                        ' Same goes for dependencies
+                        serviceDependencies = ServiceInfoRk.GetValue("DependOnService", New String() {})
 
                         Dim serviceRequiredPrivilegeList As New List(Of NTSecurityPrivilegeConstant)
 
@@ -307,7 +310,8 @@ Module WindowsServiceHelper
                                                            serviceDelayedStart,
                                                            serviceType,
                                                            serviceErrorControl,
-                                                           serviceRequiredPrivilegeList))
+                                                           serviceRequiredPrivilegeList,
+                                                           serviceDependencies))
                     End Using
                 Next
             Catch ex As Exception

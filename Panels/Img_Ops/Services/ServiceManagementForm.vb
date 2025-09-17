@@ -20,6 +20,20 @@
         For Each RequiredPrivilege In ServiceList(Index).RequiredPrivileges
             ListView2.Items.Add(New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription}))
         Next
+
+        ListView3.Items.Clear()
+        ListView4.Items.Clear()
+
+        Dim dependencies As List(Of WindowsService) = ServiceList.Where(Function(service) ServiceList(Index).Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName).ToList()
+        Dim dependents As List(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName).ToList()
+
+        For Each dependency As WindowsService In dependencies
+            ListView3.Items.Add(New ListViewItem(New String() {dependency.Name, dependency.DisplayName}))
+        Next
+
+        For Each dependent As WindowsService In dependents
+            ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName}))
+        Next
     End Sub
 
     Private Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -30,6 +44,10 @@
         ListView1.ForeColor = ForeColor
         ListView2.BackColor = BackColor
         ListView2.ForeColor = ForeColor
+        ListView3.BackColor = BackColor
+        ListView3.ForeColor = ForeColor
+        ListView4.BackColor = BackColor
+        ListView4.ForeColor = ForeColor
         TabPage1.BackColor = BackColor
         TabPage1.ForeColor = ForeColor
         TabPage2.BackColor = BackColor

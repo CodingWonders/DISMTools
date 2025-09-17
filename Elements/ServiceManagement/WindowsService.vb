@@ -36,8 +36,9 @@
     Public Property Type As ServiceType
     Public Property ErrorControl As ServiceErrorControl
     Public Property RequiredPrivileges As New List(Of NTSecurityPrivilegeConstant)
+    Public Property Dependencies As String()
 
-    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant))
+    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String())
         Me.Name = name
         Me.DisplayName = displayName
         Me.Description = description
@@ -48,6 +49,7 @@
         Me.Type = type
         Me.ErrorControl = errorControl
         Me.RequiredPrivileges = ntPrivileges
+        Me.Dependencies = deps
     End Sub
 
     Public Function StartTypeToString() As String
