@@ -3008,7 +3008,16 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
+        Dim StarterScriptFolder As String = ""
         OpenFileDialog2.InitialDirectory = Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")
+        Select Case CurrentlyEditedStage
+            Case 0
+                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "DuringSystemConfiguration")
+            Case 1
+                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenFirstUserLogsOn")
+            Case 2
+                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenUsersLogOnForFirstTime")
+        End Select
         OpenFileDialog2.ShowDialog()
     End Sub
 End Class
