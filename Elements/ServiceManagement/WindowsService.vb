@@ -26,6 +26,44 @@
         Critical = 3
     End Enum
 
+    Class ServiceFailureActions
+        Public Property FirstFailure As ServiceFailureAction
+        Public Property FirstDelayInMillis As Long
+        Public Property SecondFailure As ServiceFailureAction
+        Public Property SecondDelayInMillis As Long
+        Public Property SubsequentFailure As ServiceFailureAction
+        Public Property SubsequentDelaysInMillis As Long
+        Public Property ResetDelayInSeconds As Integer
+
+        Public Sub New()
+            FirstFailure = ServiceFailureAction.NoAction
+            FirstDelayInMillis = 0
+            SecondFailure = ServiceFailureAction.NoAction
+            SecondDelayInMillis = 0
+            SubsequentFailure = ServiceFailureAction.NoAction
+            SubsequentDelaysInMillis = 0
+            ResetDelayInSeconds = 0
+        End Sub
+
+        Public Sub New(firstFail As ServiceFailureAction, firstDelay As Long, secondFail As ServiceFailureAction, secondDelay As Long, subsequentFail As ServiceFailureAction, subsequentDelays As Long, resetDelays As Long)
+            FirstFailure = firstFail
+            FirstDelayInMillis = If(firstDelay >= 0, firstDelay, 0)
+            SecondFailure = secondFail
+            SecondDelayInMillis = If(secondDelay >= 0, secondDelay, 0)
+            SubsequentFailure = subsequentFail
+            SubsequentDelaysInMillis = If(subsequentDelays >= 0, subsequentDelays, 0)
+            ResetDelayInSeconds = If(resetDelays >= 0, resetDelays, 0)
+        End Sub
+    End Class
+
+    Enum ServiceFailureAction As Integer
+        Unknown = -1
+        NoAction = 0
+        RestartService = 1
+        RestartComputer = 2
+        RunProgram = 3
+    End Enum
+
     Public Property Name As String
     Public Property DisplayName As String
     Public Property Description As String
@@ -37,8 +75,9 @@
     Public Property ErrorControl As ServiceErrorControl
     Public Property RequiredPrivileges As New List(Of NTSecurityPrivilegeConstant)
     Public Property Dependencies As String()
+    Public Property FailureActions As ServiceFailureActions
 
-    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String())
+    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions)
         Me.Name = name
         Me.DisplayName = displayName
         Me.Description = description
@@ -50,6 +89,7 @@
         Me.ErrorControl = errorControl
         Me.RequiredPrivileges = ntPrivileges
         Me.Dependencies = deps
+        Me.FailureActions = failureActions
     End Sub
 
     Public Function StartTypeToString() As String
@@ -99,6 +139,20 @@
             Case Else
                 Return String.Format("Unknown (Type {0})", ErrorControl)
         End Select
+    End Function
+
+    Public Function FailureActionToString(FailureAction As ServiceFailureAction) As String
+        Select Case FailureAction
+            Case ServiceFailureAction.NoAction
+                Return "Take no action"
+            Case ServiceFailureAction.RestartService
+                Return "Restart Service"
+            Case ServiceFailureAction.RestartComputer
+                Return "Restart Computer"
+            Case ServiceFailureAction.RunProgram
+                Return "Run a program"
+        End Select
+        Return ""
     End Function
 
 End Class

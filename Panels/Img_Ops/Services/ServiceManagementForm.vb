@@ -13,6 +13,17 @@
         TextBox6.Text = ServiceList(Index).StartTypeToString()
         TextBox7.Text = ServiceList(Index).TypeToString()
         TextBox8.Text = ServiceList(Index).ErrorControlToString()
+        TextBox9.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.FirstFailure)
+        TextBox10.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.SecondFailure)
+        TextBox11.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.SubsequentFailure)
+        TextBox12.Text = String.Format("{0} minute(s)", (ServiceList(Index).FailureActions.ResetDelayInSeconds / 60))
+        TextBox13.Text = String.Format("{0} minute(s) ({1} seconds) after first failure, {2} minute(s) ({3} seconds) after second failure, {4} minute(s) ({5} seconds) after subsequent failures",
+                                       Math.Round((ServiceList(Index).FailureActions.FirstDelayInMillis / 60000), 2),
+                                       Math.Round((ServiceList(Index).FailureActions.FirstDelayInMillis / 1000), 2),
+                                       Math.Round((ServiceList(Index).FailureActions.SecondDelayInMillis / 60000), 2),
+                                       Math.Round((ServiceList(Index).FailureActions.SecondDelayInMillis / 1000), 2),
+                                       Math.Round((ServiceList(Index).FailureActions.SubsequentDelaysInMillis / 60000), 2),
+                                       Math.Round((ServiceList(Index).FailureActions.SubsequentDelaysInMillis / 1000), 2))
 
         CheckBox1.Checked = ServiceList(Index).DelayedStart
 
@@ -72,6 +83,17 @@
         TextBox7.ForeColor = ForeColor
         TextBox8.BackColor = BackColor
         TextBox8.ForeColor = ForeColor
+        TextBox9.BackColor = BackColor
+        TextBox9.ForeColor = ForeColor
+        TextBox10.BackColor = BackColor
+        TextBox10.ForeColor = ForeColor
+        TextBox11.BackColor = BackColor
+        TextBox11.ForeColor = ForeColor
+        TextBox12.BackColor = BackColor
+        TextBox12.ForeColor = ForeColor
+        TextBox13.BackColor = BackColor
+        TextBox13.ForeColor = ForeColor
+        GroupBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 

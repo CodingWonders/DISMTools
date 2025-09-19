@@ -254,7 +254,8 @@ Module WindowsServiceHelper
                         serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
                         serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
                         serviceRequiredPrivilegesString() As String = New String() {},
-                        serviceDependencies() As String = New String() {}
+                        serviceDependencies() As String = New String() {},
+                        serviceFailActionByteArr() As Byte = New Byte() {}
                     Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
                         ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
                         ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
@@ -286,6 +287,7 @@ Module WindowsServiceHelper
                         serviceRequiredPrivilegesString = ServiceInfoRk.GetValue("RequiredPrivileges", New String() {})
                         ' Same goes for dependencies
                         serviceDependencies = ServiceInfoRk.GetValue("DependOnService", New String() {})
+                        serviceFailActionByteArr = ServiceInfoRk.GetValue("FailureActions", New Byte() {})
 
                         Dim serviceRequiredPrivilegeList As New List(Of NTSecurityPrivilegeConstant)
 
@@ -311,7 +313,8 @@ Module WindowsServiceHelper
                                                            serviceType,
                                                            serviceErrorControl,
                                                            serviceRequiredPrivilegeList,
-                                                           serviceDependencies))
+                                                           serviceDependencies,
+                                                           ParseFailureActionByteArray(serviceFailActionByteArr)))
                     End Using
                 Next
             Catch ex As Exception
@@ -323,6 +326,53 @@ Module WindowsServiceHelper
         End If
 
         Return serviceList
+    End Function
+
+    Private Function ParseFailureActionByteArray(FailureActions As Byte()) As WindowsService.ServiceFailureActions
+        Dim scFailure As WindowsService.ServiceFailureActions = New WindowsService.ServiceFailureActions()
+        Dim firstFail As WindowsService.ServiceFailureAction = WindowsService.ServiceFailureAction.Unknown,
+            secondFail As WindowsService.ServiceFailureAction = WindowsService.ServiceFailureAction.Unknown,
+            subsequentFails As WindowsService.ServiceFailureAction = WindowsService.ServiceFailureAction.Unknown
+        Dim firstDelay As Long = 0,
+            secondDelay As Long = 0,
+            subsequentDelay As Long = 0
+        Dim resetDelay As Integer = 0
+
+        If FailureActions.Count >= 1 Then
+            Try
+                resetDelay = GetDelay(FailureActions.Skip(0).Take(4).ToArray())
+
+                ' We have to get the number of byte elements twice because undefined failure measures
+                ' cause our byte array to be smaller than expected, therefore causing indexes out of bounds.
+                firstFail = FailureActions(20)
+                firstDelay = GetDelay(FailureActions.Skip(24).Take(4).ToArray())
+                If FailureActions.Count > 28 Then
+                    ' We have defined second failure measures
+                    secondFail = FailureActions(28)
+                    secondDelay = GetDelay(FailureActions.Skip(32).Take(4).ToArray())
+                End If
+                If FailureActions.Count > 36 Then
+                    ' We have defined subsequent failure measures
+                    subsequentFails = FailureActions(36)
+                    subsequentDelay = GetDelay(FailureActions.Skip(40).Take(4).ToArray())
+                End If
+            Catch ex As Exception
+
+            End Try
+
+            scFailure = New WindowsService.ServiceFailureActions(firstFail, firstDelay, secondFail, secondDelay, subsequentFails, subsequentDelay, resetDelay)
+        End If
+        Return scFailure
+    End Function
+
+    Private Function GetDelay(ByteArray As Byte()) As Long
+        Dim binary As String = ""
+
+        For x = ByteArray.Length - 1 To 0 Step -1
+            binary &= Convert.ToString(ByteArray(x), 2).PadLeft(8, "0"c)
+        Next
+
+        Return Convert.ToInt32(binary, 2)
     End Function
 
 End Module
