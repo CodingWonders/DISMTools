@@ -462,9 +462,9 @@ Partial Class ServiceManagementForm
         Me.Label14.AutoSize = True
         Me.Label14.Location = New System.Drawing.Point(23, 109)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(211, 13)
+        Me.Label14.Size = New System.Drawing.Size(216, 13)
         Me.Label14.TabIndex = 3
-        Me.Label14.Text = "Retart Service after the following minutes:"
+        Me.Label14.Text = "Restart Service after the following minutes:"
         '
         'TextBox12
         '
