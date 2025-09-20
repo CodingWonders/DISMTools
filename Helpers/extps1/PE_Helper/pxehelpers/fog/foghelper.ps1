@@ -14,6 +14,10 @@ class ServerAuthentication {
         $this.serverIP = $ip
         $this.serverPort = $port
         $this.serverUnderlyingFogServerIP = $underlyingIp
+
+        if ((Test-IPAddressSyntax -ipAddr $this.serverIP) -eq [IPAddress]::IPv6) {
+            $this.serverIP = "[$($this.serverIP)]"
+        }
     }
 }
 
