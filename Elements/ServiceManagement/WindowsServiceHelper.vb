@@ -3,6 +3,7 @@ Imports System.IO
 Imports Microsoft.Win32
 Imports System.Runtime.InteropServices
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 Module WindowsServiceHelper
 
@@ -220,6 +221,48 @@ Module WindowsServiceHelper
         End If
     End Function
 
+    Private Function ParseInfLine(line As String) As Tuple(Of String, String)
+        Dim noComment = line.Split(";"c)(0).Trim()
+        Dim parts = noComment.Split(","c)
+
+        If parts.Length < 2 Then
+            Return Nothing
+        End If
+
+        Dim infFile = parts(0).Trim().TrimStart("@"c)
+        Dim token = parts(1).Trim()
+
+        Return Tuple.Create(infFile, token)
+    End Function
+
+    Private Function ResolveInfToken(infPath As String, token As String) As String
+        Try
+            Dim key As String = token.Trim("%"c)
+
+            Dim lines As String() = File.ReadAllLines(infPath)
+            Dim inStrings As Boolean = False
+            For Each line In lines
+                Dim lineTrim As String = line.Trim()
+                If lineTrim.StartsWith("[Strings]", StringComparison.OrdinalIgnoreCase) Then
+                    inStrings = True
+                    Continue For
+                End If
+
+                If inStrings Then
+                    If lineTrim.StartsWith("[") Then Exit For
+
+                    Dim match = Regex.Match(lineTrim, "^(?<k>[^\s=]+)\s*=\s*""?(?<v>[^""]+)""?$")
+                    If match.Success AndAlso match.Groups("k").Value.Equals(key, StringComparison.OrdinalIgnoreCase) Then
+                        Return match.Groups("v").Value
+                    End If
+                End If
+            Next
+        Catch ex As Exception
+
+        End Try
+        Return ""
+    End Function
+
     Function GetServiceList(MountPath As String) As List(Of WindowsService)
         ' For the required privileges a service may have, we have to fill in the constants first so that we don't have things like
         ' "SeUndockPrivilege", "SeShutdownPrivilege"; but rather "Remove computer from docking station", and so on... we want the
@@ -265,13 +308,19 @@ Module WindowsServiceHelper
                             ' This "service" is bogus
                             Continue For
                         End If
-                        ' TODO: for devices, tweak the indirect string resolver to like INF files
-                        ' TODO: failure/recovery actions need to be implemented, which will require us to understand binary data
-                        ' TODO: relationships with services a service depends on or services that depend on a service need to be implemented
 
                         serviceEntryName = ServiceName
                         serviceDisplayName = ServiceInfoRk.GetValue("DisplayName", "")
-                        If serviceDisplayName.StartsWith("@") Then
+                        If serviceDisplayName.StartsWith("@") AndAlso serviceDisplayName.ToLowerInvariant().Contains(".inf") Then
+                            Dim parsedInf As Tuple(Of String, String) = ParseInfLine(serviceDisplayName)
+
+                            If parsedInf IsNot Nothing Then
+                                Dim resolvedString As String = ResolveInfToken(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "INF", parsedInf.Item1), parsedInf.Item2)
+                                If Not String.IsNullOrEmpty(resolvedString) Then
+                                    serviceDisplayName = resolvedString
+                                End If
+                            End If
+                        ElseIf serviceDisplayName.StartsWith("@") Then
                             serviceDisplayName = ResolveIndirectString(serviceDisplayName)
                         End If
                         serviceDescription = ServiceInfoRk.GetValue("Description", "")
