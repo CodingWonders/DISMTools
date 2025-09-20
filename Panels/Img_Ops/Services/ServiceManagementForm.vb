@@ -97,9 +97,9 @@
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
+        DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
-
-        'MsgBox("Services: " & ServiceList.Count)
+        DynaLog.EnableLogging()
 
         For Each Service In ServiceList
             ListView1.Items.Add(New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString}))
