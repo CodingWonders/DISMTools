@@ -1808,13 +1808,24 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
-        If ListView1.FocusedItem.Text <> "" Then
-            Packages.RemoveAt(ListView1.FocusedItem.Index)
-            ListView1.Items.Remove(ListView1.FocusedItem)
-            NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
-            AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+        If ListView1.SelectedItems.Count > 0 Then
+            If ListView1.SelectedItems.Count > 1 Then
+                For x = ListView1.Items.Count - 1 To 0 Step -1
+                    If ListView1.Items(x).Selected Then
+                        Packages.RemoveAt(x)
+                        ListView1.Items(x).Remove()
+                    End If
+                Next
+            Else
+                Packages.RemoveAt(ListView1.FocusedItem.Index)
+                ListView1.Items.Remove(ListView1.FocusedItem)
+            End If
+
+
+            NoAppxFilePanel.Visible = (ListView1.SelectedItems.Count <= 0)
+            AppxFilePanel.Visible = Not (ListView1.SelectedItems.Count <= 0)
             AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
-            FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
+            FlowLayoutPanel1.Visible = Not (ListView1.SelectedItems.Count <= 0)
         End If
     End Sub
 
@@ -1856,11 +1867,7 @@ Public Class AddProvAppxPackage
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
         Try
-            If ListView1.SelectedItems.Count <> 1 Then
-                Button9.Enabled = False
-            Else
-                Button9.Enabled = True
-            End If
+            Button9.Enabled = (ListView1.SelectedItems.Count > 0)
             If ListView1.SelectedItems.Count > 1 Then
                 DetectMultiSelectionCommonProperties()
             Else
