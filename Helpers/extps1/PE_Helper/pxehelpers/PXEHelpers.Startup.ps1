@@ -194,11 +194,6 @@ function Show-PxeProviders {
     Write-Host "  N. Install a Network Adapter"
     Write-Host "     Choose this option to install a new network adapter on this environment. You will go back to this screen afterwards"
     Write-Host ""
-
-    # Show additional options
-    Write-Host "  N. Install a Network Adapter"
-    Write-Host "     Choose this option to install a new network adapter on this environment. You will go back to this screen afterwards"
-    Write-Host ""
 }
 
 Write-Progress -Activity "PXE Helpers starting up..." -Completed
