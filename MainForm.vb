@@ -13155,7 +13155,7 @@ Public Class MainForm
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
-                client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/" & dtBranch & "/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
+                client.DownloadFile("https://github.com/CodingWonders/DISMTools/raw/stable/Updater/DISMTools-UCS/update-bin/update.exe", Application.StartupPath & "\update.exe")
             End Using
         Catch ex As WebException
             DynaLog.LogMessage("Could not get updater. Error message: " & ex.Status.ToString())
