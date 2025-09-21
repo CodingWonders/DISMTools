@@ -5,7 +5,106 @@ using namespace System.Collections.Generic
 
 . "$PSScriptRoot\Common\PXEHelpers.Common.ps1"
 
+$networkAdapters = $null
+
+function Get-SystemArchitecture
+{
+    # Detect CPU architecture and compare with list
+    switch (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture).ToString())
+    {
+        "0"{
+            return "i386"
+        }
+        "1"{
+            return "mips"
+        }
+        "2"{
+            return "alpha"
+        }
+        "3"{
+            return "powerpc"
+        }
+        "5"{
+            return "arm"
+        }
+        "6"{
+            return "ia64"
+        }
+        "9"{
+            return "amd64"
+        }
+        "12" {
+            return "aarch64"
+        }
+        default {
+            return ""
+        }
+    }
+    return ""
+}
+
+function Show-InstallNetAdapterScreen {
+    param(
+        [switch]$firstStartup = $false
+    )
+
+    Show-SectionMessage -sectionTitle "Install a network adapter" -sectionDescription "Either no network adapters were detected on your computer or you decided to install a new network adapter."
+
+    Write-Host "  The following network adapters were detected on your computer, excluding kernel debuggers:`n"
+
+    foreach ($networkAdapter in $networkAdapters) {
+        Write-Host "    - Device ID $($networkAdapter.DeviceID): $($networkAdapter.Name). Type: $($networkAdapter.AdapterType). Service Name: $($networkAdapter.ServiceName)"
+    }
+
+    Write-Host ""
+    Write-Host "  To launch the Driver Installation Module to install a new network adapter, and then go back to the previous screen, type `"DIM`" and press ENTER."
+
+    if ($firstStartup) {
+        Write-Host "  To cancel network installation and restart your computer, type `"R`" and press ENTER."
+    } else {
+        Write-Host "  To go back to the previous screen, type `"X`" and press ENTER."
+    }
+
+    Write-Host ""
+    $option = Read-Host -Prompt "Choose an option described above and press ENTER"
+
+    if ($option -eq "DIM") {
+        # Get CPU architecture and launch Driver Installation Module
+        $supportedArchitectures = [List[string]]::new()
+        $supportedArchitectures.Add("i386")
+        $supportedArchitectures.Add("amd64")
+        $supportedArchitectures.Add("aarch64")
+        $systemArchitecture = Get-SystemArchitecture
+
+        if ($supportedArchitectures.Contains($systemArchitecture))
+        {
+            if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
+            {
+                Clear-Host
+                Show-CenteredTextBox -Text "Starting the Driver Installation Module . . ." -MaxWidth 70 -CenterOfAll
+                Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
+                Show-CenteredTextBox -Text "Getting Installed Network Adapters . . ." -MaxWidth 70 -CenterOfAll
+            }
+        }
+    } else {
+        if ($firstStartup) {
+            wpeutil reboot
+        }
+    }
+}
+
 $host.UI.RawUI.WindowTitle = "Preboot eXecution Environment Helpers"
+$global:product = "Preboot eXecution Environment Helpers"
+
+Show-CenteredTextBox -Text "Preboot eXecution Environment Helpers. (c) 2025 CodingWonders Software" -MaxWidth 70 -CenterOfAll
+Write-Host "`n    Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+
+Write-Progress -Activity "PXE Helpers starting up..." -Status "Getting network adapters in the system..." -PercentComplete 0
+$networkAdapters = Get-CimInstance Win32_NetworkAdapter | Where-Object { $_.ServiceName -ne "kdnic" }    # there's no reason to add a kernel debugger to the network adapters list
+
+if (($networkAdapters | Select-Object -ExpandProperty DeviceID).Count -lt 1) {
+    Show-InstallNetAdapterScreen -firstStartup
+}
 
 class PxeHelperProvider {
     [string]$ProviderName
@@ -25,6 +124,10 @@ class PxeHelperProvider {
     }
 }
 
+Show-CenteredTextBox -Text "Preboot eXecution Environment Helpers. (c) 2025 CodingWonders Software" -MaxWidth 70 -CenterOfAll
+Write-Host "`n    Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+Write-Progress -Activity "PXE Helpers starting up..." -Status "Loading PXE Helper providers..." -PercentComplete 50
+
 $providerList = [List[PxeHelperProvider]]::new()
 $providerList.Add([PxeHelperProvider]::new("Windows Deployment Services Helper", "Select this provider to deploy a Windows image using a WDS server.", "0.7+", "wds\wdshelper.ps1", $true, ""))
 #$providerList.Add([PxeHelperProvider]::new("FOG Helper", "Select this provider to deploy a Windows image using a FOG server.", "0.7.1+", "fog\foghelper.ps1", $true, "This provider is divided into 2 stages: a Windows stage and a Linux stage."))
@@ -36,6 +139,7 @@ function Invoke-PxeProvider {
 
     if (($index -lt 0) -or ($index -gt $($providerList.Count - 1))) {
         Write-Host "Please write appropriate data !"
+        return
     }
 
     try {
@@ -45,6 +149,9 @@ function Invoke-PxeProvider {
         Write-Host "Could not launch the PXE utility. $_"
     }
 }
+
+Start-Sleep -Milliseconds 500
+Write-Progress -Activity "PXE Helpers starting up..." -Status "Initialization Complete" -PercentComplete 100
 
 function Show-PxeProviders {
     $idx = 1
@@ -87,10 +194,14 @@ function Show-PxeProviders {
     Write-Host "  N. Install a Network Adapter"
     Write-Host "     Choose this option to install a new network adapter on this environment. You will go back to this screen afterwards"
     Write-Host ""
+
+    # Show additional options
+    Write-Host "  N. Install a Network Adapter"
+    Write-Host "     Choose this option to install a new network adapter on this environment. You will go back to this screen afterwards"
+    Write-Host ""
 }
 
-$global:product = "Preboot eXecution Environment Helpers"
-
+Write-Progress -Activity "PXE Helpers starting up..." -Completed
 Show-SectionMessage -sectionTitle "Choose your provider" -sectionDescription "Choose the helper for the PXE provider you use."
 
 if ($providerList.Count -gt 0) {
@@ -98,7 +209,18 @@ if ($providerList.Count -gt 0) {
     $validated = $false
     $util = -1
     do {
-        $utilStr = Read-Host -Prompt "Choose an utility from the list above and press ENTER"
+        $utilStr = Read-Host -Prompt "Choose a utility from the list above and press ENTER"
+
+        if ($utilStr -eq "N") {
+            Show-InstallNetAdapterScreen
+
+            Show-SectionMessage -sectionTitle "Choose your provider" -sectionDescription "Choose the helper for the PXE provider you use."
+            Show-PxeProviders
+            $validated = $false
+            $util = -1
+
+            continue
+        }
 
         try {
             $util = [int]$utilStr
