@@ -106,7 +106,7 @@ Public Class NewUnattendWiz
     Dim DefaultLockoutSettings As New AccountLockoutSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
-    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell)
+    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript("# Write your code here. Use the Open Script button to load the contents" & CrLf & "# of an existing script file. To get started, you can also use the starter" & CrLf & "# scripts.", PostInstallScript.Extension.PowerShell)
 
     ' Progress info
     Dim ProgressMessage As String = ""
