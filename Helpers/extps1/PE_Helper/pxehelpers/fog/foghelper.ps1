@@ -92,10 +92,22 @@ Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "P
 
 $authInfo = Invoke-ServerAuthentication
 
-Show-CenteredTextBox -Text "Connecting to the server . . ." -MaxWidth 100 -CenterOfAll
-
 $computerUUID = (Get-WmiObject Win32_ComputerSystemProduct).UUID.ToLower()
-$hostResult = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/hosts"
+
+$hostResult = $null
+$attempts = 0
+do {
+    try {
+        Show-CenteredTextBox -Text "Connecting to the server . . . (Attempt $($attempts + 1) of 5)" -MaxWidth 100 -CenterOfAll
+        $hostResult = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/hosts"
+    } catch {
+        # Could not connect to the server. Try again.
+    }
+    $attempts++
+    if ($attempts -ge 5) {
+        break
+    }
+} until ($hostResult -ne $null)
 
 if (($hostResult -eq $null) -or ($hostResult.success -eq $false)) {
     Show-CenteredTextBox -Text "Could not connect to the server. The server has imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed

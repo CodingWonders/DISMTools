@@ -1128,13 +1128,24 @@ Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "P
 
 $authInfo = Invoke-ServerAuthentication
 
-Show-CenteredTextBox -Text "Connecting to the WDS server . . ." -MaxWidth 100 -CenterOfAll
-
 $connectionBody = @{
     deviceID = (Get-WmiObject Win32_ComputerSystemProduct).UUID
 } | ConvertTo-Json
 
-$connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/connect"
+$connectionResult = $null
+$attempts = 0
+do {
+    try {
+        Show-CenteredTextBox -Text "Connecting to the WDS server . . . (Attempt $($attempts + 1) of 5)" -MaxWidth 100 -CenterOfAll
+        $connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/connect"
+    } catch {
+        # Could not connect to the server. Try again.
+    }
+    $attempts++
+    if ($attempts -ge 5) {
+        break
+    }
+} until ($connectionResult -ne $null)
 
 if (($connectionResult -eq $null) -or ($connectionResult.output.successful -eq $false)) {
     if ($connectionResult -ne $null) {
