@@ -86,7 +86,7 @@ function Start-PEGeneration
     $architecture = [PE_Arch]::($arch)
     $version = "0.7"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
@@ -1923,7 +1923,7 @@ function Start-ProjectDevelopment {
     $version = "0.7"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
@@ -2103,6 +2103,12 @@ function Start-ProjectDevelopment {
 }
 
 $host.UI.RawUI.WindowTitle = "DISMTools - Preinstallation Environment Helper"
+
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    exit 1
+}
 
 if ($cmd -eq "StartApply")
 {

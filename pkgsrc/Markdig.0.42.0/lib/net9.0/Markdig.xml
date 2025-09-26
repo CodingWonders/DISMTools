@@ -3297,6 +3297,18 @@
             </summary>
             <param name="newLine">The new line.</param>
         </member>
+        <member name="M:Markdig.Parsers.BlockProcessor.ProcessLinePart(Markdig.Helpers.StringSlice,System.Int32)">
+            <summary>
+            Processes part of a line.
+            </summary>
+            <param name="line">The line.</param>
+            <param name="column">The column.</param>
+        </member>
+        <member name="M:Markdig.Parsers.BlockProcessor.Process">
+            <summary>
+            Process current string slice.
+            </summary>
+        </member>
         <member name="M:Markdig.Parsers.BlockProcessor.Close(System.Int32)">
             <summary>
             Closes a block at the specified index.
