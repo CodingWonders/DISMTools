@@ -2109,14 +2109,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a New features:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- A new tool has been added to view and manage the services of the Windows image
-        '''- A new autorun window has been added to allow you to access the items you want more easily
-        '''- A new tool designed to prepare computers for Sysprep generalization has been added, called the *Sysprep Preparation Tool* (special thanks to @Real-MullaC for helping with testing and expansion of this tool)
-        '''- Some of the PE Helper&apos;s settings now persist
-        '''- A new PXE Helper has been added to add support for FOG
-        '''- Th [resto de la cadena truncado]&quot;;.
+        '''- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
+        '''
+        '''New features:
+        '''
+        '''- The Sysprep Preparation Tool has been updated to the latest version
+        '''- The representation of PXE Helper providers has been slightly improved
+        '''- The PXE Helpers now support IPv6 server addresses
+        '''- The PXE Helpers can now reconnect to the server up to a maximum of 5 attempts
+        '''- Service information now includes service dependencies and dependents. Failure actions are also shown [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
