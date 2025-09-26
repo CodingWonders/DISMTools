@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("PEHelperMainMenu")> 
+<Assembly: AssemblyTitle("DISMTools - Preinstallation Environment Helper Main Menu")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("PEHelperMainMenu")> 
-<Assembly: AssemblyCopyright("Copyright ©  2025")> 
+<Assembly: AssemblyProduct("DISMTools - Preinstallation Environment Helper Main Menu")> 
+<Assembly: AssemblyCopyright("© 2025 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

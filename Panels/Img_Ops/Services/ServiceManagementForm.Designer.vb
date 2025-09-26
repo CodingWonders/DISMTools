@@ -53,17 +53,44 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.TextBox11 = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.TextBox10 = New System.Windows.Forms.TextBox()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.TextBox13 = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.TextBox12 = New System.Windows.Forms.TextBox()
+        Me.Label13 = New System.Windows.Forms.Label()
+        Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         Me.TextBox8 = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ListView3 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader9 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ListView4 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader10 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader11 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label18 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.TabPage4.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -347,8 +374,8 @@ Partial Class ServiceManagementForm
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.GroupBox1)
         Me.TabPage3.Controls.Add(Me.TextBox8)
-        Me.TabPage3.Controls.Add(Me.Label10)
         Me.TabPage3.Controls.Add(Me.Label9)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
@@ -357,15 +384,127 @@ Partial Class ServiceManagementForm
         Me.TabPage3.Text = "Error Control"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
-        'TabPage4
+        'GroupBox1
         '
-        Me.TabPage4.Controls.Add(Me.Label11)
-        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Size = New System.Drawing.Size(976, 239)
-        Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "Service Dependencies"
-        Me.TabPage4.UseVisualStyleBackColor = True
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.TextBox11)
+        Me.GroupBox1.Controls.Add(Me.Label12)
+        Me.GroupBox1.Controls.Add(Me.TextBox10)
+        Me.GroupBox1.Controls.Add(Me.Label11)
+        Me.GroupBox1.Controls.Add(Me.TextBox13)
+        Me.GroupBox1.Controls.Add(Me.Label14)
+        Me.GroupBox1.Controls.Add(Me.TextBox12)
+        Me.GroupBox1.Controls.Add(Me.Label13)
+        Me.GroupBox1.Controls.Add(Me.TextBox9)
+        Me.GroupBox1.Controls.Add(Me.Label10)
+        Me.GroupBox1.Location = New System.Drawing.Point(31, 73)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(910, 150)
+        Me.GroupBox1.TabIndex = 5
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Failure Actions"
+        '
+        'TextBox11
+        '
+        Me.TextBox11.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox11.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox11.Location = New System.Drawing.Point(192, 69)
+        Me.TextBox11.Name = "TextBox11"
+        Me.TextBox11.ReadOnly = True
+        Me.TextBox11.Size = New System.Drawing.Size(694, 14)
+        Me.TextBox11.TabIndex = 8
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Location = New System.Drawing.Point(23, 69)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(92, 13)
+        Me.Label12.TabIndex = 7
+        Me.Label12.Text = "On Future Errors:"
+        '
+        'TextBox10
+        '
+        Me.TextBox10.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox10.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox10.Location = New System.Drawing.Point(192, 49)
+        Me.TextBox10.Name = "TextBox10"
+        Me.TextBox10.ReadOnly = True
+        Me.TextBox10.Size = New System.Drawing.Size(694, 14)
+        Me.TextBox10.TabIndex = 6
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(23, 49)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(73, 13)
+        Me.Label11.TabIndex = 5
+        Me.Label11.Text = "On 2nd Error:"
+        '
+        'TextBox13
+        '
+        Me.TextBox13.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox13.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox13.Location = New System.Drawing.Point(303, 109)
+        Me.TextBox13.Name = "TextBox13"
+        Me.TextBox13.ReadOnly = True
+        Me.TextBox13.Size = New System.Drawing.Size(583, 14)
+        Me.TextBox13.TabIndex = 4
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Location = New System.Drawing.Point(23, 109)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(216, 13)
+        Me.Label14.TabIndex = 3
+        Me.Label14.Text = "Restart Service after the following minutes:"
+        '
+        'TextBox12
+        '
+        Me.TextBox12.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox12.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox12.Location = New System.Drawing.Point(303, 89)
+        Me.TextBox12.Name = "TextBox12"
+        Me.TextBox12.ReadOnly = True
+        Me.TextBox12.Size = New System.Drawing.Size(583, 14)
+        Me.TextBox12.TabIndex = 4
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Location = New System.Drawing.Point(23, 89)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(229, 13)
+        Me.Label13.TabIndex = 3
+        Me.Label13.Text = "Reset Error Count after the following minutes:"
+        '
+        'TextBox9
+        '
+        Me.TextBox9.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox9.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox9.Location = New System.Drawing.Point(192, 29)
+        Me.TextBox9.Name = "TextBox9"
+        Me.TextBox9.ReadOnly = True
+        Me.TextBox9.Size = New System.Drawing.Size(694, 14)
+        Me.TextBox9.TabIndex = 4
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(23, 29)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(70, 13)
+        Me.Label10.TabIndex = 3
+        Me.Label10.Text = "On 1st Error:"
         '
         'TextBox8
         '
@@ -389,29 +528,119 @@ Partial Class ServiceManagementForm
         Me.Label9.TabIndex = 3
         Me.Label9.Text = "On service error, what should Windows do?"
         '
-        'Label10
+        'TabPage4
         '
-        Me.Label10.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(57, 129)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(862, 19)
-        Me.Label10.TabIndex = 3
-        Me.Label10.Text = "Failure actions will not be implemented in this preview release. They will be imp" & _
-    "lemented in a future release. Stay tuned!"
+        Me.TabPage4.Controls.Add(Me.SplitContainer1)
+        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage4.Name = "TabPage4"
+        Me.TabPage4.Size = New System.Drawing.Size(976, 239)
+        Me.TabPage4.TabIndex = 3
+        Me.TabPage4.Text = "Service Dependencies"
+        Me.TabPage4.UseVisualStyleBackColor = True
         '
-        'Label11
+        'SplitContainer1
         '
-        Me.Label11.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(33, 110)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(910, 19)
-        Me.Label11.TabIndex = 4
-        Me.Label11.Text = "Dependency information will not be implemented in this preview release. It will b" & _
-    "e implemented in a future release. Stay tuned!"
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.IsSplitterFixed = True
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Panel1)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel2)
+        Me.SplitContainer1.Size = New System.Drawing.Size(976, 239)
+        Me.SplitContainer1.SplitterDistance = 480
+        Me.SplitContainer1.TabIndex = 1
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.ListView3)
+        Me.Panel1.Controls.Add(Me.Label17)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(480, 239)
+        Me.Panel1.TabIndex = 0
+        '
+        'ListView3
+        '
+        Me.ListView3.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListView3.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader8, Me.ColumnHeader9})
+        Me.ListView3.FullRowSelect = True
+        Me.ListView3.Location = New System.Drawing.Point(19, 47)
+        Me.ListView3.Name = "ListView3"
+        Me.ListView3.Size = New System.Drawing.Size(443, 173)
+        Me.ListView3.TabIndex = 1
+        Me.ListView3.UseCompatibleStateImageBehavior = False
+        Me.ListView3.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader8
+        '
+        Me.ColumnHeader8.Text = "Service Name"
+        Me.ColumnHeader8.Width = 209
+        '
+        'ColumnHeader9
+        '
+        Me.ColumnHeader9.Text = "Display Name"
+        Me.ColumnHeader9.Width = 209
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.Location = New System.Drawing.Point(16, 16)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(232, 13)
+        Me.Label17.TabIndex = 0
+        Me.Label17.Text = "This service depends on the following services:"
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ListView4)
+        Me.Panel2.Controls.Add(Me.Label18)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel2.Location = New System.Drawing.Point(0, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(492, 239)
+        Me.Panel2.TabIndex = 1
+        '
+        'ListView4
+        '
+        Me.ListView4.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListView4.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader10, Me.ColumnHeader11})
+        Me.ListView4.FullRowSelect = True
+        Me.ListView4.Location = New System.Drawing.Point(19, 47)
+        Me.ListView4.Name = "ListView4"
+        Me.ListView4.Size = New System.Drawing.Size(443, 173)
+        Me.ListView4.TabIndex = 1
+        Me.ListView4.UseCompatibleStateImageBehavior = False
+        Me.ListView4.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader10
+        '
+        Me.ColumnHeader10.Text = "Service Name"
+        Me.ColumnHeader10.Width = 209
+        '
+        'ColumnHeader11
+        '
+        Me.ColumnHeader11.Text = "Display Name"
+        Me.ColumnHeader11.Width = 209
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.Location = New System.Drawing.Point(16, 16)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(227, 13)
+        Me.Label18.TabIndex = 0
+        Me.Label18.Text = "The following services depend on this service:"
         '
         'ServiceManagementForm
         '
@@ -434,8 +663,17 @@ Partial Class ServiceManagementForm
         Me.TabPage2.ResumeLayout(False)
         Me.TabPage3.ResumeLayout(False)
         Me.TabPage3.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.TabPage4.ResumeLayout(False)
-        Me.TabPage4.PerformLayout()
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -472,6 +710,26 @@ Partial Class ServiceManagementForm
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents TextBox8 As System.Windows.Forms.TextBox
     Friend WithEvents Label9 As System.Windows.Forms.Label
-    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents TextBox11 As System.Windows.Forms.TextBox
+    Friend WithEvents Label12 As System.Windows.Forms.Label
+    Friend WithEvents TextBox10 As System.Windows.Forms.TextBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents TextBox13 As System.Windows.Forms.TextBox
+    Friend WithEvents Label14 As System.Windows.Forms.Label
+    Friend WithEvents TextBox12 As System.Windows.Forms.TextBox
+    Friend WithEvents Label13 As System.Windows.Forms.Label
+    Friend WithEvents TextBox9 As System.Windows.Forms.TextBox
+    Friend WithEvents Label10 As System.Windows.Forms.Label
+    Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents ListView3 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader9 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents Panel2 As System.Windows.Forms.Panel
+    Friend WithEvents ListView4 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader10 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader11 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label18 As System.Windows.Forms.Label
 End Class

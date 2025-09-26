@@ -106,7 +106,7 @@ Public Class NewUnattendWiz
     Dim DefaultLockoutSettings As New AccountLockoutSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
-    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell)
+    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript("# Write your code here. Use the Open Script button to load the contents" & CrLf & "# of an existing script file. To get started, you can also use the starter" & CrLf & "# scripts.", PostInstallScript.Extension.PowerShell)
 
     ' Progress info
     Dim ProgressMessage As String = ""
@@ -2975,5 +2975,49 @@ Public Class NewUnattendWiz
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+        Try
+            DynaLog.LogMessage("Detemining contents of current Scintilla control...")
+            If Scintilla3.Text <> "" Then
+                DynaLog.LogMessage("Current Scintilla control is not empty. Asking before proceeding...")
+                If MsgBox("Importing this script will overwrite any existing data in the current post-installation script. It is best that you create a new entry before proceeding. Do you want to continue?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+                    DynaLog.LogMessage("User said no. Exiting...")
+                    Exit Sub
+                End If
+            End If
+
+            DynaLog.LogMessage("Opening the file for read access...")
+            Dim StarterScriptContents() As String = File.ReadAllLines(OpenFileDialog2.FileName)
+
+            DynaLog.LogMessage("Determining file extension...")
+            ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
+            Select Case StarterScriptContents(0)
+                Case "Language: PowerShell"
+                    ComboBox16.SelectedIndex = 0
+                Case "Language: Batch"
+                    ComboBox16.SelectedIndex = 1
+            End Select
+
+            DynaLog.LogMessage("Loading contents...")
+            Scintilla3.Text = String.Join(CrLf, StarterScriptContents.Skip(1).ToArray())
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not open file. Error: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
+        Dim StarterScriptFolder As String = ""
+        OpenFileDialog2.InitialDirectory = Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")
+        Select Case CurrentlyEditedStage
+            Case 0
+                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "DuringSystemConfiguration")
+            Case 1
+                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenFirstUserLogsOn")
+            Case 2
+                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenUsersLogOnForFirstTime")
+        End Select
+        OpenFileDialog2.ShowDialog()
     End Sub
 End Class

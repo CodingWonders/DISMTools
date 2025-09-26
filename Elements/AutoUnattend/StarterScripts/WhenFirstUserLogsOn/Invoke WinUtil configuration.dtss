@@ -1,0 +1,7 @@
+﻿Language: PowerShell
+
+# Export your WinUtil configuration file to "winutil-config.json" on the root of the target
+# Windows installation.
+if ((Test-Connection "christitus.com") -and (Test-Path -Path "$env:SYSTEMDRIVE\winutil-config.json" -PathType Leaf)) {
+    iex "& { $(irm christitus.com/win) } -Config `"$env:SYSTEMDRIVE\winutil-config.json`" -Run"
+}

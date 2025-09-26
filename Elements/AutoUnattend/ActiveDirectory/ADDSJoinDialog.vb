@@ -149,6 +149,8 @@ Public Class ADDSJoinDialog
         Else
             DomainAutoUserPanel.Enabled = False
             RadioButton3.Enabled = False
+            RadioButton3.Checked = False
+            RadioButton4.Checked = True
         End If
         ProgressReporter.SetMessage("Initialization complete.")
         ADDSInitBW.ReportProgress(100)

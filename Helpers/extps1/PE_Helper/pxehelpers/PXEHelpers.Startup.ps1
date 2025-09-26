@@ -167,10 +167,9 @@ function Show-PxeProviders {
         if ($unavail) {
             Write-Host "$nameString" -BackgroundColor DarkYellow -ForegroundColor Black
         } else {
-            Write-Host "$nameString" -BackgroundColor DarkGreen -ForegroundColor White
+            Write-Host "$nameString" -BackgroundColor DarkGreen -ForegroundColor Black
         }
         Write-Host "     $($provider.ProviderDescription)" -ForegroundColor DarkGray
-        Write-Host ""
         Write-Host "     This provider is supported on DISMTools versions $($provider.ProviderVersionCompatibility)"
         Write-Host "     " -NoNewline
         $csReqMessage = ""
@@ -190,7 +189,6 @@ function Show-PxeProviders {
         $idx++
         Write-Host ""
     }
-    Write-Host ""
 
     # Show additional options
     Write-Host "  N. Install a Network Adapter"
