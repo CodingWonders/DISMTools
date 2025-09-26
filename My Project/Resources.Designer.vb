@@ -2079,16 +2079,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''--- Bugfixes
-        '''
-        '''- Fixed a minor issue where DynaLog timestamps would not use a common format for time
-        '''- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
-        '''- Fixed an issue in the update checker
-        '''- Fixed a deployment issue in the Theme Designer. It will let you load and save themes now instead of throwing an exception
-        '''- Fixed an issue where people could write to the console output
-        '''- Fixed an issue where DISM woul [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.7_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
