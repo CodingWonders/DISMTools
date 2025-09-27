@@ -57,7 +57,7 @@ function Show-InstallNetAdapterScreen {
     }
 
     Write-Host ""
-    Write-Host "  To launch the Driver Installation Module to install a new network adapter, and then go back to the previous screen, type `"DIM`" and press ENTER."
+    Write-Host "  To launch the Driver Installation Module to install a new network adapter, type `"DIM`" and press ENTER."
 
     if ($firstStartup) {
         Write-Host "  To cancel network installation and restart your computer, type `"R`" and press ENTER."
