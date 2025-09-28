@@ -947,6 +947,9 @@ function Start-OSApplication
     {
         $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
     }
+    if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+        $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
+    }
     Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
     $choice = Read-Host "Are you sure you want to continue (Y/N)"
     if ($choice -ne "Y")
@@ -974,6 +977,9 @@ function Start-OSApplication
             else
             {
                 $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
+            }
+            if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+                $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
             }
             Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
             $choice = Read-Host "Are you sure you want to continue (Y/N)"
