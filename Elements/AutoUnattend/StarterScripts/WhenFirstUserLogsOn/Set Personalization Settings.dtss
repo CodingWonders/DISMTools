@@ -1,0 +1,64 @@
+﻿Language: PowerShell
+
+# This script was grabbed from an answer file in Christoph Schneegans' service.
+
+# - Set this to 1 to enable light mode across the system (taskbar, and other components)
+# - Set this to 0 to enable dark mode across the system (taskbar, and other components)
+$lightThemeSystem = 0
+
+# - Set this to 1 to enable light mode across applications that detect color schemes and
+#   react to color scheme changes
+# - Set this to 0 to enable dark mode across applications that detect color schemes and
+#   react to color scheme changes
+$lightThemeApps = 0
+
+# - Set this to 1 to turn on the accent color for the Start menu
+# - Set this to 0 to turn off the accent color for the Start menu
+$accentColorOnStart = 0
+
+# - Set this to 1 to enable transparency effects (Acrylic/Mica) across surfaces in applications
+#   that support this
+# - Set this to 0 to disable transparency effects (Acrylic/Mica) across surfaces in applications
+#   that support this
+$enableTransparency = 0
+
+# Put the accent color in the following format: "#RGB". Note that your accent color
+# may not apply to all surfaces, so you may have a mix of the specified color and
+# the default blue color.
+$htmlAccentColor = '#B11FB6'
+
+
+& { $params = @{ LiteralPath = 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize'
+        Force                = $true
+        Type                 = 'DWord'
+    }
+    Set-ItemProperty @params -Name 'SystemUsesLightTheme' -Value $lightThemeSystem
+    Set-ItemProperty @params -Name 'AppsUseLightTheme' -Value $lightThemeApps
+    Set-ItemProperty @params -Name 'ColorPrevalence' -Value $accentColorOnStart
+    Set-ItemProperty @params -Name 'EnableTransparency' -Value $enableTransparency
+}
+& { Add-Type -AssemblyName 'System.Drawing'
+    $accentColor = [System.Drawing.ColorTranslator]::FromHtml( $htmlAccentColor )
+    function ConvertTo-DWord {
+        param( [System.Drawing.Color] $Color )
+        [byte[]] $bytes = @( $Color.R
+            $Color.G
+            $Color.B
+            $Color.A
+        )
+        return [System.BitConverter]::ToUInt32( $bytes, 0)
+    } $startColor = [System.Drawing.Color]::FromArgb( 0xD2, $accentColor )
+    Set-ItemProperty -LiteralPath 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent' -Name 'StartColorMenu' -Value( ConvertTo-DWord -Color $accentColor ) -Type 'DWord' -Force
+    Set-ItemProperty -LiteralPath 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent' -Name 'AccentColorMenu' -Value( ConvertTo-DWord -Color $accentColor ) -Type 'DWord' -Force
+    Set-ItemProperty -LiteralPath 'Registry::HKCU\Software\Microsoft\Windows\DWM' -Name 'AccentColor' -Value( ConvertTo-DWord -Color $accentColor ) -Type 'DWord' -Force
+    $params = @{ LiteralPath = 'Registry::HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent'
+        Name                 = 'AccentPalette'
+    }
+    $palette = Get-ItemPropertyValue @params
+    $index = 20
+    $palette[ $index++ ] = $accentColor.R
+    $palette[ $index++ ] = $accentColor.G
+    $palette[ $index++ ] = $accentColor.B
+    $palette[ $index++ ] = $accentColor.A
+    Set-ItemProperty @params -Value $palette -Type 'Binary' -Force
+}
