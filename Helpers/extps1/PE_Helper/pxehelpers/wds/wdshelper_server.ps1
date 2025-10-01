@@ -279,6 +279,17 @@ function Deploy-WimImage {
     }
 }
 
+function Remove-SharedFolderByGuid {
+    param (
+        [Parameter(Mandatory)] [string] $guid
+    )
+    if ($guid -eq "") {
+        return $false
+    }
+    Remove-Item -Path "$tmpImageFolderPath\$guid" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+    return $true
+}
+
 function Clear-Files {
     $smbShare = Get-SmbShare -Name "$shareName" -ErrorAction SilentlyContinue
     $smbShare | Remove-SmbShare -Force -ErrorAction SilentlyContinue
@@ -659,6 +670,23 @@ try {
                     try {
                         $output = Clear-Files
                         $sendJson.Invoke(@{ success = $true; output = $output })
+                    } catch {
+                        Write-LogMessage -message "Exception caught: $_"
+                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
+                    }
+                } else {
+                    $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
+                }
+            }
+            "/api/clearbyguid" {
+                if ($request.HttpMethod -eq "POST") {
+                    try {
+                        $reader = New-Object IO.StreamReader $request.InputStream
+                        $body = $reader.ReadToEnd() | ConvertFrom-Json
+                        $guid = $body.shareGuid
+                        
+                        $output = Remove-SharedFolderByGuid -guid $guid
+                        $sendJson.Invoke(@{ success = $true })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"
                         $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
