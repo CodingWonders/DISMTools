@@ -18,10 +18,35 @@ Module WindowsServiceHelper
 
     End Class
 
+    ''' <summary>
+    ''' The dictionary containing privilege constants.
+    ''' </summary>
+    ''' <remarks>
+    ''' Keys are the security privilege constants defined by the Windows NT headers.
+    ''' For example, "SE_ASSIGNPRIMARYTOKEN_NAME" or "SE_SHUTDOWN_NAME". Values are objects of the
+    ''' Windows NT security privilege constants containing the representations of the constants
+    ''' as defined in the Windows Registry, a description of said privilege constant, and user rights
+    ''' of said privilege constants.
+    ''' </remarks>
     Private PrivilegeConstantDictionary As New Dictionary(Of String, NTSecurityPrivilegeConstant)
+
+    ''' <summary>
+    ''' The dictionary containing mapping objects between the user right of a privilege constant and the constants
+    ''' defined by the Windows NT headers.
+    ''' </summary>
+    ''' <remarks>
+    ''' Keys are the user rights of a privilege constant. Values are the constants defined by the Windows NT headers.
+    ''' </remarks>
     Private PrivilegeMappingDictionary As New Dictionary(Of String, String)
 
-    Sub FillInConstants()
+    ''' <summary>
+    ''' Clears the constant dictionaries if already filled, then fills them with constant data.
+    ''' </summary>
+    ''' <remarks>
+    ''' Constant data is defined in Microsoft documentation:
+    ''' https://learn.microsoft.com/en-us/windows/win32/secauthz/privilege-constants
+    ''' </remarks>
+    Private Sub FillInConstants()
         DynaLog.LogMessage("Clearing dictionaries...")
         PrivilegeConstantDictionary.Clear()
         PrivilegeMappingDictionary.Clear()
@@ -214,6 +239,12 @@ Module WindowsServiceHelper
         Next
     End Sub
 
+    ''' <summary>
+    ''' Resolves an indirect string
+    ''' </summary>
+    ''' <param name="source">The indirect string to resolve</param>
+    ''' <returns>The resolved string</returns>
+    ''' <remarks></remarks>
     Private Function ResolveIndirectString(source As String) As String
         DynaLog.LogMessage("Resolving indirect string " & source & "...")
         Dim buffer As New StringBuilder(260)
@@ -226,6 +257,12 @@ Module WindowsServiceHelper
         End If
     End Function
 
+    ''' <summary>
+    ''' Parses a line pointing to a INF file
+    ''' </summary>
+    ''' <param name="line">The line to parse</param>
+    ''' <returns>A tuple containing the path to the INF file and the token to look for</returns>
+    ''' <remarks></remarks>
     Private Function ParseInfLine(line As String) As Tuple(Of String, String)
         DynaLog.LogMessage("Parsing provided INF file line...")
         DynaLog.LogMessage("- Line: " & line)
@@ -244,6 +281,13 @@ Module WindowsServiceHelper
         Return Tuple.Create(infFile, token)
     End Function
 
+    ''' <summary>
+    ''' Resolves a INF token
+    ''' </summary>
+    ''' <param name="infPath">The path to the INF file</param>
+    ''' <param name="token">The token to look for</param>
+    ''' <returns>The value of the token in the INF file</returns>
+    ''' <remarks></remarks>
     Private Function ResolveInfToken(infPath As String, token As String) As String
         DynaLog.LogMessage("Resolving INF File Tokens...")
         DynaLog.LogMessage("- INF File Path: " & infPath)
@@ -277,6 +321,12 @@ Module WindowsServiceHelper
         Return ""
     End Function
 
+    ''' <summary>
+    ''' Gets a list of system services/devices from the mounted image
+    ''' </summary>
+    ''' <param name="MountPath">The path to the mounted image</param>
+    ''' <returns>The service list</returns>
+    ''' <remarks></remarks>
     Function GetServiceList(MountPath As String) As List(Of WindowsService)
         ' For the required privileges a service may have, we have to fill in the constants first so that we don't have things like
         ' "SeUndockPrivilege", "SeShutdownPrivilege"; but rather "Remove computer from docking station", and so on... we want the
@@ -413,6 +463,12 @@ Module WindowsServiceHelper
         Return serviceList
     End Function
 
+    ''' <summary>
+    ''' Parses a failure action byte array into a service failure actions object
+    ''' </summary>
+    ''' <param name="FailureActions">The byte array to parse</param>
+    ''' <returns>The set of failure actions</returns>
+    ''' <remarks></remarks>
     Private Function ParseFailureActionByteArray(FailureActions As Byte()) As WindowsService.ServiceFailureActions
         Dim scFailure As WindowsService.ServiceFailureActions = New WindowsService.ServiceFailureActions()
         Dim firstFail As WindowsService.ServiceFailureAction = WindowsService.ServiceFailureAction.Unknown,
@@ -457,6 +513,12 @@ Module WindowsServiceHelper
         Return scFailure
     End Function
 
+    ''' <summary>
+    ''' Gets a numeric delay from a byte array representing a delay for a specific fail
+    ''' </summary>
+    ''' <param name="ByteArray">The byte array to parse</param>
+    ''' <returns>The numeric delay</returns>
+    ''' <remarks></remarks>
     Private Function GetDelay(ByteArray As Byte()) As Long
         DynaLog.LogMessage("Getting numeric delay from our byte array...")
         Dim binary As String = ""
