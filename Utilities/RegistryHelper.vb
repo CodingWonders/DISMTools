@@ -154,4 +154,12 @@ Module RegistryHelper
         End Try
     End Function
 
+    Function ExportRegistryToFile(RegistryPath As String, TargetRegFile As String) As Integer
+        If String.IsNullOrEmpty(RegistryPath) Then Return DTERR_RegItemObjectNull
+        If String.IsNullOrEmpty(TargetRegFile) Then Return DTERR_RegItemObjectNull
+
+        Return RunRegProcess(String.Format("export " & ControlChars.Quote & "{0}" & ControlChars.Quote & " " & ControlChars.Quote & "{1}" & ControlChars.Quote & " /y",
+                                           RegistryPath, TargetRegFile))
+    End Function
+
 End Module

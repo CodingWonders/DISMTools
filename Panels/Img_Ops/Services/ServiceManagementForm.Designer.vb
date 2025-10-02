@@ -31,11 +31,11 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.TextBox7 = New System.Windows.Forms.TextBox()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.TextBox5 = New System.Windows.Forms.TextBox()
@@ -78,6 +78,7 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader10 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader11 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label18 = New System.Windows.Forms.Label()
+        Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -100,9 +101,10 @@ Partial Class ServiceManagementForm
         Me.Label1.AutoEllipsis = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(984, 42)
+        Me.Label1.Size = New System.Drawing.Size(1240, 42)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "This tool lets you manage the services of this target image:"
+        Me.Label1.Text = "This tool lets you view and manage the services of this target image. Click the S" & _
+    "ave button to save any changes made to the Windows services."
         '
         'ListView1
         '
@@ -113,7 +115,7 @@ Partial Class ServiceManagementForm
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(12, 59)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(984, 219)
+        Me.ListView1.Size = New System.Drawing.Size(1240, 310)
         Me.ListView1.TabIndex = 2
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -146,19 +148,19 @@ Partial Class ServiceManagementForm
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.TabPage4)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 284)
+        Me.TabControl1.Location = New System.Drawing.Point(12, 375)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(984, 265)
+        Me.TabControl1.Size = New System.Drawing.Size(1240, 265)
         Me.TabControl1.TabIndex = 3
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.ComboBox1)
         Me.TabPage1.Controls.Add(Me.CheckBox1)
         Me.TabPage1.Controls.Add(Me.TextBox3)
         Me.TabPage1.Controls.Add(Me.Label4)
         Me.TabPage1.Controls.Add(Me.TextBox7)
-        Me.TabPage1.Controls.Add(Me.TextBox6)
         Me.TabPage1.Controls.Add(Me.Label8)
         Me.TabPage1.Controls.Add(Me.Label7)
         Me.TabPage1.Controls.Add(Me.TextBox5)
@@ -173,10 +175,18 @@ Partial Class ServiceManagementForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(976, 239)
+        Me.TabPage1.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Service Information"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(224, 180)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(239, 21)
+        Me.ComboBox1.TabIndex = 4
         '
         'CheckBox1
         '
@@ -198,7 +208,7 @@ Partial Class ServiceManagementForm
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.ReadOnly = True
         Me.TextBox3.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox3.Size = New System.Drawing.Size(736, 53)
+        Me.TextBox3.Size = New System.Drawing.Size(992, 53)
         Me.TextBox3.TabIndex = 2
         '
         'Label4
@@ -218,15 +228,6 @@ Partial Class ServiceManagementForm
         Me.TextBox7.ReadOnly = True
         Me.TextBox7.Size = New System.Drawing.Size(239, 14)
         Me.TextBox7.TabIndex = 2
-        '
-        'TextBox6
-        '
-        Me.TextBox6.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox6.Location = New System.Drawing.Point(224, 183)
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.ReadOnly = True
-        Me.TextBox6.Size = New System.Drawing.Size(239, 14)
-        Me.TextBox6.TabIndex = 2
         '
         'Label8
         '
@@ -254,7 +255,7 @@ Partial Class ServiceManagementForm
         Me.TextBox5.Location = New System.Drawing.Point(224, 156)
         Me.TextBox5.Name = "TextBox5"
         Me.TextBox5.ReadOnly = True
-        Me.TextBox5.Size = New System.Drawing.Size(736, 14)
+        Me.TextBox5.Size = New System.Drawing.Size(992, 14)
         Me.TextBox5.TabIndex = 2
         '
         'Label6
@@ -274,7 +275,7 @@ Partial Class ServiceManagementForm
         Me.TextBox4.Location = New System.Drawing.Point(224, 129)
         Me.TextBox4.Name = "TextBox4"
         Me.TextBox4.ReadOnly = True
-        Me.TextBox4.Size = New System.Drawing.Size(736, 14)
+        Me.TextBox4.Size = New System.Drawing.Size(992, 14)
         Me.TextBox4.TabIndex = 2
         '
         'Label5
@@ -294,7 +295,7 @@ Partial Class ServiceManagementForm
         Me.TextBox2.Location = New System.Drawing.Point(224, 43)
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ReadOnly = True
-        Me.TextBox2.Size = New System.Drawing.Size(736, 14)
+        Me.TextBox2.Size = New System.Drawing.Size(992, 14)
         Me.TextBox2.TabIndex = 2
         '
         'Label3
@@ -314,7 +315,7 @@ Partial Class ServiceManagementForm
         Me.TextBox1.Location = New System.Drawing.Point(224, 16)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
-        Me.TextBox1.Size = New System.Drawing.Size(736, 14)
+        Me.TextBox1.Size = New System.Drawing.Size(992, 14)
         Me.TextBox1.TabIndex = 2
         '
         'Label2
@@ -341,7 +342,7 @@ Partial Class ServiceManagementForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(976, 239)
+        Me.TabPage2.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Required Privileges"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -352,7 +353,7 @@ Partial Class ServiceManagementForm
         Me.ListView2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListView2.Location = New System.Drawing.Point(3, 3)
         Me.ListView2.Name = "ListView2"
-        Me.ListView2.Size = New System.Drawing.Size(970, 233)
+        Me.ListView2.Size = New System.Drawing.Size(1226, 233)
         Me.ListView2.TabIndex = 0
         Me.ListView2.UseCompatibleStateImageBehavior = False
         Me.ListView2.View = System.Windows.Forms.View.Details
@@ -379,7 +380,7 @@ Partial Class ServiceManagementForm
         Me.TabPage3.Controls.Add(Me.Label9)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(976, 239)
+        Me.TabPage3.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Error Control"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -533,7 +534,7 @@ Partial Class ServiceManagementForm
         Me.TabPage4.Controls.Add(Me.SplitContainer1)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Size = New System.Drawing.Size(976, 239)
+        Me.TabPage4.Size = New System.Drawing.Size(1232, 239)
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "Service Dependencies"
         Me.TabPage4.UseVisualStyleBackColor = True
@@ -552,8 +553,8 @@ Partial Class ServiceManagementForm
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.Panel2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(976, 239)
-        Me.SplitContainer1.SplitterDistance = 480
+        Me.SplitContainer1.Size = New System.Drawing.Size(1232, 239)
+        Me.SplitContainer1.SplitterDistance = 605
         Me.SplitContainer1.TabIndex = 1
         '
         'Panel1
@@ -563,7 +564,7 @@ Partial Class ServiceManagementForm
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(480, 239)
+        Me.Panel1.Size = New System.Drawing.Size(605, 239)
         Me.Panel1.TabIndex = 0
         '
         'ListView3
@@ -575,7 +576,7 @@ Partial Class ServiceManagementForm
         Me.ListView3.FullRowSelect = True
         Me.ListView3.Location = New System.Drawing.Point(19, 47)
         Me.ListView3.Name = "ListView3"
-        Me.ListView3.Size = New System.Drawing.Size(443, 173)
+        Me.ListView3.Size = New System.Drawing.Size(568, 173)
         Me.ListView3.TabIndex = 1
         Me.ListView3.UseCompatibleStateImageBehavior = False
         Me.ListView3.View = System.Windows.Forms.View.Details
@@ -606,7 +607,7 @@ Partial Class ServiceManagementForm
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(492, 239)
+        Me.Panel2.Size = New System.Drawing.Size(623, 239)
         Me.Panel2.TabIndex = 1
         '
         'ListView4
@@ -618,7 +619,7 @@ Partial Class ServiceManagementForm
         Me.ListView4.FullRowSelect = True
         Me.ListView4.Location = New System.Drawing.Point(19, 47)
         Me.ListView4.Name = "ListView4"
-        Me.ListView4.Size = New System.Drawing.Size(443, 173)
+        Me.ListView4.Size = New System.Drawing.Size(574, 173)
         Me.ListView4.TabIndex = 1
         Me.ListView4.UseCompatibleStateImageBehavior = False
         Me.ListView4.View = System.Windows.Forms.View.Details
@@ -642,11 +643,23 @@ Partial Class ServiceManagementForm
         Me.Label18.TabIndex = 0
         Me.Label18.Text = "The following services depend on this service:"
         '
+        'SaveServiceInfoBtn
+        '
+        Me.SaveServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveServiceInfoBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1172, 647)
+        Me.SaveServiceInfoBtn.Name = "SaveServiceInfoBtn"
+        Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(75, 23)
+        Me.SaveServiceInfoBtn.TabIndex = 4
+        Me.SaveServiceInfoBtn.Text = "Save"
+        Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1008, 561)
+        Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.SaveServiceInfoBtn)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Label1)
@@ -693,7 +706,6 @@ Partial Class ServiceManagementForm
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents TextBox7 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents Label7 As System.Windows.Forms.Label
     Friend WithEvents TextBox4 As System.Windows.Forms.TextBox
@@ -732,4 +744,6 @@ Partial Class ServiceManagementForm
     Friend WithEvents ColumnHeader10 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader11 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents SaveServiceInfoBtn As System.Windows.Forms.Button
 End Class

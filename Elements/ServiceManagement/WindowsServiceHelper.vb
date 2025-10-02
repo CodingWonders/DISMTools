@@ -339,12 +339,12 @@ Module WindowsServiceHelper
 
         ' Time to load up a registry hive
         DynaLog.LogMessage("Loading mount path SYSTEM hive...")
-        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYS") = 0 Then
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
             DynaLog.LogMessage("Load operation succeeded. Continuing...")
             Try
                 ' First we need to grab the default control set of the target image
                 DynaLog.LogMessage("Determining default control set...")
-                Dim DefaultControlSet As Integer = RegistryHelper.GetDefaultControlSet("zSYS")
+                Dim DefaultControlSet As Integer = RegistryHelper.GetDefaultControlSet("zSYSTEM")
                 DynaLog.LogMessage("Determined control set: " & DefaultControlSet)
                 If DefaultControlSet = -1 Then
                     DynaLog.LogMessage("Control set is wrong.")
@@ -353,7 +353,7 @@ Module WindowsServiceHelper
                 ' We only document a maximum of 999 control sets. CurrentControlSet is not a thing in an offline system, as the registry
                 ' subsystems guess the control set to use based on values in HKLM\SYSTEM\Select.
                 DynaLog.LogMessage("Opening mount path services key for read access...")
-                Dim ServiceRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services", DefaultControlSet.ToString().PadLeft(3, "0")), False)
+                Dim ServiceRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYSTEM\ControlSet{0}\Services", DefaultControlSet.ToString().PadLeft(3, "0")), False)
                 ' For some stupid reason, .NET keys are stored in HKLM\SYSTEM\ControlSet<nnn>\Services. GUID keys are also not allowed
                 DynaLog.LogMessage("Getting service names...")
                 Dim ServiceNames() As String = ServiceRk.GetSubKeyNames().Where(Function(serviceName) Not serviceName.StartsWith(".NET", StringComparison.OrdinalIgnoreCase) AndAlso Not serviceName.StartsWith("{")).ToArray()
@@ -373,7 +373,7 @@ Module WindowsServiceHelper
                         serviceRequiredPrivilegesString() As String = New String() {},
                         serviceDependencies() As String = New String() {},
                         serviceFailActionByteArr() As Byte = New Byte() {}
-                    Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
+                    Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYSTEM\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
                         ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
                         ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
                         ' it will show that value.
@@ -457,7 +457,7 @@ Module WindowsServiceHelper
             End Try
 
             ' Now we unload that hive
-            RegistryHelper.UnloadRegistryHive("HKLM\zSYS")
+            RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
         End If
 
         Return serviceList
@@ -511,6 +511,36 @@ Module WindowsServiceHelper
             scFailure = New WindowsService.ServiceFailureActions(firstFail, firstDelay, secondFail, secondDelay, subsequentFails, subsequentDelay, resetDelay)
         End If
         Return scFailure
+    End Function
+
+    Private Function ExportCurrentServiceInformation() As Boolean
+        Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+
+        If defaultControlSet = -1 Then
+            Return False
+        End If
+
+        Return RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Services", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
+    End Function
+
+    Public Function SaveServiceInformation(MountPath As String, ServiceList As List(Of WindowsService)) As Boolean
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
+
+            ' Export current key to at least have a backup, in case either we or the user
+            ' screws up with service information.
+            If Not ExportCurrentServiceInformation() Then
+                ' Current service information could not be backed up. We'll ask the user
+                ' if we can continue or not given the backup.
+            End If
+
+            RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
+        Else
+            Return False
+        End If
+
+        Return True
     End Function
 
     ''' <summary>

@@ -1,16 +1,19 @@
 ﻿Public Class ServiceManagementForm
 
     Dim ServiceList As New List(Of WindowsService)
+    Dim ServiceStartTypes() As String = New String() {"Boot Loader", "I/O System", "Automatic", "Manual", "Disabled"}
 
     Private Sub DisplayServiceInformation(Index As Integer)
-        If Index > ServiceList.Count - 1 Then Exit Sub
+        If (Index < 0) OrElse (Index > ServiceList.Count - 1) Then Exit Sub
 
         TextBox1.Text = ServiceList(Index).Name
         TextBox2.Text = ServiceList(Index).DisplayName
         TextBox3.Text = ServiceList(Index).Description
         TextBox4.Text = ServiceList(Index).ImagePath
         TextBox5.Text = ServiceList(Index).ObjectName
-        TextBox6.Text = ServiceList(Index).StartTypeToString()
+        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ComboBox1.SelectedItem = ServiceList(Index).StartTypeToString()
+        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
         TextBox7.Text = ServiceList(Index).TypeToString()
         TextBox8.Text = ServiceList(Index).ErrorControlToString()
         TextBox9.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.FirstFailure)
@@ -25,7 +28,8 @@
                                        Math.Round((ServiceList(Index).FailureActions.SubsequentDelaysInMillis / 60000), 2),
                                        Math.Round((ServiceList(Index).FailureActions.SubsequentDelaysInMillis / 1000), 2))
 
-        CheckBox1.Checked = ServiceList(Index).DelayedStart
+        CheckBox1.Checked = If(ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic, ServiceList(Index).DelayedStart, False)
+        CheckBox1.Enabled = ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic
 
         ListView2.Items.Clear()
         For Each RequiredPrivilege In ServiceList(Index).RequiredPrivileges
@@ -49,6 +53,8 @@
 
     Private Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ListView1.Items.Clear()
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange(ServiceStartTypes)
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = BackColor
@@ -77,8 +83,6 @@
         TextBox4.ForeColor = ForeColor
         TextBox5.BackColor = BackColor
         TextBox5.ForeColor = ForeColor
-        TextBox6.BackColor = BackColor
-        TextBox6.ForeColor = ForeColor
         TextBox7.BackColor = BackColor
         TextBox7.ForeColor = ForeColor
         TextBox8.BackColor = BackColor
@@ -94,6 +98,8 @@
         TextBox13.BackColor = BackColor
         TextBox13.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
+        ComboBox1.BackColor = BackColor
+        ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
@@ -117,6 +123,36 @@
             If CheckBox1.Checked <> ServiceList(ListView1.FocusedItem.Index).DelayedStart Then
                 CheckBox1.Checked = ServiceList(ListView1.FocusedItem.Index).DelayedStart
             End If
+        End If
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            Dim ForbiddenTypesForNonServices() As WindowsService.ServiceType = New WindowsService.ServiceType() {WindowsService.ServiceType.WindowsService, WindowsService.ServiceType.WindowsApplication}
+            Dim ForbiddenStartTypesForNonServices() As WindowsService.ServiceStartType = New WindowsService.ServiceStartType() {WindowsService.ServiceStartType.BootLoader, WindowsService.ServiceStartType.IOSystem}
+
+            Dim selectedIndex As Integer = ListView1.FocusedItem.Index
+
+            If ForbiddenTypesForNonServices.Contains(ServiceList(selectedIndex).Type) AndAlso
+                ForbiddenStartTypesForNonServices.Contains(ComboBox1.SelectedIndex) Then
+                If MsgBox("The selected start type is unsupported for services of this type. The selected service may not work correctly or at all if you continue with this start type." & vbCrLf & vbCrLf & "Do you want to reset this start type to its current value?", vbYesNo + vbExclamation) = MsgBoxResult.Yes Then
+                    ComboBox1.SelectedIndex = ServiceList(selectedIndex).StartType
+                    Exit Sub
+                End If
+            End If
+
+            ServiceList(selectedIndex).StartType = ComboBox1.SelectedIndex
+
+            ' We don't have to uncheck the box, we simply disable it, if it's not automatic
+            CheckBox1.Enabled = (ComboBox1.SelectedIndex = WindowsService.ServiceStartType.Automatic)
+        End If
+    End Sub
+
+    Private Sub SaveServiceInfoBtn_Click(sender As Object, e As EventArgs) Handles SaveServiceInfoBtn.Click
+        If WindowsServiceHelper.SaveServiceInformation(MainForm.MountDir, ServiceList) Then
+            MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
+                   "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
+                   "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
         End If
     End Sub
 End Class
