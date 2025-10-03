@@ -120,9 +120,7 @@
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
-            If CheckBox1.Checked <> ServiceList(ListView1.FocusedItem.Index).DelayedStart Then
-                CheckBox1.Checked = ServiceList(ListView1.FocusedItem.Index).DelayedStart
-            End If
+            ServiceList(ListView1.FocusedItem.Index).DelayedStart = CheckBox1.Checked
         End If
     End Sub
 
@@ -149,10 +147,12 @@
     End Sub
 
     Private Sub SaveServiceInfoBtn_Click(sender As Object, e As EventArgs) Handles SaveServiceInfoBtn.Click
+        Cursor = Cursors.WaitCursor
         If WindowsServiceHelper.SaveServiceInformation(MainForm.MountDir, ServiceList) Then
             MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
                    "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
                    "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
         End If
+        Cursor = Cursors.Arrow
     End Sub
 End Class

@@ -535,6 +535,39 @@ Module WindowsServiceHelper
                 ' if we can continue or not given the backup.
             End If
 
+            ' zSYSTEM to denote differences. DO NOT CHANGE FROM zSYSTEM TO SYSTEM. YOU WILL BREAK THE SYSTEM!!!!!
+            Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+
+            If defaultControlSet = -1 Then
+                Return False
+            End If
+
+            Dim failedSets As Integer = 0
+
+            ' Now, we can save the properties. Only the start type for now
+            DynaLog.DisableLogging()
+            For Each Service As WindowsService In ServiceList
+                ' For those wondering: why not .NET APIs? Well, they throw access denied exceptions. Handling the exceptions tells us that
+                ' none of the information will be saved. For example, if we have 672 service entries, all of them will fail if we use .NET APIs.
+                ' However, if we use the APIs provided by the Registry Helper (which runs the reg program under the hood), we bring the failed
+                ' set operations down to 9, and we **do** set this information using this method. We'll roll with it, though we'll disable
+                ' DynaLog logging so it doesn't take about a minute.
+                Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name)
+                If RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "Start", RegistryItem.ValueType.RegDword, Service.StartType)) <> 0 Then
+                    failedSets += 1
+                    Continue For
+                End If
+                If Service.StartType = WindowsService.ServiceStartType.Automatic Then
+                    ' Currently, we assume that setting DelayedAutoStart to 0 does the same thing as removing this value altogether: turning off
+                    ' delayed start. If this is not the case, we'll just get rid of it.
+                    RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
+                End If
+            Next
+            DynaLog.EnableLogging()
+
+            Debug.WriteLine("Service Count: " & ServiceList.Count)
+            Debug.WriteLine("Failed Sets: " & failedSets)
+
             RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
         Else
             Return False
