@@ -533,6 +533,11 @@ Module WindowsServiceHelper
             If Not ExportCurrentServiceInformation() Then
                 ' Current service information could not be backed up. We'll ask the user
                 ' if we can continue or not given the backup.
+                If MsgBox("Current service information could not be backed up. Backups are used in case of a mistake during service management. You may continue, but at your own risk." & CrLf & CrLf &
+                          "The target image may not work correctly or at all after configuration, and you will not be able to recover it using previous service configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
+                          "Do you want to continue without backing up current service information?", vbYesNo + vbExclamation, "Service information could not be backed up") = MsgBoxResult.No Then
+                    Return False
+                End If
             End If
 
             ' zSYSTEM to denote differences. DO NOT CHANGE FROM zSYSTEM TO SYSTEM. YOU WILL BREAK THE SYSTEM!!!!!
