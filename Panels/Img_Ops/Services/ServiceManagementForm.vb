@@ -108,7 +108,7 @@
         DynaLog.EnableLogging()
 
         For Each Service In ServiceList
-            ListView1.Items.Add(New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString}))
+            ListView1.Items.Add(New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()}))
         Next
     End Sub
 

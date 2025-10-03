@@ -79,6 +79,7 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader11 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label18 = New System.Windows.Forms.Label()
         Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
+        Me.ColumnHeader12 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -111,7 +112,7 @@ Partial Class ServiceManagementForm
         Me.ListView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4})
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader12})
         Me.ListView1.FullRowSelect = True
         Me.ListView1.Location = New System.Drawing.Point(12, 59)
         Me.ListView1.Name = "ListView1"
@@ -402,7 +403,7 @@ Partial Class ServiceManagementForm
         Me.GroupBox1.Controls.Add(Me.Label10)
         Me.GroupBox1.Location = New System.Drawing.Point(31, 73)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(910, 150)
+        Me.GroupBox1.Size = New System.Drawing.Size(1170, 150)
         Me.GroupBox1.TabIndex = 5
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Failure Actions"
@@ -415,7 +416,7 @@ Partial Class ServiceManagementForm
         Me.TextBox11.Location = New System.Drawing.Point(192, 69)
         Me.TextBox11.Name = "TextBox11"
         Me.TextBox11.ReadOnly = True
-        Me.TextBox11.Size = New System.Drawing.Size(694, 14)
+        Me.TextBox11.Size = New System.Drawing.Size(954, 14)
         Me.TextBox11.TabIndex = 8
         '
         'Label12
@@ -435,7 +436,7 @@ Partial Class ServiceManagementForm
         Me.TextBox10.Location = New System.Drawing.Point(192, 49)
         Me.TextBox10.Name = "TextBox10"
         Me.TextBox10.ReadOnly = True
-        Me.TextBox10.Size = New System.Drawing.Size(694, 14)
+        Me.TextBox10.Size = New System.Drawing.Size(954, 14)
         Me.TextBox10.TabIndex = 6
         '
         'Label11
@@ -455,7 +456,7 @@ Partial Class ServiceManagementForm
         Me.TextBox13.Location = New System.Drawing.Point(303, 109)
         Me.TextBox13.Name = "TextBox13"
         Me.TextBox13.ReadOnly = True
-        Me.TextBox13.Size = New System.Drawing.Size(583, 14)
+        Me.TextBox13.Size = New System.Drawing.Size(843, 14)
         Me.TextBox13.TabIndex = 4
         '
         'Label14
@@ -475,7 +476,7 @@ Partial Class ServiceManagementForm
         Me.TextBox12.Location = New System.Drawing.Point(303, 89)
         Me.TextBox12.Name = "TextBox12"
         Me.TextBox12.ReadOnly = True
-        Me.TextBox12.Size = New System.Drawing.Size(583, 14)
+        Me.TextBox12.Size = New System.Drawing.Size(843, 14)
         Me.TextBox12.TabIndex = 4
         '
         'Label13
@@ -495,7 +496,7 @@ Partial Class ServiceManagementForm
         Me.TextBox9.Location = New System.Drawing.Point(192, 29)
         Me.TextBox9.Name = "TextBox9"
         Me.TextBox9.ReadOnly = True
-        Me.TextBox9.Size = New System.Drawing.Size(694, 14)
+        Me.TextBox9.Size = New System.Drawing.Size(954, 14)
         Me.TextBox9.TabIndex = 4
         '
         'Label10
@@ -517,7 +518,7 @@ Partial Class ServiceManagementForm
         Me.TextBox8.Name = "TextBox8"
         Me.TextBox8.ReadOnly = True
         Me.TextBox8.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox8.Size = New System.Drawing.Size(683, 53)
+        Me.TextBox8.Size = New System.Drawing.Size(943, 53)
         Me.TextBox8.TabIndex = 4
         '
         'Label9
@@ -654,6 +655,11 @@ Partial Class ServiceManagementForm
         Me.SaveServiceInfoBtn.Text = "Save"
         Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
         '
+        'ColumnHeader12
+        '
+        Me.ColumnHeader12.Text = "Type"
+        Me.ColumnHeader12.Width = 195
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -746,4 +752,5 @@ Partial Class ServiceManagementForm
     Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents SaveServiceInfoBtn As System.Windows.Forms.Button
+    Friend WithEvents ColumnHeader12 As System.Windows.Forms.ColumnHeader
 End Class
