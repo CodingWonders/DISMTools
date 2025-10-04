@@ -22,6 +22,7 @@ Partial Class ServiceManagementForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ServiceManagementForm))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ListView1 = New System.Windows.Forms.ListView()
@@ -29,6 +30,7 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader12 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
@@ -79,7 +81,8 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader11 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label18 = New System.Windows.Forms.Label()
         Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
-        Me.ColumnHeader12 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ProgressLabel = New System.Windows.Forms.Label()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -114,6 +117,7 @@ Partial Class ServiceManagementForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader12})
         Me.ListView1.FullRowSelect = True
+        Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(12, 59)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(1240, 310)
@@ -140,6 +144,11 @@ Partial Class ServiceManagementForm
         '
         Me.ColumnHeader4.Text = "Start Type"
         Me.ColumnHeader4.Width = 173
+        '
+        'ColumnHeader12
+        '
+        Me.ColumnHeader12.Text = "Type"
+        Me.ColumnHeader12.Width = 195
         '
         'TabControl1
         '
@@ -352,6 +361,7 @@ Partial Class ServiceManagementForm
         '
         Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader5, Me.ColumnHeader6, Me.ColumnHeader7})
         Me.ListView2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView2.HideSelection = False
         Me.ListView2.Location = New System.Drawing.Point(3, 3)
         Me.ListView2.Name = "ListView2"
         Me.ListView2.Size = New System.Drawing.Size(1226, 233)
@@ -575,6 +585,7 @@ Partial Class ServiceManagementForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView3.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader8, Me.ColumnHeader9})
         Me.ListView3.FullRowSelect = True
+        Me.ListView3.HideSelection = False
         Me.ListView3.Location = New System.Drawing.Point(19, 47)
         Me.ListView3.Name = "ListView3"
         Me.ListView3.Size = New System.Drawing.Size(568, 173)
@@ -618,6 +629,7 @@ Partial Class ServiceManagementForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ListView4.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader10, Me.ColumnHeader11})
         Me.ListView4.FullRowSelect = True
+        Me.ListView4.HideSelection = False
         Me.ListView4.Location = New System.Drawing.Point(19, 47)
         Me.ListView4.Name = "ListView4"
         Me.ListView4.Size = New System.Drawing.Size(574, 173)
@@ -655,20 +667,32 @@ Partial Class ServiceManagementForm
         Me.SaveServiceInfoBtn.Text = "Save"
         Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
         '
-        'ColumnHeader12
+        'ProgressLabel
         '
-        Me.ColumnHeader12.Text = "Type"
-        Me.ColumnHeader12.Width = 195
+        Me.ProgressLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ProgressLabel.AutoSize = True
+        Me.ProgressLabel.Location = New System.Drawing.Point(13, 652)
+        Me.ProgressLabel.Name = "ProgressLabel"
+        Me.ProgressLabel.Size = New System.Drawing.Size(73, 13)
+        Me.ProgressLabel.TabIndex = 5
+        Me.ProgressLabel.Text = "Please wait..."
+        Me.ProgressLabel.Visible = False
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 25
         '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.ProgressLabel)
         Me.Controls.Add(Me.SaveServiceInfoBtn)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Label1)
+        Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(1024, 600)
@@ -694,6 +718,7 @@ Partial Class ServiceManagementForm
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -753,4 +778,6 @@ Partial Class ServiceManagementForm
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents SaveServiceInfoBtn As System.Windows.Forms.Button
     Friend WithEvents ColumnHeader12 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ProgressLabel As System.Windows.Forms.Label
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
 End Class

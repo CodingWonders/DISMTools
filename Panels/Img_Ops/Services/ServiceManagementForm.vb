@@ -1,7 +1,22 @@
-﻿Public Class ServiceManagementForm
+﻿Imports System.Threading.Tasks
+
+Public Class ServiceManagementForm
 
     Dim ServiceList As New List(Of WindowsService)
     Dim ServiceStartTypes() As String = New String() {"Boot Loader", "I/O System", "Automatic", "Manual", "Disabled"}
+
+    Public Event ServiceSaveReported(current As Integer, count As Integer)
+
+    Private progressMessage As String = ""
+    Private isBusy As Boolean = False
+
+    Private Sub OnServiceSaveReported(current As Integer, count As Integer) Handles Me.ServiceSaveReported
+        progressMessage = String.Format("Saving service information... ({0}/{1}, {2}%)", current, count, Math.Round((current / count) * 100, 0))
+    End Sub
+
+    Public Sub ReportServiceSave(current As Integer, count As Integer)
+        RaiseEvent ServiceSaveReported(current, count)
+    End Sub
 
     Private Sub DisplayServiceInformation(Index As Integer)
         If (Index < 0) OrElse (Index > ServiceList.Count - 1) Then Exit Sub
@@ -146,13 +161,44 @@
         End If
     End Sub
 
-    Private Sub SaveServiceInfoBtn_Click(sender As Object, e As EventArgs) Handles SaveServiceInfoBtn.Click
+    Private Async Sub SaveServiceInfoBtn_Click(sender As Object, e As EventArgs) Handles SaveServiceInfoBtn.Click
+        If isBusy Then Exit Sub
+
+        ProgressLabel.Visible = True
+        Timer1.Enabled = True
         Cursor = Cursors.WaitCursor
-        If WindowsServiceHelper.SaveServiceInformation(MainForm.MountDir, ServiceList) Then
+        Dim mntPath As String = MainForm.MountDir
+        isBusy = True
+        WindowHelper.DisableCloseCapability(Handle)
+        If Await Task.Run(Function()
+                              Return WindowsServiceHelper.SaveServiceInformation(mntPath, ServiceList, Sub(current, count)
+                                                                                                           ReportServiceSave(current, count)
+                                                                                                       End Sub)
+                          End Function) Then
             MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
                    "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
                    "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
         End If
+        WindowHelper.EnableCloseCapability(Handle)
         Cursor = Cursors.Arrow
+        ProgressLabel.Visible = False
+        Timer1.Enabled = False
+        isBusy = False
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        ProgressLabel.Text = progressMessage
+    End Sub
+
+    Private Sub ServiceManagementForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If isBusy Then
+            e.Cancel = True
+            Beep()
+            Exit Sub
+        End If
+    End Sub
+
+    Private Sub ServiceManagementForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
+        If isBusy Then WindowHelper.DisableCloseCapability(Handle)
     End Sub
 End Class

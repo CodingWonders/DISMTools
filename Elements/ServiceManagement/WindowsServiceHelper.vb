@@ -525,7 +525,7 @@ Module WindowsServiceHelper
                                                                 String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
     End Function
 
-    Public Function SaveServiceInformation(MountPath As String, ServiceList As List(Of WindowsService)) As Boolean
+    Public Function SaveServiceInformation(MountPath As String, ServiceList As List(Of WindowsService), Optional reportProgress As Action(Of Integer, Integer) = Nothing) As Boolean
         If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
 
             ' Export current key to at least have a backup, in case either we or the user
@@ -548,10 +548,13 @@ Module WindowsServiceHelper
             End If
 
             Dim failedSets As Integer = 0
+            Dim currentService As Integer = 0,
+                serviceCount As Integer = ServiceList.Count
 
             ' Now, we can save the properties. Only the start type for now
             DynaLog.DisableLogging()
             For Each Service As WindowsService In ServiceList
+                currentService += 1
                 ' For those wondering: why not .NET APIs? Well, they throw access denied exceptions. Handling the exceptions tells us that
                 ' none of the information will be saved. For example, if we have 672 service entries, all of them will fail if we use .NET APIs.
                 ' However, if we use the APIs provided by the Registry Helper (which runs the reg program under the hood), we bring the failed
@@ -567,6 +570,8 @@ Module WindowsServiceHelper
                     ' delayed start. If this is not the case, we'll just get rid of it.
                     RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
                 End If
+                If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
+                ServiceManagementForm.ReportServiceSave(currentService, serviceCount)
             Next
             DynaLog.EnableLogging()
 
