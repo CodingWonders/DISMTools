@@ -686,7 +686,7 @@ Partial Class ServiceManagementForm
         '
         'ReloadServiceInformationBtn
         '
-        Me.ReloadServiceInformationBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ReloadServiceInformationBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ReloadServiceInformationBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.ReloadServiceInformationBtn.Location = New System.Drawing.Point(12, 647)
         Me.ReloadServiceInformationBtn.Name = "ReloadServiceInformationBtn"

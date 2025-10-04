@@ -27,7 +27,7 @@ Public Class ServiceManagementForm
         TextBox4.Text = ServiceList(Index).ImagePath
         TextBox5.Text = ServiceList(Index).ObjectName
         RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
-        ComboBox1.SelectedItem = ServiceList(Index).StartTypeToString()
+        ComboBox1.SelectedIndex = ServiceList(Index).StartType
         AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
         TextBox7.Text = ServiceList(Index).TypeToString()
         TextBox8.Text = ServiceList(Index).ErrorControlToString()
