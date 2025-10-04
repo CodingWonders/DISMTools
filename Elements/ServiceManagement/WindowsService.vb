@@ -337,7 +337,7 @@
             Case WindowsService.ServiceStartType.IOSystem
                 Return "I/O System"
             Case WindowsService.ServiceStartType.Automatic
-                Return "Automatic"
+                Return "Automatic" & If(DelayedStart, " (Delayed Start)", "")
             Case WindowsService.ServiceStartType.Manual
                 Return "Manual"
             Case WindowsService.ServiceStartType.Disabled
