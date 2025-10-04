@@ -83,6 +83,7 @@ Partial Class ServiceManagementForm
         Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
         Me.ProgressLabel = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -119,6 +120,7 @@ Partial Class ServiceManagementForm
         Me.ListView1.FullRowSelect = True
         Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(12, 59)
+        Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(1240, 310)
         Me.ListView1.TabIndex = 2
@@ -660,7 +662,7 @@ Partial Class ServiceManagementForm
         '
         Me.SaveServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SaveServiceInfoBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1172, 647)
+        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1177, 647)
         Me.SaveServiceInfoBtn.Name = "SaveServiceInfoBtn"
         Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(75, 23)
         Me.SaveServiceInfoBtn.TabIndex = 4
@@ -671,7 +673,7 @@ Partial Class ServiceManagementForm
         '
         Me.ProgressLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.ProgressLabel.AutoSize = True
-        Me.ProgressLabel.Location = New System.Drawing.Point(13, 652)
+        Me.ProgressLabel.Location = New System.Drawing.Point(93, 652)
         Me.ProgressLabel.Name = "ProgressLabel"
         Me.ProgressLabel.Size = New System.Drawing.Size(73, 13)
         Me.ProgressLabel.TabIndex = 5
@@ -682,11 +684,23 @@ Partial Class ServiceManagementForm
         '
         Me.Timer1.Interval = 25
         '
+        'ReloadServiceInformationBtn
+        '
+        Me.ReloadServiceInformationBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ReloadServiceInformationBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ReloadServiceInformationBtn.Location = New System.Drawing.Point(12, 647)
+        Me.ReloadServiceInformationBtn.Name = "ReloadServiceInformationBtn"
+        Me.ReloadServiceInformationBtn.Size = New System.Drawing.Size(75, 23)
+        Me.ReloadServiceInformationBtn.TabIndex = 6
+        Me.ReloadServiceInformationBtn.Text = "Reload"
+        Me.ReloadServiceInformationBtn.UseVisualStyleBackColor = True
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.ReloadServiceInformationBtn)
         Me.Controls.Add(Me.ProgressLabel)
         Me.Controls.Add(Me.SaveServiceInfoBtn)
         Me.Controls.Add(Me.TabControl1)
@@ -780,4 +794,5 @@ Partial Class ServiceManagementForm
     Friend WithEvents ColumnHeader12 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ProgressLabel As System.Windows.Forms.Label
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents ReloadServiceInformationBtn As System.Windows.Forms.Button
 End Class

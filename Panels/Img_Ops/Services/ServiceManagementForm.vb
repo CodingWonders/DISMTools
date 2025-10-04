@@ -184,6 +184,7 @@ Public Class ServiceManagementForm
         ProgressLabel.Visible = False
         Timer1.Enabled = False
         isBusy = False
+        ReloadServiceInformation()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -200,5 +201,26 @@ Public Class ServiceManagementForm
 
     Private Sub ServiceManagementForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
         If isBusy Then WindowHelper.DisableCloseCapability(Handle)
+    End Sub
+
+    Sub ReloadServiceInformation()
+        Cursor = Cursors.WaitCursor
+        ListView1.Items.Clear()
+
+        DynaLog.DisableLogging()
+        ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
+        DynaLog.EnableLogging()
+
+        For Each Service In ServiceList
+            ListView1.Items.Add(New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()}))
+        Next
+
+        Cursor = Cursors.Arrow
+    End Sub
+
+    Private Sub ReloadServiceInformationBtn_Click(sender As Object, e As EventArgs) Handles ReloadServiceInformationBtn.Click
+        If isBusy Then Exit Sub
+
+        ReloadServiceInformation()
     End Sub
 End Class
