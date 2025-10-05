@@ -10,6 +10,8 @@ Public Class ServiceManagementForm
     Private progressMessage As String = ""
     Private isBusy As Boolean = False
 
+    Private isModified As Boolean = False
+
     Private Sub OnServiceSaveReported(current As Integer, count As Integer) Handles Me.ServiceSaveReported
         progressMessage = String.Format("Saving service information... ({0}/{1}, {2}%)", current, count, Math.Round((current / count) * 100, 0))
     End Sub
@@ -118,6 +120,8 @@ Public Class ServiceManagementForm
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
+        isModified = False
+
         DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
         DynaLog.EnableLogging()
@@ -137,6 +141,8 @@ Public Class ServiceManagementForm
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
         If ListView1.SelectedItems.Count = 1 Then
             ServiceList(ListView1.FocusedItem.Index).DelayedStart = CheckBox1.Checked
+
+            isModified = True
         End If
     End Sub
 
@@ -159,6 +165,8 @@ Public Class ServiceManagementForm
 
             ' We don't have to uncheck the box, we simply disable it, if it's not automatic
             CheckBox1.Enabled = (ComboBox1.SelectedIndex = WindowsService.ServiceStartType.Automatic)
+
+            isModified = True
         End If
     End Sub
 
@@ -198,6 +206,14 @@ Public Class ServiceManagementForm
             Beep()
             Exit Sub
         End If
+
+        If isModified Then
+            If MsgBox("Some changes have been made. Closing this window will discard all your changes to Windows services. Do you want to discard these changes?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+                e.Cancel = True
+                Beep()
+                Exit Sub
+            End If
+        End If
     End Sub
 
     Private Sub ServiceManagementForm_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
@@ -207,6 +223,8 @@ Public Class ServiceManagementForm
     Sub ReloadServiceInformation()
         Cursor = Cursors.WaitCursor
         ListView1.Items.Clear()
+
+        isModified = False
 
         DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
@@ -221,6 +239,12 @@ Public Class ServiceManagementForm
 
     Private Sub ReloadServiceInformationBtn_Click(sender As Object, e As EventArgs) Handles ReloadServiceInformationBtn.Click
         If isBusy Then Exit Sub
+
+        If isModified Then
+            If MsgBox("Some changes have been made. Reloading service information will discard all your changes to Windows services. Do you want to discard these changes?", vbYesNo + vbQuestion) = MsgBoxResult.No Then
+                Exit Sub
+            End If
+        End If
 
         ReloadServiceInformation()
     End Sub
