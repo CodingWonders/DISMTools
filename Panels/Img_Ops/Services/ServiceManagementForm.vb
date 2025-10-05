@@ -222,6 +222,7 @@ Public Class ServiceManagementForm
 
     Sub ReloadServiceInformation()
         Cursor = Cursors.WaitCursor
+        NoServiceSelectedPanel.Visible = True
         ListView1.Items.Clear()
 
         isModified = False
