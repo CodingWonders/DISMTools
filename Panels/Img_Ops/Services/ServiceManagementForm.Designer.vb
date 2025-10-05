@@ -84,6 +84,10 @@ Partial Class ServiceManagementForm
         Me.ProgressLabel = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
+        Me.ServiceInfoContainerPanel = New System.Windows.Forms.Panel()
+        Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
+        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -97,6 +101,9 @@ Partial Class ServiceManagementForm
         Me.SplitContainer1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.ServiceInfoContainerPanel.SuspendLayout()
+        Me.NoServiceSelectedPanel.SuspendLayout()
+        Me.SelectedServicePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -154,13 +161,12 @@ Partial Class ServiceManagementForm
         '
         'TabControl1
         '
-        Me.TabControl1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.TabPage4)
-        Me.TabControl1.Location = New System.Drawing.Point(12, 375)
+        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(1240, 265)
@@ -695,15 +701,57 @@ Partial Class ServiceManagementForm
         Me.ReloadServiceInformationBtn.Text = "Reload"
         Me.ReloadServiceInformationBtn.UseVisualStyleBackColor = True
         '
+        'ServiceInfoContainerPanel
+        '
+        Me.ServiceInfoContainerPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ServiceInfoContainerPanel.Controls.Add(Me.NoServiceSelectedPanel)
+        Me.ServiceInfoContainerPanel.Controls.Add(Me.SelectedServicePanel)
+        Me.ServiceInfoContainerPanel.Location = New System.Drawing.Point(12, 376)
+        Me.ServiceInfoContainerPanel.Name = "ServiceInfoContainerPanel"
+        Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
+        Me.ServiceInfoContainerPanel.TabIndex = 7
+        '
+        'NoServiceSelectedPanel
+        '
+        Me.NoServiceSelectedPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.NoServiceSelectedPanel.Controls.Add(Me.Label15)
+        Me.NoServiceSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NoServiceSelectedPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NoServiceSelectedPanel.Name = "NoServiceSelectedPanel"
+        Me.NoServiceSelectedPanel.Size = New System.Drawing.Size(1240, 265)
+        Me.NoServiceSelectedPanel.TabIndex = 0
+        '
+        'SelectedServicePanel
+        '
+        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
+        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
+        Me.SelectedServicePanel.Name = "SelectedServicePanel"
+        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
+        Me.SelectedServicePanel.TabIndex = 1
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(265, 86)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(708, 90)
+        Me.Label15.TabIndex = 0
+        Me.Label15.Text = "No service has been selected. Select a service above to view details."
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1264, 681)
+        Me.Controls.Add(Me.ServiceInfoContainerPanel)
         Me.Controls.Add(Me.ReloadServiceInformationBtn)
         Me.Controls.Add(Me.ProgressLabel)
         Me.Controls.Add(Me.SaveServiceInfoBtn)
-        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.ListView1)
         Me.Controls.Add(Me.Label1)
         Me.DoubleBuffered = True
@@ -731,6 +779,9 @@ Partial Class ServiceManagementForm
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        Me.ServiceInfoContainerPanel.ResumeLayout(False)
+        Me.NoServiceSelectedPanel.ResumeLayout(False)
+        Me.SelectedServicePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -795,4 +846,8 @@ Partial Class ServiceManagementForm
     Friend WithEvents ProgressLabel As System.Windows.Forms.Label
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents ReloadServiceInformationBtn As System.Windows.Forms.Button
+    Friend WithEvents ServiceInfoContainerPanel As System.Windows.Forms.Panel
+    Friend WithEvents NoServiceSelectedPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents SelectedServicePanel As System.Windows.Forms.Panel
 End Class

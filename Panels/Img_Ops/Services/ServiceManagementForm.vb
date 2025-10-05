@@ -131,6 +131,7 @@ Public Class ServiceManagementForm
         If ListView1.SelectedItems.Count = 1 Then
             DisplayServiceInformation(ListView1.FocusedItem.Index)
         End If
+        NoServiceSelectedPanel.Visible = (ListView1.SelectedItems.Count <> 1)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
