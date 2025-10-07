@@ -1536,6 +1536,7 @@
     <None Include="Resources\add_element.png" />
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
+    <None Include="Resources\envvar_pic_32px.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
