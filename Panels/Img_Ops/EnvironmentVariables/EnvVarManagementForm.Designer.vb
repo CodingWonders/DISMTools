@@ -41,19 +41,22 @@ Partial Class EnvVarManagementForm
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.UserEnvVarActionPanel = New System.Windows.Forms.Panel()
         Me.EnvVarDetailsPanel = New System.Windows.Forms.Panel()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.SaveVarBtn = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.CopyToUserScopeBtn = New System.Windows.Forms.Button()
+        Me.CopyToMachineScopeBtn = New System.Windows.Forms.Button()
+        Me.MoveToMachineScopeBtn = New System.Windows.Forms.Button()
+        Me.MoveToUserScopeBtn = New System.Windows.Forms.Button()
         Me.HeaderContainerPanel.SuspendLayout()
         CType(Me.EnvVarContainerSplitPanel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.EnvVarContainerSplitPanel.Panel1.SuspendLayout()
@@ -235,58 +238,35 @@ Partial Class EnvVarManagementForm
         '
         'EnvVarDetailsPanel
         '
-        Me.EnvVarDetailsPanel.Controls.Add(Me.TableLayoutPanel1)
-        Me.EnvVarDetailsPanel.Controls.Add(Me.Button3)
+        Me.EnvVarDetailsPanel.Controls.Add(Me.SaveVarBtn)
         Me.EnvVarDetailsPanel.Controls.Add(Me.TextBox2)
         Me.EnvVarDetailsPanel.Controls.Add(Me.TextBox3)
         Me.EnvVarDetailsPanel.Controls.Add(Me.TextBox1)
         Me.EnvVarDetailsPanel.Controls.Add(Me.Label4)
+        Me.EnvVarDetailsPanel.Controls.Add(Me.Label7)
         Me.EnvVarDetailsPanel.Controls.Add(Me.Label6)
         Me.EnvVarDetailsPanel.Controls.Add(Me.Label5)
         Me.EnvVarDetailsPanel.Controls.Add(Me.Label3)
         Me.EnvVarDetailsPanel.Controls.Add(Me.Label2)
         Me.EnvVarDetailsPanel.Controls.Add(Me.PictureBox1)
+        Me.EnvVarDetailsPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.EnvVarDetailsPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.EnvVarDetailsPanel.Location = New System.Drawing.Point(0, 0)
         Me.EnvVarDetailsPanel.Name = "EnvVarDetailsPanel"
         Me.EnvVarDetailsPanel.Size = New System.Drawing.Size(490, 559)
         Me.EnvVarDetailsPanel.TabIndex = 1
         '
-        'Button3
+        'SaveVarBtn
         '
-        Me.Button3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button3.Enabled = False
-        Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(369, 516)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(99, 23)
-        Me.Button3.TabIndex = 5
-        Me.Button3.Text = "Save Variable"
-        Me.Button3.UseVisualStyleBackColor = True
-        '
-        'Button2
-        '
-        Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button2.Enabled = False
-        Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(227, 3)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(219, 23)
-        Me.Button2.TabIndex = 4
-        Me.Button2.Text = "Move to default user scope"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button1.Enabled = False
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(3, 3)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(218, 23)
-        Me.Button1.TabIndex = 4
-        Me.Button1.Text = "Move to machine scope"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.SaveVarBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveVarBtn.Enabled = False
+        Me.SaveVarBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SaveVarBtn.Location = New System.Drawing.Point(369, 516)
+        Me.SaveVarBtn.Name = "SaveVarBtn"
+        Me.SaveVarBtn.Size = New System.Drawing.Size(99, 23)
+        Me.SaveVarBtn.TabIndex = 5
+        Me.SaveVarBtn.Text = "Save Variable"
+        Me.SaveVarBtn.UseVisualStyleBackColor = True
         '
         'TextBox2
         '
@@ -303,7 +283,7 @@ Partial Class EnvVarManagementForm
         '
         Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox3.Location = New System.Drawing.Point(22, 217)
+        Me.TextBox3.Location = New System.Drawing.Point(22, 254)
         Me.TextBox3.Multiline = True
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.ReadOnly = True
@@ -331,10 +311,24 @@ Partial Class EnvVarManagementForm
         Me.Label4.TabIndex = 2
         Me.Label4.Text = "Scope:"
         '
+        'Label7
+        '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(19, 472)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(452, 36)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "This variable is hierarchical. Values added to the system variable will be either" & _
+    " prepended to or replaced by the user variable when the user profile is loaded."
+        Me.Label7.Visible = False
+        '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(19, 411)
+        Me.Label6.Location = New System.Drawing.Point(19, 448)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(345, 13)
         Me.Label6.TabIndex = 2
@@ -343,7 +337,7 @@ Partial Class EnvVarManagementForm
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(19, 201)
+        Me.Label5.Location = New System.Drawing.Point(19, 238)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(37, 13)
         Me.Label5.TabIndex = 2
@@ -385,14 +379,62 @@ Partial Class EnvVarManagementForm
         Me.TableLayoutPanel1.ColumnCount = 2
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.Button1, 0, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.Button2, 1, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.CopyToUserScopeBtn, 1, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.CopyToMachineScopeBtn, 0, 1)
+        Me.TableLayoutPanel1.Controls.Add(Me.MoveToMachineScopeBtn, 0, 0)
+        Me.TableLayoutPanel1.Controls.Add(Me.MoveToUserScopeBtn, 1, 0)
+        Me.TableLayoutPanel1.Enabled = False
         Me.TableLayoutPanel1.Location = New System.Drawing.Point(22, 169)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
+        Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(449, 29)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(449, 58)
         Me.TableLayoutPanel1.TabIndex = 6
+        '
+        'CopyToUserScopeBtn
+        '
+        Me.CopyToUserScopeBtn.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CopyToUserScopeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CopyToUserScopeBtn.Location = New System.Drawing.Point(227, 32)
+        Me.CopyToUserScopeBtn.Name = "CopyToUserScopeBtn"
+        Me.CopyToUserScopeBtn.Size = New System.Drawing.Size(219, 23)
+        Me.CopyToUserScopeBtn.TabIndex = 7
+        Me.CopyToUserScopeBtn.Text = "Copy to default user scope"
+        Me.CopyToUserScopeBtn.UseVisualStyleBackColor = True
+        '
+        'CopyToMachineScopeBtn
+        '
+        Me.CopyToMachineScopeBtn.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CopyToMachineScopeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CopyToMachineScopeBtn.Location = New System.Drawing.Point(3, 32)
+        Me.CopyToMachineScopeBtn.Name = "CopyToMachineScopeBtn"
+        Me.CopyToMachineScopeBtn.Size = New System.Drawing.Size(218, 23)
+        Me.CopyToMachineScopeBtn.TabIndex = 5
+        Me.CopyToMachineScopeBtn.Text = "Copy to machine scope"
+        Me.CopyToMachineScopeBtn.UseVisualStyleBackColor = True
+        '
+        'MoveToMachineScopeBtn
+        '
+        Me.MoveToMachineScopeBtn.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MoveToMachineScopeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.MoveToMachineScopeBtn.Location = New System.Drawing.Point(3, 3)
+        Me.MoveToMachineScopeBtn.Name = "MoveToMachineScopeBtn"
+        Me.MoveToMachineScopeBtn.Size = New System.Drawing.Size(218, 23)
+        Me.MoveToMachineScopeBtn.TabIndex = 4
+        Me.MoveToMachineScopeBtn.Text = "Move to machine scope"
+        Me.MoveToMachineScopeBtn.UseVisualStyleBackColor = True
+        '
+        'MoveToUserScopeBtn
+        '
+        Me.MoveToUserScopeBtn.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.MoveToUserScopeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.MoveToUserScopeBtn.Location = New System.Drawing.Point(227, 3)
+        Me.MoveToUserScopeBtn.Name = "MoveToUserScopeBtn"
+        Me.MoveToUserScopeBtn.Size = New System.Drawing.Size(219, 23)
+        Me.MoveToUserScopeBtn.TabIndex = 4
+        Me.MoveToUserScopeBtn.Text = "Move to default user scope"
+        Me.MoveToUserScopeBtn.UseVisualStyleBackColor = True
         '
         'EnvVarManagementForm
         '
@@ -444,9 +486,9 @@ Partial Class EnvVarManagementForm
     Friend WithEvents UserEnvVarActionPanel As System.Windows.Forms.Panel
     Friend WithEvents EnvVarDetailsPanel As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents SaveVarBtn As System.Windows.Forms.Button
+    Friend WithEvents MoveToUserScopeBtn As System.Windows.Forms.Button
+    Friend WithEvents MoveToMachineScopeBtn As System.Windows.Forms.Button
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox3 As System.Windows.Forms.TextBox
     Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
@@ -456,4 +498,7 @@ Partial Class EnvVarManagementForm
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents CopyToUserScopeBtn As System.Windows.Forms.Button
+    Friend WithEvents CopyToMachineScopeBtn As System.Windows.Forms.Button
+    Friend WithEvents Label7 As System.Windows.Forms.Label
 End Class

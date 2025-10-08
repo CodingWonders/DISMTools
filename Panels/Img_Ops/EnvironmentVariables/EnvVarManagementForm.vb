@@ -4,16 +4,33 @@
 
     Private Sub ShowVariableInformation(VariableScope As EnvironmentVariable.EnvironmentVariableScope, Index As Integer)
         Dim machineEnvVars As List(Of EnvironmentVariable) = envVarList.Where(Function(envVar) envVar.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine).ToList(),
-            userEnvVars As List(Of EnvironmentVariable) = envVarList.Where(Function(envVar) envVar.Scope = EnvironmentVariable.EnvironmentVariableScope.User).ToList()
+            userEnvVars As List(Of EnvironmentVariable) = envVarList.Where(Function(envVar) envVar.Scope = EnvironmentVariable.EnvironmentVariableScope.User).ToList(),
+            variableName As String = ""
         If VariableScope = EnvironmentVariable.EnvironmentVariableScope.Machine Then
             TextBox1.Text = machineEnvVars(Index).Name
             TextBox2.Text = "Machine"
             TextBox3.Text = machineEnvVars(Index).Value
+
+            MoveToMachineScopeBtn.Enabled = False
+            CopyToMachineScopeBtn.Enabled = False
+            MoveToUserScopeBtn.Enabled = True
+            CopyToUserScopeBtn.Enabled = True
         Else
             TextBox1.Text = userEnvVars(Index).Name
             TextBox2.Text = "User"
             TextBox3.Text = userEnvVars(Index).Value
+
+            MoveToMachineScopeBtn.Enabled = True
+            CopyToMachineScopeBtn.Enabled = True
+            MoveToUserScopeBtn.Enabled = False
+            CopyToUserScopeBtn.Enabled = False
         End If
+        variableName = TextBox1.Text
+
+        TableLayoutPanel1.Enabled = Not ((machineEnvVars.Any(Function(envVar) envVar.Name.Equals(variableName, StringComparison.InvariantCultureIgnoreCase))) AndAlso
+                                         (userEnvVars.Any(Function(envVar) envVar.Name.Equals(variableName, StringComparison.InvariantCultureIgnoreCase))))
+        Label7.Visible = ((machineEnvVars.Any(Function(envVar) envVar.Name.Equals(variableName, StringComparison.InvariantCultureIgnoreCase))) AndAlso
+                          (userEnvVars.Any(Function(envVar) envVar.Name.Equals(variableName, StringComparison.InvariantCultureIgnoreCase))))
     End Sub
 
     Private Sub EnvVarManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -48,12 +65,15 @@
     End Sub
 
     Private Sub UserEnvVarLV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles UserEnvVarLV.SelectedIndexChanged
+        TableLayoutPanel1.Enabled = (UserEnvVarLV.SelectedItems.Count = 1 Or SysEnvVarLV.SelectedItems.Count = 1)
+
         If UserEnvVarLV.SelectedItems.Count = 1 Then
             ShowVariableInformation(EnvironmentVariable.EnvironmentVariableScope.User, UserEnvVarLV.FocusedItem.Index)
         End If
     End Sub
 
     Private Sub SysEnvVarLV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SysEnvVarLV.SelectedIndexChanged
+        TableLayoutPanel1.Enabled = (UserEnvVarLV.SelectedItems.Count = 1 Or SysEnvVarLV.SelectedItems.Count = 1)
         If SysEnvVarLV.SelectedItems.Count = 1 Then
             ShowVariableInformation(EnvironmentVariable.EnvironmentVariableScope.Machine, SysEnvVarLV.FocusedItem.Index)
         End If
