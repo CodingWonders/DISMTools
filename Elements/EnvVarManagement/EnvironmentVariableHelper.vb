@@ -16,9 +16,8 @@ Module EnvironmentVariableHelper
                     machineEnvironmentVariables.Add(New EnvironmentVariable(VariableName, envVarRk.GetValue(VariableName, "", RegistryValueOptions.DoNotExpandEnvironmentNames), EnvironmentVariable.EnvironmentVariableScope.Machine, envVarRk.GetValueKind(VariableName)))
                 Next
                 envVarRk.Close()
-
-                RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
             End If
+            RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
         Catch ex As Exception
 
         End Try
