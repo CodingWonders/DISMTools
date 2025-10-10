@@ -16811,4 +16811,21 @@ Public Class MainForm
         End If
         ServiceManagementForm.Show()
     End Sub
+
+    Private Sub ManageSystemEnvironmentVariablesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageSystemEnvironmentVariablesToolStripMenuItem.Click
+        If isProjectLoaded Then
+            If IsImageMounted AndAlso OnlineManagement Then
+                Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "SystemPropertiesAdvanced.exe"))
+                Exit Sub
+            End If
+        Else
+            Process.Start(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "SystemPropertiesAdvanced.exe"))
+            Exit Sub
+        End If
+        If ImgBW.IsBusy Then
+            MsgBox("Background processes need to finish before loading the environment variable manager.", vbOKOnly + vbExclamation)
+            Exit Sub
+        End If
+        EnvVarManagementForm.Show()
+    End Sub
 End Class

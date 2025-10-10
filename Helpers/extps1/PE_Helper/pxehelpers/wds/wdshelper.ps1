@@ -669,27 +669,6 @@ function Start-OSApplication {
     }
 
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter
-
-    Show-CenteredTextBox -Text "Removing temporary files and unmounting network shares..." -MaxWidth 100 -CenterOfAll
-
-    if (Test-Path "$($driveLetter):\NetInstall") {
-        Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
-    }
-    net use * /d /y | Out-Null
-
-    Start-Job {
-        param ($authInfo)
-        Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/clearfiles" | Out-Null
-    } | Out-Null
-
-    Start-Sleep -Milliseconds 250
-    Clear-Host
-    Write-Host "`n`n`n`n`n`n`n`n`n`n"
-    Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
-    Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
-    Write-Host "When your computer restarts, Setup will continue."
-    Show-Timeout -Seconds 10
-    wpeutil reboot
 }
 
 function Start-DismCommand
@@ -1194,3 +1173,24 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
 }
 
 Start-OSApplication
+
+Show-CenteredTextBox -Text "Removing temporary files and unmounting network shares..." -MaxWidth 100 -CenterOfAll
+$cleanupBody = @{
+    shareGuid = $($connectionResult.output.shareFolderGuid)
+} | ConvertTo-Json
+
+if (Test-Path "$($driveLetter):\NetInstall") {
+    Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
+}
+net use * /d /y | Out-Null
+
+Invoke-RestMethod -Method Post -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/clearbyguid" -Body $cleanupBody | Out-Null
+
+Start-Sleep -Milliseconds 250
+Clear-Host
+Write-Host "`n`n`n`n`n`n`n`n`n`n"
+Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
+Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
+Write-Host "When your computer restarts, Setup will continue."
+Show-Timeout -Seconds 10
+wpeutil reboot

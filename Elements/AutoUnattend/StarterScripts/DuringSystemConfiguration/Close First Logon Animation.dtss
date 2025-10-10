@@ -1,0 +1,19 @@
+﻿Language: Batch
+
+@echo off
+REM This script forcefully closes the First Logon Animation process. This helps you reach the desktop
+REM sooner, however, the taskbar may still take a minute to show up. Meanwhile, you can continue using
+REM your computer using keyboard shortcuts. Press the Windows key to open the Start menu, press Win + E
+REM to load File Explorer.
+REM
+REM In some cases, this method may not work (for example, if you started installation using
+REM the Modern Setup Host (MoSetup)). It has been confirmed to work when the image is deployed by
+REM the Preinstallation Environment Helper (PE Helper). It should also work on the previous version
+REM of Windows Setup (Panther).
+REM
+REM It is recommended that you add this script if you had added more scripts in user-related stages
+REM that require user input, to avoid waiting (potentially) indefinitely.
+
+reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /f
+reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /ve /t REG_SZ /d "Stop First Logon Animation Process" /f
+reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /v StubPath /t REG_EXPAND_SZ /d "\"%SYSTEMROOT%\System32\cmd.exe\" /C \"taskkill /f /im firstlogonanim.exe\"" /f

@@ -18,10 +18,35 @@ Module WindowsServiceHelper
 
     End Class
 
+    ''' <summary>
+    ''' The dictionary containing privilege constants.
+    ''' </summary>
+    ''' <remarks>
+    ''' Keys are the security privilege constants defined by the Windows NT headers.
+    ''' For example, "SE_ASSIGNPRIMARYTOKEN_NAME" or "SE_SHUTDOWN_NAME". Values are objects of the
+    ''' Windows NT security privilege constants containing the representations of the constants
+    ''' as defined in the Windows Registry, a description of said privilege constant, and user rights
+    ''' of said privilege constants.
+    ''' </remarks>
     Private PrivilegeConstantDictionary As New Dictionary(Of String, NTSecurityPrivilegeConstant)
+
+    ''' <summary>
+    ''' The dictionary containing mapping objects between the user right of a privilege constant and the constants
+    ''' defined by the Windows NT headers.
+    ''' </summary>
+    ''' <remarks>
+    ''' Keys are the user rights of a privilege constant. Values are the constants defined by the Windows NT headers.
+    ''' </remarks>
     Private PrivilegeMappingDictionary As New Dictionary(Of String, String)
 
-    Sub FillInConstants()
+    ''' <summary>
+    ''' Clears the constant dictionaries if already filled, then fills them with constant data.
+    ''' </summary>
+    ''' <remarks>
+    ''' Constant data is defined in Microsoft documentation:
+    ''' https://learn.microsoft.com/en-us/windows/win32/secauthz/privilege-constants
+    ''' </remarks>
+    Private Sub FillInConstants()
         DynaLog.LogMessage("Clearing dictionaries...")
         PrivilegeConstantDictionary.Clear()
         PrivilegeMappingDictionary.Clear()
@@ -214,6 +239,12 @@ Module WindowsServiceHelper
         Next
     End Sub
 
+    ''' <summary>
+    ''' Resolves an indirect string
+    ''' </summary>
+    ''' <param name="source">The indirect string to resolve</param>
+    ''' <returns>The resolved string</returns>
+    ''' <remarks></remarks>
     Private Function ResolveIndirectString(source As String) As String
         DynaLog.LogMessage("Resolving indirect string " & source & "...")
         Dim buffer As New StringBuilder(260)
@@ -226,6 +257,12 @@ Module WindowsServiceHelper
         End If
     End Function
 
+    ''' <summary>
+    ''' Parses a line pointing to a INF file
+    ''' </summary>
+    ''' <param name="line">The line to parse</param>
+    ''' <returns>A tuple containing the path to the INF file and the token to look for</returns>
+    ''' <remarks></remarks>
     Private Function ParseInfLine(line As String) As Tuple(Of String, String)
         DynaLog.LogMessage("Parsing provided INF file line...")
         DynaLog.LogMessage("- Line: " & line)
@@ -244,6 +281,13 @@ Module WindowsServiceHelper
         Return Tuple.Create(infFile, token)
     End Function
 
+    ''' <summary>
+    ''' Resolves a INF token
+    ''' </summary>
+    ''' <param name="infPath">The path to the INF file</param>
+    ''' <param name="token">The token to look for</param>
+    ''' <returns>The value of the token in the INF file</returns>
+    ''' <remarks></remarks>
     Private Function ResolveInfToken(infPath As String, token As String) As String
         DynaLog.LogMessage("Resolving INF File Tokens...")
         DynaLog.LogMessage("- INF File Path: " & infPath)
@@ -277,6 +321,12 @@ Module WindowsServiceHelper
         Return ""
     End Function
 
+    ''' <summary>
+    ''' Gets a list of system services/devices from the mounted image
+    ''' </summary>
+    ''' <param name="MountPath">The path to the mounted image</param>
+    ''' <returns>The service list</returns>
+    ''' <remarks></remarks>
     Function GetServiceList(MountPath As String) As List(Of WindowsService)
         ' For the required privileges a service may have, we have to fill in the constants first so that we don't have things like
         ' "SeUndockPrivilege", "SeShutdownPrivilege"; but rather "Remove computer from docking station", and so on... we want the
@@ -289,12 +339,12 @@ Module WindowsServiceHelper
 
         ' Time to load up a registry hive
         DynaLog.LogMessage("Loading mount path SYSTEM hive...")
-        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYS") = 0 Then
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
             DynaLog.LogMessage("Load operation succeeded. Continuing...")
             Try
                 ' First we need to grab the default control set of the target image
                 DynaLog.LogMessage("Determining default control set...")
-                Dim DefaultControlSet As Integer = RegistryHelper.GetDefaultControlSet("zSYS")
+                Dim DefaultControlSet As Integer = RegistryHelper.GetDefaultControlSet("zSYSTEM")
                 DynaLog.LogMessage("Determined control set: " & DefaultControlSet)
                 If DefaultControlSet = -1 Then
                     DynaLog.LogMessage("Control set is wrong.")
@@ -303,7 +353,7 @@ Module WindowsServiceHelper
                 ' We only document a maximum of 999 control sets. CurrentControlSet is not a thing in an offline system, as the registry
                 ' subsystems guess the control set to use based on values in HKLM\SYSTEM\Select.
                 DynaLog.LogMessage("Opening mount path services key for read access...")
-                Dim ServiceRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services", DefaultControlSet.ToString().PadLeft(3, "0")), False)
+                Dim ServiceRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYSTEM\ControlSet{0}\Services", DefaultControlSet.ToString().PadLeft(3, "0")), False)
                 ' For some stupid reason, .NET keys are stored in HKLM\SYSTEM\ControlSet<nnn>\Services. GUID keys are also not allowed
                 DynaLog.LogMessage("Getting service names...")
                 Dim ServiceNames() As String = ServiceRk.GetSubKeyNames().Where(Function(serviceName) Not serviceName.StartsWith(".NET", StringComparison.OrdinalIgnoreCase) AndAlso Not serviceName.StartsWith("{")).ToArray()
@@ -323,7 +373,7 @@ Module WindowsServiceHelper
                         serviceRequiredPrivilegesString() As String = New String() {},
                         serviceDependencies() As String = New String() {},
                         serviceFailActionByteArr() As Byte = New Byte() {}
-                    Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYS\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
+                    Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYSTEM\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
                         ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
                         ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
                         ' it will show that value.
@@ -407,12 +457,18 @@ Module WindowsServiceHelper
             End Try
 
             ' Now we unload that hive
-            RegistryHelper.UnloadRegistryHive("HKLM\zSYS")
+            RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
         End If
 
         Return serviceList
     End Function
 
+    ''' <summary>
+    ''' Parses a failure action byte array into a service failure actions object
+    ''' </summary>
+    ''' <param name="FailureActions">The byte array to parse</param>
+    ''' <returns>The set of failure actions</returns>
+    ''' <remarks></remarks>
     Private Function ParseFailureActionByteArray(FailureActions As Byte()) As WindowsService.ServiceFailureActions
         Dim scFailure As WindowsService.ServiceFailureActions = New WindowsService.ServiceFailureActions()
         Dim firstFail As WindowsService.ServiceFailureAction = WindowsService.ServiceFailureAction.Unknown,
@@ -457,6 +513,85 @@ Module WindowsServiceHelper
         Return scFailure
     End Function
 
+    Private Function ExportCurrentServiceInformation() As Boolean
+        Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+
+        If defaultControlSet = -1 Then
+            Return False
+        End If
+
+        Return RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Services", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                   Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                String.Format("CurrentServiceInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
+    End Function
+
+    Public Function SaveServiceInformation(MountPath As String, ServiceList As List(Of WindowsService), Optional reportProgress As Action(Of Integer, Integer) = Nothing) As Boolean
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
+
+            ' Export current key to at least have a backup, in case either we or the user
+            ' screws up with service information.
+            If Not ExportCurrentServiceInformation() Then
+                ' Current service information could not be backed up. We'll ask the user
+                ' if we can continue or not given the backup.
+                If MsgBox("Current service information could not be backed up. Backups are used in case of a mistake during service management. You may continue, but at your own risk." & CrLf & CrLf &
+                          "The target image may not work correctly or at all after configuration, and you will not be able to recover it using previous service configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
+                          "Do you want to continue without backing up current service information?", vbYesNo + vbExclamation, "Service information could not be backed up") = MsgBoxResult.No Then
+                    Return False
+                End If
+            End If
+
+            ' zSYSTEM to denote differences. DO NOT CHANGE FROM zSYSTEM TO SYSTEM. YOU WILL BREAK THE SYSTEM!!!!!
+            Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+
+            If defaultControlSet = -1 Then
+                Return False
+            End If
+
+            Dim failedSets As Integer = 0
+            Dim currentService As Integer = 0,
+                serviceCount As Integer = ServiceList.Count
+
+            ' Now, we can save the properties. Only the start type for now
+            DynaLog.DisableLogging()
+            For Each Service As WindowsService In ServiceList
+                currentService += 1
+                ' For those wondering: why not .NET APIs? Well, they throw access denied exceptions. Handling the exceptions tells us that
+                ' none of the information will be saved. For example, if we have 672 service entries, all of them will fail if we use .NET APIs.
+                ' However, if we use the APIs provided by the Registry Helper (which runs the reg program under the hood), we bring the failed
+                ' set operations down to 9, and we **do** set this information using this method. We'll roll with it, though we'll disable
+                ' DynaLog logging so it doesn't take about a minute.
+                Dim registryPath As String = String.Format("HKLM\zSYSTEM\ControlSet{0}\Services\{1}", defaultControlSet.ToString().PadLeft(3, "0"c), Service.Name)
+                If RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "Start", RegistryItem.ValueType.RegDword, Service.StartType)) <> 0 Then
+                    failedSets += 1
+                    Continue For
+                End If
+                If Service.StartType = WindowsService.ServiceStartType.Automatic Then
+                    ' Currently, we assume that setting DelayedAutoStart to 0 does the same thing as removing this value altogether: turning off
+                    ' delayed start. If this is not the case, we'll just get rid of it.
+                    RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
+                End If
+                If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
+                ServiceManagementForm.ReportServiceSave(currentService, serviceCount)
+            Next
+            DynaLog.EnableLogging()
+
+            Debug.WriteLine("Service Count: " & ServiceList.Count)
+            Debug.WriteLine("Failed Sets: " & failedSets)
+
+            RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
+        Else
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' Gets a numeric delay from a byte array representing a delay for a specific fail
+    ''' </summary>
+    ''' <param name="ByteArray">The byte array to parse</param>
+    ''' <returns>The numeric delay</returns>
+    ''' <remarks></remarks>
     Private Function GetDelay(ByteArray As Byte()) As Long
         DynaLog.LogMessage("Getting numeric delay from our byte array...")
         Dim binary As String = ""

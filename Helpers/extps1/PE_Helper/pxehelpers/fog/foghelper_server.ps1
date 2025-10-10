@@ -135,7 +135,7 @@ Clear-Host
 # Start logging stuff
 Start-Transcript -Path "$env:TEMP\DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
-Write-Host "DISMTools $version - FOG Helper Server API"
+Write-Host "DISMTools $version - FOG Helper Server"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 

@@ -983,19 +983,20 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
+- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
 
 New features:
 
-- The Sysprep Preparation Tool has been updated to the latest version
-- The representation of PXE Helper providers has been slightly improved
-- The PXE Helpers now support IPv6 server addresses
-- The PXE Helpers can now reconnect to the server up to a maximum of 5 attempts
-- Service information now includes service dependencies and dependents. Failure actions are also shown
-- Service display names that point to INF files are now parsed
-- For those who are just getting started with unattended answer files, we have included starter scripts that you can use in your target installation
-- You can now remove multiple AppX packages from the addition queue in bulk
-- The Inno Setup component has been updated to version 6.5.3</value>
+- COMMAND-LINE ONLY: the PE Helper now supports external temporary directories
+- The WDS Helper now supports cleaning up files by independent session GUIDs
+- The following starter scripts have been added:
+  - Skip OOBE FLA
+  - Configure user environment personalization settings
+- The service manager now disables the Delayed Start field when a service start type is not Automatic
+- The service manager now exports current service information of the target image to the user's desktop, and also allows modifications of the following fields:
+  - Start Type
+  - Delayed Start
+- A new tool has been added to view the environment variables of the Windows image</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1041,5 +1042,8 @@ New features:
   </data>
   <data name="service_pic_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\service_pic_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="envvar_pic_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\envvar_pic_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

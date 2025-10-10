@@ -407,6 +407,16 @@ Public Class ADDSJoinDialog
             DynaLog.LogMessage(String.Format("Checking address {0} of {1}...", current, total))
             ProgressReporter.SetMessage(String.Format("Verifying syntax of DNS address {0} of {1}...", current, total))
             DnsValidatorBW.ReportProgress(((current - 1) / total) * 100)
+
+            If dnsAddress.Contains("%") Then    ' Typical for scoped IPv6
+                Try
+                    Dim percentLocation As Integer = InStr(dnsAddress, "%") - 1
+                    dnsAddress = dnsAddress.Remove(percentLocation, dnsAddress.Count - percentLocation)
+                Catch ex As Exception
+                    ' Don't do anything then
+                End Try
+            End If
+
             If Regex.IsMatch(dnsAddress, "^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$") Then    ' First, let's check IPv4
                 DynaLog.LogMessage("This is an IPv4 address.")
                 IPv4Addresses += 1

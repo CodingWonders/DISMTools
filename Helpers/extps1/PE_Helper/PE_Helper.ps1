@@ -36,6 +36,7 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
     [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [string]$bootex = "false",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [string]$scratchPath = "",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -120,8 +121,12 @@ function Start-PEGeneration
                 Write-Host "Creating temporary mount directory..."
                 try
                 {
-                    $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
-                    New-Item "$mountDirectory" -ItemType Directory | Out-Null
+                    if (($scratchPath -ne "") -and (Test-Path "$scratchPath")) {
+                        $mountDirectory = $scratchPath
+                    } else {
+                        $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+                        New-Item "$mountDirectory" -ItemType Directory | Out-Null
+                    }
                 }
                 catch
                 {
@@ -942,6 +947,9 @@ function Start-OSApplication
     {
         $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
     }
+    if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+        $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
+    }
     Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
     $choice = Read-Host "Are you sure you want to continue (Y/N)"
     if ($choice -ne "Y")
@@ -969,6 +977,9 @@ function Start-OSApplication
             else
             {
                 $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
+            }
+            if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+                $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
             }
             Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
             $choice = Read-Host "Are you sure you want to continue (Y/N)"
