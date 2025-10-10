@@ -2121,15 +2121,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
+        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
         '''
         '''New features:
         '''
-        '''- The Sysprep Preparation Tool has been updated to the latest version
-        '''- The representation of PXE Helper providers has been slightly improved
-        '''- The PXE Helpers now support IPv6 server addresses
-        '''- The PXE Helpers can now reconnect to the server up to a maximum of 5 attempts
-        '''- Service information now includes service dependencies and dependents. Failure actions are also shown [resto de la cadena truncado]&quot;;.
+        '''- COMMAND-LINE ONLY: the PE Helper now supports external temporary directories
+        '''- The WDS Helper now supports cleaning up files by independent session GUIDs
+        '''- The following starter scripts have been added:
+        '''  - Skip OOBE FLA
+        '''  - Configure user environment personalization settings
+        '''- The service manager now disables the Delayed Start field when a service sta [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
