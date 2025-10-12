@@ -1,0 +1,29 @@
+﻿Language: Batch
+
+@echo off
+REM This script configures OEM Information that you can see in system information screens.
+REM Configure the options below to set manufacturer information.
+
+REM ------ OPTIONS ------
+REM - 1. Manufacturer * -
+REM - 2. Model          -
+REM - 3. Support Hours  -
+REM - 4. Support Phone  -
+REM - 5. Support URL    -
+REM - 6. OEM Logo Path  -
+REM ---------------------
+REM * -- Required
+
+SET "OEM_Manufacturer=<Manufacturer here>"
+SET "OEM_Model="
+SET "OEM_SupportHours="
+SET "OEM_SupportPhone="
+SET "OEM_SupportURL="
+SET "OEM_Logo="
+
+IF DEFINED OEM_Manufacturer ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v Manufacturer /t REG_SZ /d "%OEM_Manufacturer%" /f )
+IF DEFINED OEM_Model ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v Model /t REG_SZ /d "%OEM_Model%" /f )
+IF DEFINED OEM_SupportHours ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v SupportHours /t REG_SZ /d "%OEM_SupportHours%" /f )
+IF DEFINED OEM_SupportPhone ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v SupportPhone /t REG_SZ /d "%OEM_SupportPhone%" /f )
+IF DEFINED OEM_SupportURL ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v SupportURL /t REG_SZ /d "%OEM_SupportURL%" /f )
+IF DEFINED OEM_Logo ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v Logo /t REG_SZ /d "%OEM_Logo%" /f )
