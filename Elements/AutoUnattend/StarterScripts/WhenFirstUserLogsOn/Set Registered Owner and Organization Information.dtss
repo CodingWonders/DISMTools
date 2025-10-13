@@ -1,0 +1,35 @@
+﻿Language: Batch
+
+@echo off
+REM This script sets up registered user and organization information given the following settings:
+REM ---- Settings ----
+REM  1. AutoUserInfo - determines whether to set registered owner as the name of the
+REM     currently signed user (0 | 1)
+REM  2. RegisteredUser - the registered owner. This is overridden by AutoUserInfo when
+REM     set to 1
+REM  3. RegisteredOrg - the registered organization. This is optional
+REM ------------------
+REM By default, software that accesses registered user/org information, if not previously set,
+REM will return "user name" and "org name", respectively. It is recommended to run this script
+REM only when the first user logs on, because, if run when users log on for the first time,
+REM owner information will change every time a user logs on for the first time if the following
+REM conditions are met:
+REM  a) Either:
+REM     * multiple users are preloaded on a system using the unattended answer file, or
+REM     * an account, or set of accounts, is added after OS installation
+REM  b) AutoUserInfo is set to 1. Otherwise, a constant value is used and you will not notice
+REM     any changes
+
+SET AutoUserInfo=0
+SET "RegisteredUser=REGISTERED_USER_HERE"
+SET "RegisteredOrg="
+
+REM If we set autouserinfo to 1 we set the registered user to the current user name.
+REM For Microsoft accounts, username information may only be the first 5 letters of
+REM the user's email address.
+IF %AutoUserInfo% EQU 1 (
+    SET "RegisteredUser=%USERNAME%"
+)
+
+IF DEFINED RegisteredUser ( reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d "%RegisteredUser%" /f )
+IF DEFINED RegisteredOrg ( reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d "%RegisteredOrg%" /f )
