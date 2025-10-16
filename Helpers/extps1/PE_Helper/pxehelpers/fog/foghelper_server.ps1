@@ -494,7 +494,23 @@ try {
 
                         <script>
                             function invokeFogApiSetup() {
-                                fetch('/api/fogsetup', { method: "GET" });
+                                alert("You will be asked a series of questions to set up communication with the API and the server. Close this popup to continue...");
+                                let fogServer = prompt("Enter the FOG server name or IP address. When entering an IP address, verify that it is either a static address in the DHCP server or a reservation.");
+                                let fogApiToken = prompt("Enter the FOG API token:");
+                                let fogUserToken = prompt("Enter the FOG User token:");
+                                
+                                const response = fetch('/api/fogsetup', {
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        server: fogServer,
+                                        apiToken: fogApiToken,
+                                        userToken: fogUserToken
+                                    })
+                                });
+                                
+                                fogServer = "";
+                                fogApiToken = "";
+                                fogUserToken = "";
                             }
 
                             function invokeExit() {
@@ -527,7 +543,18 @@ try {
                         continue
                     }
                 }
-                Set-FogServerSettings -interactive
+                
+                if ($request.HttpMethod -eq "POST") {
+                    $reader = New-Object IO.StreamReader $request.InputStream
+                    $body = $reader.ReadToEnd() | ConvertFrom-Json
+                    $server = $body.server
+                    $apiToken = $body.apiToken
+                    $userToken = $body.userToken
+                    
+                    Set-FogServerSettings -fogapitoken "$apiToken" -fogusertoken "$userToken" -fogserver "$server" | Out-Null
+                } else {
+                    $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
+                }
             }
             "/api/hosts" {
                 if ($request.HttpMethod -eq "GET") {
