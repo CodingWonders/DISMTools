@@ -60,11 +60,11 @@ Public Class ServiceManagementForm
         Dim dependents As List(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName).ToList()
 
         For Each dependency As WindowsService In dependencies
-            ListView3.Items.Add(New ListViewItem(New String() {dependency.Name, dependency.DisplayName}))
+            ListView3.Items.Add(New ListViewItem(New String() {dependency.Name, dependency.DisplayName, dependency.TypeToString()}))
         Next
 
         For Each dependent As WindowsService In dependents
-            ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName}))
+            ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()}))
         Next
     End Sub
 
