@@ -927,6 +927,35 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+
+        Try
+            DynaLog.LogMessage("Getting device DPI...")
+            Dim dx As Single, dy As Single
+            Dim g As Graphics = CreateGraphics()
+
+            Try
+                dx = g.DpiX
+                dy = g.DpiY
+            Finally
+                g.Dispose()
+            End Try
+
+            DynaLog.LogMessage("DPI X-axis: " & dx)
+            DynaLog.LogMessage("DPI Y-axis: " & dy)
+
+            ' 100% display scaling is equal to 96 DPI. Higher display scaling settings make
+            ' some items in the program not look correctly. It is better to tell the user
+            ' about this.
+            If dx > 96 Or dy > 96 Then
+                DynaLog.LogMessage("Display scaling is over 100%. The program may not look correctly...")
+                MsgBox("DISMTools has detected that a higher display scaling setting has been set. This can make the program look incorrectly." & CrLf & CrLf &
+                       "We recommend that you lower your scaling setting to 100% (96 DPI), unless you have a small display panel set to a large resolution.",
+                       vbOKOnly + vbInformation, "Higher display scaling setting detected")
+            End If
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not check DPI settings. Error message: " & ex.Message)
+        End Try
+
         If DetectPossibleADKs() = 1 Then
             DynaLog.LogMessage("An ADK has been installed but is not detected by DISMTools")
             Dim msg As String = ""
