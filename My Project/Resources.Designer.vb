@@ -726,6 +726,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property envvar_pic_32px() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("envvar_pic_32px", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property error_16px() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("error_16px", resourceCulture)
@@ -1821,6 +1831,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property scripts_addfirstscript_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("scripts_addfirstscript_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property scripts_addfirstscript_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("scripts_addfirstscript_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property search_dark() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("search_dark", resourceCulture)
@@ -1864,6 +1894,16 @@ Namespace My.Resources
         Friend ReadOnly Property sedition_pic() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("sedition_pic", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property service_pic_32px() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("service_pic_32px", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2079,16 +2119,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''--- Bugfixes
+        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
         '''
-        '''- Fixed a minor issue where DynaLog timestamps would not use a common format for time
-        '''- Fixed a migration issue where the color scheme would switch to dark, regardless of the preferred scheme you set in the past
-        '''- Fixed an issue in the update checker
-        '''- Fixed a deployment issue in the Theme Designer. It will let you load and save themes now instead of throwing an exception
-        '''- Fixed an issue where people could write to the console output
-        '''- Fixed an issue where DISM woul [resto de la cadena truncado]&quot;;.
+        '''New features:
+        '''
+        '''- COMMAND-LINE ONLY: the PE Helper now supports external temporary directories
+        '''- The WDS Helper now supports cleaning up files by independent session GUIDs
+        '''- The following starter scripts have been added:
+        '''  - Skip OOBE FLA
+        '''  - Configure user environment personalization settings
+        '''- The service manager now disables the Delayed Start field when a service sta [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

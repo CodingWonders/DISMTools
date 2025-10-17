@@ -3,7 +3,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Preparation   |
@@ -35,7 +35,7 @@ param (
     [Parameter(Mandatory = $true, Position = 0)] [string]$bootImagePath
 )
 
-$version = "0.7"
+$version = "0.7.1"
 
 if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
 {
@@ -627,6 +627,12 @@ function New-MulticastTransmission {
 }
 
 Clear-Host
+
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    return $false
+}
 
 Write-Host "DISMTools $version - PE Helper WDS Preparation Scripts"
 Write-Host "(c) 2025. CodingWonders Software"

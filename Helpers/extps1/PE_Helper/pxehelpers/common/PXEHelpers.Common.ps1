@@ -3,6 +3,12 @@ using namespace System.Collections.Generic
 $global:product = ""
 $global:description = ""
 
+enum IPAddress {
+    IPv4 = 0
+    IPv6 = 1
+    Unknown = 2
+}
+
 function Show-CenteredTextBox {
     param (
         [string]$Text,
@@ -114,4 +120,26 @@ function Disable-Networking {
     if (Test-Path "$env:SYSTEMDRIVE\net_initiated" -PathType Leaf) {
         Remove-Item -Path "$env:SYSTEMDRIVE\net_initiated" -Force
     }
+}
+
+function Test-IPAddressSyntax {
+    param (
+        [Parameter(Mandatory, Position = 0)] [string]$ipAddr
+    )
+
+    # For some stupid reason, the regex method that works in both a non-WinPE PWSH session and in a .NET application does
+    # NOT work on WinPE. GPT suggested using the IPAddress.AddressFamily property, and it produces viable results under a debugger environment. So
+    # we'll use these here.
+
+    # We'll first check IPv4, then IPv6
+    $parsed = $null
+    if ([System.Net.IPAddress]::TryParse($ipAddr.Trim(), [ref]$parsed)) {
+        if ($parsed.AddressFamily -eq [System.Net.Sockets.AddressFamily]::InterNetwork) {
+            return [IPAddress]::IPv4
+        } elseif ($parsed.AddressFamily -eq [System.Net.Sockets.AddressFamily]::InterNetworkV6) {
+            return [IPAddress]::IPv6
+        }
+    }
+
+    return [IPAddress]::Unknown
 }

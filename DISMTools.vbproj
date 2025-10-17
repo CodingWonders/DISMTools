@@ -80,8 +80,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.41.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.41.3\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.42.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.0.42.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.3.3.12\lib\net40\Microsoft.Dism.dll</HintPath>
@@ -245,6 +245,8 @@
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
     <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
+    <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
     <Compile Include="Elements\Recents.vb" />
     <Compile Include="Elements\SearchBox.vb">
@@ -554,6 +556,12 @@
     <Compile Include="Panels\Img_Ops\Editions\SetProductKey.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\EnvironmentVariables\EnvVarManagementForm.Designer.vb">
+      <DependentUpon>EnvVarManagementForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\EnvironmentVariables\EnvVarManagementForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Features\DisableFeat.Designer.vb">
       <DependentUpon>DisableFeat.vb</DependentUpon>
     </Compile>
@@ -672,6 +680,12 @@
       <DependentUpon>RegistryControlPanel.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Registry\RegistryControlPanel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.Designer.vb">
+      <DependentUpon>ServiceManagementForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Switch\ImgIndexSwitch.Designer.vb">
@@ -1023,6 +1037,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Editions\SetProductKey.resx">
       <DependentUpon>SetProductKey.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\EnvironmentVariables\EnvVarManagementForm.resx">
+      <DependentUpon>EnvVarManagementForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Features\DisableFeat.resx">
       <DependentUpon>DisableFeat.vb</DependentUpon>
     </EmbeddedResource>
@@ -1082,6 +1099,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Registry\RegistryControlPanel.resx">
       <DependentUpon>RegistryControlPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceManagementForm.resx">
+      <DependentUpon>ServiceManagementForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Switch\ImgIndexSwitch.resx">
       <DependentUpon>ImgIndexSwitch.vb</DependentUpon>
@@ -1192,6 +1212,15 @@
     <None Include="docs\css\fonts\Roboto-Slab-Regular.woff2" />
     <None Include="docs\search\search_index.json" />
     <None Include="docs\sitemap.xml.gz" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set Registered Owner and Organization Information.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set Personalization Settings.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Update Microsoft Store Apps.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Second Chance OOBE.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Windows Notification Sources.dtss" />
     <None Include="Helpers\dthelper.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1232,6 +1261,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\SysprepPreparator.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\PE_Helper.ps1">
@@ -1508,6 +1540,10 @@
     <None Include="Resources\add_element.png" />
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
+    <None Include="Resources\envvar_pic_32px.png" />
+    <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
+    <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
+    <None Include="Resources\service_pic_32px.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -1973,6 +2009,11 @@ IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
 	del "Tools\ThemeDesigner\*.zip" /F /S /Q
 )
 
+:: Copy PE Helper Main Menu
+IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.exe" (
+	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
+)
+
 :: Copy Tour
 IF EXIST "$(SolutionDir)tour" (
 	xcopy "$(SolutionDir)tour\*.*" "$(TargetDir)docs\tour" /cehyi
@@ -1984,6 +2025,9 @@ IF EXIST "$(SolutionDir)tour" (
 IF NOT EXIST AutoUnattend (
 	md AutoUnattend
 	copy /y "$(SolutionDir)Elements\AutoUnattend\*.xml" AutoUnattend
+	IF EXIST "$(ProjectDir)Elements\AutoUnattend\StarterScripts" (
+		xcopy "$(ProjectDir)Elements\AutoUnattend\StarterScripts\*.*" AutoUnattend\StarterScripts /cehyi
+	)
 )
 
 IF %25ISPREVIEW%25=="Yes" (
