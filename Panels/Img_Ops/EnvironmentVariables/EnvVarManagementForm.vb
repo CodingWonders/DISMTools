@@ -78,4 +78,12 @@
             ShowVariableInformation(EnvironmentVariable.EnvironmentVariableScope.Machine, SysEnvVarLV.FocusedItem.Index)
         End If
     End Sub
+
+    Private Sub SaveAllChangesBtn_Click(sender As Object, e As EventArgs) Handles SaveAllChangesBtn.Click
+        If EnvironmentVariableHelper.SaveEnvironmentVariables(MainForm.MountDir, envVarList) Then
+            MsgBox("Variables saved successfully.")
+        Else
+            MsgBox("Variables could not be saved.")
+        End If
+    End Sub
 End Class

@@ -57,6 +57,8 @@ Partial Class EnvVarManagementForm
         Me.CopyToMachineScopeBtn = New System.Windows.Forms.Button()
         Me.MoveToMachineScopeBtn = New System.Windows.Forms.Button()
         Me.MoveToUserScopeBtn = New System.Windows.Forms.Button()
+        Me.SaveAllChangesBtn = New System.Windows.Forms.Button()
+        Me.ButtonContainerPanel.SuspendLayout()
         Me.HeaderContainerPanel.SuspendLayout()
         CType(Me.EnvVarContainerSplitPanel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.EnvVarContainerSplitPanel.Panel1.SuspendLayout()
@@ -74,6 +76,7 @@ Partial Class EnvVarManagementForm
         '
         'ButtonContainerPanel
         '
+        Me.ButtonContainerPanel.Controls.Add(Me.SaveAllChangesBtn)
         Me.ButtonContainerPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ButtonContainerPanel.Location = New System.Drawing.Point(0, 633)
         Me.ButtonContainerPanel.Name = "ButtonContainerPanel"
@@ -436,6 +439,16 @@ Partial Class EnvVarManagementForm
         Me.MoveToUserScopeBtn.Text = "Move to default user scope"
         Me.MoveToUserScopeBtn.UseVisualStyleBackColor = True
         '
+        'SaveAllChangesBtn
+        '
+        Me.SaveAllChangesBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SaveAllChangesBtn.Location = New System.Drawing.Point(1115, 13)
+        Me.SaveAllChangesBtn.Name = "SaveAllChangesBtn"
+        Me.SaveAllChangesBtn.Size = New System.Drawing.Size(137, 23)
+        Me.SaveAllChangesBtn.TabIndex = 0
+        Me.SaveAllChangesBtn.Text = "Save all changes"
+        Me.SaveAllChangesBtn.UseVisualStyleBackColor = True
+        '
         'EnvVarManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -450,6 +463,7 @@ Partial Class EnvVarManagementForm
         Me.Name = "EnvVarManagementForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "System Environment Variable Management"
+        Me.ButtonContainerPanel.ResumeLayout(False)
         Me.HeaderContainerPanel.ResumeLayout(False)
         Me.EnvVarContainerSplitPanel.Panel1.ResumeLayout(False)
         Me.EnvVarContainerSplitPanel.Panel2.ResumeLayout(False)
@@ -501,4 +515,5 @@ Partial Class EnvVarManagementForm
     Friend WithEvents CopyToUserScopeBtn As System.Windows.Forms.Button
     Friend WithEvents CopyToMachineScopeBtn As System.Windows.Forms.Button
     Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents SaveAllChangesBtn As System.Windows.Forms.Button
 End Class
