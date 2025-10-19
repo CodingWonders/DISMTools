@@ -80,10 +80,14 @@
     End Sub
 
     Private Sub SaveAllChangesBtn_Click(sender As Object, e As EventArgs) Handles SaveAllChangesBtn.Click
+        Cursor = Cursors.WaitCursor
         If EnvironmentVariableHelper.SaveEnvironmentVariables(MainForm.MountDir, envVarList) Then
-            MsgBox("Variables saved successfully.")
+            MsgBox("Environment variable information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
+                   "A backup of the previous variable configuration has been saved to your desktop should you need it in case modifications do not go as planned." & vbCrLf & vbCrLf &
+                   "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
         Else
-            MsgBox("Variables could not be saved.")
+            MsgBox("Environment variable information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
         End If
+        Cursor = Cursors.Arrow
     End Sub
 End Class

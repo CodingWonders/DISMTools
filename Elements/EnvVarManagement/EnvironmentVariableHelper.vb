@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports Microsoft.Win32
+Imports Microsoft.VisualBasic.ControlChars
 
 Module EnvironmentVariableHelper
 
@@ -54,6 +55,24 @@ Module EnvironmentVariableHelper
         Return envVarList
     End Function
 
+    Private Function ExportCurrentEnvVarInformation(IsSystemScope As Boolean) As Boolean
+        If IsSystemScope Then
+            Dim defaultControlSet As Integer = GetDefaultControlSet("zSYSTEM")
+
+            If defaultControlSet = -1 Then
+                Return False
+            End If
+
+            Return RegistryHelper.ExportRegistryToFile(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\Session Manager\Environment", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                       Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                    String.Format("SysEnvVarInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
+        Else
+            Return RegistryHelper.ExportRegistryToFile("HKLM\zDEFAULT\Environment",
+                                                       Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory),
+                                                                    String.Format("UserEnvVarInformation_{0}.reg", Date.UtcNow.ToString("yyyyMMdd-HHmmss")))) = 0
+        End If
+    End Function
+
     Public Function SaveEnvironmentVariables(MountPath As String, VariableList As List(Of EnvironmentVariable)) As Boolean
         If VariableList Is Nothing Then Return False
 
@@ -65,6 +84,16 @@ Module EnvironmentVariableHelper
             ' if it only contains numeric values, it will be saved as a string.
 
             If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SYSTEM"), "HKLM\zSYSTEM") = 0 Then
+                ' Back up current system env vars
+                If Not ExportCurrentEnvVarInformation(True) Then
+                    If MsgBox("Current environment variable information for the system scope could not be backed up. Backups are used in case of a mistake during environment variable management. You may continue, but at your own risk." & CrLf & CrLf &
+                          "Applications that rely on these variables may not work correctly, and you will not be able to use previous variable configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
+                          "Do you want to continue without backing up current variable information?", vbYesNo + vbExclamation, "Environment variable information could not be backed up") = MsgBoxResult.No Then
+                        Return False
+                    End If
+                End If
+
+
                 Dim defaultControlSet As Integer = RegistryHelper.GetDefaultControlSet("zSYSTEM")
                 If defaultControlSet > 0 Then
                     ' If we could load the hive, we determine the control set then configure machine vars.
@@ -84,6 +113,15 @@ Module EnvironmentVariableHelper
             End If
 
             If RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Users", "Default", "NTUSER.DAT"), "HKLM\zDEFAULT") = 0 Then
+                ' Back up current user env vars
+                If Not ExportCurrentEnvVarInformation(False) Then
+                    If MsgBox("Current environment variable information for the user scope could not be backed up. Backups are used in case of a mistake during environment variable management. You may continue, but at your own risk." & CrLf & CrLf &
+                          "Applications that rely on these variables may not work correctly, and you will not be able to use previous variable configuration, unless you had previously backed it up by yourself." & CrLf & CrLf &
+                          "Do you want to continue without backing up current variable information?", vbYesNo + vbExclamation, "Environment variable information could not be backed up") = MsgBoxResult.No Then
+                        Return False
+                    End If
+                End If
+
                 ' We don't have to determine control sets here
                 For Each userVariable In userVariables
                     Dim expandedValue As String = Environment.ExpandEnvironmentVariables(userVariable.Value)
