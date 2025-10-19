@@ -187,6 +187,8 @@ Public Class ServiceManagementForm
             MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
                    "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
                    "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
+        Else
+            MsgBox("System service information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
         End If
         WindowHelper.EnableCloseCapability(Handle)
         Cursor = Cursors.Arrow
