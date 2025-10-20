@@ -7,7 +7,7 @@
 #      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
-#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for Servers      |
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for UNIX Servers |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
 #                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025 CodingWonders Software                       |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
@@ -29,39 +29,29 @@
 #
 # Exposed APIs:
 #
-#   - /api/foghome          --> The Control Panel
-#   - /api/fogsetup         --> Configures the FOG PowerShell module to communicate with the FOG server
-#   - /api/hosts            --> Gets all the registered hosts in the FOG server
-#   - /api/getImagesForHost --> Gets all the images that are associated to a given host
+#   - /api/installimages --> Gets the install images in the FOG store
+#   - /api/connect       --> Connects a client to a server
 #
-#         A client must send data to /api/getImagesForHost like this (example in PowerShell):
+#         A client must send data to /api/connect like this (example in PowerShell):
 #
 #         $json = @{
-#             hostId = "<Host ID in FOG server>"
+#             deviceId = "<Device ID>"
 #         } | ConvertTo-Json
 #
-#   - /api/getAllImages     --> Gets all the registered images in the FOG server
-#   - /api/deploy           --> Initiates a deployment task on the FOG server
+#   - /api/deploy        --> Prepares a server for image deployment to a client
 #
 #         A client must send data to /api/deploy like this (example in PowerShell):
 #
 #         $json = @{
-#             hostId = "<Host ID in FOG server>"
-#             imageId = "<Image ID in FOG server>"
+#             shareGuid = "<GUID for share, obtained with /api/connect>"
+#             image_name = "<File name of image in FOG>"
+#             image_group = "<FOG image group>"
 #         } | ConvertTo-Json
 #
-#   - /api/setDhcp          --> (Windows Server ONLY) Sets the IP address in the DHCP server to initiate the second stage of image deployment (Linux-based)
+#         This must then be sent as part of the body. Then, mount a network share that will be created to the WinPE
 #
-#         A client must send data to /api/setDhcp like this (example in PowerShell):
-#
-#         $json = @{
-#             fogIp = "<IP of underlying FOG server>"
-#         } | ConvertTo-Json
-#
-#         This is only valid when starting the WINDOWS version of this script.
-#
-#   - /api/viewlogs         --> Views the logs recorded by the script (ONLY ACCESSIBLE BY SERVERS. DO NOT ACCESS ON CLIENTS!)#
-#   - /api/exit             --> Gracefully close the program
+#   - /api/clearfiles    --> Clears all the files created during deployment preparation
+#   - /api/exit          --> Gracefully close the program
 #
 #   Settings for the server are declared in the Server Options section.
 
@@ -70,6 +60,8 @@
 # ----------------------- Server Options -----------------------
 $webHost = "*"
 $port = 8080
+$tmpImageFolderPath = "$env:SystemDrive/NetInstallFOGTemp"
+$shareName = "NetInstallTemp"
 # --------------------------------------------------------------
 
 function Write-LogMessage {
@@ -77,14 +69,6 @@ function Write-LogMessage {
         [string]$message
     )
     Write-Host "[$(Get-Date)] $message"
-}
-
-function Get-WindowsRole {
-    param(
-        [Parameter(Mandatory = $true)] [string]$RoleName
-    )
-    Write-LogMessage -message "Detecting server role `"$RoleName`"..."
-    return (Get-WindowsFeature | Where-Object { $_.Name -match "$RoleName" }).InstallState -eq "Installed"
 }
 
 function Invoke-FogModuleAvailabilityPreparation {
@@ -113,9 +97,9 @@ function Invoke-FogModuleAvailabilityPreparation {
         }
     }
 
-    if ((Test-Path -Path "$PSScriptRoot\fogready" -PathType Leaf) -and (Test-Path -Path "$PSScriptRoot\fogapi")) {
+    if ((Test-Path -Path "$PSScriptRoot/fogready" -PathType Leaf) -and (Test-Path -Path "$PSScriptRoot/FogApi")) {
         Write-LogMessage -message "A portable FOG module is available. Attempting to import it..."
-        Import-Module -Name "$PSScriptRoot\FogApi\FogApi.psd1"
+        Import-Module -Name "$PSScriptRoot/FogApi/FogApi.psd1"
         if ($?) { return $true }
     }
 
@@ -132,25 +116,25 @@ $version = "0.7.1"
 
 Clear-Host
 
-# Start logging stuff
-Start-Transcript -Path "$env:TEMP\DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
+if ($env:TEMP -eq $null) {
+    Set-Item -Path "env:TEMP" -Value "/tmp"
+}
 
-Write-Host "DISMTools $version - FOG Helper Server"
+# Start logging stuff
+Start-Transcript -Path "$env:TEMP/DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
+
+Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems; ALPHA)"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
-$compInfo = Get-ComputerInfo
-if ($compInfo.WindowsInstallationType -ne "Server") {
-    Write-LogMessage -message "This computer is not running Windows Server."
+if ([Environment]::OSVersion.Platform -ne "Unix") {
+    Write-LogMessage -message "This script is not designed for non-Unix platforms. Run the Windows counterpart instead."
     return $false
 }
 
 Write-LogMessage -message "Checking roles..."
-if ((Get-WindowsRole -RoleName "DHCP") -eq $false) {
-    Write-LogMessage -message "A required role is missing on this server. Make sure DHCP is installed."
-    return $false
-}
+# TODO: check roles
 
 if ((Invoke-FogModuleAvailabilityPreparation) -eq $false) {
     Write-LogMessage -message "Could not prepare FOG API module. Exiting..."
@@ -166,22 +150,21 @@ Write-LogMessage -message "Starting FOG Helper Web API..."
 Write-LogMessage -message "Server Options:"
 Write-LogMessage -message " - Web API Host: $webHost"
 Write-LogMessage -message " - Web API Port to listen to: $port"
+Write-LogMessage -message " - Temporary directory for deployment operations: $tmpImageFolderPath"
+Write-LogMessage -message " - Name for SMB network share: $shareName"
 Write-LogMessage -message "Creating firewall rules..."
-$fwRule = $null
 try {
-    New-NetFirewallRule -DisplayName "Allow FOG listener on port $port" -Name "AllowListener" -Protocol TCP -LocalPort $port -Action Allow -ErrorAction Stop | Out-Null
+    sudo iptables -A INPUT -p tcp --dport $port -j ACCEPT
     Write-LogMessage -message "Firewall rule creation succeeded. Continuing startup..."
 } catch {
     Write-LogMessage -message "$_"
     Write-LogMessage -message "Could not add rule. Port $port may already be allowlisted. Check firewall settings before proceeding. The script, however, will continue"
 }
 
-if (-not (Test-Path "$([IO.Path]::GetDirectoryName((Get-Module -Name FogApi).Path))\lib\settings.json" -PathType Leaf)) {
+if (-not (Test-Path "$([IO.Path]::GetDirectoryName((Get-Module -Name FogApi).Path))/lib/settings.json" -PathType Leaf)) {
     Write-Host "FOG API settings are not configured yet. Invoking configuration..."
     Set-FogServerSettings -interactive
 }
-
-$fwRule = Get-NetFirewallRule -Name "AllowListener"
 
 $listener = [System.Net.HttpListener]::new()
 $listener.Prefixes.Add("http://$($webHost):$port/api/")
@@ -217,8 +200,6 @@ $ctrlC_EH = [ConsoleCancelEventHandler]{
     throw
 }
 
-Start-Process "http://localhost:$port/api/foghome"
-
 try {
     while (-not $shutdownRequested) {
         if ($host.UI.RawUI.KeyAvailable -and (3 -eq [int]$host.UI.RawUI.ReadKey("AllowCtrlC,IncludeKeyUp,NoEcho").Character)) {
@@ -247,53 +228,42 @@ try {
 
         switch -Wildcard ($request.Url.AbsolutePath) {
             "/api/foghome" {
-                $teamingStatus = ""
                 $nicStatus = ""
-                $netAdapter = Get-NetIPConfiguration
-                if (($netAdapter -ne $null) -and (($netAdapter | Select-Object -ExpandProperty InterfaceAlias).Count -gt 0)) {
-                    $nicStatus += "$(($netAdapter | Select-Object -ExpandProperty InterfaceAlias).Count) network adapters were detected:`n<ul>`n"
-                    foreach ($nic in $netAdapter) {
-                        $nicStatus += @"
-                        <li>$($nic.InterfaceAlias -join "; "): $($nic.InterfaceDescription -join "; "):
-                            <ul>
-                                <li><abbr title="Internet Protocol, version 4">IPv4</abbr> Address: $($nic.IPv4Address.IPAddress -join "; "). Default Gateway: $($nic.IPv4DefaultGateway.NextHop -join "; ")</li>
-                                <li><abbr title="Media Access Control">MAC</abbr> Address: $($nic.NetAdapter.LinkLayerAddress -join "; ")</li>
-                                <li><abbr title="Internet Protocol, version 6">IPv6</abbr> Link-Local: $($nic.IPv6LinkLocalAddress.IPAddress -join "; "). Default Gateway: $($nic.IPv6DefaultGateway.NextHop -join "; ")</li>
-                                <li><abbr title="Domain Name System">DNS</abbr> Servers:
-                                    <ul>
-                                        $($nic.DNSServer | Where-Object { $_.ServerAddresses.Count -gt 0 } | Foreach-Object {
-                                            "<li>$($_.InterfaceAlias -join "; "): $($_.ServerAddresses -join "; ")</li>"
-                                        })
-                                    </ul>
-                                </li>
-                                <li>Adapter Speed: $($nic.NetAdapter.LinkSpeed -join "; ")</li>
-                            </ul>
-                        </li>
-"@
+                $netAdapter = [System.Net.NetworkInformation.NetworkInterface]::GetAllNetworkInterfaces() | Where-Object { $_.NetworkInterfaceType -ne 'Loopback' } | Foreach-Object {
+                    $props = $_.GetIPProperties()
+                    @{
+                        InterfaceAlias = $_.Name
+                        InterfaceDescription = $_.Description
+                        IPv4Address = ($props.UnicastAddresses | Where-Object { $_.Address.AddressFamily -eq 'InterNetwork' } | Select-Object -ExpandProperty Address)
+                        IPv6Address = ($props.UnicastAddresses | Where-Object { $_.Address.IsIPv6LinkLocal } | Select-Object -ExpandProperty Address)
+                        IPv4DefaultGateway = ($props.GatewayAddresses | Where-Object { $_.Address.AddressFamily -eq 'InterNetwork' } | Select-Object -ExpandProperty Address)
+                        IPv6DefaultGateway = ($props.GatewayAddresses | Where-Object { $_.Address.IsIPv6LinkLocal } | Select-Object -ExpandProperty Address)
+                        DNSServer = @(@{ InterfaceAlias = $_.Name; ServerAddresses = $props.DnsAddresses })
+                        LinkLayerAddress = ($_.GetPhysicalAddress().ToString() -replace '(.{2})(?!$)', '$1:')
+                        LinkSpeed = try { [Math]::Round($_.Speed / 1GB, 2) } catch { 0 }
                     }
-                    $nicStatus += "</ul>"
-                } else {
-                    $nicStatus += "No network adapters were detected."
                 }
-                $lbfoTeams = Get-NetLbfoTeam
-                if (($lbfoTeams -ne $null) -and (($lbfoTeams | Select-Object -ExpandProperty Name).Count -gt 0)) {
-                    $teamingStatus += "$(($lbfoTeams | Select-Object -ExpandProperty Name).Count) NIC teams were set up:`n<ul>`n"
-                    foreach ($lbfoTeam in $lbfoTeams) {
-                        $teamingStatus += @"
-                        <li>$($lbfoTeam.Name)
-                            <ul>
-                                <li>Members: $($lbfoTeam.Members -join ", ")</li>
-                                <li>Teaming Mode: $($lbfoTeam.TeamingMode)</li>
-                                <li>Load Balancing Algorithm: $($lbfoTeam.LoadBalancingAlgorithm)</li>
-                                <li>Status: $($lbfoTeam.Status)</li>
-                            </ul>
-                        </li>
+                $nicStatus += "$(($netAdapter | Select-Object -ExpandProperty InterfaceAlias).Count) network adapters were detected:`n<ul>`n"
+                foreach ($nic in $netAdapter) {
+                    $nicStatus += @"
+                    <li>$($nic.InterfaceAlias -join "; "): $($nic.InterfaceDescription -join "; "):
+                        <ul>
+                            <li><abbr title="Internet Protocol, version 4">IPv4</abbr> Address: $($nic.IPv4Address.IPAddressToString -join "; "). Default Gateway: $($nic.IPv4DefaultGateway.IPAddressToString -join "; ")</li>
+                            <li><abbr title="Media Access Control">MAC</abbr> Address: $($nic.LinkLayerAddress -join "; ")</li>
+                            <li><abbr title="Internet Protocol, version 6">IPv6</abbr> Link-Local: $($nic.IPv6Address.IPAddressToString -join "; "). Default Gateway: $($nic.IPv6DefaultGateway.IPAddressToString -join "; ")</li>
+                            <li><abbr title="Domain Name System">DNS</abbr> Servers:
+                                <ul>
+                                    $($nic.DNSServer | Foreach-Object {
+                                        "<li>$($_.InterfaceAlias -join "; "): $($_.ServerAddresses -join "; ")</li>"
+                                    })
+                                </ul>
+                            </li>
+                            <li>Adapter Speed: $($nic.LinkSpeed -join "; ") Gbps</li>
+                        </ul>
+                    </li>
 "@
-                    }
-                    $teamingStatus += "</ul>"
-                } else {
-                    $teamingStatus += "No NIC teams were set up."
                 }
+                $nicStatus += "</ul>"
                 $wsm_html = @"
                 <!DOCTYPE html>
                 <html>
@@ -376,7 +346,7 @@ try {
                                 <table border="0" cellspacing="2" cellpadding="4">
                                     <tr>
                                         <td class="important_tab">API Host:</td>
-                                        <td>$webHost (use $(($netAdapter | Where-Object { $_.NetIPv4Interface.Dhcp -eq 'Disabled' }).IPv4Address.IPAddress -join ", or ") when connecting to it from other clients). <a onclick="displayChooserMessage()" href="#">Which do I choose if I see multiple addresses?</a></td>
+                                        <td>$webHost (use $((([System.Net.Dns]::GetHostEntry([System.Net.Dns]::GetHostName())).AddressList | Where-Object { $_.AddressFamily -eq 'InterNetwork' -and (-not $_.IPAddressToString.StartsWith("127.")) } | Select-Object -ExpandProperty IPAddressToString) -join ", ") when connecting to it from other clients). <a onclick="displayChooserMessage()" href="#">Which do I choose if I see multiple addresses?</a></td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Port to listen to:</td>
@@ -384,7 +354,7 @@ try {
                                     </tr>
                                     <tr>
                                         <td class="important_tab">User that started the server:</td>
-                                        <td>$env:USERNAME</td>
+                                        <td>$env:USER</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" class="super_duper_important_tab">IMPORTANT! You will need to provide the aforementioned information when connecting from clients</td>
@@ -400,62 +370,26 @@ try {
                                     </tr>
                                     <tr>
                                         <td class="important_tab">System:</td>
-                                        <td>$($compInfo.CsManufacturer) $($compInfo.CsModel)</td>
+                                        <td>$(Get-Content -Path "/sys/class/dmi/id/sys_vendor") $(Get-Content -Path "/sys/class/dmi/id/board_name")</td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Processor:</td>
-                                        <td>$($compInfo.CsProcessors[0].Name)</td>
+                                        <td>$(Get-Content -Path "/proc/cpuinfo" | Select-String "model name" | Select-Object -First 1 | Foreach-Object { ($_ -split ':')[1].Trim() })</td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Memory:</td>
-                                        <td>$(((Get-CimInstance Win32_PhysicalMemory) | Measure-Object -Property Capacity -Sum).Sum/1MB) MB</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">NTFS Volumes:</td>
-                                        <td>
-                                            <ul>
-                                            $(Get-Volume | Where-Object { $_.DriveType -eq "Fixed" -and $_.FileSystemType -eq "NTFS" -and $_.DriveLetter -ne $null } | Foreach-Object {
-                                                "<li>Drive $($_.DriveLetter) (`"$($_.FileSystemLabel)`"). Size: $([Math]::Round($_.Size / 1073741824, 2)) GB (percentage remaining: $([Math]::Round(($_.SizeRemaining / $_.Size) * 100, 2))%)</li>"
-                                            })
-                                            </ul>
-                                        </td>
+                                        <td>$(Get-Content -Path "/proc/meminfo" | Select-String "MemTotal" | Select-Object -First 1 | Foreach-Object { ($_ -split ':')[1].Trim() })</td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Current Network Adapters (NICs):</td>
                                         <td>$nicStatus</td>
                                     </tr>
                                     <tr>
-                                        <td class="important_tab">NIC Teaming:</td>
-                                        <td>$teamingStatus</td>
-                                    </tr>
-                                    <tr>
                                         <td colspan="2" class="important_important_tab">System Software</td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Operating system:</td>
-                                        <td>$($compInfo.OsName) (NT Version: $($compInfo.OsVersion). Extended Build String: $($compInfo.WindowsBuildLabEx))</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Build Type:</td>
-                                        <td>$($compInfo.OsBuildType)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Installed HotFixes:</td>
-                                        <td>
-                                            <ul>
-                                                $($compInfo.OsHotFixes | ForEach-Object {
-                                                    "<li>$($_.HotFixID): $($_.Description). Installed on: $($_.InstalledOn)</li>"
-                                                })
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">OS Suites:</td>
-                                        <td>$($compInfo.OsSuites -join ", ")</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Logon Server:</td>
-                                        <td>$($compInfo.LogonServer)</td>
+                                        <td>$(uname -a)</td>
                                     </tr>
                                     <tr>
                                         <td class="important_tab">Available Environment Variables:</td>
@@ -466,18 +400,6 @@ try {
                                                 })
                                             </ul>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Service Pack Version:</td>
-                                        <td>$($compInfo.OsServicePackMajorVersion).$($compInfo.OsServicePackMinorVersion)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Server Level:</td>
-                                        <td>$($compInfo.OsServerLevel)</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="important_tab">Architecture:</td>
-                                        <td>$($compInfo.OsArchitecture)</td>
                                     </tr>
                                 </table>
                             </fieldset>
@@ -536,14 +458,13 @@ try {
                 $response.OutputStream.Close()
             }
             "/api/fogsetup" {
-                if (Test-Path "$([IO.Path]::GetDirectoryName((Get-Module -Name FogApi).Path))\lib\settings.json" -PathType Leaf) {
+                if (Test-Path "$([IO.Path]::GetDirectoryName((Get-Module -Name FogApi).Path))/lib/settings.json" -PathType Leaf) {
                     Write-Host "FOG API settings are already configured. If you continue, settings will be reset."
                     if ((Read-Host -Prompt "Do you want to reset these settings? (Y/N)") -eq "n") {
                         $sendJson.Invoke(@{ success = $true; reason = "The operation was cancelled." })
                         continue
                     }
                 }
-
                 if ($request.HttpMethod -eq "POST") {
                     $reader = New-Object IO.StreamReader $request.InputStream
                     $body = $reader.ReadToEnd() | ConvertFrom-Json
@@ -601,6 +522,36 @@ try {
                     $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
                 }
             }
+            "/api/installimages" {
+                if ($request.HttpMethod -eq "GET") {
+                    try {
+                        $images = Get-FOGInstallImages
+                        $sendJson.Invoke(@{ success = $true; images = $images })
+                    } catch {
+                        Write-LogMessage -message "Exception caught: $_"
+                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
+                    }
+                } else {
+                    $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
+                }
+            }
+            "/api/connect" {
+                if ($request.HttpMethod -eq "POST") {
+                    try {
+                        $reader = New-Object IO.StreamReader $request.InputStream
+                        $body = $reader.ReadToEnd() | ConvertFrom-Json
+                        $deviceId = $body.deviceId
+
+                        $result = Start-ServerConnection -deviceId $deviceId
+                        if ($result -ne $null) {
+                            $sendJson.Invoke(@{ success = $result.successful; output = $result })
+                        }
+                    } catch {
+                        Write-LogMessage -message "Exception caught: $_"
+                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
+                    }
+                }
+            }
             "/api/deploy" {
                 if ($request.HttpMethod -eq "POST") {
                     try {
@@ -619,8 +570,8 @@ try {
                         # Some utterly broken nonsense that darksidemilk has to fix.
                         # $output = Send-FogImage -hostId "$hostId" -imageName "$imageName" 2>$null
 
-                        & "$env:WINDIR\system32\WindowsPowerShell\v1.0\powershell.exe" `
-                          -command "Import-Module FogApi ; Send-FogImage -hostId \""$hostId\"" -imageName \""$imageName\"" -ErrorAction SilentlyContinue"
+                        & "$env:WINDIR/system32/WindowsPowerShell/v1.0/powershell.exe" `
+                          -command "Import-Module FogApi ; Send-FogImage -hostId /""$hostId/"" -imageName /""$imageName/"" -ErrorAction SilentlyContinue"
                         $sendJson.Invoke(@{ success = $? })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"
@@ -650,7 +601,7 @@ try {
                 }
             }
             "/api/viewlogs" {
-                notepad "$env:TEMP\DT_FOGHS_Log.log"
+                Get-Content "$env:TEMP/DT_FOGHS_Log.log"
             }
             "/api/exit" {
                 $sendJson.Invoke(@{ success = $true })
@@ -666,9 +617,7 @@ try {
 } finally {
     Write-LogMessage -message "Shutting down..."
     $listener.Stop()
-    if ($fwRule -ne $null) {
-        Get-NetFirewallRule -Name $($fwRule.Name) | Remove-NetFirewallRule
-    }
+    sudo iptables -D INPUT -p tcp --dport $port -j ACCEPT
 }
 
 # Clean up

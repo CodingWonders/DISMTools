@@ -1278,6 +1278,9 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghelper_server.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghelper_server_unix.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\fog\__ModuleSetup.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

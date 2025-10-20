@@ -281,7 +281,7 @@ function Deploy-WimImage {
 
 function Remove-SharedFolderByGuid {
     param (
-        [Parameter(Mandatory)] [string] $guid
+        [Parameter(Mandatory)] [string]$guid
     )
     if ($guid -eq "") {
         return $false
@@ -684,7 +684,7 @@ try {
                         $reader = New-Object IO.StreamReader $request.InputStream
                         $body = $reader.ReadToEnd() | ConvertFrom-Json
                         $guid = $body.shareGuid
-                        
+
                         $output = Remove-SharedFolderByGuid -guid $guid
                         $sendJson.Invoke(@{ success = $true })
                     } catch {
