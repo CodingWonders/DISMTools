@@ -64,6 +64,8 @@ $tmpImageFolderPath = "$env:SystemDrive/NetInstallFOGTemp"
 $shareName = "NetInstallTemp"
 # --------------------------------------------------------------
 
+$noFirewallSetup = $false
+
 function Write-LogMessage {
     param(
         [string]$message
@@ -123,7 +125,7 @@ if ($env:TEMP -eq $null) {
 # Start logging stuff
 Start-Transcript -Path "$env:TEMP/DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
-Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems; ALPHA)"
+Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems; PRERELEASE)"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
@@ -133,8 +135,10 @@ if ([Environment]::OSVersion.Platform -ne "Unix") {
     return $false
 }
 
-Write-LogMessage -message "Checking roles..."
-# TODO: check roles
+if ($env:NOFWRULESETUP -ne $null) {
+    Write-LogMessage -message "Firewall rules may have been set up externally. We don't have to set them up."
+    $noFirewallSetup = $true
+}
 
 if ((Invoke-FogModuleAvailabilityPreparation) -eq $false) {
     Write-LogMessage -message "Could not prepare FOG API module. Exiting..."
@@ -152,13 +156,16 @@ Write-LogMessage -message " - Web API Host: $webHost"
 Write-LogMessage -message " - Web API Port to listen to: $port"
 Write-LogMessage -message " - Temporary directory for deployment operations: $tmpImageFolderPath"
 Write-LogMessage -message " - Name for SMB network share: $shareName"
-Write-LogMessage -message "Creating firewall rules..."
-try {
-    sudo iptables -A INPUT -p tcp --dport $port -j ACCEPT
-    Write-LogMessage -message "Firewall rule creation succeeded. Continuing startup..."
-} catch {
-    Write-LogMessage -message "$_"
-    Write-LogMessage -message "Could not add rule. Port $port may already be allowlisted. Check firewall settings before proceeding. The script, however, will continue"
+
+if ($noFirewallSetup -eq $false) {
+    Write-LogMessage -message "Creating firewall rules..."
+    try {
+        sudo iptables -A INPUT -p tcp --dport $port -j ACCEPT
+        Write-LogMessage -message "Firewall rule creation succeeded. Continuing startup..."
+    } catch {
+        Write-LogMessage -message "$_"
+        Write-LogMessage -message "Could not add rule. Port $port may already be allowlisted. Check firewall settings before proceeding. The script, however, will continue"
+    }
 }
 
 if (-not (Test-Path "$([IO.Path]::GetDirectoryName((Get-Module -Name FogApi).Path))/lib/settings.json" -PathType Leaf)) {
@@ -569,9 +576,10 @@ try {
                         #
                         # Some utterly broken nonsense that darksidemilk has to fix.
                         # $output = Send-FogImage -hostId "$hostId" -imageName "$imageName" 2>$null
+                        $finalId = $hostId
+                        $finalImageName = "`"$imageName`""
+                        Send-FogImage -hostId $finalId -imageName $finalImageName -ErrorAction SilentlyContinue -Verbose
 
-                        & "$env:WINDIR/system32/WindowsPowerShell/v1.0/powershell.exe" `
-                          -command "Import-Module FogApi ; Send-FogImage -hostId /""$hostId/"" -imageName /""$imageName/"" -ErrorAction SilentlyContinue"
                         $sendJson.Invoke(@{ success = $? })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"
@@ -617,7 +625,9 @@ try {
 } finally {
     Write-LogMessage -message "Shutting down..."
     $listener.Stop()
-    sudo iptables -D INPUT -p tcp --dport $port -j ACCEPT
+    if ($noFirewallSetup -eq $false) {
+        sudo iptables -D INPUT -p tcp --dport $port -j ACCEPT
+    }
 }
 
 # Clean up
