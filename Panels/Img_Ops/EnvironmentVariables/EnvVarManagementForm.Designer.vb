@@ -24,6 +24,7 @@ Partial Class EnvVarManagementForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EnvVarManagementForm))
         Me.ButtonContainerPanel = New System.Windows.Forms.Panel()
+        Me.SaveAllChangesBtn = New System.Windows.Forms.Button()
         Me.HeaderContainerPanel = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.EnvVarContainerSplitPanel = New System.Windows.Forms.SplitContainer()
@@ -57,7 +58,6 @@ Partial Class EnvVarManagementForm
         Me.CopyToMachineScopeBtn = New System.Windows.Forms.Button()
         Me.MoveToMachineScopeBtn = New System.Windows.Forms.Button()
         Me.MoveToUserScopeBtn = New System.Windows.Forms.Button()
-        Me.SaveAllChangesBtn = New System.Windows.Forms.Button()
         Me.ButtonContainerPanel.SuspendLayout()
         Me.HeaderContainerPanel.SuspendLayout()
         CType(Me.EnvVarContainerSplitPanel, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -82,6 +82,16 @@ Partial Class EnvVarManagementForm
         Me.ButtonContainerPanel.Name = "ButtonContainerPanel"
         Me.ButtonContainerPanel.Size = New System.Drawing.Size(1264, 48)
         Me.ButtonContainerPanel.TabIndex = 0
+        '
+        'SaveAllChangesBtn
+        '
+        Me.SaveAllChangesBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SaveAllChangesBtn.Location = New System.Drawing.Point(1115, 13)
+        Me.SaveAllChangesBtn.Name = "SaveAllChangesBtn"
+        Me.SaveAllChangesBtn.Size = New System.Drawing.Size(137, 23)
+        Me.SaveAllChangesBtn.TabIndex = 0
+        Me.SaveAllChangesBtn.Text = "Save all changes"
+        Me.SaveAllChangesBtn.UseVisualStyleBackColor = True
         '
         'HeaderContainerPanel
         '
@@ -438,16 +448,6 @@ Partial Class EnvVarManagementForm
         Me.MoveToUserScopeBtn.TabIndex = 4
         Me.MoveToUserScopeBtn.Text = "Move to default user scope"
         Me.MoveToUserScopeBtn.UseVisualStyleBackColor = True
-        '
-        'SaveAllChangesBtn
-        '
-        Me.SaveAllChangesBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.SaveAllChangesBtn.Location = New System.Drawing.Point(1115, 13)
-        Me.SaveAllChangesBtn.Name = "SaveAllChangesBtn"
-        Me.SaveAllChangesBtn.Size = New System.Drawing.Size(137, 23)
-        Me.SaveAllChangesBtn.TabIndex = 0
-        Me.SaveAllChangesBtn.Text = "Save all changes"
-        Me.SaveAllChangesBtn.UseVisualStyleBackColor = True
         '
         'EnvVarManagementForm
         '
