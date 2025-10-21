@@ -230,11 +230,6 @@
             </summary>
             <seealso cref="T:Markdig.IMarkdownExtension" />
         </member>
-        <member name="P:Markdig.Extensions.AutoLinks.AutoLinkOptions.OpenInNewWindow">
-            <summary>
-            Should the link open in a new window when clicked (false by default)
-            </summary>
-        </member>
         <member name="P:Markdig.Extensions.AutoLinks.AutoLinkOptions.UseHttpsForWWWLinks">
             <summary>
             Should a www link be prefixed with https:// instead of http:// (false by default)
@@ -849,11 +844,6 @@
             The base path after the base url (default is `/browse`)
             </summary>
         </member>
-        <member name="P:Markdig.Extensions.JiraLinks.JiraLinkOptions.OpenInNewWindow">
-            <summary>
-            Should the link open in a new window when clicked
-            </summary>
-        </member>
         <member name="M:Markdig.Extensions.JiraLinks.JiraLinkOptions.GetUrl">
             <summary>
             Gets the full url composed of the <see cref="P:Markdig.Extensions.JiraLinks.JiraLinkOptions.BaseUrl"/> and <see cref="P:Markdig.Extensions.JiraLinks.JiraLinkOptions.BasePath"/> with no trailing `/`
@@ -1448,6 +1438,7 @@
             <param name="slice">The text slice.</param>
             <param name="delimiterChar">The delimiter character (either `-` or `=`). If `\0`, it will detect the character (either `-` or `=`)</param>
             <param name="align">The alignment of the column.</param>
+            <param name="delimiterCount">The number of times <paramref name="delimiterChar"/> appeared in the column header.</param>
             <returns>
               <c>true</c> if parsing was successful
             </returns>
@@ -3772,12 +3763,12 @@
             </summary>
             <seealso cref="T:Markdig.Parsers.InlineParser" />
         </member>
-        <member name="M:Markdig.Parsers.Inlines.AutolinkInlineParser.#ctor">
+        <member name="M:Markdig.Parsers.Inlines.AutolinkInlineParser.#ctor(Markdig.Parsers.Inlines.AutolinkOptions)">
             <summary>
             Initializes a new instance of the <see cref="T:Markdig.Parsers.Inlines.AutolinkInlineParser"/> class.
             </summary>
         </member>
-        <member name="P:Markdig.Parsers.Inlines.AutolinkInlineParser.EnableHtmlParsing">
+        <member name="P:Markdig.Parsers.Inlines.AutolinkOptions.EnableHtmlParsing">
             <summary>
             Gets or sets a value indicating whether to enable HTML parsing. Default is <c>true</c>
             </summary>
@@ -3900,6 +3891,11 @@
             Initializes a new instance of the <see cref="T:Markdig.Parsers.Inlines.LinkInlineParser"/> class.
             </summary>
         </member>
+        <member name="M:Markdig.Parsers.Inlines.LinkInlineParser.#ctor(Markdig.Parsers.LinkOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Markdig.Parsers.Inlines.LinkInlineParser"/> class.
+            </summary>
+        </member>
         <member name="T:Markdig.Parsers.Inlines.LiteralInlineParser">
             <summary>
             An inline parser for parsing <see cref="T:Markdig.Syntax.Inlines.LiteralInline"/>.
@@ -3934,6 +3930,11 @@
             <param name="isFinalProcessing"></param>
             <returns><c>true</c> to continue to the next delimiter processor;
             <c>false</c> to stop the process (in case a processor is performing sub-sequent processor itself)</returns>
+        </member>
+        <member name="P:Markdig.Parsers.LinkOptions.OpenInNewWindow">
+            <summary>
+            Should the link open in a new window when clicked (false by default)
+            </summary>
         </member>
         <member name="T:Markdig.Parsers.ListBlockParser">
             <summary>
@@ -4783,12 +4784,12 @@
         </member>
         <member name="E:Markdig.Renderers.RendererBase.ObjectWriteBefore">
             <summary>
-            Occurs when before writing an object.
+            Occurs before writing an object.
             </summary>
         </member>
         <member name="E:Markdig.Renderers.RendererBase.ObjectWriteAfter">
             <summary>
-            Occurs when after writing an object.
+            Occurs after writing an object.
             </summary>
         </member>
         <member name="M:Markdig.Renderers.RendererBase.WriteChildren(Markdig.Syntax.ContainerBlock)">
