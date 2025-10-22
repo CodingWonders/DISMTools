@@ -1263,6 +1263,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\startup\startnet.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\start_foghs_unix.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\SysprepPreparator.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
