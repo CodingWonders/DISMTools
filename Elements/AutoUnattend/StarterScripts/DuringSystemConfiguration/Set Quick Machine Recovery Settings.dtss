@@ -1,0 +1,56 @@
+﻿Language: Batch
+
+@echo off
+REM This script configures Quick Machine Recovery (QMR) settings. QMR is a new recovery
+REM method found in Windows 11 24H2 and higher. DO NOT USE SCRIPT IF TARGET IMAGE IS
+REM WINDOWS 11 23H2 OR OLDER!
+REM
+REM QMR is part of the set of features proposed in the Windows Resiliency Initiative,
+REM introduced after the CrowdStrike incident.
+
+REM ---------- OPTIONS -----------
+REM - 1. Cloud Remediation State - 0 or 1
+REM - 2. Auto Remediation State  - 0 or 1
+REM - 3. Mins. Until Next Check  -
+REM - 4. Hours Until Next Reboot -
+REM - 5. Headless Recovery       - 0 or 1
+REM ------------------------------
+REM NOTES:
+REM  - Options 3/4 will only take effect if auto remediation is enabled
+REM  - Cloud Remediation allows the system to scan for solutions on WinRE launch
+REM  - Auto Remediation allows the system to continue scanning for solutions if the
+REM    first attempt fails
+REM  - Headless is undocumented but defined in reagentc XML
+
+SET QMR_CloudRemediation=0
+SET QMR_AutoRemediation=0
+SET QMR_NextCheckMinutes=30
+SET QMR_NextRebootHours=72
+SET QMR_Headless=0
+
+REM leave the rest of this script as is
+
+IF NOT DEFINED QMR_CloudRemediation (SET QMR_CloudRemediation=0)
+IF NOT DEFINED QMR_AutoRemediation (SET QMR_AutoRemediation=0)
+IF NOT DEFINED QMR_NextCheckMinutes (SET QMR_NextCheckMinutes=30)
+IF NOT DEFINED QMR_NextRebootHours (SET QMR_NextRebootHours=72)
+IF NOT DEFINED QMR_Headless (SET QMR_Headless=0)
+
+REM convert hours to minutes since reagentc xml expects minutes and not hours
+SET /A QMR_NextRebootMinutes=%QMR_NextRebootHours% * 60 >nul
+
+SET "REAGENTC_XML=%SYSTEMROOT%\system32\dt_reagentc.xml"
+
+REM we'll save our custom reagentc xml to system32 - since < and > are used in cmd
+REM for redirection, we'll escape them like this: ^< ^>
+ECHO ^<?xml version='1.0' encoding='utf-8'?^> > %REAGENTC_XML%
+ECHO. >> %REAGENTC_XML%
+ECHO ^<WindowsRE^> >> %REAGENTC_XML%
+ECHO   ^<WifiCredential^> >> %REAGENTC_XML%
+ECHO   ^</WifiCredential^> >> %REAGENTC_XML%
+ECHO   ^<CloudRemediation state="%QMR_CloudRemediation%"/^> >> %REAGENTC_XML%
+ECHO   ^<AutoRemediation state="%QMR_AutoRemediation%" totalwaittime="%QMR_NextRebootMinutes%" waitinterval="%QMR_NextCheckMinutes%"/^> >> %REAGENTC_XML%
+ECHO   ^<Headless state="%QMR_Headless%"/^> >> %REAGENTC_XML%
+ECHO ^</WindowsRE^> >> %REAGENTC_XML%
+
+IF EXIST "%REAGENTC_XML%" ( reagentc /setrecoverysettings /path "%REAGENTC_XML%" )
