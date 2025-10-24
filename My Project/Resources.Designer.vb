@@ -2121,16 +2121,17 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
+        '''- Fixed an issue in the ADDS domain join wizard regarding user name validation
         '''
         '''New features:
         '''
-        '''- COMMAND-LINE ONLY: the PE Helper now supports external temporary directories
-        '''- The WDS Helper now supports cleaning up files by independent session GUIDs
-        '''- The following starter scripts have been added:
-        '''  - Skip OOBE FLA
-        '''  - Configure user environment personalization settings
-        '''- The service manager now disables the Delayed Start field when a service sta [resto de la cadena truncado]&quot;;.
+        '''- The FOG Helper Server has now moved interactivity for setting up the API from the console to the web-based manager
+        '''- The FOG Helper Server is now available on UNIX systems
+        '''- UnattendGen has been updated to the latest version
+        '''- &quot;Disable Windows Notification Sources&quot; has been added
+        '''- &quot;Invoke WinUtil configuration&quot; has been modified to reduce ping count
+        '''- &quot;Disable SCOOBE&quot; has been added
+        '''- &quot;Se [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
