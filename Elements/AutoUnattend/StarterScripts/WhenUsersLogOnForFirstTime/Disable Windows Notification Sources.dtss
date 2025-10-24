@@ -1,0 +1,19 @@
+﻿Language: Batch
+
+@echo off
+REM This script disables notifications for the notification sources defined below. Continuing with answer
+REM file creation using this script, without any modifications, will disable 4 notification sources in the target
+REM Windows image:
+REM  - Suggested (Windows 10/11) - Microsoft products/services/subscriptions
+REM  - Startup App Notification (Windows Server 2022+/Windows 11+)
+REM  - OneDrive (SkyDrive)
+REM  - Microsoft Account Health
+REM To add notification sources to disable in this script, add them to the list below, like this:
+REM     FOR %%a IN (Windows.SystemToast.Suggested ... <your_source_here>) DO ...
+REM The sources you specify will be added to the notifications list in Settings -> System -> Notifications. You can
+REM re-enable them if you see fit.
+
+FOR %%a IN (Windows.SystemToast.Suggested Windows.SystemToast.StartupApp Microsoft.SkyDrive.Desktop Windows.SystemToast.AccountHealth) DO (
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a" /f
+    reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a" /v Enabled /t REG_DWORD /d 0 /f
+)

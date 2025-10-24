@@ -1,0 +1,9 @@
+﻿Language: Batch
+
+@echo off
+REM This script disables the Second Chance Out-of-Box Experience (SCOOBE), responsible for
+REM suggesting (again) Microsoft services and subscriptions. This is applied for all users
+REM in a system.
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement" /v ScoobeSystemSettingEnabled /t REG_DWORD /d 0 /f

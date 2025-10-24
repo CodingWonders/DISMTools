@@ -60,11 +60,11 @@ Public Class ServiceManagementForm
         Dim dependents As List(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName).ToList()
 
         For Each dependency As WindowsService In dependencies
-            ListView3.Items.Add(New ListViewItem(New String() {dependency.Name, dependency.DisplayName}))
+            ListView3.Items.Add(New ListViewItem(New String() {dependency.Name, dependency.DisplayName, dependency.TypeToString()}))
         Next
 
         For Each dependent As WindowsService In dependents
-            ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName}))
+            ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()}))
         Next
     End Sub
 
@@ -187,6 +187,8 @@ Public Class ServiceManagementForm
             MsgBox("System service information has been successfully saved to the registry of the target image." & vbCrLf & vbCrLf &
                    "A backup of the previous service configuration has been saved to your desktop should you need it in case service modifications do not go as planned." & vbCrLf & vbCrLf &
                    "Simply load the target image's SYSTEM hive and import this registry file.", vbOKOnly + vbInformation)
+        Else
+            MsgBox("System service information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
         End If
         WindowHelper.EnableCloseCapability(Handle)
         Cursor = Cursors.Arrow

@@ -258,7 +258,7 @@ Public Class ADDSJoinDialog
                     MsgBox("A domain name must be specified", vbOKOnly + vbCritical)
                     Return False
                 End If
-                If TextBox5.Text = "" Then
+                If initialUserName = "" Then
                     MsgBox("A user name must be specified", vbOKOnly + vbCritical)
                     Return False
                 End If
