@@ -115,6 +115,12 @@ if (($hostResult -eq $null) -or ($hostResult.success -eq $false)) {
     wpeutil reboot
 }
 
+# We'll set this variable to false to begin with. Then we'll set it to the actual value.
+# That way we prevent having to deal with null variables. This variable determines whether the
+# server is a Windows or a UNIX system.
+$isWindows = $false
+$isWindows = (Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/getostype").platform -eq 2       # 2 = System.PlatformID.Win32NT
+
 $hosts = $hostResult.hosts
 
 $hostId = ($hosts | ForEach-Object { $_.inventory | Where-Object { $_.sysuuid -eq "$computerUUID" } }).hostId
@@ -189,7 +195,7 @@ Show-SectionMessage -sectionTitle "The first portion is complete" -sectionDescri
 Show-CenteredTextBox -Text "You have completed the first portion of the FOG Helper. To continue the deployment of this image, the computer needs to boot into a Linux-based environment to restore all the partitions from the image into your machine. Follow these steps to initiate the second stage. (You can take a picture of this screen in case you'll forget these steps)" -MaxWidth 100 -ForegroundColor DarkGreen
 
 Write-Host "1. Power off the machine. It will do so when you press ENTER"
-Write-Host "2. Configure DHCP settings in your server to boot to the Linux environment. The FOG Helper can attempt to do this for you based on the information you provided"
+Write-Host "2. Configure DHCP settings in your server to boot to the Linux environment. The FOG Helper can attempt to do this for you based on the information you provided (WINDOWS SYSTEMS ONLY)"
 Write-Host "   NOTE: this will configure global DHCP server settings that may be overridden by scopes you may have created. Revise your configuration" -ForegroundColor DarkYellow
 Write-Host "3. Configure the boot procedure of the target machine to boot via the network, if you haven't already done so."
 Write-Host "   NOTE: you may need to turn off Secure Boot on the target machine for the Linux environment to work" -ForegroundColor DarkYellow
@@ -199,19 +205,21 @@ Show-CenteredTextBox -Text "Afterwards, deployment will become an automated proc
 Write-Host "Press ENTER to configure global DHCP server settings and shut down your computer . . ."
 Read-Host | Out-Null
 
-Show-CenteredTextBox -Text "Setting DHCP global options 66 and 67 . . ." -MaxWidth 75 -CenterOfAll
+if ($isWindows) {
+    Show-CenteredTextBox -Text "Setting DHCP global options 66 and 67 . . ." -MaxWidth 75 -CenterOfAll
 
-$dhcpSetterBody = @{ fogIp = "$($authInfo.serverUnderlyingFogServerIP)" } | ConvertTo-Json
-$dhcpSetterResults = Invoke-RestMethod -Method Post -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/setDhcp" -Body $dhcpSetterBody
+    $dhcpSetterBody = @{ fogIp = "$($authInfo.serverUnderlyingFogServerIP)" } | ConvertTo-Json
+    $dhcpSetterResults = Invoke-RestMethod -Method Post -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/setDhcp" -Body $dhcpSetterBody
 
-if (($dhcpSetterResults -eq $null) -or ($dhcpSetterResults.success -eq $false)) {
-    Show-CenteredTextBox -Text "DHCP settings could not be set. You will have to set them manually." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
-    Write-Host "Use these options:"
-    Write-Host "- DHCP Option 66 (Boot Server Host Name): `"$($authInfo.serverUnderlyingFogServerIP)`""
-    Write-Host "- DHCP Option 67 (Bootfile Name): `"ipxe.efi`" (note that you may need to use a different value based on your setup, since this assumes all target machines use UEFI)"
+    if (($dhcpSetterResults -eq $null) -or ($dhcpSetterResults.success -eq $false)) {
+        Show-CenteredTextBox -Text "DHCP settings could not be set. You will have to set them manually." -MaxWidth 75 -CenterOfAll -ForegroundColor DarkYellow
+        Write-Host "Use these options:"
+        Write-Host "- DHCP Option 66 (Boot Server Host Name): `"$($authInfo.serverUnderlyingFogServerIP)`""
+        Write-Host "- DHCP Option 67 (Bootfile Name): `"ipxe.efi`" (note that you may need to use a different value based on your setup, since this assumes all target machines use UEFI)"
 
-    Write-Host "`nJot down these steps, and press ENTER to shut down the machine."
-    Read-Host | Out-Null
+        Write-Host "`nJot down these steps, and press ENTER to shut down the machine."
+        Read-Host | Out-Null
+    }
 }
 
 Show-CenteredTextBox -Text "Shutting down . . ." -MaxWidth 75 -CenterOfAll

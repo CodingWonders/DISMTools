@@ -567,7 +567,7 @@ try {
             "/api/hosts" {
                 if ($request.HttpMethod -eq "GET") {
                     try {
-                        $hosts = Get-FogHosts
+                        $hosts = Get-FogObject -type object -coreObject host
                         $sendJson.Invoke(@{ success = $true; hosts = $hosts.data })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"

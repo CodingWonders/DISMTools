@@ -125,7 +125,7 @@ if ($env:TEMP -eq $null) {
 # Start logging stuff
 Start-Transcript -Path "$env:TEMP/DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
-Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems; PRERELEASE)"
+Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems)"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
@@ -495,7 +495,7 @@ try {
             "/api/hosts" {
                 if ($request.HttpMethod -eq "GET") {
                     try {
-                        $hosts = Get-FogHosts
+                        $hosts = Get-FogObject -type object -coreObject host
                         $sendJson.Invoke(@{ success = $true; hosts = $hosts.data })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"
