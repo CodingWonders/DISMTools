@@ -102,11 +102,18 @@ Module EnvironmentVariableHelper
                         ' then we go with an expand string. Otherwise we'll go with a string
                         Dim expandedValue As String = Environment.ExpandEnvironmentVariables(machineVariable.Value)
 
-                        RegistryHelper.AddRegistryItem(New RegistryItem(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\Session Manager\Environment",
-                                                                                      defaultControlSet.ToString().PadLeft(3, "0"c)),
-                                                                                  machineVariable.Name,
-                                                                                  If(machineVariable.Value.Equals(expandedValue), RegistryValueKind.String, RegistryValueKind.ExpandString),
-                                                                                  machineVariable.Value))
+                        ' If a variable no longer exists, we remove it
+                        If machineVariable.NoLongerExists Then
+                            RegistryHelper.RemoveRegistryItem(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\Session Manager\Environment", defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                              String.Format("/v {0} /f", Quote & machineVariable.Name & Quote))
+                        Else
+                            RegistryHelper.AddRegistryItem(New RegistryItem(String.Format("HKLM\zSYSTEM\ControlSet{0}\Control\Session Manager\Environment",
+                                                                                          defaultControlSet.ToString().PadLeft(3, "0"c)),
+                                                                                      machineVariable.Name,
+                                                                                      If(machineVariable.Value.Equals(expandedValue), RegistryValueKind.String, RegistryValueKind.ExpandString),
+                                                                                      machineVariable.Value))
+
+                        End If
                     Next
                 End If
                 RegistryHelper.UnloadRegistryHive("HKLM\zSYSTEM")
@@ -126,11 +133,16 @@ Module EnvironmentVariableHelper
                 For Each userVariable In userVariables
                     Dim expandedValue As String = Environment.ExpandEnvironmentVariables(userVariable.Value)
 
-                    RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\zDEFAULT\Environment",
-                                                                    userVariable.Name,
-                                                                    If(userVariable.Value.Equals(expandedValue), RegistryValueKind.String, RegistryValueKind.ExpandString),
-                                                                    userVariable.Value))
-
+                    ' If a variable no longer exists, we remove it
+                    If userVariable.NoLongerExists Then
+                        RegistryHelper.RemoveRegistryItem("HKLM\zDEFAULT\Environment",
+                                                          String.Format("/v {0} /f", Quote & userVariable.Name & Quote))
+                    Else
+                        RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\zDEFAULT\Environment",
+                                                                        userVariable.Name,
+                                                                        If(userVariable.Value.Equals(expandedValue), RegistryValueKind.String, RegistryValueKind.ExpandString),
+                                                                        userVariable.Value))
+                    End If
                 Next
                 RegistryHelper.UnloadRegistryHive("HKLM\zDEFAULT")
             End If

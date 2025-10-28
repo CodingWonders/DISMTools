@@ -11,12 +11,14 @@ Public Class EnvironmentVariable
     Public Property Value As String
     Public Property ValueKind As RegistryValueKind
     Public Property Scope As EnvironmentVariableScope
+    Public Property NoLongerExists As Boolean
 
     Public Sub New(name As String, value As String, scope As EnvironmentVariableScope, valueKind As RegistryValueKind)
         Me.Name = name
         Me.Value = value
         Me.Scope = scope
         Me.ValueKind = valueKind
+        Me.NoLongerExists = False
     End Sub
 
     Public Overrides Function ToString() As String
