@@ -35,12 +35,16 @@ Partial Class EnvVarManagementForm
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.SysEnvVarActionPanel = New System.Windows.Forms.Panel()
+        Me.RemoveMachineVarButton = New System.Windows.Forms.Button()
+        Me.AddMachineVarButton = New System.Windows.Forms.Button()
         Me.UserEnvVarGB = New System.Windows.Forms.GroupBox()
         Me.UserEnvVarPanel = New System.Windows.Forms.Panel()
         Me.UserEnvVarLV = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.UserEnvVarActionPanel = New System.Windows.Forms.Panel()
+        Me.RemoveUserVarBtn = New System.Windows.Forms.Button()
+        Me.AddUserVarButton = New System.Windows.Forms.Button()
         Me.EnvVarDetailsPanel = New System.Windows.Forms.Panel()
         Me.SaveVarBtn = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
@@ -58,10 +62,6 @@ Partial Class EnvVarManagementForm
         Me.CopyToMachineScopeBtn = New System.Windows.Forms.Button()
         Me.MoveToMachineScopeBtn = New System.Windows.Forms.Button()
         Me.MoveToUserScopeBtn = New System.Windows.Forms.Button()
-        Me.AddUserVarButton = New System.Windows.Forms.Button()
-        Me.RemoveUserVarBtn = New System.Windows.Forms.Button()
-        Me.AddMachineVarButton = New System.Windows.Forms.Button()
-        Me.RemoveMachineVarButton = New System.Windows.Forms.Button()
         Me.ButtonContainerPanel.SuspendLayout()
         Me.HeaderContainerPanel.SuspendLayout()
         CType(Me.EnvVarContainerSplitPanel, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -204,6 +204,29 @@ Partial Class EnvVarManagementForm
         Me.SysEnvVarActionPanel.Size = New System.Drawing.Size(728, 32)
         Me.SysEnvVarActionPanel.TabIndex = 1
         '
+        'RemoveMachineVarButton
+        '
+        Me.RemoveMachineVarButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RemoveMachineVarButton.Enabled = False
+        Me.RemoveMachineVarButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RemoveMachineVarButton.Location = New System.Drawing.Point(560, 6)
+        Me.RemoveMachineVarButton.Name = "RemoveMachineVarButton"
+        Me.RemoveMachineVarButton.Size = New System.Drawing.Size(161, 23)
+        Me.RemoveMachineVarButton.TabIndex = 0
+        Me.RemoveMachineVarButton.Text = "Remove machine variable"
+        Me.RemoveMachineVarButton.UseVisualStyleBackColor = True
+        '
+        'AddMachineVarButton
+        '
+        Me.AddMachineVarButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AddMachineVarButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.AddMachineVarButton.Location = New System.Drawing.Point(393, 6)
+        Me.AddMachineVarButton.Name = "AddMachineVarButton"
+        Me.AddMachineVarButton.Size = New System.Drawing.Size(161, 23)
+        Me.AddMachineVarButton.TabIndex = 0
+        Me.AddMachineVarButton.Text = "Add machine variable..."
+        Me.AddMachineVarButton.UseVisualStyleBackColor = True
+        '
         'UserEnvVarGB
         '
         Me.UserEnvVarGB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -259,6 +282,29 @@ Partial Class EnvVarManagementForm
         Me.UserEnvVarActionPanel.Size = New System.Drawing.Size(728, 32)
         Me.UserEnvVarActionPanel.TabIndex = 0
         '
+        'RemoveUserVarBtn
+        '
+        Me.RemoveUserVarBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RemoveUserVarBtn.Enabled = False
+        Me.RemoveUserVarBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RemoveUserVarBtn.Location = New System.Drawing.Point(560, 6)
+        Me.RemoveUserVarBtn.Name = "RemoveUserVarBtn"
+        Me.RemoveUserVarBtn.Size = New System.Drawing.Size(161, 23)
+        Me.RemoveUserVarBtn.TabIndex = 0
+        Me.RemoveUserVarBtn.Text = "Remove user variable"
+        Me.RemoveUserVarBtn.UseVisualStyleBackColor = True
+        '
+        'AddUserVarButton
+        '
+        Me.AddUserVarButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AddUserVarButton.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.AddUserVarButton.Location = New System.Drawing.Point(393, 6)
+        Me.AddUserVarButton.Name = "AddUserVarButton"
+        Me.AddUserVarButton.Size = New System.Drawing.Size(161, 23)
+        Me.AddUserVarButton.TabIndex = 0
+        Me.AddUserVarButton.Text = "Add user variable..."
+        Me.AddUserVarButton.UseVisualStyleBackColor = True
+        '
         'EnvVarDetailsPanel
         '
         Me.EnvVarDetailsPanel.Controls.Add(Me.SaveVarBtn)
@@ -274,6 +320,7 @@ Partial Class EnvVarManagementForm
         Me.EnvVarDetailsPanel.Controls.Add(Me.PictureBox1)
         Me.EnvVarDetailsPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.EnvVarDetailsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.EnvVarDetailsPanel.Enabled = False
         Me.EnvVarDetailsPanel.Location = New System.Drawing.Point(0, 0)
         Me.EnvVarDetailsPanel.Name = "EnvVarDetailsPanel"
         Me.EnvVarDetailsPanel.Size = New System.Drawing.Size(490, 559)
@@ -455,52 +502,6 @@ Partial Class EnvVarManagementForm
         Me.MoveToUserScopeBtn.TabIndex = 4
         Me.MoveToUserScopeBtn.Text = "Move to default user scope"
         Me.MoveToUserScopeBtn.UseVisualStyleBackColor = True
-        '
-        'AddUserVarButton
-        '
-        Me.AddUserVarButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AddUserVarButton.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.AddUserVarButton.Location = New System.Drawing.Point(393, 6)
-        Me.AddUserVarButton.Name = "AddUserVarButton"
-        Me.AddUserVarButton.Size = New System.Drawing.Size(161, 23)
-        Me.AddUserVarButton.TabIndex = 0
-        Me.AddUserVarButton.Text = "Add user variable..."
-        Me.AddUserVarButton.UseVisualStyleBackColor = True
-        '
-        'RemoveUserVarBtn
-        '
-        Me.RemoveUserVarBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RemoveUserVarBtn.Enabled = False
-        Me.RemoveUserVarBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.RemoveUserVarBtn.Location = New System.Drawing.Point(560, 6)
-        Me.RemoveUserVarBtn.Name = "RemoveUserVarBtn"
-        Me.RemoveUserVarBtn.Size = New System.Drawing.Size(161, 23)
-        Me.RemoveUserVarBtn.TabIndex = 0
-        Me.RemoveUserVarBtn.Text = "Remove user variable"
-        Me.RemoveUserVarBtn.UseVisualStyleBackColor = True
-        '
-        'AddMachineVarButton
-        '
-        Me.AddMachineVarButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AddMachineVarButton.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.AddMachineVarButton.Location = New System.Drawing.Point(393, 6)
-        Me.AddMachineVarButton.Name = "AddMachineVarButton"
-        Me.AddMachineVarButton.Size = New System.Drawing.Size(161, 23)
-        Me.AddMachineVarButton.TabIndex = 0
-        Me.AddMachineVarButton.Text = "Add machine variable..."
-        Me.AddMachineVarButton.UseVisualStyleBackColor = True
-        '
-        'RemoveMachineVarButton
-        '
-        Me.RemoveMachineVarButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RemoveMachineVarButton.Enabled = False
-        Me.RemoveMachineVarButton.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.RemoveMachineVarButton.Location = New System.Drawing.Point(560, 6)
-        Me.RemoveMachineVarButton.Name = "RemoveMachineVarButton"
-        Me.RemoveMachineVarButton.Size = New System.Drawing.Size(161, 23)
-        Me.RemoveMachineVarButton.TabIndex = 0
-        Me.RemoveMachineVarButton.Text = "Remove machine variable"
-        Me.RemoveMachineVarButton.UseVisualStyleBackColor = True
         '
         'EnvVarManagementForm
         '
