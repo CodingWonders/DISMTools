@@ -21,9 +21,9 @@ SET "OEM_SupportPhone="
 SET "OEM_SupportURL="
 SET "OEM_Logo="
 
-IF DEFINED OEM_Manufacturer ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v Manufacturer /t REG_SZ /d "%OEM_Manufacturer%" /f )
-IF DEFINED OEM_Model ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v Model /t REG_SZ /d "%OEM_Model%" /f )
-IF DEFINED OEM_SupportHours ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v SupportHours /t REG_SZ /d "%OEM_SupportHours%" /f )
-IF DEFINED OEM_SupportPhone ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v SupportPhone /t REG_SZ /d "%OEM_SupportPhone%" /f )
-IF DEFINED OEM_SupportURL ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v SupportURL /t REG_SZ /d "%OEM_SupportURL%" /f )
-IF DEFINED OEM_Logo ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v Logo /t REG_SZ /d "%OEM_Logo%" /f )
+IF DEFINED OEM_Manufacturer ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /f /v Manufacturer /t REG_SZ /d "%OEM_Manufacturer%" )
+IF DEFINED OEM_Model ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /f /v Model /t REG_SZ /d "%OEM_Model%" )
+IF DEFINED OEM_SupportHours ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /f /v SupportHours /t REG_SZ /d "%OEM_SupportHours%" )
+IF DEFINED OEM_SupportPhone ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /f /v SupportPhone /t REG_SZ /d "%OEM_SupportPhone%" )
+IF DEFINED OEM_SupportURL ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /f /v SupportURL /t REG_SZ /d "%OEM_SupportURL%" )
+IF DEFINED OEM_Logo ( reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /f /v Logo /t REG_SZ /d "%OEM_Logo%" )
