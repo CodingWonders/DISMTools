@@ -996,7 +996,36 @@ Public Class MainForm
             If MsgBox(tourMessage, vbYesNo + vbQuestion, "Getting Started with DISMTools") = MsgBoxResult.Yes Then
                 If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
                     DynaLog.LogMessage("Tour directory exists. Starting the tour!")
-                    Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+
+                    Dim languageCode As String = "en"
+
+                    Select Case Language
+                        Case 0
+                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                Case "ENU", "ENG"
+                                    languageCode = "en"
+                                Case "ESN"
+                                    languageCode = "es"
+                                Case "FRA"
+                                    languageCode = "fr"
+                                Case "PTB", "PTG"
+                                    languageCode = "pt"
+                                Case "ITA"
+                                    languageCode = "it"
+                            End Select
+                        Case 1
+                            languageCode = "en"
+                        Case 2
+                            languageCode = "es"
+                        Case 3
+                            languageCode = "fr"
+                        Case 4
+                            languageCode = "pt"
+                        Case 5
+                            languageCode = "it"
+                    End Select
+
+                    Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", languageCode, "tour-start.html"))
                 End If
             End If
         End If
@@ -16776,7 +16805,36 @@ Public Class MainForm
     Private Sub DISMToolsTourToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DISMToolsTourToolStripMenuItem.Click
         If Directory.Exists(Path.Combine(Application.StartupPath, "docs", "tour")) Then
             DynaLog.LogMessage("Tour directory exists. Starting the tour!")
-            Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", "tour-start.html"))
+
+            Dim languageCode As String = "en"
+
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            languageCode = "en"
+                        Case "ESN"
+                            languageCode = "es"
+                        Case "FRA"
+                            languageCode = "fr"
+                        Case "PTB", "PTG"
+                            languageCode = "pt"
+                        Case "ITA"
+                            languageCode = "it"
+                    End Select
+                Case 1
+                    languageCode = "en"
+                Case 2
+                    languageCode = "es"
+                Case 3
+                    languageCode = "fr"
+                Case 4
+                    languageCode = "pt"
+                Case 5
+                    languageCode = "it"
+            End Select
+
+            Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", languageCode, "tour-start.html"))
         End If
     End Sub
 
