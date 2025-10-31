@@ -59,10 +59,10 @@ Public Class AddListEntryDlg
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                     Case "ITA"
-                        Label1.Text = "Entrata:"
+                        Label1.Text = "Voce:"
                         Button1.Text = "Sfoglia..."
                         OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
+                        Cancel_Button.Text = "Annulla"
                 End Select
             Case 1
                 Label1.Text = "Entry:"
@@ -85,10 +85,10 @@ Public Class AddListEntryDlg
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
             Case 5
-                Label1.Text = "Entrata:"
+                Label1.Text = "Voce:"
                 Button1.Text = "Sfoglia..."
                 OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
+                Cancel_Button.Text = "Annulla"
         End Select
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
