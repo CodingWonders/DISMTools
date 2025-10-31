@@ -2119,19 +2119,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
+        '''-- Bugfixes
+        '''
+        '''- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
+        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
         '''- Fixed an issue in the ADDS domain join wizard regarding user name validation
         '''
-        '''New features:
+        '''-- New features
         '''
-        '''- The FOG Helper Server has now moved interactivity for setting up the API from the console to the web-based manager
-        '''- The FOG Helper Server is now available on UNIX systems
-        '''- UnattendGen has been updated to the latest version
-        '''- &quot;Disable Windows Notification Sources&quot; has been added
-        '''- &quot;Invoke WinUtil configuration&quot; has been modified to reduce ping count
-        '''- &quot;Disable SCOOBE&quot; has been added
-        '''- &quot;Se [resto de la cadena truncado]&quot;;.
+        '''- A new autorun window has been added to allow you to access the items you want more easily
+        '''- A new tool designed to prepare computers for Sysprep generaliz [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
