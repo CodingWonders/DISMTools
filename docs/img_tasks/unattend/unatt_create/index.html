@@ -211,6 +211,16 @@
                 </li>
                 <li class="toctree-l4"><a class="reference internal" href="../../tools/isocreator/exttools/dtpe_es/">Extensibility Suite</a>
                 </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../tools/isocreator/exttools/sysprep/">SysPrep Preparation Tool</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../tools/isocreator/cmdline/cmdline/">Overview</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../tools/isocreator/cmdline/scriptref/">Administration Script Reference</a>
+                </li>
     </ul>
                 </li>
     </ul>
@@ -218,6 +228,10 @@
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../tools/regcpl/">Image registry control panel</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/servicemgr/">System service manager</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tools/envvarmgr/">System environment variable manager</a>
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" >Unattended answer files</a>
     <ul class="current">
@@ -236,6 +250,34 @@
         </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#active-directory-domain-services-domain-join">Active Directory Domain Services domain join</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#starter-script-reference">Starter Script Reference</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#close-first-logon-animation">Close First Logon Animation</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-oem-information">Set OEM Information</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-quick-machine-recovery-settings">Set Quick Machine Recovery Settings</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#invoke-winutil-configuration">Invoke WinUtil Configuration</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-personalization-settings">Set Personalization Settings</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-registered-owner-and-organization">Set Registered Owner and Organization</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-up-a-custom-wallpaper">Set up a custom wallpaper</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#update-microsoft-store-apps">Update Microsoft Store apps</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#disable-second-chance-oobe">Disable Second Chance OOBE</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#disable-windows-notification-sources">Disable Windows Notification Sources</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#change-history">Change History</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#acknowledgements">Acknowledgements</a>
     </li>
@@ -381,6 +423,7 @@
 <p>Notes:</p>
 <ul>
 <li>After scripts are done, you can restart Windows Explorer in case you have applied personalization changes, for example, via the Registry</li>
+<li>If you are new to the world of post-installation scripts, you can go with new Starter Scripts. Go to the starter script reference section (at the bottom of this page) for more information</li>
 </ul>
 <p>In the <strong>Component Settings</strong> page, you can specify placeholders for additional components that you want to add to your answer file for specific passes. You will have to fill them in manually after the answer file is generated:</p>
 <p align="center">
@@ -423,6 +466,356 @@
 </p>
 
 <p>Finally, like with the <strong>Windows Image Explorer</strong>, you can use the generator program separately. You can check out its repository <a href="https://github.com/CodingWonders/UnattendGen">here</a></p>
+<h2 id="active-directory-domain-services-domain-join">Active Directory Domain Services domain join</h2>
+<p>If the unattended answer file and, by extension, the Windows image, will be targeted to a fleet of computers in a domain; you can configure domain join settings using the <strong>Domain Services Wizard</strong>.</p>
+<p>You can access the Domain Services Wizard by clicking the <strong>Join target device to domain...</strong> button that will appear in the following pages:</p>
+<ul>
+<li>System Configuration</li>
+<li>User Accounts</li>
+<li>Component Settings</li>
+</ul>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_jointargetdevice.png" />
+</p>
+
+<p>You will first need to configure target DNS server information: the primary domain suffix, the name of the NIC (<em>Interface Alias</em>), and DNS server addresses.</p>
+<p>You can specify the interface alias in one of 2 ways:</p>
+<ul>
+<li>By picking from available NICs in the current system. To choose this, it is recommended that you verify if you are running DISMTools in one of the devices in the domain, unless your current device also has a NIC with the same name as the target devices</li>
+<li>By typing the name of the NIC manually</li>
+</ul>
+<p>When you pick the NIC from the list, every other field (PDS, DNS server addresses) will be filled in automatically given the current configuration of the NIC. However, you can still change these fields if you need to use different values.</p>
+<p>For DNS server addresses, you need to put one address per line. If you want to check if the syntax of the addresses is correct, click <strong>Verify DNS Address Syntax</strong>.</p>
+<p>One example of filled-in information is shown below:</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo.png" />
+</p>
+
+<p>After configuring DNS server information, you will need to configure information related to the initial user with which the target device will join the domain.</p>
+<p align="center">
+    <img src="../../../res/img_tasks/unattend/unatt_creator/dsw/dswizard_dsinfo.png" />
+</p>
+
+<ul>
+<li>If the device is part of a domain, the domain name will be filled in automatically and you will be able to pick users from available organizational units (OUs) in the domain. However, you can still specify different information manually.</li>
+<li>If the device is not part of a domain, you will need to specify all information manually.</li>
+</ul>
+<p>To pick a user from the domain:</p>
+<ol>
+<li>Select the OU from the drop-down list. After selecting the OU, the list of users in the OU will be populated automatically</li>
+<li>Select the user from the list</li>
+</ol>
+<p>Both the UPN and the SAM account names will be filled in automatically. When specifying this information manually, you will need to specify the user part of the UPN. For instance, <code>johndoe</code>.</p>
+<p>Finally, specify the password of the user. Since DISMTools will <strong>NOT</strong> check if the password is correct, make sure that you type it correctly.</p>
+<p>You've finished the Domain Services Wizard. When you get to the components screen, you will see that the necessary components and settings have been added to your answer file.</p>
+<h2 id="starter-script-reference">Starter Script Reference</h2>
+<p>Currently, there are 10 starter scripts available:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Script Name</th>
+<th style="text-align: center;">Stage</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Close First Logon Animation</td>
+<td style="text-align: center;">During System Configuration</td>
+<td style="text-align: left;">Closes the first logon animation that appears when a user logs on for the first time</td>
+</tr>
+<tr>
+<td style="text-align: left;">Set OEM Information</td>
+<td style="text-align: center;">During System Configuration</td>
+<td style="text-align: left;">Sets the OEM information of the system, like the manufacturer, model, or support information</td>
+</tr>
+<tr>
+<td style="text-align: left;">Set Quick Machine Recovery Settings</td>
+<td style="text-align: center;">During System Configuration</td>
+<td style="text-align: left;">Configures Quick Machine Recovery (QMR) settings on the target system</td>
+</tr>
+<tr>
+<td style="text-align: left;">Invoke WinUtil Configuration</td>
+<td style="text-align: center;">When the first user logs on</td>
+<td style="text-align: left;">Invokes WinUtil with a configuration file to apply personalization settings</td>
+</tr>
+<tr>
+<td style="text-align: left;">Set Personalization Settings</td>
+<td style="text-align: center;">When the first user logs on</td>
+<td style="text-align: left;">Sets personalization settings, like the desktop wallpaper, accent color, or color modes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Set Registered Owner and Organization</td>
+<td style="text-align: center;">When the first user logs on</td>
+<td style="text-align: left;">Sets the registered owner and organization of the system</td>
+</tr>
+<tr>
+<td style="text-align: left;">Set up a custom wallpaper</td>
+<td style="text-align: center;">When the first user logs on</td>
+<td style="text-align: left;">Sets a custom wallpaper for the desktop</td>
+</tr>
+<tr>
+<td style="text-align: left;">Update Microsoft Store apps</td>
+<td style="text-align: center;">When the first user logs on</td>
+<td style="text-align: left;">Updates all Microsoft Store apps to their latest versions, if available</td>
+</tr>
+<tr>
+<td style="text-align: left;">Disable Second Chance OOBE</td>
+<td style="text-align: center;">When users log on for the first time</td>
+<td style="text-align: left;">Disables the Second Chance OOBE (SCOOBE)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Disable Windows Notification Sources</td>
+<td style="text-align: center;">When users log on for the first time</td>
+<td style="text-align: left;">Disables various Windows notifications given sources</td>
+</tr>
+</tbody>
+</table>
+<p>Some scripts allow you to configure settings after you import them:</p>
+<h3 id="close-first-logon-animation">Close First Logon Animation</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
+<h3 id="set-oem-information">Set OEM Information</h3>
+<p><strong>Script language</strong>: Batch</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Option</th>
+<th style="text-align: center;">Required?</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>OEM_Manufacturer</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">The manufacturer of the system</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_Model</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">The model of the system</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_SupportURL</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">The support URL of the system</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_SupportPhone</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">The support phone number of the system</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_SupportHours</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">The support hours of the system</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_Logo</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">The path to the OEM logo of the system. Must be a BMP file</td>
+</tr>
+</tbody>
+</table>
+<h3 id="set-quick-machine-recovery-settings">Set Quick Machine Recovery Settings</h3>
+<p><strong>Script language</strong>: Batch</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Option</th>
+<th style="text-align: center;">Required?</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>QMR_CloudRemediation</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">Enables (1) or disables (0) cloud remediation for QMR</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_AutoRemediation</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">Enables (1) or disables (0) automatic remediation for QMR</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_NextCheckMinutes</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">Sets the number of minutes before the next QMR check</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_NextRebootHours</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">Sets the number of hours before the next reboot</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_Headless</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">Enables (1) or disables (0) headless mode for QMR</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Options 3 and 4 will only be applied if automatic remediation is enabled</li>
+<li>Cloud Remediation allows the system to scan for solutions on WinRE launch</li>
+<li>Auto Remediation allows the system to continue scanning for solutions if the first attempt fails</li>
+</ul>
+<h3 id="invoke-winutil-configuration">Invoke WinUtil Configuration</h3>
+<p><strong>Script language</strong>: PowerShell</p>
+<p>You need to add your configuration file to the root of the image's mount directory, as <code>winutil-config.json</code>. You can learn more about configuration files <a href="https://winutil.christitus.com/userguide/automation/">here</a>.</p>
+<h3 id="set-personalization-settings">Set Personalization Settings</h3>
+<p><strong>Script language</strong>: PowerShell</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Option</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>$lightThemeSystem</code></td>
+<td style="text-align: left;">If 0, sets the system theme to dark mode. If 1, sets it to light mode</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$lightThemeApps</code></td>
+<td style="text-align: left;">If 0, sets the app theme to dark mode. If 1, sets it to light mode</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$accentColorOnStart</code></td>
+<td style="text-align: left;">If 0, disables accent color on Start, taskbar and action center. If 1, enables it</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$enableTransparency</code></td>
+<td style="text-align: left;">If 0, disables transparency effects (Acrylic/Mica). If 1, enables it</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$htmlAccentColor</code></td>
+<td style="text-align: left;">Sets the accent color of the system. Must be a hex value</td>
+</tr>
+</tbody>
+</table>
+<h3 id="set-registered-owner-and-organization">Set Registered Owner and Organization</h3>
+<p><strong>Script language</strong>: Batch</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Option</th>
+<th style="text-align: center;">Required?</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>AutoUserInfo</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">Determines whether to set registered owner as the name of the currently signed user (0 or 1)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>RegisteredUser</code></td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: left;">The registered owner of the system</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>RegisteredOrg</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">The registered organization of the system</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>If <code>AutoUserInfo</code> is set to 1 and a Microsoft account is used, the registered owner will be set to the first 5 letters of the email address</li>
+<li>This script should not be used when users log on for the first time because user information will change every time a new user logs on for the first time if the following conditions are met:<ul>
+<li><code>AutoUserInfo</code> is set to 1</li>
+<li>More than one user account is created, either from the answer file or after OOBE</li>
+</ul>
+</li>
+</ul>
+<h3 id="set-up-a-custom-wallpaper">Set up a custom wallpaper</h3>
+<p><strong>Script language</strong>: PowerShell</p>
+<p>Place the wallpaper in any path inside the Windows image. Then, replace <code>&lt;path to your wallpaper here&gt;</code> with the actual path to your wallpaper starting from the mount directory of the Windows image. For example:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Path in mount directory</th>
+<th style="text-align: center;">Actual Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>C:\mount\wallpaper.jpg</code></td>
+<td style="text-align: center;"><code>$env:SYSTEMDRIVE\wallpaper.jpg</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>C:\mount\Pictures\wallpaper.png</code></td>
+<td style="text-align: center;"><code>$env:SYSTEMDRIVE\Pictures\wallpaper.png</code></td>
+</tr>
+</tbody>
+</table>
+<p>If the image file does not exist in the target image and continue with the script, you will see a black desktop background.</p>
+<h3 id="update-microsoft-store-apps">Update Microsoft Store apps</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
+<h3 id="disable-second-chance-oobe">Disable Second Chance OOBE</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
+<h3 id="disable-windows-notification-sources">Disable Windows Notification Sources</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>By default, the script will disable the following notification sources:</p>
+<ul>
+<li>Suggested</li>
+<li>Startup App Notification</li>
+<li>OneDrive</li>
+<li>Microsoft Account Health</li>
+</ul>
+<p>These entries will be added to list of notification sources, in Settings -&gt; System -&gt; Notifications. To add more entries to the list, do the following:</p>
+<pre><code class="language-batch">FOR %%a IN (Windows.SystemToast.Suggested ... Windows.SystemToast.AccountHealth &lt;your source here&gt;) DO (
+    reg add &quot;HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a&quot; /f
+    reg add &quot;HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a&quot; /v Enabled /t REG_DWORD /d 0 /f
+)
+</code></pre>
+<p>Notes for your source:</p>
+<ul>
+<li>If your source contains spaces, surround it with quotes</li>
+</ul>
+<h3 id="change-history">Change History</h3>
+<ul>
+<li>DISMTools 0.7.1 Preview 4:<ul>
+<li>Added:<ul>
+<li>Disable Windows Notification Sources</li>
+<li>Disable Second Chance OOBE</li>
+<li>Set OEM Information</li>
+<li>Set Registered Owner and Organization</li>
+<li>Set Quick Machine Recovery Settings</li>
+</ul>
+</li>
+<li>Modified:<ul>
+<li>Invoke WinUtil Configuration: reduced ping count to server</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DISMTools 0.7.1 Preview 3:<ul>
+<li>Added:<ul>
+<li>Skip OOBE First Logon Animation</li>
+<li>Personalize User Environment</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DISMTools 0.7.1 Preview 2:<ul>
+<li>Added:<ul>
+<li>Set up a custom wallpaper</li>
+<li>Update Microsoft Store apps</li>
+<li>Invoke WinUtil Configuration</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>Special thanks to Christoph Schneegans for creating the library that makes this creator possible.</p>
               

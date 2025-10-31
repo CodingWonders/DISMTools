@@ -1,6 +1,7 @@
 ﻿Imports System.Diagnostics
 Imports System.IO
 Imports Microsoft.Win32
+Imports Microsoft.VisualBasic.ControlChars
 
 Module RegistryHelper
 
@@ -73,14 +74,14 @@ Module RegistryHelper
 
         DynaLog.LogMessage("Adding registry item " & regItem.ToString())
 
-        Return RunRegProcess(String.Format("add {0} {1} /t {2} /d {3} /f",
-                                           regItem.RegistryKeyLocation,
+        Return RunRegProcess(String.Format("add {0} /f {1} /t {2} /d {3}",
+                                           Quote & regItem.RegistryKeyLocation & Quote,
                                            If(String.IsNullOrEmpty(regItem.RegistryValueName),
                                               "/ve",
                                               String.Format("/v {0}",
                                                             regItem.RegistryValueName)),
                                            GetRegValueTypeFromEnum(regItem.RegistryValueType),
-                                           regItem.RegistryValueData))
+                                           Quote & regItem.RegistryValueData & Quote))
     End Function
 
     ''' <summary>

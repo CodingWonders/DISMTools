@@ -51,11 +51,15 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">What's new</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#a-new-coat-of-paint">A new coat of paint</a>
+    <li class="toctree-l2"><a class="reference internal" href="#support-for-more-pxe-providers">Support for more PXE providers</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#network-based-deployment-made-easy-and-more-preinstallation-environment-features">Network-based deployment made easy, and more Preinstallation Environment features</a>
+    <li class="toctree-l2"><a class="reference internal" href="#prepare-reference-computers-for-image-capture-more-easily">Prepare reference computers for image capture more easily</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#new-unattended-answer-file-features-suitable-for-both-consumers-and-businesses">New unattended answer file features suitable for both consumers and businesses</a>
+    <li class="toctree-l2"><a class="reference internal" href="#get-to-pe-helper-tasks-and-components-more-easily">Get to PE Helper tasks and components more easily</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#improved-active-directory-domain-join-integration-and-unattended-answer-file-features">Improved Active Directory domain join integration and unattended answer file features</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manage-the-services-and-environment-variables-of-your-images">Manage the services and environment variables of your images</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#overall-refinements">Overall refinements</a>
     </li>
@@ -221,6 +225,16 @@
                 </li>
                 <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/exttools/dtpe_es/">Extensibility Suite</a>
                 </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/exttools/sysprep/">SysPrep Preparation Tool</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/cmdline/cmdline/">Overview</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../img_tasks/tools/isocreator/cmdline/scriptref/">Administration Script Reference</a>
+                </li>
     </ul>
                 </li>
     </ul>
@@ -228,6 +242,10 @@
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/regcpl/">Image registry control panel</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/servicemgr/">System service manager</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../img_tasks/tools/envvarmgr/">System environment variable manager</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" >Unattended answer files</a>
     <ul>
@@ -276,29 +294,50 @@
                 <h1 id="release-highlights">Release highlights</h1>
 <p>This new version of DISMTools comes with new features that enhance image management and servicing tasks. Here are some of its key changes.</p>
 <p>If you want to take a look at everything that has changed though, check out the <a href="https://github.com/CodingWonders/DISMTools/releases/latest">release notes page</a> for more information.</p>
-<h2 id="a-new-coat-of-paint">A new coat of paint</h2>
-<p>DISMTools 0.7 includes refined default themes, with darker dark colors and lighter light colors. Using its new <strong>theme engine</strong>, you can customize it even more with more colors, including a revamped color scheme inspired on older releases of DISMTools. It also features a new editor with which you can make your own themes.</p>
+<h2 id="support-for-more-pxe-providers">Support for more PXE providers</h2>
+<p>DISMTools 0.7.1 adds official support for FOG (<em>in both a Windows environment and a UNIX environment</em>), increasing the number of supported PXE providers to 2. Several improvements have also been made to the PXE Helper framework to support adding network drivers to the Preinstallation Environment, IPv6, and more.</p>
 <p align="center">
   <img src="../../res/whats_new/WhatsNew_1.png">
 </p>
 
-<h2 id="network-based-deployment-made-easy-and-more-preinstallation-environment-features">Network-based deployment made easy, and more Preinstallation Environment features</h2>
-<p>The DISMTools Preinstallation Environment now includes support for PXE providers with the new PXE Helpers. In this version, support for the <a href="https://en.wikipedia.org/wiki/Windows_Deployment_Services">Windows Deployment Services</a> is included, though additional providers will be supported in the future.</p>
+<h2 id="prepare-reference-computers-for-image-capture-more-easily">Prepare reference computers for image capture more easily</h2>
+<p>If you're preparing a Windows image using a reference computer by pre-installing applications, generalizing that system has become easier with the new <strong>Sysprep Preparation Tool</strong>. Simply follow the steps in the wizard and you'll be ready to capture your image in no time.</p>
+<p align="center">
+  <img src="../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Preparation.png" />
+</p>
+
+<p><a href="../../img_tasks/tools/isocreator/exttools/sysprep">Learn more about the Sysprep Preparation Tool</a></p>
+<h2 id="get-to-pe-helper-tasks-and-components-more-easily">Get to PE Helper tasks and components more easily</h2>
+<p>DISMTools 0.7.1 introduces a new Autorun application that lets you launch HotInstall, to begin installation of operating systems, reboot to installation media, start PXE Helper server components, and launch the Sysprep Preparation Tool; all from a single interface.</p>
 <p align="center">
   <img src="../../res/whats_new/WhatsNew_2.png">
 </p>
 
-<p>The DISMTools PE also includes a new menu from which you can perform local or network-based deployments. It also lets you access a command line with built-in scripts that allow you to initialize networking stacks, capture sysprepped installations to Windows images, and more.</p>
-<h2 id="new-unattended-answer-file-features-suitable-for-both-consumers-and-businesses">New unattended answer file features suitable for both consumers and businesses</h2>
-<p>DISMTools 0.7 includes new features in the unattended answer file creation wizard. If you ever need to specify more settings for specific components, you can now make these changes using the wizard, and not the Editor mode. It also allows you to make devices join a domain powered by Active Directory Domain Services (AD DS) using a convenient wizard.</p>
-<p>The underlying generator program (<a href="https://github.com/CodingWonders/UnattendGen"><em>UnattendGen</em></a>) has also become cross-platform, with support for Linux and macOS (<em>command-line only</em>).</p>
+<h2 id="improved-active-directory-domain-join-integration-and-unattended-answer-file-features">Improved Active Directory domain join integration and unattended answer file features</h2>
+<p>The unattended answer file creation wizard, when creating answer files that join devices to a domain, can now let you specify an initial user account to join the domain with much more easily, thanks to a new picker for OUs and users. DNS Address syntax validation has also been improved to work seamlessly with scoped IPv6 addresses. DISMTools will also warn you when a selected account in the domain is disabled.</p>
+<p>For those getting started with unattended installations, we now provide a set of <em>starter scripts</em> that will help you tweak target installations more easily. Set a wallpaper that you like? Check. Configure OEM information and Quick Machine Recovery settings? Check. Call <a href="https://github.com/ChrisTitusTech/winutil">WinUtil</a> with your configuration file? Check. Use these scripts as a base for your own customizations, regardless of the image you're working with.</p>
+<p>When it comes to post-installation scripts, we have also improved the wizard so that you can now specify multiple scripts in each of the stages (during system configuration, when the first user logs on, or when users log on for the first time).</p>
+<p align="center">
+  <img src="../../res/whats_new/WhatsNew_2.1.png">
+</p>
+
+<h2 id="manage-the-services-and-environment-variables-of-your-images">Manage the services and environment variables of your images</h2>
+<p>DISMTools 0.7.1 features new tools that let you view and modify system services and environment variables in your Windows images, allowing you to see more information about the images you're working with and tweak them to your liking.</p>
+<p align="center">
+  <img src="../../res/whats_new/WhatsNew_3.png">
+</p>
+
+<ul>
+<li><a href="../../img_tasks/tools/servicemgr">Learn more about the Service Manager</a></li>
+<li><a href="../../img_tasks/tools/envvarmgr">Learn more about the Environment Variable Manager</a></li>
+</ul>
 <h2 id="overall-refinements">Overall refinements</h2>
-<p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, more items have received translations, the program is more reliable, and components have been updated to their latest versions.</p>
+<p>This release also focuses on refining existing tasks and functionality to improve the user experience. For example, the program is more reliable and components have been updated to their latest versions. A note-worthy change is that DISMTools is more DPI-aware now, so it no longer looks blurry on high-DPI displays.</p>
 <!-- Room for more features -->
 
 <h1 id="thanks-to-the-contributors">Thanks to the contributors</h1>
 <p>The following people have helped shape this version of DISMTools by reporting issues or suggesting new features or changes:</p>
-<p><a href="https://github.com/MTTGamer">MTTGamer</a> and <a href="https://github.com/Real-MullaC">Real-MullaC</a></p>
+<p><a href="https://github.com/Real-MullaC">Real-MullaC</a>, <a href="https://github.com/clin1234">clin1234</a></p>
 <p>If you want to appear in this list, you can report issues or suggestions in any channel you prefer (via the <a href="https://forums.mydigitallife.net/threads/dismtools.87263/">MDL forum thread</a>, via the <a href="https://github.com/CodingWonders/DISMTools">GitHub repository</a>, or via any announcements on the <a href="https://reddit.com/r/DISMTools">DISMTools subreddit</a> or on the <a href="https://reddit.com/r/Windows">Windows</a>, <a href="https://reddit.com/r/Windows11">Windows11</a> and <a href="https://reddit.com/r/Windows10">Windows10</a> subreddits (as comments)) or submit new code changes (read the <a href="https://github.com/CodingWonders/DISMTools/blob/stable/CONTRIBUTING.md">contribution guidelines</a> for more information).</p>
               
             </div>

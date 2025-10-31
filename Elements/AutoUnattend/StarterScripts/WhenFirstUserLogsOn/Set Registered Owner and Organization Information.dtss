@@ -31,5 +31,5 @@ IF %AutoUserInfo% EQU 1 (
     SET "RegisteredUser=%USERNAME%"
 )
 
-IF DEFINED RegisteredUser ( reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d "%RegisteredUser%" /f )
-IF DEFINED RegisteredOrg ( reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d "%RegisteredOrg%" /f )
+IF DEFINED RegisteredUser ( reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /f /v RegisteredOwner /t REG_SZ /d "%RegisteredUser%" )
+IF DEFINED RegisteredOrg ( reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion" /f /v RegisteredOrganization /t REG_SZ /d "%RegisteredOrg%" )

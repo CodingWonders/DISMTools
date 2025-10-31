@@ -1454,8 +1454,10 @@ Public Class ProjProperties
                         FeatUpd = "23H2 (Zinc)"
                     Case 25801 To 25941
                         FeatUpd = "24H1 (Gallium)"
-                    Case 25942 To 27500
+                    Case 25942 To 26199
                         FeatUpd = "24H2 (Germanium)"
+                    Case 26200 To 27500
+                        FeatUpd = "25H2 (Germanium)"
                     Case 27501 To 27686
                         FeatUpd = "25H1 (Dilithium)"
                     Case 27687 To 27788

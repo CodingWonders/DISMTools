@@ -3,6 +3,7 @@
 Public Class EnvVarManagementForm
 
     Dim envVarList As New List(Of EnvironmentVariable)
+    Dim currentEnvVarIndex As Tuple(Of EnvironmentVariable.EnvironmentVariableScope, Integer)
 
     Private Sub ShowVariableInformation(VariableScope As EnvironmentVariable.EnvironmentVariableScope, Index As Integer)
         Dim machineEnvVars As List(Of EnvironmentVariable) = envVarList.Where(Function(envVar) envVar.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine).ToList(),
@@ -17,10 +18,14 @@ Public Class EnvVarManagementForm
             CopyToMachineScopeBtn.Enabled = False
             MoveToUserScopeBtn.Enabled = True
             CopyToUserScopeBtn.Enabled = True
+
+            currentEnvVarIndex = New Tuple(Of EnvironmentVariable.EnvironmentVariableScope, Integer)(EnvironmentVariable.EnvironmentVariableScope.Machine, Index)
         Else
             TextBox1.Text = userEnvVars(Index).Name
             TextBox2.Text = "User"
             TextBox3.Text = userEnvVars(Index).Value
+
+            currentEnvVarIndex = New Tuple(Of EnvironmentVariable.EnvironmentVariableScope, Integer)(EnvironmentVariable.EnvironmentVariableScope.User, Index)
 
             MoveToMachineScopeBtn.Enabled = True
             CopyToMachineScopeBtn.Enabled = True
@@ -42,11 +47,11 @@ Public Class EnvVarManagementForm
         If CleanData Then envVarList = EnvironmentVariableHelper.GetEnvironmentVariableList(MainForm.MountDir)
 
         For Each envVar In envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine)
-            SysEnvVarLV.Items.Add(New ListViewItem(New String() {envVar.Name, envVar.Value}))
+            SysEnvVarLV.Items.Add(New ListViewItem(New String() {String.Format("{0}{1}", envVar.Name, If(envVar.NoLongerExists, " (will be removed)", "")), envVar.Value}))
         Next
 
         For Each envVar In envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.User)
-            UserEnvVarLV.Items.Add(New ListViewItem(New String() {envVar.Name, envVar.Value}))
+            UserEnvVarLV.Items.Add(New ListViewItem(New String() {String.Format("{0}{1}", envVar.Name, If(envVar.NoLongerExists, " (will be removed)", "")), envVar.Value}))
         Next
     End Sub
 
@@ -72,7 +77,8 @@ Public Class EnvVarManagementForm
     End Sub
 
     Private Sub UserEnvVarLV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles UserEnvVarLV.SelectedIndexChanged
-        TableLayoutPanel1.Enabled = (UserEnvVarLV.SelectedItems.Count = 1 Or SysEnvVarLV.SelectedItems.Count = 1)
+        EnvVarDetailsPanel.Enabled = (UserEnvVarLV.SelectedItems.Count = 1 Or SysEnvVarLV.SelectedItems.Count = 1)
+        RemoveUserVarBtn.Enabled = UserEnvVarLV.SelectedItems.Count = 1
 
         If UserEnvVarLV.SelectedItems.Count = 1 Then
             ShowVariableInformation(EnvironmentVariable.EnvironmentVariableScope.User, UserEnvVarLV.FocusedItem.Index)
@@ -80,7 +86,9 @@ Public Class EnvVarManagementForm
     End Sub
 
     Private Sub SysEnvVarLV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SysEnvVarLV.SelectedIndexChanged
-        TableLayoutPanel1.Enabled = (UserEnvVarLV.SelectedItems.Count = 1 Or SysEnvVarLV.SelectedItems.Count = 1)
+        EnvVarDetailsPanel.Enabled = (UserEnvVarLV.SelectedItems.Count = 1 Or SysEnvVarLV.SelectedItems.Count = 1)
+        RemoveMachineVarButton.Enabled = SysEnvVarLV.SelectedItems.Count = 1
+
         If SysEnvVarLV.SelectedItems.Count = 1 Then
             ShowVariableInformation(EnvironmentVariable.EnvironmentVariableScope.Machine, SysEnvVarLV.FocusedItem.Index)
         End If
@@ -96,7 +104,8 @@ Public Class EnvVarManagementForm
             MsgBox("Environment variable information could not be saved to the registry of the target image.", vbOKOnly + vbExclamation)
         End If
         Cursor = Cursors.Arrow
-        ReloadEnvironmentVariableInformation()
+        EnvVarDetailsPanel.Enabled = False
+        ReloadEnvironmentVariableInformation(True)
     End Sub
 
     Private Function GetEnvironmentVariableIndex(Name As String, Scope As EnvironmentVariable.EnvironmentVariableScope) As Integer
@@ -145,6 +154,60 @@ Public Class EnvVarManagementForm
                                                If(Environment.ExpandEnvironmentVariables(Value).Equals(Value), RegistryValueKind.String, RegistryValueKind.ExpandString)))
     End Sub
 
+    Private Sub ResetVariableList(machineVariables As List(Of EnvironmentVariable), userVariables As List(Of EnvironmentVariable))
+        envVarList.Clear()
+        envVarList.AddRange(machineVariables)
+        envVarList.AddRange(userVariables)
+    End Sub
+
+    Private Sub SaveEnvironmentVariableInformation(IndexInfo As Tuple(Of EnvironmentVariable.EnvironmentVariableScope, Integer), Name As String, Value As String)
+        Dim machineVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine).ToList(),
+            userVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.User).ToList()
+
+        If IndexInfo.Item1 = EnvironmentVariable.EnvironmentVariableScope.Machine Then
+            machineVariables(IndexInfo.Item2).Name = Name
+            machineVariables(IndexInfo.Item2).Value = Value
+            machineVariables(IndexInfo.Item2).ValueKind = If(Environment.ExpandEnvironmentVariables(Value).Equals(Value, StringComparison.InvariantCultureIgnoreCase), RegistryValueKind.String, RegistryValueKind.ExpandString)
+        Else
+            userVariables(IndexInfo.Item2).Name = Name
+            userVariables(IndexInfo.Item2).Value = Value
+            userVariables(IndexInfo.Item2).ValueKind = If(Environment.ExpandEnvironmentVariables(Value).Equals(Value, StringComparison.InvariantCultureIgnoreCase), RegistryValueKind.String, RegistryValueKind.ExpandString)
+        End If
+
+        ResetVariableList(machineVariables, userVariables)
+    End Sub
+
+    Private Sub AddUserEnvironmentVariable()
+        Dim machineVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine).ToList(),
+            userVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.User).ToList()
+
+        userVariables.Add(New EnvironmentVariable("NEW_VARIABLE", "", EnvironmentVariable.EnvironmentVariableScope.User, RegistryValueKind.String))
+
+        ResetVariableList(machineVariables, userVariables)
+    End Sub
+
+    Private Sub AddMachineEnvironmentVariable()
+        Dim machineVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine).ToList(),
+            userVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.User).ToList()
+
+        machineVariables.Add(New EnvironmentVariable("NEW_VARIABLE", "", EnvironmentVariable.EnvironmentVariableScope.Machine, RegistryValueKind.String))
+
+        ResetVariableList(machineVariables, userVariables)
+    End Sub
+
+    Private Sub RemoveEnvironmentVariable()
+        Dim machineVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.Machine).ToList(),
+            userVariables As List(Of EnvironmentVariable) = envVarList.Where(Function(variable) variable.Scope = EnvironmentVariable.EnvironmentVariableScope.User).ToList()
+
+        If currentEnvVarIndex.Item1 = EnvironmentVariable.EnvironmentVariableScope.Machine Then
+            machineVariables(currentEnvVarIndex.Item2).NoLongerExists = True
+        Else
+            userVariables(currentEnvVarIndex.Item2).NoLongerExists = True
+        End If
+
+        ResetVariableList(machineVariables, userVariables)
+    End Sub
+
     Private Sub CopyToMachineScopeBtn_Click(sender As Object, e As EventArgs) Handles CopyToMachineScopeBtn.Click
         CopyEnvironmentVariableToMachineScope(TextBox1.Text, TextBox3.Text)
         ReloadEnvironmentVariableInformation()
@@ -152,6 +215,36 @@ Public Class EnvVarManagementForm
 
     Private Sub CopyToUserScopeBtn_Click(sender As Object, e As EventArgs) Handles CopyToUserScopeBtn.Click
         CopyEnvironmentVariableToUserScope(TextBox1.Text, TextBox3.Text)
+        ReloadEnvironmentVariableInformation()
+    End Sub
+
+    Private Sub MoveToMachineScopeBtn_Click(sender As Object, e As EventArgs) Handles MoveToMachineScopeBtn.Click
+        MoveEnvironmentVariableToMachineScope(TextBox1.Text)
+        ReloadEnvironmentVariableInformation()
+    End Sub
+
+    Private Sub MoveToUserScopeBtn_Click(sender As Object, e As EventArgs) Handles MoveToUserScopeBtn.Click
+        MoveEnvironmentVariableToUserScope(TextBox1.Text)
+        ReloadEnvironmentVariableInformation()
+    End Sub
+
+    Private Sub SaveVarBtn_Click(sender As Object, e As EventArgs) Handles SaveVarBtn.Click
+        SaveEnvironmentVariableInformation(currentEnvVarIndex, TextBox1.Text, TextBox3.Text)
+        ReloadEnvironmentVariableInformation()
+    End Sub
+
+    Private Sub AddUserVarButton_Click(sender As Object, e As EventArgs) Handles AddUserVarButton.Click
+        AddUserEnvironmentVariable()
+        ReloadEnvironmentVariableInformation()
+    End Sub
+
+    Private Sub AddMachineVarButton_Click(sender As Object, e As EventArgs) Handles AddMachineVarButton.Click
+        AddMachineEnvironmentVariable()
+        ReloadEnvironmentVariableInformation()
+    End Sub
+
+    Private Sub RemoveUserVarBtn_Click(sender As Object, e As EventArgs) Handles RemoveUserVarBtn.Click, RemoveMachineVarButton.Click
+        RemoveEnvironmentVariable()
         ReloadEnvironmentVariableInformation()
     End Sub
 End Class

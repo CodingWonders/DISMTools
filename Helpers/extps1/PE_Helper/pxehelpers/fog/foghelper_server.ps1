@@ -535,6 +535,14 @@ try {
                 $response.OutputStream.Write($buffer, 0, $buffer.Length)
                 $response.OutputStream.Close()
             }
+            "/api/getostype" {
+                if ($request.HttpMethod -eq "GET") {
+                    $osType = [Environment]::OSVersion.Platform
+                    $sendJson.Invoke(@{ success = $true; platform = $osType })
+                } else {
+                    $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
+                }
+            }
             "/api/fogsetup" {
                 if (Test-Path "$([IO.Path]::GetDirectoryName((Get-Module -Name FogApi).Path))\lib\settings.json" -PathType Leaf) {
                     Write-Host "FOG API settings are already configured. If you continue, settings will be reset."
@@ -559,7 +567,7 @@ try {
             "/api/hosts" {
                 if ($request.HttpMethod -eq "GET") {
                     try {
-                        $hosts = Get-FogHosts
+                        $hosts = Get-FogObject -type object -coreObject host
                         $sendJson.Invoke(@{ success = $true; hosts = $hosts.data })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"
