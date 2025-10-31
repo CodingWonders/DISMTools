@@ -16,6 +16,10 @@ class ServerAuthentication {
         $this.serverPort = $port
         $this.serverUser = $user
         $this.serverPassword = $password
+
+        if ((Test-IPAddressSyntax -ipAddr $this.serverIP) -eq [IPAddress]::IPv6) {
+            $this.serverIP = "[$($this.serverIP)]"
+        }
     }
 }
 
@@ -665,27 +669,6 @@ function Start-OSApplication {
     }
 
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter
-
-    Show-CenteredTextBox -Text "Removing temporary files and unmounting network shares..." -MaxWidth 100 -CenterOfAll
-
-    if (Test-Path "$($driveLetter):\NetInstall") {
-        Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
-    }
-    net use * /d /y | Out-Null
-
-    Start-Job {
-        param ($authInfo)
-        Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/clearfiles" | Out-Null
-    } | Out-Null
-
-    Start-Sleep -Milliseconds 250
-    Clear-Host
-    Write-Host "`n`n`n`n`n`n`n`n`n`n"
-    Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
-    Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
-    Write-Host "When your computer restarts, Setup will continue."
-    Show-Timeout -Seconds 10
-    wpeutil reboot
 }
 
 function Start-DismCommand
@@ -1124,13 +1107,24 @@ Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "P
 
 $authInfo = Invoke-ServerAuthentication
 
-Show-CenteredTextBox -Text "Connecting to the WDS server . . ." -MaxWidth 100 -CenterOfAll
-
 $connectionBody = @{
     deviceID = (Get-WmiObject Win32_ComputerSystemProduct).UUID
 } | ConvertTo-Json
 
-$connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/connect"
+$connectionResult = $null
+$attempts = 0
+do {
+    try {
+        Show-CenteredTextBox -Text "Connecting to the WDS server . . . (Attempt $($attempts + 1) of 5)" -MaxWidth 100 -CenterOfAll
+        $connectionResult = Invoke-RestMethod -Method Post -Body $connectionBody -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/connect"
+    } catch {
+        # Could not connect to the server. Try again.
+    }
+    $attempts++
+    if ($attempts -ge 5) {
+        break
+    }
+} until ($connectionResult -ne $null)
 
 if (($connectionResult -eq $null) -or ($connectionResult.output.successful -eq $false)) {
     if ($connectionResult -ne $null) {
@@ -1179,3 +1173,24 @@ if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
 }
 
 Start-OSApplication
+
+Show-CenteredTextBox -Text "Removing temporary files and unmounting network shares..." -MaxWidth 100 -CenterOfAll
+$cleanupBody = @{
+    shareGuid = $($connectionResult.output.shareFolderGuid)
+} | ConvertTo-Json
+
+if (Test-Path "$($driveLetter):\NetInstall") {
+    Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
+}
+net use * /d /y | Out-Null
+
+Invoke-RestMethod -Method Post -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/clearbyguid" -Body $cleanupBody | Out-Null
+
+Start-Sleep -Milliseconds 250
+Clear-Host
+Write-Host "`n`n`n`n`n`n`n`n`n`n"
+Write-Host "The first stage of Setup has completed, and your system will reboot automatically."
+Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
+Write-Host "When your computer restarts, Setup will continue."
+Show-Timeout -Seconds 10
+wpeutil reboot

@@ -3,7 +3,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
@@ -36,6 +36,7 @@ param (
     [Parameter(ParameterSetName = 'StartPEGen', Position = 4)] [string]$unattendFile,
     [Parameter(ParameterSetName = 'StartPEGen', Position = 5)] [string]$copyToVentoy = "false",
     [Parameter(ParameterSetName = 'StartPEGen', Position = 6)] [string]$bootex = "false",
+    [Parameter(ParameterSetName = 'StartPEGen', Position = 7)] [string]$scratchPath = "",
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 1)] [string]$testArch,
     [Parameter(ParameterSetName = 'StartDevelopment', Mandatory = $true, Position = 2)] [string]$targetPath
 )
@@ -84,9 +85,9 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.7"
+    $version = "0.7.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
@@ -120,8 +121,12 @@ function Start-PEGeneration
                 Write-Host "Creating temporary mount directory..."
                 try
                 {
-                    $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
-                    New-Item "$mountDirectory" -ItemType Directory | Out-Null
+                    if (($scratchPath -ne "") -and (Test-Path "$scratchPath")) {
+                        $mountDirectory = $scratchPath
+                    } else {
+                        $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+                        New-Item "$mountDirectory" -ItemType Directory | Out-Null
+                    }
                 }
                 catch
                 {
@@ -228,6 +233,7 @@ function Start-PEGeneration
                 Copy-Item -Path "$((Get-Location).Path)\files\README1ST.TXT" -Destination "$((Get-Location).Path)\ISOTEMP\media\README.TXT" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                Copy-Item -Path "$((Get-Location).Path)\files\*.sh" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
                 {
                     Write-Host "Unattended answer file has been detected. Copying to ISO file..."
@@ -255,6 +261,23 @@ function Start-PEGeneration
                     {
                         Write-Host "HotInstall could not be copied."
                     }
+                }
+                # Detect if Sysprep Preparator is present in the working directory and copy it to the ISO file
+                if (Test-Path -Path "$((Get-Location).Path)\files\SysprepPreparator.zip" -PathType Leaf) {
+                    Write-Host "Sysprep Preparation Tool has been detected. Adding to ISO file..."
+                    New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\SysprepPreparator" -ItemType Directory | Out-Null
+                    Expand-Archive -Path "$((Get-Location).Path)\files\SysprepPreparator.zip" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\SysprepPreparator" -Force -ErrorAction SilentlyContinue
+                }
+                if (Test-Path -Path "$((Get-Location).Path)\tools\MainMenu") {
+                    Write-Host "The main menu has been detected. Adding to ISO file..."
+                    Copy-Item -Path "$((Get-Location).Path)\tools\MainMenu\*.*" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Force -Recurse -Verbose
+                    $autorunContents = @'
+
+[autorun]
+open=autorun.exe
+icon=autorun.ico
+'@
+                    $autoRunContents | Out-File -FilePath "$((Get-Location).Path)\ISOTEMP\media\autorun.inf" -Encoding utf8 -Force
                 }
                 Write-Host "The ISO file structure has been successfully created. DISMTools will continue creating the ISO file automatically after 5 seconds."
                 Start-Sleep -Seconds 5
@@ -925,6 +948,9 @@ function Start-OSApplication
     {
         $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE."
     }
+    if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+        $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
+    }
     Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
     $choice = Read-Host "Are you sure you want to continue (Y/N)"
     if ($choice -ne "Y")
@@ -952,6 +978,9 @@ function Start-OSApplication
             else
             {
                 $msg = "This will perform disk configuration changes on partition $partition. THIS WILL FORMAT IT. IF YOU ARE NOT WILLING TO LOSE DATA, DO NOT CONTINUE.`n"
+            }
+            if (Test-Path "$env:SYSTEMDRIVE\HotInstall") {
+                $msg = "$msg`n`nIf you reboot your computer right after disk configuration is written, you will need to boot to installation media in order to install an operating system."
             }
             Write-Host $msg -BackgroundColor Black -ForegroundColor Yellow
             $choice = Read-Host "Are you sure you want to continue (Y/N)"
@@ -1920,10 +1949,10 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.7"
+    $version = "0.7.1"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
@@ -2103,6 +2132,12 @@ function Start-ProjectDevelopment {
 }
 
 $host.UI.RawUI.WindowTitle = "DISMTools - Preinstallation Environment Helper"
+
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    exit 1
+}
 
 if ($cmd -eq "StartApply")
 {

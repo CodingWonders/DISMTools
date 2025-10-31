@@ -1,5 +1,7 @@
 ﻿Imports System.Diagnostics
 Imports System.IO
+Imports Microsoft.Win32
+Imports Microsoft.VisualBasic.ControlChars
 
 Module RegistryHelper
 
@@ -72,14 +74,14 @@ Module RegistryHelper
 
         DynaLog.LogMessage("Adding registry item " & regItem.ToString())
 
-        Return RunRegProcess(String.Format("add {0} {1} /t {2} /d {3} /f",
-                                           regItem.RegistryKeyLocation,
+        Return RunRegProcess(String.Format("add {0} /f {1} /t {2} /d {3}",
+                                           Quote & regItem.RegistryKeyLocation & Quote,
                                            If(String.IsNullOrEmpty(regItem.RegistryValueName),
                                               "/ve",
                                               String.Format("/v {0}",
                                                             regItem.RegistryValueName)),
                                            GetRegValueTypeFromEnum(regItem.RegistryValueType),
-                                           regItem.RegistryValueData))
+                                           Quote & regItem.RegistryValueData & Quote))
     End Function
 
     ''' <summary>
@@ -131,6 +133,34 @@ Module RegistryHelper
 
         Return RunRegProcess(String.Format("unload {0}",
                                            regMountedPath))
+    End Function
+
+    ''' <summary>
+    ''' Gets the default control set of a system's SYSTEM hive
+    ''' </summary>
+    ''' <param name="RegistryPath">The path to the loaded hive (DO NOT ADD HKLM)</param>
+    ''' <returns>The default control set value if obtained, -1 otherwise</returns>
+    ''' <remarks></remarks>
+    Function GetDefaultControlSet(RegistryPath As String) As Integer
+        If String.IsNullOrEmpty(RegistryPath) Then Return DTERR_RegItemObjectNull
+
+        Try
+            Dim ControlSetRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("{0}\Select", RegistryPath), False)
+            Dim ControlSet As Integer = ControlSetRk.GetValue("Default", -1)
+            ControlSetRk.Close()
+
+            Return ControlSet
+        Catch ex As Exception
+            Return -1
+        End Try
+    End Function
+
+    Function ExportRegistryToFile(RegistryPath As String, TargetRegFile As String) As Integer
+        If String.IsNullOrEmpty(RegistryPath) Then Return DTERR_RegItemObjectNull
+        If String.IsNullOrEmpty(TargetRegFile) Then Return DTERR_RegItemObjectNull
+
+        Return RunRegProcess(String.Format("export " & ControlChars.Quote & "{0}" & ControlChars.Quote & " " & ControlChars.Quote & "{1}" & ControlChars.Quote & " /y",
+                                           RegistryPath, TargetRegFile))
     End Function
 
 End Module

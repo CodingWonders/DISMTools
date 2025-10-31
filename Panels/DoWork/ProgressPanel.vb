@@ -2004,6 +2004,16 @@ Public Class ProgressPanel
                            "- Image file: " & SourceImg & CrLf &
                            "- Image index: " & ImgIndex & CrLf &
                            "- Mount point: " & MountDir)
+        Try
+            If Not isReadOnly AndAlso (File.GetAttributes(SourceImg) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
+                DynaLog.LogMessage("Source image contains read-only flag. Attempting to remove it...")
+                ' Remove readonly flag
+                File.SetAttributes(SourceImg, (File.GetAttributes(SourceImg) And Not FileAttributes.ReadOnly))
+                DynaLog.LogMessage("Flags were removed successfully.")
+            End If
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not remove or get flags. Error message: " & ex.Message)
+        End Try
         Select Case DismVersionChecker.ProductMajorPart
             Case 6
                 Select Case DismVersionChecker.ProductMinorPart

@@ -72,6 +72,7 @@ Partial Class NewUnattendWiz
         Me.SystemComponentPanel = New System.Windows.Forms.Panel()
         Me.ComponentBodyPanel = New System.Windows.Forms.Panel()
         Me.NoSpecifiedComponentsPanel = New System.Windows.Forms.Panel()
+        Me.Label65 = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox4 = New System.Windows.Forms.PictureBox()
@@ -99,10 +100,25 @@ Partial Class NewUnattendWiz
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.CheckBox20 = New System.Windows.Forms.CheckBox()
         Me.ScriptEditorContainerPanel = New System.Windows.Forms.Panel()
+        Me.ScriptEditContainer = New System.Windows.Forms.Panel()
         Me.ScriptEditorPanel = New System.Windows.Forms.Panel()
         Me.Scintilla3 = New ScintillaNET.Scintilla()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button19 = New System.Windows.Forms.Button()
+        Me.ComboBox16 = New System.Windows.Forms.ComboBox()
+        Me.Label67 = New System.Windows.Forms.Label()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.NoSpecifiedScriptsPanel = New System.Windows.Forms.Panel()
+        Me.Label68 = New System.Windows.Forms.Label()
+        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+        Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.Button13 = New System.Windows.Forms.Button()
+        Me.Button14 = New System.Windows.Forms.Button()
+        Me.Button15 = New System.Windows.Forms.Button()
+        Me.Button16 = New System.Windows.Forms.Button()
+        Me.Button17 = New System.Windows.Forms.Button()
+        Me.Button18 = New System.Windows.Forms.Button()
+        Me.Label66 = New System.Windows.Forms.Label()
         Me.ScriptStagePanel = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.StageEditorDescriptionLabel = New System.Windows.Forms.Label()
@@ -356,7 +372,7 @@ Partial Class NewUnattendWiz
         Me.CNameTTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.ScriptEditorOFD = New System.Windows.Forms.OpenFileDialog()
         Me.CPUnattendGenFBD = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Label65 = New System.Windows.Forms.Label()
+        Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog()
         Me.SidePanel.SuspendLayout()
         Me.ExpressModeSteps.SuspendLayout()
         Me.EditorPanelTrigger.SuspendLayout()
@@ -381,8 +397,12 @@ Partial Class NewUnattendWiz
         Me.ComponentSwitcherPanel.SuspendLayout()
         Me.PostInstallPanel.SuspendLayout()
         Me.ScriptEditorContainerPanel.SuspendLayout()
+        Me.ScriptEditContainer.SuspendLayout()
         Me.ScriptEditorPanel.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.NoSpecifiedScriptsPanel.SuspendLayout()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel5.SuspendLayout()
         Me.ScriptStagePanel.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.SystemTelemetryPanel.SuspendLayout()
@@ -887,6 +907,18 @@ Partial Class NewUnattendWiz
         Me.NoSpecifiedComponentsPanel.Size = New System.Drawing.Size(901, 391)
         Me.NoSpecifiedComponentsPanel.TabIndex = 0
         '
+        'Label65
+        '
+        Me.Label65.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label65.AutoEllipsis = True
+        Me.Label65.Location = New System.Drawing.Point(17, 336)
+        Me.Label65.Name = "Label65"
+        Me.Label65.Size = New System.Drawing.Size(866, 44)
+        Me.Label65.TabIndex = 1
+        Me.Label65.Text = "Don't want to add custom components? Click Next to skip this step."
+        Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Label15
         '
         Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.None
@@ -937,6 +969,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla4
         '
+        Me.Scintilla4.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla4.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla4.LexerName = Nothing
@@ -1187,41 +1220,86 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorContainerPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ScriptEditorContainerPanel.Controls.Add(Me.ScriptEditorPanel)
+        Me.ScriptEditorContainerPanel.Controls.Add(Me.ScriptEditContainer)
         Me.ScriptEditorContainerPanel.Controls.Add(Me.ScriptStagePanel)
         Me.ScriptEditorContainerPanel.Location = New System.Drawing.Point(36, 160)
         Me.ScriptEditorContainerPanel.Name = "ScriptEditorContainerPanel"
         Me.ScriptEditorContainerPanel.Size = New System.Drawing.Size(936, 349)
         Me.ScriptEditorContainerPanel.TabIndex = 12
         '
+        'ScriptEditContainer
+        '
+        Me.ScriptEditContainer.Controls.Add(Me.ScriptEditorPanel)
+        Me.ScriptEditContainer.Controls.Add(Me.NoSpecifiedScriptsPanel)
+        Me.ScriptEditContainer.Controls.Add(Me.Panel5)
+        Me.ScriptEditContainer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ScriptEditContainer.Location = New System.Drawing.Point(256, 0)
+        Me.ScriptEditContainer.Name = "ScriptEditContainer"
+        Me.ScriptEditContainer.Size = New System.Drawing.Size(680, 349)
+        Me.ScriptEditContainer.TabIndex = 2
+        '
         'ScriptEditorPanel
         '
         Me.ScriptEditorPanel.Controls.Add(Me.Scintilla3)
         Me.ScriptEditorPanel.Controls.Add(Me.Panel1)
         Me.ScriptEditorPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ScriptEditorPanel.Location = New System.Drawing.Point(256, 0)
+        Me.ScriptEditorPanel.Location = New System.Drawing.Point(0, 32)
         Me.ScriptEditorPanel.Name = "ScriptEditorPanel"
-        Me.ScriptEditorPanel.Size = New System.Drawing.Size(680, 349)
+        Me.ScriptEditorPanel.Size = New System.Drawing.Size(680, 317)
         Me.ScriptEditorPanel.TabIndex = 1
         '
         'Scintilla3
         '
+        Me.Scintilla3.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla3.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla3.LexerName = ""
         Me.Scintilla3.Location = New System.Drawing.Point(0, 0)
         Me.Scintilla3.Name = "Scintilla3"
-        Me.Scintilla3.Size = New System.Drawing.Size(680, 317)
+        Me.Scintilla3.Size = New System.Drawing.Size(680, 285)
         Me.Scintilla3.TabIndex = 4
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.Button19)
+        Me.Panel1.Controls.Add(Me.ComboBox16)
+        Me.Panel1.Controls.Add(Me.Label67)
         Me.Panel1.Controls.Add(Me.Button4)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(0, 317)
+        Me.Panel1.Location = New System.Drawing.Point(0, 285)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(680, 32)
         Me.Panel1.TabIndex = 5
+        '
+        'Button19
+        '
+        Me.Button19.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button19.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button19.Location = New System.Drawing.Point(398, 3)
+        Me.Button19.Name = "Button19"
+        Me.Button19.Size = New System.Drawing.Size(161, 23)
+        Me.Button19.TabIndex = 3
+        Me.Button19.Text = "Import from Starter Script..."
+        Me.Button19.UseVisualStyleBackColor = True
+        '
+        'ComboBox16
+        '
+        Me.ComboBox16.FormattingEnabled = True
+        Me.ComboBox16.Items.AddRange(New Object() {"PowerShell", "Batch"})
+        Me.ComboBox16.Location = New System.Drawing.Point(74, 5)
+        Me.ComboBox16.Name = "ComboBox16"
+        Me.ComboBox16.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBox16.TabIndex = 2
+        Me.ComboBox16.Text = "PowerShell"
+        '
+        'Label67
+        '
+        Me.Label67.AutoSize = True
+        Me.Label67.Location = New System.Drawing.Point(10, 8)
+        Me.Label67.Name = "Label67"
+        Me.Label67.Size = New System.Drawing.Size(58, 13)
+        Me.Label67.TabIndex = 1
+        Me.Label67.Text = "Language:"
         '
         'Button4
         '
@@ -1233,6 +1311,131 @@ Partial Class NewUnattendWiz
         Me.Button4.TabIndex = 0
         Me.Button4.Text = "Open script..."
         Me.Button4.UseVisualStyleBackColor = True
+        '
+        'NoSpecifiedScriptsPanel
+        '
+        Me.NoSpecifiedScriptsPanel.Controls.Add(Me.Label68)
+        Me.NoSpecifiedScriptsPanel.Controls.Add(Me.PictureBox5)
+        Me.NoSpecifiedScriptsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NoSpecifiedScriptsPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.NoSpecifiedScriptsPanel.Location = New System.Drawing.Point(0, 32)
+        Me.NoSpecifiedScriptsPanel.Name = "NoSpecifiedScriptsPanel"
+        Me.NoSpecifiedScriptsPanel.Size = New System.Drawing.Size(680, 317)
+        Me.NoSpecifiedScriptsPanel.TabIndex = 2
+        '
+        'Label68
+        '
+        Me.Label68.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label68.AutoEllipsis = True
+        Me.Label68.Location = New System.Drawing.Point(8, 184)
+        Me.Label68.Name = "Label68"
+        Me.Label68.Size = New System.Drawing.Size(665, 44)
+        Me.Label68.TabIndex = 1
+        Me.Label68.Text = "No scripts have been added to this stage yet. Click the plus symbol on the top of" & _
+    " this section to add a new script."
+        Me.Label68.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'PictureBox5
+        '
+        Me.PictureBox5.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.PictureBox5.Image = Global.DISMTools.My.Resources.Resources.scripts_addfirstscript_light
+        Me.PictureBox5.Location = New System.Drawing.Point(148, 36)
+        Me.PictureBox5.Name = "PictureBox5"
+        Me.PictureBox5.Size = New System.Drawing.Size(384, 128)
+        Me.PictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox5.TabIndex = 0
+        Me.PictureBox5.TabStop = False
+        '
+        'Panel5
+        '
+        Me.Panel5.Controls.Add(Me.Button13)
+        Me.Panel5.Controls.Add(Me.Button14)
+        Me.Panel5.Controls.Add(Me.Button15)
+        Me.Panel5.Controls.Add(Me.Button16)
+        Me.Panel5.Controls.Add(Me.Button17)
+        Me.Panel5.Controls.Add(Me.Button18)
+        Me.Panel5.Controls.Add(Me.Label66)
+        Me.Panel5.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel5.Location = New System.Drawing.Point(0, 0)
+        Me.Panel5.Name = "Panel5"
+        Me.Panel5.Size = New System.Drawing.Size(680, 32)
+        Me.Panel5.TabIndex = 1
+        '
+        'Button13
+        '
+        Me.Button13.Enabled = False
+        Me.Button13.Image = Global.DISMTools.My.Resources.Resources.remove_element
+        Me.Button13.Location = New System.Drawing.Point(72, 3)
+        Me.Button13.Name = "Button13"
+        Me.Button13.Size = New System.Drawing.Size(28, 28)
+        Me.Button13.TabIndex = 3
+        Me.Button13.UseVisualStyleBackColor = True
+        '
+        'Button14
+        '
+        Me.Button14.Enabled = False
+        Me.Button14.Image = Global.DISMTools.My.Resources.Resources.prev_element
+        Me.Button14.Location = New System.Drawing.Point(38, 3)
+        Me.Button14.Name = "Button14"
+        Me.Button14.Size = New System.Drawing.Size(28, 28)
+        Me.Button14.TabIndex = 3
+        Me.Button14.UseVisualStyleBackColor = True
+        '
+        'Button15
+        '
+        Me.Button15.Enabled = False
+        Me.Button15.Image = Global.DISMTools.My.Resources.Resources.first_element
+        Me.Button15.Location = New System.Drawing.Point(4, 3)
+        Me.Button15.Name = "Button15"
+        Me.Button15.Size = New System.Drawing.Size(28, 28)
+        Me.Button15.TabIndex = 3
+        Me.Button15.UseVisualStyleBackColor = True
+        '
+        'Button16
+        '
+        Me.Button16.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button16.Image = Global.DISMTools.My.Resources.Resources.add_element
+        Me.Button16.Location = New System.Drawing.Point(581, 3)
+        Me.Button16.Name = "Button16"
+        Me.Button16.Size = New System.Drawing.Size(28, 28)
+        Me.Button16.TabIndex = 2
+        Me.Button16.UseVisualStyleBackColor = True
+        '
+        'Button17
+        '
+        Me.Button17.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button17.Enabled = False
+        Me.Button17.Image = Global.DISMTools.My.Resources.Resources.next_element
+        Me.Button17.Location = New System.Drawing.Point(615, 3)
+        Me.Button17.Name = "Button17"
+        Me.Button17.Size = New System.Drawing.Size(28, 28)
+        Me.Button17.TabIndex = 2
+        Me.Button17.UseVisualStyleBackColor = True
+        '
+        'Button18
+        '
+        Me.Button18.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button18.Enabled = False
+        Me.Button18.Image = Global.DISMTools.My.Resources.Resources.last_element
+        Me.Button18.Location = New System.Drawing.Point(649, 3)
+        Me.Button18.Name = "Button18"
+        Me.Button18.Size = New System.Drawing.Size(28, 28)
+        Me.Button18.TabIndex = 2
+        Me.Button18.UseVisualStyleBackColor = True
+        '
+        'Label66
+        '
+        Me.Label66.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label66.AutoEllipsis = True
+        Me.Label66.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label66.Location = New System.Drawing.Point(106, 8)
+        Me.Label66.Name = "Label66"
+        Me.Label66.Size = New System.Drawing.Size(469, 15)
+        Me.Label66.TabIndex = 0
+        Me.Label66.Text = "Script {{current}} of {{count}}"
+        Me.Label66.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ScriptStagePanel
         '
@@ -2913,6 +3116,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla2
         '
+        Me.Scintilla2.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla2.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla2.LexerName = Nothing
@@ -3695,6 +3899,7 @@ Partial Class NewUnattendWiz
         '
         'Scintilla1
         '
+        Me.Scintilla1.AutocompleteListSelectedBackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(120, Byte), Integer), CType(CType(212, Byte), Integer))
         Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Scintilla1.IndentationGuides = ScintillaNET.IndentView.LookBoth
         Me.Scintilla1.LexerName = Nothing
@@ -4015,17 +4220,10 @@ Partial Class NewUnattendWiz
     "en:"
         Me.CPUnattendGenFBD.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
-        'Label65
+        'OpenFileDialog2
         '
-        Me.Label65.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label65.AutoEllipsis = True
-        Me.Label65.Location = New System.Drawing.Point(17, 336)
-        Me.Label65.Name = "Label65"
-        Me.Label65.Size = New System.Drawing.Size(866, 44)
-        Me.Label65.TabIndex = 1
-        Me.Label65.Text = "Don't want to add custom components? Click Next to skip this step."
-        Me.Label65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.OpenFileDialog2.Filter = "DISMTools Starter Scripts|*.dtss"
+        Me.OpenFileDialog2.Title = "Pick a Starter Script"
         '
         'NewUnattendWiz
         '
@@ -4074,8 +4272,13 @@ Partial Class NewUnattendWiz
         Me.PostInstallPanel.ResumeLayout(False)
         Me.PostInstallPanel.PerformLayout()
         Me.ScriptEditorContainerPanel.ResumeLayout(False)
+        Me.ScriptEditContainer.ResumeLayout(False)
         Me.ScriptEditorPanel.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.NoSpecifiedScriptsPanel.ResumeLayout(False)
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel5.ResumeLayout(False)
         Me.ScriptStagePanel.ResumeLayout(False)
         Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.FlowLayoutPanel1.PerformLayout()
@@ -4505,4 +4708,20 @@ Partial Class NewUnattendWiz
     Friend WithEvents LinkLabel10 As System.Windows.Forms.LinkLabel
     Friend WithEvents CPUnattendGenFBD As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents Label65 As System.Windows.Forms.Label
+    Friend WithEvents ScriptEditContainer As System.Windows.Forms.Panel
+    Friend WithEvents NoSpecifiedScriptsPanel As System.Windows.Forms.Panel
+    Friend WithEvents Label68 As System.Windows.Forms.Label
+    Friend WithEvents PictureBox5 As System.Windows.Forms.PictureBox
+    Friend WithEvents Panel5 As System.Windows.Forms.Panel
+    Friend WithEvents Button13 As System.Windows.Forms.Button
+    Friend WithEvents Button14 As System.Windows.Forms.Button
+    Friend WithEvents Button15 As System.Windows.Forms.Button
+    Friend WithEvents Button16 As System.Windows.Forms.Button
+    Friend WithEvents Button17 As System.Windows.Forms.Button
+    Friend WithEvents Button18 As System.Windows.Forms.Button
+    Friend WithEvents Label66 As System.Windows.Forms.Label
+    Friend WithEvents Label67 As System.Windows.Forms.Label
+    Friend WithEvents ComboBox16 As System.Windows.Forms.ComboBox
+    Friend WithEvents Button19 As System.Windows.Forms.Button
+    Friend WithEvents OpenFileDialog2 As System.Windows.Forms.OpenFileDialog
 End Class

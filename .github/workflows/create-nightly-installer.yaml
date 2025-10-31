@@ -55,6 +55,10 @@ jobs:
           mkdir -p "./${{ GITHUB.REF_NAME }}"
           mv -f "./downloaded_artifacts/dt_setup.exe" "./${{ GITHUB.REF_NAME }}/dt_setup.exe"
           rm -rf "./downloaded_artifacts"
+      - name: Fix OpenSSL Issues
+        run: |
+          sudo apt remove openssh-server openssh-client
+          sudo apt install openssh-server openssh-client
       - name: Upload Installer
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}

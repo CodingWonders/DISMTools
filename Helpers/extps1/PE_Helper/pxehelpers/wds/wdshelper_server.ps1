@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7                                         |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - WDS Helper Web-based API for Servers      |
@@ -81,18 +81,25 @@ function Get-WindowsRole {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7"
+$version = "0.7.1"
 
 Clear-Host
 
 # Start logging stuff
 Start-Transcript -Path "$env:TEMP\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
 
-Write-Host "DISMTools $version - Windows Deployment Services Helper API"
+Write-Host "DISMTools $version - Windows Deployment Services Helper Server"
 Write-Host "(c) 2025. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
+
+if ([Environment]::OSVersion.Platform -ne "Win32NT") {
+    Write-Host "This script cannot be run on non-Windows NT platforms. Press ENTER to exit..."
+    Read-Host | Out-Null
+    return $false
+}
+
 $compInfo = Get-ComputerInfo
 if ($compInfo.WindowsInstallationType -ne "Server") {
     Write-LogMessage -message "This computer is not running Windows Server."
@@ -270,6 +277,17 @@ function Deploy-WimImage {
         Write-Progress -Activity "WDS Deployment Preparation Work" -Completed
         throw $_
     }
+}
+
+function Remove-SharedFolderByGuid {
+    param (
+        [Parameter(Mandatory)] [string]$guid
+    )
+    if ($guid -eq "") {
+        return $false
+    }
+    Remove-Item -Path "$tmpImageFolderPath\$guid" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
+    return $true
 }
 
 function Clear-Files {
@@ -652,6 +670,23 @@ try {
                     try {
                         $output = Clear-Files
                         $sendJson.Invoke(@{ success = $true; output = $output })
+                    } catch {
+                        Write-LogMessage -message "Exception caught: $_"
+                        $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
+                    }
+                } else {
+                    $sendJson.Invoke(@{ error = "Method not allowed" }, 405)
+                }
+            }
+            "/api/clearbyguid" {
+                if ($request.HttpMethod -eq "POST") {
+                    try {
+                        $reader = New-Object IO.StreamReader $request.InputStream
+                        $body = $reader.ReadToEnd() | ConvertFrom-Json
+                        $guid = $body.shareGuid
+
+                        $output = Remove-SharedFolderByGuid -guid $guid
+                        $sendJson.Invoke(@{ success = $true })
                     } catch {
                         Write-LogMessage -message "Exception caught: $_"
                         $sendJson.Invoke(@{ success = $false; error = $_.Exception.Message }, 500)
