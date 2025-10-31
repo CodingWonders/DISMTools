@@ -32,7 +32,7 @@ Public Class IncompleteSetupDlg
                 OK_Button.Text = "Sim"
                 Cancel_Button.Text = "Não"
             Case "ITA"
-                Label1.Text = "L'impostazione non è ancora completa e le impostazioni personalizzate non verranno salvate. Procedendo, il programma utilizzerà le impostazioni predefinite." & CrLf & CrLf & "Volete procedere?"
+                Label1.Text = "L'impostazione non è ancora stata completata e le impostazioni personalizzate non verranno salvate. Procedendo, il programma userà le impostazioni predefinite." & CrLf & CrLf & "Vuoi procedere?"
                 OK_Button.Text = "Sì"
                 Cancel_Button.Text = "No"
         End Select

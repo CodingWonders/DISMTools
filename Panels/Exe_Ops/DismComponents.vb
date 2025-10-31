@@ -37,7 +37,7 @@ Public Class DismComponents
                         OK_Button.Text = "OK"
                     Case "ITA"
                         Text = "Componenti DISM"
-                        ListView1.Columns(0).Text = "Component"
+                        ListView1.Columns(0).Text = "Componente"
                         ListView1.Columns(1).Text = "Versione"
                         OK_Button.Text = "OK"
                 End Select
@@ -63,7 +63,7 @@ Public Class DismComponents
                 OK_Button.Text = "OK"
             Case 5
                 Text = "Componenti DISM"
-                ListView1.Columns(0).Text = "Component"
+                ListView1.Columns(0).Text = "Componente"
                 ListView1.Columns(1).Text = "Versione"
                 OK_Button.Text = "OK"
         End Select
