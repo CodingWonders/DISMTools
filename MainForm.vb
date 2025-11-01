@@ -8545,7 +8545,7 @@ Public Class MainForm
                 ' Tree view context menu
                 AccessDirectoryToolStripMenuItem.Text = "Accesso alla directory"
                 UnloadProjectToolStripMenuItem1.Text = "Scarica il progetto"
-                CopyDeploymentToolsToolStripMenuItem.Text = "Copia strumenti di distribuzione"
+                CopyDeploymentToolsToolStripMenuItem.Text = "Copia strumenti distribuzione"
                 OfAllArchitecturesToolStripMenuItem.Text = "Di tutte le architetture"
                 OfSelectedArchitectureToolStripMenuItem.Text = "Dell'architettura selezionata"
                 ForX86ArchitectureToolStripMenuItem.Text = "Per l'architettura x86"
@@ -15729,7 +15729,7 @@ Public Class MainForm
                             Case "ITA"
                                 msg = Environment.UserName & ", prima di procedere leggi attentamente questo messaggio." & CrLf & CrLf &
                                       "Se si usa la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ripristino." & CrLf & CrLf &
-                                      "Questa operazione non cancellerà i file della vecchia installazione, quindi se si vuole liberare un po' di spazio è necessario usare Pulizia disco (cleanmgr)." & CrLf & CrLf &
+                                      "Questa operazione non cancellerà i file della vecchia installazione, quindi se vuoi liberare un po' di spazio è necessario usare Pulizia disco (cleanmgr)." & CrLf & CrLf &
                                       "Vuoi rimuovere la possibilità di tornare a una versione precedente di Windows?"
                         End Select
                     Case 1
@@ -15755,7 +15755,7 @@ Public Class MainForm
                     Case 5
                         msg = Environment.UserName & ", prima di procedere leggi attentamente questo messaggio." & CrLf & CrLf &
                               "Se si usa la nuova versione di Windows da qualche tempo e si è accertato che non ci sono problemi, è possibile rimuovere la possibilità di avviare un ripristino." & CrLf & CrLf &
-                              "Questa operazione non cancellerà i file della vecchia installazione, quindi se si vuole liberare un po' di spazio è necessario utilizzare Pulizia disco (cleanmgr)." & CrLf & CrLf &
+                              "Questa operazione non cancellerà i file della vecchia installazione, quindi se vuoi liberare un po' di spazio è necessario utilizzare Pulizia disco (cleanmgr)." & CrLf & CrLf &
                               "Vuoi rimuovere la possibilità di tornare a una versione precedente di Windows?"
                 End Select
                 If MsgBox(msg, vbYesNo + vbExclamation, Text) = MsgBoxResult.Yes Then
