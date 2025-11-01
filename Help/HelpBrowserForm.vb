@@ -20,7 +20,7 @@ Public Class HelpBrowserForm
                     Case "PTB", "PTG"
                         TitleMsg = "Tópicos de ajuda do DISMTools"
                     Case "ITA"
-                        TitleMsg = "Argomenti della guida di DISMTools"
+                        TitleMsg = "Argomenti guida DISMTools"
                 End Select
             Case 1
                 TitleMsg = "DISMTools Help Topics"

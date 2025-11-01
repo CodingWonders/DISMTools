@@ -7266,8 +7266,8 @@ Public Class ProgressPanel
                         Text = "Progresso"
                         Label1.Text = "Operazioni immagine..."
                         Label2.Text = "Attendi mentre vengono eseguite le operazioni. L'operazione potrebbe richiedere del tempo"
-                        Cancel_Button.Text = "Annullare"
-                        LogButton.Text = If(Height = 240, " Mostra registro", "Nascondi registro")
+                        Cancel_Button.Text = "Annulla"
+                        LogButton.Text = If(Height = 240, " Visualizza registro", "Nascondi registro")
                         LinkLabel1.Text = "Visualizza il file registro DISM (avanzato)"
                         allTasks.Text = "Attendi..."
                         currentTask.Text = "Attendi..."
