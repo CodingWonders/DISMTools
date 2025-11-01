@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
 
 Public Class HelpBrowserForm
