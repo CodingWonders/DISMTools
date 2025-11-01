@@ -31,7 +31,7 @@ Public Class HelpBrowserForm
             Case 4
                 TitleMsg = "Tópicos de ajuda do DISMTools"
             Case 5
-                TitleMsg = "Argomenti della guida di DISMTools"
+                TitleMsg = "Argomenti guida di DISMTools"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
