@@ -2037,7 +2037,7 @@ Public Class MainForm
                         Case "PTB", "PTG"
                             progressLabel = "Obter informações básicas sobre a imagem..."
                         Case "ITA"
-                            progressLabel = "Ottenere informazioni elementari sull'immagine..."
+                            progressLabel = "Verifica informazioni elementari immagine..."
                     End Select
                 Case 1
                     progressLabel = "Getting basic image information..."
@@ -2081,7 +2081,7 @@ Public Class MainForm
                             Case "PTB", "PTG"
                                 progressLabel = "Obter informações avançadas sobre a imagem..."
                             Case "ITA"
-                                progressLabel = "Ottenere informazioni avanzate sull'immagine..."
+                                progressLabel = "Verifica informazioni avanzate immagine..."
                         End Select
                     Case 1
                         progressLabel = "Getting advanced image information..."
@@ -2170,7 +2170,7 @@ Public Class MainForm
                             Case "PTB", "PTG"
                                 progressLabel = "Obter pacotes de imagem..."
                             Case "ITA"
-                                progressLabel = "Ottenere pacchetti di immagini..."
+                                progressLabel = "Verifica pacchetti immagine..."
                         End Select
                     Case 1
                         progressLabel = "Getting image packages..."
@@ -2202,7 +2202,7 @@ Public Class MainForm
                             Case "PTB", "PTG"
                                 progressLabel = "Obter características de imagem..."
                             Case "ITA"
-                                progressLabel = "Ottenere le caratteristiche delle immagini..."
+                                progressLabel = "Verifica funzionalità immagini..."
                         End Select
                     Case 1
                         progressLabel = "Getting image features..."
@@ -2213,7 +2213,7 @@ Public Class MainForm
                     Case 4
                         progressLabel = "Obter características de imagem..."
                     Case 5
-                        progressLabel = "Verifica caratteristiche immagine..."
+                        progressLabel = "Verifica funzionalità immagine..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(True, OnlineMode)
@@ -2239,7 +2239,7 @@ Public Class MainForm
                                     Case "PTB", "PTG"
                                         progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                                     Case "ITA"
-                                        progressLabel = "Ottenere i pacchetti AppX dell'immagine (applicazioni in stile Metro)..."
+                                        progressLabel = "Verifica pacchetti AppX immagine (applicazioni in stile Metro)..."
                                 End Select
                             Case 1
                                 progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
@@ -2250,7 +2250,7 @@ Public Class MainForm
                             Case 4
                                 progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                             Case 5
-                                progressLabel = "Ricerca pacchetti AppX dell'immagine (applicazioni in stile Metro)..."
+                                progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
                         End Select
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageAppxPackages(True, OnlineMode)
@@ -2281,7 +2281,7 @@ Public Class MainForm
                                     Case "PTB", "PTG"
                                         progressLabel = "Obter capacidades de imagem..."
                                     Case "ITA"
-                                        progressLabel = "Verifica funzionalità su richiesta dell'immagine (caratteristiche)..."
+                                        progressLabel = "Verifica funzionalità su richiesta dell'immagine (capacità)..."
                                 End Select
                             Case 1
                                 progressLabel = "Getting image Features on Demand (capabilities)..."
@@ -2292,7 +2292,7 @@ Public Class MainForm
                             Case 4
                                 progressLabel = "Obter capacidades de imagem..."
                             Case 5
-                                progressLabel = "Verifica funzionalità su richiesta dell'immagine (caratteristiche)..."
+                                progressLabel = "Verifica funzionalità su richiesta dell'immagine (capacità)..."
                         End Select
                         ImgBW.ReportProgress(progressMin + progressDivs)
                         GetImageCapabilities(True, OnlineMode)
@@ -2319,7 +2319,7 @@ Public Class MainForm
                             Case "PTB", "PTG"
                                 progressLabel = "Obter controladores de imagem..."
                             Case "ITA"
-                                progressLabel = "Ottenere i driver di dispositivo dell'immagine..."
+                                progressLabel = "Verifica driver dispositivo immagine..."
                         End Select
                     Case 1
                         progressLabel = "Getting image drivers..."
@@ -2353,7 +2353,7 @@ Public Class MainForm
                             Case "PTB", "PTG"
                                 progressLabel = "Obter pacotes de imagem..."
                             Case "ITA"
-                                progressLabel = "Ottenere pacchetti di immagini..."
+                                progressLabel = "Verifica pacchetti immagine..."
                         End Select
                     Case 1
                         progressLabel = "Getting image packages..."
@@ -2382,7 +2382,7 @@ Public Class MainForm
                             Case "PTB", "PTG"
                                 progressLabel = "Obter características de imagem..."
                             Case "ITA"
-                                progressLabel = "Ottenere le caratteristiche delle immagini..."
+                                progressLabel = "Verifica funzionalità immagini..."
                         End Select
                     Case 1
                         progressLabel = "Getting image features..."
@@ -2393,7 +2393,7 @@ Public Class MainForm
                     Case 4
                         progressLabel = "Obter características de imagem..."
                     Case 5
-                        progressLabel = "Verifica caratteristiche immagine..."
+                        progressLabel = "Verifica funzionalità immagine..."
                 End Select
                 ImgBW.ReportProgress(progressMin + progressDivs)
                 GetImageFeatures(True, OnlineMode)
@@ -2414,7 +2414,7 @@ Public Class MainForm
                                 Case "PTB", "PTG"
                                     progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                                 Case "ITA"
-                                    progressLabel = "Ottenere i pacchetti AppX dell'immagine (applicazioni in stile Metro)..."
+                                    progressLabel = "Verifica pacchetti AppX immagine (applicazioni in stile Metro)..."
                             End Select
                         Case 1
                             progressLabel = "Getting image provisioned AppX packages (Metro-style applications)..."
@@ -2425,7 +2425,7 @@ Public Class MainForm
                         Case 4
                             progressLabel = "Obter pacotes AppX provisionados por imagem (aplicações de estilo Metro)..."
                         Case 5
-                            progressLabel = "Ricerca pacchetti AppX dell'immagine (applicazioni in stile Metro)..."
+                            progressLabel = "Ricerca pacchetti AppX immagine (applicazioni in stile Metro)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageAppxPackages(True, OnlineMode)
@@ -2450,7 +2450,7 @@ Public Class MainForm
                                 Case "PTB", "PTG"
                                     progressLabel = "Obter capacidades de imagem..."
                                 Case "ITA"
-                                    progressLabel = "Ottenere le funzionalità su richiesta dell'immagine (caratteristiche)..."
+                                    progressLabel = "Verifica funzionalità su richiesta immagine (capacità)..."
                             End Select
                         Case 1
                             progressLabel = "Getting image Features on Demand (capabilities)..."
@@ -2461,7 +2461,7 @@ Public Class MainForm
                         Case 4
                             progressLabel = "Obter capacidades de imagem..."
                         Case 5
-                            progressLabel = "Verifica funzionalità su richiesta  dell'immagine (caratteristiche)..."
+                            progressLabel = "Verifica funzionalità su richiesta immagine (capacità)..."
                     End Select
                     ImgBW.ReportProgress(progressMin + progressDivs)
                     GetImageCapabilities(True, OnlineMode)
@@ -7002,7 +7002,7 @@ Public Class MainForm
                         Label9.Text = "Per conoscere le ultime novità sullo sviluppo di DISMTools, consulta la discussione nei forum di My Digital Life. Per visualizzare la maggior parte dei contenuti è necessario un account."
                         LinkLabel25.Text = "Visita"
                         Label22.Text = "Non è stato possibile ottenere le ultime novità"
-                        Label34.Text = "Informazioni sull'errore:"
+                        Label34.Text = "Informazioni errore:"
                         Label35.Text = "Prova a collegare il sistema alla rete. Se il sistema è collegato alla rete ma l'errore persiste, verifica se è possibile accedere ai siti web."
                         Button59.Text = "Riprova"
                         ' - Tutorial videos panel
@@ -8388,10 +8388,10 @@ Public Class MainForm
                 CommitImage.Text = "Applica le modifiche all'immagine..."
                 DeleteImage.Text = "Cancellare le immagini del volume dal file WIM..."
                 ExportImage.Text = "Esportazione dell'immagine..."
-                GetImageInfo.Text = "Ottenere informazioni sull'immagine..."
-                GetWIMBootEntry.Text = "Ottenere voci di configurazione WIMBoot..."
-                ListImage.Text = "Elenca i file e le directory nell'immagine..."
-                MountImage.Text = "Monta l'immagine..."
+                GetImageInfo.Text = "Verifica informazioni immagine..."
+                GetWIMBootEntry.Text = "Verifica voci configurazione WIMBoot..."
+                ListImage.Text = "Elenca file e cartelle nell'immagine..."
+                MountImage.Text = "Monta immagine..."
                 OptimizeFFU.Text = "Ottimizzare il file FFU..."
                 OptimizeImage.Text = "Ottimizzare l'immagine..."
                 RemountImage.Text = "Rimonta l'immagine per la manutenzione..."
@@ -8401,40 +8401,40 @@ Public Class MainForm
                 UpdateWIMBootEntry.Text = "Aggiornare la voce di configurazione di WIMBoot..."
                 ApplySiloedPackage.Text = "Applica il pacchetto di provisioning a silo..."
                 ' Menu - Commands - OS packages
-                GetPackages.Text = "Ottieni informazioni sui pacchetti..."
+                GetPackages.Text = "Verifica informazioni pacchetti..."
                 AddPackage.Text = "Aggiungi pacchetto..."
                 RemovePackage.Text = "Rimuovi pacchetto..."
-                GetFeatures.Text = "Ottieni informazioni sulle caratteristiche..."
-                EnableFeature.Text = "Abilita la funzione..."
+                GetFeatures.Text = "Verifica informazioni funzionalità..."
+                EnableFeature.Text = "Abilita funzionalità..."
                 DisableFeature.Text = "Disabilita la funzionalità..."
                 CleanupImage.Text = "Eseguire operazioni di pulizia o ripristino..."
                 SaveImageInformationToolStripMenuItem.Text = "Salva informazioni sull'immagine..."
                 ' Menu - Commands - Provisioning packages
                 AddProvisioningPackage.Text = "Aggiungi pacchetto di provisioning..."
-                GetProvisioningPackageInfo.Text = "Ottenere informazioni sul pacchetto di provisioning..."
-                ApplyCustomDataImage.Text = "Applicare l'immagine dati personalizzata..."
+                GetProvisioningPackageInfo.Text = "Verifica informazioni pacchetto provisioning..."
+                ApplyCustomDataImage.Text = "Applica immagine dati personalizzata..."
                 ' Menu - Commands - App packages
-                GetProvisionedAppxPackages.Text = "Ottieni informazioni sul pacchetto app..."
+                GetProvisionedAppxPackages.Text = "Verifica informazioni pacchetto app..."
                 AddProvisionedAppxPackage.Text = "Aggiungi pacchetto app in provisioning..."
                 RemoveProvisionedAppxPackage.Text = "Rimuovere il provisioning del pacchetto app..."
                 OptimizeProvisionedAppxPackages.Text = "Ottimizzare i pacchetti in provisioning..."
                 SetProvisionedAppxDataFile.Text = "Aggiungere un file di dati personalizzato al pacchetto app..."
                 ' Menu - Commands - App (MSP) servicing
-                CheckAppPatch.Text = "Ottieni informazioni sulle patch dell'applicazione..."
-                GetAppPatchInfo.Text = "Ottenere informazioni dettagliate sulle patch dell'applicazione..."
-                GetAppPatches.Text = "Ottieni informazioni elementari sulle patch delle applicazioni installate..."
-                GetAppInfo.Text = "Ottenere informazioni dettagliate sull'applicazione Windows Installer (*.msi)..."
-                GetApps.Text = "Ottenere informazioni elementari sull'applicazione Windows Installer (*.msi)..."
+                CheckAppPatch.Text = "Verifica informazioni patch applicazione..."
+                GetAppPatchInfo.Text = "Verifica informazioni dettagliate patch applicazione..."
+                GetAppPatches.Text = "Verifica informazioni di base patch applicazioni installate..."
+                GetAppInfo.Text = "Verifica informazioni dettagliate applicazione Windows Installer (*.msi)..."
+                GetApps.Text = "Verifica informazioni di base applicazione Windows Installer (*.msi)..."
                 ' Menu - Commands - Default app associations
-                ExportDefaultAppAssociations.Text = "Esporta le associazioni predefinite delle applicazioni..."
-                GetDefaultAppAssociations.Text = "Ottieni informazioni sulle associazioni predefinite delle applicazioni..."
-                ImportDefaultAppAssociations.Text = "Importa le associazioni predefinite delle applicazioni..."
-                RemoveDefaultAppAssociations.Text = "Rimuovere le associazioni predefinite delle applicazioni..."
+                ExportDefaultAppAssociations.Text = "Esporta associazioni predefinite applicazioni..."
+                GetDefaultAppAssociations.Text = "Verifica informazioni associazioni predefinite delle applicazioni..."
+                ImportDefaultAppAssociations.Text = "Importa associazioni predefinite applicazioni..."
+                RemoveDefaultAppAssociations.Text = "Rimuovi associazioni predefinite applicazioni..."
                 ' Menu - Commands - Languages and regional settings
-                GetIntl.Text = "Ottieni le impostazioni e le lingue internazionali..."
-                SetUILang.Text = "Imposta la lingua dell'interfaccia utente..."
-                SetUILangFallback.Text = "Imposta la lingua di fallback dell'interfaccia utente predefinita..."
-                SetSysUILang.Text = "Imposta la lingua dell'interfaccia utente preferita dal sistema..."
+                GetIntl.Text = "Verifica impostazioni e lingue internazionali..."
+                SetUILang.Text = "Imposta lingua interfaccia utente..."
+                SetUILangFallback.Text = "Imposta lingua di fallback predefinita interfaccia utente..."
+                SetSysUILang.Text = "Imposta lingua interfaccia utente preferita dal sistema..."
                 SetSysLocale.Text = "Imposta il locale del sistema..."
                 SetUserLocale.Text = "Imposta il locale dell'utente..."
                 SetInputLocale.Text = "Imposta il locale di input..."
@@ -8446,16 +8446,16 @@ Public Class MainForm
                 SetSetupUILang.Text = "Imposta la lingua predefinita del programma di installazione..."
                 ' Menu - Commands - Capabilities
                 AddCapability.Text = "Aggiungi capacità..."
-                ExportSource.Text = "Esportazione di capacità nel repository..."
-                GetCapabilities.Text = "Ottenere informazioni sulle capacità..."
+                ExportSource.Text = "Esportazione capacità nel repository..."
+                GetCapabilities.Text = "Verifica informazioni capacità..."
                 RemoveCapability.Text = "Rimuovi capacità..."
                 ' Menu - Commands - Windows editions
-                GetCurrentEdition.Text = "Ottieni l'edizione corrente..."
-                GetTargetEditions.Text = "Ottieni obiettivi di aggiornamento..."
-                SetEdition.Text = "Aggiorna l'immagine..."
-                SetProductKey.Text = "Imposta la chiave del prodotto..."
+                GetCurrentEdition.Text = "Verifica edizione attuale..."
+                GetTargetEditions.Text = "Verifica obiettivi aggiornamento..."
+                SetEdition.Text = "Aggiorna immagine..."
+                SetProductKey.Text = "Imposta chiave prodotto..."
                 ' Menu - Commands - Drivers
-                GetDrivers.Text = "Ottenere informazioni sui driver..."
+                GetDrivers.Text = "Verifica informazioni driver..."
                 AddDriver.Text = "Aggiungi driver..."
                 RemoveDriver.Text = "Rimuovi driver..."
                 ExportDriver.Text = "Esporta i pacchetti di driver..."
@@ -8463,17 +8463,17 @@ Public Class MainForm
                 ' Menu - Commands - Unattended answer files
                 ApplyUnattend.Text = "Applica il file di risposta non presidiato..."
                 ' Menu - Commands - Windows PE servicing
-                GetPESettings.Text = "Ottieni le impostazioni..."
+                GetPESettings.Text = "Verifica impostazioni..."
                 SetScratchSpace.Text = "Imposta spazio per lo scratch..."
-                SetTargetPath.Text = "Imposta il percorso di destinazione..."
+                SetTargetPath.Text = "Imposta percorso destinazione..."
                 ' Menu - Commands - OS uninstall
-                GetOSUninstallWindow.Text = "Ottenere la finestra di disinstallazione..."
+                GetOSUninstallWindow.Text = "Verifica finestra disinstallazione..."
                 InitiateOSUninstall.Text = "Avvia disinstallazione..."
-                RemoveOSUninstall.Text = "Rimuovere l'abilità di ritorno..."
+                RemoveOSUninstall.Text = "Rimuovi opzione fallback..."
                 SetOSUninstallWindow.Text = "Imposta finestra di disinstallazione..."
                 ' Menu - Commands - Reserved storage
-                SetReservedStorageState.Text = "Imposta lo stato di archiviazione riservato..."
-                GetReservedStorageState.Text = "Ottenere lo stato di archiviazione riservato..."
+                SetReservedStorageState.Text = "Imposta stato archiviazione riservato..."
+                GetReservedStorageState.Text = "Verifica stato archiviazione riservato..."
                 ' Menu - Commands - Microsoft Edge
                 AddEdge.Text = "Aggiungi Edge..."
                 AddEdgeBrowser.Text = "Aggiungi browser Edge..."
@@ -8487,7 +8487,7 @@ Public Class MainForm
                 UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Creatore file di risposta non presidiata"
                 RegCplToolStripMenuItem.Text = "Gestire gli alveari del registro delle immagini..."
                 WebResourcesToolStripMenuItem.Text = "Risorse Web"
-                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Scarica le ISO delle lingue e delle caratteristiche opzionali..."
+                LanguagesAndOptionalFeaturesISOToolStripMenuItem.Text = "Scarica le ISO delle lingue e delle funzionalità opzionali..."
                 LanguagesAndFODWin10ToolStripMenuItem.Text = "Scarica le lingue e i dischi FOD per Windows 10..."
                 ReportManagerToolStripMenuItem.Text = "Gestore dei rapporti"
                 MountedImageManagerTSMI.Text = "Gestore di immagini montate"
@@ -8526,13 +8526,13 @@ Public Class MainForm
                 UpdateLink.Text = "È disponibile una nuova versione da scaricare e installare. Fare clic qui per saperne di più"
                 UpdateLink.LinkArea = New LinkArea(60, 32)
                 ' Pop-up context menus
-                PkgBasicInfo.Text = "Ottieni informazioni elementari (tutti i pacchetti)"
-                PkgDetailedInfo.Text = "Ottiene informazioni dettagliate (pacchetto specifico)"
+                PkgBasicInfo.Text = "Verifica informazioni elementari (tutti i pacchetti)"
+                PkgDetailedInfo.Text = "Verifica informazioni dettagliate (pacchetto specifico)"
                 CommitAndUnmountTSMI.Text = "Applica le modifiche e smonta l'immagine"
                 DiscardAndUnmountTSMI.Text = "Scarta le modifiche e smonta l'immagine"
                 UnmountSettingsToolStripMenuItem.Text = "Smontare le impostazioni..."
                 ViewPackageDirectoryToolStripMenuItem.Text = "Visualizza la directory dei pacchetti"
-                GetImageFileInformationToolStripMenuItem.Text = "Ottieni informazioni sulla immagine..."
+                GetImageFileInformationToolStripMenuItem.Text = "Verifica informazioni immagine..."
                 SaveCompleteImageInformationToolStripMenuItem.Text = "Salva informazioni complete sull'immagine..."
                 CreateDiscImageWithThisFileToolStripMenuItem.Text = "Crea l'immagine del disco con questo file..."
                 ' OpenFileDialogs and FolderBrowsers
@@ -8573,71 +8573,71 @@ Public Class MainForm
                 MicrosoftStoreGenerationProjectToolStripMenuItem.Text = "Visita il sito Web di Microsoft Store Generation Project"
                 AppxDownloadHelpToolStripMenuItem.Text = "Come si ottengono le applicazioni?"
                 ' New design
-                GreetingLabel.Text = "Ti diamo il benvenuto a questa sessione di assistenza"
+                GreetingLabel.Text = "Ti diamo il benvenuto in questa sessione di assistenza"
                 LinkLabel12.Text = "PROGETTO"
                 LinkLabel13.Text = "IMMAGINE"
                 Label54.Text = "Nome:"
                 Label51.Text = "Posizione:"
                 Label53.Text = "Immagini montate?"
-                LinkLabel14.Text = "Fare clic qui per montare un'immagine"
-                Label55.Text = "Attività del progetto"
-                LinkLabel15.Text = "Visualizza le proprietà del progetto"
-                LinkLabel16.Text = "Aprire in Esplora file"
+                LinkLabel14.Text = "Fai clic qui per montare un'immagine"
+                Label55.Text = "Attività progetto"
+                LinkLabel15.Text = "Visualizza proprietà progetto"
+                LinkLabel16.Text = "Apri in Esplora file"
                 LinkLabel17.Text = "Scarica il progetto"
                 Label59.Text = "Non è stata montata alcuna immagine"
                 Label58.Text = "Per visualizzare le informazioni sull'immagine è necessario montarla"
                 Label57.Text = "Scelte"
-                LinkLabel21.Text = "Montare un'immagine..."
-                LinkLabel18.Text = "Scegliere un'immagine montata..."
+                LinkLabel21.Text = "Monta immagine..."
+                LinkLabel18.Text = "Scegli immagine montata..."
                 Label39.Text = "Indice immagine:"
                 Label43.Text = "Punto di montaggio:"
                 Label45.Text = "Versione:"
                 Label42.Text = "Nome:"
                 Label40.Text = "Descrizione:"
                 Label56.Text = "Attività immagine"
-                LinkLabel20.Text = "Visualizza le proprietà dell'immagine"
-                LinkLabel19.Text = "Smontare l'immagine"
-                GroupBox4.Text = "Operazioni sull'immagine"
-                Button26.Text = "Monta l'immagine..."
-                Button27.Text = "Applica le modifiche correnti"
-                Button28.Text = "Applicare e smontare l'immagine"
-                Button29.Text = "Smonta l'immagine eliminando le modifiche"
+                LinkLabel20.Text = "Visualizza proprietà immagine"
+                LinkLabel19.Text = "Smonta immagine"
+                GroupBox4.Text = "Operazioni immagine"
+                Button26.Text = "Monta immagine..."
+                Button27.Text = "Applica modifiche attuali"
+                Button28.Text = "Applica e smonta l'immagine"
+                Button29.Text = "Smonta immagine eliminando le modifiche"
                 Button25.Text = "Ricarica la sessione di assistenza"
                 Button24.Text = "Cambia gli indici dell'immagine..."
                 Button30.Text = "Applica immagine..."
                 Button31.Text = "Cattura immagine..."
-                Button32.Text = "Rimuovere le immagini del volume..."
-                Button33.Text = "Salva informazioni complete sull'immagine..."
+                Button32.Text = "Rimuovi immagini volume..."
+                Button33.Text = "Salva informazioni complete immagine..."
                 GroupBox5.Text = "Operazioni pacchetto"
                 Button36.Text = "Aggiungi pacchetto..."
-                Button34.Text = "Ottieni informazioni sul pacchetto..."
-                Button38.Text = "Salva informazioni sul pacchetto installato..."
+                Button34.Text = "Verifica informazioni pacchetto..."
+                Button38.Text = "Salva informazioni pacchetto installato..."
                 Button35.Text = "Rimuovi pacchetto..."
                 Button37.Text = "Esegui la manutenzione e la pulizia dell'archivio componenti..."
                 GroupBox6.Text = "Operazioni funzionali"
-                Button41.Text = "Attiva funzione..."
-                Button39.Text = "Ottieni informazioni sulla funzione..."
-                Button42.Text = "Salva informazioni sulla funzione..."
-                Button40.Text = "Disattiva funzione..."
+                Button41.Text = "Attiva funzionalità..."
+                Button39.Text = "Verifica informazioni funzionalità..."
+                Button42.Text = "Salva informazioni funzionalità..."
+                Button40.Text = "Disattiva funzionalità..."
                 GroupBox7.Text = "Operazioni pacchetto AppX"
                 Button44.Text = "Aggiungi pacchetto AppX..."
-                Button45.Text = "Ottieni informazioni sull'applicazione..."
-                Button46.Text = "Salva informazioni sul pacchetto AppX installato..."
+                Button45.Text = "Verifica informazioni applicazione..."
+                Button46.Text = "Salva informazioni pacchetto AppX installato..."
                 Button43.Text = "Rimuovi pacchetto AppX..."
-                GroupBox8.Text = "Operazioni con le funzionalità"
+                GroupBox8.Text = "Operazioni funzionalità"
                 Button48.Text = "Aggiungi capacità..."
-                Button49.Text = "Ottieni informazioni sulla capacità..."
-                Button50.Text = "Salva informazioni sulle capacità..."
+                Button49.Text = "Verifica informazioni capacità..."
+                Button50.Text = "Salva informazioni capacità..."
                 Button47.Text = "Rimuovi capacità..."
-                GroupBox9.Text = "Operazioni del driver del dispositivo"
+                GroupBox9.Text = "Operazioni driver dispositivo"
                 Button53.Text = "Aggiungi pacchetto driver..."
-                Button52.Text = "Ottieni informazioni sul driver..."
+                Button52.Text = "Verifica informazioni driver..."
                 Button54.Text = "Salva informazioni sul driver installato..."
                 Button51.Text = "Rimuovi driver..."
                 GroupBox10.Text = "Operazioni di Windows PE"
-                Button55.Text = "Ottieni configurazione"
+                Button55.Text = "Verifica configurazione"
                 Button56.Text = "Salva configurazione..."
-                Button57.Text = "Imposta percorso di destinazione..."
+                Button57.Text = "Imposta percorso destinazione..."
                 Button58.Text = "Imposta spazio temporaneo..."
                 ' New home panel design
                 LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
@@ -8652,10 +8652,10 @@ Public Class MainForm
                 LinkLabel8.Text = "Provenienza da altri programmi di utilità?"
                 Label38.Text = "Esecuzione di operazioni"
                 LinkLabel9.Text = "Suggerimenti per eseguire un'ottima manutenzione"
-                LinkLabel10.Text = "Ottenere informazioni sull'immagine"
-                LinkLabel11.Text = "Salvataggio delle informazioni sull'immagine"
-                LinkLabel4.Text = "Gestione dell'installazione attiva"
-                LinkLabel5.Text = "Gestione delle installazioni su qualsiasi unità"
+                LinkLabel10.Text = "Verifica informazioni immagine"
+                LinkLabel11.Text = "Salvataggio informazioni immagine"
+                LinkLabel4.Text = "Gestione installazione attiva"
+                LinkLabel5.Text = "Gestione installazioni in qualsiasi unità"
                 ' - Latest news panel
                 Label9.Text = "Per conoscere le ultime notizie sullo sviluppo di DISMTools, consultate la discussione sui forum di My Digital Life. Per visualizzare la maggior parte dei contenuti è necessario un account."
                 LinkLabel25.Text = "Visita"
@@ -14040,7 +14040,7 @@ Public Class MainForm
                     Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                     Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Ottenere i nomi delle caratteristiche e il loro stato..."
+                        PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
@@ -14051,7 +14051,7 @@ Public Class MainForm
             Case 4
                 PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
             Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi caratteristiche e relativo stato..."
+                PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
         End Select
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
@@ -14715,7 +14715,7 @@ Public Class MainForm
             Case 4
                 PleaseWaitDialog.Label2.Text = "Obter nomes de pacotes..."
             Case 5
-                PleaseWaitDialog.Label2.Text = "Ottenere i nomi dei pacchetti..."
+                PleaseWaitDialog.Label2.Text = "Verifica nomi pacchetti..."
         End Select
         If Not CompletedTasks(0) Then
             DynaLog.LogMessage("OS package background processes haven't completed.")
@@ -14775,7 +14775,7 @@ Public Class MainForm
                     Case "PTB", "PTG"
                         PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
                     Case "ITA"
-                        PleaseWaitDialog.Label2.Text = "Verifica nomi caratteristiche e relativo stato..."
+                        PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
                 End Select
             Case 1
                 PleaseWaitDialog.Label2.Text = "Getting feature names and their state..."
@@ -14786,7 +14786,7 @@ Public Class MainForm
             Case 4
                 PleaseWaitDialog.Label2.Text = "Obter os nomes das características e o seu estado..."
             Case 5
-                PleaseWaitDialog.Label2.Text = "Verifica nomi caratteristiche e relativo stato..."
+                PleaseWaitDialog.Label2.Text = "Verifica nomi e stato funzionalità..."
         End Select
         If Not CompletedTasks(1) Then
             DynaLog.LogMessage("Feature background processes haven't completed.")
@@ -15512,7 +15512,7 @@ Public Class MainForm
                                 msg = "Hai a disposizione " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf &
                                       "- Per aumentare o diminuire questa finestra di disinstallazione, vai su Comandi -> Disinstallazione del sistema operativo -> Imposta finestra disinstallazione..." & CrLf &
                                       "- Per avviare il rollback del sistema operativo, vai su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf &
-                                      "- Per rimuovere la possibilità di tornare alla vecchia versione, vai su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di ritorno..."
+                                      "- Per rimuovere la possibilità di tornare alla vecchia versione, vai su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di fallback..."
                         End Select
                     Case 1
                         msg = "You have " & RollbackDays & " days to go back to the old version of Windows." & CrLf & CrLf &
@@ -15538,7 +15538,7 @@ Public Class MainForm
                         msg = "Hai a disposizione " & RollbackDays & " giorni per tornare alla vecchia versione di Windows." & CrLf & CrLf &
                               "- Per aumentare o diminuire questa finestra di disinstallazione, vai su Comandi -> Disinstallazione del sistema operativo -> Imposta finestra di disinstallazione..." & CrLf &
                               "- Per avviare il rollback del sistema operativo, vai su Comandi -> Disinstallazione del sistema operativo -> Avvia disinstallazione..." & CrLf &
-                              "- Per rimuovere la possibilità di tornare alla vecchia versione, vai su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di ritorno..."
+                              "- Per rimuovere la possibilità di tornare alla vecchia versione, vai su Comandi -> Disinstallazione del sistema operativo -> Rimuovi la possibilità di fallback..."
                 End Select
                 MsgBox(msg, vbOKOnly + vbInformation, Text)
             Catch ex As Exception
