@@ -1371,7 +1371,7 @@ Public Class Options
                 CheckBox13.Text = "Controlla gli aggiornamenti"
                 CheckBox14.Text = "Salva sempre le informazioni complete per i seguenti elementi:"
                 CheckBox15.Text = "Pacchetti installati"
-                CheckBox16.Text = "Caratteristiche"
+                CheckBox16.Text = "Funzionalità"
                 CheckBox17.Text = "Pacchetti AppX installati"
                 CheckBox18.Text = "Capacità"
                 CheckBox19.Text = "Driver installati"

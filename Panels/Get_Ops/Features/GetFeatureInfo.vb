@@ -90,21 +90,21 @@ Public Class GetFeatureInfoDlg
                         Button2.Text = "Guardar..."
                         SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
                     Case "ITA"
-                        Text = "Ottieni informazioni sulle caratteristiche"
+                        Text = "Verifica informazioni funzionalità"
                         Label1.Text = Text
                         Label2.Text = "Pronto"
-                        Label22.Text = "Nome caratteristica:"
+                        Label22.Text = "Nome funzionalità:"
                         Label24.Text = "Nome visualizzato:"
-                        Label26.Text = "Descrizione caratteristica:"
+                        Label26.Text = "Descrizione funzionalità:"
                         Label31.Text = "È necessario un riavvio?"
-                        Label36.Text = "Informazioni sulla caratteristica"
-                        Label37.Text = "Selezionare una funzione installata a sinistra per visualizzarne le informazioni qui"
-                        Label41.Text = "Stato della funzione:"
+                        Label36.Text = "Informazioni funzionalità"
+                        Label37.Text = "Per visualizzarne qui le informazioni seleziona a sinistra una funzionalità installata"
+                        Label41.Text = "Stato funzionalità:"
                         Label43.Text = "Proprietà personalizzate:"
-                        ListView1.Columns(0).Text = "Nome della funzione"
-                        ListView1.Columns(1).Text = "Stato della caratteristica"
+                        ListView1.Columns(0).Text = "Nome funzionalità"
+                        ListView1.Columns(1).Text = "Stato funzionalità"
                         Button2.Text = "Salva..."
-                        SearchBox1.cueBanner = "Digitare qui per cercare una caratteristica..."
+                        SearchBox1.cueBanner = "Digita qui per cercare una funzionalità..."
                 End Select
             Case 1
                 Text = "Get feature information"
@@ -171,21 +171,21 @@ Public Class GetFeatureInfoDlg
                 Button2.Text = "Guardar..."
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma caraterística..."
             Case 5
-                Text = "Ottieni informazioni sulle caratteristiche"
+                Text = "Verifica informazioni funzionalità"
                 Label1.Text = Text
                 Label2.Text = "Pronto"
-                Label22.Text = "Nome caratteristica:"
+                Label22.Text = "Nome funzionalità:"
                 Label24.Text = "Nome visualizzato:"
-                Label26.Text = "Descrizione caratteristica:"
+                Label26.Text = "Descrizione funzionalità:"
                 Label31.Text = "È necessario un riavvio?"
-                Label36.Text = "Informazioni sulla caratteristica"
-                Label37.Text = "Selezionare una funzione installata a sinistra per visualizzarne le informazioni qui"
-                Label41.Text = "Stato della funzione:"
+                Label36.Text = "Informazioni sulla funzionalità"
+                Label37.Text = "Per visualizzarne qui le informazioni seleziona  a sinistra una funzionalità installata"
+                Label41.Text = "Stato funzionalità:"
                 Label43.Text = "Proprietà personalizzate:"
-                ListView1.Columns(0).Text = "Nome della funzione"
-                ListView1.Columns(1).Text = "Stato della caratteristica"
+                ListView1.Columns(0).Text = "Nome funzionalità"
+                ListView1.Columns(1).Text = "Stato funzionalità"
                 Button2.Text = "Salva..."
-                SearchBox1.cueBanner = "Digitare qui per cercare una caratteristica..."
+                SearchBox1.cueBanner = "Digita qui per cercare una funzionalità..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -227,7 +227,7 @@ Public Class GetFeatureInfoDlg
                                 Case "PTB", "PTG"
                                     msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                                 Case "ITA"
-                                    msg = "I processi in background devono essere completati prima di mostrare le informazioni sulle caratteristiche. Aspetteremo che siano completati"
+                                    msg = "Prima di poter visualizzare le informazioni sulle funzionalità i processi in background devono essere stati completati. Attendi che siano stati completati."
                             End Select
                         Case 1
                             msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
@@ -238,7 +238,7 @@ Public Class GetFeatureInfoDlg
                         Case 4
                             msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                         Case 5
-                            msg = "I processi in background devono essere completati prima di mostrare le informazioni sulle caratteristiche. Aspetteremo che siano completati"
+                            msg = "Prima di poter visualizzare le informazioni sulle funzionalità i processi in background devono essere stati completati. Attendi che siano stati completati."
                     End Select
                     MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                     Select Case MainForm.Language
@@ -253,7 +253,7 @@ Public Class GetFeatureInfoDlg
                                 Case "PTB", "PTG"
                                     Label2.Text = "À espera que os processos em segundo plano terminem..."
                                 Case "ITA"
-                                    Label2.Text = "In attesa che i processi in secondo piano finiscano..."
+                                    Label2.Text = "In attesa che i processi in background siano stati completati..."
                             End Select
                         Case 1
                             Label2.Text = "Waiting for background processes to finish..."
@@ -264,7 +264,7 @@ Public Class GetFeatureInfoDlg
                         Case 4
                             Label2.Text = "À espera que os processos em segundo plano terminem..."
                         Case 5
-                            Label2.Text = "In attesa che i processi in secondo piano finiscano..."
+                            Label2.Text = "In attesa che i processi in background siano stati completati..."
                     End Select
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
@@ -287,7 +287,7 @@ Public Class GetFeatureInfoDlg
                             Case "PTB", "PTG"
                                 Label2.Text = "Preparar-se para obter informações sobre a característica..."
                             Case "ITA"
-                                Label2.Text = "Preparazione per ottenere informazioni sulle caratteristiche..."
+                                Label2.Text = "Preparazione verifica informazioni funzionalità..."
                         End Select
                     Case 1
                         Label2.Text = "Preparing to get feature information..."
@@ -298,7 +298,7 @@ Public Class GetFeatureInfoDlg
                     Case 4
                         Label2.Text = "Preparar-se para obter informações sobre a característica..."
                     Case 5
-                        Label2.Text = "Preparazione per ottenere informazioni sulle caratteristiche..."
+                        Label2.Text = "Preparazione verifica informazioni funzionalità..."
                 End Select
                 Application.DoEvents()
                 Try
@@ -318,7 +318,7 @@ Public Class GetFeatureInfoDlg
                                     Case "PTB", "PTG"
                                         Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "ITA"
-                                        Label2.Text = "Ottenere informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                                        Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                 End Select
                             Case 1
                                 Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -329,7 +329,7 @@ Public Class GetFeatureInfoDlg
                             Case 4
                                 Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                             Case 5
-                                Label2.Text = "Ottenere informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                                Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
                         DynaLog.LogMessage("Feature to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
                         Application.DoEvents()
@@ -362,7 +362,7 @@ Public Class GetFeatureInfoDlg
                                         Case "PTB", "PTG"
                                             cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
                                         Case "ITA"
-                                            cPropValue.Text = "Selezionare o espandere un elemento."
+                                            cPropValue.Text = "Seleziona o espandi un elemento."
                                     End Select
                                 Case 1
                                     cPropValue.Text = "Please select or expand an entry."
@@ -373,7 +373,7 @@ Public Class GetFeatureInfoDlg
                                 Case 4
                                     cPropValue.Text = "Por favor, seleccione ou expanda uma entrada."
                                 Case 5
-                                    cPropValue.Text = "Selezionare o espandere un elemento."
+                                    cPropValue.Text = "Seleziona o espandi un elemento."
                             End Select
                         Else
                             DynaLog.LogMessage("This feature does not have custom properties.")
@@ -424,7 +424,7 @@ Public Class GetFeatureInfoDlg
                                 Case "PTB", "PTG"
                                     msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "ITA"
-                                    msg = "Impossibile ottenere informazioni sulle caratteristiche. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                             End Select
                         Case 1
                             msg = "Could not get feature information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -435,7 +435,7 @@ Public Class GetFeatureInfoDlg
                         Case 4
                             msg = "Não foi possível obter informações sobre a característica. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case 5
-                            msg = "Impossibile ottenere informazioni sulle caratteristiche. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            msg = "Impossibile verificare informazioni sulle funzionalità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally
@@ -545,7 +545,7 @@ Public Class GetFeatureInfoDlg
                         Case "PTB", "PTG"
                             cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
                         Case "ITA"
-                            cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sottovoci, espandetelo."
+                            cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sotto voci, espandilo."
                     End Select
                 Case 1
                     cPropValue.Text = "No value has been defined. If the selected item has subitems, expand it."
@@ -556,7 +556,7 @@ Public Class GetFeatureInfoDlg
                 Case 4
                     cPropValue.Text = "Nenhum valor foi definido. Se o item selecionado tiver subitens, expanda-o."
                 Case 5
-                    cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sottovoci, espandetelo."
+                    cPropValue.Text = "Non è stato definito alcun valore. Se l'elemento selezionato ha delle sotto voci, espandilo."
             End Select
         End If
     End Sub
