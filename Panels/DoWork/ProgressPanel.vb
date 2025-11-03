@@ -6974,7 +6974,7 @@ Public Class ProgressPanel
                 ImgConversionSuccessDialog.ShowDialog(MainForm)
                 If ImgConversionSuccessDialog.DialogResult = Windows.Forms.DialogResult.OK Then
                     DynaLog.LogMessage("Opening image file location in File Explorer...")
-                    Process.Start("\Windows\explorer.exe", "/select," & Quote & imgDestFile & Quote)
+                    Process.Start(Environment.GetEnvironmentVariable("SYSTEMROOT") & "\explorer.exe", "/select," & Quote & imgDestFile & Quote)
                 End If
             ElseIf OperationNum = 996 Then
                 DynaLog.LogMessage("Updating mounted image lists, updating project configuration and saving project...")
