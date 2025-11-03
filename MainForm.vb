@@ -3,7 +3,6 @@ Imports System.IO
 Imports System.Threading
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.Text.Encoding
-Imports System.Text.Encoding
 Imports Microsoft.Win32
 Imports Microsoft.Dism
 Imports System.Runtime.InteropServices
