@@ -1093,7 +1093,7 @@ Public Class ProgressPanel
                 currentTask.Text = "Anexo do diretório de montagem especificado à imagem de destino especificada..."
             Case 5
                 allTasks.Text = "Applicazione all'immagine..."
-                currentTask.Text = "Applicazione della cartella di montaggio specificata all'immagine di destinazione specificata..."
+                currentTask.Text = "Applicazione cartella montaggio specificata all'immagine destinazione specificata..."
         End Select
         LogView.AppendText(CrLf & "Appending mount directory to specified target image..." & CrLf & "Options:" & CrLf &
                            "- Source image directory: " & AppendixSourceDir & CrLf &
@@ -3552,7 +3552,7 @@ Public Class ProgressPanel
             Case 4
                 currentTask.Text = "Desativar características..."
             Case 5
-                currentTask.Text = "Disabilitazione delle caratteristiche..."
+                currentTask.Text = "Disabilitazione funzionalità..."
         End Select
         CurrentPB.Maximum = featDisablementCount
         For x = 0 To Array.LastIndexOf(featDisablementNames, featDisablementLastName)
@@ -5752,7 +5752,7 @@ Public Class ProgressPanel
                     Case 4
                         currentTask.Text = "A importar controladores de terceiros para a imagem de destino..."
                     Case 5
-                        currentTask.Text = "Importazione di driver di terze parti nell'immagine di destinazione..."
+                        currentTask.Text = "Importazione driver di terze parti nell'immagine destinazione..."
                 End Select
                 LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
                 CommandArgs = BckArgs
@@ -5860,7 +5860,7 @@ Public Class ProgressPanel
                 currentTask.Text = "Aplicar o ficheiro de resposta automática especificado à imagem de destino..."
             Case 5
                 allTasks.Text = "Applicazione del file di risposta non presidiato..."
-                currentTask.Text = "Applicazione del file di risposta non presidiato specificato all'immagine di destinazione..."
+                currentTask.Text = "Applicazione file risposta non presidiata specificato all'immagine destinazione..."
         End Select
         LogView.AppendText(CrLf & "Applying unattended answer file. Options:" & CrLf &
                            "- Unattended answer file: " & UnattendedFile)
@@ -5956,8 +5956,8 @@ Public Class ProgressPanel
                 allTasks.Text = "A configurar a localização de destino..."
                 currentTask.Text = "A configurar a localização de destino do Windows PE..."
             Case 5
-                allTasks.Text = "Impostazione del percorso di destinazione..."
-                currentTask.Text = "Impostazione del percorso di destinazione di Windows PE..."
+                allTasks.Text = "Impostazione percorso destinazione..."
+                currentTask.Text = "Impostazione percorso destinazione di Windows PE..."
         End Select
         LogView.AppendText(CrLf & "Setting the Windows PE target path..." & CrLf &
                            "- New target path: " & Quote & peNewTargetPath & Quote)
@@ -6122,8 +6122,8 @@ Public Class ProgressPanel
                 allTasks.Text = "Remover a capacidade de reversão do SO..."
                 currentTask.Text = "Remover a capacidade de reverter para uma instalação antiga do Windows..."
             Case 5
-                allTasks.Text = "Rimozione della possibilità di ritorno al sistema operativo..."
-                currentTask.Text = "Rimozione della possibilità di tornare a una vecchia installazione di Windows..."
+                allTasks.Text = "Rimozione opzione fallback al sistema operativo precedente..."
+                currentTask.Text = "Rimozione opzione fallback ad una vecchia installazione di Windows..."
         End Select
         LogView.AppendText(CrLf & "Removing the ability to revert to an old installation of Windows...")
         CommandArgs &= " /online /remove-osuninstall"
@@ -6974,7 +6974,7 @@ Public Class ProgressPanel
                 ImgConversionSuccessDialog.ShowDialog(MainForm)
                 If ImgConversionSuccessDialog.DialogResult = Windows.Forms.DialogResult.OK Then
                     DynaLog.LogMessage("Opening image file location in File Explorer...")
-                    Process.Start(Environment.GetEnvironmentVariable("SYSTEMROOT") & "\explorer.exe", "/select," & Quote & imgDestFile & Quote)
+                    Process.Start("\Windows\explorer.exe", "/select," & Quote & imgDestFile & Quote)
                 End If
             ElseIf OperationNum = 996 Then
                 DynaLog.LogMessage("Updating mounted image lists, updating project configuration and saving project...")

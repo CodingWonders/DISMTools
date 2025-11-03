@@ -167,7 +167,7 @@ Public Class GetCapabilityInfoDlg
                 Button2.Text = "Guardar..."
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
             Case 5
-                Text = "Ottieni informazioni sulla capacità"
+                Text = "Verifica informazioni capacità"
                 Label1.Text = Text
                 Label2.Text = "Pronto"
                 Label22.Text = "Identità capacità:"
@@ -223,7 +223,7 @@ Public Class GetCapabilityInfoDlg
                                 Case "PTB", "PTG"
                                     msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                                 Case "ITA"
-                                    msg = "Prima di visualizzare le informazioni sulle caratteristiche devono essere completati i processi in background. Attendi che siano completati"
+                                    msg = "Prima di poter visualizzare le informazioni sulle funzionalità devono essere stati completati i processi in background. Attendi che siano completati"
                             End Select
                         Case 1
                             msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
@@ -234,7 +234,7 @@ Public Class GetCapabilityInfoDlg
                         Case 4
                             msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                         Case 5
-                            msg = "Prima di visualizzare le informazioni sulle caratteristiche devono essere completati i processi in background. Attendi che siano completati"
+                            msg = "Prima di poter visualizzare le informazioni sulle funzionalità devono essere stati completati i processi in background. Attendi che siano completati"
                     End Select
                     MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                     Select Case MainForm.Language
