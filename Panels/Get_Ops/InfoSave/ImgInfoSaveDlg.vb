@@ -1171,7 +1171,7 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= GetParagraph("Information summary for " & MainForm.imgAppxPackageNames.Count - 65537 & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
+                    Contents &= GetParagraph("Information summary for " & MainForm.imgAppxPackageNames.Count(Function(package) Not String.IsNullOrEmpty(package)) & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
                         GetTableHeader(New String() {"Package name",
                                                      "Application display name",
                                                      "Architecture",
@@ -1320,7 +1320,7 @@ Public Class ImgInfoSaveDlg
                         For Each pkg As DismAppxPackage In InstalledAppxPackageInfo
                             pkgNames.Add(pkg.PackageName)
                         Next
-                        Contents &= CrLf & GetParagraph("Information summary for " & If(MainForm.imgAppxPackageNames.Count - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count - 65537, pkgNames.Count) & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
+                        Contents &= CrLf & GetParagraph("Information summary for " & If(MainForm.imgAppxPackageNames.Count(Function(package) Not String.IsNullOrEmpty(package)) - 1 > pkgNames.Count, MainForm.imgAppxPackageNames.Count(Function(package) Not String.IsNullOrEmpty(package)), pkgNames.Count) & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
                             GetTableHeader(New String() {"Package name",
                                                          "Application display name",
                                                          "Architecture",
