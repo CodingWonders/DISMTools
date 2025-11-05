@@ -9,6 +9,10 @@
     Partial Friend Class MyApplication
 
         Public Sub CatchEmAll(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            DynaLog.LogMessage("Unhandled exception occurred. Gotta catch'em all !")
+            DynaLog.LogMessage("Exception information:")
+            DynaLog.LogMessage("- Message: " & e.Exception.Message)
+            DynaLog.LogMessage("- Code (HRESULT): " & Hex(e.Exception.HResult))
             ' Gotta catch 'em all !
             Installer.MainForm.LogErrorMessage(e.Exception, InstallationStage.InstallerStage.Miscellaneous)
             Installer.MainForm.ChangePage(WizardPage.Page.FailurePage, True)

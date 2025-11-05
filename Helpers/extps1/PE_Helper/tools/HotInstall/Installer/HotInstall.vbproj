@@ -123,9 +123,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Util\BuildGetter.vb" />
     <Compile Include="Util\Casters.vb" />
     <Compile Include="Util\Converters.vb" />
     <Compile Include="Util\DriverHelper.vb" />
+    <Compile Include="Util\DynaLog.vb" />
     <Compile Include="Util\LanguageFileParser.vb" />
     <Compile Include="Util\NativeMethods.vb" />
     <Compile Include="Util\Utilities.vb" />

@@ -18,8 +18,10 @@ Public Class DiskSpaceChecker
         If DriveObjects Is Nothing Then
             Throw New Exception("A null-valued object collection has been passed for the drive report")
         End If
+        DynaLog.LogMessage("Count of obtained disks: " & DriveObjects.Count)
         reportContents &= "Amount of local disks and partitions in the host system: " & DriveObjects.Count & CrLf & CrLf
         If DriveObjects.Count > 0 Then
+            DynaLog.LogMessage("Saving obtained disks to report...")
             For Each DriveObject As ManagementObject In DriveObjects
                 reportContents &= "Information for Disk " & GetObjectValue(DriveObject, "DiskIndex") & ", Partition " & (GetObjectValue(DriveObject, "Index") + 1) & CrLf &
                                   "- Drive total size: " & GetObjectValue(DriveObject, "Size") & " bytes (~" & Converters.BytesToReadableSize(GetObjectValue(DriveObject, "Size")) & ")" & CrLf &
@@ -40,14 +42,21 @@ Public Class DiskSpaceChecker
             Throw New Exception("No fixed drives have been passed")
         End If
 
+        DynaLog.LogMessage("Comparing spaces of images and drives...")
+        DynaLog.LogMessage("- Count of images: " & ImageNames.Count)
+        DynaLog.LogMessage("- Count of drives: " & Drives.Count)
+
         reportContents &= "Comparison of sizes:" & CrLf & CrLf
 
+        DynaLog.LogMessage("Comparing spaces for drives...")
         For Each Drive As ManagementObject In Drives
             reportContents &= "- Disk, with volume label " & Quote & GetObjectValue(Drive, "VolumeName") & Quote & " (" & GetObjectValue(Drive, "DeviceID") & "):" & CrLf
             For Each ImageSize In ImageSizes
                 If GetObjectValue(Drive, "Size") > ImageSize Then
+                    DynaLog.LogMessage("This image can be installed here.")
                     reportContents &= "  - " & Quote & ImageNames(ImageSizes.IndexOf(ImageSize)) & Quote & " (index " & ImageSizes.IndexOf(ImageSize) + 1 & ") can be installed on this disk because there is enough free space." & CrLf
                 Else
+                    DynaLog.LogMessage("This image cannot be installed here.")
                     reportContents &= "  - " & Quote & ImageNames(ImageSizes.IndexOf(ImageSize)) & Quote & " (index " & ImageSizes.IndexOf(ImageSize) + 1 & ") cannot be installed on this disk because there is not enough free space." & CrLf
                 End If
             Next
@@ -59,6 +68,9 @@ Public Class DiskSpaceChecker
 #End Region
 
     Function GetDirectorySize(DirectoryName As String, ExcludedFile As String) As Long
+        DynaLog.LogMessage("Getting the size of provided directory...")
+        DynaLog.LogMessage("- Directory: " & DirectoryName)
+        DynaLog.LogMessage("- File to exclude: " & ExcludedFile)
         Dim DirectorySize As Long = 0
         If Directory.Exists(DirectoryName) Then
             For Each FileInDir In Directory.GetFiles(DirectoryName, "*", SearchOption.AllDirectories)
@@ -66,6 +78,7 @@ Public Class DiskSpaceChecker
                 DirectorySize += New FileInfo(FileInDir).Length
             Next
         End If
+        DynaLog.LogMessage("Reported size: " & DirectorySize & " bytes")
         Return DirectorySize
     End Function
 
@@ -76,9 +89,15 @@ Public Class DiskSpaceChecker
     End Sub
 
     Sub ListFreeSpace(FreeSpace As Long, SpaceToCompare As Long, Optional SystemDriveMO As ManagementObject = Nothing)
+        DynaLog.LogMessage("Listing free space in drive...")
+        DynaLog.LogMessage("- Free space: " & FreeSpace)
+        DynaLog.LogMessage("- Referenced space: " & SpaceToCompare)
         If SystemDriveMO IsNot Nothing Then
+            DynaLog.LogMessage("System drive management object is something. We select the drive")
             reportContents &= "The system drive is mounted to " & GetObjectValue(SystemDriveMO, "DeviceID") & CrLf & CrLf
         End If
+
+        DynaLog.LogMessage("Saving information to report...")
         reportContents &= "Disc image files will be copied to the system drive shown above:" & CrLf &
                           "- The total size of the disc image files is " & SpaceToCompare & " bytes (~" & Converters.BytesToReadableSize(SpaceToCompare) & ")" & CrLf &
                           "- The free space on this drive is " & FreeSpace & " bytes (~" & Converters.BytesToReadableSize(FreeSpace) & ")" & CrLf & CrLf
@@ -96,6 +115,8 @@ Public Class DiskSpaceChecker
     End Sub
 
     Sub SaveReport(Location As String)
+        DynaLog.LogMessage("Saving DSC report...")
+        DynaLog.LogMessage("- Destination: " & Location)
         Try
             File.WriteAllText(Location, reportContents, System.Text.Encoding.UTF8)
         Catch ex As Exception
@@ -104,14 +125,19 @@ Public Class DiskSpaceChecker
     End Sub
 
     Sub GenerateDSCReport()
+        DynaLog.LogMessage("Generating Disk Space Checker report...")
+        DynaLog.LogMessage("Getting System Drives...")
         Dim SystemDrives As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3")        ' DriveType = 3 --> Local Disk
         If SystemDrives IsNot Nothing AndAlso SystemDrives.Count > 0 Then
+            DynaLog.LogMessage("System drives were obtained. Listing...")
             ' List the disks with a management query
             ListObtainedDisks(GetResultsFromManagementQuery("SELECT * FROM Win32_DiskPartition"))
 
             ' Get System Drive
+            DynaLog.LogMessage("Getting System Boot Drive...")
             Dim SystemBootDrive As ManagementObjectCollection = GetResultsFromManagementQuery("SELECT * FROM Win32_LogicalDisk WHERE DriveType = 3 AND DeviceID LIKE " & Quote & Environment.GetEnvironmentVariable("HOMEDRIVE") & Quote)
             If SystemBootDrive IsNot Nothing Then
+                DynaLog.LogMessage("Getting image file sizes and free spaces...")
                 ' We have grabbed the system boot drive
                 progressMessage = GetValueFromLanguageData("DiskSpaceChecker.DSC_GetSizeOfImageFiles")
                 BackgroundWorker1.ReportProgress(10)
@@ -119,14 +145,19 @@ Public Class DiskSpaceChecker
                 ' Get the free space of the system boot drive, since we'll copy the files there
                 Dim FreeSpaceOnSystemDrive As Long = GetObjectValue(SystemBootDrive(0), "FreeSpace")
                 ListFreeSpace(FreeSpaceOnSystemDrive, FolderSize, SystemBootDrive(0))
+                DynaLog.LogMessage("Free space on system drive: " & FreeSpaceOnSystemDrive & " bytes")
+                DynaLog.LogMessage("Folder Size: " & FolderSize & " bytes")
                 If FreeSpaceOnSystemDrive < FolderSize Then
+                    DynaLog.LogMessage("Free space is lower than folder size.")
                     Throw New Exception("There is not enough space to copy the disc image files to the system drive. Please free up some space and try again.")
                 End If
                 ' Get information about the installation image and compare the expanded sizes of all indexes with the total space of all fixed drives
                 progressMessage = GetValueFromLanguageData("DiskSpaceChecker.DSC_GetImageFileInfo")
                 BackgroundWorker1.ReportProgress(40)
+                DynaLog.LogMessage("Getting image information...")
                 Dim imgInfoCollection As DismImageInfoCollection = GetImageInformation(Path.Combine(sourcePath, "sources", "install.wim"))
                 If imgInfoCollection IsNot Nothing Then
+                    DynaLog.LogMessage("Getting image names and sizes...")
                     progressMessage = GetValueFromLanguageData("DiskSpaceChecker.DSC_GetImageNamesAndSizes")
                     BackgroundWorker1.ReportProgress(60)
                     ' Grab the image names and expanded sizes
@@ -138,6 +169,7 @@ Public Class DiskSpaceChecker
                     Next
                     progressMessage = GetValueFromLanguageData("DiskSpaceChecker.DSC_CompareSizes")
                     BackgroundWorker1.ReportProgress(80)
+                    DynaLog.LogMessage("Comparing spaces...")
                     ListSpaceComparison(ImageNames, ImageSizes, SystemDrives)
                 End If
             End If
@@ -147,15 +179,19 @@ Public Class DiskSpaceChecker
     End Sub
 
     Function GetImageInformation(ImagePath As String) As DismImageInfoCollection
+        DynaLog.LogMessage("Getting Windows image information...")
+        DynaLog.LogMessage("- Image Path: " & ImagePath)
         Dim imgInfoCollection As DismImageInfoCollection = Nothing
         Try
             If ImagePath <> "" AndAlso File.Exists(ImagePath) Then
+                DynaLog.LogMessage("Preparing to initialize API and get image info")
                 DismApi.Initialize(DismLogLevel.LogErrors)
                 imgInfoCollection = DismApi.GetImageInfo(Path.Combine(sourcePath, "sources", "install.wim"))
             End If
         Catch ex As Exception
             Throw ex
         Finally
+            DynaLog.LogMessage("Shutting down API...")
             Try
                 DismApi.Shutdown()
             Catch ex As Exception
