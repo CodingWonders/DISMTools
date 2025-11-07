@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "25103"
+    Const UnattendGenReleaseTag As String = "25111"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -2862,7 +2862,7 @@ Public Class NewUnattendWiz
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
         If ComboBox14.SelectedItem IsNot Nothing Then
             ' Perform a Google search (yes, Google is not my favorite search engine, but this takes advantage of the Web tab)
-            Process.Start(String.Format("https://www.google.com/search?q={0}+site:learn.microsoft.com&udm=14", ComboBox14.SelectedItem))
+            SearchEngineHelper.InvokeSearchQuery("Google", String.Format("{0}+site:learn.microsoft.com", ComboBox14.SelectedItem))
         End If
     End Sub
 

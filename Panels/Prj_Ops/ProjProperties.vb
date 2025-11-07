@@ -411,7 +411,7 @@ Public Class ProjProperties
                                       "dism /English /get-imageinfo /imagefile=" & Quote & MainForm.SourceImg & Quote & " /index=" & MainForm.ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & Quote & MainForm.projPath & "\tempinfo\imgwimboot" & Quote, ASCII)
             End Select
             If Debugger.IsAttached Then
-                Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start(Environment.GetEnvironmentVariable("SYSTEMROOT") & "\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
             End If
             Using WIMBootProc As New Process()
                 WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"

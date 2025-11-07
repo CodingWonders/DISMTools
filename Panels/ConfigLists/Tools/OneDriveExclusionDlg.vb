@@ -23,7 +23,7 @@ Public Class OneDriveExclusionDlg
                     Case "PTB", "PTG"
                         Label3.Text = "As pastas do OneDrive dos utilizadores foram excluídas e serão adicionadas à lista de configuração."
                     Case "ITA"
-                        Label3.Text = "Le cartelle OneDrive dell'utente sono state escluse e saranno aggiunte all'elenco di configurazione"
+                        Label3.Text = "Le cartelle OneDrive dell'utente sono state escluse e saranno aggiunte all'elenco configurazione"
                 End Select
             Case 1
                 Label3.Text = "User OneDrive folders have been excluded and will be added to the configuration list."
@@ -34,7 +34,7 @@ Public Class OneDriveExclusionDlg
             Case 4
                 Label3.Text = "As pastas do OneDrive dos utilizadores foram excluídas e serão adicionadas à lista de configuração."
             Case 5
-                Label3.Text = "Le cartelle OneDrive dell'utente sono state escluse e saranno aggiunte all'elenco di configurazione"
+                Label3.Text = "Le cartelle OneDrive dell'utente sono state escluse e saranno aggiunte all'elenco configurazione"
         End Select
         Refresh()
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -69,7 +69,7 @@ Public Class OneDriveExclusionDlg
                             Case "PTB", "PTG"
                                 Label3.Text = "Excluir pastas do OneDrive dos utilizadores..."
                             Case "ITA"
-                                Label3.Text = "Esclusione delle cartelle OneDrive dell'utente..."
+                                Label3.Text = "Esclusione cartelle OneDrive utente..."
                         End Select
                     Case 1
                         Label3.Text = "Excluding user OneDrive folders..."
@@ -80,7 +80,7 @@ Public Class OneDriveExclusionDlg
                     Case 4
                         Label3.Text = "Excluir pastas do OneDrive dos utilizadores..."
                     Case 5
-                        Label3.Text = "Esclusione delle cartelle OneDrive dell'utente..."
+                        Label3.Text = "Esclusione cartelle OneDrive utente..."
                 End Select
                 Refresh()
                 ' Go through all User folders and exclude all OneDrive folders
@@ -153,14 +153,14 @@ Public Class OneDriveExclusionDlg
                         FolderBrowserDialog1.Description = "Escolha um caminho que contenha pastas dos utilizadores:"
                     Case "ITA"
                         Text = "Escludere le cartelle OneDrive dell'utente"
-                        Label1.Text = "Questo strumento consente di escludere le cartelle OneDrive dell'utente dall'elenco di configurazione su cui si sta lavorando. È sufficiente specificare il percorso a cui si desidera applicare il file dell'elenco di configurazione e fare clic su Escludi." & CrLf & CrLf & _
-                                      "NOTA: una volta eseguito questo strumento ed escluse le cartelle OneDrive dell'utente, non si dovrebbe usare l'elenco di configurazione su un'immagine diversa da quella specificata qui. Se si desidera utilizzare l'elenco di configurazione su altre immagini, rimuovere le cartelle OneDrive dell'utente nell'elenco di configurazione ed eseguire nuovamente questo strumento."
+                        Label1.Text = "Questo strumento consente di escludere le cartelle OneDrive dell'utente dall'elenco configurazione su cui si sta lavorando. È sufficiente specificare il percorso a cui vuoi applicare il file dell'elenco configurazione e seelzionare 'Escludi'." & CrLf & CrLf & _
+                                      "NOTA: una volta eseguito questo strumento ed escluse le cartelle OneDrive dell'utente, non si dovrebbe usare l'elenco configurazione in un'immagine diversa da quella specificata qui. Se vuoi usare l'elenco configurazione in altre immagini, rimuovi le cartelle OneDrive dell'utente nell'elenco configurazione ed esegui nuovamente questo strumento."
                         Label2.Text = "Percorso da cui escludere le cartelle OneDrive:"
-                        Label3.Text = "Quando si è pronti, fare clic su Escludi"
+                        Label3.Text = "Quando si è pronti, seleziona 'Escludi'"
                         Button1.Text = "Sfoglia..."
-                        OK_Button.Text = "Escludere"
-                        Cancel_Button.Text = "Annullare"
-                        FolderBrowserDialog1.Description = "Scegliere un percorso che contenga le cartelle dell'utente:"
+                        OK_Button.Text = "Escludi"
+                        Cancel_Button.Text = "Annulla"
+                        FolderBrowserDialog1.Description = "Scegli un percorso che contenga le cartelle dell'utente:"
                 End Select
             Case 1
                 Text = "Exclude user OneDrive folders"
@@ -204,14 +204,14 @@ Public Class OneDriveExclusionDlg
                 FolderBrowserDialog1.Description = "Escolha um caminho que contenha pastas dos utilizadores:"
             Case 5
                 Text = "Escludere le cartelle OneDrive dell'utente"
-                Label1.Text = "Questo strumento consente di escludere le cartelle OneDrive dell'utente dall'elenco di configurazione su cui si sta lavorando. È sufficiente specificare il percorso a cui si desidera applicare il file dell'elenco di configurazione e fare clic su Escludi." & CrLf & CrLf & _
-                              "NOTA: una volta eseguito questo strumento ed escluse le cartelle OneDrive dell'utente, non si dovrebbe usare l'elenco di configurazione su un'immagine diversa da quella specificata qui. Se si desidera utilizzare l'elenco di configurazione su altre immagini, rimuovere le cartelle OneDrive dell'utente nell'elenco di configurazione ed eseguire nuovamente questo strumento."
+                Label1.Text = "Questo strumento consente di escludere le cartelle OneDrive dell'utente dall'elenco configurazione su cui si sta lavorando. È sufficiente specificare il percorso a cui vuoi applicare il file dell'elenco configurazione e selezionare 'Escludi'." & CrLf & CrLf & _
+                              "NOTA: una volta eseguito questo strumento ed escluse le cartelle OneDrive dell'utente, non si dovrebbe usare l'elenco configurazione in un'immagine diversa da quella specificata qui. Se vuoi usare l'elenco configurazione in altre immagini, rimuovi le cartelle OneDrive dell'utente nell'elenco configurazione ed esegui nuovamente questo strumento."
                 Label2.Text = "Percorso da cui escludere le cartelle OneDrive:"
-                Label3.Text = "Quando si è pronti, fare clic su Escludi"
+                Label3.Text = "Quando si è pronti, seleziona 'Escludi'"
                 Button1.Text = "Sfoglia..."
-                OK_Button.Text = "Escludere"
-                Cancel_Button.Text = "Annullare"
-                FolderBrowserDialog1.Description = "Scegliere un percorso che contenga le cartelle dell'utente:"
+                OK_Button.Text = "Escludi"
+                Cancel_Button.Text = "Annulla"
+                FolderBrowserDialog1.Description = "Scegli un percorso che contenga le cartelle dell'utente:"
         End Select
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

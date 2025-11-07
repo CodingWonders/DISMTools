@@ -86,21 +86,21 @@ Public Class GetCapabilityInfoDlg
                         Button2.Text = "Guardar..."
                         SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
                     Case "ITA"
-                        Text = "Ottieni informazioni sulla capacità"
+                        Text = "Verifica informazioni capacità"
                         Label1.Text = Text
                         Label2.Text = "Pronto"
-                        Label22.Text = "Identità della capacità:"
-                        Label24.Text = "Nome della capacità:"
-                        Label26.Text = "Stato della capacità:"
+                        Label22.Text = "Identità capacità:"
+                        Label24.Text = "Nome capacità:"
+                        Label26.Text = "Stato capacità:"
                         Label31.Text = "Nome visualizzato:"
                         Label36.Text = "Informazioni sulla capacità"
-                        Label37.Text = "Selezionare una capacità installata a sinistra per visualizzarne le informazioni qui"
-                        Label41.Text = "Descrizione della capacità:"
+                        Label37.Text = "Seleziona una capacità installata a sinistra per visualizzarne qui le informazioni"
+                        Label41.Text = "Descrizione capacità:"
                         Label43.Text = "Dimensioni:"
-                        ListView1.Columns(0).Text = "Identità della capacità"
+                        ListView1.Columns(0).Text = "Identità capacità"
                         ListView1.Columns(1).Text = "Stato"
                         Button2.Text = "Salva..."
-                        SearchBox1.cueBanner = "Digitare qui per cercare una capacità..."
+                        SearchBox1.cueBanner = "Digita qui per cercare una capacità..."
                 End Select
             Case 1
                 Text = "Get capability information"
@@ -167,21 +167,21 @@ Public Class GetCapabilityInfoDlg
                 Button2.Text = "Guardar..."
                 SearchBox1.cueBanner = "Digite aqui para pesquisar uma capacidade..."
             Case 5
-                Text = "Ottieni informazioni sulla capacità"
+                Text = "Verifica informazioni capacità"
                 Label1.Text = Text
                 Label2.Text = "Pronto"
-                Label22.Text = "Identità della capacità:"
-                Label24.Text = "Nome della capacità:"
-                Label26.Text = "Stato della capacità:"
+                Label22.Text = "Identità capacità:"
+                Label24.Text = "Nome capacità:"
+                Label26.Text = "Stato capacità:"
                 Label31.Text = "Nome visualizzato:"
-                Label36.Text = "Informazioni sulla capacità"
-                Label37.Text = "Selezionare una capacità installata a sinistra per visualizzarne le informazioni qui"
-                Label41.Text = "Descrizione della capacità:"
+                Label36.Text = "Informazioni capacità"
+                Label37.Text = "Seleziona una capacità installata a sinistra per visualizzarne qui le informazioni"
+                Label41.Text = "Descrizione capacità:"
                 Label43.Text = "Dimensioni:"
-                ListView1.Columns(0).Text = "Identità della capacità"
+                ListView1.Columns(0).Text = "Identità capacità"
                 ListView1.Columns(1).Text = "Stato"
                 Button2.Text = "Salva..."
-                SearchBox1.cueBanner = "Digitare qui per cercare una capacità..."
+                SearchBox1.cueBanner = "Digita qui per cercare una capacità..."
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -223,7 +223,7 @@ Public Class GetCapabilityInfoDlg
                                 Case "PTB", "PTG"
                                     msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                                 Case "ITA"
-                                    msg = "I processi in background devono essere completati prima di mostrare le informazioni sulle caratteristiche. Aspetteremo che siano completati"
+                                    msg = "Prima di poter visualizzare le informazioni sulle funzionalità devono essere stati completati i processi in background. Attendi che siano completati"
                             End Select
                         Case 1
                             msg = "Background processes need to have completed before showing feature information. We'll wait until they have completed"
@@ -234,7 +234,7 @@ Public Class GetCapabilityInfoDlg
                         Case 4
                             msg = "Os processos em segundo plano têm de estar concluídos antes de mostrar informações sobre as características. Vamos esperar até que estejam concluídos"
                         Case 5
-                            msg = "I processi in background devono essere completati prima di mostrare le informazioni sulle caratteristiche. Aspetteremo che siano completati"
+                            msg = "Prima di poter visualizzare le informazioni sulle funzionalità devono essere stati completati i processi in background. Attendi che siano completati"
                     End Select
                     MsgBox(msg, vbOKOnly + vbInformation, Label1.Text)
                     Select Case MainForm.Language
@@ -249,7 +249,7 @@ Public Class GetCapabilityInfoDlg
                                 Case "PTB", "PTG"
                                     Label2.Text = "À espera que os processos em segundo plano terminem..."
                                 Case "ITA"
-                                    Label2.Text = "In attesa che i processi in secondo piano finiscano..."
+                                    Label2.Text = "In attesa del completamento che i processi in background..."
                             End Select
                         Case 1
                             Label2.Text = "Waiting for background processes to finish..."
@@ -260,7 +260,7 @@ Public Class GetCapabilityInfoDlg
                         Case 4
                             Label2.Text = "À espera que os processos em segundo plano terminem..."
                         Case 5
-                            Label2.Text = "In attesa che i processi in secondo piano finiscano..."
+                            Label2.Text = "In attesa del completamento che i processi in background..."
                     End Select
                     While MainForm.ImgBW.IsBusy
                         Application.DoEvents()
@@ -280,7 +280,7 @@ Public Class GetCapabilityInfoDlg
                             Case "PTB", "PTG"
                                 Label2.Text = "Preparar-se para obter informações sobre a capacidade..."
                             Case "ITA"
-                                Label2.Text = "Preparazione per ottenere informazioni sulle capacità..."
+                                Label2.Text = "Preparazione verifica informazioni sulle capacità..."
                         End Select
                     Case 1
                         Label2.Text = "Preparing to get capability information..."
@@ -291,7 +291,7 @@ Public Class GetCapabilityInfoDlg
                     Case 4
                         Label2.Text = "Preparar-se para obter informações sobre a capacidade..."
                     Case 5
-                        Label2.Text = "Preparazione per ottenere informazioni sulle capacità..."
+                        Label2.Text = "Preparazione verifica informazioni sulle capacità..."
                 End Select
                 Application.DoEvents()
                 Try
@@ -311,7 +311,7 @@ Public Class GetCapabilityInfoDlg
                                     Case "PTB", "PTG"
                                         Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                     Case "ITA"
-                                        Label2.Text = "Ottenere informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                                        Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                                 End Select
                             Case 1
                                 Label2.Text = "Getting information from " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
@@ -322,7 +322,7 @@ Public Class GetCapabilityInfoDlg
                             Case 4
                                 Label2.Text = "Obter informações de " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                             Case 5
-                                Label2.Text = "Ottenere informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
+                                Label2.Text = "Verifica informazioni da " & Quote & ListView1.FocusedItem.SubItems(0).Text & Quote & "..."
                         End Select
                         DynaLog.LogMessage("Capability to get information about: " & ListView1.FocusedItem.SubItems(0).Text)
                         Application.DoEvents()
@@ -386,7 +386,7 @@ Public Class GetCapabilityInfoDlg
                                 Case "PTB", "PTG"
                                     msg = "Não foi possível obter informações sobre a capacidade. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                                 Case "ITA"
-                                    msg = "Impossibile ottenere informazioni sulle capacità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                                    msg = "Impossibile verificare informazioni sulle capacità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                             End Select
                         Case 1
                             msg = "Could not get capability information. Reason: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -397,7 +397,7 @@ Public Class GetCapabilityInfoDlg
                         Case 4
                             msg = "Não foi possível obter informações sobre a capacidade. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case 5
-                            msg = "Impossibile ottenere informazioni sulle capacità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            msg = "Impossibile verificare informazioni sulle capacità. Motivo: " & CrLf & CrLf & ex.ToString() & ": " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                 Finally

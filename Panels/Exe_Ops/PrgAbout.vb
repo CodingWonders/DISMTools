@@ -146,26 +146,26 @@ Public Class PrgAbout
                     Case "ITA"
                         Text = "Informazioni su questo programma"
                         Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
-                        Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
-                        Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
+                        Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie ad un'interfaccia grafica"
+                        Label3.Text = "Per la creazione di questo programma sono stati usate queste risorse e componenti:"
                         Label4.Text = "Risorse"
                         Label5.Text = "Fluency"
-                        Label6.Text = "Icona di SQL Server (Color)"
+                        Label6.Text = "Icona SQL Server (Color)"
                         Label7.Text = "Utilità"
                         Label8.Text = "7-Zip"
-                        Label10.Text = "Documentazione di aiuto"
-                        Label11.Text = "Fonte della guida ai comandi"
+                        Label10.Text = "Documentazione guida in linea"
+                        Label11.Text = "Sorgente guida comandi"
                         Label13.Text = "Scintilla.NET (pacchetto NuGet)"
                         If Not MainForm.dtBranch.Contains("pre") Then
-                            Label15.Text = "Costruito su " & RetrieveLinkerTimestamp() & " da msbuild"
+                            Label15.Text = "Creato con " & RetrieveLinkerTimestamp() & " da msbuild"
                             Label15.Visible = True
                         End If
                         Label16.Text = "ManagedDism (pacchetto NuGet)"
-                        Label17.Text = "Risorse di branding"
+                        Label17.Text = "Risorse branding"
                         Label18.Text = "Windows Home Server 2011"
                         LinkLabel1.Text = "CREDITI"
                         LinkLabel2.Text = "LICENZE"
-                        LinkLabel3.Text = "COSA C'È DI NUOVO"
+                        LinkLabel3.Text = "NOVITA'"
                         LinkLabel4.Text = "Icons8"
                         LinkLabel5.Text = "Sito web"
                         LinkLabel7.Text = "Microsoft"
@@ -174,7 +174,7 @@ Public Class PrgAbout
                         LinkLabel11.Text = "Microsoft"
                         LinkLabel12.Text = "Sito web"
                         OK_Button.Text = "OK"
-                        UpdCheckBtn.Text = "Controlla gli aggiornamenti"
+                        UpdCheckBtn.Text = "Controlla aggiornamenti"
                 End Select
             Case 1
                 Text = "About this program"
@@ -308,21 +308,21 @@ Public Class PrgAbout
                 Text = "Informazioni su questo programma"
                 Label1.Text = "DISMTools - versione " & My.Application.Info.Version.ToString() & If(MainForm.dtBranch.Contains("pre"), "." & MainForm.dtBranch & "." & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"), "")
                 Label2.Text = "DISMTools consente di distribuire, gestire e riparare le immagini di Windows con facilità, grazie a un'interfaccia grafica"
-                Label3.Text = "Per la creazione di questo programma sono stati utilizzati queste risorse e componenti:"
+                Label3.Text = "Per la creazione di questo programma sono stati usate queste risorse e componenti:"
                 Label4.Text = "Risorse"
                 Label5.Text = "Fluency"
-                Label6.Text = "Icona di SQL Server (Color)"
+                Label6.Text = "Icona SQL Server (Color)"
                 Label7.Text = "Utilità"
                 Label8.Text = "7-Zip"
-                Label10.Text = "Documentazione di aiuto"
-                Label11.Text = "Fonte della guida ai comandi"
+                Label10.Text = "Documentazione guida in linea"
+                Label11.Text = "Sorgente guida comandi"
                 Label13.Text = "Scintilla.NET (pacchetto NuGet)"
                 If Not MainForm.dtBranch.Contains("pre") Then
-                    Label15.Text = "Costruito su " & RetrieveLinkerTimestamp() & " da msbuild"
+                    Label15.Text = "Creato con " & RetrieveLinkerTimestamp() & " da msbuild"
                     Label15.Visible = True
                 End If
                 Label16.Text = "ManagedDism (pacchetto NuGet)"
-                Label17.Text = "Risorse di branding"
+                Label17.Text = "Risorse branding"
                 Label18.Text = "Windows Home Server 2011"
                 LinkLabel1.Text = "CREDITI"
                 LinkLabel2.Text = "LICENZE"
@@ -335,7 +335,7 @@ Public Class PrgAbout
                 LinkLabel11.Text = "Microsoft"
                 LinkLabel12.Text = "Sito web"
                 OK_Button.Text = "OK"
-                UpdCheckBtn.Text = "Controlla gli aggiornamenti"
+                UpdCheckBtn.Text = "Controlla aggiornamenti"
         End Select
         RichTextBox1.Text = My.Resources.LicenseOverview
         RichTextBox2.Text = My.Resources.WhatsNew
@@ -579,7 +579,7 @@ Public Class PrgAbout
                     Case "PTB", "PTG"
                         PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
                     Case "ITA"
-                        PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto sui forum di My Digital Life")
+                        PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
                 End Select
             Case 1
                 PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
@@ -590,7 +590,7 @@ Public Class PrgAbout
             Case 4
                 PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
             Case 5
-                PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto sui forum di My Digital Life")
+                PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
         End Select
     End Sub
 
