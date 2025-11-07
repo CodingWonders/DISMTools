@@ -2119,18 +2119,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes
+        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
         '''
-        '''- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
-        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
-        '''- Fixed an issue in the ADDS domain join wizard regarding user name validation
+        '''New features:
         '''
-        '''-- New features
-        '''
-        '''- A new autorun window has been added to allow you to access the items you want more easily
-        '''- A new tool designed to prepare computers for Sysprep generaliz [resto de la cadena truncado]&quot;;.
+        '''- HotInstall has received DynaLog logging
+        '''- UnattendGen has been updated to the latest version
+        '''- The Italian tour has been updated to point to Italian tour videos
+        '''- Several improvements were made to Italian translations (#294, #296, #298, #301; thanks @bovirus)
+        '''- CODE: web search functionality has been modularized. The search engine helper will be used in the future
+        '''- Tinted color themes [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
