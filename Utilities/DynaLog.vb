@@ -9,12 +9,57 @@ Imports System.Globalization
 Public Class DynaLog
 
     ''' <summary>
+    ''' Version identifier for DynaLog in this implementation
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const DYNALOG_VERSION As String = "1.0.3"
+    ''' <summary>
+    ''' The minimum amount of days a current log should be kept for archiving
+    ''' </summary>
+    ''' <remarks>Negative value to reflect how old a file is</remarks>
+    Private Const DYNALOG_LOG_ARCHIVE_MINIMUM_THRESHOLD_DAYS As Integer = -14
+    ''' <summary>
+    ''' The maximum amount of days log archives should be kept for deletion
+    ''' </summary>
+    ''' <remarks>Negative value to reflect how old a file is</remarks>
+    Private Const DYNALOG_LOG_ARCHIVE_RETENTION_MAXIMUM_THRESHOLD_DAYS As Integer = -28
+
+    ' Absolute values for constants
+    Private Shared ReadOnly DYNALOG_LOG_ARCHIVE_MINIMUM_THRESHOLD_DAYS_ABS As Integer = -DYNALOG_LOG_ARCHIVE_MINIMUM_THRESHOLD_DAYS,
+        DYNALOG_LOG_ARCHIVE_RETENTION_MAXIMUM_THRESHOLD_DAYS_ABS As Integer = -DYNALOG_LOG_ARCHIVE_RETENTION_MAXIMUM_THRESHOLD_DAYS
+
+    ''' <summary>
     ''' Determines whether the logger is temporarily enabled or disabled
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks>This can be called by any function/method</remarks>
     Public Shared Property LoggerEnabled As Boolean = True
+
+    Private Shared Sub RemoveLogArchives()
+        LogMessage("Removing archived logs older than " & DYNALOG_LOG_ARCHIVE_RETENTION_MAXIMUM_THRESHOLD_DAYS_ABS & " days...", False)
+        Try
+            Dim LogArchives() As String = Directory.GetFiles(Path.Combine(Application.StartupPath, "logs"), "DT_DynaLog_*.old", SearchOption.TopDirectoryOnly)
+            LogMessage("Archives found: " & LogArchives.Count)
+            If LogArchives.Count > 0 Then
+                LogMessage("Removing log archives...")
+                For Each LogArchive In LogArchives
+                    Try
+                        ' Determine if log file is older than retention maximum threshold constant
+                        Dim CreationDate As DateTime = File.GetCreationTimeUtc(LogArchive)
+                        If CreationDate < DateTime.UtcNow.AddDays(DYNALOG_LOG_ARCHIVE_RETENTION_MAXIMUM_THRESHOLD_DAYS) Then
+                            LogMessage("- Log archive " & Quote & LogArchive & Quote & " is more than " & DYNALOG_LOG_ARCHIVE_RETENTION_MAXIMUM_THRESHOLD_DAYS_ABS & " days old. Removing...")
+                            File.Delete(LogArchive)
+                        End If
+                    Catch ex As Exception
+                        LogMessage("Could not delete log archive. Error message: " & ex.Message)
+                    End Try
+                Next
+            End If
+        Catch ex As Exception
+            LogMessage("Could not detect log archives. Error message: " & ex.Message)
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Checks the age of the active DynaLog log file
@@ -26,7 +71,7 @@ Public Class DynaLog
             LogMessage("Log File Found. Checking log file creation date...", False)
             Try
                 Dim CreationDate As DateTime = File.GetCreationTimeUtc(Application.StartupPath & "\logs\DT_DynaLog.log")
-                If CreationDate < DateTime.UtcNow.AddDays(-14) Then
+                If CreationDate < DateTime.UtcNow.AddDays(DYNALOG_LOG_ARCHIVE_MINIMUM_THRESHOLD_DAYS) Then
                     LogMessage("Current log file is more than 2 weeks old. Archiving...", False)
                     Dim ArchivedFileName As String = "DT_DynaLog_" & DateTime.UtcNow.ToString("yyMMdd-HHmm") & ".old"
                     Try
@@ -42,12 +87,14 @@ Public Class DynaLog
             Catch ex As Exception
                 LogMessage("Could not check log file age. Error info:" & CrLf & CrLf & ex.ToString(), False)
             End Try
+            RemoveLogArchives()
         Else
             ' Don't do anything
         End If
     End Sub
 
     Public Shared Sub BeginLogging()
+        LogMessage("----- Dynamic Logging (DynaLog) version " & DYNALOG_VERSION & " -----", False)
         LogMessage("DynaLog Logger has begun logging program operations...", False)
         LogMessage("--- Time Stamps are shown in UTC Time!!! ---", False)
     End Sub
