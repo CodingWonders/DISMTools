@@ -233,7 +233,7 @@ Partial Class MainForm
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(670, 45)
         Me.Label2.TabIndex = 5
-        Me.Label2.Text = "PE Helper Scripts and Components (c) 2024-2025 CodingWonders Software" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Compilatio" & _
+        Me.Label2.Text = "PE Helper Scripts and Components (c) 2024-2026 CodingWonders Software" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Compilatio" & _
     "n Scripts (c) 2022 CT Tech Group LLC" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FOG PowerShell API (c) 2020 JJ Fullmer"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
