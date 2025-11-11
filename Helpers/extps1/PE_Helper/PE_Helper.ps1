@@ -8,7 +8,7 @@
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2025 CodingWonders Software                  |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -87,7 +87,7 @@ function Start-PEGeneration
     $architecture = [PE_Arch]::($arch)
     $version = "0.7.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
@@ -878,16 +878,19 @@ function New-WinPEIso
             Write-Host "Generating ISO file with UEFI compatibility..."
             $bootData = "1$($efiVars)"
         }
-        $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
-        if ($oscdimgProc.ExitCode -eq 0)
-        {
-            Write-Host "ISO generation has completed successfully."
-        }
-        else
-        {
-            Write-Host "Failed to generate an ISO file."
-        }
-        return $($oscdimgProc.ExitCode -eq 0)
+
+        $success = $false
+
+        do {
+            $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
+            $success = ($oscdimgProc.ExitCode -eq 0)
+            if ($success -eq $false) {
+                Write-Host "Could not generate ISO file. This can happen if the destination file is in use. Trying again after 5 seconds..."
+                Start-Sleep -Seconds 5
+            }
+        } until ($success -eq $true)
+
+        return $success
     }
     catch
     {
@@ -1952,7 +1955,7 @@ function Start-ProjectDevelopment {
     $version = "0.7.1"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
@@ -2155,7 +2158,7 @@ elseif ($cmd -eq "Help")
 {
     # Show help documentation
     Write-Host "DISMTools - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------`n"
 
     Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"
