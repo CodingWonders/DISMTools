@@ -281,6 +281,9 @@ Public Class MainForm
     Public PEHelper_CopyToVentoy As Boolean = False ' Whether to copy new ISO files to Ventoy drives automatically
     Public PEHelper_Use2023EFI As Boolean = False   ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
 
+    ' Web Search Settings
+    Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1442,6 +1445,9 @@ Public Class MainForm
                 AutoCompleteInfo(3) = (CInt(InfoSaverKey.GetValue("Cap_CompleteInfo")) = 1)
                 AutoCompleteInfo(4) = (CInt(InfoSaverKey.GetValue("Drv_CompleteInfo")) = 1)
                 InfoSaverKey.Close()
+                Dim SearchKey As RegistryKey = Key.OpenSubKey("SearchSettings")
+                SearchEngineName = SearchKey.GetValue("EngineName").ToString().Replace(Quote, "").Trim()
+                SearchKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
                 ChangePrgColors(ColorMode)
@@ -1539,6 +1545,8 @@ Public Class MainForm
                         If StartPosition <> FormStartPosition.CenterScreen Then Left = CInt(line.Replace("WndLeft=", "").Trim())
                     ElseIf line.StartsWith("WndTop=", StringComparison.OrdinalIgnoreCase) Then
                         If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
+                    ElseIf line.StartsWith("EngineName=", StringComparison.OrdinalIgnoreCase) Then
+                        SearchEngineName = line.Replace("EngineName=", "").Trim().Replace(Quote, "")
                     End If
                 Next
                 ' Apply program colors immediately
@@ -1831,6 +1839,7 @@ Public Class MainForm
                            "ImgOperationMode           =    " & ImgOperationMode & CrLf &
                            "Quiet                      =    " & QuietOperations & CrLf &
                            "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
+                           "WebSearchEngineName        =    " & SearchEngineName & CrLf &
                            "PEHelper_UnattendedFile    =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
                            "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
@@ -4720,6 +4729,8 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
+        DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & "DuckDuckGo" & Quote)
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4810,6 +4821,9 @@ Public Class MainForm
         InfoSaverKey.SetValue("Cap_CompleteInfo", 1, RegistryValueKind.DWord)
         InfoSaverKey.SetValue("Drv_CompleteInfo", 1, RegistryValueKind.DWord)
         InfoSaverKey.Close()
+        Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
+        SearchKey.SetValue("EngineName", "DuckDuckGo", RegistryValueKind.String)
+        SearchKey.Close()
         Key.Close()
     End Sub
 
@@ -5034,6 +5048,8 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "AppX_CompleteInfo=" & If(AutoCompleteInfo(2), "1", "0"))
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "Cap_CompleteInfo=" & If(AutoCompleteInfo(3), "1", "0"))
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
+                DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
+                DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & SearchEngineName & Quote)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -5140,6 +5156,9 @@ Public Class MainForm
                     InfoSaverKey.SetValue("Cap_CompleteInfo", If(AutoCompleteInfo(3), 1, 0), RegistryValueKind.DWord)
                     InfoSaverKey.SetValue("Drv_CompleteInfo", If(AutoCompleteInfo(4), 1, 0), RegistryValueKind.DWord)
                     InfoSaverKey.Close()
+                    Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
+                    SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
+                    SearchKey.Close()
                     Key.Close()
                 Catch ex As Exception
                     DynaLog.LogMessage("An error occurred while saving settings to registry. Error message: " & ex.Message)

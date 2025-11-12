@@ -211,6 +211,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; Va
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
+Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; ValueType: string; ValueName: "EngineName"; ValueData: "DuckDuckGo"; Flags: uninsdeletevalue createvalueifdoesntexist
+
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist
 

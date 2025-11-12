@@ -2861,8 +2861,7 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
         If ComboBox14.SelectedItem IsNot Nothing Then
-            ' Perform a Google search (yes, Google is not my favorite search engine, but this takes advantage of the Web tab)
-            SearchEngineHelper.InvokeSearchQuery("Google", String.Format("{0}+site:learn.microsoft.com", ComboBox14.SelectedItem))
+            SearchEngineHelper.InvokeSearchQuery(MainForm.SearchEngineName, String.Format("{0}+site:learn.microsoft.com", ComboBox14.SelectedItem))
         End If
     End Sub
 
