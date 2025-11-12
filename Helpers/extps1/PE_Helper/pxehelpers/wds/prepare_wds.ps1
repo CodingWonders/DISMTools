@@ -8,7 +8,7 @@
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Preparation   |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025 CodingWonders Software                       |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -635,7 +635,7 @@ if ([Environment]::OSVersion.Platform -ne "Win32NT") {
 }
 
 Write-Host "DISMTools $version - PE Helper WDS Preparation Scripts"
-Write-Host "(c) 2025. CodingWonders Software"
+Write-Host "(c) 2025-2026. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 if (Update-WinPEForWds -bootImage "$bootImagePath") {

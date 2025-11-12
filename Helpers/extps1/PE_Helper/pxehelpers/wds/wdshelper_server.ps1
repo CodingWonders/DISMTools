@@ -9,7 +9,7 @@
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - WDS Helper Web-based API for Servers      |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025 CodingWonders Software                       |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -89,7 +89,7 @@ Clear-Host
 Start-Transcript -Path "$env:TEMP\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - Windows Deployment Services Helper Server"
-Write-Host "(c) 2025. CodingWonders Software"
+Write-Host "(c) 2025-2026. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
@@ -586,7 +586,7 @@ try {
                             <button onclick="invokeLogViewer()">View Server Logs</button>
                             <button onclick="window.location.reload();">Refresh Page</button>
                             Other actions exposed by the API can only be called by clients.
-                            <p align="right"><i>&copy; 2025. <a href="https://github.com/CodingWonders" target="_blank">CodingWonders Software</a></i></p>
+                            <p align="right"><i>&copy; 2025-2026. <a href="https://github.com/CodingWonders" target="_blank">CodingWonders Software</a></i></p>
                         </div>
 
                         <script>

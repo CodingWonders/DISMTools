@@ -29,7 +29,7 @@ Just like any script, you should read the source code of these files if you're a
 
 ## Credits/Copyright information
 
-- **Preinstallation Environment Helper, Extensibility Suite, Driver Installation Module:** (c) 2024-2025 CodingWonders Software
-- **HotInstall:** (c) 2025 CodingWonders Software
-- **PXE Helpers:** (c) 2025 CodingWonders Software
+- **Preinstallation Environment Helper, Extensibility Suite, Driver Installation Module:** (c) 2024-2026 CodingWonders Software
+- **HotInstall:** (c) 2025-2026 CodingWonders Software
+- **PXE Helpers:** (c) 2025-2026 CodingWonders Software
 - **Compilation Scripts:** (c) 2022 CT Tech Group LLC. Licensed under MIT
