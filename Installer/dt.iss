@@ -56,9 +56,11 @@ UsePreviousLanguage=no
 LanguageDetectionMethod=uilanguage
 
 ;Wizard setup
-WizardStyle=modern
+WizardStyle=modern dynamic windows11
 WizardImageFile=mainImg.bmp
-WizardSmallImageFile=logo.bmp
+WizardImageFileDynamicDark=mainImg_dark.bmp
+WizardSmallImageFile=logo.png
+WizardSmallImageFileDynamicDark=logo.png
 
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=admin
