@@ -1,11 +1,17 @@
 ﻿Module SearchEngineHelper
 
+    ''' <summary>
+    ''' List of registered search engines
+    ''' </summary>
+    ''' <remarks>
+    ''' Brave wanted to be silly and snuck the AI summaries on me. TURN THESE OFF!!!!
+    ''' </remarks>
     Private SearchEngines As New List(Of SearchEngine) From {
         New SearchEngine("Google Search", "Google LLC", "https://google.com/search?q={0}&udm=14"),
         New SearchEngine("Bing", "Microsoft", "https://bing.com/search?q={0}"),
         New SearchEngine("DuckDuckGo", "", "https://duckduckgo.com/?q={0}&ia=web"),
         New SearchEngine("Startpage", "", "https://startpage.com/sp/search?q={0}"),
-        New SearchEngine("Brave Search", "", "https://search.brave.com/search?q={0}&source=web")
+        New SearchEngine("Brave Search", "", "https://search.brave.com/search?q={0}&source=web&summary=0")
     }
 
     Public Function GetAllSearchEngines() As List(Of SearchEngine)
@@ -16,7 +22,15 @@
         Dim selectedEngine As SearchEngine = SearchEngines.FirstOrDefault(Function(engine) engine.Name.ToLowerInvariant().Contains(SearchEngineName.ToLowerInvariant()))
 
         If selectedEngine IsNot Nothing Then
-            Process.Start(String.Format(selectedEngine.SearchURI, SearchQuery))
+            ' Exact queries can only be sent to Google Search and Brave Search. If we had picked either, then we replace those quotes
+            ' with actual quotes passed with the search query. Other search engines, like DuckDuckGo, don't seem to cope
+            ' with THE exact terms quite well, unless we don't pass the quotes.
+            If selectedEngine.Equals(SearchEngines.First(Function(engine) engine.Name.ToLowerInvariant().Contains("google"))) OrElse
+                selectedEngine.Equals(SearchEngines.First(Function(engine) engine.Name.ToLowerInvariant().Contains("brave"))) Then
+                SearchQuery = SearchQuery.Replace(ControlChars.Quote, "%22")
+            End If
+
+            Process.Start(String.Format(selectedEngine.SearchURI, SearchQuery.Replace(" ", "%20")))
         End If
     End Sub
 
