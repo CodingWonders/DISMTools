@@ -73,7 +73,13 @@ Public Class HelpBrowserForm
                         languageCode = "it"
                 End Select
 
-                Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", languageCode, "tour-start.html"))
+                Dim tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+                tourServer.StartServer()
+                If tourServer.IsListenerAlive() Then
+                    Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                    MsgBox("A web server has been started for the tour. Once you finish the tour, click OK to stop the server.", vbOKOnly + vbInformation, "DISMTools Tour")
+                    tourServer.StopServer()
+                End If
             End If
             WebBrowser1.Navigate(CurrentSite)
             Exit Sub
