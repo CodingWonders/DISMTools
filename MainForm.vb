@@ -281,6 +281,9 @@ Public Class MainForm
     Public PEHelper_CopyToVentoy As Boolean = False ' Whether to copy new ISO files to Ventoy drives automatically
     Public PEHelper_Use2023EFI As Boolean = False   ' Whether to use Windows UEFI CA 2023-signed boot binaries (EFI ONLY)
 
+    ' Tour server
+    Public ReadOnly tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+
     Friend NotInheritable Class NativeMethods
 
         Private Sub New()
@@ -1024,13 +1027,11 @@ Public Class MainForm
                         Case 5
                             languageCode = "it"
                     End Select
-                    
-                    Dim tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+
                     tourServer.StartServer()
                     If tourServer.IsListenerAlive() Then
                         Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
-                        MsgBox("A web server has been started for the tour. Once you finish the tour, click OK to stop the server.", vbOKOnly + vbInformation, "DISMTools Tour")
-                        tourServer.StopServer()
+                        TourActionsTSMI.Visible = True
                     End If
                 End If
             End If
@@ -5300,6 +5301,7 @@ Public Class MainForm
         InvalidSettingsTSMI.Image = GetGlyphResource("setting_error_glyph")
         ExitFullScreenTSMI.Image = GetGlyphResource("exit_full_screen_glyph")
         BranchTSMI.Image = GetGlyphResource("branch")
+        TourActionsTSMI.Image = GetGlyphResource("tour_glyph")
         ' New design stuff
         FlowLayoutPanel1.BackColor = CurrentTheme.BackgroundColor
         GroupBox4.ForeColor = CurrentTheme.ForegroundColor
@@ -5537,6 +5539,11 @@ Public Class MainForm
                         ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
                         ' Menu - Contributions
                         ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
+                        ' Menu - Tour Server
+                        TourActionsTSMI.Text = "Tour Actions"
+                        ServerStatusTSMI.Text = String.Format("Tour Server is active on port {0}", tourServer.GetTcpPort())
+                        RestartDTTourTSMI.Text = "Restart Tour"
+                        StopDTTourServerTSMI.Text = "Stop Tour Server"
                         ' Start Panel
                         LabelHeader1.Text = "Begin"
                         Label10.Text = "Recent projects"
@@ -5867,6 +5874,11 @@ Public Class MainForm
                         ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
                         ' Menu - Contributions
                         ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir al sistema de ayuda"
+                        ' Menu - Tour Server
+                        TourActionsTSMI.Text = "Acciones del tour"
+                        ServerStatusTSMI.Text = String.Format("El servidor del tour está activo en el puerto {0}", tourServer.GetTcpPort())
+                        RestartDTTourTSMI.Text = "Reiniciar tour"
+                        StopDTTourServerTSMI.Text = "Detener servidor del tour"
                         ' Start Panel
                         LabelHeader1.Text = "Comenzar"
                         Label10.Text = "Proyectos recientes"
@@ -6197,6 +6209,11 @@ Public Class MainForm
                         ReportFeedbackToolStripMenuItem.Text = "Rapport de rétroaction (s'ouvre dans un navigateur web)"
                         ' Menu - Contributions
                         ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuer au système d'aide"
+                        ' Menu - Tour Server
+                        TourActionsTSMI.Text = "Actions de visite guidée"
+                        ServerStatusTSMI.Text = String.Format("Le serveur de visite guidée est actif sur le port {0}", tourServer.GetTcpPort())
+                        RestartDTTourTSMI.Text = "Redémarrer la visite guidée"
+                        StopDTTourServerTSMI.Text = "Arrêter le serveur de visite guidée"
                         ' Start Panel
                         LabelHeader1.Text = "Commencer"
                         Label10.Text = "Projets récents"
@@ -6526,6 +6543,11 @@ Public Class MainForm
                         ReportFeedbackToolStripMenuItem.Text = "Comunicar comentários (abre no navegador Web)"
                         ' Menu - Contributions
                         ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir para o sistema de ajuda"
+                        ' Menu - Tour Server
+                        TourActionsTSMI.Text = "Ações do Tour"
+                        ServerStatusTSMI.Text = String.Format("O servidor de tour está ativo na porta {0}", tourServer.GetTcpPort())
+                        RestartDTTourTSMI.Text = "Reiniciar Tour"
+                        StopDTTourServerTSMI.Text = "Parar Servidor de Tour"
                         ' Start Panel
                         LabelHeader1.Text = "Início"
                         Label10.Text = "Projectos recentes"
@@ -6855,6 +6877,11 @@ Public Class MainForm
                         ReportFeedbackToolStripMenuItem.Text = "Invia feedback (si apre nel browser web)"
                         ' Menu - Contributions
                         ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuisci al supporto del programma"
+                        ' Menu - Tour Server
+                        TourActionsTSMI.Text = "Azioni tour"
+                        ServerStatusTSMI.Text = String.Format("Il server tour è attivo sulla porta {0}", tourServer.GetTcpPort())
+                        RestartDTTourTSMI.Text = "Riavvia tour"
+                        StopDTTourServerTSMI.Text = "Interrompi server tour"
                         ' Start Panel
                         LabelHeader1.Text = "Inizia"
                         Label10.Text = "Progetti recenti"
@@ -7191,6 +7218,11 @@ Public Class MainForm
                 ReportFeedbackToolStripMenuItem.Text = "Report feedback (opens in web browser)"
                 ' Menu - Contributions
                 ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
+                ' Menu - Tour Server
+                TourActionsTSMI.Text = "Tour Actions"
+                ServerStatusTSMI.Text = String.Format("Tour Server is active on port {0}", tourServer.GetTcpPort())
+                RestartDTTourTSMI.Text = "Restart Tour"
+                StopDTTourServerTSMI.Text = "Stop Tour Server"
                 ' Start Panel
                 LabelHeader1.Text = "Begin"
                 Label10.Text = "Recent projects"
@@ -7522,6 +7554,11 @@ Public Class MainForm
                 ReportFeedbackToolStripMenuItem.Text = "Enviar comentarios (se abre en navegador web)"
                 ' Menu - Contributions
                 ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir al sistema de ayuda"
+                ' Menu - Tour Server
+                TourActionsTSMI.Text = "Acciones del tour"
+                ServerStatusTSMI.Text = String.Format("El servidor del tour está activo en el puerto {0}", tourServer.GetTcpPort())
+                RestartDTTourTSMI.Text = "Reiniciar tour"
+                StopDTTourServerTSMI.Text = "Detener servidor del tour"
                 ' Start Panel
                 LabelHeader1.Text = "Comenzar"
                 Label10.Text = "Proyectos recientes"
@@ -7852,6 +7889,11 @@ Public Class MainForm
                 ReportFeedbackToolStripMenuItem.Text = "Rapport de rétroaction (s'ouvre dans un navigateur web)"
                 ' Menu - Contributions
                 ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuer au système d'aide"
+                ' Menu - Tour Server
+                TourActionsTSMI.Text = "Actions de visite guidée"
+                ServerStatusTSMI.Text = String.Format("Le serveur de visite guidée est actif sur le port {0}", tourServer.GetTcpPort())
+                RestartDTTourTSMI.Text = "Redémarrer la visite guidée"
+                StopDTTourServerTSMI.Text = "Arrêter le serveur de visite guidée"
                 ' Start Panel
                 LabelHeader1.Text = "Commencer"
                 Label10.Text = "Projets récents"
@@ -8183,6 +8225,11 @@ Public Class MainForm
                 ReportFeedbackToolStripMenuItem.Text = "Comunicar comentários (abre no navegador Web)"
                 ' Menu - Contributions
                 ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribuir para o sistema de ajuda"
+                ' Menu - Tour Server
+                TourActionsTSMI.Text = "Ações do Tour"
+                ServerStatusTSMI.Text = String.Format("O servidor de tour está ativo na porta {0}", tourServer.GetTcpPort())
+                RestartDTTourTSMI.Text = "Reiniciar Tour"
+                StopDTTourServerTSMI.Text = "Parar Servidor de Tour"
                 ' Start Panel
                 LabelHeader1.Text = "Início"
                 Label10.Text = "Projectos recentes"
@@ -8506,6 +8553,11 @@ Public Class MainForm
                 GlossaryToolStripMenuItem.Text = "Glossario"
                 CommandHelpToolStripMenuItem.Text = "Aiuto per i comandi..."
                 AboutDISMToolsToolStripMenuItem.Text = "Informazioni su DISMTools"
+                ' Menu - Tour Server
+                TourActionsTSMI.Text = "Azioni tour"
+                ServerStatusTSMI.Text = String.Format("Il server tour è attivo sulla porta {0}", tourServer.GetTcpPort())
+                RestartDTTourTSMI.Text = "Riavvia tour"
+                StopDTTourServerTSMI.Text = "Interrompi server tour"
                 ' Menu - Invalid settings
                 ISFix.Text = "Ulteriori informazioni"
                 ISHelp.Text = "Che cos'è questo?"
@@ -11963,6 +12015,11 @@ Public Class MainForm
             ' Settings have already been saved. Re-enable DynaLog for ending
             EnableDynaLog = True
             DynaLog.EnableLogging()
+        End If
+        If tourServer.IsListenerAlive() Then
+            DynaLog.LogMessage("Tour is active. Attempting to shut down server...")
+            tourServer.StopServer()
+            TourActionsTSMI.Visible = False
         End If
         DynaLog.LogMessage("Stopping mounted image detector...")
         StopMountedImageDetector()
@@ -16842,12 +16899,10 @@ Public Class MainForm
                     languageCode = "it"
             End Select
 
-            Dim tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
             tourServer.StartServer()
             If tourServer.IsListenerAlive() Then
                 Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
-                MsgBox("A web server has been started for the tour. Once you finish the tour, click OK to stop the server.", vbOKOnly + vbInformation, "DISMTools Tour")
-                tourServer.StopServer()
+                TourActionsTSMI.Visible = True
             End If
         End If
     End Sub
@@ -16928,5 +16983,42 @@ Public Class MainForm
             Exit Sub
         End If
         EnvVarManagementForm.Show()
+    End Sub
+
+    Private Sub StopDTTourServerTSMI_Click(sender As Object, e As EventArgs) Handles StopDTTourServerTSMI.Click
+        tourServer.StopServer()
+        TourActionsTSMI.Visible = False
+    End Sub
+
+    Private Sub RestartDTTourTSMI_Click(sender As Object, e As EventArgs) Handles RestartDTTourTSMI.Click
+        Dim languageCode As String = "en"
+
+        Select Case Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        languageCode = "en"
+                    Case "ESN"
+                        languageCode = "es"
+                    Case "FRA"
+                        languageCode = "fr"
+                    Case "PTB", "PTG"
+                        languageCode = "pt"
+                    Case "ITA"
+                        languageCode = "it"
+                End Select
+            Case 1
+                languageCode = "en"
+            Case 2
+                languageCode = "es"
+            Case 3
+                languageCode = "fr"
+            Case 4
+                languageCode = "pt"
+            Case 5
+                languageCode = "it"
+        End Select
+
+        Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
     End Sub
 End Class
