@@ -51,6 +51,10 @@ Public Class TourServer
         Return _listener.IsListening
     End Function
 
+    Public Function GetTcpPort() As Integer
+        Return _tcpPort
+    End Function
+
     Public Sub StopServer()
         ' Exit if the listener is dead
         If Not IsListenerAlive() Then Exit Sub
