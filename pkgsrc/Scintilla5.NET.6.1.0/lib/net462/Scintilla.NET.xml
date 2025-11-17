@@ -5319,6 +5319,12 @@
             Undo buffer is cleared but <see cref="M:ScintillaNET.Scintilla.SetSavePoint"/> is not called.
             </summary>
         </member>
+        <member name="P:ScintillaNET.Scintilla.SatelliteDirectory">
+            <summary>
+            Optional absolute directory path probed first for native satellite libraries.
+            If set, this directory is checked before all default probing locations.
+            </summary>
+        </member>
         <member name="P:ScintillaNET.Scintilla._ScintillaManagedDragDrop">
             <summary>
             Gets or sets whether Scintilla's native drag &amp; drop should be used instead of WinForms based one.
