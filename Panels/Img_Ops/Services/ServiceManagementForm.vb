@@ -272,4 +272,11 @@ Public Class ServiceManagementForm
 
         ReloadServiceInformation()
     End Sub
+
+    Private Sub GetSvchostGroupsBtn_Click(sender As Object, e As EventArgs) Handles GetSvchostGroupsBtn.Click
+        Dim groups As List(Of WindowsServiceHostGroup) = WindowsServiceHelper.GetSvchostGroups(MainForm.MountDir, ServiceList)
+
+        RegisteredServiceHostGroupsDialog.GroupInformation = groups
+        RegisteredServiceHostGroupsDialog.ShowDialog(Me)
+    End Sub
 End Class

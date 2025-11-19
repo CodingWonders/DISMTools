@@ -82,22 +82,23 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader13 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader14 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label18 = New System.Windows.Forms.Label()
-        Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
-        Me.ProgressLabel = New System.Windows.Forms.Label()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-        Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
-        Me.ServiceInfoContainerPanel = New System.Windows.Forms.Panel()
-        Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.GetSvchostGroupsBtn = New System.Windows.Forms.Button()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.ListView5 = New System.Windows.Forms.ListView()
         Me.ColumnHeader15 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader16 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader17 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
+        Me.ProgressLabel = New System.Windows.Forms.Label()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
+        Me.ServiceInfoContainerPanel = New System.Windows.Forms.Panel()
+        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
+        Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -111,11 +112,11 @@ Partial Class ServiceManagementForm
         Me.SplitContainer1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
-        Me.ServiceInfoContainerPanel.SuspendLayout()
-        Me.NoServiceSelectedPanel.SuspendLayout()
-        Me.SelectedServicePanel.SuspendLayout()
         Me.TabPage5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.ServiceInfoContainerPanel.SuspendLayout()
+        Me.SelectedServicePanel.SuspendLayout()
+        Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -687,87 +688,9 @@ Partial Class ServiceManagementForm
         Me.Label18.TabIndex = 0
         Me.Label18.Text = "The following services depend on this service:"
         '
-        'SaveServiceInfoBtn
-        '
-        Me.SaveServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.SaveServiceInfoBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1177, 647)
-        Me.SaveServiceInfoBtn.Name = "SaveServiceInfoBtn"
-        Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(75, 23)
-        Me.SaveServiceInfoBtn.TabIndex = 4
-        Me.SaveServiceInfoBtn.Text = "Save"
-        Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
-        '
-        'ProgressLabel
-        '
-        Me.ProgressLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ProgressLabel.AutoSize = True
-        Me.ProgressLabel.Location = New System.Drawing.Point(93, 652)
-        Me.ProgressLabel.Name = "ProgressLabel"
-        Me.ProgressLabel.Size = New System.Drawing.Size(73, 13)
-        Me.ProgressLabel.TabIndex = 5
-        Me.ProgressLabel.Text = "Please wait..."
-        Me.ProgressLabel.Visible = False
-        '
-        'Timer1
-        '
-        Me.Timer1.Interval = 25
-        '
-        'ReloadServiceInformationBtn
-        '
-        Me.ReloadServiceInformationBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ReloadServiceInformationBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ReloadServiceInformationBtn.Location = New System.Drawing.Point(12, 647)
-        Me.ReloadServiceInformationBtn.Name = "ReloadServiceInformationBtn"
-        Me.ReloadServiceInformationBtn.Size = New System.Drawing.Size(75, 23)
-        Me.ReloadServiceInformationBtn.TabIndex = 6
-        Me.ReloadServiceInformationBtn.Text = "Reload"
-        Me.ReloadServiceInformationBtn.UseVisualStyleBackColor = True
-        '
-        'ServiceInfoContainerPanel
-        '
-        Me.ServiceInfoContainerPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ServiceInfoContainerPanel.Controls.Add(Me.SelectedServicePanel)
-        Me.ServiceInfoContainerPanel.Controls.Add(Me.NoServiceSelectedPanel)
-        Me.ServiceInfoContainerPanel.Location = New System.Drawing.Point(12, 376)
-        Me.ServiceInfoContainerPanel.Name = "ServiceInfoContainerPanel"
-        Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
-        Me.ServiceInfoContainerPanel.TabIndex = 7
-        '
-        'NoServiceSelectedPanel
-        '
-        Me.NoServiceSelectedPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.NoServiceSelectedPanel.Controls.Add(Me.Label15)
-        Me.NoServiceSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.NoServiceSelectedPanel.Location = New System.Drawing.Point(0, 0)
-        Me.NoServiceSelectedPanel.Name = "NoServiceSelectedPanel"
-        Me.NoServiceSelectedPanel.Size = New System.Drawing.Size(1240, 265)
-        Me.NoServiceSelectedPanel.TabIndex = 0
-        '
-        'Label15
-        '
-        Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.None
-        Me.Label15.AutoEllipsis = True
-        Me.Label15.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.Location = New System.Drawing.Point(265, 86)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(708, 90)
-        Me.Label15.TabIndex = 0
-        Me.Label15.Text = "No service has been selected. Select a service above to view details."
-        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'SelectedServicePanel
-        '
-        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
-        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
-        Me.SelectedServicePanel.Name = "SelectedServicePanel"
-        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
-        Me.SelectedServicePanel.TabIndex = 1
-        '
         'TabPage5
         '
+        Me.TabPage5.Controls.Add(Me.GetSvchostGroupsBtn)
         Me.TabPage5.Controls.Add(Me.GroupBox2)
         Me.TabPage5.Controls.Add(Me.TextBox6)
         Me.TabPage5.Controls.Add(Me.Label16)
@@ -779,25 +702,16 @@ Partial Class ServiceManagementForm
         Me.TabPage5.Text = "Service Groups"
         Me.TabPage5.UseVisualStyleBackColor = True
         '
-        'Label16
+        'GetSvchostGroupsBtn
         '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(16, 16)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(144, 13)
-        Me.Label16.TabIndex = 0
-        Me.Label16.Text = "This service is part of group:"
-        '
-        'TextBox6
-        '
-        Me.TextBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBox6.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox6.Location = New System.Drawing.Point(18, 36)
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.ReadOnly = True
-        Me.TextBox6.Size = New System.Drawing.Size(1194, 14)
-        Me.TextBox6.TabIndex = 3
+        Me.GetSvchostGroupsBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GetSvchostGroupsBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.GetSvchostGroupsBtn.Location = New System.Drawing.Point(947, 32)
+        Me.GetSvchostGroupsBtn.Name = "GetSvchostGroupsBtn"
+        Me.GetSvchostGroupsBtn.Size = New System.Drawing.Size(265, 23)
+        Me.GetSvchostGroupsBtn.TabIndex = 5
+        Me.GetSvchostGroupsBtn.Text = "Get registered service host groups"
+        Me.GetSvchostGroupsBtn.UseVisualStyleBackColor = True
         '
         'GroupBox2
         '
@@ -840,6 +754,105 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader17.Text = "Type"
         Me.ColumnHeader17.Width = 311
         '
+        'TextBox6
+        '
+        Me.TextBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox6.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox6.Location = New System.Drawing.Point(18, 36)
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.ReadOnly = True
+        Me.TextBox6.Size = New System.Drawing.Size(923, 14)
+        Me.TextBox6.TabIndex = 3
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(16, 16)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(144, 13)
+        Me.Label16.TabIndex = 0
+        Me.Label16.Text = "This service is part of group:"
+        '
+        'SaveServiceInfoBtn
+        '
+        Me.SaveServiceInfoBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.SaveServiceInfoBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.SaveServiceInfoBtn.Location = New System.Drawing.Point(1177, 647)
+        Me.SaveServiceInfoBtn.Name = "SaveServiceInfoBtn"
+        Me.SaveServiceInfoBtn.Size = New System.Drawing.Size(75, 23)
+        Me.SaveServiceInfoBtn.TabIndex = 4
+        Me.SaveServiceInfoBtn.Text = "Save"
+        Me.SaveServiceInfoBtn.UseVisualStyleBackColor = True
+        '
+        'ProgressLabel
+        '
+        Me.ProgressLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ProgressLabel.AutoSize = True
+        Me.ProgressLabel.Location = New System.Drawing.Point(93, 652)
+        Me.ProgressLabel.Name = "ProgressLabel"
+        Me.ProgressLabel.Size = New System.Drawing.Size(73, 13)
+        Me.ProgressLabel.TabIndex = 5
+        Me.ProgressLabel.Text = "Please wait..."
+        Me.ProgressLabel.Visible = False
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 25
+        '
+        'ReloadServiceInformationBtn
+        '
+        Me.ReloadServiceInformationBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ReloadServiceInformationBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ReloadServiceInformationBtn.Location = New System.Drawing.Point(12, 647)
+        Me.ReloadServiceInformationBtn.Name = "ReloadServiceInformationBtn"
+        Me.ReloadServiceInformationBtn.Size = New System.Drawing.Size(75, 23)
+        Me.ReloadServiceInformationBtn.TabIndex = 6
+        Me.ReloadServiceInformationBtn.Text = "Reload"
+        Me.ReloadServiceInformationBtn.UseVisualStyleBackColor = True
+        '
+        'ServiceInfoContainerPanel
+        '
+        Me.ServiceInfoContainerPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ServiceInfoContainerPanel.Controls.Add(Me.NoServiceSelectedPanel)
+        Me.ServiceInfoContainerPanel.Controls.Add(Me.SelectedServicePanel)
+        Me.ServiceInfoContainerPanel.Location = New System.Drawing.Point(12, 376)
+        Me.ServiceInfoContainerPanel.Name = "ServiceInfoContainerPanel"
+        Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
+        Me.ServiceInfoContainerPanel.TabIndex = 7
+        '
+        'SelectedServicePanel
+        '
+        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
+        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
+        Me.SelectedServicePanel.Name = "SelectedServicePanel"
+        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
+        Me.SelectedServicePanel.TabIndex = 1
+        '
+        'NoServiceSelectedPanel
+        '
+        Me.NoServiceSelectedPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.NoServiceSelectedPanel.Controls.Add(Me.Label15)
+        Me.NoServiceSelectedPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.NoServiceSelectedPanel.Location = New System.Drawing.Point(0, 0)
+        Me.NoServiceSelectedPanel.Name = "NoServiceSelectedPanel"
+        Me.NoServiceSelectedPanel.Size = New System.Drawing.Size(1240, 265)
+        Me.NoServiceSelectedPanel.TabIndex = 0
+        '
+        'Label15
+        '
+        Me.Label15.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label15.AutoEllipsis = True
+        Me.Label15.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(265, 86)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(708, 90)
+        Me.Label15.TabIndex = 0
+        Me.Label15.Text = "No service has been selected. Select a service above to view details."
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -876,12 +889,12 @@ Partial Class ServiceManagementForm
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        Me.ServiceInfoContainerPanel.ResumeLayout(False)
-        Me.NoServiceSelectedPanel.ResumeLayout(False)
-        Me.SelectedServicePanel.ResumeLayout(False)
         Me.TabPage5.ResumeLayout(False)
         Me.TabPage5.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
+        Me.ServiceInfoContainerPanel.ResumeLayout(False)
+        Me.SelectedServicePanel.ResumeLayout(False)
+        Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -960,4 +973,5 @@ Partial Class ServiceManagementForm
     Friend WithEvents ColumnHeader17 As System.Windows.Forms.ColumnHeader
     Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
     Friend WithEvents Label16 As System.Windows.Forms.Label
+    Friend WithEvents GetSvchostGroupsBtn As System.Windows.Forms.Button
 End Class

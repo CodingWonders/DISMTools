@@ -605,4 +605,38 @@ Module WindowsServiceHelper
         Return Convert.ToInt32(binary, 2)
     End Function
 
+    Public Function GetSvchostGroups(MountDir As String, ServiceList As List(Of WindowsService)) As List(Of WindowsServiceHostGroup)
+        Dim svchostGroups As New List(Of WindowsServiceHostGroup)
+
+        Dim svchostGroupValues As String() = New String() {}
+        Dim svchostGroupMappingDictionary As New Dictionary(Of String, String())
+
+        ' First we get the registered service groups in svchost (HKLM\Software\Microsoft\Windows NT\CurrentVersion\Svchost)
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\zSOFTWARE") = 0 Then
+            Dim svchostGroupsRk As RegistryKey = Registry.LocalMachine.OpenSubKey("zSOFTWARE\Microsoft\Windows NT\CurrentVersion\Svchost", False)
+            svchostGroupValues = svchostGroupsRk.GetValueNames()
+
+            For Each svchostGroupValue In svchostGroupValues
+                ' we map them so we can iterate through the multiline values later
+                svchostGroupMappingDictionary.Add(svchostGroupValue, svchostGroupsRk.GetValue(svchostGroupValue))
+            Next
+
+            svchostGroupsRk.Close()
+            RegistryHelper.UnloadRegistryHive("HKLM\zSOFTWARE")
+        End If
+
+        ' We iterate through all the keys and filter the service list accordingly
+        For Each key In svchostGroupMappingDictionary.Keys
+            Dim filteredServices As New List(Of WindowsService)
+
+            For Each serviceValue In svchostGroupMappingDictionary(key)
+                filteredServices.Add(ServiceList.FirstOrDefault(Function(service) service.Name.Equals(serviceValue, StringComparison.InvariantCultureIgnoreCase)))
+            Next
+
+            svchostGroups.Add(New WindowsServiceHostGroup(key, filteredServices.Where(Function(service) service IsNot Nothing).ToList()))
+        Next
+
+        Return svchostGroups
+    End Function
+
 End Module

@@ -255,6 +255,7 @@
     <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsService.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
+    <Compile Include="Elements\ServiceManagement\WindowsServiceHostGroup.vb" />
     <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
@@ -682,6 +683,12 @@
     <Compile Include="Panels\Img_Ops\Registry\RegistryControlPanel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.Designer.vb">
+      <DependentUpon>RegisteredServiceHostGroupsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.Designer.vb">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
     </Compile>
@@ -1102,6 +1109,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Registry\RegistryControlPanel.resx">
       <DependentUpon>RegistryControlPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.resx">
+      <DependentUpon>RegisteredServiceHostGroupsDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceManagementForm.resx">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
