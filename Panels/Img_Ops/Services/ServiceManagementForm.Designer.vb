@@ -74,11 +74,13 @@ Partial Class ServiceManagementForm
         Me.ListView3 = New System.Windows.Forms.ListView()
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader9 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader10 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label17 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.ListView4 = New System.Windows.Forms.ListView()
         Me.ColumnHeader11 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader13 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader14 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label18 = New System.Windows.Forms.Label()
         Me.SaveServiceInfoBtn = New System.Windows.Forms.Button()
         Me.ProgressLabel = New System.Windows.Forms.Label()
@@ -88,8 +90,14 @@ Partial Class ServiceManagementForm
         Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.SelectedServicePanel = New System.Windows.Forms.Panel()
-        Me.ColumnHeader10 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader14 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.ListView5 = New System.Windows.Forms.ListView()
+        Me.ColumnHeader15 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader16 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader17 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -106,6 +114,8 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.SuspendLayout()
         Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SelectedServicePanel.SuspendLayout()
+        Me.TabPage5.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -167,6 +177,7 @@ Partial Class ServiceManagementForm
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage3)
         Me.TabControl1.Controls.Add(Me.TabPage4)
+        Me.TabControl1.Controls.Add(Me.TabPage5)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
@@ -613,6 +624,11 @@ Partial Class ServiceManagementForm
         Me.ColumnHeader9.Text = "Display Name"
         Me.ColumnHeader9.Width = 209
         '
+        'ColumnHeader10
+        '
+        Me.ColumnHeader10.Text = "Type"
+        Me.ColumnHeader10.Width = 120
+        '
         'Label17
         '
         Me.Label17.AutoSize = True
@@ -656,6 +672,11 @@ Partial Class ServiceManagementForm
         '
         Me.ColumnHeader13.Text = "Display Name"
         Me.ColumnHeader13.Width = 209
+        '
+        'ColumnHeader14
+        '
+        Me.ColumnHeader14.Text = "Type"
+        Me.ColumnHeader14.Width = 120
         '
         'Label18
         '
@@ -707,8 +728,8 @@ Partial Class ServiceManagementForm
         '
         Me.ServiceInfoContainerPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ServiceInfoContainerPanel.Controls.Add(Me.NoServiceSelectedPanel)
         Me.ServiceInfoContainerPanel.Controls.Add(Me.SelectedServicePanel)
+        Me.ServiceInfoContainerPanel.Controls.Add(Me.NoServiceSelectedPanel)
         Me.ServiceInfoContainerPanel.Location = New System.Drawing.Point(12, 376)
         Me.ServiceInfoContainerPanel.Name = "ServiceInfoContainerPanel"
         Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
@@ -745,15 +766,79 @@ Partial Class ServiceManagementForm
         Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
         Me.SelectedServicePanel.TabIndex = 1
         '
-        'ColumnHeader10
+        'TabPage5
         '
-        Me.ColumnHeader10.Text = "Type"
-        Me.ColumnHeader10.Width = 120
+        Me.TabPage5.Controls.Add(Me.GroupBox2)
+        Me.TabPage5.Controls.Add(Me.TextBox6)
+        Me.TabPage5.Controls.Add(Me.Label16)
+        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage5.Name = "TabPage5"
+        Me.TabPage5.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage5.Size = New System.Drawing.Size(1232, 239)
+        Me.TabPage5.TabIndex = 4
+        Me.TabPage5.Text = "Service Groups"
+        Me.TabPage5.UseVisualStyleBackColor = True
         '
-        'ColumnHeader14
+        'Label16
         '
-        Me.ColumnHeader14.Text = "Type"
-        Me.ColumnHeader14.Width = 120
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(16, 16)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(144, 13)
+        Me.Label16.TabIndex = 0
+        Me.Label16.Text = "This service is part of group:"
+        '
+        'TextBox6
+        '
+        Me.TextBox6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox6.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox6.Location = New System.Drawing.Point(18, 36)
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.ReadOnly = True
+        Me.TextBox6.Size = New System.Drawing.Size(1194, 14)
+        Me.TextBox6.TabIndex = 3
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox2.Controls.Add(Me.ListView5)
+        Me.GroupBox2.Location = New System.Drawing.Point(19, 57)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(1193, 167)
+        Me.GroupBox2.TabIndex = 4
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Services that belong to this group"
+        '
+        'ListView5
+        '
+        Me.ListView5.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader15, Me.ColumnHeader16, Me.ColumnHeader17})
+        Me.ListView5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListView5.FullRowSelect = True
+        Me.ListView5.HideSelection = False
+        Me.ListView5.Location = New System.Drawing.Point(3, 17)
+        Me.ListView5.Name = "ListView5"
+        Me.ListView5.Size = New System.Drawing.Size(1187, 147)
+        Me.ListView5.TabIndex = 2
+        Me.ListView5.UseCompatibleStateImageBehavior = False
+        Me.ListView5.View = System.Windows.Forms.View.Details
+        '
+        'ColumnHeader15
+        '
+        Me.ColumnHeader15.Text = "Service Name"
+        Me.ColumnHeader15.Width = 209
+        '
+        'ColumnHeader16
+        '
+        Me.ColumnHeader16.Text = "Display Name"
+        Me.ColumnHeader16.Width = 567
+        '
+        'ColumnHeader17
+        '
+        Me.ColumnHeader17.Text = "Type"
+        Me.ColumnHeader17.Width = 311
         '
         'ServiceManagementForm
         '
@@ -794,6 +879,9 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
         Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.SelectedServicePanel.ResumeLayout(False)
+        Me.TabPage5.ResumeLayout(False)
+        Me.TabPage5.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -864,4 +952,12 @@ Partial Class ServiceManagementForm
     Friend WithEvents SelectedServicePanel As System.Windows.Forms.Panel
     Friend WithEvents ColumnHeader10 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader14 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents TabPage5 As System.Windows.Forms.TabPage
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents ListView5 As System.Windows.Forms.ListView
+    Friend WithEvents ColumnHeader15 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader16 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader17 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
+    Friend WithEvents Label16 As System.Windows.Forms.Label
 End Class

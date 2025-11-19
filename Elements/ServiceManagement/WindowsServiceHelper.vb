@@ -366,6 +366,7 @@ Module WindowsServiceHelper
                         serviceDisplayName As String = "",
                         serviceDescription As String = "",
                         serviceObjectName As String = "",
+                        serviceGroupName As String = "",
                         serviceStartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Unknown,
                         serviceDelayedStart As Boolean = False,
                         serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
@@ -411,6 +412,7 @@ Module WindowsServiceHelper
                             serviceDescription = ResolveIndirectString(serviceDescription)
                         End If
                         serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
+                        serviceGroupName = ServiceInfoRk.GetValue("Group", "")
                         serviceStartType = ServiceInfoRk.GetValue("Start", -1)
                         serviceDelayedStart = (ServiceInfoRk.GetValue("DelayedAutoStart", 0) = 1)
                         serviceType = ServiceInfoRk.GetValue("Type", -1)
@@ -443,6 +445,7 @@ Module WindowsServiceHelper
                                                            serviceDescription,
                                                            serviceObjectName,
                                                            serviceImagePath,
+                                                           serviceGroupName,
                                                            serviceStartType,
                                                            serviceDelayedStart,
                                                            serviceType,
