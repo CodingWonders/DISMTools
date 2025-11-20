@@ -23,6 +23,13 @@ if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
 	)
 )
+if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
+	if exist "%sysdrive%\scripts\imagecapture.bat" (
+		echo An image capture will begin now...
+		call "%sysdrive%\scripts\imagecapture.bat"
+		powershell -command wpeutil shutdown
+	)
+)
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 	powershell -noprofile -file "%sysdrive%\menu.ps1"
 	if exist "%sysdrive%\netinstall" (

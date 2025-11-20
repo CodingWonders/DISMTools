@@ -40,6 +40,9 @@ if not defined imagename (
 
 echo Capturing Windows installation to the target WIM file. This can take a long time, depending on the computer's speed.
 call :create_config_list %sourcedrive%
+if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
+	call :sysprep_hotinstall_remove_temp_files
+)
 set dismstart=%date% %time%
 dism /capture-image /imagefile=%destdrive%:\%destfile% /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
 if %ERRORLEVEL% equ 0 (
@@ -65,6 +68,11 @@ if "%succeeded%" equ "true" (
 echo ======================================================
 exit /b
 
+:sysprep_hotinstall_remove_temp_files
+echo The capture script was invoked by the Sysprep preparation tool. Removing files...
+bcdedit /delete {current} /f
+exit /b
+
 :create_config_list
 echo Setting up file/folder exclusions for source volume...
 REM create the config list file. It will call echo lots of times
@@ -80,6 +88,10 @@ echo \Windows\CSC >> %configlistpath%
 for /d %%f in (%~1:\Users\*) do (
 	if exist "%%f\OneDrive" ( echo %%f\OneDrive >> %configlistpath% )
 	if exist "%%f\SkyDrive" ( echo %%f\SkyDrive >> %configlistpath% )
+)
+if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
+	echo \$DISMTOOLS.~BT >> %configlistpath%
+	echo \$DISMTOOLS.~WS >> %configlistpath%
 )
 echo. >> %configlistpath%
 echo [CompressionExclusionList] >> %configlistpath%
