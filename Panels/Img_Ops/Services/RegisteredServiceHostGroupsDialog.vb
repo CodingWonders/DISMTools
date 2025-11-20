@@ -21,9 +21,15 @@ Public Class RegisteredServiceHostGroupsDialog
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
 
+        ' Order group information based on service count
+        GroupInformation = GroupInformation.OrderByDescending(Function(serviceGroup) serviceGroup.Services.Count).ToList()
+
         For Each Group In GroupInformation
             ServiceGroupDetailsLv.Items.Add(New ListViewItem(New String() {Group.Name, String.Format("{0} service(s) in group", Group.Services.Count)}))
         Next
+
+        Dim count As Integer = GroupInformation.Select(Function(serviceGroup) serviceGroup.Services.Count).Aggregate(Function(x, y) x + y)
+        Label2.Text = String.Format("{0} service(s) are registered in the service host.", count)
     End Sub
 
     Private Sub ServiceGroupDetailsLv_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ServiceGroupDetailsLv.SelectedIndexChanged

@@ -33,6 +33,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.ColumnHeader15 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader16 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader17 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -122,6 +123,16 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.ColumnHeader17.Text = "Type"
         Me.ColumnHeader17.Width = 192
         '
+        'Label2
+        '
+        Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(13, 332)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(31, 13)
+        Me.Label2.TabIndex = 1
+        Me.Label2.Text = "Total"
+        '
         'RegisteredServiceHostGroupsDialog
         '
         Me.AcceptButton = Me.OK_Button
@@ -130,6 +141,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.ClientSize = New System.Drawing.Size(704, 365)
         Me.Controls.Add(Me.ServiceDetailsLv)
         Me.Controls.Add(Me.ServiceGroupDetailsLv)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -142,6 +154,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.Text = "Registered Service Host groups in image"
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
@@ -154,5 +167,6 @@ Partial Class RegisteredServiceHostGroupsDialog
     Friend WithEvents ColumnHeader15 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader16 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader17 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label2 As System.Windows.Forms.Label
 
 End Class
