@@ -600,9 +600,9 @@ Public Class MainForm
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_Preparation")
             InstallerBW.ReportProgress(20)
             DynaLog.LogMessage("Configuring legacy BOOTMGR mode...")
-            RunBCDConfigurator("/set {default} bootmenupolicy legacy")
-            RunBCDConfigurator("/set {current} bootmenupolicy legacy")
-            RunBCDConfigurator("/set {bootmgr} timeout 3")
+            RunBCDConfigurator("/set {default} bootmenupolicy legacy", True)
+            RunBCDConfigurator("/set {current} bootmenupolicy legacy", True)
+            RunBCDConfigurator("/set {bootmgr} timeout 3", True)
 
             ' Configure RAMDisk Settings
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_RAMDiskConfig")
