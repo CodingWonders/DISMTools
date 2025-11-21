@@ -983,16 +983,24 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
+- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
 
 New features:
 
-- HotInstall has received DynaLog logging
-- UnattendGen has been updated to the latest version
-- The Italian tour has been updated to point to Italian tour videos
-- Several improvements were made to Italian translations (#294, #296, #298, #301; thanks @bovirus)
-- CODE: web search functionality has been modularized. The search engine helper will be used in the future
-- Tinted color themes are now available</value>
+- The PE Helper will now call OSCDIMG more times if it fails to create the ISO file
+- The Sysprep Preparation Tool has been updated with the inclusion of a new Auto mode, and preparation tasks now running asynchronously
+- Self-contained copies of UnattendGen that are older or newer than the expected version will now be removed automatically
+- Set Quick Machine Recovery Settings script has been modified to add value checking
+- Enable Verbose Status Messages script has been introduced
+- Disable Windows Notification Sources script has been modified to block Copilot notifications
+- Web Search engines are now configurable
+- Feature and capability image information dialogs now have links to search for specific items online, using your preferred search engine
+- DynaLog now removes log archives more than a month old
+- You can now view service groups
+- You can now view the groups registered in the image's service host
+- Inno Setup installer has been updated to version 6.6
+- The managed DISM API has been updated to version 4.0.0
+- Scintilla.NET has been updated to version 6.1.0</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
