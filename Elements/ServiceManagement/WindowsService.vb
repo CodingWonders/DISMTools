@@ -248,6 +248,12 @@
     Public Property ImagePath As String
 
     ''' <summary>
+    ''' The group the service is in
+    ''' </summary>
+    ''' <remarks>Groups are used by the service host (svchost) to launch a batch of services given their group</remarks>
+    Public Property Group As String
+
+    ''' <summary>
     ''' The start type of a service
     ''' </summary>
     ''' <remarks></remarks>
@@ -310,12 +316,13 @@
     ''' <param name="deps">The names of the services this Windows service depends on</param>
     ''' <param name="failureActions">The failure actions of the Windows service</param>
     ''' <remarks></remarks>
-    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions)
+    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, group As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions)
         Me.Name = name
         Me.DisplayName = displayName
         Me.Description = description
         Me.ObjectName = objectName
         Me.ImagePath = imagePath
+        Me.Group = group
         Me.StartType = startType
         Me.DelayedStart = delayedStart
         Me.Type = type

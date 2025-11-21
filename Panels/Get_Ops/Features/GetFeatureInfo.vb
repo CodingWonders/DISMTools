@@ -196,6 +196,7 @@ Public Class GetFeatureInfoDlg
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
+        Button1.Visible = False
         DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting features...")
@@ -485,6 +486,8 @@ Public Class GetFeatureInfoDlg
         _lvwColumnSorter = New ListViewColumnSorter()
         ListView1.ListViewItemSorter = _lvwColumnSorter
         WindowHelper.EnableCloseCapability(Handle)
+
+        Button1.Visible = (ListView1.SelectedItems.Count = 1)
     End Sub
 
     Private Sub PopulateTreeView(treeView As TreeView, input As String)
@@ -671,5 +674,9 @@ Public Class GetFeatureInfoDlg
             e.SuppressKeyPress = True
             SearchBox1.SelectionStart = SearchBox1.TextLength
         End If
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        SearchEngineHelper.InvokeSearchQuery(MainForm.SearchEngineName, String.Format("microsoft windows {0}", Quote & Label23.Text & Quote))
     End Sub
 End Class

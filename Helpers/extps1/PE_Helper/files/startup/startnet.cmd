@@ -5,7 +5,7 @@ set version=0.7.2
 set sysdrive=%SYSTEMDRIVE%
 set debug=0
 echo DISMTools %version% - Preinstallation Environment
-echo (c) 2024-2025. CodingWonders Software
+echo (c) 2024-2026. CodingWonders Software
 echo.
 echo Please wait while the environment starts up...
 wpeinit
@@ -21,6 +21,13 @@ if !ERRORLEVEL! equ 1 (
 	reg add "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f >nul 2>&1
 	if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
+	)
+)
+if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
+	if exist "%sysdrive%\scripts\imagecapture.bat" (
+		echo An image capture will begin now...
+		call "%sysdrive%\scripts\imagecapture.bat"
+		powershell -command wpeutil shutdown
 	)
 )
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (

@@ -72,8 +72,12 @@ Public Class HelpBrowserForm
                     Case 5
                         languageCode = "it"
                 End Select
-
-                Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", languageCode, "tour-start.html"))
+                
+                MainForm.tourServer.StartServer()
+                If MainForm.tourServer.IsListenerAlive() Then
+                    Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                    MainForm.TourActionsTSMI.Visible = True
+                End If
             End If
             WebBrowser1.Navigate(CurrentSite)
             Exit Sub

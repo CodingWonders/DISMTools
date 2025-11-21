@@ -149,6 +149,12 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), RunAsAdmin:=True)
+        Dim SPDlgResult As DialogResult = SysprepPreparatorModeDialog.ShowDialog(Me)
+        Select Case SPDlgResult
+            Case Windows.Forms.DialogResult.Yes
+                RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), "/auto", True)
+            Case Windows.Forms.DialogResult.No
+                RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), RunAsAdmin:=True)
+        End Select
     End Sub
 End Class

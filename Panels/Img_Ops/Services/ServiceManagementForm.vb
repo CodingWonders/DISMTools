@@ -31,6 +31,7 @@ Public Class ServiceManagementForm
         RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
         ComboBox1.SelectedIndex = ServiceList(Index).StartType
         AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        TextBox6.Text = ServiceList(Index).Group
         TextBox7.Text = ServiceList(Index).TypeToString()
         TextBox8.Text = ServiceList(Index).ErrorControlToString()
         TextBox9.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.FirstFailure)
@@ -55,6 +56,7 @@ Public Class ServiceManagementForm
 
         ListView3.Items.Clear()
         ListView4.Items.Clear()
+        ListView5.Items.Clear()
 
         Dim dependencies As List(Of WindowsService) = ServiceList.Where(Function(service) ServiceList(Index).Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName).ToList()
         Dim dependents As List(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName).ToList()
@@ -66,6 +68,18 @@ Public Class ServiceManagementForm
         For Each dependent As WindowsService In dependents
             ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()}))
         Next
+
+        If ServiceList(Index).Group <> "" Then
+            Dim servicesInGroup As List(Of WindowsService) = ServiceList.Where(Function(service) service.Group.Equals(ServiceList(Index).Group, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(service) service.DisplayName).ToList()
+
+            For Each serviceInGroup As WindowsService In servicesInGroup
+                ListView5.Items.Add(New ListViewItem(New String() {serviceInGroup.Name, serviceInGroup.DisplayName, serviceInGroup.TypeToString()}))
+            Next
+            ListView5.Visible = True
+        Else
+            TextBox6.Text = "<undefined service group>"
+            ListView5.Visible = False
+        End If
     End Sub
 
     Private Sub ServiceManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -82,6 +96,8 @@ Public Class ServiceManagementForm
         ListView3.ForeColor = ForeColor
         ListView4.BackColor = BackColor
         ListView4.ForeColor = ForeColor
+        ListView5.BackColor = BackColor
+        ListView5.ForeColor = ForeColor
         TabPage1.BackColor = BackColor
         TabPage1.ForeColor = ForeColor
         TabPage2.BackColor = BackColor
@@ -90,6 +106,8 @@ Public Class ServiceManagementForm
         TabPage3.ForeColor = ForeColor
         TabPage4.BackColor = BackColor
         TabPage4.ForeColor = ForeColor
+        TabPage5.BackColor = BackColor
+        TabPage5.ForeColor = ForeColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
         TextBox2.BackColor = BackColor
@@ -100,6 +118,8 @@ Public Class ServiceManagementForm
         TextBox4.ForeColor = ForeColor
         TextBox5.BackColor = BackColor
         TextBox5.ForeColor = ForeColor
+        TextBox6.BackColor = BackColor
+        TextBox6.ForeColor = ForeColor
         TextBox7.BackColor = BackColor
         TextBox7.ForeColor = ForeColor
         TextBox8.BackColor = BackColor
@@ -115,6 +135,7 @@ Public Class ServiceManagementForm
         TextBox13.BackColor = BackColor
         TextBox13.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
+        GroupBox2.ForeColor = ForeColor
         ComboBox1.BackColor = BackColor
         ComboBox1.ForeColor = ForeColor
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
@@ -250,5 +271,12 @@ Public Class ServiceManagementForm
         End If
 
         ReloadServiceInformation()
+    End Sub
+
+    Private Sub GetSvchostGroupsBtn_Click(sender As Object, e As EventArgs) Handles GetSvchostGroupsBtn.Click
+        Dim groups As List(Of WindowsServiceHostGroup) = WindowsServiceHelper.GetSvchostGroups(MainForm.MountDir, ServiceList)
+
+        RegisteredServiceHostGroupsDialog.GroupInformation = groups
+        RegisteredServiceHostGroupsDialog.ShowDialog(Me)
     End Sub
 End Class

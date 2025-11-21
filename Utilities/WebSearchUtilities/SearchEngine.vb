@@ -28,4 +28,11 @@
         Me.SearchURI = searchURI
     End Sub
 
+    Public Overrides Function Equals(obj As Object) As Boolean
+        Dim engineToCompare As SearchEngine = CType(obj, SearchEngine)
+        Return Name.Equals(engineToCompare.Name, StringComparison.InvariantCultureIgnoreCase) AndAlso
+            Company.Equals(engineToCompare.Company, StringComparison.InvariantCultureIgnoreCase) AndAlso
+            SearchURI.Equals(engineToCompare.SearchURI, StringComparison.InvariantCultureIgnoreCase)
+    End Function
+
 End Class

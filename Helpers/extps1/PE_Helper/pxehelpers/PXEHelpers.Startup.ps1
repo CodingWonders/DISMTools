@@ -96,7 +96,7 @@ function Show-InstallNetAdapterScreen {
 $host.UI.RawUI.WindowTitle = "Preboot eXecution Environment Helpers"
 $global:product = "Preboot eXecution Environment Helpers"
 
-Show-CenteredTextBox -Text "Preboot eXecution Environment Helpers. (c) 2025 CodingWonders Software" -MaxWidth 70 -CenterOfAll
+Show-CenteredTextBox -Text "Preboot eXecution Environment Helpers. (c) 2025-2026 CodingWonders Software" -MaxWidth 70 -CenterOfAll
 Write-Host "`n    Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
 
 Write-Progress -Activity "PXE Helpers starting up..." -Status "Getting network adapters in the system..." -PercentComplete 0
@@ -124,7 +124,7 @@ class PxeHelperProvider {
     }
 }
 
-Show-CenteredTextBox -Text "Preboot eXecution Environment Helpers. (c) 2025 CodingWonders Software" -MaxWidth 70 -CenterOfAll
+Show-CenteredTextBox -Text "Preboot eXecution Environment Helpers. (c) 2025-2026 CodingWonders Software" -MaxWidth 70 -CenterOfAll
 Write-Host "`n    Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
 Write-Progress -Activity "PXE Helpers starting up..." -Status "Loading PXE Helper providers..." -PercentComplete 50
 

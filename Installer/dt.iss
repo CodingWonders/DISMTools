@@ -56,9 +56,11 @@ UsePreviousLanguage=no
 LanguageDetectionMethod=uilanguage
 
 ;Wizard setup
-WizardStyle=modern
+WizardStyle=modern dynamic windows11
 WizardImageFile=mainImg.bmp
-WizardSmallImageFile=logo.bmp
+WizardImageFileDynamicDark=mainImg_dark.bmp
+WizardSmallImageFile=logo.png
+WizardSmallImageFileDynamicDark=logo.png
 
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=admin
@@ -210,6 +212,9 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; Va
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "AppX_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Cap_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; ValueName: "Drv_CompleteInfo"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
+
+Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; ValueType: string; ValueName: "EngineName"; ValueData: "DuckDuckGo"; Flags: uninsdeletevalue createvalueifdoesntexist
 
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist

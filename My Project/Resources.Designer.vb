@@ -2041,6 +2041,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property tour_glyph_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("tour_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property tour_glyph_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("tour_glyph_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property umount_img() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("umount_img", resourceCulture)
@@ -2121,16 +2141,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
+        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
         '''
         '''New features:
         '''
-        '''- HotInstall has received DynaLog logging
-        '''- UnattendGen has been updated to the latest version
-        '''- The Italian tour has been updated to point to Italian tour videos
-        '''- Several improvements were made to Italian translations (#294, #296, #298, #301; thanks @bovirus)
-        '''- CODE: web search functionality has been modularized. The search engine helper will be used in the future
-        '''- Tinted color themes [resto de la cadena truncado]&quot;;.
+        '''- The PE Helper will now call OSCDIMG more times if it fails to create the ISO file
+        '''- The Sysprep Preparation Tool has been updated with the inclusion of a new Auto mode, and preparation tasks now running asynchronously
+        '''- Self-contained copies of UnattendGen that are older or newer than the expected version will now be removed automatically
+        '''- Set Quick Machine Recovery S [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

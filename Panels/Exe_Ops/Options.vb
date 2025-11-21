@@ -216,6 +216,8 @@ Public Class Options
         MainForm.ExpandedProgressPanel = CheckBox7.Checked
         MainForm.ShowDateAndTime = CheckBox21.Checked
         MainForm.TimeLabel.Visible = CheckBox21.Checked
+
+        MainForm.SearchEngineName = ComboBox7.SelectedItem
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -363,6 +365,7 @@ Public Class Options
         ComboBox3.Items.Clear()
         ComboBox5.Items.Clear()
         ComboBox6.Items.Clear()
+        ComboBox7.Items.Clear()
         ComboBox1.SelectedText = ""
         ComboBox2.SelectedText = ""
         ComboBox3.SelectedText = ""
@@ -1572,6 +1575,7 @@ Public Class Options
         ComboBox3.Items.AddRange(Languages)
         ComboBox5.Items.AddRange(LogViews)
         ComboBox6.Items.AddRange(NotFreqs)
+        ComboBox7.Items.AddRange(SearchEngineHelper.GetAllSearchEngines().Select(Function(engine) engine.Name).ToArray())
         DynaLog.LogMessage("Checking if portable marker exists...")
         If File.Exists(Application.StartupPath & "\portable") Then ComboBox1.Items.RemoveAt(1)
         If Environment.OSVersion.Version.Major = 10 Then
@@ -1616,6 +1620,8 @@ Public Class Options
         ComboBox5.ForeColor = CurrentTheme.ForegroundColor
         ComboBox6.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox6.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox7.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox7.ForeColor = CurrentTheme.ForegroundColor
         DarkThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
         DarkThemesCB.ForeColor = CurrentTheme.ForegroundColor
         LightThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1815,6 +1821,8 @@ Public Class Options
         CheckBox7.Checked = MainForm.ExpandedProgressPanel
         CheckBox21.Checked = MainForm.ShowDateAndTime
         CheckBox23.Checked = Not MainForm.NoNTSamMappings
+
+        ComboBox7.SelectedItem = MainForm.SearchEngineName
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged

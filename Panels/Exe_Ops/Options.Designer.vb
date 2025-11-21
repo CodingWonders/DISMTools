@@ -241,6 +241,11 @@ Partial Class Options
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.Panel21 = New System.Windows.Forms.Panel()
+        Me.Label67 = New System.Windows.Forms.Label()
+        Me.Label68 = New System.Windows.Forms.Label()
+        Me.Label69 = New System.Windows.Forms.Label()
+        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -335,6 +340,7 @@ Partial Class Options
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
+        Me.Panel21.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1011,7 +1017,7 @@ Partial Class Options
         Me.Label18.AutoEllipsis = True
         Me.Label18.Location = New System.Drawing.Point(38, 40)
         Me.Label18.Name = "Label18"
-        Me.Label18.Size = New System.Drawing.Size(687, 64)
+        Me.Label18.Size = New System.Drawing.Size(680, 64)
         Me.Label18.TabIndex = 8
         Me.Label18.Text = resources.GetString("Label18.Text")
         '
@@ -1866,8 +1872,8 @@ Partial Class Options
         '
         'ValueContainer
         '
-        Me.ValueContainer.Controls.Add(Me.Options_Personalization)
         Me.ValueContainer.Controls.Add(Me.Options_ImgOps)
+        Me.ValueContainer.Controls.Add(Me.Options_Personalization)
         Me.ValueContainer.Controls.Add(Me.Options_Program)
         Me.ValueContainer.Controls.Add(Me.Options_Logs)
         Me.ValueContainer.Controls.Add(Me.Options_Scratch)
@@ -2113,6 +2119,7 @@ Partial Class Options
         Me.FlowLayoutPanel5.AutoScroll = True
         Me.FlowLayoutPanel5.Controls.Add(Me.Panel6)
         Me.FlowLayoutPanel5.Controls.Add(Me.Panel7)
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel21)
         Me.FlowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel5.Location = New System.Drawing.Point(0, 0)
         Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
@@ -2130,7 +2137,7 @@ Partial Class Options
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(748, 239)
+        Me.Panel6.Size = New System.Drawing.Size(728, 239)
         Me.Panel6.TabIndex = 0
         '
         'Label32
@@ -2138,7 +2145,7 @@ Partial Class Options
         Me.Label32.AutoEllipsis = True
         Me.Label32.Location = New System.Drawing.Point(38, 188)
         Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(687, 51)
+        Me.Label32.Size = New System.Drawing.Size(680, 51)
         Me.Label32.TabIndex = 8
         Me.Label32.Text = resources.GetString("Label32.Text")
         '
@@ -2161,7 +2168,7 @@ Partial Class Options
         Me.Panel7.Location = New System.Drawing.Point(0, 239)
         Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(748, 172)
+        Me.Panel7.Size = New System.Drawing.Size(728, 172)
         Me.Panel7.TabIndex = 1
         '
         'Label9
@@ -2668,6 +2675,55 @@ Partial Class Options
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
         '
+        'Panel21
+        '
+        Me.Panel21.Controls.Add(Me.ComboBox7)
+        Me.Panel21.Controls.Add(Me.Label69)
+        Me.Panel21.Controls.Add(Me.Label67)
+        Me.Panel21.Controls.Add(Me.Label68)
+        Me.Panel21.Location = New System.Drawing.Point(0, 411)
+        Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel21.Name = "Panel21"
+        Me.Panel21.Size = New System.Drawing.Size(728, 172)
+        Me.Panel21.TabIndex = 2
+        '
+        'Label67
+        '
+        Me.Label67.AutoSize = True
+        Me.Label67.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label67.Location = New System.Drawing.Point(18, 18)
+        Me.Label67.Name = "Label67"
+        Me.Label67.Size = New System.Drawing.Size(205, 15)
+        Me.Label67.TabIndex = 3
+        Me.Label67.Text = "Searching image information online"
+        '
+        'Label68
+        '
+        Me.Label68.AutoEllipsis = True
+        Me.Label68.Location = New System.Drawing.Point(41, 47)
+        Me.Label68.Name = "Label68"
+        Me.Label68.Size = New System.Drawing.Size(665, 48)
+        Me.Label68.TabIndex = 0
+        Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
+    "se the settings the program should consider for web searches:"
+        '
+        'Label69
+        '
+        Me.Label69.AutoSize = True
+        Me.Label69.Location = New System.Drawing.Point(40, 104)
+        Me.Label69.Name = "Label69"
+        Me.Label69.Size = New System.Drawing.Size(210, 15)
+        Me.Label69.TabIndex = 4
+        Me.Label69.Text = "Search Engine to use for web searches:"
+        '
+        'ComboBox7
+        '
+        Me.ComboBox7.FormattingEnabled = True
+        Me.ComboBox7.Location = New System.Drawing.Point(43, 129)
+        Me.ComboBox7.Name = "ComboBox7"
+        Me.ComboBox7.Size = New System.Drawing.Size(313, 23)
+        Me.ComboBox7.TabIndex = 5
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -2816,6 +2872,8 @@ Partial Class Options
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
         Me.Panel23.PerformLayout()
+        Me.Panel21.ResumeLayout(False)
+        Me.Panel21.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3037,5 +3095,10 @@ Partial Class Options
     Friend WithEvents CheckBox23 As System.Windows.Forms.CheckBox
     Friend WithEvents Button6 As System.Windows.Forms.Button
     Friend WithEvents Label33 As System.Windows.Forms.Label
+    Friend WithEvents Panel21 As System.Windows.Forms.Panel
+    Friend WithEvents ComboBox7 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label69 As System.Windows.Forms.Label
+    Friend WithEvents Label67 As System.Windows.Forms.Label
+    Friend WithEvents Label68 As System.Windows.Forms.Label
 
 End Class
