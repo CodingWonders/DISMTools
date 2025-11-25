@@ -152,6 +152,8 @@ Public Class MainForm
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
         Dim SPDlgResult As DialogResult = SysprepPreparatorModeDialog.ShowDialog(Me)
+        If SPDlgResult = Windows.Forms.DialogResult.Cancel Then Exit Sub
+
         Dim args As String = ""
 
         If SPDlgResult = Windows.Forms.DialogResult.Yes Then args &= "/auto"
