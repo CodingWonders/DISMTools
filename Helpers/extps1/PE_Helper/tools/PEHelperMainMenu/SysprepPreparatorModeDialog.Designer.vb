@@ -30,6 +30,7 @@ Partial Class SysprepPreparatorModeDialog
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox3 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.MainMenuPanel.SuspendLayout()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -130,12 +131,25 @@ Partial Class SysprepPreparatorModeDialog
         Me.PictureBox2.TabIndex = 2
         Me.PictureBox2.TabStop = False
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Checked = True
+        Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBox1.Location = New System.Drawing.Point(16, 195)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(245, 19)
+        Me.CheckBox1.TabIndex = 6
+        Me.CheckBox1.Text = "Capture image after preparing the system"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'SysprepPreparatorModeDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(24, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(624, 345)
+        Me.Controls.Add(Me.CheckBox1)
         Me.Controls.Add(Me.MainMenuPanel)
         Me.Controls.Add(Me.Label1)
         Me.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -153,6 +167,7 @@ Partial Class SysprepPreparatorModeDialog
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents Label1 As System.Windows.Forms.Label
@@ -162,5 +177,6 @@ Partial Class SysprepPreparatorModeDialog
     Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents PictureBox3 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class

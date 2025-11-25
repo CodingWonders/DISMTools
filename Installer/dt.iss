@@ -61,6 +61,7 @@ WizardImageFile=mainImg.bmp
 WizardImageFileDynamicDark=mainImg_dark.bmp
 WizardSmallImageFile=logo.png
 WizardSmallImageFileDynamicDark=logo.png
+WizardSizePercent=150
 
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=admin
@@ -69,7 +70,7 @@ DefaultDirName={#pfDir}
 DisableDirPage=yes
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
-LicenseFile=.\files\license.rtf
+LicenseFile=.\LICENSE.rtf
 OutputBaseFilename=dt_setup
 Compression=lzma
 SolidCompression=yes

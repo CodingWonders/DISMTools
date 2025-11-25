@@ -7,6 +7,8 @@ Public Class MainForm
 
     Private RestartMessage As String, ProcessExitCodeMessage As String
 
+    Friend AutoCapture As Boolean = False
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Since we need Windows Server to run PXE Helper Servers, we'll block access to that page
         ' on non-Server Windows.
@@ -150,11 +152,11 @@ Public Class MainForm
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
         Dim SPDlgResult As DialogResult = SysprepPreparatorModeDialog.ShowDialog(Me)
-        Select Case SPDlgResult
-            Case Windows.Forms.DialogResult.Yes
-                RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), "/auto", True)
-            Case Windows.Forms.DialogResult.No
-                RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), RunAsAdmin:=True)
-        End Select
+        Dim args As String = ""
+
+        If SPDlgResult = Windows.Forms.DialogResult.Yes Then args &= "/auto"
+        If AutoCapture Then args &= " /dt_capture"
+
+        RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), args, True)
     End Sub
 End Class
