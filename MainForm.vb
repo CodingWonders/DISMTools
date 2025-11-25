@@ -6739,7 +6739,7 @@ Public Class MainForm
                         ' Menu - File
                         NewProjectToolStripMenuItem.Text = "&Nuovo progetto..."
                         OpenExistingProjectToolStripMenuItem.Text = "&Apri progetto esistente"
-                        ManageOnlineInstallationToolStripMenuItem.Text = "&Gestisci installazione online"
+                        ManageOnlineInstallationToolStripMenuItem.Text = "&Gestisci installazione online..."
                         ManageOfflineInstallationToolStripMenuItem.Text = "Gestisci installazione &offline..."
                         RecentProjectsListMenu.Text = "Progetti recenti"
                         SaveProjectToolStripMenuItem.Text = "&Salva progetto..."
@@ -6906,7 +6906,7 @@ Public Class MainForm
                         Label10.Text = "Progetti recenti"
                         NewProjLink.Text = "Nuovo progetto..."
                         ExistingProjLink.Text = "Apri progetto esistente..."
-                        OnlineInstMgmt.Text = "Gestisci installazione online"
+                        OnlineInstMgmt.Text = "Gestisci installazione online..."
                         OfflineInstMgmt.Text = "Gestisci installazione offline..."
                         RecentRemoveLink.Text = "Rimuovi elemento"
                         ' ToolStrip buttons
@@ -7036,7 +7036,7 @@ Public Class MainForm
                         ' New home panel design
                         LinkLabel22.Text = "BENVENUTO"
                         LinkLabel23.Text = "ULTIME NOTIZIE"
-                        LinkLabel24.Text = "VIDEO TUTORIAL"
+                        LinkLabel24.Text = "TUTORIAL VIDEO"
                         ' - Welcome panel
                         Label36.Text = "Questo è un software beta"
                         Label8.Text = "Questo programma non è completo e potresti incontrare dei problemi. Se ciò dovesse accadere, non esitare ad inviarci un feedback"
@@ -7046,8 +7046,8 @@ Public Class MainForm
                         LinkLabel8.Text = "Provieni da altri programmi di utilità?"
                         Label38.Text = "Esecuzione operazioni"
                         LinkLabel9.Text = "Suggerimenti per eseguire un'ottima manutenzione"
-                        LinkLabel10.Text = "Verificare informazioni sull'immagine"
-                        LinkLabel11.Text = "Salvataggio informazioni immagine"
+                        LinkLabel10.Text = "Verifica informazioni immagine"
+                        LinkLabel11.Text = "Salvata informazioni immagine"
                         LinkLabel4.Text = "Gestisci installazione online"
                         LinkLabel5.Text = "Gestisci installazioni in qualsiasi unità"
                         ' - Latest news panel
@@ -8421,8 +8421,8 @@ Public Class MainForm
                 ' Submenu items
                 ' Menu - File
                 NewProjectToolStripMenuItem.Text = "&Nuovo progetto..."
-                OpenExistingProjectToolStripMenuItem.Text = "&Aprire un progetto esistente"
-                ManageOnlineInstallationToolStripMenuItem.Text = "&Gestione dell'installazione attiva"
+                OpenExistingProjectToolStripMenuItem.Text = "&Apri progetto esistente"
+                ManageOnlineInstallationToolStripMenuItem.Text = "&Gestisci installazione online..."
                 ManageOfflineInstallationToolStripMenuItem.Text = "Gestisci installazione &offline..."
                 RecentProjectsListMenu.Text = "Progetti recenti"
                 SaveProjectToolStripMenuItem.Text = "&Salva progetto..."
@@ -8718,7 +8718,7 @@ Public Class MainForm
                 Button58.Text = "Imposta spazio temporaneo..."
                 ' New home panel design
                 LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
-                LinkLabel23.Text = "ULTIME NOTIZIE"
+                LinkLabel23.Text = "NOVITA'"
                 LinkLabel24.Text = "VIDEO TUTORIAL"
                 ' - Welcome panel
                 Label36.Text = "Questo è un software beta"
