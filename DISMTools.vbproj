@@ -84,7 +84,7 @@
       <HintPath>packages\Markdig.0.43.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.3.3.12\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.4.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Core, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Core.dll</HintPath>
@@ -107,8 +107,8 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=6.0.1.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.6.0.1\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=6.1.0.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.6.1.0\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -882,6 +882,7 @@
     <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
+    <Compile Include="Utilities\TourServer.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
     <Compile Include="Utilities\WMIHelper.vb" />
     <Compile Include="Videos\Video.vb" />
@@ -1551,6 +1552,8 @@
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
+    <None Include="Resources\menus\tour_glyph_dark.png" />
+    <None Include="Resources\menus\tour_glyph_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -2102,13 +2105,6 @@ IF EXIST tools (
 
 IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -2116,4 +2112,11 @@ IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="packages\Scintilla5.NET.6.1.0\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.1.0\build\scintilla5.net.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Scintilla5.NET.6.1.0\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.1.0\build\scintilla5.net.targets'))" />
+  </Target>
 </Project>

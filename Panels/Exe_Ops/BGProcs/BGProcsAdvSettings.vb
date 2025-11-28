@@ -41,7 +41,7 @@ Public Class BGProcsAdvSettings
                 Case 4
                     msg = "O programa irá agora detetar os controladores da imagem de acordo com as opções que especificou. Isto pode demorar algum tempo."
                 Case 5
-                    msg = "Il programma ora rileverà i driver dell'immagine in base alle opzioni specificate. Questa operazione potrebbe richiedere un po' di tempo"
+                    msg = "Il programma rileverà i driver dell'immagine in base alle opzioni specificate. Questa operazione potrebbe richiedere un po' di tempo"
             End Select
             MsgBox(msg, vbOKOnly + vbInformation, Text)
             MainForm.bwGetImageInfo = False
@@ -103,15 +103,15 @@ Public Class BGProcsAdvSettings
                         OK_Button.Text = "OK"
                         Cancel_Button.Text = "Cancelar"
                     Case "ITA"
-                        Text = "Impostazioni avanzate dei processi in background"
-                        Label1.Text = "Configura impostazioni aggiuntive per i processi in secondo piano:"
+                        Text = "Impostazioni avanzate processi in background"
+                        Label1.Text = "Configura impostazioni aggiuntive per i processi in background:"
                         CheckBox1.Text = "Migliora il rilevamento di tutti i pacchetti AppX di un'installazione attiva con gli helper di PowerShell"
-                        CheckBox2.Text = "Salta i pacchetti con criteri non rimovibili impostati"
+                        CheckBox2.Text = "Salta i pacchetti con impostati criteri non rimovibili"
                         CheckBox3.Text = "Rileva tutti i driver dell'immagine"
                         CheckBox4.Text = "Salta i pacchetti framework e rimuovili dagli elenchi se sono stati rilevati"
                         CheckBox5.Text = "Esegui tutti i processi in background dopo aver eseguito un'attività"
                         OK_Button.Text = "OK"
-                        Cancel_Button.Text = "Annullare"
+                        Cancel_Button.Text = "Annulla"
                 End Select
             Case 1
                 Text = "Advanced background process settings"
@@ -154,15 +154,15 @@ Public Class BGProcsAdvSettings
                 OK_Button.Text = "OK"
                 Cancel_Button.Text = "Cancelar"
             Case 5
-                Text = "Impostazioni avanzate dei processi in background"
-                Label1.Text = "Configura impostazioni aggiuntive per i processi in secondo piano:"
+                Text = "Impostazioni avanzate processi in background"
+                Label1.Text = "Configura impostazioni aggiuntive per i processi in background:"
                 CheckBox1.Text = "Migliora il rilevamento di tutti i pacchetti AppX di un'installazione attiva con gli helper di PowerShell"
                 CheckBox2.Text = "Salta i pacchetti con criteri non rimovibili impostati"
                 CheckBox3.Text = "Rileva tutti i driver dell'immagine"
                 CheckBox4.Text = "Salta i pacchetti framework e rimuovili dagli elenchi se sono stati rilevati"
                 CheckBox5.Text = "Esegui tutti i processi in background dopo aver eseguito un'attività"
                 OK_Button.Text = "OK"
-                Cancel_Button.Text = "Annullare"
+                Cancel_Button.Text = "Annulla"
         End Select
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor

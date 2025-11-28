@@ -20,7 +20,7 @@ Public Class HelpBrowserForm
                     Case "PTB", "PTG"
                         TitleMsg = "Tópicos de ajuda do DISMTools"
                     Case "ITA"
-                        TitleMsg = "Argomenti della guida di DISMTools"
+                        TitleMsg = "Argomenti guida DISMTools"
                 End Select
             Case 1
                 TitleMsg = "DISMTools Help Topics"
@@ -31,7 +31,7 @@ Public Class HelpBrowserForm
             Case 4
                 TitleMsg = "Tópicos de ajuda do DISMTools"
             Case 5
-                TitleMsg = "Argomenti della guida di DISMTools"
+                TitleMsg = "Argomenti guida di DISMTools"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -72,8 +72,12 @@ Public Class HelpBrowserForm
                     Case 5
                         languageCode = "it"
                 End Select
-
-                Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", languageCode, "tour-start.html"))
+                
+                MainForm.tourServer.StartServer()
+                If MainForm.tourServer.IsListenerAlive() Then
+                    Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                    MainForm.TourActionsTSMI.Visible = True
+                End If
             End If
             WebBrowser1.Navigate(CurrentSite)
             Exit Sub

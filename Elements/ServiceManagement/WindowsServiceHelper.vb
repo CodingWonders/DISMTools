@@ -571,7 +571,6 @@ Module WindowsServiceHelper
                     RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
                 End If
                 If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
-                ServiceManagementForm.ReportServiceSave(currentService, serviceCount)
             Next
             DynaLog.EnableLogging()
 

@@ -2041,6 +2041,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property tour_glyph_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("tour_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property tour_glyph_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("tour_glyph_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property umount_img() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("umount_img", resourceCulture)
@@ -2119,18 +2139,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''-- Bugfixes
-        '''
-        '''- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
-        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
-        '''- Fixed an issue in the ADDS domain join wizard regarding user name validation
-        '''
-        '''-- New features
-        '''
-        '''- A new autorun window has been added to allow you to access the items you want more easily
-        '''- A new tool designed to prepare computers for Sysprep generaliz [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.7.1_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

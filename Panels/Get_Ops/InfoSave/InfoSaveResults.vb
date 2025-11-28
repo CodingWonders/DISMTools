@@ -85,6 +85,8 @@ Public Class InfoSaveResults
                                        "                margin: 0;" & CrLf &
                                        "                height: 100vh;" & CrLf &
                                        "                overflow: hidden;" & CrLf &
+                                       "                background-color: #FCFBFF;" & CrLf &
+                                       "                color: black;" & CrLf &
                                        "            }" & CrLf &
                                        "            table {" & CrLf &
                                        "                border-collapse: collapse;" & CrLf &
@@ -146,6 +148,27 @@ Public Class InfoSaveResults
                                        "            }" & CrLf &
                                        "            #menu-toggle:hover {" & CrLf &
                                        "                background-color: #333;" & CrLf &
+                                       "            }" & CrLf & CrLf &
+                                       "            @media (prefers-color-sheme: dark) {" & CrLf &
+                                       "                body {" & CrLf &
+                                       "                    background-color: #1F1F1F;" & CrLf &
+                                       "                    color: white;" & CrLf &
+                                       "                }" & CrLf & CrLf &
+                                       "                table th {" & CrLf &
+                                       "                    border-bottom: 1px solid #EEE" & CrLf &
+                                       "                }" & CrLf & CrLf &
+                                       "                table td {" & CrLf &
+                                       "                    border-bottom: 1px solid #EEE" & CrLf &
+                                       "                }" & CrLf & CrLf &
+                                       "                #sidebar {" & CrLf &
+                                       "                    border-right: 1px solid #EEE" & CrLf &
+                                       "                }" & CrLf & CrLf &
+                                       "                #sidebar a {" & CrLf &
+                                       "                    color: white;" & CrLf &
+                                       "                }" & CrLf & CrLf &
+                                       "                #sidebar a:hover {" & CrLf &
+                                       "                    background-color: #282828;" & CrLf &
+                                       "                }" & CrLf &
                                        "            }" & CrLf &
                                        "        </style>" & CrLf &
                                        "    </head>" & CrLf &

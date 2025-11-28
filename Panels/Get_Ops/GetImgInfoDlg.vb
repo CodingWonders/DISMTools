@@ -147,10 +147,10 @@ Public Class GetImgInfoDlg
                         ListView1.Columns(1).Text = "Nome da imagem"
                         OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
                     Case "ITA"
-                        Text = "Ottieni informazioni sull'immagine"
+                        Text = "Verifica informazioni immagine"
                         Label1.Text = Text
                         Label2.Text = "File immagine da cui ottenere informazioni:"
-                        Label3.Text = "Elenco degli indici del file immagine:"
+                        Label3.Text = "Elenco indici file immagine:"
                         Label22.Text = "Versione immagine:"
                         Label24.Text = "Nome immagine:"
                         Label26.Text = "Descrizione immagine:"
@@ -159,25 +159,25 @@ Public Class GetImgInfoDlg
                         Label43.Text = "Architettura:"
                         Label47.Text = "HAL:"
                         Label33.Text = "Service Pack build:"
-                        Label28.Text = "Livello del Service Pack:"
+                        Label28.Text = "Livello Service Pack:"
                         Label30.Text = "Tipo di installazione:"
                         Label39.Text = "Edizione:"
-                        Label45.Text = "Tipo di prodotto:"
-                        Label5.Text = "Suite di prodotti:"
-                        Label7.Text = "Directory principale del sistema:"
-                        Label9.Text = "Numero di file:"
-                        Label11.Text = "Date:"
+                        Label45.Text = "Tipo prodotto:"
+                        Label5.Text = "Suite prodotti:"
+                        Label7.Text = "Cartella principale sistema:"
+                        Label9.Text = "Numero file:"
+                        Label11.Text = "Data:"
                         Label13.Text = "Lingue installate:"
-                        Label36.Text = "Informazioni sull'immagine"
-                        Label37.Text = "Selezionare un indice nella vista elenco a sinistra per visualizzarne le informazioni qui"
+                        Label36.Text = "Informazioni immagine"
+                        Label37.Text = "Per visualizzarne qui le informazioni seleziona a sinistra un indice nella vista elenco"
                         RadioButton1.Text = "Immagine attualmente montata"
-                        RadioButton2.Text = "Un'altra immagine"
+                        RadioButton2.Text = "Altra immagine"
                         Button1.Text = "Sfoglia..."
                         Button2.Text = "Salva..."
                         Button3.Text = "Scegli..."
                         ListView1.Columns(0).Text = "Indice"
-                        ListView1.Columns(1).Text = "Nome dell'immagine"
-                        OpenFileDialog1.Title = "Specificare l'immagine da cui ottenere le informazioni"
+                        ListView1.Columns(1).Text = "Nome immagine"
+                        OpenFileDialog1.Title = "Specifica l'immagine di cui verificare le informazioni"
                 End Select
             Case 1
                 Text = "Get image information"
@@ -308,10 +308,10 @@ Public Class GetImgInfoDlg
                 ListView1.Columns(1).Text = "Nome da imagem"
                 OpenFileDialog1.Title = "Especificar a imagem da qual obter a informação"
             Case 5
-                Text = "Ottieni informazioni sull'immagine"
+                Text = "Verifica informazioni immagine"
                 Label1.Text = Text
-                Label2.Text = "File immagine da cui ottenere informazioni:"
-                Label3.Text = "Elenco degli indici del file immagine:"
+                Label2.Text = "File immagine di cui verificare le informazioni:"
+                Label3.Text = "Elenco indici file immagine:"
                 Label22.Text = "Versione immagine:"
                 Label24.Text = "Nome immagine:"
                 Label26.Text = "Descrizione immagine:"
@@ -319,26 +319,26 @@ Public Class GetImgInfoDlg
                 Label41.Text = "Supporta WIMBoot?"
                 Label43.Text = "Architettura:"
                 Label47.Text = "HAL:"
-                Label33.Text = "Service Pack build:"
-                Label28.Text = "Livello del Service Pack:"
-                Label30.Text = "Tipo di installazione:"
+                Label33.Text = "Build Service Pack:"
+                Label28.Text = "Livello Service Pack:"
+                Label30.Text = "Tipo installazione:"
                 Label39.Text = "Edizione:"
-                Label45.Text = "Tipo di prodotto:"
-                Label5.Text = "Suite di prodotti:"
-                Label7.Text = "Directory principale del sistema:"
-                Label9.Text = "Numero di file:"
-                Label11.Text = "Date:"
+                Label45.Text = "Tipo prodotto:"
+                Label5.Text = "Suite prodotti:"
+                Label7.Text = "Cartella principale sistema:"
+                Label9.Text = "Numero file:"
+                Label11.Text = "Data:"
                 Label13.Text = "Lingue installate:"
-                Label36.Text = "Informazioni sull'immagine"
-                Label37.Text = "Selezionare un indice nella vista elenco a sinistra per visualizzarne le informazioni qui"
+                Label36.Text = "Informazioni immagine"
+                Label37.Text = "Per visualizzarne qui le informazioni seleziona a sinistra un indice nella vista elenco"
                 RadioButton1.Text = "Immagine attualmente montata"
-                RadioButton2.Text = "Un'altra immagine"
+                RadioButton2.Text = "Altra immagine"
                 Button1.Text = "Sfoglia..."
                 Button2.Text = "Salva..."
                 Button3.Text = "Scegli..."
                 ListView1.Columns(0).Text = "Indice"
-                ListView1.Columns(1).Text = "Nome dell'immagine"
-                OpenFileDialog1.Title = "Specificare l'immagine da cui ottenere le informazioni"
+                ListView1.Columns(1).Text = "Nome immagine"
+                OpenFileDialog1.Title = "Specifica l'immagine di cui verificare le informazioni"
         End Select
         Win10Title.BackColor = CurrentTheme.BackgroundColor
         BackColor = CurrentTheme.SectionBackgroundColor
@@ -408,7 +408,7 @@ Public Class GetImgInfoDlg
                         Case "PTB", "PTG"
                             msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                         Case "ITA"
-                            msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                            msg = "Impossibile verificare informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                     End Select
                 Case 1
                     msg = "Could not gather information of this image file. Reason:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
@@ -419,7 +419,7 @@ Public Class GetImgInfoDlg
                 Case 4
                     msg = "Não foi possível recolher informações sobre este ficheiro de imagem. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
                 Case 5
-                    msg = "Impossibile raccogliere informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
+                    msg = "Impossibile verificare informazioni sull'immagine. Motivo:" & CrLf & CrLf & ex.ToString() & " - " & ex.Message & " (HRESULT " & Hex(ex.HResult) & ")"
             End Select
             MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
         Finally
@@ -549,7 +549,7 @@ Public Class GetImgInfoDlg
                     Case "ITA"
                         Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
                         Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                            "Data di modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                            "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
                 End Select
             Case 1
                 Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " files in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " directories"
@@ -570,7 +570,7 @@ Public Class GetImgInfoDlg
             Case 5
                 Label6.Text = ImageInfoList(Index).CustomizedInfo.FileCount & " file in " & ImageInfoList(Index).CustomizedInfo.DirectoryCount & " cartelle"
                 Label10.Text = "Data di creazione: " & ImageInfoList(Index).CustomizedInfo.CreatedTime & CrLf & _
-                    "Data di modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
+                    "Data modifica: " & ImageInfoList(Index).CustomizedInfo.ModifiedTime
         End Select
 
         DynaLog.LogMessage("Getting WIMBoot status...")
@@ -598,7 +598,7 @@ Public Class GetImgInfoDlg
                                       "dism /English /get-imageinfo /imagefile=" & Quote & SelectedImageFile & Quote & " /index=" & ListView1.FocusedItem.Index + 1 & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & Quote & Application.StartupPath & "\tempinfo\imgwimboot" & Quote, ASCII)
             End Select
             If Debugger.IsAttached Then
-                Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
+                Process.Start(Environment.GetEnvironmentVariable("SYSTEMROOT") & "\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
             End If
             Using WIMBootProc As New Process()
                 WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
@@ -711,7 +711,7 @@ Public Class GetImgInfoDlg
                     Case "PTB", "PTG"
                         Label23.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
                     Case "ITA"
-                        Label23.Text &= " (aggiornamento della caratteristica: " & FeatUpd & ")"
+                        Label23.Text &= " (aggiornamento funzionalità: " & FeatUpd & ")"
                 End Select
             Case 1
                 Label23.Text &= " (feature update: " & FeatUpd & ")"
@@ -722,7 +722,7 @@ Public Class GetImgInfoDlg
             Case 4
                 Label23.Text &= " (atualização de funcionalidades: " & FeatUpd & ")"
             Case 5
-                Label23.Text &= " (aggiornamento della caratteristica: " & FeatUpd & ")"
+                Label23.Text &= " (aggiornamento funzionalità: " & FeatUpd & ")"
         End Select
     End Sub
 

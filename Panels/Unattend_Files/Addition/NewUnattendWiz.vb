@@ -606,8 +606,40 @@ Public Class NewUnattendWiz
         End If
         DynaLog.LogMessage("Checking if self-contained UnattendGen is present...")
         If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
-            DynaLog.LogMessage("Self-contained UnattendGen is present.")
             ' Self-contained version detected
+            DynaLog.LogMessage("Self-contained UnattendGen is present. Determining version...")
+            ' We determine if the version of UnattendGen that we downloaded matches the one associated with the
+            ' release tag. If it is the same version, then we accept it. Otherwise, we remove the directory and
+            ' start over. As a lowest common denominator, we'll go with the 32-bit Windows release to check 
+            ' version information. Then we'll go with the 64-bit version.
+            Dim incompatibleReleases As Integer = 0
+            Try
+                Dim UG32VerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained", "x86", "UnattendGen.exe"))
+                DynaLog.LogMessage("Version of 32-bit UnattendGen: " & UG32VerInfo.FileVersion)
+                DynaLog.LogMessage("--- We are expecting release build " & UnattendGenReleaseTag & " - anything other than that will be discarded ---")
+                If UG32VerInfo.FilePrivatePart <> UnattendGenReleaseTag Then
+                    DynaLog.LogMessage("This release of UnattendGen has been marked as unsupported and will be deleted in favor of a newer version.")
+                    incompatibleReleases += 1
+                End If
+                Dim UG64VerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained", "amd64", "UnattendGen.exe"))
+                DynaLog.LogMessage("Version of 64-bit UnattendGen: " & UG64VerInfo.FileVersion)
+                DynaLog.LogMessage("--- We are expecting release build " & UnattendGenReleaseTag & " - anything other than that will be discarded ---")
+                If UG64VerInfo.FilePrivatePart <> UnattendGenReleaseTag Then
+                    DynaLog.LogMessage("This release of UnattendGen has been marked as unsupported and will be deleted in favor of a newer version.")
+                    incompatibleReleases += 1
+                End If
+
+                If incompatibleReleases > 0 Then
+                    DynaLog.LogMessage("One or more releases have been marked as unsupported. UnattendGen will be redownloaded shortly...")
+                    Directory.Delete(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained"), True)
+
+                    DotNetRuntimeSupported = False
+                    PreferSelfContained = False
+                    Exit Sub
+                End If
+            Catch ex As Exception
+
+            End Try
             DotNetRuntimeSupported = True
             PreferSelfContained = True
             Exit Sub

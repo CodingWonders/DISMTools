@@ -72,11 +72,11 @@ Public Class MainForm
                 ExitLink.Text = "Sair"
             Case "ITA"
                 RestartMessage = "Il computer verrà riavviato. Assicurati che sia configurato per avviarsi dal supporto di installazione. Vuoi riavviare?"
-                ProcessExitCodeMessage = "Processo terminato con codice 0x{0}:" & CrLf & CrLf & "{1}"
+                ProcessExitCodeMessage = "Processo completato con codice 0x{0}:" & CrLf & CrLf & "{1}"
                 Label1.Text = "Cosa vuoi fare?"
                 Label3.Text = "Avvia server PXE Helper per installazione di rete"
                 LinkLabel1.Text = "Installa un sistema operativo"
-                LinkLabel2.Text = "Riavvia al supporto di installazione"
+                LinkLabel2.Text = "Riavvia con il supporto di installazione"
                 LinkLabel3.Text = "Avvia server PXE Helper per installazione di rete"
                 LinkLabel4.Text = "Prepara sistema per acquisizione immagine"
                 LinkLabel5.Text = "Indietro"
@@ -149,6 +149,12 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), RunAsAdmin:=True)
+        Dim SPDlgResult As DialogResult = SysprepPreparatorModeDialog.ShowDialog(Me)
+        Select Case SPDlgResult
+            Case Windows.Forms.DialogResult.Yes
+                RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), "/auto", True)
+            Case Windows.Forms.DialogResult.No
+                RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), RunAsAdmin:=True)
+        End Select
     End Sub
 End Class

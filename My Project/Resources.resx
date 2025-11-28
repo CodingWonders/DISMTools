@@ -981,53 +981,9 @@ SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Overall changes:
+    <value>To get more information about what's new in this release, check out the release notes over at:
 
--- Bugfixes
-
-- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
-- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
-- Fixed an issue in the ADDS domain join wizard regarding user name validation
-
--- New features
-
-- A new autorun window has been added to allow you to access the items you want more easily
-- A new tool designed to prepare computers for Sysprep generalization has been added, called the Sysprep Preparation Tool
-- Some of the PE Helper's settings now persist
-- A new PXE Helper has been added to add support for FOG, the server component of which supports both Windows and UNIX
-- The PXE Helpers main menu now detects network adapters and offers you the ability to install new network adapters by leveraging the Driver Installation Module (DIM)
-- The representation of PXE Helper providers has been slightly improved
-- The PXE Helpers now support IPv6 server addresses
-- The PXE Helpers can now reconnect to the server up to a maximum of 5 attempts
-- COMMAND-LINE ONLY: the PE Helper now supports external temporary directories
-- The WDS Helper now supports cleaning up files by independent session GUIDs
-- You can now specify the initial user to join an Active Directory domain with more easily
-- When selecting a user, DISMTools will now check if the account is disabled and will show a warning if it is
-- UnattendGen has been updated to the latest version
-- Batch scripts are now added as is, without wrappers (thanks @cschneegans for suggesting). Multiple scripts per stage can now be added as well. Editor syntax highlighting is also dynamically adjusted based on the language
-- For those who are just getting started with unattended answer files, we have included starter scripts that you can use in your target installation
-- A new tool has been added to view and manage the services of the Windows image
-- You can now remove multiple AppX packages from the addition queue in bulk
-- A new tool has been added to view the environment variables of the Windows image
-- DISMTools will now attempt to remove read-only flags from the image to mount if it had been copied to read-write locations with that flag set
-- The Inno Setup component has been updated to version 6.5.3
-- DISMTools is now DPI-aware on Windows 10 and 11 (#290, thanks @Clin1234)
-- Markdig has been updated to version 0.43.0
-
-Changes made since last preview:
-
--- Bugfixes
-
-- Fixed an issue where the start script for the UNIX version of the FOG Helper Server would not start due to Windows line endings
-- Some starter scripts have had their registry addition procedures fixed to prevent issues
-
--- New features
-
-- The Environment Variable Manager can now fully modify environment variables
-- The FOG Helper now determines OS platform when connecting to a server
-- Feature update detection support has been added for Germanium 25H2 builds
-- The DISMTools Tour is now multi-lingual, in both text and video forms, supporting the 5 program languages
-- The Help documentation has been updated</value>
+https://github.com/CodingWonders/DISMTools/releases/tag/v0.7.1_upd1</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1076,5 +1032,11 @@ Changes made since last preview:
   </data>
   <data name="envvar_pic_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\envvar_pic_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tour_glyph_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\tour_glyph_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tour_glyph_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\tour_glyph_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -229,6 +229,11 @@ Public Class PopupMountedImagePicker
     End Function
 
     Private Shared Sub GetMountedImages()
+        If MainForm.ImgBW.IsBusy Then
+            mountedImages = Nothing
+            Exit Sub
+        End If
+
         Try
             DynaLog.LogMessage("Preparing to get mounted images...")
             MainForm.StopMountedImageDetector()

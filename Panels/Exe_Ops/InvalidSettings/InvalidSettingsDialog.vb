@@ -35,7 +35,7 @@ Public Class InvalidSettingsDialog
                     Case "ITA"
                         Text = "Sono state rilevate impostazioni non valide"
                         Label1.Text = "Il programma ha rilevato impostazioni non valide"
-                        Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Controllare i campi sottostanti per ulteriori informazioni:"
+                        Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Per ulteriori informazioni: controlla i campi sottostanti:"
                         Button1.Text = "OK"
                 End Select
             Case 1
@@ -61,7 +61,7 @@ Public Class InvalidSettingsDialog
             Case 5
                 Text = "Sono state rilevate impostazioni non valide"
                 Label1.Text = "Il programma ha rilevato impostazioni non valide"
-                Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Controllare i campi sottostanti per ulteriori informazioni:"
+                Label2.Text = "Le impostazioni non valide sono state ripristinate ai valori predefiniti. Per ulteriori informazioni controllare i campi sottostanti:"
                 Button1.Text = "OK"
         End Select
         BackColor = CurrentTheme.SectionBackgroundColor
@@ -105,7 +105,7 @@ Public Class InvalidSettingsDialog
                         Case "PTB", "PTG"
                             Label3.Text = "A configuração do executável DISM parece estar em ordem"
                         Case "ITA"
-                            Label3.Text = "L'impostazione dell'eseguibile DISM sembra essere in ordine"
+                            Label3.Text = "L'impostazione dell'eseguibile DISM sembra essere corretta"
                     End Select
                 Case 1
                     Label3.Text = "The DISM executable setting seems to be in order"
@@ -116,7 +116,7 @@ Public Class InvalidSettingsDialog
                 Case 4
                     Label3.Text = "A configuração do executável DISM parece estar em ordem"
                 Case 5
-                    Label3.Text = "L'impostazione dell'eseguibile DISM sembra essere in ordine"
+                    Label3.Text = "L'impostazione dell'eseguibile DISM sembra essere corretta"
             End Select
         End If
         If MainForm.isLogFontProblematic Then
@@ -132,7 +132,7 @@ Public Class InvalidSettingsDialog
                         Case "PTB", "PTG"
                             Label4.Text = "A fonte de registo especificada não existe neste sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                         Case "ITA"
-                            Label4.Text = "Il font di registro specificato non esiste in questo sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
+                            Label4.Text = "Il font specificato del registro non esiste in questo sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                     End Select
                 Case 1
                     Label4.Text = "The specified log font does not exist in this system: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
@@ -143,7 +143,7 @@ Public Class InvalidSettingsDialog
                 Case 4
                     Label4.Text = "A fonte de registo especificada não existe neste sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
                 Case 5
-                    Label4.Text = "Il font di registro specificato non esiste in questo sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
+                    Label4.Text = "Il font specificato del registro non esiste in questo sistema: " & CrLf & Quote & MainForm.ProblematicStrings(1) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -185,7 +185,7 @@ Public Class InvalidSettingsDialog
                         Case "PTB", "PTG"
                             Label5.Text = "O ficheiro de registo especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                         Case "ITA"
-                            Label5.Text = "Il file di registro specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
+                            Label5.Text = "Il file registro specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                     End Select
                 Case 1
                     Label5.Text = "The specified log file does not exist: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
@@ -196,7 +196,7 @@ Public Class InvalidSettingsDialog
                 Case 4
                     Label5.Text = "O ficheiro de registo especificado não existe: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
                 Case 5
-                    Label5.Text = "Il file di registro specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
+                    Label5.Text = "Il file registro specificato non esiste: " & CrLf & Quote & MainForm.ProblematicStrings(2) & Quote
             End Select
         Else
             Select Case MainForm.Language
@@ -211,7 +211,7 @@ Public Class InvalidSettingsDialog
                         Case "PTB", "PTG"
                             Label5.Text = "A configuração do ficheiro de registo parece estar em ordem"
                         Case "ITA"
-                            Label5.Text = "L'impostazione del file di log sembra essere in ordine"
+                            Label5.Text = "L'impostazione del file registro sembra essere corretta"
                     End Select
                 Case 1
                     Label5.Text = "The log file setting seems to be in order"
@@ -222,7 +222,7 @@ Public Class InvalidSettingsDialog
                 Case 4
                     Label5.Text = "A configuração do ficheiro de registo parece estar em ordem"
                 Case 5
-                    Label5.Text = "L'impostazione del file di log sembra essere in ordine"
+                    Label5.Text = "L'impostazione del file registro sembra essere corretta"
             End Select
         End If
         If MainForm.isScratchDirProblematic Then
@@ -264,7 +264,7 @@ Public Class InvalidSettingsDialog
                         Case "PTB", "PTG"
                             Label6.Text = "A configuração do diretório temporário parece estar em ordem"
                         Case "ITA"
-                            Label6.Text = "L'impostazione della cartelle temporanea sembra essere corretta"
+                            Label6.Text = "L'impostazione della cartella temporanea sembra essere corretta"
                     End Select
                 Case 1
                     Label6.Text = "The scratch directory setting seems to be in order"
@@ -275,7 +275,7 @@ Public Class InvalidSettingsDialog
                 Case 4
                     Label6.Text = "A configuração do diretório temporário parece estar em ordem"
                 Case 5
-                    Label6.Text = "L'impostazione della cartelle temporanea sembra essere corretta"
+                    Label6.Text = "L'impostazione della cartella temporanea sembra essere corretta"
             End Select
         End If
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
