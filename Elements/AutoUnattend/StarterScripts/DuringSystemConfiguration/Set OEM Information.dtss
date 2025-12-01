@@ -1,4 +1,6 @@
 ﻿Language: Batch
+Name: Set Original Equipment Manufacturer (OEM) information
+Description: This script configures OEM settings such as the manufacturer or the model to further customize a Windows installation.
 
 @echo off
 REM This script configures OEM Information that you can see in system information screens.

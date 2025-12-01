@@ -236,6 +236,7 @@
     <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
     <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
     <Compile Include="Elements\AutoUnattend\Scripts\PostInstallScript.vb" />
+    <Compile Include="Elements\AutoUnattend\StarterScripts\StarterScript.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
@@ -858,6 +859,12 @@
     <Compile Include="Panels\Unattend_Files\Addition\NewUnattendWiz.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.Designer.vb">
+      <DependentUpon>SampleScriptBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </Compile>
@@ -1196,6 +1203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\NewUnattendWiz.resx">
       <DependentUpon>NewUnattendWiz.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.resx">
+      <DependentUpon>SampleScriptBrowser.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>

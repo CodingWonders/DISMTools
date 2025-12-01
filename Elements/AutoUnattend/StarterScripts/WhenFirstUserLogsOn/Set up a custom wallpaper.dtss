@@ -1,4 +1,6 @@
 ﻿Language: PowerShell
+Name: Set a custom wallpaper
+Description: This script configures a wallpaper in the target system environment.
 
 Add-Type -Language CSharp -TypeDefinition @"
     using System;

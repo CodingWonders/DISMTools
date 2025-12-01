@@ -1,4 +1,6 @@
 ﻿Language: PowerShell
+Name: Configure folders for Git integration
+Description: This script configures a folder, or a set of folders, for Git source control integration in the File Explorer. Git and the latest versions of system components need to be installed in the target system to take advantage of all features.
 
 # This script configures folders eligible for VCS integration with the system's File Explorer. These settings
 # can be configured later from Settings -> System -> Advanced -> File Explorer. This script is useful

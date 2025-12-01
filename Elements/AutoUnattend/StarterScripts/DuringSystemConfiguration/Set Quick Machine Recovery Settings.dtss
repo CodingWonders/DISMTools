@@ -1,4 +1,6 @@
 ﻿Language: Batch
+Name: Set Quick Machine Recovery (QMR) settings
+Description: This script configures a target system's Quick Machine Recovery settings on Windows 11 24H2 and later.
 
 @echo off
 REM This script configures Quick Machine Recovery (QMR) settings. QMR is a new recovery
