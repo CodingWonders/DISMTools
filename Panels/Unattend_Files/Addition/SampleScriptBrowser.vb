@@ -122,6 +122,8 @@ Public Class SampleScriptBrowser
         ' Reset screens and get rid of listview items
         ScriptDetailsPanel.Visible = False
         ListView1.Items.Clear()
+        ' this keeps on being enabled; disable it
+        OK_Button.Enabled = False
 
         If Not LoadAllStarterScripts() Then
             ' starter scripts could not be loaded. stop
