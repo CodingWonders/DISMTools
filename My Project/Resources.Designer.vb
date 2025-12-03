@@ -554,6 +554,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca una cadena traducida similar a # Write your code here, or use one of the following buttons at the bottom of this window:
+        '''# - Use the Open Script button to load the contents of an existing script file.
+        '''# - To get started with our curated set of Starter Scripts, use the &quot;Import a predefined Starter Script&quot; button
+        '''# - To use a Starter Script that you may have created, use the &quot;Import a Starter script in file system&quot; button.
+        '''</summary>
+        Friend ReadOnly Property DefaultPostInstallScriptCode() As String
+            Get
+                Return ResourceManager.GetString("DefaultPostInstallScriptCode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
