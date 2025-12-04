@@ -8719,7 +8719,7 @@ Public Class MainForm
                 ' New home panel design
                 LinkLabel22.Text = "TI DIAMO IL BENVENUTO"
                 LinkLabel23.Text = "NOVITA'"
-                LinkLabel24.Text = "VIDEO TUTORIAL"
+                LinkLabel24.Text = "TUTORIAL VIDEO"
                 ' - Welcome panel
                 Label36.Text = "Questo è un software beta"
                 Label8.Text = "Questo programma non è completo e potreste incontrare dei problemi. Se ciò dovesse accadere, non esitate a inviarci un feedback"
