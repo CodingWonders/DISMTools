@@ -9,6 +9,7 @@ echo (c) 2024-2026. CodingWonders Software
 echo.
 echo Please wait while the environment starts up...
 wpeinit
+doskey inv=powershell -file "%sysdrive%\DTPE_Inventory.ps1"
 if %debug% equ 1 (
 	echo Debug mode enabled.
 	taskmgr
@@ -72,6 +73,7 @@ if %debug% lss 2 (
 	echo - To shut down the system, type "wpeutil shutdown" and press ENTER
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
 	echo - To initialize networking, type "netinit" and press ENTER
+	echo - To show hardware and software inventory, type "inv" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image

@@ -1,0 +1,43 @@
+﻿Language: PowerShell
+Name: Configure folders for Git integration
+Description: This script configures a folder, or a set of folders, for Git source control integration in the File Explorer. Git and the latest versions of system components need to be installed in the target system to take advantage of all features.
+
+# This script configures folders eligible for VCS integration with the system's File Explorer. These settings
+# can be configured later from Settings -> System -> Advanced -> File Explorer. This script is useful
+# for developers who use Git and want to look at commit information from within the File Explorer, without
+# resorting to Git clients.
+
+# To add a folder for Git integration, simply specify it as a value in the gitFolders array, like this:
+# $gitFolders = @(
+#     "path\to\git\repo",
+#     "path\to\another\git\repo",
+#     ...
+# )
+
+$gitFolders = @(
+	"<your folders here>"
+)
+
+# leave the rest as is
+
+# This GUID is defined in HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderTypes. Its canonical name is
+# "VersionControl". If this GUID ever changes, reflect it here.
+$SOURCECONTROL_FOLDERTYPEGUID = "{69F1E26B-EC64-4280-BC83-F1EB887EC35A}"
+
+# This GUID is defined in HKLM\SOFTWARE\Classes\PackagedCom\ClassIndex. It points to the DevHome APPX.
+$SOURCECONTROL_PROPERTYPROVIDERGUID = "{1212F95B-257E-414E-B44F-F26634BD2627}"
+
+# we'll fool Windows into believing we did all this via Settings
+$SOURCECONTROL_REGISTEREDAPPID = "windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel"
+
+# go through all the user-specified folders to be tracked by VCS
+foreach ($gitFolder in $gitFolders) {
+	# for each entry we need to create a new GUID
+	$gitFolderGuid = (New-Guid).Guid.ToUpper()
+
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V FolderType /T REG_SZ /D "$SOURCECONTROL_FOLDERTYPEGUID"
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V Path /T REG_SZ /D "$gitFolder"
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V PropertyProvider /T REG_SZ /D "$SOURCECONTROL_PROPERTYPROVIDERGUID"
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\PerFolderRoots\{$gitFolderGuid}" /F /V RegisteredAppID /T REG_SZ /D "$SOURCECONTROL_REGISTEREDAPPID"
+}

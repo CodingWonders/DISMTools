@@ -1,4 +1,6 @@
 ﻿Language: Batch
+Name: Disable Windows Notification Sources
+Description: This script disables user-specified notification sources in the target system.
 
 @echo off
 REM This script disables notifications for the notification sources defined below. Continuing with answer
