@@ -983,24 +983,23 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
+- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
+- Fixed a crash when opening the popup mounted image picker in some cases
 
 New features:
 
-- The PE Helper will now call OSCDIMG more times if it fails to create the ISO file
-- The Sysprep Preparation Tool has been updated with the inclusion of a new Auto mode, and preparation tasks now running asynchronously
-- Self-contained copies of UnattendGen that are older or newer than the expected version will now be removed automatically
-- Set Quick Machine Recovery Settings script has been modified to add value checking
-- Enable Verbose Status Messages script has been introduced
-- Disable Windows Notification Sources script has been modified to block Copilot notifications
-- Web Search engines are now configurable
-- Feature and capability image information dialogs now have links to search for specific items online, using your preferred search engine
-- DynaLog now removes log archives more than a month old
-- You can now view service groups
-- You can now view the groups registered in the image's service host
-- Inno Setup installer has been updated to version 6.6
-- The managed DISM API has been updated to version 4.0.0
-- Scintilla.NET has been updated to version 6.1.0</value>
+- The PE Helper now introduces a computer inventory framework that lets you view information about your system, for issue reporting
+- The Sysprep Preparation Tool has been updated
+- The Starter Script format now contains name and description fields
+- You can now preview starter scripts before loading them with the new Starter Script browser
+- New script: Configure folders for Git integration
+- Set a custom wallpaper has been modified: wallpaper path has been moved to a variable
+- All remaining scripts have been modified to add name and description fields
+- Sorting of svchost groups is now done by name when 2 or more svchost groups contain the same amount of services
+- The RTF version of the GPLv3 license is now used
+- The installer window size has been increased
+- Markdig has been updated to version 0.44.0
+- Italian translations have been updated (#307, thanks @bovirus)</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

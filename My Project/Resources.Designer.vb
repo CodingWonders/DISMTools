@@ -2153,14 +2153,15 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
+        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
+        '''- Fixed a crash when opening the popup mounted image picker in some cases
         '''
         '''New features:
         '''
-        '''- The PE Helper will now call OSCDIMG more times if it fails to create the ISO file
-        '''- The Sysprep Preparation Tool has been updated with the inclusion of a new Auto mode, and preparation tasks now running asynchronously
-        '''- Self-contained copies of UnattendGen that are older or newer than the expected version will now be removed automatically
-        '''- Set Quick Machine Recovery S [resto de la cadena truncado]&quot;;.
+        '''- The PE Helper now introduces a computer inventory framework that lets you view information about your system, for issue reporting
+        '''- The Sysprep Preparation Tool has been updated
+        '''- The Starter Script format now contains name and description fields
+        '''- You can now preview start [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
