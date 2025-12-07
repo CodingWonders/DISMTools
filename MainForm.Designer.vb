@@ -185,6 +185,12 @@ Partial Class MainForm
         Me.WebResourcesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LanguagesAndFODWin10ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator45 = New System.Windows.Forms.ToolStripSeparator()
+        Me.PxeHelperServersTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StartWdsHelperTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.StartFogHelperTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator46 = New System.Windows.Forms.ToolStripSeparator()
+        Me.UnixFogInstructionTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator41 = New System.Windows.Forms.ToolStripSeparator()
         Me.ReportManagerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MountedImageManagerTSMI = New System.Windows.Forms.ToolStripMenuItem()
@@ -1468,7 +1474,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1483,7 +1489,7 @@ Partial Class MainForm
         'WIMESDToolStripMenuItem
         '
         Me.WIMESDToolStripMenuItem.Name = "WIMESDToolStripMenuItem"
-        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
+        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.WIMESDToolStripMenuItem.Text = "WIM <-> ESD"
         '
         'ToolStripSeparator12
@@ -1583,6 +1589,41 @@ Partial Class MainForm
         Me.LanguagesAndFODWin10ToolStripMenuItem.Name = "LanguagesAndFODWin10ToolStripMenuItem"
         Me.LanguagesAndFODWin10ToolStripMenuItem.Size = New System.Drawing.Size(360, 22)
         Me.LanguagesAndFODWin10ToolStripMenuItem.Text = "Download Languages and FOD discs for Windows 10..."
+        '
+        'ToolStripSeparator45
+        '
+        Me.ToolStripSeparator45.Name = "ToolStripSeparator45"
+        Me.ToolStripSeparator45.Size = New System.Drawing.Size(283, 6)
+        '
+        'PxeHelperServersTSMI
+        '
+        Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI})
+        Me.PxeHelperServersTSMI.Name = "PxeHelperServersTSMI"
+        Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(286, 22)
+        Me.PxeHelperServersTSMI.Text = "Start PXE Helper Server for..."
+        '
+        'StartWdsHelperTSMI
+        '
+        Me.StartWdsHelperTSMI.Name = "StartWdsHelperTSMI"
+        Me.StartWdsHelperTSMI.Size = New System.Drawing.Size(377, 22)
+        Me.StartWdsHelperTSMI.Text = "Windows Deployment Services"
+        '
+        'StartFogHelperTSMI
+        '
+        Me.StartFogHelperTSMI.Name = "StartFogHelperTSMI"
+        Me.StartFogHelperTSMI.Size = New System.Drawing.Size(377, 22)
+        Me.StartFogHelperTSMI.Text = "FOG"
+        '
+        'ToolStripSeparator46
+        '
+        Me.ToolStripSeparator46.Name = "ToolStripSeparator46"
+        Me.ToolStripSeparator46.Size = New System.Drawing.Size(374, 6)
+        '
+        'UnixFogInstructionTSMI
+        '
+        Me.UnixFogInstructionTSMI.Name = "UnixFogInstructionTSMI"
+        Me.UnixFogInstructionTSMI.Size = New System.Drawing.Size(377, 22)
+        Me.UnixFogInstructionTSMI.Text = "Show instructions for FOG Helper Server on UNIX systems"
         '
         'ToolStripSeparator41
         '
@@ -5082,4 +5123,10 @@ Partial Class MainForm
     Friend WithEvents StopDTTourServerTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ServerStatusTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator44 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents ToolStripSeparator45 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents PxeHelperServersTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents StartWdsHelperTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents StartFogHelperTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator46 As System.Windows.Forms.ToolStripSeparator
+    Friend WithEvents UnixFogInstructionTSMI As System.Windows.Forms.ToolStripMenuItem
 End Class

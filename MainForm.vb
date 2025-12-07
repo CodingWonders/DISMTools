@@ -1039,6 +1039,13 @@ Public Class MainForm
                 End If
             End If
         End If
+
+        ' For the PXE Helper Server menu item to be usable, we need to be on a server system.
+        Dim InstallationTypeRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+        Dim InstallationType As String = InstallationTypeRk.GetValue("InstallationType", "")
+        InstallationTypeRk.Close()
+
+        PxeHelperServersTSMI.Enabled = InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase)
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -17039,5 +17046,53 @@ Public Class MainForm
         End Select
 
         Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+    End Sub
+
+    Private Sub RunProcess(FilePath As String, Optional Arguments As String = "")
+        Try
+            Dim proc As New Process() With {
+                .StartInfo = New ProcessStartInfo() With {
+                    .FileName = FilePath,
+                    .Arguments = Arguments,
+                    .WorkingDirectory = Path.GetDirectoryName(FilePath),
+                    .CreateNoWindow = True
+                }
+            }
+            proc.Start()
+        Catch ignored As Exception
+
+        End Try
+    End Sub
+
+    Private Sub StartWdsHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartWdsHelperTSMI.Click
+        Dim wdshsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "wds", "wdshelper_server.ps1")
+        If File.Exists(wdshsPath) Then
+            DynaLog.LogMessage("WDSHS Script exists. Launching...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       "-Executionpolicy Bypass -File " & Quote & wdshsPath & Quote)
+        Else
+            DynaLog.LogMessage("WDSHS Script does not exist.")
+        End If
+    End Sub
+
+    Private Sub StartFogHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartFogHelperTSMI.Click
+        Dim foghsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "fog", "foghelper_server.ps1")
+        If File.Exists(foghsPath) Then
+            DynaLog.LogMessage("FOGHS Script exists. Launching...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       "-Executionpolicy Bypass -File " & Quote & foghsPath & Quote)
+        Else
+            DynaLog.LogMessage("FOGHS Script does not exist.")
+        End If
+    End Sub
+
+    Private Sub UnixFogInstructionTSMI_Click(sender As Object, e As EventArgs) Handles UnixFogInstructionTSMI.Click
+        Dim foghsUnixNotesPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "fog", "foghs_unix_notes.txt")
+        If File.Exists(foghsUnixNotesPath) Then
+            DynaLog.LogMessage("FOGHS UNIX Notes exist. Launching...")
+            RunProcess(SystemEditor, Quote & foghsUnixNotesPath & Quote)
+        Else
+            DynaLog.LogMessage("FOGHS UNIX notes do not exist.")
+        End If
     End Sub
 End Class
