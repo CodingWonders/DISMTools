@@ -140,6 +140,17 @@ if ($env:NOFWRULESETUP -ne $null) {
     $noFirewallSetup = $true
 }
 
+# Detect FOG and MariaDB systemd units
+if ((Get-ChildItem -Path "/usr/lib/systemd/system/FOG*.service" -ErrorAction SilentlyContinue).Count -le 0) {
+    Write-LogMessage -message "FOG systemd service units not detected. FOG service is not installed!"
+    return $false
+}
+
+if ((Test-Path -Path "/usr/lib/systemd/system/mariadb.service" -PathType Leaf) -eq $false) {
+    Write-LogMessage -message "MariaDB systemd service unit not detected. Database service is not installed!"
+    return $false
+}
+
 if ((Invoke-FogModuleAvailabilityPreparation) -eq $false) {
     Write-LogMessage -message "Could not prepare FOG API module. Exiting..."
     return $false
