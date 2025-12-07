@@ -983,6 +983,9 @@ Public Class ISOCreator
             ' Detect if we support UEFI CA 2023 binaries on the current system, just to have an idea (on the current system, at least)
             ' https://techcommunity.microsoft.com/blog/Windows-ITPro-blog/secure-boot-playbook-for-certificates-expiring-in-2026/4469235
             Try
+                ' we don't REALLY need to check on BIOS systems
+                If Not Environment.GetEnvironmentVariable("FIRMWARE_TYPE").Equals("UEFI") Then Exit Try
+
                 DynaLog.LogMessage("Detecting if current system is compatible with UEFI CA 2023...")
 
                 Dim sbUefiBinStatusRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing", False)
