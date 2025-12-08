@@ -3039,15 +3039,6 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
-        'OpenFileDialog2.InitialDirectory = Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")
-        'Select Case CurrentlyEditedStage
-        '    Case 0
-        '        OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "DuringSystemConfiguration")
-        '    Case 1
-        '        OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenFirstUserLogsOn")
-        '    Case 2
-        '        OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenUsersLogOnForFirstTime")
-        'End Select
         OpenFileDialog2.ShowDialog()
     End Sub
 
@@ -3062,9 +3053,9 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Determining file extension...")
             ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
             Select Case SampleScriptBrowser.FinalScriptLanguage
-                Case "Language: PowerShell"
+                Case "PowerShell"
                     ComboBox16.SelectedIndex = 0
-                Case "Language: Batch"
+                Case "Batch"
                     ComboBox16.SelectedIndex = 1
             End Select
 
