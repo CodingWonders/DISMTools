@@ -986,6 +986,18 @@ Public Class ISOCreator
                 ' we don't REALLY need to check on BIOS systems
                 If Not Environment.GetEnvironmentVariable("FIRMWARE_TYPE").Equals("UEFI") Then Exit Try
 
+                ' Before checking the system for CA 2023 certs, we'll check if Secure Boot is enabled.
+                DynaLog.LogMessage("Detecting current Secure Boot status...")
+
+                Dim sbStateRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot\State", False)
+                Dim sbState As Integer = sbStateRk.GetValue("UEFISecureBootEnabled")
+                sbStateRk.Close()
+
+                DynaLog.LogMessage("Secure Boot Status: " & sbState)
+
+                ' If we have 0 then we know secure boot is disabled on the system.
+                If sbState = 0 Then Exit Try
+
                 DynaLog.LogMessage("Detecting if current system is compatible with UEFI CA 2023...")
 
                 Dim sbUefiBinStatusRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing", False)
