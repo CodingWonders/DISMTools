@@ -1,4 +1,7 @@
 @echo off
+set sysdrive=%SYSTEMDRIVE%
+
+:main
 cls
 echo Image Capture Utility
 echo =========================
@@ -17,11 +20,17 @@ echo exi >> %scriptpath%
 
 diskpart /s %scriptpath%
 
-set /p sourcedrive=Please enter the letter of the volume to capture: 
+set /p sourcedrive=Please enter the letter of the volume to capture. Type "DIM" to install drivers if you don't see your drives: 
 if not defined sourcedrive (
 	echo The letter of the volume to capture must be specified.
 	exit /b 1
 )
+
+if "%sourcedrive%" equ "DIM" (
+	call :dt_dim_driver_install
+	goto :main
+)
+
 set /p destdrive=Please enter the letter of the volume the file will be stored on: 
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
@@ -71,6 +80,17 @@ exit /b
 :sysprep_hotinstall_remove_temp_files
 echo The capture script was invoked by the Sysprep preparation tool. Removing files...
 bcdedit /delete {current} /f
+exit /b
+
+:dt_dim_driver_install
+echo Starting the Driver Installation Module for architecture %PROCESSOR_ARCHITECTURE%...
+if "%PROCESSOR_ARCHITECTURE%" equ "X86" (
+	"%sysdrive%\Tools\DIM\i386\DT-DIM.exe"
+) else if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
+	"%sysdrive%\Tools\DIM\amd64\DT-DIM.exe"
+) else if "%PROCESSOR_ARCHITECTURE%" equ "ARM64" (
+	"%sysdrive%\Tools\DIM\aarch64\DT-DIM.exe"
+)
 exit /b
 
 :create_config_list
