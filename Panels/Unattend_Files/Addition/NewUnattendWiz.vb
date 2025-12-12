@@ -116,6 +116,21 @@ Public Class NewUnattendWiz
     ' Editor Mode
     Dim DefaultContents As String
 
+    Private EditionMapping As New Dictionary(Of String, String) From {
+        {"Education", "Education"},
+        {"EducationN", "Education N"},
+        {"Home", "Home"},
+        {"HomeN", "Home N"},
+        {"HomeSingleLanguage", "Home Single Language"},
+        {"Professional", "Pro"},
+        {"ProfessionalEducation", "Pro Education"},
+        {"ProfessionalEducationN", "Pro Education N"},
+        {"ProfessionalWorkstation", "Pro for Workstations"},
+        {"ProfessionalN", "Pro N"},
+        {"ProfessionalWorkstationN", "Pro N for Workstations"},
+        {"Enterprise", "Enterprise"},
+        {"EnterpriseN", "Enterprise N"}
+    }
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -900,6 +915,8 @@ Public Class NewUnattendWiz
         CheckedListBox1.SetItemChecked(0, False)
         CheckedListBox1.SetItemChecked(1, True)
         CheckedListBox1.SetItemChecked(2, False)
+
+        Button21.Enabled = MainForm.IsImageMounted
     End Sub
 
     Sub ReloadSettings()
@@ -3062,5 +3079,15 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Loading contents...")
             Scintilla3.Text = StarterScriptContents
         End If
+    End Sub
+
+    Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
+        If EditionMapping.ContainsKey(MainForm.imgEdition) Then
+            ComboBox6.SelectedItem = EditionMapping(MainForm.imgEdition)
+        End If
+    End Sub
+
+    Private Sub Button21_MouseHover(sender As Object, e As EventArgs) Handles Button21.MouseHover
+        CNameTTip.Show("Click here to attempt to grab the edition of the currently loaded image. This will help you use a suitable product key for said Windows image.", sender)
     End Sub
 End Class
