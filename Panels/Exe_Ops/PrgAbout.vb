@@ -595,7 +595,12 @@ Public Class PrgAbout
     End Sub
 
     Private Sub UpdCheckBtn_Click(sender As Object, e As EventArgs) Handles UpdCheckBtn.Click
-        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not delete existing update downloader...")
+            Exit Sub
+        End Try
         Try
             Using client As New WebClient()
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12
