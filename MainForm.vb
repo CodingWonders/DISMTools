@@ -12030,6 +12030,24 @@ Public Class MainForm
                 Exit Sub
             End If
         End If
+        If HelpBrowserForm.Visible Then
+            DynaLog.LogMessage("The help browser is open. Attempting closure...")
+            HelpBrowserForm.Close()
+            If HelpBrowserForm.Visible Then
+                DynaLog.LogMessage("The help browser is still open. Cannot continue closure")
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
+        If InfoSaveResults.Visible Then
+            DynaLog.LogMessage("The info saver result viewer is open. Attempting closure...")
+            InfoSaveResults.Close()
+            If InfoSaveResults.Visible Then
+                DynaLog.LogMessage("The info saver result viewer is still open. Cannot continue closure")
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
         If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
             ToggleFullScreenMode()
         End If
