@@ -1,7 +1,31 @@
 #requires -version 5.0
 #requires -runasadministrator
-
-# Windows Deployment Services Helper
+#                                              ....
+#                                         .'^""""""^.
+#      '^`'.                            '^"""""""^.
+#     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+#       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
+#         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Helper        |
+#              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
+#                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
+#                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
+#                      .^""";_]]]?)}:^^""",,,`'````'..
+#                        .;-]]]?(xxxx}:^^^^'
+#                       `+]]]?(xxxxxxxr},'
+#                     .`:+]?)xxxxxxxxxxxr<.
+#                   .`^^^^:(xxxxxxxxxxxxxxr>.
+#                 .`^^^^^^^^I(xxxxxxxxxxxxxxr<.
+#               .`^^^^^^^^^^^^I(xxxxxxxxxxxxxxr<.
+#             .`^^^^^^^^^^^^^^^'`[xxxxxxxxxxxxxxr<.
+#           .`^^^^^^^^^^^^^^^'    `}xxxxxxxxxxxxxxr<.
+#          `^^":ll:"^^^^^^^'        `}xxxxxxxxxxxxxxr,
+#         '^^^I-??]l^^^^^'            `[xxxxxxxxxxxxxx.          This script is provided AS IS, without any warranty. It shouldn't
+#         '^^^,<??~,^^^'                `{xxxxxxxxxxxx.          do any damage to your computer, but you still need to be careful over
+#          `^^^^^^^^^'                    `{xxxxxxxxr,           what you do with it.
+#           .'`^^^`'                        `i1jrt[:.
 
 . "$PSScriptRoot\..\Common\PXEHelpers.Common.ps1"
 
@@ -1081,6 +1105,29 @@ function Show-Timeout {
     Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
 }
 
+function Test-PxeBoot {
+    # First we check if we have PXE keys
+    if ((Test-Path -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE") -eq $false) {
+        return $false
+    }
+    
+    # The user may have added that key manually. We'll see if we have a reply. Get-ItemPropertyValue
+    # does not respect error actions, so we'll have to intervene in a different way.
+    try {
+        $reply = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE" -Name "BootServerReply" -ErrorAction Stop
+    } catch {
+        return $false
+    }
+    
+    # Next we'll check if we ACTUALLY have a reply.
+    if ($reply -eq $null) {
+        return $false
+    }
+    
+    # All good.
+    return $true
+}
+
 $global:product = "Windows Deployment Services Helper"
 $global:description = "This script will guide you through the process of deploying an operating system via a Windows Deployment Services server."
 
@@ -1102,6 +1149,19 @@ Read-Host | Out-Null
 Enable-Networking
 
 Write-Host "Preparing to connect to the WDS server..."
+
+# Detect if we booted to WinPE using PXE
+if ((Test-PxeBoot) -eq $false) {
+    Clear-Host
+    Show-CenteredTextBox -Text "We have detected that you started the WDS Helper without booting the Preinstallation Environment via the Preboot Execution Environment (PXE). You may experience issues if you continue." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkYellow
+    Write-Host "`n"
+    Write-Host "    Press Y to continue with operating system installation (not recommended)"
+    Write-Host "    Press N to restart your computer. You can restart the installation process once you boot via PXE`n"
+    $option = Read-Host -Prompt "Do you want to continue? (y/N)"
+    if ($option -ne "y") {
+        exit 1
+    }
+}
 
 Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Web API on your WDS server. You can find it in the `"pxehelpers\wds`" folder on the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
 
