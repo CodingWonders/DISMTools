@@ -9,7 +9,7 @@
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Helper        |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -70,8 +70,27 @@ class DiskLayout {
     }
 }
 
+$pxeReplySettings = $null
+
 function Invoke-ServerAuthentication {
-    $ip = Read-Host -Prompt "Please enter the IP address of the server"
+    if ($pxeReplySettings -ne $null) {
+        Write-Host "    We have detected the IP address of the WDS server you started this environment from ($($pxeReplySettings['serverAddr'])). If you started the WDS Helper Server on this server, you can use this address here."
+        Write-Host "    The IP address assigned to this device is $($pxeReplySettings['clientAddr']).`n"
+    }
+    
+    $ipMessage = "Please enter the IP address of the server"
+    
+    if ($pxeReplySettings -ne $null) {
+        $ipMessage += ", or press ENTER to use this IP address [$($pxeReplySettings['serverAddr'])]"
+    }
+    
+    $ip = Read-Host -Prompt "$ipMessage"
+    
+    if (($ip -eq "") -and ($pxeReplySettings -ne $null)) {
+        Write-Host "Using $($pxeReplySettings['serverAddr']) as the server..."
+        $ip = $pxeReplySettings["serverAddr"]
+    }
+    
     $port = Read-Host -Prompt "Please enter the port to which the WDS Helper Web API is listening"
     $user = Read-Host -Prompt "Please enter the user name for server authentication"
     $password = Read-Host -Prompt "Please enter the password for server authentication (WILL BE SHOWN!)"
@@ -1128,6 +1147,37 @@ function Test-PxeBoot {
     return $true
 }
 
+function Get-PxeIpAddresses {
+    <#
+        .SYNOPSIS
+            Gets the client and DHCP server addresses from PXE boot server reply information.
+        .OUTPUTS
+            A hashtable containing both client and server addresses, a null object if PXE info could not be obtained or if the system is not in a PXE environment.
+        .NOTES
+            Hashtable values are in IPv4 form. IPv6 is not yet accounted for.
+    #>
+    
+    # if we haven't booted via PXE, then don't grab anything
+    if ((Test-PxeBoot) -eq $false) {
+        return $null
+    }
+    
+    $clientAddress = ""
+    $serverAddress = ""
+    
+    try {
+        $reply = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE" -Name "BootServerReply"
+        
+        # Bytes 13 through 16 contain our client address, while bytes 21 through 24 contain the server address
+        $clientAddress = $reply[12..15] -join "."
+        $serverAddress = $reply[20..23] -join "."
+    } catch {
+        return $null
+    }
+    
+    return @{"clientAddr" = $clientAddress; "serverAddr" = $serverAddress}
+}
+
 $global:product = "Windows Deployment Services Helper"
 $global:description = "This script will guide you through the process of deploying an operating system via a Windows Deployment Services server."
 
@@ -1162,6 +1212,8 @@ if ((Test-PxeBoot) -eq $false) {
         exit 1
     }
 }
+
+$pxeReplySettings = Get-PxeIpAddresses
 
 Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Web API on your WDS server. You can find it in the `"pxehelpers\wds`" folder on the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
 
