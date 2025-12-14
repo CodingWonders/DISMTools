@@ -78,21 +78,58 @@ function Invoke-ServerAuthentication {
         Write-Host "    The IP address assigned to this device is $($pxeReplySettings['clientAddr']).`n"
     }
     
+    $validAddress = $false
+    $validPort = $false
+    
+    $ip = ""
+    $port = 0
+    $user = ""
+    
     $ipMessage = "Please enter the IP address of the server"
     
     if ($pxeReplySettings -ne $null) {
         $ipMessage += ", or press ENTER to use this IP address [$($pxeReplySettings['serverAddr'])]"
     }
     
-    $ip = Read-Host -Prompt "$ipMessage"
+    do {
+        $ip = Read-Host -Prompt "$ipMessage"
+        
+        if (($ip -eq "") -and ($pxeReplySettings -ne $null)) {
+            Write-Host "Using $($pxeReplySettings['serverAddr']) as the server..."
+            $ip = $pxeReplySettings["serverAddr"]
+        }
+        
+        if ((Test-IPAddressSyntax -ipAddr $ip) -ne [IPAddress]::Unknown) {
+            $validAddress = $true
+        }
+    } until ($validAddress -eq $true)
     
-    if (($ip -eq "") -and ($pxeReplySettings -ne $null)) {
-        Write-Host "Using $($pxeReplySettings['serverAddr']) as the server..."
-        $ip = $pxeReplySettings["serverAddr"]
-    }
+    do {
+        $portStr = Read-Host -Prompt "Please enter the port to which the WDS Helper Server is listening, or press ENTER to use the default port [8080]"
+        
+        # if we haven't input anything here we'll make it 8080, if we don't do anything it will default to 0
+        if ($portStr -eq "") {
+            Write-Host "Using default port..."
+            $portStr = "8080"
+        }
+        
+        try {
+            $port = [int]$portStr
+            $validPort = $true
+        } catch {
+            Write-Host "The port needs to be numeric. Try again."
+            $validPort = $false
+        }
+    } until ($validPort -eq $true)
     
-    $port = Read-Host -Prompt "Please enter the port to which the WDS Helper Web API is listening"
-    $user = Read-Host -Prompt "Please enter the user name for server authentication"
+    do {
+        $user = Read-Host -Prompt "Please enter the user name for server authentication"
+        
+        if ($user -eq "") {
+            Write-Host "Please enter a user."
+        }
+    } until ($user -ne "")
+    
     $password = Read-Host -Prompt "Please enter the password for server authentication (WILL BE SHOWN!)"
     return [ServerAuthentication]::new($ip, $port, $user, $password)
 }
@@ -1215,7 +1252,7 @@ if ((Test-PxeBoot) -eq $false) {
 
 $pxeReplySettings = Get-PxeIpAddresses
 
-Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Web API on your WDS server. You can find it in the `"pxehelpers\wds`" folder on the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
+Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Server on your WDS server. You can invoke it from either DISMTools or the autorun menu of the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
 
 $authInfo = Invoke-ServerAuthentication
 
