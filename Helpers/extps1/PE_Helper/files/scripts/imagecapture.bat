@@ -20,7 +20,12 @@ echo exi >> %scriptpath%
 
 diskpart /s %scriptpath%
 
-set /p sourcedrive=Please enter the letter of the volume to capture. Type "DIM" to install drivers if you don't see your drives: 
+echo.
+echo - To install drivers if you don't see your drives, type "DIM"
+echo - To prepare a capture for a Windows Deployment Services server, type "WDS"
+echo.
+
+set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
 if not defined sourcedrive (
 	echo The letter of the volume to capture must be specified.
 	exit /b 1
@@ -29,6 +34,12 @@ if not defined sourcedrive (
 if "%sourcedrive%" equ "DIM" (
 	call :dt_dim_driver_install
 	goto :main
+)
+
+if "%sourcedrive%" equ "WDS" (
+	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
+	"%SYSTEMROOT%\system32\wdscapture.exe"
+	exit /b
 )
 
 set /p destdrive=Please enter the letter of the volume the file will be stored on: 
