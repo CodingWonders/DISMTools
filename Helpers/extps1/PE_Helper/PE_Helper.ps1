@@ -501,6 +501,8 @@ function Add-PEPackages {
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-StorageWMI.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-StorageWMI_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WDS-Tools.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WDS-Tools_en-us.cab")
         # Add ARM64EC packages
         if ($architecture -eq 'arm64') {
             $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
