@@ -39,6 +39,10 @@ if "%sourcedrive%" equ "DIM" (
 if "%sourcedrive%" equ "WDS" (
 	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
 	"%SYSTEMROOT%\system32\wdscapture.exe"
+	if %ERRORLEVEL% equ 0 (
+		echo WDS capture succeeded.
+		call :sysprep_hotinstall_remove_temp_files
+	)
 	exit /b
 )
 
