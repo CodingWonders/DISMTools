@@ -14,6 +14,7 @@ echo.
 echo Showing drive letter assignments...
 set scriptpath=%TEMP%\%RANDOM%.txt
 set configlistpath=%TEMP%\configlist.ini
+set wdscapturepath=%SYSTEMROOT%\system32\wdscapture.inf
 
 echo lis vol > %scriptpath%
 echo exi >> %scriptpath%
@@ -38,6 +39,7 @@ if "%sourcedrive%" equ "DIM" (
 
 if "%sourcedrive%" equ "WDS" (
 	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
+	call :create_wdscapture_config_list
 	"%SYSTEMROOT%\system32\wdscapture.exe"
 	if %ERRORLEVEL% equ 0 (
 		echo WDS capture succeeded.
@@ -134,3 +136,37 @@ echo *.mp3 >> %configlistpath%
 echo *.zip >> %configlistpath%
 echo *.cab >> %configlistpath%
 echo \WINDOWS\inf\*.pnf >> %configlistpath%
+exit /b
+
+:create_wdscapture_config_list
+echo Preparing wdscapture.inf...
+REM we can perform modifications to wdscapture.inf without touching the ACLs.
+echo [Capture] > %wdscapturepath%
+echo Unattended=No >> %wdscapturepath%
+echo VolumeToCapture= >> %wdscapturepath%
+echo SystemRoot= >> %wdscapturepath%
+echo ImageName= >> %wdscapturepath%
+echo ImageDescription= >> %wdscapturepath%
+echo DestinationFile= >> %wdscapturepath%
+echo Overwrite=No >> %wdscapturepath%
+echo. >> %wdscapturepath%
+echo [ExclusionList] >> %wdscapturepath%
+echo $ntfs.log >> %wdscapturepath%
+echo hiberfil.sys >> %wdscapturepath%
+echo pagefile.sys >> %wdscapturepath%
+echo "System Volume Information" >> %wdscapturepath%
+echo RECYCLER >> %wdscapturepath%
+echo winpepge.sys >> %wdscapturepath%
+echo %%SYSTEMROOT%%\CSC >> %wdscapturepath%
+echo $DISMTOOLS.~BT >> %wdscapturepath%
+echo $DISMTOOLS.~WS >> %wdscapturepath%
+echo. >> %wdscapturepath%
+echo [WDS] >> %wdscapturepath%
+echo UploadToWDSServer=No >> %wdscapturepath%
+echo WDSServerName= >> %wdscapturepath%
+echo WDSImageGroup= >> %wdscapturepath%
+echo Username= >> %wdscapturepath%
+echo Password= >> %wdscapturepath%
+echo DeleteLocalWimOnSuccess=No >> %wdscapturepath%
+echo. >> %wdscapturepath%
+exit /b
