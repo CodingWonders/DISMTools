@@ -2945,7 +2945,7 @@ Public Class NewUnattendWiz
         Else
             SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
         End If
-        CurrentlyConfiguredScripts.Add(New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell))
+        CurrentlyConfiguredScripts.Add(New PostInstallScript(My.Resources.DefaultPostInstallScriptCode, PostInstallScript.Extension.PowerShell))
         CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
         SwitchScript(CurrentlyEditedScript)
     End Sub
