@@ -12016,6 +12016,15 @@ Public Class MainForm
             Beep()
             Exit Sub
         End If
+        If MountedImgMgr.Visible Then
+            DynaLog.LogMessage("The mounted image manager is still open. Attempting closure...")
+            MountedImgMgr.Close()
+            If MountedImgMgr.Visible Then
+                DynaLog.LogMessage("The mounted image manager is still open. Cannot continue closure")
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
         If RegistryControlPanel.Visible Then
             DynaLog.LogMessage("The image registry control panel is still open. Cannot continue closure")
             e.Cancel = True
