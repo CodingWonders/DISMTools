@@ -96,8 +96,12 @@ function Get-KitsRoot {
         $regPath = "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots"
     }
 
+    if ((Test-Path "$regPath") -eq $false) {
+        return $adk10KitsRoot
+    }
+
     try {
-        $adk10KitsRoot = Get-ItemPropertyValue -Path $regPath -Name "KitsRoot10"
+        $adk10KitsRoot = Get-ItemPropertyValue -Path $regPath -Name "KitsRoot10" -ErrorAction Stop
     } catch {
         Write-Host "Could not find ADK."
     }
@@ -145,7 +149,7 @@ function Start-PEGeneration
         {
             $peToolsPath = ""
 
-            if ($expectedADKPath -ne "") { $peToolsPath = $expectedADKPath }
+            if ($expectedADKPath -ne "Assessment and Deployment Kit") { $peToolsPath = $expectedADKPath }
             if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "")) { $peToolsPath = $expectedADKPath_WOW64Environ }
 
             if (Test-Path "$peToolsPath")
