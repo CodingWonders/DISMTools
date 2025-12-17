@@ -23,7 +23,7 @@ diskpart /s %scriptpath%
 
 echo.
 echo - To install drivers if you don't see your drives, type "DIM"
-echo - To prepare a capture for a Windows Deployment Services server, type "WDS"
+if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
