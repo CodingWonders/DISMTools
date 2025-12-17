@@ -407,9 +407,7 @@ Public Class ISOCreator
                     End Select
                     Close()
                 Else
-                    If MainForm.DetectPossibleADKs() = 1 Then
-                        RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\Software\Microsoft\WIMMount", "AdkInstallation", RegistryItem.ValueType.RegDword, "1"))
-                    End If
+                    RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\Software\Microsoft\WIMMount", "AdkInstallation", RegistryItem.ValueType.RegDword, "1"))
                 End If
             Else
                 Close()
