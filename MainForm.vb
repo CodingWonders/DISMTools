@@ -571,21 +571,59 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    Private Function GetKitsRoot(IsWOW6432Environment As Boolean) As String
+        DynaLog.LogMessage("Getting ADK root for Windows 10+ ADK...")
+        DynaLog.LogMessage("Detect in a WOW64 compatibility (32-bit) environment? " & If(IsWOW6432Environment, "Yes", "No"))
+
+        Dim Adk10KitsRoot As String = ""
+
+        ' if we set the wow64 bit on and we're on a 32-bit system, then we prematurely return the value
+        If IsWOW6432Environment AndAlso Not Environment.Is64BitOperatingSystem Then
+            DynaLog.LogMessage("A 32-bit environment has been detected and we're checking values in WOW64. We're already on 32-bit, so we don't check...")
+            Return Adk10KitsRoot
+        End If
+
+        Try
+            Dim KitsRootRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("SOFTWARE{0}\Microsoft\Windows Kits\Installed Roots", If(IsWOW6432Environment, "\WOW6432Node", "")), False)
+            Adk10KitsRoot = KitsRootRk.GetValue("KitsRoot10", "")
+            KitsRootRk.Close()
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not check kits root. Error message: " & ex.Message)
+        End Try
+
+        DynaLog.LogMessage("Detected Kits Root: " & Adk10KitsRoot)
+
+        Return Adk10KitsRoot
+    End Function
+
     Function DetectPossibleADKs() As Integer
         DynaLog.LogMessage("Detecting possible ADKs...")
+
+        Dim AdkKitsRoot As String = GetKitsRoot(False),
+            AdkKitsRoot_WOW64Environ As String = GetKitsRoot(True)
+
+        Dim expectedADKPath As String = Path.Combine(AdkKitsRoot, "Assessment and Deployment Kit"),
+            expectedADKPath_WOW64Environ As String = Path.Combine(AdkKitsRoot_WOW64Environ, "Assessment and Deployment Kit")
+
+        DynaLog.LogMessage("- Kits root for Win64 environment: " & AdkKitsRoot)
+        DynaLog.LogMessage("- Kits root for WOW64 compatibility environment: " & AdkKitsRoot_WOW64Environ)
+
+        DynaLog.LogMessage("Expected ADK locations are:")
+        DynaLog.LogMessage("- For native/Win64 environments: " & expectedADKPath)
+        DynaLog.LogMessage("- For WOW64 compatibility environments: " & expectedADKPath_WOW64Environ)
+
         Dim DefinedADKInstallation As Boolean
         Try
-            Dim AdkSwitchRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
-            Dim AdkSwitchVal As Integer = AdkSwitchRk.GetValue("AdkInstallation")
-            AdkSwitchRk.Close()
-            DynaLog.LogMessage("ADK installation status: " & AdkSwitchVal)
-            If AdkSwitchVal <> 1 Then
-                DynaLog.LogMessage("No ADK installation has been found")
-                DefinedADKInstallation = False
-            Else
-                DynaLog.LogMessage("ADK installation found. No need for anything else")
-                Return 2
-            End If
+            ' We'll check if the expected ADK paths exist. If at least one exists, then we know we have the ADK.
+            For Each adkPath In {expectedADKPath, expectedADKPath_WOW64Environ}
+                DynaLog.LogMessage("Determining if " & adkPath & " exists...")
+                If Directory.Exists(adkPath) Then
+                    DynaLog.LogMessage(Quote & adkPath & Quote & " exists. We have an ADK...")
+                    Return 2
+                Else
+                    DynaLog.LogMessage(Quote & adkPath & Quote & " does not exist.")
+                End If
+            Next
         Catch ex As Exception
             DynaLog.LogMessage("Could not grab ADK installation. " & ex.Message)
             DefinedADKInstallation = False
@@ -13425,10 +13463,7 @@ Public Class MainForm
         If prjTreeView.SelectedNode.Name.StartsWith("dandi") Then
             DynaLog.LogMessage("ADK nodes are selected. Continuing...")
             Try
-                Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
-                Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
-                adkInst.Close()
-                If adk = "1" Then
+                If DetectPossibleADKs() = 2 Then
                     DynaLog.LogMessage("The ADK is installed")
                     DynaLog.LogMessage("Copy mode for ADK files: " & adkCopyArg)
                     ' Copy deployment tools. This will default to "Program Files\Windows Kits\10"
@@ -13686,10 +13721,7 @@ Public Class MainForm
     Private Sub ADKCopierBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKCopierBW.RunWorkerCompleted
         Try
             ' Detect if ADKs are present
-            Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
-            Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
-            adkInst.Close()
-            If adk = "1" Then
+            If DetectPossibleADKs() = 2 Then
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -13715,7 +13747,7 @@ Public Class MainForm
                     Case 5
                         MenuDesc.Text = "Copia strumenti di distribuzione nel progetto completata"
                 End Select
-            ElseIf adk <> "1" Then
+            Else
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName

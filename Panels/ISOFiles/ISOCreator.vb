@@ -406,8 +406,6 @@ Public Class ISOCreator
                             Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
                     End Select
                     Close()
-                Else
-                    RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\Software\Microsoft\WIMMount", "AdkInstallation", RegistryItem.ValueType.RegDword, "1"))
                 End If
             Else
                 Close()
