@@ -983,23 +983,24 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
-- Fixed a crash when opening the popup mounted image picker in some cases
+- When picking a starter script using the predefined collection, language highlighting is correctly selected now
+- ADK detection has been refactored in both the main program and the PE Helper to detect ADK kits roots, as opposed to a registry value that is no longer added by ADK installers (thanks rayman95 on the My Digital Life forums for spotting)
+- Certain windows that cause freezes when the program is closed are now closed automatically
 
 New features:
 
-- The PE Helper now introduces a computer inventory framework that lets you view information about your system, for issue reporting
-- The Sysprep Preparation Tool has been updated
-- The Starter Script format now contains name and description fields
-- You can now preview starter scripts before loading them with the new Starter Script browser
-- New script: Configure folders for Git integration
-- Set a custom wallpaper has been modified: wallpaper path has been moved to a variable
-- All remaining scripts have been modified to add name and description fields
-- Sorting of svchost groups is now done by name when 2 or more svchost groups contain the same amount of services
-- The RTF version of the GPLv3 license is now used
-- The installer window size has been increased
-- Markdig has been updated to version 0.44.0
-- Italian translations have been updated (#307, thanks @bovirus)</value>
+- You can now access PXE Helper Servers more quickly from the Tools menu
+- Notes are now included for the FOG Helper Server on UNIX
+- The FOG Helper Server for UNIX now checks presence of FOG and MariaDB systemd service units
+- DISMTools will now warn you when you create ISO files with UEFI CA 2023 support on a system that does not offer such support
+- The PE Helper now adds the WDS Tools optional component to the Preinstallation Environment
+- The image capture script in the DISMTools Preinstallation Environment now lets you launch the Driver Installation Module to load disk controllers, and the WDS image capture wizard to capture your installations for a WDS instance
+- The WDS Helper now displays a warning when it's loaded on non-PXE environments
+- The WDS Helper can now get the IP addresses of the PXE client and the PXE server. You can default to using the server's IP address and the default port as well
+- The WDS Helper now validates more information when authenticating with the server
+- A product key can now be determined automatically by the wizard based on the edition of the mounted Windows image
+- The popup mounted image picker now loads at the center of the parent window to avoid showing either partially or out of screen bounds
+- Scintilla.NET has been updated to version 6.1.1</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

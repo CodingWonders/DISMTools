@@ -803,7 +803,7 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button3.PointToScreen(Point.Empty))
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
             TextBox1.Text = selectedImage.ImageFilePath
         End If

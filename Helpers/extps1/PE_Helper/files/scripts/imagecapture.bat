@@ -1,4 +1,7 @@
 @echo off
+set sysdrive=%SYSTEMDRIVE%
+
+:main
 cls
 echo Image Capture Utility
 echo =========================
@@ -11,17 +14,40 @@ echo.
 echo Showing drive letter assignments...
 set scriptpath=%TEMP%\%RANDOM%.txt
 set configlistpath=%TEMP%\configlist.ini
+set wdscapturepath=%SYSTEMROOT%\system32\wdscapture.inf
 
 echo lis vol > %scriptpath%
 echo exi >> %scriptpath%
 
 diskpart /s %scriptpath%
 
-set /p sourcedrive=Please enter the letter of the volume to capture: 
+echo.
+echo - To install drivers if you don't see your drives, type "DIM"
+if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
+echo.
+
+set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
 if not defined sourcedrive (
 	echo The letter of the volume to capture must be specified.
 	exit /b 1
 )
+
+if "%sourcedrive%" equ "DIM" (
+	call :dt_dim_driver_install
+	goto :main
+)
+
+if "%sourcedrive%" equ "WDS" (
+	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
+	call :create_wdscapture_config_list
+	"%SYSTEMROOT%\system32\wdscapture.exe"
+	if %ERRORLEVEL% equ 0 (
+		echo WDS capture succeeded.
+		call :sysprep_hotinstall_remove_temp_files
+	)
+	exit /b
+)
+
 set /p destdrive=Please enter the letter of the volume the file will be stored on: 
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
@@ -73,6 +99,17 @@ echo The capture script was invoked by the Sysprep preparation tool. Removing fi
 bcdedit /delete {current} /f
 exit /b
 
+:dt_dim_driver_install
+echo Starting the Driver Installation Module for architecture %PROCESSOR_ARCHITECTURE%...
+if "%PROCESSOR_ARCHITECTURE%" equ "X86" (
+	"%sysdrive%\Tools\DIM\i386\DT-DIM.exe"
+) else if "%PROCESSOR_ARCHITECTURE%" equ "AMD64" (
+	"%sysdrive%\Tools\DIM\amd64\DT-DIM.exe"
+) else if "%PROCESSOR_ARCHITECTURE%" equ "ARM64" (
+	"%sysdrive%\Tools\DIM\aarch64\DT-DIM.exe"
+)
+exit /b
+
 :create_config_list
 echo Setting up file/folder exclusions for source volume...
 REM create the config list file. It will call echo lots of times
@@ -99,3 +136,37 @@ echo *.mp3 >> %configlistpath%
 echo *.zip >> %configlistpath%
 echo *.cab >> %configlistpath%
 echo \WINDOWS\inf\*.pnf >> %configlistpath%
+exit /b
+
+:create_wdscapture_config_list
+echo Preparing wdscapture.inf...
+REM we can perform modifications to wdscapture.inf without touching the ACLs.
+echo [Capture] > %wdscapturepath%
+echo Unattended=No >> %wdscapturepath%
+echo VolumeToCapture= >> %wdscapturepath%
+echo SystemRoot= >> %wdscapturepath%
+echo ImageName= >> %wdscapturepath%
+echo ImageDescription= >> %wdscapturepath%
+echo DestinationFile= >> %wdscapturepath%
+echo Overwrite=No >> %wdscapturepath%
+echo. >> %wdscapturepath%
+echo [ExclusionList] >> %wdscapturepath%
+echo $ntfs.log >> %wdscapturepath%
+echo hiberfil.sys >> %wdscapturepath%
+echo pagefile.sys >> %wdscapturepath%
+echo "System Volume Information" >> %wdscapturepath%
+echo RECYCLER >> %wdscapturepath%
+echo winpepge.sys >> %wdscapturepath%
+echo %%SYSTEMROOT%%\CSC >> %wdscapturepath%
+echo $DISMTOOLS.~BT >> %wdscapturepath%
+echo $DISMTOOLS.~WS >> %wdscapturepath%
+echo. >> %wdscapturepath%
+echo [WDS] >> %wdscapturepath%
+echo UploadToWDSServer=No >> %wdscapturepath%
+echo WDSServerName= >> %wdscapturepath%
+echo WDSImageGroup= >> %wdscapturepath%
+echo Username= >> %wdscapturepath%
+echo Password= >> %wdscapturepath%
+echo DeleteLocalWimOnSuccess=No >> %wdscapturepath%
+echo. >> %wdscapturepath%
+exit /b

@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "25111"
+    Const UnattendGenReleaseTag As String = "25123"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -116,6 +116,21 @@ Public Class NewUnattendWiz
     ' Editor Mode
     Dim DefaultContents As String
 
+    Private EditionMapping As New Dictionary(Of String, String) From {
+        {"Education", "Education"},
+        {"EducationN", "Education N"},
+        {"Home", "Home"},
+        {"HomeN", "Home N"},
+        {"HomeSingleLanguage", "Home Single Language"},
+        {"Professional", "Pro"},
+        {"ProfessionalEducation", "Pro Education"},
+        {"ProfessionalEducationN", "Pro Education N"},
+        {"ProfessionalWorkstation", "Pro for Workstations"},
+        {"ProfessionalN", "Pro N"},
+        {"ProfessionalWorkstationN", "Pro N for Workstations"},
+        {"Enterprise", "Enterprise"},
+        {"EnterpriseN", "Enterprise N"}
+    }
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -900,6 +915,8 @@ Public Class NewUnattendWiz
         CheckedListBox1.SetItemChecked(0, False)
         CheckedListBox1.SetItemChecked(1, True)
         CheckedListBox1.SetItemChecked(2, False)
+
+        Button21.Enabled = MainForm.IsImageMounted
     End Sub
 
     Sub ReloadSettings()
@@ -2928,7 +2945,7 @@ Public Class NewUnattendWiz
         Else
             SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
         End If
-        CurrentlyConfiguredScripts.Add(New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell))
+        CurrentlyConfiguredScripts.Add(New PostInstallScript(My.Resources.DefaultPostInstallScriptCode, PostInstallScript.Extension.PowerShell))
         CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
         SwitchScript(CurrentlyEditedScript)
     End Sub
@@ -3039,15 +3056,6 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
-        'OpenFileDialog2.InitialDirectory = Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")
-        'Select Case CurrentlyEditedStage
-        '    Case 0
-        '        OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "DuringSystemConfiguration")
-        '    Case 1
-        '        OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenFirstUserLogsOn")
-        '    Case 2
-        '        OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenUsersLogOnForFirstTime")
-        'End Select
         OpenFileDialog2.ShowDialog()
     End Sub
 
@@ -3062,14 +3070,26 @@ Public Class NewUnattendWiz
             DynaLog.LogMessage("Determining file extension...")
             ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
             Select Case SampleScriptBrowser.FinalScriptLanguage
-                Case "Language: PowerShell"
+                Case "PowerShell"
                     ComboBox16.SelectedIndex = 0
-                Case "Language: Batch"
+                Case "Batch"
                     ComboBox16.SelectedIndex = 1
             End Select
 
             DynaLog.LogMessage("Loading contents...")
             Scintilla3.Text = StarterScriptContents
         End If
+    End Sub
+
+    Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
+        If EditionMapping.ContainsKey(MainForm.imgEdition) Then
+            ComboBox6.SelectedItem = EditionMapping(MainForm.imgEdition)
+        Else
+            MsgBox("There is no product key for the " & Quote & MainForm.imgEdition & Quote & " edition.", vbOKOnly + vbInformation)
+        End If
+    End Sub
+
+    Private Sub Button21_MouseHover(sender As Object, e As EventArgs) Handles Button21.MouseHover
+        CNameTTip.Show("Click here to attempt to grab the edition of the currently loaded image. This will help you use a suitable product key for said Windows image.", sender)
     End Sub
 End Class

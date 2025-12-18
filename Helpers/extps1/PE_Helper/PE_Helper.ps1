@@ -77,6 +77,50 @@ if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]:
     exit 1
 }
 
+function Get-KitsRoot {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [bool]$wow64environment
+    )
+
+    $adk10KitsRoot = ""
+
+    # if we set the wow64 bit on and we're on a 32-bit system, then we prematurely return the value
+    if (($wow64environment -eq $true) -and (-not [Environment]::Is64BitOperatingSystem)) {
+        return $adk10KitsRoot
+    }
+
+    $regPath = ""
+    if ($wow64environment) {
+        $regPath = "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
+    } else {
+        $regPath = "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots"
+    }
+
+    if ((Test-Path "$regPath") -eq $false) {
+        return $adk10KitsRoot
+    }
+
+    try {
+        $adk10KitsRoot = Get-ItemPropertyValue -Path $regPath -Name "KitsRoot10" -ErrorAction Stop
+    } catch {
+        Write-Host "Could not find ADK."
+    }
+
+    return $adk10KitsRoot
+}
+
+function Test-KitsRootPaths {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [string]$adkKitsRootPath,
+        [Parameter(Mandatory = $true, Position = 1)] [string]$adkKitsRootPath_WOW64Environ
+    )
+
+    if (Test-Path "$adkKitsRootPath") { return $true }
+    if (Test-Path "$adkKitsRootPath_WOW64Environ") { return $true }
+
+    return $false
+}
+
 function Start-PEGeneration
 {
     <#
@@ -94,24 +138,26 @@ function Start-PEGeneration
     # Detect if the Windows ADK is present
     try
     {
-        if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+        # RAYMAN prompted the change. YEAH!
+        $adkKitsRoot = Get-KitsRoot -wow64environment $false
+        $adkKitsRoot_WOW64Environ = Get-KitsRoot -wow64environment $true
+
+        $expectedADKPath = "$($adkKitsRoot)Assessment and Deployment Kit"
+        $expectedADKPath_WOW64Environ = "$($adkKitsRoot_WOW64Environ)Assessment and Deployment Kit"
+
+        if ((Test-KitsRootPaths -adkKitsRootPath "$expectedADKPath" -adkKitsRootPath_WOW64Environ "$expectedADKPath_WOW64Environ") -eq $true)
         {
-            # An ADK may be installed, but it may not be Windows 10 ADK
-            $progFiles = ""
             $peToolsPath = ""
-            if ([Environment]::Is64BitOperatingSystem)
+
+            if ($expectedADKPath -ne "Assessment and Deployment Kit") { $peToolsPath = $expectedADKPath }
+            if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "")) { $peToolsPath = $expectedADKPath_WOW64Environ }
+
+            if (Test-Path "$peToolsPath")
             {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
-            }
-            else
-            {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files"
-            }
-            if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
-            {
-                $peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+                Write-Host "Using $peToolsPath as the Preinstallation Environment tools path..."
+
                 Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
-                if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -176,7 +222,7 @@ function Start-PEGeneration
                     Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 }
                 Write-Host "Copying Windows PE optional components. Please wait..."
-                if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEComponents -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -501,6 +547,8 @@ function Add-PEPackages {
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-StorageWMI.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-StorageWMI_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WDS-Tools.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WDS-Tools_en-us.cab")
         # Add ARM64EC packages
         if ($architecture -eq 'arm64') {
             $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
@@ -835,11 +883,11 @@ function New-WinPEIso
         }
         if ([Environment]::Is64BitOperatingSystem)
         {
-            Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\amd64\Oscdimg"
+            Set-Item -Path "env:NewPath" -Value "$peToolsPath\Deployment Tools\amd64\Oscdimg"
         }
         else
         {
-            Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
+            Set-Item -Path "env:NewPath" -Value "$peToolsPath\Deployment Tools\x86\Oscdimg"
         }
         # Detect whether files are in fwfiles or bootbins - ADK 10.1.26100.2454 and later put boot files in bootbins,
         # not in fwfiles. All of this to add support for the boot binaries signed with this certificate - I'm starting to

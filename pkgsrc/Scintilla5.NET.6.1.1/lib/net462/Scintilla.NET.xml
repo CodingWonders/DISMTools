@@ -5319,12 +5319,6 @@
             Undo buffer is cleared but <see cref="M:ScintillaNET.Scintilla.SetSavePoint"/> is not called.
             </summary>
         </member>
-        <member name="P:ScintillaNET.Scintilla.SatelliteDirectory">
-            <summary>
-            Optional absolute directory path probed first for native satellite libraries.
-            If set, this directory is checked before all default probing locations.
-            </summary>
-        </member>
         <member name="P:ScintillaNET.Scintilla._ScintillaManagedDragDrop">
             <summary>
             Gets or sets whether Scintilla's native drag &amp; drop should be used instead of WinForms based one.
@@ -6593,6 +6587,19 @@
             Gets or sets a value indicating whether control's elements are aligned to support locales using right-to-left fonts.
             </summary>
             <value>The right to left.</value>
+        </member>
+        <member name="T:ScintillaNET.ScintillaNativeLibrary">
+            <summary>
+            Provides optional early configuration for locating native satellite libraries (Scintilla.dll, Lexilla.dll).
+            Must be configured BEFORE the <see cref="T:ScintillaNET.Scintilla"/> type is first touched; otherwise changes have no effect.
+            </summary>
+        </member>
+        <member name="P:ScintillaNET.ScintillaNativeLibrary.SatelliteDirectory">
+            <summary>
+            Optional absolute directory path probed first for native satellite libraries.
+            If set, this directory is checked before all default probing locations.
+            Example Usage: ScintillaNativeLibrary.SatelliteDirectory = @"C:\MyApp\binaries";
+            </summary>
         </member>
         <member name="T:ScintillaNET.ScintillaReader">
             <summary>

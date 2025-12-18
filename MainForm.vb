@@ -571,21 +571,59 @@ Public Class MainForm
         Return Nothing
     End Function
 
+    Private Function GetKitsRoot(IsWOW6432Environment As Boolean) As String
+        DynaLog.LogMessage("Getting ADK root for Windows 10+ ADK...")
+        DynaLog.LogMessage("Detect in a WOW64 compatibility (32-bit) environment? " & If(IsWOW6432Environment, "Yes", "No"))
+
+        Dim Adk10KitsRoot As String = ""
+
+        ' if we set the wow64 bit on and we're on a 32-bit system, then we prematurely return the value
+        If IsWOW6432Environment AndAlso Not Environment.Is64BitOperatingSystem Then
+            DynaLog.LogMessage("A 32-bit environment has been detected and we're checking values in WOW64. We're already on 32-bit, so we don't check...")
+            Return Adk10KitsRoot
+        End If
+
+        Try
+            Dim KitsRootRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("SOFTWARE{0}\Microsoft\Windows Kits\Installed Roots", If(IsWOW6432Environment, "\WOW6432Node", "")), False)
+            Adk10KitsRoot = KitsRootRk.GetValue("KitsRoot10", "")
+            KitsRootRk.Close()
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not check kits root. Error message: " & ex.Message)
+        End Try
+
+        DynaLog.LogMessage("Detected Kits Root: " & Adk10KitsRoot)
+
+        Return Adk10KitsRoot
+    End Function
+
     Function DetectPossibleADKs() As Integer
         DynaLog.LogMessage("Detecting possible ADKs...")
+
+        Dim AdkKitsRoot As String = GetKitsRoot(False),
+            AdkKitsRoot_WOW64Environ As String = GetKitsRoot(True)
+
+        Dim expectedADKPath As String = Path.Combine(AdkKitsRoot, "Assessment and Deployment Kit"),
+            expectedADKPath_WOW64Environ As String = Path.Combine(AdkKitsRoot_WOW64Environ, "Assessment and Deployment Kit")
+
+        DynaLog.LogMessage("- Kits root for Win64 environment: " & AdkKitsRoot)
+        DynaLog.LogMessage("- Kits root for WOW64 compatibility environment: " & AdkKitsRoot_WOW64Environ)
+
+        DynaLog.LogMessage("Expected ADK locations are:")
+        DynaLog.LogMessage("- For native/Win64 environments: " & expectedADKPath)
+        DynaLog.LogMessage("- For WOW64 compatibility environments: " & expectedADKPath_WOW64Environ)
+
         Dim DefinedADKInstallation As Boolean
         Try
-            Dim AdkSwitchRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
-            Dim AdkSwitchVal As Integer = AdkSwitchRk.GetValue("AdkInstallation")
-            AdkSwitchRk.Close()
-            DynaLog.LogMessage("ADK installation status: " & AdkSwitchVal)
-            If AdkSwitchVal <> 1 Then
-                DynaLog.LogMessage("No ADK installation has been found")
-                DefinedADKInstallation = False
-            Else
-                DynaLog.LogMessage("ADK installation found. No need for anything else")
-                Return 2
-            End If
+            ' We'll check if the expected ADK paths exist. If at least one exists, then we know we have the ADK.
+            For Each adkPath In {expectedADKPath, expectedADKPath_WOW64Environ}
+                DynaLog.LogMessage("Determining if " & adkPath & " exists...")
+                If Directory.Exists(adkPath) Then
+                    DynaLog.LogMessage(Quote & adkPath & Quote & " exists. We have an ADK...")
+                    Return 2
+                Else
+                    DynaLog.LogMessage(Quote & adkPath & Quote & " does not exist.")
+                End If
+            Next
         Catch ex As Exception
             DynaLog.LogMessage("Could not grab ADK installation. " & ex.Message)
             DefinedADKInstallation = False
@@ -1039,6 +1077,13 @@ Public Class MainForm
                 End If
             End If
         End If
+
+        ' For the PXE Helper Server menu item to be usable, we need to be on a server system.
+        Dim InstallationTypeRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
+        Dim InstallationType As String = InstallationTypeRk.GetValue("InstallationType", "")
+        InstallationTypeRk.Close()
+
+        PxeHelperServersTSMI.Enabled = InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase)
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -12009,6 +12054,15 @@ Public Class MainForm
             Beep()
             Exit Sub
         End If
+        If MountedImgMgr.Visible Then
+            DynaLog.LogMessage("The mounted image manager is still open. Attempting closure...")
+            MountedImgMgr.Close()
+            If MountedImgMgr.Visible Then
+                DynaLog.LogMessage("The mounted image manager is still open. Cannot continue closure")
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
         If RegistryControlPanel.Visible Then
             DynaLog.LogMessage("The image registry control panel is still open. Cannot continue closure")
             e.Cancel = True
@@ -12019,6 +12073,24 @@ Public Class MainForm
             WimScriptEditor.Close()
             If WimScriptEditor.Visible Then
                 DynaLog.LogMessage("The configuration list editor is still open. Cannot continue closure")
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
+        If HelpBrowserForm.Visible Then
+            DynaLog.LogMessage("The help browser is open. Attempting closure...")
+            HelpBrowserForm.Close()
+            If HelpBrowserForm.Visible Then
+                DynaLog.LogMessage("The help browser is still open. Cannot continue closure")
+                e.Cancel = True
+                Exit Sub
+            End If
+        End If
+        If InfoSaveResults.Visible Then
+            DynaLog.LogMessage("The info saver result viewer is open. Attempting closure...")
+            InfoSaveResults.Close()
+            If InfoSaveResults.Visible Then
+                DynaLog.LogMessage("The info saver result viewer is still open. Cannot continue closure")
                 e.Cancel = True
                 Exit Sub
             End If
@@ -13290,7 +13362,12 @@ Public Class MainForm
     Private Sub UpdateLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles UpdateLink.LinkClicked
         If Not HomePanel.Visible Then Exit Sub
         DynaLog.LogMessage("Beginning download of Update System...")
-        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not delete existing update downloader...")
+            Exit Sub
+        End Try
         Try
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()
@@ -13386,10 +13463,7 @@ Public Class MainForm
         If prjTreeView.SelectedNode.Name.StartsWith("dandi") Then
             DynaLog.LogMessage("ADK nodes are selected. Continuing...")
             Try
-                Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
-                Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
-                adkInst.Close()
-                If adk = "1" Then
+                If DetectPossibleADKs() = 2 Then
                     DynaLog.LogMessage("The ADK is installed")
                     DynaLog.LogMessage("Copy mode for ADK files: " & adkCopyArg)
                     ' Copy deployment tools. This will default to "Program Files\Windows Kits\10"
@@ -13647,10 +13721,7 @@ Public Class MainForm
     Private Sub ADKCopierBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ADKCopierBW.RunWorkerCompleted
         Try
             ' Detect if ADKs are present
-            Dim adkInst As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\WIMMount")
-            Dim adk As String = adkInst.GetValue("AdkInstallation").ToString()
-            adkInst.Close()
-            If adk = "1" Then
+            If DetectPossibleADKs() = 2 Then
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -13676,7 +13747,7 @@ Public Class MainForm
                     Case 5
                         MenuDesc.Text = "Copia strumenti di distribuzione nel progetto completata"
                 End Select
-            ElseIf adk <> "1" Then
+            Else
                 Select Case Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -17039,5 +17110,53 @@ Public Class MainForm
         End Select
 
         Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+    End Sub
+
+    Private Sub RunProcess(FilePath As String, Optional Arguments As String = "")
+        Try
+            Dim proc As New Process() With {
+                .StartInfo = New ProcessStartInfo() With {
+                    .FileName = FilePath,
+                    .Arguments = Arguments,
+                    .WorkingDirectory = Path.GetDirectoryName(FilePath),
+                    .CreateNoWindow = True
+                }
+            }
+            proc.Start()
+        Catch ignored As Exception
+
+        End Try
+    End Sub
+
+    Private Sub StartWdsHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartWdsHelperTSMI.Click
+        Dim wdshsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "wds", "wdshelper_server.ps1")
+        If File.Exists(wdshsPath) Then
+            DynaLog.LogMessage("WDSHS Script exists. Launching...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       "-Executionpolicy Bypass -File " & Quote & wdshsPath & Quote)
+        Else
+            DynaLog.LogMessage("WDSHS Script does not exist.")
+        End If
+    End Sub
+
+    Private Sub StartFogHelperTSMI_Click(sender As Object, e As EventArgs) Handles StartFogHelperTSMI.Click
+        Dim foghsPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "fog", "foghelper_server.ps1")
+        If File.Exists(foghsPath) Then
+            DynaLog.LogMessage("FOGHS Script exists. Launching...")
+            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
+                       "-Executionpolicy Bypass -File " & Quote & foghsPath & Quote)
+        Else
+            DynaLog.LogMessage("FOGHS Script does not exist.")
+        End If
+    End Sub
+
+    Private Sub UnixFogInstructionTSMI_Click(sender As Object, e As EventArgs) Handles UnixFogInstructionTSMI.Click
+        Dim foghsUnixNotesPath As String = Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "pxehelpers", "fog", "foghs_unix_notes.txt")
+        If File.Exists(foghsUnixNotesPath) Then
+            DynaLog.LogMessage("FOGHS UNIX Notes exist. Launching...")
+            RunProcess(SystemEditor, Quote & foghsUnixNotesPath & Quote)
+        Else
+            DynaLog.LogMessage("FOGHS UNIX notes do not exist.")
+        End If
     End Sub
 End Class

@@ -840,7 +840,12 @@ Public Class PrgSetup
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
         DynaLog.LogMessage("Beginning download of Update System...")
-        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not delete existing update downloader...")
+            Exit Sub
+        End Try
         Try
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()

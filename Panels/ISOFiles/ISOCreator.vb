@@ -4,6 +4,7 @@ Imports Microsoft.VisualBasic.ControlChars
 Imports Microsoft.Dism
 Imports DISMTools.Utilities
 Imports System.Net
+Imports Microsoft.Win32
 
 Public Class ISOCreator
 
@@ -405,10 +406,6 @@ Public Class ISOCreator
                             Process.Start("https://learn.microsoft.com/it-it/windows-hardware/get-started/adk-install")
                     End Select
                     Close()
-                Else
-                    If MainForm.DetectPossibleADKs() = 1 Then
-                        RegistryHelper.AddRegistryItem(New RegistryItem("HKLM\Software\Microsoft\WIMMount", "AdkInstallation", RegistryItem.ValueType.RegDword, "1"))
-                    End If
                 End If
             Else
                 Close()
@@ -824,7 +821,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button2.PointToScreen(Point.Empty))
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Selected image: " & selectedImage.ImageFilePath)
             TextBox1.Text = selectedImage.ImageFilePath
@@ -900,8 +897,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub CheckBox3_CheckedChanged(sender As Object, e As EventArgs)
-        Dim uefiCA2023_Message As String = ""
-        Dim uefiCA2023_Title As String = ""
+        Dim uefiCA2023_Message As String = "", uefiCA2023_Title As String = "", uefiCA2023_NotSupportedOnCurrentSystemMessage As String = ""
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -910,30 +906,35 @@ Public Class ISOCreator
                             "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
                             "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
                             "If you have any doubts, we recommend that you leave this option unchecked."
+                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "We have detected that, currently, this system does not support Windows UEFI CA 2023 boot binaries. If you continue with ISO creation, you may not be able to boot to the resulting ISO file on this system."
                         uefiCA2023_Title = "Windows UEFI CA 2023 information"
                     Case "ESN"
                         uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
                             "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
                             "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
                             "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
+                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Hemos detectado que, actualmente, su sistema no soporta archivos de arranque Windows UEFI CA 2023. Si continúa con la creación de archivos ISO, podría no ser capaz de arrancar a archivos ISO resultantes en este sistema."
                         uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
                     Case "FRA"
                         uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
                             "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
                             "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
                             "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
+                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Nous avons détecté que, actuellement, ce système ne prend pas en charge les binaires de démarrage Windows UEFI CA 2023. Si vous poursuivez la création de l'ISO, vous risquez de ne pas pouvoir démarrer à partir du fichier ISO obtenu sur ce système."
                         uefiCA2023_Title = "Informations Windows UEFI CA 2023"
                     Case "PTB", "PTG"
                         uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
                             "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
                             "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
                             "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
+                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Detetámos que, atualmente, este sistema não suporta binários de arranque Windows UEFI CA 2023. Se continuar com a criação da ISO, poderá não conseguir arrancar a partir do ficheiro ISO resultante neste sistema."
                         uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
                     Case "ITA"
                         uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
                             "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
                             "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
                             "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
+                        uefiCA2023_NotSupportedOnCurrentSystemMessage = "Abbiamo rilevato che, attualmente, questo sistema non supporta i file binari di avvio Windows UEFI CA 2023. Se si procede con la creazione dell'ISO, potrebbe non essere possibile avviare il file ISO risultante su questo sistema."
                         uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
                 End Select
             Case 1
@@ -941,34 +942,78 @@ Public Class ISOCreator
                     "Some computers that use UEFI may not boot correctly to this ISO file with the updated boot binaries. Because of this, it is recommended that you check your test equipment for compatibility with these binaries." & CrLf & CrLf &
                     "Run the PowerShell command described in the Help documentation for the ISO creator to determine whether a device has this certificate installed." & CrLf & CrLf &
                     "If you have any doubts, we recommend that you leave this option unchecked."
+                uefiCA2023_NotSupportedOnCurrentSystemMessage = "We have detected that, currently, this system does not support Windows UEFI CA 2023 boot binaries. If you continue with ISO creation, you may not be able to boot to the resulting ISO file on this system."
                 uefiCA2023_Title = "Windows UEFI CA 2023 information"
             Case 2
                 uefiCA2023_Message = "Esta opción creará archivos ISO que contengan archivos de arranque EFI firmados con el certificado " & Quote & "Windows UEFI CA 2023" & Quote & CrLf & CrLf &
                     "Algunos equipos que utilicen UEFI podrán no iniciar correctamente este archivo ISO con los archivos de arranque actualizados. Debido a esto, es recomendable que compruebe sus dispositivos de prueba para ver si son compatibles con estos archivos." & CrLf & CrLf &
                     "Ejecute el comando de PowerShell descrito en la Ayuda para el creador de archivos ISO (en inglés) para determinar si un equipo tiene este certificado instalado." & CrLf & CrLf &
                     "Si tiene dudas, le recomendamos que deje esta opción sin marcar."
+                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Hemos detectado que, actualmente, su sistema no soporta archivos de arranque Windows UEFI CA 2023. Si continúa con la creación de archivos ISO, podría no ser capaz de arrancar a archivos ISO resultantes en este sistema."
                 uefiCA2023_Title = "Información sobre Windows UEFI CA 2023"
             Case 3
                 uefiCA2023_Message = "Cette option créera des fichiers ISO contenant des binaires de démarrage EFI signés avec le certificat " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
                     "Certains ordinateurs qui utilisent l'UEFI peuvent ne pas démarrer correctement avec ce fichier ISO contenant les binaires de démarrage mis à jour. Pour cette raison, il est recommandé de vérifier la compatibilité de votre équipement de test avec ces binaires." & CrLf & CrLf &
                     "Exécutez la commande PowerShell décrite dans la documentation d'aide du créateur de l'ISO (en anglais) pour déterminer si ce certificat est installé sur un appareil." & CrLf & CrLf &
                     "Si vous avez des doutes, nous vous recommandons de ne pas cocher cette option."
+                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Nous avons détecté que, actuellement, ce système ne prend pas en charge les binaires de démarrage Windows UEFI CA 2023. Si vous poursuivez la création de l'ISO, vous risquez de ne pas pouvoir démarrer à partir du fichier ISO obtenu sur ce système."
                 uefiCA2023_Title = "Informations Windows UEFI CA 2023"
             Case 4
                 uefiCA2023_Message = "Esta opção criará ficheiros ISO que contêm binários de arranque EFI assinados com o certificado " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
                     "Alguns computadores que utilizam UEFI podem não arrancar corretamente com este ficheiro ISO com os binários de arranque actualizados. Por este motivo, recomenda-se que verifique a compatibilidade do seu equipamento de teste com estes binários." & CrLf & CrLf &
                     "Execute o comando PowerShell descrito na documentação de ajuda do criador ISO (em inglês) para determinar se um dispositivo tem este certificado instalado." & CrLf & CrLf &
                     "Se tiver dúvidas, recomendamos que deixe esta opção desmarcada."
+                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Detetámos que, atualmente, este sistema não suporta binários de arranque Windows UEFI CA 2023. Se continuar com a criação da ISO, poderá não conseguir arrancar a partir do ficheiro ISO resultante neste sistema."
                 uefiCA2023_Title = "Informações sobre o Windows UEFI CA 2023"
             Case 5
                 uefiCA2023_Message = "Questa opzione creerà file ISO contenenti binari di avvio EFI firmati con il certificato " & Quote & "Windows UEFI CA 2023" & Quote & "." & CrLf & CrLf &
                     "Alcuni computer che utilizzano UEFI potrebbero non avviarsi correttamente da questo file ISO con i binari di avvio aggiornati. Per questo motivo, si consiglia di verificare la compatibilità della propria apparecchiatura di test con questi file binari." & CrLf & CrLf &
                     "Eseguire il comando PowerShell descritto nella documentazione della Guida per il creatore ISO (in inglese) per determinare se un dispositivo ha questo certificato installato." & CrLf & CrLf &
                     "In caso di dubbi, si consiglia di lasciare questa opzione deselezionata."
+                uefiCA2023_NotSupportedOnCurrentSystemMessage = "Abbiamo rilevato che, attualmente, questo sistema non supporta i file binari di avvio Windows UEFI CA 2023. Se si procede con la creazione dell'ISO, potrebbe non essere possibile avviare il file ISO risultante su questo sistema."
                 uefiCA2023_Title = "Informazioni su Windows UEFI CA 2023"
         End Select
         If CheckBox3.Checked Then
             MsgBox(uefiCA2023_Message, vbOKOnly + vbInformation, uefiCA2023_Title)
+
+            ' Detect if we support UEFI CA 2023 binaries on the current system, just to have an idea (on the current system, at least)
+            ' https://techcommunity.microsoft.com/blog/Windows-ITPro-blog/secure-boot-playbook-for-certificates-expiring-in-2026/4469235
+            Try
+                ' we don't REALLY need to check on BIOS systems
+                If Not Environment.GetEnvironmentVariable("FIRMWARE_TYPE").Equals("UEFI") Then Exit Try
+
+                ' Before checking the system for CA 2023 certs, we'll check if Secure Boot is enabled.
+                DynaLog.LogMessage("Detecting current Secure Boot status...")
+
+                Dim sbStateRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot\State", False)
+                Dim sbState As Integer = sbStateRk.GetValue("UEFISecureBootEnabled")
+                sbStateRk.Close()
+
+                DynaLog.LogMessage("Secure Boot Status: " & sbState)
+
+                ' If we have 0 then we know secure boot is disabled on the system.
+                If sbState = 0 Then Exit Try
+
+                DynaLog.LogMessage("Detecting if current system is compatible with UEFI CA 2023...")
+
+                Dim sbUefiBinStatusRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot\Servicing", False)
+                Dim sbUefiBinStatus As String = sbUefiBinStatusRk.GetValue("UEFICA2023Status", "")
+                sbUefiBinStatusRk.Close()
+
+                DynaLog.LogMessage("UEFI CA 2023 Status: " & sbUefiBinStatus)
+
+                ' If the status value is "Updated", it means that the system has already applied Secure Boot DBX updates
+                ' to enable support for UEFI CA 2023 binaries. If it is "NotStarted" or something else though, then
+                ' the system hasn't initiated any DBX updates.
+                If Not sbUefiBinStatus.Equals("updated", StringComparison.InvariantCultureIgnoreCase) Then
+                    DynaLog.LogMessage("UEFI CA 2023 Status is not Updated. We are not running with UEFI CA 2023-supported SecureBoot")
+
+                    MsgBox(uefiCA2023_NotSupportedOnCurrentSystemMessage, vbOKOnly + vbExclamation, uefiCA2023_Title)
+                End If
+
+            Catch ex As Exception
+
+            End Try
         End If
     End Sub
 

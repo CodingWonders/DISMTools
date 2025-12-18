@@ -1,7 +1,31 @@
 #requires -version 5.0
 #requires -runasadministrator
-
-# Windows Deployment Services Helper
+#                                              ....
+#                                         .'^""""""^.
+#      '^`'.                            '^"""""""^.
+#     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+#       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
+#         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
+#            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Helper        |
+#              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
+#                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
+#                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
+#                      .^""";_]]]?)}:^^""",,,`'````'..
+#                        .;-]]]?(xxxx}:^^^^'
+#                       `+]]]?(xxxxxxxr},'
+#                     .`:+]?)xxxxxxxxxxxr<.
+#                   .`^^^^:(xxxxxxxxxxxxxxr>.
+#                 .`^^^^^^^^I(xxxxxxxxxxxxxxr<.
+#               .`^^^^^^^^^^^^I(xxxxxxxxxxxxxxr<.
+#             .`^^^^^^^^^^^^^^^'`[xxxxxxxxxxxxxxr<.
+#           .`^^^^^^^^^^^^^^^'    `}xxxxxxxxxxxxxxr<.
+#          `^^":ll:"^^^^^^^'        `}xxxxxxxxxxxxxxr,
+#         '^^^I-??]l^^^^^'            `[xxxxxxxxxxxxxx.          This script is provided AS IS, without any warranty. It shouldn't
+#         '^^^,<??~,^^^'                `{xxxxxxxxxxxx.          do any damage to your computer, but you still need to be careful over
+#          `^^^^^^^^^'                    `{xxxxxxxxr,           what you do with it.
+#           .'`^^^`'                        `i1jrt[:.
 
 . "$PSScriptRoot\..\Common\PXEHelpers.Common.ps1"
 
@@ -46,10 +70,66 @@ class DiskLayout {
     }
 }
 
+$pxeReplySettings = $null
+
 function Invoke-ServerAuthentication {
-    $ip = Read-Host -Prompt "Please enter the IP address of the server"
-    $port = Read-Host -Prompt "Please enter the port to which the WDS Helper Web API is listening"
-    $user = Read-Host -Prompt "Please enter the user name for server authentication"
+    if ($pxeReplySettings -ne $null) {
+        Write-Host "    We have detected the IP address of the WDS server you started this environment from ($($pxeReplySettings['serverAddr'])). If you started the WDS Helper Server on this server, you can use this address here."
+        Write-Host "    The IP address assigned to this device is $($pxeReplySettings['clientAddr']).`n"
+    }
+    
+    $validAddress = $false
+    $validPort = $false
+    
+    $ip = ""
+    $port = 0
+    $user = ""
+    
+    $ipMessage = "Please enter the IP address of the server"
+    
+    if ($pxeReplySettings -ne $null) {
+        $ipMessage += ", or press ENTER to use this IP address [$($pxeReplySettings['serverAddr'])]"
+    }
+    
+    do {
+        $ip = Read-Host -Prompt "$ipMessage"
+        
+        if (($ip -eq "") -and ($pxeReplySettings -ne $null)) {
+            Write-Host "Using $($pxeReplySettings['serverAddr']) as the server..."
+            $ip = $pxeReplySettings["serverAddr"]
+        }
+        
+        if ((Test-IPAddressSyntax -ipAddr $ip) -ne [IPAddress]::Unknown) {
+            $validAddress = $true
+        }
+    } until ($validAddress -eq $true)
+    
+    do {
+        $portStr = Read-Host -Prompt "Please enter the port to which the WDS Helper Server is listening, or press ENTER to use the default port [8080]"
+        
+        # if we haven't input anything here we'll make it 8080, if we don't do anything it will default to 0
+        if ($portStr -eq "") {
+            Write-Host "Using default port..."
+            $portStr = "8080"
+        }
+        
+        try {
+            $port = [int]$portStr
+            $validPort = $true
+        } catch {
+            Write-Host "The port needs to be numeric. Try again."
+            $validPort = $false
+        }
+    } until ($validPort -eq $true)
+    
+    do {
+        $user = Read-Host -Prompt "Please enter the user name for server authentication"
+        
+        if ($user -eq "") {
+            Write-Host "Please enter a user."
+        }
+    } until ($user -ne "")
+    
     $password = Read-Host -Prompt "Please enter the password for server authentication (WILL BE SHOWN!)"
     return [ServerAuthentication]::new($ip, $port, $user, $password)
 }
@@ -1081,6 +1161,60 @@ function Show-Timeout {
     Write-Progress -Activity "Restarting system..." -Status "Restarting your system" -PercentComplete 100
 }
 
+function Test-PxeBoot {
+    # First we check if we have PXE keys
+    if ((Test-Path -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE") -eq $false) {
+        return $false
+    }
+    
+    # The user may have added that key manually. We'll see if we have a reply. Get-ItemPropertyValue
+    # does not respect error actions, so we'll have to intervene in a different way.
+    try {
+        $reply = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE" -Name "BootServerReply" -ErrorAction Stop
+    } catch {
+        return $false
+    }
+    
+    # Next we'll check if we ACTUALLY have a reply.
+    if ($reply -eq $null) {
+        return $false
+    }
+    
+    # All good.
+    return $true
+}
+
+function Get-PxeIpAddresses {
+    <#
+        .SYNOPSIS
+            Gets the client and DHCP server addresses from PXE boot server reply information.
+        .OUTPUTS
+            A hashtable containing both client and server addresses, a null object if PXE info could not be obtained or if the system is not in a PXE environment.
+        .NOTES
+            Hashtable values are in IPv4 form. IPv6 is not yet accounted for.
+    #>
+    
+    # if we haven't booted via PXE, then don't grab anything
+    if ((Test-PxeBoot) -eq $false) {
+        return $null
+    }
+    
+    $clientAddress = ""
+    $serverAddress = ""
+    
+    try {
+        $reply = Get-ItemPropertyValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\PXE" -Name "BootServerReply"
+        
+        # Bytes 13 through 16 contain our client address, while bytes 21 through 24 contain the server address
+        $clientAddress = $reply[12..15] -join "."
+        $serverAddress = $reply[20..23] -join "."
+    } catch {
+        return $null
+    }
+    
+    return @{"clientAddr" = $clientAddress; "serverAddr" = $serverAddress}
+}
+
 $global:product = "Windows Deployment Services Helper"
 $global:description = "This script will guide you through the process of deploying an operating system via a Windows Deployment Services server."
 
@@ -1103,7 +1237,22 @@ Enable-Networking
 
 Write-Host "Preparing to connect to the WDS server..."
 
-Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Web API on your WDS server. You can find it in the `"pxehelpers\wds`" folder on the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
+# Detect if we booted to WinPE using PXE
+if ((Test-PxeBoot) -eq $false) {
+    Clear-Host
+    Show-CenteredTextBox -Text "We have detected that you started the WDS Helper without booting the Preinstallation Environment via the Preboot Execution Environment (PXE). You may experience issues if you continue." -MaxWidth 100 -CenterOfAll -ForegroundColor DarkYellow
+    Write-Host "`n"
+    Write-Host "    Press Y to continue with operating system installation (not recommended)"
+    Write-Host "    Press N to restart your computer. You can restart the installation process once you boot via PXE`n"
+    $option = Read-Host -Prompt "Do you want to continue? (y/N)"
+    if ($option -ne "y") {
+        exit 1
+    }
+}
+
+$pxeReplySettings = Get-PxeIpAddresses
+
+Show-SectionMessage -sectionTitle "Connect to the server" -sectionDescription "Please start the WDS Helper Server on your WDS server. You can invoke it from either DISMTools or the autorun menu of the install disc. After startup, provide server authentication information that will be used to communicate with the server and the API."
 
 $authInfo = Invoke-ServerAuthentication
 
