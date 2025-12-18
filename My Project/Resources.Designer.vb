@@ -2153,15 +2153,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
-        '''- Fixed a crash when opening the popup mounted image picker in some cases
+        '''- When picking a starter script using the predefined collection, language highlighting is correctly selected now
+        '''- ADK detection has been refactored in both the main program and the PE Helper to detect ADK kits roots, as opposed to a registry value that is no longer added by ADK installers (thanks rayman95 on the My Digital Life forums for spotting)
+        '''- Certain windows that cause freezes when the program is closed are now closed automatically
         '''
         '''New features:
         '''
-        '''- The PE Helper now introduces a computer inventory framework that lets you view information about your system, for issue reporting
-        '''- The Sysprep Preparation Tool has been updated
-        '''- The Starter Script format now contains name and description fields
-        '''- You can now preview start [resto de la cadena truncado]&quot;;.
+        '''- You can now access PXE Helper  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
