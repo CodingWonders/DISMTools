@@ -57,7 +57,7 @@ if not defined destdrive (
 )
 
 if "%destdrive%" equ "NET" (
-	set /p destip=Please enter the UNC path (e.g. \\192.168.1.10\Share): 
+	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share):"
     set /p destuser=Please enter the username: 
     set /p destpassword=Please enter the password: 
 
