@@ -48,10 +48,28 @@ if "%sourcedrive%" equ "WDS" (
 	exit /b
 )
 
+echo - If you would like to save to a network share, type "NET"
+
 set /p destdrive=Please enter the letter of the volume the file will be stored on: 
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
 	exit /b 1
+)
+
+if "%destdrive%" equ "NET" (
+	set /p destip=Please enter the UNC path (e.g. \\192.168.1.10\Share): 
+    set /p destuser=Please enter the username: 
+    set /p destpassword=Please enter the password: 
+
+    echo Connecting to network share...
+    net use Z: "%destip%" %destpassword% /USER:%destuser% /P:No
+
+    if %errorlevel% neq 0 (
+        echo [ERROR] Failed to map network drive.
+        exit /b 1
+    )
+	
+	set destdrive=Z
 )
 echo.
 set /p destfile=Enter a file name for the target WIM file. Press ENTER without specifying anything to continue with a random name: 
