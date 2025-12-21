@@ -2015,28 +2015,30 @@ function Start-ProjectDevelopment {
     # Detect if the Windows ADK is present
     try
     {
-        if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+        # RAYMAN prompted the change. YEAH!
+        $adkKitsRoot = Get-KitsRoot -wow64environment $false
+        $adkKitsRoot_WOW64Environ = Get-KitsRoot -wow64environment $true
+
+        $expectedADKPath = "$($adkKitsRoot)Assessment and Deployment Kit"
+        $expectedADKPath_WOW64Environ = "$($adkKitsRoot_WOW64Environ)Assessment and Deployment Kit"
+
+        if ((Test-KitsRootPaths -adkKitsRootPath "$expectedADKPath" -adkKitsRootPath_WOW64Environ "$expectedADKPath_WOW64Environ") -eq $true)
         {
-            # An ADK may be installed, but it may not be Windows 10 ADK
-            $progFiles = ""
             $peToolsPath = ""
-            if ([Environment]::Is64BitOperatingSystem)
+
+            if ($expectedADKPath -ne "Assessment and Deployment Kit") { $peToolsPath = $expectedADKPath }
+            if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "")) { $peToolsPath = $expectedADKPath_WOW64Environ }
+
+            if (Test-Path "$peToolsPath")
             {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
-            }
-            else
-            {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files"
-            }
-            if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
-            {
-                $peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+                Write-Host "Using $peToolsPath as the Preinstallation Environment tools path..."
+
                 if (-not (Test-Path "$targetPath"))
                 {
                     New-Item -Path "$targetPath" -ItemType Directory | Out-Null
                 }
                 Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
-                if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -2063,7 +2065,7 @@ function Start-ProjectDevelopment {
                     exit 1
                 }
                 Write-Host "Copying Windows PE optional components. Please wait..."
-                if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEComponents -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -2214,13 +2216,17 @@ elseif ($cmd -eq "Help")
     Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------`n"
 
-    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"
+    Write-Host "Usage: PE_Helper.ps1 [-cmd] {StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath> [-unattendFile <answer file>] [-copyToVentoy `"true|false`"] [-bootex `"true|false`"] [-scratchPath <path_to_custom_mount_dir] | StartApply | StartDevelopment -testArch <arch> -targetPath <targetPath> | Help}`n"
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
     Write-Host "             x86, amd64, arm64"
     Write-Host "      -imgFile: (Mandatory) Specifies the WIM file to copy to the target Preinstallation Environment (PE)"
     Write-Host "      -isoPath: (Mandatory) Specifies the target path of the ISO file"
+    Write-Host "      -unattendFile: Specifies an answer file to include in the ISO file. This **overrides** any answer files applied to the image"
+    Write-Host "      -copyToVentoy: Determines whether to copy the resulting ISO file to Ventoy drives plugged into the computer"
+    Write-Host "      -bootex: Determines whether to use Windows UEFI CA 2023-signed EFI boot binaries (ONLY works with ADK 10.1.26100.2454 and later)"
+    Write-Host "      -scratchPath: (Experimental) Specifies a custom location to which the script should mount the image"
     Write-Host "      You need the Windows ADK and the PE plugin, which you can download here:"
     Write-Host "        https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
     Write-Host "    StartApply: starts the Windows image application process from the Preinstallation Environment (PE). Parameters: none"
@@ -2232,7 +2238,7 @@ elseif ($cmd -eq "Help")
     Write-Host "    Help: shows this help documentation`n"
 
     Write-Host "Examples:`n"
-    Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`""
+    Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`" -unattendFile `"unattend.xml`" -copyToVentoy `"false`" -bootex `"false`""
     Write-Host "    PE_Helper.ps1 [-cmd] StartApply"
     Write-Host "    PE_Helper.ps1 [-cmd] StartDevelopment -testArch amd64 -targetPath `"C:\FooBar`""
     Write-Host "    PE_Helper.ps1 [-cmd] Help"
