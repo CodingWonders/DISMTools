@@ -1,5 +1,6 @@
 @echo off
 set sysdrive=%SYSTEMDRIVE%
+setlocal enabledelayedexpansion
 
 :main
 cls
@@ -50,19 +51,42 @@ if "%sourcedrive%" equ "WDS" (
 )
 
 if "%sourcedrive%" equ "NET" (
-	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share):"
+	cls
+	echo This process will help you map a network drive to which you can save your Windows image. Keep
+	echo in mind, however, that this will NOT produce an installation image compatible with network-based
+	echo installation solutions ^(WDS^); it will just create an image suitable for local installations and
+	echo save it in the network share that you specify here. Press the Enter key NOW if you want to go back.
+	echo.
+
+	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share): "
+	if not defined destip (goto :main)
 	set /p destuser=Please enter the username: 
 	set /p destpassword=Please enter the password: 
 
 	echo Connecting to network share...
-	net use * "%destip%" %destpassword% /USER:%destuser% /P:No
+	REM for results to appear in HKCU\Network, we need to make the share persistent
+	net use * "%destip%" %destpassword% /USER:%destuser% /P:Yes
 
-	if %errorlevel% neq 0 (
-		echo Could not map network drive.
+	if !errorlevel! neq 0 (
+		echo Could not map network drive. This can happen if the computer can't contact the destination.
+		echo Press ENTER to go back, and try again.
+		pause > nul
 		goto :main
 	)
 	
-	set destdrive=Z
+	REM because we use NET USE * it assigns an available letter to the share; it may not always
+	REM be Z:, so we'll check
+	for /f %%a in ('reg query HKCU\Network') do (
+		for /f "tokens=3" %%b in ('reg query "HKCU\Network\%%~nxa" /v RemotePath') do (
+			if "%%b" EQU "%destip%" (set destdrive=%%~nxa)
+		)
+	)
+	
+	echo Share is mapped to !destdrive!:
+	echo Now, you will need to specify the source drive to capture.
+	
+	ping /n 3 127.0.0.1 >nul 2>&1
+	
 	REM we have to ask for the source drive again
 	goto :main
 )
