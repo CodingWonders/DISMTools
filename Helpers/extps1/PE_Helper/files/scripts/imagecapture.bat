@@ -49,13 +49,7 @@ if "%sourcedrive%" equ "WDS" (
 	exit /b
 )
 
-set /p destdrive=Please enter the letter of the volume the file will be stored on: 
-if not defined destdrive (
-	echo The letter of the volume where the image will be stored must be specified.
-	exit /b 1
-)
-
-if "%destdrive%" equ "NET" (
+if "%sourcedrive%" equ "NET" (
 	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share):"
 	set /p destuser=Please enter the username: 
 	set /p destpassword=Please enter the password: 
@@ -70,6 +64,13 @@ if "%destdrive%" equ "NET" (
 	
 	set destdrive=Z
 )
+
+set /p destdrive=Please enter the letter of the volume the file will be stored on: 
+if not defined destdrive (
+	echo The letter of the volume where the image will be stored must be specified.
+	exit /b 1
+)
+
 echo.
 set /p destfile=Enter a file name for the target WIM file. Press ENTER without specifying anything to continue with a random name: 
 if not defined destfile (
