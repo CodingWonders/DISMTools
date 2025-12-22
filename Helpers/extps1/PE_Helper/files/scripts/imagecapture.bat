@@ -24,6 +24,7 @@ diskpart /s %scriptpath%
 echo.
 echo - To install drivers if you don't see your drives, type "DIM"
 if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
+echo - To save the image to a network share, type "NET"
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
@@ -52,6 +53,22 @@ set /p destdrive=Please enter the letter of the volume the file will be stored o
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
 	exit /b 1
+)
+
+if "%destdrive%" equ "NET" (
+	set /p "destip=Please enter the UNC path (e.g. \\192.168.1.10\Share):"
+	set /p destuser=Please enter the username: 
+	set /p destpassword=Please enter the password: 
+
+	echo Connecting to network share...
+	net use Z: "%destip%" %destpassword% /USER:%destuser% /P:No
+
+	if %errorlevel% neq 0 (
+		echo Could not map network drive.
+		goto :main
+	)
+	
+	set destdrive=Z
 )
 echo.
 set /p destfile=Enter a file name for the target WIM file. Press ENTER without specifying anything to continue with a random name: 
