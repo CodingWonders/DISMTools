@@ -55,7 +55,7 @@ if "%sourcedrive%" equ "NET" (
 	set /p destpassword=Please enter the password: 
 
 	echo Connecting to network share...
-	net use Z: "%destip%" %destpassword% /USER:%destuser% /P:No
+	net use * "%destip%" %destpassword% /USER:%destuser% /P:No
 
 	if %errorlevel% neq 0 (
 		echo Could not map network drive.
@@ -63,9 +63,11 @@ if "%sourcedrive%" equ "NET" (
 	)
 	
 	set destdrive=Z
+	REM we have to ask for the source drive again
+	goto :main
 )
 
-set /p destdrive=Please enter the letter of the volume the file will be stored on: 
+if not defined destdrive ( set /p destdrive=Please enter the letter of the volume the file will be stored on: )
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
 	exit /b 1
