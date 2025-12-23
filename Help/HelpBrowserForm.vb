@@ -5,7 +5,6 @@ Public Class HelpBrowserForm
 
     Dim TitleMsg As String = ""
     Dim CurrentSite As String = ""
-    Dim DocTitle As String = ""
 
     Private Sub HelpBrowserForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -36,6 +35,8 @@ Public Class HelpBrowserForm
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Text = TitleMsg
+
+        TitleChangerTimer.Enabled = True
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
@@ -82,20 +83,10 @@ Public Class HelpBrowserForm
             WebBrowser1.Navigate(CurrentSite)
             Exit Sub
         End If
-        If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
-            DynaLog.LogMessage("HTML exists in Absolute URI path. Navigating...")
-            WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")
-        ElseIf e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+        If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("Absolute URI points to an external website. Opening in default browser...")
             Process.Start(e.Url.AbsoluteUri)
             WebBrowser1.Navigate(CurrentSite)
-        End If
-        DynaLog.LogMessage("Document title: " & WebBrowser1.DocumentTitle)
-        If WebBrowser1.DocumentTitle = "" Then
-            Text = DocTitle & " - " & TitleMsg
-        Else
-            Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
-            If e.Url.AbsoluteUri.StartsWith("file:///") Then DocTitle = WebBrowser1.DocumentTitle
         End If
         CurrentSite = e.Url.AbsoluteUri
     End Sub
@@ -105,5 +96,13 @@ Public Class HelpBrowserForm
             Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
             If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
+    End Sub
+
+    Private Sub TitleChangerTimer_Tick(sender As Object, e As EventArgs) Handles TitleChangerTimer.Tick
+        Text = String.Format("{0} -- {1}", WebBrowser1.DocumentTitle, TitleMsg)
+    End Sub
+
+    Private Sub HelpBrowserForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        TitleChangerTimer.Enabled = False
     End Sub
 End Class

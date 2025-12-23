@@ -22,8 +22,10 @@ Partial Class HelpBrowserForm
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(HelpBrowserForm))
         Me.WebBrowser1 = New System.Windows.Forms.WebBrowser()
+        Me.TitleChangerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
         '
         'WebBrowser1
@@ -38,6 +40,10 @@ Partial Class HelpBrowserForm
         Me.WebBrowser1.Size = New System.Drawing.Size(1264, 681)
         Me.WebBrowser1.TabIndex = 0
         Me.WebBrowser1.WebBrowserShortcutsEnabled = False
+        '
+        'TitleChangerTimer
+        '
+        Me.TitleChangerTimer.Interval = 250
         '
         'HelpBrowserForm
         '
@@ -54,4 +60,5 @@ Partial Class HelpBrowserForm
 
     End Sub
     Friend WithEvents WebBrowser1 As System.Windows.Forms.WebBrowser
+    Friend WithEvents TitleChangerTimer As System.Windows.Forms.Timer
 End Class
