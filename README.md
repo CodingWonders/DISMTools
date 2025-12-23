@@ -1,4 +1,5 @@
 ![Product image](https://github.com/CodingWonders/DISMTools/blob/stable/res/product_overview.png)
+[![](https://dcbadge.limes.pink/api/server/https://discord.gg/hJJTrMNP5p?theme=default-inverted&style=for-the-badge)](https://discord.gg/hJJTrMNP5p)
 
 <!-- Tags (powered by Shields.io) -->
 
