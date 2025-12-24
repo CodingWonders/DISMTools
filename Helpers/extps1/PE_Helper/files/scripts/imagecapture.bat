@@ -114,7 +114,7 @@ if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
 	call :sysprep_hotinstall_remove_temp_files
 )
 set dismstart=%date% %time%
-dism /capture-image /imagefile=%destdrive%:\%destfile% /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
+dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
 if %ERRORLEVEL% equ 0 (
 	set succeeded=true
 ) else (
