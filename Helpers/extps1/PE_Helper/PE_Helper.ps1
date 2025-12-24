@@ -150,7 +150,7 @@ function Start-PEGeneration
             $peToolsPath = ""
 
             if ($expectedADKPath -ne "Assessment and Deployment Kit") { $peToolsPath = $expectedADKPath }
-            if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "")) { $peToolsPath = $expectedADKPath_WOW64Environ }
+            if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "Assessment and Deployment Kit")) { $peToolsPath = $expectedADKPath_WOW64Environ }
 
             if (Test-Path "$peToolsPath")
             {
