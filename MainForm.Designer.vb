@@ -1756,6 +1756,12 @@ Partial Class MainForm
         Me.ContributeToTheHelpSystemToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.ContributeToTheHelpSystemToolStripMenuItem.Text = "Contribute to the help system"
         '
+        'Discord
+        '
+        Me.Discord.Name = "Discord"
+        Me.Discord.Size = New System.Drawing.Size(286, 22)
+        Me.Discord.Text = "Join the discord (opens in web browser)"
+        '
         'BranchTSMI
         '
         Me.BranchTSMI.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -4869,6 +4875,7 @@ Partial Class MainForm
     Friend WithEvents TutorialVideoPanel As System.Windows.Forms.Panel
     Friend WithEvents LatestNewsPanel As System.Windows.Forms.Panel
     Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Discord As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator21 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents OnlineInstMgmt As System.Windows.Forms.LinkLabel
     Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
