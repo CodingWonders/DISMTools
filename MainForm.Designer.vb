@@ -1683,7 +1683,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.Discord, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
