@@ -6,6 +6,7 @@ Write-Host "  2 - Perform a Network Installation"
 Write-Host "      Choose this method if you started the Preinstallation Environment using a network-based"
 Write-Host "      deployment solution. This is recommended for system administrators that want to deploy a system"
 Write-Host "      image to multiple computers at once."
+Write-Host "  3 - Perform a Local Installation and Capture Image for Network Installation with WDS"
 Write-Host "  C - Enter a command line"
 Write-Host "  S - Shut down my computer"
 Write-Host "  R - Restart my computer`n"
@@ -15,6 +16,9 @@ $option = Read-Host -Prompt "Choose an installation method by typing the option 
 switch ($option) {
 	"2" {
 		New-Item -Path "$env:SYSTEMDRIVE\netinstall" -ErrorAction SilentlyContinue | Out-Null
+	}
+	"3" {
+		New-Item -Path "./scripts/installwds.ps1" -ErrorAction SilentlyContinue | Out-Null
 	}
 	"C" {
 		New-Item -Path "$env:SYSTEMDRIVE\cmdcons" -ErrorAction SilentlyContinue | Out-Null
