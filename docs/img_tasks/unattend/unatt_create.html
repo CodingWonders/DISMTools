@@ -511,7 +511,7 @@
 <p>Finally, specify the password of the user. Since DISMTools will <strong>NOT</strong> check if the password is correct, make sure that you type it correctly.</p>
 <p>You've finished the Domain Services Wizard. When you get to the components screen, you will see that the necessary components and settings have been added to your answer file.</p>
 <h2 id="starter-script-reference">Starter Script Reference</h2>
-<p>Currently, there are 10 starter scripts available:</p>
+<p>Currently, there are 12 starter scripts available:</p>
 <table>
 <thead>
 <tr>
@@ -524,57 +524,62 @@
 <tr>
 <td style="text-align: left;">Close First Logon Animation</td>
 <td style="text-align: center;">During System Configuration</td>
-<td style="text-align: left;">Closes the first logon animation that appears when a user logs on for the first time</td>
+<td style="text-align: left;">This script closes the First Logon Animation process and allows a system to reach the desktop sooner. This works on Windows 10 and Windows 11.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Enable Verbose Status Messages</td>
+<td style="text-align: center;">During System Configuration</td>
+<td style="text-align: left;">This script enables the verbose status messages that are enabled by default on Windows Server. This can help report service start/stop status.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Set OEM Information</td>
 <td style="text-align: center;">During System Configuration</td>
-<td style="text-align: left;">Sets the OEM information of the system, like the manufacturer, model, or support information</td>
+<td style="text-align: left;">This script configures OEM settings such as the manufacturer or the model to further customize a Windows installation.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Set Quick Machine Recovery Settings</td>
 <td style="text-align: center;">During System Configuration</td>
-<td style="text-align: left;">Configures Quick Machine Recovery (QMR) settings on the target system</td>
+<td style="text-align: left;">This script configures a target system's Quick Machine Recovery settings on Windows 11 24H2 and later.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Configure folders for Git integration</td>
 <td style="text-align: center;">When the first user logs on</td>
-<td style="text-align: left;">Configures folders for Git source control integration in the File Explorer</td>
+<td style="text-align: left;">This script configures a folder, or a set of folders, for Git source control integration in the File Explorer. Git and the latest versions of system components need to be installed in the target system to take advantage of all features.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Invoke WinUtil Configuration</td>
 <td style="text-align: center;">When the first user logs on</td>
-<td style="text-align: left;">Invokes WinUtil with a configuration file to apply personalization settings</td>
+<td style="text-align: left;">This script configures a target system using a configuration file exported from the Windows Utility.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Set Personalization Settings</td>
 <td style="text-align: center;">When the first user logs on</td>
-<td style="text-align: left;">Sets personalization settings, like the desktop wallpaper, accent color, or color modes</td>
+<td style="text-align: left;">This script configures settings related to color modes and accent colors on the user environment of the target system.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Set Registered Owner and Organization</td>
 <td style="text-align: center;">When the first user logs on</td>
-<td style="text-align: left;">Sets the registered owner and organization of the system</td>
+<td style="text-align: left;">This script configures the registered owner and organization of the target system.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Set up a custom wallpaper</td>
 <td style="text-align: center;">When the first user logs on</td>
-<td style="text-align: left;">Sets a custom wallpaper for the desktop</td>
+<td style="text-align: left;">This script configures a wallpaper in the target system environment.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Update Microsoft Store apps</td>
 <td style="text-align: center;">When the first user logs on</td>
-<td style="text-align: left;">Updates all Microsoft Store apps to their latest versions, if available</td>
+<td style="text-align: left;">This script invokes an update of all Microsoft Store applications. A network is required for this to work.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Disable Second Chance OOBE</td>
 <td style="text-align: center;">When users log on for the first time</td>
-<td style="text-align: left;">Disables the Second Chance OOBE (SCOOBE)</td>
+<td style="text-align: left;">This script disables the Second Chance Out-of-Box Experience on the target system. This works on Windows 10 and Windows 11.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Disable Windows Notification Sources</td>
 <td style="text-align: center;">When users log on for the first time</td>
-<td style="text-align: left;">Disables various Windows notifications given sources</td>
+<td style="text-align: left;">This script disables user-specified notification sources in the target system.</td>
 </tr>
 </tbody>
 </table>
@@ -791,6 +796,7 @@
 <li>Startup App Notification</li>
 <li>OneDrive</li>
 <li>Microsoft Account Health</li>
+<li>Copilot (AppX package)</li>
 </ul>
 <p>These entries will be added to list of notification sources, in Settings -&gt; System -&gt; Notifications. To add more entries to the list, do the following:</p>
 <pre><code class="language-batch">FOR %%a IN (Windows.SystemToast.Suggested ... Windows.SystemToast.AccountHealth &lt;your source here&gt;) DO (
@@ -807,6 +813,10 @@
 <li>DISMTools 0.7.2 Preview 3:<ul>
 <li>Added:<ul>
 <li>Configure Git folders for File Explorer</li>
+</ul>
+</li>
+<li>Modified:<ul>
+<li>Added name and description fields to starter scripts for script browser</li>
 </ul>
 </li>
 </ul>
