@@ -107,6 +107,7 @@ Partial Class MainForm
         Me.GetAppPatches = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetAppInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetApps = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Discord = New System.Windows.Forms.ToolStripMenuItem()
         Me.DefaultAppAssociationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportDefaultAppAssociations = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetDefaultAppAssociations = New System.Windows.Forms.ToolStripMenuItem()
@@ -1683,7 +1684,7 @@ Partial Class MainForm
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HelpTopicsToolStripMenuItem, Me.DISMToolsTourToolStripMenuItem, Me.GlossaryToolStripMenuItem, Me.CommandHelpToolStripMenuItem, Me.ToolStripSeparator10, Me.AboutDISMToolsToolStripMenuItem, Me.ToolStripSeparator21, Me.Discord, Me.ReportFeedbackToolStripMenuItem, Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem, Me.ToolStripSeparator35, Me.ContributeToTheHelpSystemToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
         Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
@@ -1700,6 +1701,12 @@ Partial Class MainForm
         Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
         Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
+        '
+        'Discord
+        '
+        Me.Discord.Name = "Discord"
+        Me.Discord.Size = New System.Drawing.Size(286, 22)
+        Me.Disocrd.Text = "Join the discord (opens in web browser)"
         '
         'GlossaryToolStripMenuItem
         '
@@ -4869,6 +4876,7 @@ Partial Class MainForm
     Friend WithEvents TutorialVideoPanel As System.Windows.Forms.Panel
     Friend WithEvents LatestNewsPanel As System.Windows.Forms.Panel
     Friend WithEvents ReportFeedbackToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Discord As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator21 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents OnlineInstMgmt As System.Windows.Forms.LinkLabel
     Friend WithEvents AppxPackagePopupCMS As System.Windows.Forms.ContextMenuStrip
