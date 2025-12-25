@@ -238,7 +238,7 @@ If you want to grab a copy straight from the source code, follow these instructi
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 > [!NOTE]
-> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2022 build tools. Install, at least, the Community edition and the **MSVC v143- VS 2022 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
+> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2022 build tools. Install, at least, the Community edition and the **MSVC v145- VS 2026 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
 >
 > Simply searching for "MSVC" in the list of components can get you the necessary component.
 
