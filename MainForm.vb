@@ -12885,6 +12885,11 @@ Public Class MainForm
         Process.Start("https://github.com/CodingWonders/DISMTools/issues/new/choose")
     End Sub
 
+    Private Sub Discord_Click(sender As Object, e As EventArgs) Handles Discord.Click
+        DynaLog.LogMessage("Launching discord join link...")
+        Process.Start("https://discord.gg/hJJTrMNP5p")
+    End Sub
+
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image unmount dialog...")
         If isProjectLoaded And MountDir = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text Then
