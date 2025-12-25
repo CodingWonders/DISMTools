@@ -1706,7 +1706,7 @@ Partial Class MainForm
         '
         Me.Discord.Name = "Discord"
         Me.Discord.Size = New System.Drawing.Size(286, 22)
-        Me.Disocrd.Text = "Join the discord (opens in web browser)"
+        Me.Discord.Text = "Join the discord (opens in web browser)"
         '
         'GlossaryToolStripMenuItem
         '
