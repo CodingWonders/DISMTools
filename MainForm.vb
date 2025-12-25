@@ -15430,42 +15430,42 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel6_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel6.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\new_to_servicing.html")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
 
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#first-steps")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html#first-steps")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
 
     Private Sub LinkLabel8_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel8.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
 
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html#best-practices")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html#best-practices")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
 
     Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs.html")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
 
     Private Sub LinkLabel11_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel11.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs\index.html#saving-image-information")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\info\infodlgs.html#saving-image-information")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
@@ -15477,14 +15477,14 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\online_inst_mgmt.html")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
     End Sub
 
     Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\offline_inst_mgmt.html")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()
@@ -15599,7 +15599,7 @@ Public Class MainForm
     End Sub
 
     Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\add_provisionedappxpackage\index.html#questions")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\add_provisionedappxpackage.html#questions")
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
         HelpBrowserForm.ShowDialog(AddProvAppxPackage)
