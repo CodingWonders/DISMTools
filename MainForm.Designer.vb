@@ -213,6 +213,7 @@ Partial Class MainForm
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator35 = New System.Windows.Forms.ToolStripSeparator()
         Me.ContributeToTheHelpSystemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Discord = New System.Windows.Forms.ToolStripMenuItem
         Me.BranchTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.VersionTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitFullScreenTSMI = New System.Windows.Forms.ToolStripMenuItem()
