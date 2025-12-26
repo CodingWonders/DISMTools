@@ -48,7 +48,7 @@ LanguageCodePage=1252
 
 ; *** Application titles
 SetupAppTitle=Setup
-SetupWindowTitle=Setup - %1
+SetupWindowTitle=Setup - %1 0.7.3 Preview
 UninstallAppTitle=Entfernen
 UninstallAppFullTitle=%1 entfernen
 
