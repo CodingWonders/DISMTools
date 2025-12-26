@@ -21,8 +21,13 @@
 #define IDC_REMOVE_BUTTON 104
 #define IDC_INSTALL_BUTTON 105
 #define IDC_EXIT_BUTTON   106
-#define IDC_ADD_DRV_FILE 107
-#define IDC_ADD_DRV_FOLDER 108
+#define IDC_ABOUT_BUTTON  107
+#define IDC_ADD_DRV_FILE 108
+#define IDC_ADD_DRV_FOLDER 109
+
+// Version Constant
+const LPCWSTR DIM_VERSION = L"0.7.2_msvcv145";
+const LPCWSTR DIM_ABOUT_MESSAGE = L"Driver Installation Module version %s \n(c) 2024-2026 CodingWonders Software.";
 
 // Instruction Message Constants
 

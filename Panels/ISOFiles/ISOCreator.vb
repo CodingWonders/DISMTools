@@ -13,7 +13,7 @@ Public Class ISOCreator
     Dim progressMessages() As String = New String(2) {"Status", "Creating ISO file. This can take some time. Please wait...", "The ISO file has been created"}
     Dim success As Boolean
     Dim architectures() As String = New String(2) {"x86", "amd64", "arm64"}
-    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/2/d/9/2d9c8902-3fcd-48a6-a22a-432b08bed61e/ADK/adksetup.exe", "https://download.microsoft.com/download/5/5/6/556e01ec-9d78-417d-b1e1-d83a2eff20bc/ADKWinPEAddons/adkwinpesetup.exe"}
+    Dim adkDownloadLocations() As String = New String(1) {"https://download.microsoft.com/download/615540bc-be0b-433a-b91b-1f2b0642bb24/adk/adksetup.exe", "https://download.microsoft.com/download/2472e9a0-7c74-4ffd-a3e4-27ed1fa30d30/adkwinpeaddons/adkwinpesetup.exe"}
     Dim adkDownloadSuccess As Boolean
 
     Private Sub ISOCreator_Load(sender As Object, e As EventArgs) Handles MyBase.Load

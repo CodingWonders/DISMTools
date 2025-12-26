@@ -2151,15 +2151,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''- When picking a starter script using the predefined collection, language highlighting is correctly selected now
-        '''- ADK detection has been refactored in both the main program and the PE Helper to detect ADK kits roots, as opposed to a registry value that is no longer added by ADK installers (thanks rayman95 on the My Digital Life forums for spotting)
-        '''- Certain windows that cause freezes when the program is closed are now closed automatically
+        '''-- Bugfixes
         '''
-        '''New features:
-        '''
-        '''- You can now access PXE Helper  [resto de la cadena truncado]&quot;;.
+        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
+        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
+        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
+        '''- Fixed a crash when opening the popup mounted image picker in some cases
+        '''- When picking a starter script using the predefined collection, language highlighting  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

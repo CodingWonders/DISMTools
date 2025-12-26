@@ -8,6 +8,7 @@
 	<a href="https://github.com/CodingWonders/DISMTools/releases/latest"><img src="https://img.shields.io/github/v/release/CodingWonders/DISMTools?display_name=release&label=Latest%20Version" /></a>
 	<a href="https://forums.mydigitallife.net/threads/dismtools.87263"><img src="https://img.shields.io/badge/MDL_Forums-blue" /></a>
 	<a href="https://reddit.com/r/DISMTools"><img src="https://img.shields.io/badge/Subreddit-orange?logo=reddit&logoColor=white" /></a>
+	<a href="https://discord.gg/hJJTrMNP5p"><img src="https://dcbadge.limes.pink/api/server/https://discord.gg/hJJTrMNP5p?theme=default-inverted&style=for-the-badge" /></a>
 </p>
 <hr>
 
@@ -237,7 +238,7 @@ If you want to grab a copy straight from the source code, follow these instructi
 4. Finally, go to "Build > Build solution", or press CTRL-Shift-B
 
 > [!NOTE]
-> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2022 build tools. Install, at least, the Community edition and the **MSVC v143- VS 2022 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
+> To build the Driver Installation Module project (`DT-DIM`) for ARM64 systems, you need the Visual Studio 2026 build tools. Install, at least, the Community edition and the **MSVC v145- VS 2026 C++ ARM64/ARM64EC Build Tools** component in the Visual Studio Installer.
 >
 > Simply searching for "MSVC" in the list of components can get you the necessary component.
 
@@ -274,11 +275,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 ## Testing the latest
 
-We continue the development of the next version in the Preview branch. To go to it, select "dt_preview" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
+We continue the development of the next version in the Preview branch. To go to it, select "dt_pre_0.7.2" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-<!-- However, if you want to download the latest release AS SOON AS the project is built with new changes, you can download the [nightly installer](https://github.com/CodingWonders/dt-nightly-installers/raw/refs/heads/main/dt_prerel_2582_relcndid/dt_setup.exe). -->
-
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.7, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.7.2, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 
