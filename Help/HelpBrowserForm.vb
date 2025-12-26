@@ -5,7 +5,6 @@ Public Class HelpBrowserForm
 
     Dim TitleMsg As String = ""
     Dim CurrentSite As String = ""
-    Dim DocTitle As String = ""
 
     Private Sub HelpBrowserForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -20,7 +19,7 @@ Public Class HelpBrowserForm
                     Case "PTB", "PTG"
                         TitleMsg = "Tópicos de ajuda do DISMTools"
                     Case "ITA"
-                        TitleMsg = "Argomenti della guida di DISMTools"
+                        TitleMsg = "Argomenti guida DISMTools"
                 End Select
             Case 1
                 TitleMsg = "DISMTools Help Topics"
@@ -31,11 +30,13 @@ Public Class HelpBrowserForm
             Case 4
                 TitleMsg = "Tópicos de ajuda do DISMTools"
             Case 5
-                TitleMsg = "Argomenti della guida di DISMTools"
+                TitleMsg = "Argomenti guida di DISMTools"
         End Select
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         Text = TitleMsg
+
+        TitleChangerTimer.Enabled = True
     End Sub
 
     Private Sub WebBrowser1_Navigated(sender As Object, e As WebBrowserNavigatedEventArgs) Handles WebBrowser1.Navigated
@@ -72,26 +73,20 @@ Public Class HelpBrowserForm
                     Case 5
                         languageCode = "it"
                 End Select
-
-                Process.Start(Path.Combine(Application.StartupPath, "docs", "tour", languageCode, "tour-start.html"))
+                
+                MainForm.tourServer.StartServer()
+                If MainForm.tourServer.IsListenerAlive() Then
+                    Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
+                    MainForm.TourActionsTSMI.Visible = True
+                End If
             End If
             WebBrowser1.Navigate(CurrentSite)
             Exit Sub
         End If
-        If File.Exists(e.Url.AbsoluteUri.Replace("file:///", "").Trim().Replace("/", "\").Trim().Replace("%20", " ").Trim() & "\index.html") Then
-            DynaLog.LogMessage("HTML exists in Absolute URI path. Navigating...")
-            WebBrowser1.Navigate(e.Url.AbsoluteUri & "\index.html")
-        ElseIf e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
+        If e.Url.AbsoluteUri.StartsWith("http", StringComparison.OrdinalIgnoreCase) Or e.Url.AbsoluteUri.StartsWith("ftp", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("Absolute URI points to an external website. Opening in default browser...")
             Process.Start(e.Url.AbsoluteUri)
             WebBrowser1.Navigate(CurrentSite)
-        End If
-        DynaLog.LogMessage("Document title: " & WebBrowser1.DocumentTitle)
-        If WebBrowser1.DocumentTitle = "" Then
-            Text = DocTitle & " - " & TitleMsg
-        Else
-            Text = WebBrowser1.DocumentTitle & " - " & TitleMsg
-            If e.Url.AbsoluteUri.StartsWith("file:///") Then DocTitle = WebBrowser1.DocumentTitle
         End If
         CurrentSite = e.Url.AbsoluteUri
     End Sub
@@ -101,5 +96,13 @@ Public Class HelpBrowserForm
             Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
             If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
+    End Sub
+
+    Private Sub TitleChangerTimer_Tick(sender As Object, e As EventArgs) Handles TitleChangerTimer.Tick
+        Text = String.Format("{0} -- {1}", WebBrowser1.DocumentTitle, TitleMsg)
+    End Sub
+
+    Private Sub HelpBrowserForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        TitleChangerTimer.Enabled = False
     End Sub
 End Class

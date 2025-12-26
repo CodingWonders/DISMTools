@@ -2,12 +2,12 @@
 //                                         .'^""""""^.            
 //      '^`'.                            '^"""""""^.              
 //     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-//      .^""""""`                      ^"""""""`                  | DISMTools 0.6.2                                       |
+//      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
 //       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 //         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 //            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Driver Installation Module (DIM)	      |
 //              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-//                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2025 CodingWonders Software                  |
+//                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
 //                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 //                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.        
 //                      .^""";_]]]?)}:^^""",,,`'````'..           
@@ -79,12 +79,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
     MONITORINFO monInfo = { sizeof(monInfo) };
     GetMonitorInfo(hMon, &monInfo);
 
-    int WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - 600) / 2;
+    int WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - 640) / 2;
     int WndY = monInfo.rcMonitor.top + ((monInfo.rcMonitor.bottom - monInfo.rcMonitor.top) - 400) / 2;
 
     HWND hwnd = CreateWindowEx(0, CLASS_NAME, L"Driver Installation Module", 
                                WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX),
-                               WndX, WndY, 600, 400, NULL, NULL, hInstance, NULL);
+                               WndX, WndY, 640, 400, NULL, NULL, hInstance, NULL);
 
     HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
     SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)icon);
@@ -105,7 +105,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    static HWND hwndList, hAddButton, hEditButton, hRemoveButton, hInstallButton, hExitButton, hInstructionLabel;
+    static HWND hwndList, hAddButton, hEditButton, hRemoveButton, hInstallButton, hExitButton, hAboutButton, hInstructionLabel;
 
     switch (uMsg) {
         case WM_CREATE: {
@@ -113,7 +113,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             hwndList = CreateWindow(WC_LISTVIEW, L"",
                                     WS_CHILD | WS_VISIBLE | LVS_REPORT,
-                                    10, 10, 560, 274, hwnd, (HMENU)IDC_DRIVER_LIST, NULL, NULL);
+                                    10, 10, 600, 274, hwnd, (HMENU)IDC_DRIVER_LIST, NULL, NULL);
 
             // Set some more styles
             DWORD lvStyles = ListView_GetExtendedListViewStyle(hwndList);
@@ -145,9 +145,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             hExitButton = CreateWindow(L"BUTTON", L"Exit", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
                                        450, 320, 100, 30, hwnd, (HMENU)IDC_EXIT_BUTTON, NULL, NULL);
 
+            hAboutButton = CreateWindow(L"BUTTON", L"i", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
+                                        560, 320, 48, 30, hwnd, (HMENU)IDC_ABOUT_BUTTON, NULL, NULL);
+
             hInstructionLabel = CreateWindowEx(WS_EX_TRANSPARENT, L"static", L"ST_U", 
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-                10, 298, 560, 16, hwnd, (HMENU)(501), (HINSTANCE)GetWindowLong(hwnd, GWLP_HINSTANCE), NULL);
+                10, 298, 600, 16, hwnd, (HMENU)(501), (HINSTANCE)GetWindowLong(hwnd, GWLP_HINSTANCE), NULL);
 
             UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_BEGIN);
 
@@ -239,6 +242,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     break;
                 case IDC_EXIT_BUTTON:
                     PostQuitMessage(0);
+                    break;
+                case IDC_ABOUT_BUTTON:
+                    wchar_t aboutMessageBuffer[512];
+                    swprintf(aboutMessageBuffer, 512, DIM_ABOUT_MESSAGE, DIM_VERSION);
+                    MessageBox(hwnd, aboutMessageBuffer, L"About the Driver Installation Module", MB_OK | MB_ICONINFORMATION);
                     break;
             }
             break;

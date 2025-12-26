@@ -554,6 +554,18 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca una cadena traducida similar a # Write your code here, or use one of the following buttons at the bottom of this window:
+        '''# - Use the Open Script button to load the contents of an existing script file.
+        '''# - To get started with our curated set of Starter Scripts, use the &quot;Import a predefined Starter Script&quot; button
+        '''# - To use a Starter Script that you may have created, use the &quot;Import a Starter script in file system&quot; button.
+        '''</summary>
+        Friend ReadOnly Property DefaultPostInstallScriptCode() As String
+            Get
+                Return ResourceManager.GetString("DefaultPostInstallScriptCode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property delete_imgindex() As System.Drawing.Bitmap
@@ -2041,6 +2053,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property tour_glyph_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("tour_glyph_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property tour_glyph_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("tour_glyph_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property umount_img() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("umount_img", resourceCulture)
@@ -2123,14 +2155,11 @@ Namespace My.Resources
         '''
         '''-- Bugfixes
         '''
-        '''- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
-        '''- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
-        '''- Fixed an issue in the ADDS domain join wizard regarding user name validation
-        '''
-        '''-- New features
-        '''
-        '''- A new autorun window has been added to allow you to access the items you want more easily
-        '''- A new tool designed to prepare computers for Sysprep generaliz [resto de la cadena truncado]&quot;;.
+        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
+        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
+        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
+        '''- Fixed a crash when opening the popup mounted image picker in some cases
+        '''- When picking a starter script using the predefined collection, language highlighting  [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

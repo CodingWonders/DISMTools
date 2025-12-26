@@ -1,0 +1,72 @@
+FOG Helper Server for Unix-based systems -- Usage Information
+
+The FOG Helper Server (FOGHS) is designed for both Windows and Unix (Linux) systems. To
+run the FOGHS on a Windows system, a Linux server needs to be set up with FOG installed.
+
+To run the FOGHS on a Linux system, the following requirements need to be met:
+
+- A recent version of a Linux distribution with support for PowerShell 7. Examples of 
+  such distributions are:
+    - Debian
+    - Ubuntu
+    - Red Hat Enterprise Linux (RHEL)    
+    Additional distributions may be supported by PowerShell 7 as part of community-provided
+    packages. Refer to the documentation provided by your distribution for more information
+    regarding compatibility.
+
+To run FOG, you will need to install MariaDB. If you haven't installed FOG, the installation
+steps provided at https://wiki.fogproject.org/wiki/index.php?title=Installation#Installer
+can help you get started.
+
+-- Running FOGHS on a Linux server
+
+The ISO files that you create with this program contain a Bash script that lets you quickly
+invoke the FOGHS. This script should have the execute permission set up in its permissions list for
+everyone (all users and groups).
+
+    EXPECTED PERMISSIONS FOR FOGHS LAUNCHER SCRIPT: r-xr-xr-x (555)
+
+To verify the permissions of the FOGHS launcher script, invoke stat:
+
+    `stat start_foghs_unix.sh`
+
+If the script does NOT have an execute permission set up, you need to do the following first before
+running it, depending on where the script comes from:
+
+- If the script comes from writable media:
+    Run `chmod +x ./start_foghs_unix.sh`
+- If the script comes from **read-only** media, such as CD/DVD-ROM:
+    You will need to copy the required files for FOGHS to your local disk. Follow these steps:
+	
+	1. Create a folder in which you'll store the FOGHS on a writable volume. For example:
+	                    `mkdir <path>/foghs`
+	2. Copy the launcher script to that path:
+	                    `cp ./start_foghs_unix.sh <path>/foghs`
+	3. Create subdirectories for the FOG Helper components:
+	                    `mkdir -p <path>/foghs/pxehelpers/fog`
+	4. Copy every component of the FOG Helper from the source media into the recently created
+	   folder:
+	                    `cp ./pxehelpers/fog/*.ps1 <path>/foghs/pxehelpers/fog`
+	5. Set the execute permission:
+	                    `chmod +x <path>/foghs/start_foghs_unix.sh`
+
+This will add the execute permission.
+
+After verifying that the execute permission is present in the launcher script, launch it:
+
+                `./start_foghs_unix.sh`
+
+The script will verify if PowerShell is installed on your system, as well as any systemd service
+units related to both FOG and MariaDB. If all goes well, the server will come up in a few
+seconds.
+
+-- Report feedback
+
+Help us improve your experience when using the FOGHS on Unix systems by reporting feedback.
+
+Any issues regarding interactivity with the FOG API can be reported here: 
+
+    https://github.com/darksidemilk/FogApi
+	
+Other issues (such as start issues caused by the launcher script) can be reported in the
+DISMTools repository.

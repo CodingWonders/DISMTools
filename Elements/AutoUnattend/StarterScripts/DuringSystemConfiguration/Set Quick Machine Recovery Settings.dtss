@@ -1,4 +1,6 @@
 ﻿Language: Batch
+Name: Set Quick Machine Recovery (QMR) settings
+Description: This script configures a target system's Quick Machine Recovery settings on Windows 11 24H2 and later.
 
 @echo off
 REM This script configures Quick Machine Recovery (QMR) settings. QMR is a new recovery
@@ -35,6 +37,14 @@ IF NOT DEFINED QMR_AutoRemediation (SET QMR_AutoRemediation=0)
 IF NOT DEFINED QMR_NextCheckMinutes (SET QMR_NextCheckMinutes=30)
 IF NOT DEFINED QMR_NextRebootHours (SET QMR_NextRebootHours=72)
 IF NOT DEFINED QMR_Headless (SET QMR_Headless=0)
+
+REM do some value checking - for boolean values, if value greater than 1, make it 1; otherwise, make it 0
+REM                        - for integer values, if value lower than 0, get absolute value
+IF %QMR_CloudRemediation% GTR 1 (SET QMR_CloudRemediation=1) ELSE IF %QMR_CloudRemediation% LSS 0 (SET QMR_CloudRemediation=0)
+IF %QMR_AutoRemediation% GTR 1 (SET QMR_AutoRemediation=1) ELSE IF %QMR_AutoRemediation% LSS 0 (SET QMR_AutoRemediation=0)
+IF %QMR_NextCheckMinutes% LSS 0 (SET /A QMR_NextCheckMinutes=-%QMR_NextCheckMinutes% >nul)
+IF %QMR_NextRebootHours% LSS 0 (SET /A QMR_NextRebootHours=-%QMR_NextRebootHours% >nul)
+IF %QMR_Headless% GTR 1 (SET QMR_Headless=1) ELSE IF %QMR_Headless% LSS 0 (SET QMR_Headless=0)
 
 REM convert hours to minutes since reagentc xml expects minutes and not hours
 SET /A QMR_NextRebootMinutes=%QMR_NextRebootHours% * 60 >nul

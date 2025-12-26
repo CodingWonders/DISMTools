@@ -80,11 +80,11 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.43.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.43.0\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.44.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.0.44.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.3.3.12\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.4.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Core, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
       <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Core.dll</HintPath>
@@ -107,14 +107,14 @@
     <Reference Include="PresentationFramework">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Scintilla.NET, Version=6.0.1.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
-      <HintPath>packages\Scintilla5.NET.6.0.1\lib\net462\Scintilla.NET.dll</HintPath>
+    <Reference Include="Scintilla.NET, Version=6.1.1.0, Culture=neutral, PublicKeyToken=0221e70ba618311e, processorArchitecture=MSIL">
+      <HintPath>packages\Scintilla5.NET.6.1.1\lib\net462\Scintilla.NET.dll</HintPath>
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition">
       <Private>True</Private>
@@ -141,8 +141,8 @@
     <Reference Include="System.Management">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Memory, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
@@ -152,16 +152,16 @@
     <Reference Include="System.Numerics">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
@@ -236,6 +236,7 @@
     <Compile Include="Elements\AutoUnattend\NetworkConnections\WirelessSettings.vb" />
     <Compile Include="Elements\AutoUnattend\ProductKey\ProductKey.vb" />
     <Compile Include="Elements\AutoUnattend\Scripts\PostInstallScript.vb" />
+    <Compile Include="Elements\AutoUnattend\StarterScripts\StarterScript.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\ComputerName.vb" />
     <Compile Include="Elements\AutoUnattend\SysConfig\SVSettings.vb" />
     <Compile Include="Elements\AutoUnattend\Telemetry\SystemTelemetry.vb" />
@@ -255,6 +256,7 @@
     <Compile Include="Elements\ServiceManagement\NTSecurityPrivilegeConstant.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsService.vb" />
     <Compile Include="Elements\ServiceManagement\WindowsServiceHelper.vb" />
+    <Compile Include="Elements\ServiceManagement\WindowsServiceHostGroup.vb" />
     <Compile Include="Elements\WindowsRegistry\RegistryItem.vb" />
     <Compile Include="Help\HelpBrowserForm.Designer.vb">
       <DependentUpon>HelpBrowserForm.vb</DependentUpon>
@@ -682,6 +684,12 @@
     <Compile Include="Panels\Img_Ops\Registry\RegistryControlPanel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.Designer.vb">
+      <DependentUpon>RegisteredServiceHostGroupsDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Services\ServiceManagementForm.Designer.vb">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
     </Compile>
@@ -851,6 +859,12 @@
     <Compile Include="Panels\Unattend_Files\Addition\NewUnattendWiz.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.Designer.vb">
+      <DependentUpon>SampleScriptBrowser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Unattend_Files\Management\UnattendMgr.Designer.vb">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </Compile>
@@ -882,6 +896,9 @@
     <Compile Include="Utilities\ThemeUtilities\ColorTables\LightModeColorTable.vb" />
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
+    <Compile Include="Utilities\TourServer.vb" />
+    <Compile Include="Utilities\WebSearchUtilities\SearchEngine.vb" />
+    <Compile Include="Utilities\WebSearchUtilities\SearchEngineHelper.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
     <Compile Include="Utilities\WMIHelper.vb" />
     <Compile Include="Videos\Video.vb" />
@@ -1100,6 +1117,9 @@
     <EmbeddedResource Include="Panels\Img_Ops\Registry\RegistryControlPanel.resx">
       <DependentUpon>RegistryControlPanel.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Services\RegisteredServiceHostGroupsDialog.resx">
+      <DependentUpon>RegisteredServiceHostGroupsDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Services\ServiceManagementForm.resx">
       <DependentUpon>ServiceManagementForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1184,6 +1204,9 @@
     <EmbeddedResource Include="Panels\Unattend_Files\Addition\NewUnattendWiz.resx">
       <DependentUpon>NewUnattendWiz.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Unattend_Files\Addition\SampleScriptBrowser.resx">
+      <DependentUpon>SampleScriptBrowser.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Panels\Unattend_Files\Management\UnattendMgr.resx">
       <DependentUpon>UnattendMgr.vb</DependentUpon>
     </EmbeddedResource>
@@ -1213,8 +1236,10 @@
     <None Include="docs\search\search_index.json" />
     <None Include="docs\sitemap.xml.gz" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Configure Git folders for File Explorer.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set Registered Owner and Organization Information.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set Personalization Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Update Microsoft Store Apps.dtss" />
@@ -1253,6 +1278,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE_Inventory.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
@@ -1516,6 +1544,9 @@
     <Content Include="Helpers\extps1\PE_Helper\files\README1ST.TXT">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Helpers\extps1\PE_Helper\pxehelpers\fog\foghs_unix_notes.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Helpers\extps1\PE_Helper\tools\DIM\aarch64\DT-DIM.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1551,6 +1582,8 @@
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
+    <None Include="Resources\menus\tour_glyph_dark.png" />
+    <None Include="Resources\menus\tour_glyph_light.png" />
     <Content Include="Tools\UnattendGen\win-arm64\Library-License.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\LICENSE.txt" />
     <Content Include="Tools\UnattendGen\win-arm64\Newtonsoft.Json.dll" />
@@ -2102,13 +2135,6 @@ IF EXIST tools (
 
 IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.0.1\build\scintilla5.net.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -2116,4 +2142,11 @@ IF EXIST "report.html" (del "report.html")</PreBuildEvent>
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets" Condition="Exists('packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Scintilla5.NET.6.1.1\build\scintilla5.net.targets'))" />
+  </Target>
 </Project>

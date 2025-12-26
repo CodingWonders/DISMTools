@@ -4,12 +4,12 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for UNIX Servers |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025 CodingWonders Software                       |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -114,7 +114,7 @@ function Get-FogHosts {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7.1"
+$version = "0.7.2"
 
 Clear-Host
 
@@ -126,7 +126,7 @@ if ($env:TEMP -eq $null) {
 Start-Transcript -Path "$env:TEMP/DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - FOG Helper Server API (UNIX Systems)"
-Write-Host "(c) 2025. CodingWonders Software"
+Write-Host "(c) 2025-2026. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
@@ -138,6 +138,17 @@ if ([Environment]::OSVersion.Platform -ne "Unix") {
 if ($env:NOFWRULESETUP -ne $null) {
     Write-LogMessage -message "Firewall rules may have been set up externally. We don't have to set them up."
     $noFirewallSetup = $true
+}
+
+# Detect FOG and MariaDB systemd units
+if ((Get-ChildItem -Path "/usr/lib/systemd/system/FOG*.service" -ErrorAction SilentlyContinue).Count -le 0) {
+    Write-LogMessage -message "FOG systemd service units not detected. FOG service is not installed!"
+    return $false
+}
+
+if ((Test-Path -Path "/usr/lib/systemd/system/mariadb.service" -PathType Leaf) -eq $false) {
+    Write-LogMessage -message "MariaDB systemd service unit not detected. Database service is not installed!"
+    return $false
 }
 
 if ((Invoke-FogModuleAvailabilityPreparation) -eq $false) {
@@ -418,7 +429,7 @@ try {
                             <button onclick="invokeLogViewer()">View Server Logs</button>
                             <button onclick="window.location.reload();">Refresh Page</button>
                             Other actions exposed by the API can only be called by clients.
-                            <p align="right"><i>&copy; 2025. <a href="https://github.com/CodingWonders" target="_blank">CodingWonders Software</a></i></p>
+                            <p align="right"><i>&copy; 2025-2026. <a href="https://github.com/CodingWonders" target="_blank">CodingWonders Software</a></i></p>
                         </div>
 
                         <script>

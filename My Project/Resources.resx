@@ -985,49 +985,66 @@ GPT ATTRIBUTES=0x8000000000000001</value>
 
 -- Bugfixes
 
-- Guards have been added to all PE Helper scripts to prevent running them on non-Windows platforms
-- The DNS address syntax parser of the Active Directory domain join wizard now parses scoped IPv6 addresses correctly
-- Fixed an issue in the ADDS domain join wizard regarding user name validation
+- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
+- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
+- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
+- Fixed a crash when opening the popup mounted image picker in some cases
+- When picking a starter script using the predefined collection, language highlighting is correctly selected now
+- ADK detection has been refactored in both the main program and the PE Helper to detect ADK kits roots, as opposed to a registry value that is no longer added by ADK installers (thanks rayman95 on the My Digital Life forums for spotting)
+- Certain windows that cause freezes when the program is closed are now closed automatically
 
 -- New features
 
-- A new autorun window has been added to allow you to access the items you want more easily
-- A new tool designed to prepare computers for Sysprep generalization has been added, called the Sysprep Preparation Tool
-- Some of the PE Helper's settings now persist
-- A new PXE Helper has been added to add support for FOG, the server component of which supports both Windows and UNIX
-- The PXE Helpers main menu now detects network adapters and offers you the ability to install new network adapters by leveraging the Driver Installation Module (DIM)
-- The representation of PXE Helper providers has been slightly improved
-- The PXE Helpers now support IPv6 server addresses
-- The PXE Helpers can now reconnect to the server up to a maximum of 5 attempts
-- COMMAND-LINE ONLY: the PE Helper now supports external temporary directories
-- The WDS Helper now supports cleaning up files by independent session GUIDs
-- You can now specify the initial user to join an Active Directory domain with more easily
-- When selecting a user, DISMTools will now check if the account is disabled and will show a warning if it is
+- HotInstall has received DynaLog logging
+- The PE Helper will now call OSCDIMG more times if it fails to create the ISO file
+- The Sysprep Preparation Tool has been updated to version 0.7.2
+- The PE Helper now introduces a computer inventory framework that lets you view information about your system, for issue reporting
+- You can now access PXE Helper Servers more quickly from the Tools menu
+- Notes are now included for the FOG Helper Server on UNIX
+- The FOG Helper Server for UNIX now checks presence of FOG and MariaDB systemd service units
+- DISMTools will now warn you when you create ISO files with UEFI CA 2023 support on a system that does not offer such support
+- The PE Helper now adds the WDS Tools optional component to the Preinstallation Environment
+- The image capture script in the DISMTools Preinstallation Environment now lets you launch the Driver Installation Module to load disk controllers, and the WDS image capture wizard to capture your installations for a WDS instance
+- Several improvements were made to the WDS Helper:
+  - The WDS Helper now displays a warning when it's loaded on non-PXE environments
+  - The WDS Helper can now get the IP addresses of the PXE client and the PXE server. You can default to using the server's IP address and the default port as well
+  - The WDS Helper now validates more information when authenticating with the server
 - UnattendGen has been updated to the latest version
-- Batch scripts are now added as is, without wrappers (thanks @cschneegans for suggesting). Multiple scripts per stage can now be added as well. Editor syntax highlighting is also dynamically adjusted based on the language
-- For those who are just getting started with unattended answer files, we have included starter scripts that you can use in your target installation
-- A new tool has been added to view and manage the services of the Windows image
-- You can now remove multiple AppX packages from the addition queue in bulk
-- A new tool has been added to view the environment variables of the Windows image
-- DISMTools will now attempt to remove read-only flags from the image to mount if it had been copied to read-write locations with that flag set
-- The Inno Setup component has been updated to version 6.5.3
-- DISMTools is now DPI-aware on Windows 10 and 11 (#290, thanks @Clin1234)
-- Markdig has been updated to version 0.43.0
+- Self-contained copies of UnattendGen that are older or newer than the expected version will now be removed automatically
+- The Starter Script format now contains name and description fields. Scripts have been updated to offer such fields
+- You can now preview starter scripts before loading them with the new Starter Script browser
+- "Set Quick Machine Recovery Settings" has been modified to add value checking
+- "Enable Verbose Status Messages" has been introduced
+- "Disable Windows Notification Sources" has been modified to block Copilot notifications
+- "Configure folders for Git integration" has been introduced
+- "Set a custom wallpaper" has been modified to move wallpaper path to a variable
+- A product key can now be determined automatically by the wizard based on the edition of the mounted Windows image
+- Web Search engines are now configurable
+- Feature and capability image information dialogs now have links to search for specific items online, using your preferred search engine
+- DynaLog now removes log archives more than a month old
+- The Italian tour has been updated to point to Italian tour videos
+- You can now view service groups
+- You can now view the groups registered in the image's service host
+- Several improvements were made to Italian translations (#294, #296, #298, #301, #307; thanks @bovirus)
+- CODE: web search functionality has been modularized
+- Tinted color themes are now available
+- Inno Setup has been updated to version 6.6
+- The RTF version of the GPLv3 license is now used
+- The installer window size has been increased
+- The popup mounted image picker now loads at the center of the parent window to avoid showing either partially or out of screen bounds
+- The Managed DISM API has been updated to version 4.0.0
+- Scintilla.NET has been updated to 6.1.1
+- Markdig has been updated to 0.44.0
 
 Changes made since last preview:
 
--- Bugfixes
-
-- Fixed an issue where the start script for the UNIX version of the FOG Helper Server would not start due to Windows line endings
-- Some starter scripts have had their registry addition procedures fixed to prevent issues
-
 -- New features
 
-- The Environment Variable Manager can now fully modify environment variables
-- The FOG Helper now determines OS platform when connecting to a server
-- Feature update detection support has been added for Germanium 25H2 builds
-- The DISMTools Tour is now multi-lingual, in both text and video forms, supporting the 5 program languages
-- The Help documentation has been updated</value>
+- The ISO creator now downloads and installs the latest ADKs (10.1.28000.1)
+- The revamped ADK detection procedure has been ported to the Extensibility Suite
+- The image capture script now lets you capture Windows images for local installations to a mapped network share (#313, thanks @Real-MullaC)
+- CODE: The Driver Installation Module has been retargeted to MSVC v145/VS2026
+- A link to the new CWSOFTWARE Discord server has been added to the Help menu (yes there's one now, #317, thanks @Real-MullaC)</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1076,5 +1093,17 @@ Changes made since last preview:
   </data>
   <data name="envvar_pic_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\envvar_pic_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tour_glyph_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\tour_glyph_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tour_glyph_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\menus\tour_glyph_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DefaultPostInstallScriptCode" xml:space="preserve">
+    <value># Write your code here, or use one of the following buttons at the bottom of this window:
+# - Use the Open Script button to load the contents of an existing script file.
+# - To get started with our curated set of Starter Scripts, use the "Import a predefined Starter Script" button
+# - To use a Starter Script that you may have created, use the "Import a Starter script in file system" button</value>
   </data>
 </root>

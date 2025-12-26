@@ -366,6 +366,7 @@ Module WindowsServiceHelper
                         serviceDisplayName As String = "",
                         serviceDescription As String = "",
                         serviceObjectName As String = "",
+                        serviceGroupName As String = "",
                         serviceStartType As WindowsService.ServiceStartType = WindowsService.ServiceStartType.Unknown,
                         serviceDelayedStart As Boolean = False,
                         serviceType As WindowsService.ServiceType = WindowsService.ServiceType.Unknown,
@@ -411,6 +412,7 @@ Module WindowsServiceHelper
                             serviceDescription = ResolveIndirectString(serviceDescription)
                         End If
                         serviceObjectName = ServiceInfoRk.GetValue("ObjectName", "")
+                        serviceGroupName = ServiceInfoRk.GetValue("Group", "")
                         serviceStartType = ServiceInfoRk.GetValue("Start", -1)
                         serviceDelayedStart = (ServiceInfoRk.GetValue("DelayedAutoStart", 0) = 1)
                         serviceType = ServiceInfoRk.GetValue("Type", -1)
@@ -443,6 +445,7 @@ Module WindowsServiceHelper
                                                            serviceDescription,
                                                            serviceObjectName,
                                                            serviceImagePath,
+                                                           serviceGroupName,
                                                            serviceStartType,
                                                            serviceDelayedStart,
                                                            serviceType,
@@ -571,7 +574,6 @@ Module WindowsServiceHelper
                     RegistryHelper.AddRegistryItem(New RegistryItem(registryPath, "DelayedAutoStart", RegistryItem.ValueType.RegDword, If(Service.DelayedStart, 1, 0)))
                 End If
                 If reportProgress IsNot Nothing Then reportProgress.Invoke(currentService, serviceCount)
-                ServiceManagementForm.ReportServiceSave(currentService, serviceCount)
             Next
             DynaLog.EnableLogging()
 
@@ -601,6 +603,40 @@ Module WindowsServiceHelper
         Next
 
         Return Convert.ToInt32(binary, 2)
+    End Function
+
+    Public Function GetSvchostGroups(MountDir As String, ServiceList As List(Of WindowsService)) As List(Of WindowsServiceHostGroup)
+        Dim svchostGroups As New List(Of WindowsServiceHostGroup)
+
+        Dim svchostGroupValues As String() = New String() {}
+        Dim svchostGroupMappingDictionary As New Dictionary(Of String, String())
+
+        ' First we get the registered service groups in svchost (HKLM\Software\Microsoft\Windows NT\CurrentVersion\Svchost)
+        If RegistryHelper.LoadRegistryHive(Path.Combine(MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\zSOFTWARE") = 0 Then
+            Dim svchostGroupsRk As RegistryKey = Registry.LocalMachine.OpenSubKey("zSOFTWARE\Microsoft\Windows NT\CurrentVersion\Svchost", False)
+            svchostGroupValues = svchostGroupsRk.GetValueNames()
+
+            For Each svchostGroupValue In svchostGroupValues
+                ' we map them so we can iterate through the multiline values later
+                svchostGroupMappingDictionary.Add(svchostGroupValue, svchostGroupsRk.GetValue(svchostGroupValue))
+            Next
+
+            svchostGroupsRk.Close()
+            RegistryHelper.UnloadRegistryHive("HKLM\zSOFTWARE")
+        End If
+
+        ' We iterate through all the keys and filter the service list accordingly
+        For Each key In svchostGroupMappingDictionary.Keys
+            Dim filteredServices As New List(Of WindowsService)
+
+            For Each serviceValue In svchostGroupMappingDictionary(key)
+                filteredServices.Add(ServiceList.FirstOrDefault(Function(service) service.Name.Equals(serviceValue, StringComparison.InvariantCultureIgnoreCase)))
+            Next
+
+            svchostGroups.Add(New WindowsServiceHostGroup(key, filteredServices.Where(Function(service) service IsNot Nothing).ToList()))
+        Next
+
+        Return svchostGroups
     End Function
 
 End Module

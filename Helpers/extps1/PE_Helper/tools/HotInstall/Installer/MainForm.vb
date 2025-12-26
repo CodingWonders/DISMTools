@@ -91,16 +91,37 @@ Public Class MainForm
         GetImgInfoBtn.Text = GetValueFromLanguageData("MainForm.GetImageInformationButton")
     End Sub
 
+    Function GetCopyrightTimespan(ByVal start As Integer, ByVal current As Integer) As String
+        If current <= start Then
+            Return current.ToString()
+        Else
+            Return start.ToString() & "-" & current.ToString()
+        End If
+    End Function
+
+    Sub InitDynaLog()
+        DynaLog.LogMessage("HotInstall - Version " & My.Application.Info.Version.ToString() & ", build timestamp: " & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
+        ' Display copyright/author information for every component
+        DynaLog.LogMessage("Components:")
+        DynaLog.LogMessage("- Program: " & My.Application.Info.Copyright.Replace("©", "(c)"))
+        DynaLog.LogMessage("- ManagedDism: (c) " & GetCopyrightTimespan(2016, 2016) & " Jeff Kluge")
+        DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
+        DynaLog.BeginLogging()
+    End Sub
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        InitDynaLog()
         Visible = False
         ChangeLanguage(My.Computer.Info.InstalledUICulture.TwoLetterISOLanguageName)
 
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
+            DynaLog.LogMessage("Windows 7 or an earlier version has been detected on this system. Program incompatible -- aborting any future procedures!")
             Throw New Exception(GetValueFromLanguageData("MainForm.Win7IncompatibilityError"))
         End If
         ' Check if the account has the required privileges
         If Not My.User.IsInRole(ApplicationServices.BuiltInRole.Administrator) Then
+            DynaLog.LogMessage("This user is not part of the Administrators group/role -- aborting any future procedures!")
             Throw New Exception(GetValueFromLanguageData("MainForm.NonAdminError"))
         End If
 
@@ -275,6 +296,8 @@ Public Class MainForm
     ''' <returns>A validation result</returns>
     ''' <remarks></remarks>
     Function VerifyOptionsInPage(WizardPage As WizardPage.Page) As Boolean
+        DynaLog.LogMessage("Verifying user options before moving on to next page...")
+        DynaLog.LogMessage("Page in which we need to verify user settings: " & WizardPage.ToString())
         Select Case WizardPage
             Case Installer.WizardPage.Page.DisclaimerPage
                 If Not CheckBox1.Checked Then
@@ -300,6 +323,9 @@ Public Class MainForm
     ''' <param name="Force">(Optional) Determines whether or not to skip checks</param>
     ''' <remarks></remarks>
     Sub ChangePage(NewPage As WizardPage.Page, Optional Force As Boolean = False)
+        DynaLog.LogMessage("Changing current page of the wizard...")
+        DynaLog.LogMessage("- New page to load: " & NewPage.ToString())
+        DynaLog.LogMessage("- Force page switch? " & If(Force, "Yes", "No"))
         If NewPage > CurrentWizardPage.InstallerWizardPage AndAlso VerifyInPages.Contains(CurrentWizardPage.InstallerWizardPage) AndAlso Not Force Then
             If Not VerifyOptionsInPage(CurrentWizardPage.InstallerWizardPage) Then Exit Sub
         End If
@@ -349,23 +375,30 @@ Public Class MainForm
     ''' <returns>An image information collection</returns>
     ''' <remarks></remarks>
     Public Function GetImageInformation(WindowsImage As String) As DismImageInfoCollection
+        DynaLog.LogMessage("Getting Windows image information...")
+        DynaLog.LogMessage("- Image Path: " & WindowsImage)
+
+        Dim imgInfoCollection As DismImageInfoCollection = Nothing
+
         Try
             DismApi.Initialize(DismLogLevel.LogErrors)
             If File.Exists(WindowsImage) Then
-                Return DismApi.GetImageInfo(WindowsImage)
+                DynaLog.LogMessage("Preparing to initialize API and get image info")
+                imgInfoCollection = DismApi.GetImageInfo(WindowsImage)
             Else
                 Throw New Exception(String.Format(GetValueFromLanguageData("MainForm.GetImageInfo_FileDoesNotExistError"), WindowsImage), New Win32Exception(2))
             End If
         Catch ex As Exception
             Throw
         Finally
+            DynaLog.LogMessage("Shutting down API...")
             Try
                 DismApi.Shutdown()
             Catch ex As Exception
                 ' Do nothing
             End Try
         End Try
-        Return Nothing
+        Return imgInfoCollection
     End Function
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -385,6 +418,8 @@ Public Class MainForm
         Catch ex As Exception
 
         End Try
+        DynaLog.LogMessage("We Are Done")
+        DynaLog.EndLogging()
     End Sub
 
     Private Sub SlideshowTimer_Tick(sender As Object, e As EventArgs) Handles SlideshowTimer.Tick
@@ -408,8 +443,13 @@ Public Class MainForm
     ''' <param name="ExcludedFile">The file to exclude from the copy process</param>
     ''' <remarks></remarks>
     Sub CopyFiles(Source As String, Destination As String, Optional ExcludedFile As String = "")
+        DynaLog.LogMessage("Preparing to copy files and directories...")
+        DynaLog.LogMessage("- Source Directory: " & Source)
+        DynaLog.LogMessage("- Destination Directory: " & Destination)
+        DynaLog.LogMessage("- Excluded File: " & ExcludedFile)
         Try
             If Not Directory.Exists(Destination) Then
+                DynaLog.LogMessage("Destination does not exist. Creating...")
                 Directory.CreateDirectory(Destination)
             End If
             Dim FileCount As Integer = Directory.GetFiles(Source, "*", SearchOption.AllDirectories).Count
@@ -418,6 +458,7 @@ Public Class MainForm
             Dim SourceRoot As String = Path.GetFullPath(Source).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
             Dim DestinationRoot As String = Path.GetFullPath(Destination).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
 
+            DynaLog.LogMessage("Creating directories...")
             For Each DirToCreate In Directory.GetDirectories(Source, "*", SearchOption.AllDirectories)
                 Dim sourcePath As String = DirToCreate.Substring(SourceRoot.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                 Dim destinationPath As String = Path.Combine(DestinationRoot, sourcePath)
@@ -426,6 +467,7 @@ Public Class MainForm
                 End If
             Next
 
+            DynaLog.LogMessage("Copying files to each directory...")
             For Each FileToCopy In Directory.GetFiles(Source, "*", SearchOption.AllDirectories)
                 ProgressMessage = String.Format(GetValueFromLanguageData("MainForm.CopyFiles_ProgressMessage"), CopiedFiles, FileCount)
                 InstallerBW.ReportProgress(5)
@@ -440,6 +482,7 @@ Public Class MainForm
                 File.SetAttributes(destinationPath, FileAttributes.Archive)
             Next
         Catch ex As Exception
+            DynaLog.LogMessage("Could not copy files. Error message: " & ex.Message)
             Throw
         End Try
     End Sub
@@ -454,13 +497,21 @@ Public Class MainForm
     ''' <param name="Commit">(Optional) Determines whether or not to save changes</param>
     ''' <remarks>If Mount is true, an index must be specified.</remarks>
     Sub UseWindowsImage(ImageFile As String, MountDirectory As String, Optional Index As Integer = 0, Optional Mount As Boolean = False, Optional Commit As Boolean = False)
+        DynaLog.LogMessage("Preparing to perform operations with Windows images...")
+        DynaLog.LogMessage("- Image File: " & ImageFile)
+        DynaLog.LogMessage("- Mount Directory: " & MountDirectory)
+        DynaLog.LogMessage("- Index: " & Index)
+        DynaLog.LogMessage("- Perform mount operation? " & If(Mount, "Yes", "No, unmount image"))
+        DynaLog.LogMessage("- Commit changes (unmount only)? " & If(Commit, "Yes", "No, either not unmounting or unmounting without the changes"))
         ' Check if things exist
         If Not File.Exists(ImageFile) Then Throw New Exception(String.Format(GetValueFromLanguageData("MainForm.GetImageInfo_FileDoesNotExistError"), ImageFile))
         Try
             If Not Directory.Exists(MountDirectory) Then
+                DynaLog.LogMessage("Destination mount dir does not exist. Creating...")
                 Directory.CreateDirectory(MountDirectory)
             End If
         Catch ex As Exception
+            DynaLog.LogMessage("Could not create mount directory. Error message: " & ex.Message)
             Throw
         End Try
 
@@ -473,25 +524,30 @@ Public Class MainForm
 
         ' Proceed with the DISM operation
         Try
+            DynaLog.LogMessage("Initializing API...")
             DismApi.Initialize(DismLogLevel.LogErrors)
             If Mount Then
                 If Index <= 0 Then
                     Throw New Exception(GetValueFromLanguageData("MainForm.UseWindowsImage_Mount_IndexLT1"))
                 End If
+                DynaLog.LogMessage("Mounting image...")
                 DismApi.MountImage(ImageFile, MountDirectory, Index, False, Sub(progress As DismProgress)
                                                                                 If progress.Current > 100 Then Exit Sub
                                                                                 DismProgressPercentage = progress.Current
                                                                                 ProgressMessage = MountString & " (" & DismProgressPercentage & "%)"
                                                                                 Dim newProgress As Integer = ProgressInitialValue + CInt((ProgressMaximumValue - ProgressInitialValue) * progress.Current / 100)
+                                                                                DynaLog.LogMessage("Mount operation progress: " & progress.Current & "% -- reporting progress " & newProgress & "%")
                                                                                 If newProgress > 100 Then Exit Sub
                                                                                 InstallerBW.ReportProgress(newProgress)
                                                                             End Sub)
             Else
+                DynaLog.LogMessage("Unmounting image...")
                 DismApi.UnmountImage(MountDirectory, Commit, Sub(progress As DismProgress)
                                                                  If (progress.Current / 2) > 100 Then Exit Sub
                                                                  DismProgressPercentage = progress.Current / 2
                                                                  ProgressMessage = UnmountString & " (" & DismProgressPercentage & "%)"
                                                                  Dim newProgress As Integer = ProgressInitialValue + CInt((ProgressMaximumValue - ProgressInitialValue) * (progress.Current / 2) / 100)
+                                                                 DynaLog.LogMessage("Unmount operation progress - reported by API: " & progress.Current & "% - actual progress: " & (progress.Current / 2) & "% -- reporting progress " & newProgress & "%")
                                                                  If newProgress > 100 Then Exit Sub
                                                                  InstallerBW.ReportProgress(newProgress)
                                                              End Sub)
@@ -500,6 +556,7 @@ Public Class MainForm
             Throw
         Finally
             Try
+                DynaLog.LogMessage("Shutting down API...")
                 DismApi.Shutdown()
             Catch ex As Exception
                 ' Don't do anything
@@ -514,6 +571,9 @@ Public Class MainForm
     ''' <param name="DontWorryBeHappy">(Optional) Determines whether or not to throw an exception if the process exits with a code different from 0</param>
     ''' <remarks>Arguments need to be passed. Otherwise, BCDEdit will simply return a basic list of entries on the BCD</remarks>
     Public Sub RunBCDConfigurator(Arguments As String, Optional DontWorryBeHappy As Boolean = False)
+        DynaLog.LogMessage("Preparing to modify boot configuration data...")
+        DynaLog.LogMessage("- Arguments: " & Arguments)
+        DynaLog.LogMessage("- Ignore error messages? " & If(DontWorryBeHappy, "Yes", "No"))
         Try
             BCDEditProcess.StartInfo.Arguments = Arguments
             BCDEditProcess.Start()
@@ -539,13 +599,15 @@ Public Class MainForm
             ' Configure bootmgr to use legacy view
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_Preparation")
             InstallerBW.ReportProgress(20)
-            RunBCDConfigurator("/set {default} bootmenupolicy legacy")
-            RunBCDConfigurator("/set {current} bootmenupolicy legacy")
-            RunBCDConfigurator("/set {bootmgr} timeout 3")
+            DynaLog.LogMessage("Configuring legacy BOOTMGR mode...")
+            RunBCDConfigurator("/set {default} bootmenupolicy legacy", True)
+            RunBCDConfigurator("/set {current} bootmenupolicy legacy", True)
+            RunBCDConfigurator("/set {bootmgr} timeout 3", True)
 
             ' Configure RAMDisk Settings
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_RAMDiskConfig")
             InstallerBW.ReportProgress(25)
+            DynaLog.LogMessage("Creating RAMDISK drive for WinPE...")
             RunBCDConfigurator("/create {ramdiskoptions}", True)
             RunBCDConfigurator("/set {ramdiskoptions} ramdisksdidevice partition=" & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim())
             RunBCDConfigurator("/set {ramdiskoptions} ramdisksdipath \$DISMTOOLS.~BT\Boot\Boot.sdi")
@@ -553,6 +615,7 @@ Public Class MainForm
             ' Create BCD Entry and grab GUID
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_BootEntryCreate")
             InstallerBW.ReportProgress(30)
+            DynaLog.LogMessage("Creating boot entry in BCD...")
             BCDEditProcess.StartInfo.Arguments = "/create /d " & Quote & BootMgrEntryName & Quote & " /application osloader"
             BCDEditProcess.Start()
             TargetGuidOutput = BCDEditProcess.StandardOutput.ReadToEnd()
@@ -563,6 +626,8 @@ Public Class MainForm
             Dim startIndex As Integer = TargetGuidOutput.IndexOf("{")
             Dim endIndex As Integer = TargetGuidOutput.LastIndexOf("}")
             TargetGuid = TargetGuidOutput.Substring(startIndex, endIndex - startIndex + 1)
+            DynaLog.LogMessage("Obtained target BCD entry GUID: " & TargetGuid)
+            DynaLog.LogMessage("Saving GUID for later reference...")
             If TestMode AndAlso TestBCD Then
                 BCDEntryTextLocation = Path.Combine(Application.StartupPath, "bcdguid.txt")
             ElseIf Not TestMode Then
@@ -573,6 +638,7 @@ Public Class MainForm
             ' Update BCD Entry
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_BootEntryConfig")
             InstallerBW.ReportProgress(35)
+            DynaLog.LogMessage("Defining boot entry properties for " & If(Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI", "modern UEFI systems", "legacy BIOS systems") & "...")
             Dim osloaderPath As String = ""
             If Environment.GetEnvironmentVariable("FIRMWARE_TYPE") = "UEFI" Then
                 osloaderPath = "\Windows\system32\Boot\winload.efi"
@@ -588,10 +654,12 @@ Public Class MainForm
             RunBCDConfigurator("/set " & TargetGuid & " winpe Yes")
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_BootEntryDispOrderModify")
             InstallerBW.ReportProgress(38)
+            DynaLog.LogMessage("Configuring display order of target BCD entry...")
             RunBCDConfigurator("/displayorder " & TargetGuid & " /addfirst")
             RunBCDConfigurator("/default " & TargetGuid)
 
             ' Write removal script
+            DynaLog.LogMessage("Writing BCD entry removal script...")
             File.WriteAllText(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\$DISMTOOLS.~BT\remove.cmd",
                               String.Format(My.Resources.HI_UninstallScript, TargetGuid), ASCII)
 
@@ -604,6 +672,7 @@ Public Class MainForm
 
     Private Sub InstallerBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles InstallerBW.DoWork
         Control.CheckForIllegalCrossThreadCalls = False
+        DynaLog.LogMessage("Invoking DSC...")
         CurrentStage = InstallationStage.InstallerStage.DiskSpaceChecker
         If DiskSpaceChecker.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then
             Throw New Exception(GetValueFromLanguageData("MainForm.DSC_ReportGen_Error"))
@@ -612,8 +681,10 @@ Public Class MainForm
         CurrentStage = InstallationStage.InstallerStage.FileCopy
         ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_FileCopy")
         InstallerBW.ReportProgress(5)
+        DynaLog.LogMessage("Copying files to temporary directory...")
         CopyFiles(If(TestMode Or TestBCD, Application.StartupPath, Path.GetPathRoot(Application.StartupPath)), Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), "install.wim")
         If Not TestMode OrElse (TestMode AndAlso TestBCD) Then
+            DynaLog.LogMessage("We either in official mode or BCD test mode. Creating BCD entry...")
             CurrentStage = InstallationStage.InstallerStage.BootEntryCreation
             ' Leave bcdedit stuff out of test mode
             ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_BootEntryCreation")
@@ -623,6 +694,7 @@ Public Class MainForm
         CurrentStage = InstallationStage.InstallerStage.WIMMount
         ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_WIMMount")
         InstallerBW.ReportProgress(40)
+        DynaLog.LogMessage("Preparing to mount the WinPE image...")
         ProgressInitialValue = 40
         ProgressMaximumValue = 60
         UseWindowsImage(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT", "sources", "boot.wim"),
@@ -633,6 +705,7 @@ Public Class MainForm
         Try
             If TestMode And Not TestBCD Then Exit Try
             CurrentStage = InstallationStage.InstallerStage.WIMCustomize
+            DynaLog.LogMessage("Copying BCD entry GUID and DSC information to WinPE image...")
             Dim HotInstallInfoPath As String = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS", "HotInstall")
             If Not Directory.Exists(HotInstallInfoPath) Then
                 Directory.CreateDirectory(HotInstallInfoPath)
@@ -650,6 +723,7 @@ Public Class MainForm
         InstallerBW.ReportProgress(70)
         ProgressInitialValue = 70
         ProgressMaximumValue = 95
+        DynaLog.LogMessage("Preparing to unmount the target WinPE image...")
         ' Unmount Windows image committing changes
         UseWindowsImage(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT", "sources", "boot.wim"),
                         Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"),
@@ -657,6 +731,7 @@ Public Class MainForm
         ProgressMessage = GetValueFromLanguageData("MainForm.ProgressMessage_DeleteFiles")
         InstallerBW.ReportProgress(95)
         Try
+            DynaLog.LogMessage("Invoking removal script on startup...")
             If TestMode Then Directory.Delete(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~BT"), True)
             Directory.Delete(Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "$DISMTOOLS.~WS"), True)
             If File.Exists(Environment.GetEnvironmentVariable("SYSTEMDRIVE") & "\$DISMTOOLS.~BT\remove.cmd") Then
@@ -727,6 +802,8 @@ Public Class MainForm
     ''' <remarks></remarks>
     Sub LogErrorMessage(ex As Exception, stage As InstallationStage.InstallerStage)
         If ex Is Nothing Then Exit Sub
+        DynaLog.LogMessage("Preparing to log error message...")
+        DynaLog.LogMessage("- Error message: " & ex.Message)
 
         Dim stageStr As String = ""
         ErrorTextBox.Clear()
@@ -781,6 +858,7 @@ Public Class MainForm
     End Sub
 
     Private Sub GetImgInfoBtn_Click(sender As Object, e As EventArgs) Handles GetImgInfoBtn.Click
+        DynaLog.LogMessage("Getting and saving image information...")
         Dim TargetInfoPath As String = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), "imageinfo.txt")
         Dim TextContents As String = ""
         Cursor = Cursors.WaitCursor

@@ -1,4 +1,6 @@
 ﻿Language: PowerShell
+Name: Invoke Windows Utility configuration
+Description: This script configures a target system using a configuration file exported from the Windows Utility.
 
 # Export your WinUtil configuration file to "winutil-config.json" on the root of the target
 # Windows installation.

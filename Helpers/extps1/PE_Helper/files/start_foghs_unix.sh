@@ -11,14 +11,41 @@ if [[ ! $? ]]; then
     echo "PowerShell is not installed. Refer to Microsoft documentation in order to install PowerShell for UNIX."
     echo "If you see this message even when PowerShell is installed on your system, please report this issue."
     echo ""
-    echo "Exiting..."
+    echo "Showing usage instructions and exiting..."
+    if [[ -f "./pxehelpers/fog/foghs_unix_notes.txt" ]]; then
+        more ./pxehelpers/fog/foghs_unix_notes.txt
+    fi
     exit 1
 fi
 
 if [[ ! -f "$FOGHELPER_SCRIPTPATH" ]]; then
     echo "The FOG Helper server component for Unix systems is not available in either the current path or the provided disc."
-    echo "Exiting..."
+    echo "Showing usage instructions and exiting..."
+    if [[ -f "./pxehelpers/fog/foghs_unix_notes.txt" ]]; then
+        more ./pxehelpers/fog/foghs_unix_notes.txt
+    fi
     exit 2
+fi
+
+# get amount of systemd units for both fog and mariadb
+FOG_SYSTEMD_UNITS=$(ls -lA /usr/lib/systemd/system/FOG*.service 2>/dev/null | wc -l)
+
+if [[ $FOG_SYSTEMD_UNITS -le 0 ]]; then
+    echo "No FOG services have been detected on this system."
+    echo "Showing usage instructions and exiting..."
+    if [[ -f "./pxehelpers/fog/foghs_unix_notes.txt" ]]; then
+        more ./pxehelpers/fog/foghs_unix_notes.txt
+    fi
+    exit 3
+fi
+
+if [[ ! -f "/usr/lib/systemd/system/mariadb.service" ]]; then
+    echo "MariaDB service has not been detected on this system."
+    echo "Showing usage instructions and exiting..."
+    if [[ -f "./pxehelpers/fog/foghs_unix_notes.txt" ]]; then
+        more ./pxehelpers/fog/foghs_unix_notes.txt
+    fi
+    exit 3
 fi
 
 echo "You may be asked for your password as starting up the FOG Helper Server requires setting up firewall rules for"

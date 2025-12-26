@@ -3,12 +3,12 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | Preinstallation Environment (PE) helper               |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2025 CodingWonders Software                  |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2024-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -77,6 +77,50 @@ if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]:
     exit 1
 }
 
+function Get-KitsRoot {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [bool]$wow64environment
+    )
+
+    $adk10KitsRoot = ""
+
+    # if we set the wow64 bit on and we're on a 32-bit system, then we prematurely return the value
+    if (($wow64environment -eq $true) -and (-not [Environment]::Is64BitOperatingSystem)) {
+        return $adk10KitsRoot
+    }
+
+    $regPath = ""
+    if ($wow64environment) {
+        $regPath = "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Installed Roots"
+    } else {
+        $regPath = "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots"
+    }
+
+    if ((Test-Path "$regPath") -eq $false) {
+        return $adk10KitsRoot
+    }
+
+    try {
+        $adk10KitsRoot = Get-ItemPropertyValue -Path $regPath -Name "KitsRoot10" -ErrorAction Stop
+    } catch {
+        Write-Host "Could not find ADK."
+    }
+
+    return $adk10KitsRoot
+}
+
+function Test-KitsRootPaths {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)] [string]$adkKitsRootPath,
+        [Parameter(Mandatory = $true, Position = 1)] [string]$adkKitsRootPath_WOW64Environ
+    )
+
+    if (Test-Path "$adkKitsRootPath") { return $true }
+    if (Test-Path "$adkKitsRootPath_WOW64Environ") { return $true }
+
+    return $false
+}
+
 function Start-PEGeneration
 {
     <#
@@ -85,33 +129,35 @@ function Start-PEGeneration
     #>
     $mountDirectory = ""
     $architecture = [PE_Arch]::($arch)
-    $version = "0.7.1"
+    $version = "0.7.2"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting PE generation..."
     # Detect if the Windows ADK is present
     try
     {
-        if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+        # RAYMAN prompted the change. YEAH!
+        $adkKitsRoot = Get-KitsRoot -wow64environment $false
+        $adkKitsRoot_WOW64Environ = Get-KitsRoot -wow64environment $true
+
+        $expectedADKPath = "$($adkKitsRoot)Assessment and Deployment Kit"
+        $expectedADKPath_WOW64Environ = "$($adkKitsRoot_WOW64Environ)Assessment and Deployment Kit"
+
+        if ((Test-KitsRootPaths -adkKitsRootPath "$expectedADKPath" -adkKitsRootPath_WOW64Environ "$expectedADKPath_WOW64Environ") -eq $true)
         {
-            # An ADK may be installed, but it may not be Windows 10 ADK
-            $progFiles = ""
             $peToolsPath = ""
-            if ([Environment]::Is64BitOperatingSystem)
+
+            if ($expectedADKPath -ne "Assessment and Deployment Kit") { $peToolsPath = $expectedADKPath }
+            if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "Assessment and Deployment Kit")) { $peToolsPath = $expectedADKPath_WOW64Environ }
+
+            if (Test-Path "$peToolsPath")
             {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
-            }
-            else
-            {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files"
-            }
-            if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
-            {
-                $peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+                Write-Host "Using $peToolsPath as the Preinstallation Environment tools path..."
+
                 Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
-                if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -176,7 +222,7 @@ function Start-PEGeneration
                     Start-DismCommand -Verb Commit -ImagePath "$mountDirectory" | Out-Null
                 }
                 Write-Host "Copying Windows PE optional components. Please wait..."
-                if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEComponents -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -501,6 +547,8 @@ function Add-PEPackages {
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-EnhancedStorage_en-us.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-StorageWMI.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-StorageWMI_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WDS-Tools.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WDS-Tools_en-us.cab")
         # Add ARM64EC packages
         if ($architecture -eq 'arm64') {
             $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
@@ -681,6 +729,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
             New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
@@ -697,6 +746,10 @@ function Start-PECustomization
             Write-Host "-- PowerShell Execution Policy --"
             if (-not (Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $true)) { throw }
             reg add "HKLM\WINPESOFT\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f
+            reg add "HKLM\WINPESOFT\DISMTools" /f
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
+            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$((Get-Date).ToString('yyMMdd-HHmm'))"
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Registry changed."
         }
@@ -830,11 +883,11 @@ function New-WinPEIso
         }
         if ([Environment]::Is64BitOperatingSystem)
         {
-            Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\amd64\Oscdimg"
+            Set-Item -Path "env:NewPath" -Value "$peToolsPath\Deployment Tools\amd64\Oscdimg"
         }
         else
         {
-            Set-Item -Path "env:NewPath" -Value "$peToolsPath\..\Deployment Tools\x86\Oscdimg"
+            Set-Item -Path "env:NewPath" -Value "$peToolsPath\Deployment Tools\x86\Oscdimg"
         }
         # Detect whether files are in fwfiles or bootbins - ADK 10.1.26100.2454 and later put boot files in bootbins,
         # not in fwfiles. All of this to add support for the boot binaries signed with this certificate - I'm starting to
@@ -878,16 +931,19 @@ function New-WinPEIso
             Write-Host "Generating ISO file with UEFI compatibility..."
             $bootData = "1$($efiVars)"
         }
-        $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
-        if ($oscdimgProc.ExitCode -eq 0)
-        {
-            Write-Host "ISO generation has completed successfully."
-        }
-        else
-        {
-            Write-Host "Failed to generate an ISO file."
-        }
-        return $($oscdimgProc.ExitCode -eq 0)
+
+        $success = $false
+
+        do {
+            $oscdimgProc = Start-Process "$env:NewPath\oscdimg.exe" -ArgumentList "-lDISMTools_PE -bootdata:$bootData -u2 -udfver102 `"$((Get-Location).Path)\ISOTEMP\media`" `"$isoLocation`"" -Wait -PassThru -NoNewWindow
+            $success = ($oscdimgProc.ExitCode -eq 0)
+            if ($success -eq $false) {
+                Write-Host "Could not generate ISO file. This can happen if the destination file is in use. Trying again after 5 seconds..."
+                Start-Sleep -Seconds 5
+            }
+        } until ($success -eq $true)
+
+        return $success
     }
     catch
     {
@@ -1949,38 +2005,40 @@ function Show-Timeout {
 function Start-ProjectDevelopment {
     $mountDirectory = ""
     $architecture = [PE_Arch]::($testArch)
-    $version = "0.7.1"
+    $version = "0.7.2"
     $ESVer = "0.6.1"
     Write-Host "DISMTools $version - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
+    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------"
     # Start PE generation
     Write-Host "Starting project creation... (Extensibility Suite version $ESVer)"
     # Detect if the Windows ADK is present
     try
     {
-        if ((Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\WIMMount' -Name 'AdkInstallation') -eq 1)
+        # RAYMAN prompted the change. YEAH!
+        $adkKitsRoot = Get-KitsRoot -wow64environment $false
+        $adkKitsRoot_WOW64Environ = Get-KitsRoot -wow64environment $true
+
+        $expectedADKPath = "$($adkKitsRoot)Assessment and Deployment Kit"
+        $expectedADKPath_WOW64Environ = "$($adkKitsRoot_WOW64Environ)Assessment and Deployment Kit"
+
+        if ((Test-KitsRootPaths -adkKitsRootPath "$expectedADKPath" -adkKitsRootPath_WOW64Environ "$expectedADKPath_WOW64Environ") -eq $true)
         {
-            # An ADK may be installed, but it may not be Windows 10 ADK
-            $progFiles = ""
             $peToolsPath = ""
-            if ([Environment]::Is64BitOperatingSystem)
+
+            if ($expectedADKPath -ne "Assessment and Deployment Kit") { $peToolsPath = $expectedADKPath }
+            if (($peToolsPath -eq "") -and ($expectedADKPath_WOW64Environ -ne "")) { $peToolsPath = $expectedADKPath_WOW64Environ }
+
+            if (Test-Path "$peToolsPath")
             {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files (x86)"
-            }
-            else
-            {
-                $progFiles = "$env:SYSTEMDRIVE\Program Files"
-            }
-            if (Test-Path "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment")
-            {
-                $peToolsPath = "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment"
+                Write-Host "Using $peToolsPath as the Preinstallation Environment tools path..."
+
                 if (-not (Test-Path "$targetPath"))
                 {
                     New-Item -Path "$targetPath" -ItemType Directory | Out-Null
                 }
                 Write-Host "Creating working directory and copying Preinstallation Environment (PE) files..."
-                if ((Copy-PEFiles -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEFiles -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE file copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -2007,7 +2065,7 @@ function Start-ProjectDevelopment {
                     exit 1
                 }
                 Write-Host "Copying Windows PE optional components. Please wait..."
-                if ((Copy-PEComponents -peToolsPath "$progFiles\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
+                if ((Copy-PEComponents -peToolsPath "$peToolsPath\Windows Preinstallation Environment" -architecture $architecture -targetDir "$((Get-Location).Path)\ISOTEMP") -eq $false)
                 {
                     Write-Host "Preinstallation Environment creation has failed in the PE optional component copy phase."
                     Write-Host "`nPress ENTER to exit"
@@ -2043,11 +2101,11 @@ function Start-ProjectDevelopment {
                 Write-Host "Project files have been copied."
                 if ([Environment]::Is64BitOperatingSystem)
                 {
-                    Copy-Item -Path "$peToolsPath\..\Deployment Tools\amd64\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
+                    Copy-Item -Path "$peToolsPath\Deployment Tools\amd64\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
                 }
                 else
                 {
-                    Copy-Item -Path "$peToolsPath\..\Deployment Tools\x86\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
+                    Copy-Item -Path "$peToolsPath\Deployment Tools\x86\Oscdimg\oscdimg.exe" -Destination "$targetPath\ISORoot\oscdimg.exe" -Force -Verbose
                 }
                 Write-Host "Copying setup tools..."
                 Copy-Item -Path "$((Get-Location).Path)\PE_Helper.ps1" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
@@ -2155,16 +2213,20 @@ elseif ($cmd -eq "Help")
 {
     # Show help documentation
     Write-Host "DISMTools - Preinstallation Environment Helper"
-    Write-Host "(c) 2024-2025. CodingWonders Software"
+    Write-Host "(c) 2024-2026. CodingWonders Software. Portions (c) CT Tech Group LLC; (c) JJ Fullmer"
     Write-Host "-----------------------------------------------------------`n"
 
-    Write-Host "Usage: PE_Helper.ps1 {-cmd} [StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath>] [StartApply] [StartDevelopment -testArch <arch> -targetPath <targetPath>] [Help]`n"
+    Write-Host "Usage: PE_Helper.ps1 [-cmd] {StartPEGen -arch <arch> -imgFile <imgFile> -isoPath <isoPath> [-unattendFile <answer file>] [-copyToVentoy `"true|false`"] [-bootex `"true|false`"] [-scratchPath <path_to_custom_mount_dir] | StartApply | StartDevelopment -testArch <arch> -targetPath <targetPath> | Help}`n"
     Write-Host " -cmd: Specifies the command to run. Typing this is optional. Valid options: StartPEGen, StartApply, Help`n"
     Write-Host "    StartPEGen: starts the Preinstallation Environment (PE) generation process. Parameters:"
     Write-Host "      -arch: (Mandatory) Specifies the architecture of the target Preinstallation Environment (PE). Valid options:"
     Write-Host "             x86, amd64, arm64"
     Write-Host "      -imgFile: (Mandatory) Specifies the WIM file to copy to the target Preinstallation Environment (PE)"
     Write-Host "      -isoPath: (Mandatory) Specifies the target path of the ISO file"
+    Write-Host "      -unattendFile: Specifies an answer file to include in the ISO file. This **overrides** any answer files applied to the image"
+    Write-Host "      -copyToVentoy: Determines whether to copy the resulting ISO file to Ventoy drives plugged into the computer"
+    Write-Host "      -bootex: Determines whether to use Windows UEFI CA 2023-signed EFI boot binaries (ONLY works with ADK 10.1.26100.2454 and later)"
+    Write-Host "      -scratchPath: (Experimental) Specifies a custom location to which the script should mount the image"
     Write-Host "      You need the Windows ADK and the PE plugin, which you can download here:"
     Write-Host "        https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install"
     Write-Host "    StartApply: starts the Windows image application process from the Preinstallation Environment (PE). Parameters: none"
@@ -2176,7 +2238,7 @@ elseif ($cmd -eq "Help")
     Write-Host "    Help: shows this help documentation`n"
 
     Write-Host "Examples:`n"
-    Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`""
+    Write-Host "    PE_Helper.ps1 [-cmd] StartPEGen -arch amd64 -imgFile `"C:\Whatever.wim`" -isoPath `"C:\dt_pe.iso`" -unattendFile `"unattend.xml`" -copyToVentoy `"false`" -bootex `"false`""
     Write-Host "    PE_Helper.ps1 [-cmd] StartApply"
     Write-Host "    PE_Helper.ps1 [-cmd] StartDevelopment -testArch amd64 -targetPath `"C:\FooBar`""
     Write-Host "    PE_Helper.ps1 [-cmd] Help"

@@ -7,6 +7,8 @@ Public Class MainForm
 
     Private RestartMessage As String, ProcessExitCodeMessage As String
 
+    Friend AutoCapture As Boolean = False
+
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Since we need Windows Server to run PXE Helper Servers, we'll block access to that page
         ' on non-Server Windows.
@@ -72,11 +74,11 @@ Public Class MainForm
                 ExitLink.Text = "Sair"
             Case "ITA"
                 RestartMessage = "Il computer verrà riavviato. Assicurati che sia configurato per avviarsi dal supporto di installazione. Vuoi riavviare?"
-                ProcessExitCodeMessage = "Processo terminato con codice 0x{0}:" & CrLf & CrLf & "{1}"
+                ProcessExitCodeMessage = "Processo completato con codice 0x{0}:" & CrLf & CrLf & "{1}"
                 Label1.Text = "Cosa vuoi fare?"
                 Label3.Text = "Avvia server PXE Helper per installazione di rete"
                 LinkLabel1.Text = "Installa un sistema operativo"
-                LinkLabel2.Text = "Riavvia al supporto di installazione"
+                LinkLabel2.Text = "Riavvia con il supporto di installazione"
                 LinkLabel3.Text = "Avvia server PXE Helper per installazione di rete"
                 LinkLabel4.Text = "Prepara sistema per acquisizione immagine"
                 LinkLabel5.Text = "Indietro"
@@ -149,6 +151,14 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
-        RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), RunAsAdmin:=True)
+        Dim SPDlgResult As DialogResult = SysprepPreparatorModeDialog.ShowDialog(Me)
+        If SPDlgResult = Windows.Forms.DialogResult.Cancel Then Exit Sub
+
+        Dim args As String = ""
+
+        If SPDlgResult = Windows.Forms.DialogResult.Yes Then args &= "/auto"
+        If AutoCapture Then args &= " /dt_capture"
+
+        RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), args, True)
     End Sub
 End Class

@@ -1,4 +1,6 @@
 ﻿Language: Batch
+Name: Disable Second Chance Out-of-Box Experience (SCOOBE)
+Description: This script disables the Second Chance Out-of-Box Experience on the target system. This works on Windows 10 and Windows 11.
 
 @echo off
 REM This script disables the Second Chance Out-of-Box Experience (SCOOBE), responsible for

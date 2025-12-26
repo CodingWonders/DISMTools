@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode14 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode15 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode16 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode17 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode18 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode19 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode20 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode21 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode22 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode23 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode24 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode25 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode26 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -104,6 +104,7 @@ Partial Class NewUnattendWiz
         Me.ScriptEditorPanel = New System.Windows.Forms.Panel()
         Me.Scintilla3 = New ScintillaNET.Scintilla()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button20 = New System.Windows.Forms.Button()
         Me.Button19 = New System.Windows.Forms.Button()
         Me.ComboBox16 = New System.Windows.Forms.ComboBox()
         Me.Label67 = New System.Windows.Forms.Label()
@@ -235,6 +236,7 @@ Partial Class NewUnattendWiz
         Me.Label30 = New System.Windows.Forms.Label()
         Me.TextBox3 = New System.Windows.Forms.TextBox()
         Me.GenericKeyPanel = New System.Windows.Forms.Panel()
+        Me.Button21 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Label29 = New System.Windows.Forms.Label()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
@@ -503,33 +505,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode1.Name = "Nodo0"
-        TreeNode1.Text = "Welcome"
-        TreeNode2.Name = "Nodo1"
-        TreeNode2.Text = "Regional Configuration"
-        TreeNode3.Name = "Nodo2"
-        TreeNode3.Text = "Basic System Configuration"
-        TreeNode4.Name = "Nodo3"
-        TreeNode4.Text = "Time Zone"
-        TreeNode5.Name = "Nodo4"
-        TreeNode5.Text = "Disk Configuration"
-        TreeNode6.Name = "Nodo5"
-        TreeNode6.Text = "Product Key"
-        TreeNode7.Name = "Nodo6"
-        TreeNode7.Text = "User Accounts"
-        TreeNode8.Name = "Nodo9"
-        TreeNode8.Text = "Virtual Machine Support"
-        TreeNode9.Name = "Nodo10"
-        TreeNode9.Text = "Wireless Networking"
-        TreeNode10.Name = "Nodo11"
-        TreeNode10.Text = "System Telemetry"
-        TreeNode11.Name = "Nodo12"
-        TreeNode11.Text = "Post-Installation Scripts"
-        TreeNode12.Name = "Nodo13"
-        TreeNode12.Text = "Component Settings"
-        TreeNode13.Name = "Nodo14"
-        TreeNode13.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
+        TreeNode14.Name = "Nodo0"
+        TreeNode14.Text = "Welcome"
+        TreeNode15.Name = "Nodo1"
+        TreeNode15.Text = "Regional Configuration"
+        TreeNode16.Name = "Nodo2"
+        TreeNode16.Text = "Basic System Configuration"
+        TreeNode17.Name = "Nodo3"
+        TreeNode17.Text = "Time Zone"
+        TreeNode18.Name = "Nodo4"
+        TreeNode18.Text = "Disk Configuration"
+        TreeNode19.Name = "Nodo5"
+        TreeNode19.Text = "Product Key"
+        TreeNode20.Name = "Nodo6"
+        TreeNode20.Text = "User Accounts"
+        TreeNode21.Name = "Nodo9"
+        TreeNode21.Text = "Virtual Machine Support"
+        TreeNode22.Name = "Nodo10"
+        TreeNode22.Text = "Wireless Networking"
+        TreeNode23.Name = "Nodo11"
+        TreeNode23.Text = "System Telemetry"
+        TreeNode24.Name = "Nodo12"
+        TreeNode24.Text = "Post-Installation Scripts"
+        TreeNode25.Name = "Nodo13"
+        TreeNode25.Text = "Component Settings"
+        TreeNode26.Name = "Nodo14"
+        TreeNode26.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode14, TreeNode15, TreeNode16, TreeNode17, TreeNode18, TreeNode19, TreeNode20, TreeNode21, TreeNode22, TreeNode23, TreeNode24, TreeNode25, TreeNode26})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -1256,37 +1258,49 @@ Partial Class NewUnattendWiz
         Me.Scintilla3.LexerName = ""
         Me.Scintilla3.Location = New System.Drawing.Point(0, 0)
         Me.Scintilla3.Name = "Scintilla3"
-        Me.Scintilla3.Size = New System.Drawing.Size(680, 285)
+        Me.Scintilla3.Size = New System.Drawing.Size(680, 261)
         Me.Scintilla3.TabIndex = 4
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.Button20)
         Me.Panel1.Controls.Add(Me.Button19)
         Me.Panel1.Controls.Add(Me.ComboBox16)
         Me.Panel1.Controls.Add(Me.Label67)
         Me.Panel1.Controls.Add(Me.Button4)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(0, 285)
+        Me.Panel1.Location = New System.Drawing.Point(0, 261)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(680, 32)
+        Me.Panel1.Size = New System.Drawing.Size(680, 56)
         Me.Panel1.TabIndex = 5
+        '
+        'Button20
+        '
+        Me.Button20.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button20.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button20.Location = New System.Drawing.Point(43, 28)
+        Me.Button20.Name = "Button20"
+        Me.Button20.Size = New System.Drawing.Size(256, 23)
+        Me.Button20.TabIndex = 3
+        Me.Button20.Text = "Import a predefined Starter Script..."
+        Me.Button20.UseVisualStyleBackColor = True
         '
         'Button19
         '
         Me.Button19.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button19.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button19.Location = New System.Drawing.Point(398, 3)
+        Me.Button19.Location = New System.Drawing.Point(305, 28)
         Me.Button19.Name = "Button19"
-        Me.Button19.Size = New System.Drawing.Size(161, 23)
+        Me.Button19.Size = New System.Drawing.Size(256, 23)
         Me.Button19.TabIndex = 3
-        Me.Button19.Text = "Import from Starter Script..."
+        Me.Button19.Text = "Import a Starter Script in file system..."
         Me.Button19.UseVisualStyleBackColor = True
         '
         'ComboBox16
         '
         Me.ComboBox16.FormattingEnabled = True
         Me.ComboBox16.Items.AddRange(New Object() {"PowerShell", "Batch"})
-        Me.ComboBox16.Location = New System.Drawing.Point(74, 5)
+        Me.ComboBox16.Location = New System.Drawing.Point(89, 5)
         Me.ComboBox16.Name = "ComboBox16"
         Me.ComboBox16.Size = New System.Drawing.Size(121, 21)
         Me.ComboBox16.TabIndex = 2
@@ -1305,7 +1319,7 @@ Partial Class NewUnattendWiz
         '
         Me.Button4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(565, 3)
+        Me.Button4.Location = New System.Drawing.Point(567, 28)
         Me.Button4.Name = "Button4"
         Me.Button4.Size = New System.Drawing.Size(110, 23)
         Me.Button4.TabIndex = 0
@@ -2759,6 +2773,7 @@ Partial Class NewUnattendWiz
         '
         Me.GenericKeyPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GenericKeyPanel.Controls.Add(Me.Button21)
         Me.GenericKeyPanel.Controls.Add(Me.Button5)
         Me.GenericKeyPanel.Controls.Add(Me.Label29)
         Me.GenericKeyPanel.Controls.Add(Me.TextBox2)
@@ -2769,6 +2784,17 @@ Partial Class NewUnattendWiz
         Me.GenericKeyPanel.Name = "GenericKeyPanel"
         Me.GenericKeyPanel.Size = New System.Drawing.Size(857, 100)
         Me.GenericKeyPanel.TabIndex = 7
+        '
+        'Button21
+        '
+        Me.Button21.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button21.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button21.Location = New System.Drawing.Point(664, 7)
+        Me.Button21.Name = "Button21"
+        Me.Button21.Size = New System.Drawing.Size(181, 23)
+        Me.Button21.TabIndex = 5
+        Me.Button21.Text = "Detect from image edition"
+        Me.Button21.UseVisualStyleBackColor = True
         '
         'Button5
         '
@@ -2808,7 +2834,7 @@ Partial Class NewUnattendWiz
         Me.ComboBox6.Items.AddRange(New Object() {"Education", "Education N", "Home", "Home N", "Home Single Language", "Pro", "Pro Education", "Pro Education N", "Pro for Workstations", "Pro N", "Pro N for Workstations", "Enterprise", "Enterprise N"})
         Me.ComboBox6.Location = New System.Drawing.Point(262, 8)
         Me.ComboBox6.Name = "ComboBox6"
-        Me.ComboBox6.Size = New System.Drawing.Size(583, 21)
+        Me.ComboBox6.Size = New System.Drawing.Size(396, 21)
         Me.ComboBox6.TabIndex = 1
         '
         'Label28
@@ -4724,4 +4750,6 @@ Partial Class NewUnattendWiz
     Friend WithEvents ComboBox16 As System.Windows.Forms.ComboBox
     Friend WithEvents Button19 As System.Windows.Forms.Button
     Friend WithEvents OpenFileDialog2 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents Button20 As System.Windows.Forms.Button
+    Friend WithEvents Button21 As System.Windows.Forms.Button
 End Class

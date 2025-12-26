@@ -196,7 +196,7 @@ Public Class PrgSetup
                         Case "PTB", "PTG"
                             msg = "A pasta onde o ficheiro de registo será guardado não existe. Certifique-se de que existe e tente novamente."
                         Case "ITA"
-                            msg = "La cartella in cui verrà memorizzato il file di registro non esiste. Assicurarsi che esista e riprovare."
+                            msg = "La cartella in cui verrà memorizzato il file registro non esiste. Assicurati che esista e riprovare."
                     End Select
                     MsgBox(msg, vbOKOnly + vbCritical, Text)
                     Exit Sub
@@ -586,48 +586,48 @@ Public Class PrgSetup
             Case "ITA"
                 Text = "Impostare DISMTools"
                 Label1.Text = Text
-                Label2.Text = "Ti diamo il benvenuto a DISMTools"
-                Label3.Text = "DISMTools è un'interfaccia grafica gratuita e open-source, basata su progetti, per le operazioni DISM. Per iniziare a configurare le operazioni, fare clic su Avanti"
-                Label5.Text = "Rendilo tuo. Personalizzate questo programma a vostro piacimento e fate clic su Avanti. Queste impostazioni possono essere configurate in qualsiasi momento nella sezione " & Quote & "Personalizzazione" & Quote & " della finestra Opzioni"
-                Label6.Text = "Personalizzazione di questo programma"
+                Label2.Text = "Benvenuto in DISMTools"
+                Label3.Text = "DISMTools è un'interfaccia grafica gratuita e open source, basata su progetti, per le operazioni DISM. Per iniziare a configurare le operazioni, seleziona 'Avanti'"
+                Label5.Text = "Personalizza questo programma a piacimento e seleziona 'Avanti'. Queste impostazioni possono essere configurate in qualsiasi momento in 'Opzioni' -> 'Personalizzazione'."
+                Label6.Text = "Personalizzazione di DISMTools"
                 Label7.Text = "Modalità colore:"
                 Label8.Text = "Lingua:"
-                Label9.Text = "Carattere della finestra di registro:"
-                Label10.Text = "File di registro:"
+                Label9.Text = "Font finestra registro:"
+                Label10.Text = "File registro:"
                 ' Since we start with log level 3, manually show that option
-                Label11.Text = "Errori, avvisi e messaggi informativi (livello di registro 3)"
-                Label13.Text = "Specificare le impostazioni del registro e fare clic su Avanti. A seconda del livello di contenuto specificato, verranno registrate più o meno informazioni. Questa impostazione può essere configurata in qualsiasi momento nella sezione " & Quote & "Logs" & Quote & " della finestra Opzioni"
-                Label14.Text = "Cosa registrare quando si esegue un'operazione?"
+                Label11.Text = "Errori, avvisi e messaggi informativi (livello registro 3)"
+                Label13.Text = "Imposta il livello di registrazione e seleziona 'Avanti'. A seconda del livello specificato, verranno registrate più o meno informazioni. Questa impostazione può essere configurata in qualsiasi momento in 'Opzioni' -> 'Registri'."
+                Label14.Text = "Quali attività registrare quando si esegue un'operazione?"
                 ' Same here
-                Label16.Text = "Il file di registro deve visualizzare gli errori, le avvertenze e i messaggi informativi dopo l'esecuzione di un'operazione sull'immagine."
-                Label20.Text = "C'è qualcos'altro che si desidera configurare?"
-                Label21.Text = "Le impostazioni disponibili sono più di quelle appena configurate. Se si desidera modificarne altre, fare clic sul pulsante sottostante. Inoltre, queste impostazioni diventeranno persistenti"
-                Label22.Text = "È possibile eseguire questi passaggi in qualsiasi momento"
-                Label23.Text = "Avete finito di impostare gli elementi di base per utilizzare DISMTools nel modo desiderato. Fate clic su " & Quote & "Finish" & Quote & " e le vostre impostazioni diventeranno permanenti."
-                Label24.Text = "L'impostazione è completa"
-                Label25.Text = "Ora che avete configurato il tutto, vi consigliamo di fare le seguenti cose:"
-                Label26.Text = "Rimanere aggiornati per ricevere nuove funzioni e un'esperienza migliorata"
-                Label27.Text = "Iniziare a utilizzare DISMTools e il servizio di assistenza alle immagini, in modo da muoversi più rapidamente"
-                Label28.Text = "Stile del pannello di avanzamento secondario:"
-                Label29.Text = "Questo carattere potrebbe non essere leggibile sulle finestre di registro. Anche se è possibile utilizzarlo, si consiglia di utilizzare caratteri monospaziati per una maggiore leggibilità."
+                Label16.Text = "Il file registro visualizza gli errori, le avvertenze e i messaggi informativi dopo l'esecuzione di un'operazione sull'immagine."
+                Label20.Text = "Vuoi configurare altre impostazioni?"
+                Label21.Text = "Le impostazioni disponibili sono più di quelle appena configurate. Se vuoi modificarne altre, seleziona il pulsante sottostante. Inoltre, queste impostazioni diventeranno permanenti."
+                Label22.Text = "È possibile eseguire questi passaggi in qualsiasi momento."
+                Label23.Text = "Hai completato l'impostazione degli elementi base per usare DISMTools nel modo desiderato. Seleziona 'Fine' e le impostazioni diventeranno permanenti."
+                Label24.Text = "L'impostazione è stata completa"
+                Label25.Text = "Ora che hai configurato il programma, ti consigliamo di:"
+                Label26.Text = "rimani aggiornato per ricevere nuove funzionalità e un'esperienza migliorata."
+                Label27.Text = "inizia ad usare DISMTools e il servizio di assistenza immagini, in modo da muoverti più rapidamente."
+                Label28.Text = "Stile pannello avanzamento secondario:"
+                Label29.Text = "Questo font potrebbe non essere leggibile nelle finestre registro. Anche se è possibile usarla, per una maggiore leggibilità ti consigliamo di usare font mono spaziati."
                 Back_Button.Text = "Indietro"
                 Next_Button.Text = "Avanti"
                 Cancel_Button.Text = "Annulla"
                 Button1.Text = "Sfoglia..."
-                Button2.Text = "Usa il file di registro predefinito"
+                Button2.Text = "Usa file registro predefinito"
                 Button5.Text = "Configura altre impostazioni"
-                Button6.Text = "Iniziare"
-                Button7.Text = "Controlla gli aggiornamenti"
-                CheckBox1.Text = "Crea automaticamente i log nella directory dei log del programma"
+                Button6.Text = "Inizia"
+                Button7.Text = "Controlla aggiornamenti"
+                CheckBox1.Text = "Crea automaticamente i registri nella cartella registri del programma"
                 RadioButton1.Text = "Moderno"
-                RadioButton2.Text = "Classica"
-                SaveFileDialog1.Title = "Specificare il file di registro"
+                RadioButton2.Text = "Classico"
+                SaveFileDialog1.Title = "Specifica file registro"
 
                 ' Configure string arrays to put them in the comboboxes
-                ColorModes(0) = "Utilizza le impostazioni di sistema"
-                ColorModes(1) = "Modalità luce"
+                ColorModes(0) = "Usa impostazioni sistema"
+                ColorModes(1) = "Modalità chiara"
                 ColorModes(2) = "Modalità scura"
-                Languages(0) = "Utilizza la lingua di sistema"
+                Languages(0) = "Usa lingua sistema"
                 Languages(1) = "Inglese"
                 Languages(2) = "Spagnolo"
                 Languages(3) = "Francese"
@@ -840,7 +840,12 @@ Public Class PrgSetup
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
         DynaLog.LogMessage("Beginning download of Update System...")
-        If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Try
+            If File.Exists(Application.StartupPath & "\update.exe") Then File.Delete(Application.StartupPath & "\update.exe")
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not delete existing update downloader...")
+            Exit Sub
+        End Try
         Try
             DynaLog.LogMessage("Downloading " & Quote & "update.exe" & Quote & " from DISMTools repository...")
             Using client As New WebClient()
@@ -873,7 +878,7 @@ Public Class PrgSetup
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\getting_started\start.html")
         HelpBrowserForm.MinimizeBox = True
         HelpBrowserForm.MaximizeBox = True
         HelpBrowserForm.Show()

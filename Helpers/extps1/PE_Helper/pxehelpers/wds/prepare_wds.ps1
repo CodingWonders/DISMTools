@@ -3,12 +3,12 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.1                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Preparation   |
 #              .^"""""`.            ."""""""",,,,,,,,,,,,,,,.    ---------------------------------------------------------
-#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025 CodingWonders Software                       |
+#                .^"""""^.        .`",,"""",,,,,,,,,,,,,,,,'     | (C) 2025-2026 CodingWonders Software                  |
 #                  .^"""""^.    '`^^"",:,,,,,,,,,,,,,,,,,".      ---------------------------------------------------------
 #                    .^"""""^.`+]>,^^"",,:,,,,,,,,,,,,,`.
 #                      .^""";_]]]?)}:^^""",,,`'````'..
@@ -35,7 +35,7 @@ param (
     [Parameter(Mandatory = $true, Position = 0)] [string]$bootImagePath
 )
 
-$version = "0.7.1"
+$version = "0.7.2"
 
 if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
 {
@@ -635,7 +635,7 @@ if ([Environment]::OSVersion.Platform -ne "Win32NT") {
 }
 
 Write-Host "DISMTools $version - PE Helper WDS Preparation Scripts"
-Write-Host "(c) 2025. CodingWonders Software"
+Write-Host "(c) 2025-2026. CodingWonders Software"
 Write-Host "-----------------------------------------------------------"
 
 if (Update-WinPEForWds -bootImage "$bootImagePath") {

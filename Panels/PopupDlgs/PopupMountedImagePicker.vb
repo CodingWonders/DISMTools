@@ -7,12 +7,12 @@ Public Class PopupMountedImagePicker
     Private Shared mountedImages As DismMountedImageInfoCollection
     Private Shared focusedIndex As Integer
 
-    Public Shared Function PickImage(position As Point, Optional showUpwards As Boolean = False) As DismMountedImageInfo
+    Public Shared Function PickImage(Optional position As Nullable(Of Point) = Nothing, Optional showUpwards As Boolean = False) As DismMountedImageInfo
         Dim pmipForm As Form = New Form With {
-            .Location = position,
+            .Location = If(position IsNot Nothing, position, New Point(0, 0)),
             .Size = New Size(800, 376),
             .FormBorderStyle = FormBorderStyle.None,
-            .StartPosition = FormStartPosition.Manual,
+            .StartPosition = If(position IsNot Nothing, FormStartPosition.Manual, FormStartPosition.CenterScreen),
             .ControlBox = False,
             .Font = New Font("Tahoma", 8.25F),
             .KeyPreview = True,
@@ -229,6 +229,11 @@ Public Class PopupMountedImagePicker
     End Function
 
     Private Shared Sub GetMountedImages()
+        If MainForm.ImgBW.IsBusy Then
+            mountedImages = Nothing
+            Exit Sub
+        End If
+
         Try
             DynaLog.LogMessage("Preparing to get mounted images...")
             MainForm.StopMountedImageDetector()

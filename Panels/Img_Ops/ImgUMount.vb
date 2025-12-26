@@ -355,7 +355,7 @@ Public Class ImgUMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(Button1.PointToScreen(Point.Empty))
+        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
             TextBox1.Text = selectedImage.MountPath
             DynaLog.LogMessage("Checking if selected item is the mount directory of the project...")

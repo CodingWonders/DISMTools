@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET VsDirectory=%ProgramFiles%\Microsoft Visual Studio\2022
+SET VsDirectory=%ProgramFiles%\Microsoft Visual Studio\18
 SET BuildToolPath=""
 
 IF NOT EXIST "%VsDirectory%" (

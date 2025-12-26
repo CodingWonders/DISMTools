@@ -40,8 +40,8 @@ Public Class SettingsResetDlg
                         OK_Button.Text = "Sim"
                         Cancel_Button.Text = "Não"
                     Case "ITA"
-                        Text = "Reimpostare le preferenze"
-                        Label1.Text = "Se si procede, le impostazioni verranno ripristinate ai valori predefiniti. Al termine di questo processo, si tornerà alla finestra principale del programma." & CrLf & CrLf & "Volete procedere?"
+                        Text = "Ripristina preferenze"
+                        Label1.Text = "Se procedi, le impostazioni verranno ripristinate ai valori predefiniti. Al termine di questo processo, si tornerà alla finestra principale del programma." & CrLf & CrLf & "Vuoi procedere?"
                         OK_Button.Text = "Sì"
                         Cancel_Button.Text = "No"
                 End Select
@@ -66,8 +66,8 @@ Public Class SettingsResetDlg
                 OK_Button.Text = "Sim"
                 Cancel_Button.Text = "Não"
             Case 5
-                Text = "Reimpostare le preferenze"
-                Label1.Text = "Se si procede, le impostazioni verranno ripristinate ai valori predefiniti. Al termine di questo processo, si tornerà alla finestra principale del programma." & CrLf & CrLf & "Volete procedere?"
+                Text = "Ripristino preferenze"
+                Label1.Text = "Se procedi, le impostazioni verranno ripristinate ai valori predefiniti. Al termine di questo processo, si tornerà alla finestra principale del programma." & CrLf & CrLf & "Vuoi procedere?"
                 OK_Button.Text = "Sì"
                 Cancel_Button.Text = "No"
         End Select

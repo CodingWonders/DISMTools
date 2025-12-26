@@ -1,14 +1,15 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 title DISMTools Preinstallation Environment
-set version=0.7.1
+set version=0.7.2
 set sysdrive=%SYSTEMDRIVE%
 set debug=0
 echo DISMTools %version% - Preinstallation Environment
-echo (c) 2024-2025. CodingWonders Software
+echo (c) 2024-2026. CodingWonders Software
 echo.
 echo Please wait while the environment starts up...
 wpeinit
+doskey inv=powershell -file "%sysdrive%\DTPE_Inventory.ps1"
 if %debug% equ 1 (
 	echo Debug mode enabled.
 	taskmgr
@@ -21,6 +22,13 @@ if !ERRORLEVEL! equ 1 (
 	reg add "HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell" /v "ExecutionPolicy" /t REG_SZ /d "Unrestricted" /f >nul 2>&1
 	if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
+	)
+)
+if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
+	if exist "%sysdrive%\scripts\imagecapture.bat" (
+		echo An image capture will begin now...
+		call "%sysdrive%\scripts\imagecapture.bat"
+		powershell -command wpeutil shutdown
 	)
 )
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
@@ -65,6 +73,7 @@ if %debug% lss 2 (
 	echo - To shut down the system, type "wpeutil shutdown" and press ENTER
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
 	echo - To initialize networking, type "netinit" and press ENTER
+	echo - To show hardware and software inventory, type "inv" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image

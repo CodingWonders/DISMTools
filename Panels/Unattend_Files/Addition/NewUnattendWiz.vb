@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "25103"
+    Const UnattendGenReleaseTag As String = "25123"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -106,7 +106,7 @@ Public Class NewUnattendWiz
     Dim DefaultLockoutSettings As New AccountLockoutSettings()
     Dim DefaultVMSettings As New VirtualMachineSettings()
     Dim DefaultNetworkConfiguration As New WirelessSettings()
-    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript("# Write your code here. Use the Open Script button to load the contents" & CrLf & "# of an existing script file. To get started, you can also use the starter" & CrLf & "# scripts.", PostInstallScript.Extension.PowerShell)
+    Dim DefaultPostInstallScript As PostInstallScript = New PostInstallScript(My.Resources.DefaultPostInstallScriptCode, PostInstallScript.Extension.PowerShell)
 
     ' Progress info
     Dim ProgressMessage As String = ""
@@ -116,6 +116,21 @@ Public Class NewUnattendWiz
     ' Editor Mode
     Dim DefaultContents As String
 
+    Private EditionMapping As New Dictionary(Of String, String) From {
+        {"Education", "Education"},
+        {"EducationN", "Education N"},
+        {"Home", "Home"},
+        {"HomeN", "Home N"},
+        {"HomeSingleLanguage", "Home Single Language"},
+        {"Professional", "Pro"},
+        {"ProfessionalEducation", "Pro Education"},
+        {"ProfessionalEducationN", "Pro Education N"},
+        {"ProfessionalWorkstation", "Pro for Workstations"},
+        {"ProfessionalN", "Pro N"},
+        {"ProfessionalWorkstationN", "Pro N for Workstations"},
+        {"Enterprise", "Enterprise"},
+        {"EnterpriseN", "Enterprise N"}
+    }
 
     ''' <summary>
     ''' Initializes the Scintilla editor
@@ -606,8 +621,40 @@ Public Class NewUnattendWiz
         End If
         DynaLog.LogMessage("Checking if self-contained UnattendGen is present...")
         If Directory.Exists(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained")) Then
-            DynaLog.LogMessage("Self-contained UnattendGen is present.")
             ' Self-contained version detected
+            DynaLog.LogMessage("Self-contained UnattendGen is present. Determining version...")
+            ' We determine if the version of UnattendGen that we downloaded matches the one associated with the
+            ' release tag. If it is the same version, then we accept it. Otherwise, we remove the directory and
+            ' start over. As a lowest common denominator, we'll go with the 32-bit Windows release to check 
+            ' version information. Then we'll go with the 64-bit version.
+            Dim incompatibleReleases As Integer = 0
+            Try
+                Dim UG32VerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained", "x86", "UnattendGen.exe"))
+                DynaLog.LogMessage("Version of 32-bit UnattendGen: " & UG32VerInfo.FileVersion)
+                DynaLog.LogMessage("--- We are expecting release build " & UnattendGenReleaseTag & " - anything other than that will be discarded ---")
+                If UG32VerInfo.FilePrivatePart <> UnattendGenReleaseTag Then
+                    DynaLog.LogMessage("This release of UnattendGen has been marked as unsupported and will be deleted in favor of a newer version.")
+                    incompatibleReleases += 1
+                End If
+                Dim UG64VerInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained", "amd64", "UnattendGen.exe"))
+                DynaLog.LogMessage("Version of 64-bit UnattendGen: " & UG64VerInfo.FileVersion)
+                DynaLog.LogMessage("--- We are expecting release build " & UnattendGenReleaseTag & " - anything other than that will be discarded ---")
+                If UG64VerInfo.FilePrivatePart <> UnattendGenReleaseTag Then
+                    DynaLog.LogMessage("This release of UnattendGen has been marked as unsupported and will be deleted in favor of a newer version.")
+                    incompatibleReleases += 1
+                End If
+
+                If incompatibleReleases > 0 Then
+                    DynaLog.LogMessage("One or more releases have been marked as unsupported. UnattendGen will be redownloaded shortly...")
+                    Directory.Delete(Path.Combine(Application.StartupPath, "Tools\UnattendGen\SelfContained"), True)
+
+                    DotNetRuntimeSupported = False
+                    PreferSelfContained = False
+                    Exit Sub
+                End If
+            Catch ex As Exception
+
+            End Try
             DotNetRuntimeSupported = True
             PreferSelfContained = True
             Exit Sub
@@ -868,6 +915,8 @@ Public Class NewUnattendWiz
         CheckedListBox1.SetItemChecked(0, False)
         CheckedListBox1.SetItemChecked(1, True)
         CheckedListBox1.SetItemChecked(2, False)
+
+        Button21.Enabled = MainForm.IsImageMounted
     End Sub
 
     Sub ReloadSettings()
@@ -2422,7 +2471,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Help_Button_Click(sender As Object, e As EventArgs) Handles Help_Button.Click, ToolStripButton6.Click
-        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create\index.html")
+        HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create.html")
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
         HelpBrowserForm.ShowDialog()
@@ -2861,8 +2910,7 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel9_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel9.LinkClicked
         If ComboBox14.SelectedItem IsNot Nothing Then
-            ' Perform a Google search (yes, Google is not my favorite search engine, but this takes advantage of the Web tab)
-            Process.Start(String.Format("https://www.google.com/search?q={0}+site:learn.microsoft.com&udm=14", ComboBox14.SelectedItem))
+            SearchEngineHelper.InvokeSearchQuery(MainForm.SearchEngineName, String.Format("{0}+site:learn.microsoft.com", ComboBox14.SelectedItem))
         End If
     End Sub
 
@@ -2897,7 +2945,7 @@ Public Class NewUnattendWiz
         Else
             SaveConfiguredScript(CurrentlyEditedScript, Scintilla3.Text)
         End If
-        CurrentlyConfiguredScripts.Add(New PostInstallScript("# Write your code here. Use the Open Script button to load the contents of an existing script file.", PostInstallScript.Extension.PowerShell))
+        CurrentlyConfiguredScripts.Add(New PostInstallScript(My.Resources.DefaultPostInstallScriptCode, PostInstallScript.Extension.PowerShell))
         CurrentlyEditedScript = CurrentlyConfiguredScripts.Count - 1
         SwitchScript(CurrentlyEditedScript)
     End Sub
@@ -3001,23 +3049,47 @@ Public Class NewUnattendWiz
             End Select
 
             DynaLog.LogMessage("Loading contents...")
-            Scintilla3.Text = String.Join(CrLf, StarterScriptContents.Skip(1).ToArray())
+            Scintilla3.Text = String.Join(CrLf, StarterScriptContents.Skip(3).ToArray())
         Catch ex As Exception
             DynaLog.LogMessage("Could not open file. Error: " & ex.Message)
         End Try
     End Sub
 
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
-        Dim StarterScriptFolder As String = ""
-        OpenFileDialog2.InitialDirectory = Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts")
-        Select Case CurrentlyEditedStage
-            Case 0
-                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "DuringSystemConfiguration")
-            Case 1
-                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenFirstUserLogsOn")
-            Case 2
-                OpenFileDialog2.InitialDirectory = Path.Combine(OpenFileDialog2.InitialDirectory, "WhenUsersLogOnForFirstTime")
-        End Select
         OpenFileDialog2.ShowDialog()
+    End Sub
+
+    Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
+        ' Determining on the selected stage, we show a certain amount of items
+        SampleScriptBrowser.FinalScriptStage = CurrentlyEditedStage
+
+        If SampleScriptBrowser.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            DynaLog.LogMessage("Opening the file for read access...")
+            Dim StarterScriptContents As String = SampleScriptBrowser.FinalScriptCode
+
+            DynaLog.LogMessage("Determining file extension...")
+            ' The first line indicates the extension we need to apply to show pretty colors. The rest is the script.
+            Select Case SampleScriptBrowser.FinalScriptLanguage
+                Case "PowerShell"
+                    ComboBox16.SelectedIndex = 0
+                Case "Batch"
+                    ComboBox16.SelectedIndex = 1
+            End Select
+
+            DynaLog.LogMessage("Loading contents...")
+            Scintilla3.Text = StarterScriptContents
+        End If
+    End Sub
+
+    Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
+        If EditionMapping.ContainsKey(MainForm.imgEdition) Then
+            ComboBox6.SelectedItem = EditionMapping(MainForm.imgEdition)
+        Else
+            MsgBox("There is no product key for the " & Quote & MainForm.imgEdition & Quote & " edition.", vbOKOnly + vbInformation)
+        End If
+    End Sub
+
+    Private Sub Button21_MouseHover(sender As Object, e As EventArgs) Handles Button21.MouseHover
+        CNameTTip.Show("Click here to attempt to grab the edition of the currently loaded image. This will help you use a suitable product key for said Windows image.", sender)
     End Sub
 End Class
