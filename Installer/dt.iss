@@ -32,7 +32,7 @@ AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}
 
 ; Uninstaller info
-UninstallDisplayName={#MyAppName}
+UninstallDisplayName={#AppListName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 AppPublisher={#MyAppPublisher}
 
