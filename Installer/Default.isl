@@ -29,7 +29,7 @@ LanguageCodePage=0
 
 ; *** Application titles
 SetupAppTitle=Setup
-SetupWindowTitle=Setup - %1 0.7.3 Preview
+SetupWindowTitle=Setup - %1 {#MyAppVersion}
 UninstallAppTitle=Uninstall
 UninstallAppFullTitle=%1 Uninstall
 
