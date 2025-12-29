@@ -729,6 +729,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
