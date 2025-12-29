@@ -1,0 +1,9 @@
+﻿Language: Batch
+Name: Show extensions for known file types
+Description: This script shows file extensions.
+
+@echo off
+REM This script shows file extensions. This prevents cases where
+REM files have double extensions and can cause harm to a system.
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v HideFileExt /t REG_DWORD /d 0 /f
