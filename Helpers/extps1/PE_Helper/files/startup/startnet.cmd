@@ -38,6 +38,9 @@ if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 		powershell -noprofile -file ".\pxehelpers\PXEHelpers.Startup.ps1"
 	) else if exist "%sysdrive%\cmdcons" (
 		set debug=2
+	) else if exist "%sysdrive%\changekeyb" (
+		cd /d "%sysdrive%"\
+		powershell -noprofile -file ".\ChangeKeyboardLayout.ps1"
 	)
 )
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
