@@ -430,9 +430,15 @@ Public Class ImportDrivers
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        For Each DI As DriveInfo In DIList
-            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-        Next
+        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
+                                                                                           DI.VolumeLabel,
+                                                                                           Casters.CastDriveType(DI.DriveType, True),
+                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
+                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
+                                                                                           DI.DriveFormat,
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
         Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
         If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
@@ -503,9 +509,15 @@ Public Class ImportDrivers
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        For Each DI As DriveInfo In DIList
-            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-        Next
+        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
+                                                                                           DI.VolumeLabel,
+                                                                                           Casters.CastDriveType(DI.DriveType, True),
+                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
+                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
+                                                                                           DI.DriveFormat,
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

@@ -533,15 +533,11 @@ Public Class ISOCreator
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
-                For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                    ListView1.Items.Add(New ListViewItem(New String() {
-                                                         (ImageInfoCollection.IndexOf(ImageInfo) + 1),
-                                                         ImageInfo.ImageName,
-                                                         ImageInfo.ImageDescription,
-                                                         ImageInfo.ProductVersion.ToString(),
-                                                         Casters.CastDismArchitecture(ImageInfo.Architecture)
-                                                     }))
-                Next
+                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1), 
+                                                                                                                       imageinfo.ImageName,
+                                                                                                                       imageinfo.ImageDescription,
+                                                                                                                       imageinfo.ProductVersion.ToString(),
+                                                                                                                       casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)

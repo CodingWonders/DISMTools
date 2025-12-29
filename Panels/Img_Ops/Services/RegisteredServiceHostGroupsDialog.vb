@@ -24,9 +24,7 @@ Public Class RegisteredServiceHostGroupsDialog
         ' Order group information based on service count
         GroupInformation = GroupInformation.OrderByDescending(Function(serviceGroup) serviceGroup.Services.Count).ThenBy(Function(serviceGroup) serviceGroup.Name).ToList()
 
-        For Each Group In GroupInformation
-            ServiceGroupDetailsLv.Items.Add(New ListViewItem(New String() {Group.Name, String.Format("{0} service(s) in group", Group.Services.Count)}))
-        Next
+        ServiceGroupDetailsLv.Items.AddRange(GroupInformation.Select(Function(Group) New ListViewItem(New String() {Group.Name, String.Format("{0} service(s) in group", Group.Services.Count)})).ToArray())
 
         Dim count As Integer = GroupInformation.Select(Function(serviceGroup) serviceGroup.Services.Count).Aggregate(Function(x, y) x + y)
         Label2.Text = String.Format("{0} service(s) are registered in the service host.", count)
@@ -36,9 +34,7 @@ Public Class RegisteredServiceHostGroupsDialog
         ServiceDetailsLv.Items.Clear()
         Try
             If ServiceGroupDetailsLv.SelectedItems.Count = 1 Then
-                For Each ServiceInGroup In GroupInformation(ServiceGroupDetailsLv.FocusedItem.Index).Services
-                    ServiceDetailsLv.Items.Add(New ListViewItem(New String() {ServiceInGroup.Name, ServiceInGroup.DisplayName, ServiceInGroup.TypeToString()}))
-                Next
+                ServiceDetailsLv.Items.AddRange(GroupInformation(ServiceGroupDetailsLv.FocusedItem.Index).Services.Select(Function(ServiceInGroup) New ListViewItem(New String() {ServiceInGroup.Name, ServiceInGroup.DisplayName, ServiceInGroup.TypeToString()})).ToArray())
             End If
         Catch ex As Exception
             ' ignore possible exceptions

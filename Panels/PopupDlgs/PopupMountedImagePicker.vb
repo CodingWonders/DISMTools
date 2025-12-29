@@ -111,11 +111,9 @@ Public Class PopupMountedImagePicker
                                                 GetMountedImages()
                                                 pmipForm.Cursor = Cursors.Arrow
                                                 If mountedImages IsNot Nothing Then
-                                                    For Each mountedImage As DismMountedImageInfo In mountedImages
-                                                        pmipMountedImageList.Items.Add(New ListViewItem(New String() {mountedImage.ImageFilePath,
-                                                                                                                      mountedImage.ImageIndex,
-                                                                                                                      mountedImage.MountPath}))
-                                                    Next
+                                                    pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFilePath,
+                                                                                                                                                                   mountedImage.ImageIndex,
+                                                                                                                                                                   mountedImage.MountPath})).ToArray())
                                                 End If
                                             End Sub
 
@@ -218,11 +216,9 @@ Public Class PopupMountedImagePicker
 
         GetMountedImages()
         If mountedImages IsNot Nothing Then
-            For Each mountedImage As DismMountedImageInfo In mountedImages
-                pmipMountedImageList.Items.Add(New ListViewItem(New String() {mountedImage.ImageFilePath,
-                                                                              mountedImage.ImageIndex,
-                                                                              mountedImage.MountPath}))
-            Next
+            pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFilePath,
+                                                                                                                           mountedImage.ImageIndex,
+                                                                                                                           mountedImage.MountPath})).ToArray())
         End If
 
         Return If(pmipForm.ShowDialog() = DialogResult.OK, mountedImages(focusedIndex), Nothing)

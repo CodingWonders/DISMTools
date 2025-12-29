@@ -15386,13 +15386,11 @@ Public Class MainForm
         If FeedContents.Items.Count > 0 Then
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
-            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text,
-                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime,
-                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
-                                                                                            TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
-                FeedLinks.Add(item.Links(0).Uri)
-            Next
+            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
+            ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
+            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
         Else
             DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
             FeedsPanel.Visible = False
@@ -15419,13 +15417,11 @@ Public Class MainForm
         If FeedContents.Items.Count > 0 Then
             FeedsPanel.Visible = True
             FeedErrorPanel.Visible = False
-            For Each item As SyndicationItem In FeedContents.Items.OrderByDescending(Function(x) x.PublishDate)
-                ListView1.Items.Add(New ListViewItem(New String() {item.Title.Text,
-                                                                   TimeZoneInfo.ConvertTime(item.PublishDate.DateTime,
-                                                                                            TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
-                                                                                            TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")}))
-                FeedLinks.Add(item.Links(0).Uri)
-            Next
+            Dim sortedArticles As IOrderedEnumerable(Of SyndicationItem) = FeedContents.Items.OrderByDescending(Function(article) article.PublishDate)
+            ListView1.Items.AddRange(sortedArticles.Select(Function(article) New ListViewItem(New String() {article.Title.Text, TimeZoneInfo.ConvertTime(article.PublishDate.DateTime,
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"),
+                                                                                                                                                         TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time")).ToString("dddd, MMMM dd, yyyy H:mm:ss")})).ToArray())
+            FeedLinks.AddRange(sortedArticles.Select(Function(article) article.Links(0).Uri))
         Else
             DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
             FeedsPanel.Visible = False

@@ -200,9 +200,7 @@ Public Class GetFeatureInfoDlg
         DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting features...")
-        For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-        Next
+        ListView1.Items.AddRange(InstalledFeatureInfo.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
         SearchBox1.Text = ""
     End Sub
 
@@ -613,13 +611,11 @@ Public Class GetFeatureInfoDlg
             End Select
         End If
         If InstalledFeatureInfo.Count > 0 Then
-            Dim finalFeatureLookup = InstalledFeatureInfo.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            Dim finalFeatureLookup As IEnumerable(Of DismFeature) = InstalledFeatureInfo.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
             If featureState <> "" Then      ' We filter them again based on the state
                 finalFeatureLookup = finalFeatureLookup.Where(Function(feature) feature.State = expectedFeatureState)
             End If
-            For Each filteredFeature In finalFeatureLookup
-                ListView1.Items.Add(New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)}))
-            Next
+            ListView1.Items.AddRange(finalFeatureLookup.Select(Function(filteredFeature) New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)})).ToArray())
         End If
     End Sub
 
@@ -634,9 +630,7 @@ Public Class GetFeatureInfoDlg
             End If
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-            Next
+            ListView1.Items.AddRange(InstalledFeatureInfo.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
         End If
     End Sub
 

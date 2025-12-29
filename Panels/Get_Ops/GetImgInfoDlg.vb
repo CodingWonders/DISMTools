@@ -388,10 +388,8 @@ Public Class GetImgInfoDlg
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
-                For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                    ImageInfoList.Add(ImageInfo)
-                    ListView1.Items.Add(New ListViewItem(New String() {ImageInfo.ImageIndex, ImageInfo.ImageName}))
-                Next
+                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {ImageInfo.ImageIndex, ImageInfo.ImageName})).ToArray())
+                ImageInfoList.AddRange(ImageInfoCollection.Select(Function(ImageInfo) ImageInfo))
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
