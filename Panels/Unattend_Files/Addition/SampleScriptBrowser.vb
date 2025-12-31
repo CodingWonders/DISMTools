@@ -10,6 +10,7 @@ Public Class SampleScriptBrowser
     Private SysConfigScripts As New List(Of StarterScript)
     Private FirstUserLogonScripts As New List(Of StarterScript)
     Private UserFirstLogonScripts As New List(Of StarterScript)
+    Private UserScripts As New List(Of StarterScript)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -75,6 +76,20 @@ Public Class SampleScriptBrowser
             UserFirstLogonScripts.Add(ParseStarterScript(UserFirstLogonScript))
         Next
 
+        ' Now we consider all user scripts
+        If Directory.Exists(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts", "UserScripts")) Then
+            For Each UserScript In Directory.GetFiles(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts", "UserScripts"), "*.dtss")
+                UserScripts.Add(ParseStarterScript(UserScript))
+            Next
+        Else
+            ' The userdata part does not exist. Remove user-defined scripts option from the list
+            Try
+                ComboBox1.Items.RemoveAt(3)
+            Catch ex As Exception
+
+            End Try
+        End If
+
         Return True
     End Function
 
@@ -82,17 +97,13 @@ Public Class SampleScriptBrowser
         ListView1.Items.Clear()
         Select Case StageContext
             Case 0
-                For Each scriptObj In SysConfigScripts.Where(Function(script) script IsNot Nothing).ToList()
-                    ListView1.Items.Add(scriptObj.Name)
-                Next
+                ListView1.Items.AddRange(SysConfigScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
             Case 1
-                For Each scriptObj In FirstUserLogonScripts.Where(Function(script) script IsNot Nothing).ToList()
-                    ListView1.Items.Add(scriptObj.Name)
-                Next
+                ListView1.Items.AddRange(FirstUserLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
             Case 2
-                For Each scriptObj In UserFirstLogonScripts.Where(Function(script) script IsNot Nothing).ToList()
-                    ListView1.Items.Add(scriptObj.Name)
-                Next
+                ListView1.Items.AddRange(UserFirstLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 3
+                ListView1.Items.AddRange(UserScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
         End Select
         FinalScriptStage = StageContext
     End Sub
@@ -106,6 +117,8 @@ Public Class SampleScriptBrowser
                     Return FirstUserLogonScripts(index)
                 Case 2
                     Return UserFirstLogonScripts(index)
+                Case 3
+                    Return UserScripts(index)
             End Select
         Catch ex As Exception
 
@@ -118,6 +131,7 @@ Public Class SampleScriptBrowser
         SysConfigScripts.Clear()
         FirstUserLogonScripts.Clear()
         UserFirstLogonScripts.Clear()
+        UserScripts.Clear()
 
         ' Reset screens and get rid of listview items
         ScriptDetailsPanel.Visible = False
