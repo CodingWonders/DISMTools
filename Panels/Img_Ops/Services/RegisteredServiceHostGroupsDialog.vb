@@ -34,7 +34,7 @@ Public Class RegisteredServiceHostGroupsDialog
         ServiceDetailsLv.Items.Clear()
         Try
             If ServiceGroupDetailsLv.SelectedItems.Count = 1 Then
-                ServiceDetailsLv.Items.AddRange(GroupInformation(ServiceGroupDetailsLv.FocusedItem.Index).Services.Select(Function(ServiceInGroup) New ListViewItem(New String() {ServiceInGroup.Name, ServiceInGroup.DisplayName, ServiceInGroup.TypeToString()})).ToArray())
+                ServiceDetailsLv.Items.AddRange(GroupInformation(ServiceGroupDetailsLv.FocusedItem.Index).Services.OrderBy(Function(ServiceInGroup) ServiceInGroup.DisplayName).Select(Function(ServiceInGroup) New ListViewItem(New String() {ServiceInGroup.Name, ServiceInGroup.DisplayName, ServiceInGroup.TypeToString()})).ToArray())
             End If
         Catch ex As Exception
             ' ignore possible exceptions
