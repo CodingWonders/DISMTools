@@ -693,6 +693,11 @@ Public Class MainForm
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitDynaLog()
+
+        ' Prepare all user data
+        DynaLog.LogMessage("Preparing user data...")
+        UserDataManagerModule.CopyUserDataToProgramFiles()
+
         LoadThemes(True)
         ' Because of the DISM API, Windows 7 compatibility is out the window (no pun intended)
         If Environment.OSVersion.Version.Major = 6 And Environment.OSVersion.Version.Minor < 2 Then
