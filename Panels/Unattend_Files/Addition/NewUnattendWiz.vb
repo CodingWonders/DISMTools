@@ -1975,6 +1975,13 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
             End If
         End If
+
+        If Not File.Exists(UnattendGen.StartInfo.FileName) Then
+            DynaLog.LogMessage("UnattendGen binary does not exist. Cancelling...")
+            e.Cancel = True
+            Exit Sub
+        End If
+
         UnattendGen.StartInfo.Arguments = "--target=" & Quote & SaveTarget & Quote
         If Debugger.IsAttached Then
             DynaLog.LogMessage("A debugger has been attached. Telling UnattendGen to show debug output...")
