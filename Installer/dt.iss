@@ -220,6 +220,13 @@ Root: HKCU; Subkey: "Software\DISMTools\Stable\SearchSettings"; ValueType: strin
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist
 
+[Messages]
+SetupAppTitle={#MyAppName} {#verConst} Installer
+SetupWindowTitle={#MyAppName} {#verConst} Installer ({#MyAppVersion})
+UninstallAppTitle={#MyAppName} {#verConst} Uninstaller
+UninstallAppFullTitle={#MyAppName} {#verConst} Uninstaller ({#MyAppVersion})
+BeveledLabel={#MyAppName} {#verConst}
+
 [Icons]
 Name: "{autoprograms}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"
 Name: "{autodesktop}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"; Tasks: desktopicon
