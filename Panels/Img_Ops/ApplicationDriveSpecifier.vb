@@ -25,9 +25,7 @@ Public Class ApplicationDriveSpecifier
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT DeviceID, Model, Partitions, Size FROM Win32_DiskDrive")
         Dim dskResults As ManagementObjectCollection = searcher.Get()
         DynaLog.LogMessage("Management object searcher returned " & dskResults.Count & " result(s)")
-        For Each result As ManagementObject In dskResults
-            ListView1.Items.Add(New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"}))
-        Next
+        ListView1.Items.AddRange(dskResults.Cast(Of ManagementObject)().Select(Function(result) New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"})).ToArray())
     End Sub
 
     Private Sub ApplicationDriveSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load

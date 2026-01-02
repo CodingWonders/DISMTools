@@ -35,6 +35,7 @@ Partial Class SampleScriptBrowser
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ScriptDetailsContainerPanel = New System.Windows.Forms.Panel()
         Me.ScriptDetailsPanel = New System.Windows.Forms.Panel()
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -42,7 +43,6 @@ Partial Class SampleScriptBrowser
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
@@ -139,7 +139,7 @@ Partial Class SampleScriptBrowser
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time"})
+        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
         Me.ComboBox1.Location = New System.Drawing.Point(15, 36)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(291, 21)
@@ -150,9 +150,9 @@ Partial Class SampleScriptBrowser
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(86, 13)
+        Me.Label1.Size = New System.Drawing.Size(153, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Choose a stage:"
+        Me.Label1.Text = "Choose a stage or script type:"
         '
         'ScriptDetailsContainerPanel
         '
@@ -178,6 +178,18 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsPanel.Size = New System.Drawing.Size(688, 513)
         Me.ScriptDetailsPanel.TabIndex = 1
         Me.ScriptDetailsPanel.Visible = False
+        '
+        'RichTextBox1
+        '
+        Me.RichTextBox1.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RichTextBox1.Location = New System.Drawing.Point(53, 192)
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.ReadOnly = True
+        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
+        Me.RichTextBox1.Size = New System.Drawing.Size(585, 273)
+        Me.RichTextBox1.TabIndex = 6
+        Me.RichTextBox1.Text = ""
+        Me.RichTextBox1.WordWrap = False
         '
         'Label7
         '
@@ -250,18 +262,6 @@ Partial Class SampleScriptBrowser
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "Select a script to view its information."
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'RichTextBox1
-        '
-        Me.RichTextBox1.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RichTextBox1.Location = New System.Drawing.Point(53, 192)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
-        Me.RichTextBox1.Size = New System.Drawing.Size(585, 273)
-        Me.RichTextBox1.TabIndex = 6
-        Me.RichTextBox1.Text = ""
-        Me.RichTextBox1.WordWrap = False
         '
         'Label8
         '

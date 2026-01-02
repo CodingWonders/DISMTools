@@ -265,9 +265,7 @@ Public Class ImgSwmToWim
                 Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(TextBox1.Text)
                 DynaLog.LogMessage("Information collection count: " & imgInfoCollection.Count)
                 NumericUpDown1.Maximum = imgInfoCollection.Count
-                For Each imgInfo As DismImageInfo In imgInfoCollection
-                    ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
-                Next
+                ListView1.Items.AddRange(imgInfoCollection.Select(Function(imgInfo) New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()})).ToArray())
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)

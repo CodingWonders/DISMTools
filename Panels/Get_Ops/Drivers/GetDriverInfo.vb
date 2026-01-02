@@ -496,10 +496,8 @@ Public Class GetDriverInfo
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting installed drivers...")
         If InstalledDriverInfo.Count > 0 Then
-            For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
-                InstalledDriverList.Add(DriverPackage)
-                ListView1.Items.Add(New ListViewItem(New String() {DriverPackage.PublishedName, Path.GetFileName(DriverPackage.OriginalFileName)}))
-            Next
+            InstalledDriverList.AddRange(InstalledDriverInfo.Select(Function(driver) driver))
+            ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
         End If
 
         ' Detect if the "Detect all drivers" option is checked and act accordingly
@@ -1286,16 +1284,14 @@ Public Class GetDriverInfo
         DynaLog.LogMessage("Search query: " & sQuery)
         DynaLog.LogMessage("Will original file names be searched instead of published names? " & If(OriginalNames, "Yes", "No"))
         If InstalledDriverInfo.Count > 0 Then
-            Dim FilteredDrivers
+            Dim FilteredDrivers As IEnumerable(Of DismDriverPackage)
             If OriginalNames Then
                 FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
             Else
                 FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End If
-            For Each FilteredDriver As DismDriverPackage In FilteredDrivers
-                ListView1.Items.Add(New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)}))
-                SearchedDriverList.Add(FilteredDriver)
-            Next
+            ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
+            SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))
         End If
     End Sub
 
@@ -1306,9 +1302,7 @@ Public Class GetDriverInfo
             SearchDrivers(SearchBox1.Text, SearchBox1.Text.StartsWith("og:", StringComparison.OrdinalIgnoreCase))
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
-            Next
+            ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
         End If
     End Sub
 

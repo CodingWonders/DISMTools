@@ -196,9 +196,7 @@ Public Class GetCapabilityInfoDlg
         DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting capabilities...")
-        For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-        Next
+        ListView1.Items.AddRange(InstalledCapabilityInfo.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
         SearchBox1.Text = ""
     End Sub
 
@@ -498,13 +496,11 @@ Public Class GetCapabilityInfoDlg
             End Select
         End If
         If InstalledCapabilityInfo.Count > 0 Then
-            Dim finalCapabilityLookup = InstalledCapabilityInfo.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            Dim finalCapabilityLookup As IEnumerable(Of DismCapability) = InstalledCapabilityInfo.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
             If capState <> "" Then      ' We filter them again based on the state
                 finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.State = expectedCapabilityState)
             End If
-            For Each filteredCapability In finalCapabilityLookup
-                ListView1.Items.Add(New ListViewItem(New String() {filteredCapability.Name, Casters.CastDismPackageState(filteredCapability.State, True)}))
-            Next
+            ListView1.Items.AddRange(finalCapabilityLookup.Select(Function(filteredCapability) New ListViewItem(New String() {filteredCapability.Name, Casters.CastDismPackageState(filteredCapability.State, True)})).ToArray())
         End If
     End Sub
 
@@ -519,9 +515,7 @@ Public Class GetCapabilityInfoDlg
             End If
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-            Next
+            ListView1.Items.AddRange(InstalledCapabilityInfo.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
         End If
     End Sub
 

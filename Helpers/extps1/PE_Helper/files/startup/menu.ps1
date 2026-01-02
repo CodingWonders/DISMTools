@@ -7,6 +7,7 @@ Write-Host "      Choose this method if you started the Preinstallation Environm
 Write-Host "      deployment solution. This is recommended for system administrators that want to deploy a system"
 Write-Host "      image to multiple computers at once."
 Write-Host "  C - Enter a command line"
+Write-Host "  K - Change active keyboard layout"
 Write-Host "  S - Shut down my computer"
 Write-Host "  R - Restart my computer`n"
 Write-Host "You will not be able to go back to choose another option after making your decision. You must reboot your"
@@ -21,6 +22,9 @@ switch ($option) {
 	}
 	"S" {
 		Start-Process -FilePath "$env:WINDIR\system32\wpeutil.exe" -ArgumentList "shutdown" -NoNewWindow -Wait
+	}
+	"K" {
+		New-Item -Path "$env:SYSTEMDRIVE\changekeyb" -ErrorAction SilentlyContinue | Out-Null
 	}
 	"R" {
 		Start-Process -FilePath "$env:WINDIR\system32\wpeutil.exe" -ArgumentList "reboot" -NoNewWindow -Wait

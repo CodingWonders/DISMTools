@@ -897,6 +897,7 @@
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Utilities\TourServer.vb" />
+    <Compile Include="Utilities\UserDataManagerModule.vb" />
     <Compile Include="Utilities\WebSearchUtilities\SearchEngine.vb" />
     <Compile Include="Utilities\WebSearchUtilities\SearchEngineHelper.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
@@ -1245,6 +1246,7 @@
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Update Microsoft Store Apps.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Show Extensions for Known File Types.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Second Chance OOBE.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Windows Notification Sources.dtss" />
     <None Include="Helpers\dthelper.bat">
@@ -1278,6 +1280,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\ChangeKeyboardLayout.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE_Inventory.ps1">
@@ -1963,6 +1968,7 @@
 SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
+SET CREATE_SAMPLE_USERDATA="Yes"
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
@@ -2080,6 +2086,13 @@ IF NOT EXIST videos (
 IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
 	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
+)
+IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
+	echo Creating sample userdata structure...
+	IF NOT EXIST "userdata" (md "userdata")
+	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts) DO (
+		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
+	)
 )
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information

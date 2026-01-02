@@ -2151,15 +2151,17 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''-- Bugfixes
+        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
         '''
-        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
-        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
-        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
-        '''- Fixed a crash when opening the popup mounted image picker in some cases
-        '''- When picking a starter script using the predefined collection, language highlighting  [resto de la cadena truncado]&quot;;.
+        '''New features:
+        '''
+        '''- A menu option has been added to the DISMTools Preinstallation Environment to change the keyboard layout to use
+        '''- Desktop background overrides have been implemented for the DISMTools Preinstallation Environment
+        '''- The &quot;Show File Extensions&quot; starter script has been introduced
+        '''- The Starter Script Browser can now show starter scripts created by users
+        '''- When selecti [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -50,31 +50,21 @@ Public Class ServiceManagementForm
         CheckBox1.Enabled = ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic
 
         ListView2.Items.Clear()
-        For Each RequiredPrivilege In ServiceList(Index).RequiredPrivileges
-            ListView2.Items.Add(New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription}))
-        Next
+        ListView2.Items.AddRange(ServiceList(Index).RequiredPrivileges.Select(Function(RequiredPrivilege) New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription})).ToArray())
 
         ListView3.Items.Clear()
         ListView4.Items.Clear()
         ListView5.Items.Clear()
 
-        Dim dependencies As List(Of WindowsService) = ServiceList.Where(Function(service) ServiceList(Index).Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName).ToList()
-        Dim dependents As List(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName).ToList()
+        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) ServiceList(Index).Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName)
+        Dim dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName)
 
-        For Each dependency As WindowsService In dependencies
-            ListView3.Items.Add(New ListViewItem(New String() {dependency.Name, dependency.DisplayName, dependency.TypeToString()}))
-        Next
-
-        For Each dependent As WindowsService In dependents
-            ListView4.Items.Add(New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()}))
-        Next
+        ListView3.Items.AddRange(dependencies.Select(Function(dependency) New ListViewItem(New String() {dependency.Name, dependency.DisplayName, dependency.TypeToString()})).ToArray())
+        ListView4.Items.AddRange(dependents.Select(Function(dependent) New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()})).ToArray())
 
         If ServiceList(Index).Group <> "" Then
-            Dim servicesInGroup As List(Of WindowsService) = ServiceList.Where(Function(service) service.Group.Equals(ServiceList(Index).Group, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(service) service.DisplayName).ToList()
-
-            For Each serviceInGroup As WindowsService In servicesInGroup
-                ListView5.Items.Add(New ListViewItem(New String() {serviceInGroup.Name, serviceInGroup.DisplayName, serviceInGroup.TypeToString()}))
-            Next
+            Dim servicesInGroup As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Group.Equals(ServiceList(Index).Group, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(service) service.DisplayName)
+            ListView5.Items.AddRange(servicesInGroup.Select(Function(serviceInGroup) New ListViewItem(New String() {serviceInGroup.Name, serviceInGroup.DisplayName, serviceInGroup.TypeToString()})).ToArray())
             ListView5.Visible = True
         Else
             TextBox6.Text = "<undefined service group>"
@@ -147,9 +137,7 @@ Public Class ServiceManagementForm
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
         DynaLog.EnableLogging()
 
-        For Each Service In ServiceList
-            ListView1.Items.Add(New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()}))
-        Next
+        ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -253,10 +241,8 @@ Public Class ServiceManagementForm
         DynaLog.DisableLogging()
         ServiceList = WindowsServiceHelper.GetServiceList(MainForm.MountDir)
         DynaLog.EnableLogging()
-
-        For Each Service In ServiceList
-            ListView1.Items.Add(New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()}))
-        Next
+        
+        ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
 
         Cursor = Cursors.Arrow
     End Sub

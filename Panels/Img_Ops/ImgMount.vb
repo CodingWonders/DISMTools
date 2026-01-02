@@ -631,9 +631,7 @@ Public Class ImgMount
             NumericUpDown1.Maximum = imgInfoCollection.Count
             If imgInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating list...")
-                For Each imgInfo As DismImageInfo In imgInfoCollection
-                    ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
-                Next
+                ListView1.Items.AddRange(imgInfoCollection.Select(Function(imgInfo) New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()})).ToArray())
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
