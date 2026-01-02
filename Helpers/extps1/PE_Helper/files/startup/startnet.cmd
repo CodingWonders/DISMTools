@@ -77,6 +77,7 @@ if %debug% lss 2 (
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
 	echo - To initialize networking, type "netinit" and press ENTER
 	echo - To show hardware and software inventory, type "inv" and press ENTER
+	echo - To change the keyboard layout, type "keyboardchange" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
@@ -92,5 +93,6 @@ if %debug% lss 2 (
 	doskey StartInstall=powershell -file "%sysdrive%\StartInstall.ps1"
 	doskey StartDim=cmd /c "%sysdrive%\dimstart.bat"
 	doskey netinit=cmd /c "%sysdrive%\scripts\initializenetwork.bat"
+	doskey keyboardchange=powershell -noprofile -file "%sysdrive%\ChangeKeyboardLayout.ps1"
 	exit /b
 )
