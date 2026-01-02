@@ -347,13 +347,13 @@ Public Class ISOCreator
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
             Button4.Enabled = False
         Else
             Button4.Enabled = True
         End If
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True

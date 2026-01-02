@@ -99,8 +99,8 @@ Public Class ADDSJoinDialog
         TextBox6.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         RichTextBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         VerifyInPages.AddRange(New WizardPage() {WizardPage.DnsConfigPage, WizardPage.DsConfigPage})
         ChangePage(WizardPage.DnsConfigPage)
         dnsMappings.Clear()

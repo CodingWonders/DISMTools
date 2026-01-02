@@ -287,35 +287,6 @@ Public Class MainForm
     ' Tour server
     Public ReadOnly tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
 
-    Friend NotInheritable Class NativeMethods
-
-        Private Sub New()
-        End Sub
-
-        <DllImport("dwmapi.dll")>
-        Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
-        End Function
-
-    End Class
-
-    Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
-    Const WS_EX_COMPOSITED As Integer = &H2000000
-    Const GWL_EXSTYLE As Integer = -20
-
-    Shared Sub EnableDarkTitleBar(hwnd As IntPtr, isDarkMode As Boolean)
-        Dim attribute As Integer = If(isDarkMode, 1, 0)
-        Dim result As Integer = NativeMethods.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
-    End Sub
-
-    Function GetWindowHandle(ctrl As Control) As IntPtr
-        Return ctrl.Handle
-    End Function
-
-    Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
-        Dim version = Environment.OSVersion.Version
-        Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)
-    End Function
-
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
         DynaLog.LogMessage("Command-line arguments that have been passed to the program: " & String.Join(" ", args))
@@ -5296,10 +5267,10 @@ Public Class MainForm
                     ColorModeRk.Close()
                     DynaLog.LogMessage("Color Mode is " & CInt(ColorMode) & ". Changing accordingly...")
                     If ColorMode = "0" Then
-                        If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
+                        WindowHelper.ToggleDarkTitleBar(Handle, True)
                         ThemeHelper.ChangeCurrentTheme(DarkThemeIndex, True)
                     ElseIf ColorMode = "1" Then
-                        If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
+                        WindowHelper.ToggleDarkTitleBar(Handle, False)
                         ThemeHelper.ChangeCurrentTheme(LightThemeIndex, False)
                     End If
                 Catch ex As Exception
@@ -5308,11 +5279,11 @@ Public Class MainForm
                 End Try
             Case 1
                 DynaLog.LogMessage("Color Code is 1. Switching to light theme...")
-                If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, False)
+                WindowHelper.ToggleDarkTitleBar(Handle, False)
                 ThemeHelper.ChangeCurrentTheme(LightThemeIndex, False)
             Case 2
                 DynaLog.LogMessage("Color Code is 1. Switching to dark theme...")
-                If IsWindowsVersionOrGreater(10, 0, 18362) Then EnableDarkTitleBar(Handle, True)
+                WindowHelper.ToggleDarkTitleBar(Handle, True)
                 ThemeHelper.ChangeCurrentTheme(DarkThemeIndex, True)
         End Select
         BackColor = CurrentTheme.BackgroundColor

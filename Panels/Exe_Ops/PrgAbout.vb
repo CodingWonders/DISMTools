@@ -358,8 +358,8 @@ Public Class PrgAbout
         CreditsPanel.ForeColor = Color.White
         RichTextBox1.ForeColor = ForeColor
         RichTextBox2.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         UpdCheckBtn.Enabled = Not MainForm.SkipUpdates
     End Sub
 

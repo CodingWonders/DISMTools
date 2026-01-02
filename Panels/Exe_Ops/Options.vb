@@ -1687,8 +1687,8 @@ Public Class Options
 
         End Try
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         If Not File.Exists(Application.StartupPath & "\portable") Then
             Panel2.Enabled = False
             Panel3.Visible = True

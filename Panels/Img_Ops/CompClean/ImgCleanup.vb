@@ -406,8 +406,8 @@ Public Class ImgCleanup
         RichTextBox1.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         PictureBox2.Image = GetGlyphResource("image_glyph")
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ' Determine when the last base reset was run
         DynaLog.LogMessage("Getting status of last base reset...")
         If MainForm.OnlineManagement Then

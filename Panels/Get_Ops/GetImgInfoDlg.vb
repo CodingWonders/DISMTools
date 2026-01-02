@@ -349,8 +349,8 @@ Public Class GetImgInfoDlg
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         LanguageList.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""

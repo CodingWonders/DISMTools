@@ -876,8 +876,8 @@ Public Class ProjProperties
         TabPage1.BackColor = CurrentTheme.SectionBackgroundColor
         TabPage2.BackColor = CurrentTheme.SectionBackgroundColor
         LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         LanguageList.ForeColor = ForeColor
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         imgMountDir.Text = ""

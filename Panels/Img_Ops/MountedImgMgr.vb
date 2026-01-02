@@ -188,8 +188,8 @@ Public Class MountedImgMgr
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
         ListView1.Items.Clear()
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DetectorBW.RunWorkerAsync()
     End Sub
 

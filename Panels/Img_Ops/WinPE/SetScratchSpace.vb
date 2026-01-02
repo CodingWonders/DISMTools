@@ -145,8 +145,8 @@ Public Class SetPEScratchSpace
         ComboBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox1.ForeColor = ForeColor
         Label5.Visible = False
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         GetScratchSpace()
     End Sub
 End Class

@@ -18,8 +18,8 @@ Public Class RegisteredServiceHostGroupsDialog
         ServiceGroupDetailsLv.ForeColor = ForeColor
         ServiceDetailsLv.BackColor = BackColor
         ServiceDetailsLv.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
         ' Order group information based on service count
         GroupInformation = GroupInformation.OrderByDescending(Function(serviceGroup) serviceGroup.Services.Count).ThenBy(Function(serviceGroup) serviceGroup.Name).ToList()

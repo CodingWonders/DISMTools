@@ -268,7 +268,7 @@ Public Class SetImageEdition
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Determining EULA option compatibility...")
         DynaLog.LogMessage("- Image Installation Type: " & MainForm.imgPType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))
