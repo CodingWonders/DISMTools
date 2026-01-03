@@ -519,7 +519,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -1252,7 +1252,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If MainForm.ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving installed device driver information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
@@ -1271,13 +1271,13 @@ Public Class GetDriverInfo
                     If File.Exists(drvFile) Then ImgInfoSaveDlg.DriverPkgs.Add(drvFile)
                 Next
             End If
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
-        DriverFileInfoDlg.ShowDialog()
+        DriverFileInfoDlg.ShowDialog(Me)
     End Sub
 
     Sub SearchDrivers(sQuery As String, OriginalNames As Boolean)

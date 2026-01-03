@@ -518,7 +518,7 @@ Public Class AddCapabilities
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             RichTextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub

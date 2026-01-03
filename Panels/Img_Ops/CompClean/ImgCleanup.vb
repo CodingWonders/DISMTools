@@ -803,7 +803,7 @@ Public Class ImgCleanup
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        HealthRestoreSourceOFD.ShowDialog()
+        HealthRestoreSourceOFD.ShowDialog(Me)
     End Sub
 
     Private Sub HealthRestoreSourceOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles HealthRestoreSourceOFD.FileOk

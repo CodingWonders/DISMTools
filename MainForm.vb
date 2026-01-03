@@ -8971,7 +8971,7 @@ Public Class MainForm
             CheckDTProjHeaders(DTProjPath)
             If isSqlServerDTProj Then
                 DynaLog.LogMessage("We are dealing with a SQL Server Data Tools project. Cancelling project load...")
-                SqlServerProjectErrorDlg.ShowDialog()
+                SqlServerProjectErrorDlg.ShowDialog(Me)
                 Exit Sub
             End If
             SaveProjectToolStripMenuItem.Enabled = True
@@ -9842,7 +9842,7 @@ Public Class MainForm
                 DynaLog.LogMessage("The program will be closed...")
                 ProgressPanel.ProgramIsBeingClosed = True
             End If
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
         End If
         Text = "DISMTools"
         If Debugger.IsAttached Then
@@ -9876,7 +9876,7 @@ Public Class MainForm
 
     Sub BeginOnlineManagement(ShowDialog As Boolean)
         DynaLog.LogMessage("Beginning active installation management. Show warning? " & If(ShowDialog, "Yes", "No"))
-        If ShowDialog Then ActiveInstAccessWarn.ShowDialog()
+        If ShowDialog Then ActiveInstAccessWarn.ShowDialog(Me)
         IsImageMounted = True
         isProjectLoaded = True
         Select Case Language
@@ -11799,13 +11799,13 @@ Public Class MainForm
     Private Sub NewProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles NewProjLink.LinkClicked
         If Not HomePanel.Visible Then Exit Sub
         DynaLog.LogMessage("Opening new project panel...")
-        NewProj.ShowDialog()
+        NewProj.ShowDialog(Me)
     End Sub
 
     Private Sub ExistingProjLink_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles ExistingProjLink.LinkClicked
         If Not HomePanel.Visible Then Exit Sub
         DynaLog.LogMessage("Opening project OFD...")
-        If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("File specified in OFD: " & OpenFileDialog1.FileName)
             If File.Exists(OpenFileDialog1.FileName) Then
                 DynaLog.LogMessage("Project file exists")
@@ -11917,7 +11917,7 @@ Public Class MainForm
             ProjProperties.Text = ProjProperties.Label1.Text
         End If
         DynaLog.LogMessage("Showing project/image properties...")
-        ProjProperties.ShowDialog()
+        ProjProperties.ShowDialog(Me)
     End Sub
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
@@ -11955,12 +11955,12 @@ Public Class MainForm
             ProjProperties.Text = ProjProperties.Label1.Text
         End If
         DynaLog.LogMessage("Showing project/image properties...")
-        ProjProperties.ShowDialog()
+        ProjProperties.ShowDialog(Me)
     End Sub
 
     Private Sub UnloadProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnloadProjectToolStripMenuItem.Click
         DynaLog.LogMessage("Showing save question...")
-        SaveProjectQuestionDialog.ShowDialog()
+        SaveProjectQuestionDialog.ShowDialog(Me)
         If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
             If SaveProjectQuestionDialog.CheckBox1.Checked Then
                 DynaLog.LogMessage("Saving project and unmounting the image...")
@@ -11998,7 +11998,7 @@ Public Class MainForm
             DynaLog.LogMessage("DISMTools is managing a project at this time. Unloading project...")
             If isModified Then
                 DynaLog.LogMessage("The image this project contains has been modified")
-                SaveProjectQuestionDialog.ShowDialog()
+                SaveProjectQuestionDialog.ShowDialog(Me)
                 If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
                     If SaveProjectQuestionDialog.CheckBox1.Checked Then
                         DynaLog.LogMessage("Saving project and unmounting the image...")
@@ -12136,7 +12136,7 @@ Public Class MainForm
         DynaLog.LogMessage("DISMTools is managing a project at this time. Unloading project...")
         If isModified Then
             DynaLog.LogMessage("The image this project contains has been modified")
-            SaveProjectQuestionDialog.ShowDialog()
+            SaveProjectQuestionDialog.ShowDialog(Me)
             If SaveProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
                 If SaveProjectQuestionDialog.CheckBox1.Checked Then
                     DynaLog.LogMessage("Saving project and unmounting the image...")
@@ -12171,7 +12171,7 @@ Public Class MainForm
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
         DynaLog.LogMessage("Launching Options Panel...")
         Options.PrefReset.Enabled = True
-        Options.ShowDialog()
+        Options.ShowDialog(Me)
     End Sub
 
     Private Sub ExplorerView_Click(sender As Object, e As EventArgs) Handles Button22.Click
@@ -12182,11 +12182,11 @@ Public Class MainForm
     Private Sub GetImageInfo_Click(sender As Object, e As EventArgs) Handles GetImageInfo.Click
         If ImgBW.IsBusy Then
             DynaLog.LogMessage("Notifying user about background process being busy...")
-            BGProcsBusyDialog.ShowDialog()
+            BGProcsBusyDialog.ShowDialog(Me)
             Exit Sub
         End If
         DynaLog.LogMessage("Opening image file information dialog...")
-        GetImgInfoDlg.ShowDialog()
+        GetImgInfoDlg.ShowDialog(Me)
     End Sub
 
     Private Sub prjTreeView_AfterExpand(sender As Object, e As TreeViewEventArgs) Handles prjTreeView.AfterExpand
@@ -12492,32 +12492,32 @@ Public Class MainForm
 
     Private Sub AddPackage_Click(sender As Object, e As EventArgs) Handles AddPackage.Click
         DynaLog.LogMessage("Opening package addition dialog...")
-        AddPackageDlg.ShowDialog()
+        AddPackageDlg.ShowDialog(Me)
     End Sub
 
     Private Sub AboutDISMToolsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutDISMToolsToolStripMenuItem.Click, VersionTSMI.Click
         DynaLog.LogMessage("Showing program information...")
-        PrgAbout.ShowDialog()
+        PrgAbout.ShowDialog(Me)
     End Sub
 
     Private Sub WIMESDToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles WIMESDToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image conversion dialog...")
-        ImgWim2Esd.ShowDialog()
+        ImgWim2Esd.ShowDialog(Me)
     End Sub
 
     Private Sub CaptureImage_Click(sender As Object, e As EventArgs) Handles CaptureImage.Click
         DynaLog.LogMessage("Opening image capture dialog...")
-        ImgCapture.ShowDialog()
+        ImgCapture.ShowDialog(Me)
     End Sub
 
     Private Sub MergeSWM_Click(sender As Object, e As EventArgs) Handles MergeSWM.Click
         DynaLog.LogMessage("Opening image merger dialog...")
-        ImgSwmToWim.ShowDialog()
+        ImgSwmToWim.ShowDialog(Me)
     End Sub
 
     Private Sub ApplyImage_Click(sender As Object, e As EventArgs) Handles ApplyImage.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        ImgApply.ShowDialog()
+        ImgApply.ShowDialog(Me)
     End Sub
 
     Private Sub SaveProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveProjectToolStripMenuItem.Click
@@ -12732,7 +12732,7 @@ Public Class MainForm
                         ProgressPanel.SaveToNewIndex = False
                         ProgressPanel.UMountImgIndex = ImgIndex
                         ProgressPanel.OperationNum = 21
-                        ProgressPanel.ShowDialog()
+                        ProgressPanel.ShowDialog(Me)
                     End If
                 ElseIf SysVer.Minor = 1 Then    ' Windows 7 / WinPE 3.x
 
@@ -12764,34 +12764,34 @@ Public Class MainForm
                 ProgressPanel.SaveToNewIndex = False
                 ProgressPanel.UMountImgIndex = ImgIndex
                 ProgressPanel.OperationNum = 21
-                ProgressPanel.ShowDialog()
+                ProgressPanel.ShowDialog(Me)
             End If
         End If
     End Sub
 
     Private Sub RemovePackage_Click(sender As Object, e As EventArgs) Handles RemovePackage.Click
-        RemPackage.ShowDialog()
+        RemPackage.ShowDialog(Me)
     End Sub
 
     Private Sub EnableFeature_Click(sender As Object, e As EventArgs) Handles EnableFeature.Click
-        EnableFeat.ShowDialog()
+        EnableFeat.ShowDialog(Me)
     End Sub
 
     Private Sub DisableFeature_Click(sender As Object, e As EventArgs) Handles DisableFeature.Click
-        DisableFeat.ShowDialog()
+        DisableFeat.ShowDialog(Me)
     End Sub
 
     Private Sub AddProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles AddProvisionedAppxPackage.Click
-        AddProvAppxPackage.ShowDialog()
+        AddProvAppxPackage.ShowDialog(Me)
     End Sub
 
     Private Sub RemoveProvisionedAppxPackage_Click(sender As Object, e As EventArgs) Handles RemoveProvisionedAppxPackage.Click
-        RemProvAppxPackage.ShowDialog()
+        RemProvAppxPackage.ShowDialog(Me)
     End Sub
 
     Private Sub DeleteImage_Click(sender As Object, e As EventArgs) Handles DeleteImage.Click
         DynaLog.LogMessage("Opening image index removal dialog...")
-        ImgIndexDelete.ShowDialog()
+        ImgIndexDelete.ShowDialog(Me)
     End Sub
 
     Private Sub MountedImageDetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles MountedImageDetectorBW.DoWork
@@ -12880,7 +12880,7 @@ Public Class MainForm
             ImgUMount.TextBox1.Text = MountedImgMgr.ListView1.FocusedItem.SubItems(2).Text
             ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         End If
-        ImgUMount.ShowDialog()
+        ImgUMount.ShowDialog(Me)
     End Sub
 
     Private Sub CommitAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles CommitAndUnmountTSMI.Click
@@ -12892,7 +12892,7 @@ Public Class MainForm
         ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         ProgressPanel.MountDir = ""
         ProgressPanel.UMountOp = 0
-        ProgressPanel.ShowDialog()
+        ProgressPanel.ShowDialog(Me)
     End Sub
 
     Private Sub DiscardAndUnmountTSMI_Click(sender As Object, e As EventArgs) Handles DiscardAndUnmountTSMI.Click
@@ -12904,22 +12904,22 @@ Public Class MainForm
         ProgressPanel.UMountImgIndex = MountedImgMgr.ListView1.FocusedItem.SubItems(1).Text
         ProgressPanel.MountDir = ""
         ProgressPanel.UMountOp = 1
-        ProgressPanel.ShowDialog()
+        ProgressPanel.ShowDialog(Me)
     End Sub
 
     Private Sub CleanupImage_Click(sender As Object, e As EventArgs) Handles CleanupImage.Click
         DynaLog.LogMessage("Opening image cleanup dialog...")
-        ImgCleanup.ShowDialog()
+        ImgCleanup.ShowDialog(Me)
     End Sub
 
     Private Sub NewProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewProjectToolStripMenuItem.Click
         DynaLog.LogMessage("Opening project creation dialog...")
-        NewProj.ShowDialog()
+        NewProj.ShowDialog(Me)
     End Sub
 
     Private Sub OpenExistingProjectToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExistingProjectToolStripMenuItem.Click
         DynaLog.LogMessage("Opening project OFD...")
-        If OpenFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("File specified in OFD: " & OpenFileDialog1.FileName)
             If File.Exists(OpenFileDialog1.FileName) Then
                 DynaLog.LogMessage("Project file exists")
@@ -12999,19 +12999,19 @@ Public Class MainForm
     End Sub
 
     Private Sub AddCapability_Click(sender As Object, e As EventArgs) Handles AddCapability.Click
-        AddCapabilities.ShowDialog()
+        AddCapabilities.ShowDialog(Me)
     End Sub
 
     Private Sub RemoveCapability_Click(sender As Object, e As EventArgs) Handles RemoveCapability.Click
-        RemCapabilities.ShowDialog()
+        RemCapabilities.ShowDialog(Me)
     End Sub
 
     Private Sub AddDriver_Click(sender As Object, e As EventArgs) Handles AddDriver.Click
-        AddDrivers.ShowDialog()
+        AddDrivers.ShowDialog(Me)
     End Sub
 
     Private Sub RemoveDriver_Click(sender As Object, e As EventArgs) Handles RemoveDriver.Click
-        RemDrivers.ShowDialog()
+        RemDrivers.ShowDialog(Me)
     End Sub
 
     ''' <summary>
@@ -13062,7 +13062,7 @@ Public Class MainForm
 
     Private Sub AddProvisioningPackage_Click(sender As Object, e As EventArgs) Handles AddProvisioningPackage.Click
         DynaLog.LogMessage("Opening provisioned package addition dialog...")
-        AddProvisioningPkg.ShowDialog()
+        AddProvisioningPkg.ShowDialog(Me)
     End Sub
 
     Private Sub OnlineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OnlineInstMgmt.LinkClicked
@@ -13962,7 +13962,7 @@ Public Class MainForm
     Private Sub ScratchDirectorySettingsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ScratchDirectorySettingsToolStripMenuItem.Click
         DynaLog.LogMessage("Opening options dialog...")
         Options.SectionNum = 3
-        Options.ShowDialog()
+        Options.ShowDialog(Me)
     End Sub
 
     Private Sub ManageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageToolStripMenuItem.Click
@@ -13982,22 +13982,22 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image mount dialog...")
         DynaLog.LogMessage("Stopping mounted image detector...")
         StopMountedImageDetector()
-        ImgMount.ShowDialog()
+        ImgMount.ShowDialog(Me)
     End Sub
 
     Private Sub UnmountImageToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnmountImageToolStripMenuItem.Click
         DynaLog.LogMessage("Opening image unmount dialog...")
         ImgUMount.RadioButton1.Checked = True
         ImgUMount.RadioButton2.Checked = False
-        ImgUMount.ShowDialog()
+        ImgUMount.ShowDialog(Me)
     End Sub
 
     Private Sub RemoveVolumeImagesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemoveVolumeImagesToolStripMenuItem.Click
-        ImgIndexDelete.ShowDialog()
+        ImgIndexDelete.ShowDialog(Me)
     End Sub
 
     Private Sub SwitchImageIndexesToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles SwitchImageIndexesToolStripMenuItem1.Click
-        ImgIndexSwitch.ShowDialog()
+        ImgIndexSwitch.ShowDialog(Me)
     End Sub
 
     Private Sub ManageOnlineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOnlineInstallationToolStripMenuItem.Click
@@ -14007,7 +14007,7 @@ Public Class MainForm
         If isProjectLoaded Then
             DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
-            ActiveInstAccessWarn.ShowDialog()
+            ActiveInstAccessWarn.ShowDialog(Me)
             If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
             If ImgBW.IsBusy Then Exit Sub
         End If
@@ -14017,7 +14017,7 @@ Public Class MainForm
 
     Private Sub ManageOfflineInstallationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ManageOfflineInstallationToolStripMenuItem.Click
         DynaLog.LogMessage("Beginning offline installation management...")
-        If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If OfflineInstDriveLister.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Selected drive path: " & drivePath)
             DynaLog.LogMessage("User has accepted the disk chooser popup.")
             If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
@@ -14134,7 +14134,7 @@ Public Class MainForm
         End If
         StopMountedImageDetector()
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
-        GetDriverInfo.ShowDialog()
+        GetDriverInfo.ShowDialog(Me)
     End Sub
 
     Private Sub ViewProjectFilesInFileExplorerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ViewProjectFilesInFileExplorerToolStripMenuItem.Click
@@ -14376,7 +14376,7 @@ Public Class MainForm
         DynaLog.LogMessage("Triggering logo asset resource save...")
         If OnlineManagement Then AppxResSFD.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) Else AppxResSFD.InitialDirectory = projPath
         AppxResSFD.FileName = If(GetAppxPkgInfoDlg.displayName <> "", GetAppxPkgInfoDlg.displayName, GetAppxPkgInfoDlg.Label25.Text)
-        AppxResSFD.ShowDialog()
+        AppxResSFD.ShowDialog(Me)
     End Sub
 
     Private Sub AppxResSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxResSFD.FileOk
@@ -14482,7 +14482,7 @@ Public Class MainForm
 
     Private Sub SplitImage_Click(sender As Object, e As EventArgs) Handles SplitImage.Click
         DynaLog.LogMessage("Opening image split dialog...")
-        ImgSplit.ShowDialog()
+        ImgSplit.ShowDialog(Me)
     End Sub
 
     Private Sub Notifications_BalloonTipClicked(sender As Object, e As EventArgs) Handles Notifications.BalloonTipClicked
@@ -14496,24 +14496,24 @@ Public Class MainForm
 
     Private Sub ExportDriver_Click(sender As Object, e As EventArgs) Handles ExportDriver.Click
         DynaLog.LogMessage("Opening device driver export dialog...")
-        ExportDrivers.ShowDialog()
+        ExportDrivers.ShowDialog(Me)
     End Sub
 
     Private Sub GetPESettings_Click(sender As Object, e As EventArgs) Handles GetPESettings.Click
-        GetWinPESettings.ShowDialog()
+        GetWinPESettings.ShowDialog(Me)
     End Sub
 
     Private Sub SetTargetPath_Click(sender As Object, e As EventArgs) Handles SetTargetPath.Click
-        SetPETargetPath.ShowDialog()
+        SetPETargetPath.ShowDialog(Me)
     End Sub
 
     Private Sub SetScratchSpace_Click(sender As Object, e As EventArgs) Handles SetScratchSpace.Click
-        SetPEScratchSpace.ShowDialog()
+        SetPEScratchSpace.ShowDialog(Me)
     End Sub
 
     Private Sub ISFix_Click(sender As Object, e As EventArgs) Handles ISFix.Click
         DynaLog.LogMessage("Showing dialog for invalid settings...")
-        InvalidSettingsDialog.ShowDialog()
+        InvalidSettingsDialog.ShowDialog(Me)
     End Sub
 
     Private Sub MicrosoftAppsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MicrosoftAppsToolStripMenuItem.Click
@@ -14525,7 +14525,7 @@ Public Class MainForm
     End Sub
 
     Private Sub SaveImageInformationToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SaveImageInformationToolStripMenuItem.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
@@ -14546,14 +14546,14 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub OfflineInstMgmt_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles OfflineInstMgmt.LinkClicked
         DynaLog.LogMessage("Beginning offline installation management...")
-        If OfflineInstDriveLister.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If OfflineInstDriveLister.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Selected drive path: " & drivePath)
             DynaLog.LogMessage("User has accepted the disk chooser popup.")
             If drivePath = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) Then
@@ -14626,7 +14626,7 @@ Public Class MainForm
             ProjProperties.Text = ProjProperties.Label1.Text
         End If
         DynaLog.LogMessage("Showing project/image properties...")
-        ProjProperties.ShowDialog()
+        ProjProperties.ShowDialog(Me)
     End Sub
 
     Private Sub LinkLabel16_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel16.LinkClicked
@@ -14690,7 +14690,7 @@ Public Class MainForm
         DynaLog.LogMessage("Opening image unmount dialog...")
         ImgUMount.RadioButton1.Checked = True
         ImgUMount.RadioButton2.Checked = False
-        ImgUMount.ShowDialog()
+        ImgUMount.ShowDialog(Me)
     End Sub
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
@@ -14728,12 +14728,12 @@ Public Class MainForm
             ProjProperties.Text = ProjProperties.Label1.Text
         End If
         DynaLog.LogMessage("Showing project/image properties...")
-        ProjProperties.ShowDialog()
+        ProjProperties.ShowDialog(Me)
     End Sub
 
     Private Sub LinkLabel21_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel21.LinkClicked
         DynaLog.LogMessage("Opening image mount dialog...")
-        ImgMount.ShowDialog()
+        ImgMount.ShowDialog(Me)
     End Sub
 
 #End Region
@@ -14741,7 +14741,7 @@ Public Class MainForm
 #Region "Common Task button functionality in new design"
 
     Private Sub Button24_Click(sender As Object, e As EventArgs) Handles Button24.Click
-        ImgIndexSwitch.ShowDialog()
+        ImgIndexSwitch.ShowDialog(Me)
     End Sub
 
     Private Sub Button25_Click(sender As Object, e As EventArgs) Handles Button25.Click
@@ -14755,7 +14755,7 @@ Public Class MainForm
     Private Sub Button26_Click(sender As Object, e As EventArgs) Handles Button26.Click
         DynaLog.LogMessage("Opening image mount dialog...")
         StopMountedImageDetector()
-        ImgMount.ShowDialog()
+        ImgMount.ShowDialog(Me)
     End Sub
 
     Private Sub Button27_Click(sender As Object, e As EventArgs) Handles Button27.Click
@@ -14783,21 +14783,21 @@ Public Class MainForm
 
     Private Sub Button30_Click(sender As Object, e As EventArgs) Handles Button30.Click
         DynaLog.LogMessage("Opening image application dialog...")
-        ImgApply.ShowDialog()
+        ImgApply.ShowDialog(Me)
     End Sub
 
     Private Sub Button31_Click(sender As Object, e As EventArgs) Handles Button31.Click
         DynaLog.LogMessage("Opening image capture dialog...")
-        ImgCapture.ShowDialog()
+        ImgCapture.ShowDialog(Me)
     End Sub
 
     Private Sub Button32_Click(sender As Object, e As EventArgs) Handles Button32.Click
         DynaLog.LogMessage("Opening volume image removal dialog...")
-        ImgIndexDelete.ShowDialog()
+        ImgIndexDelete.ShowDialog(Me)
     End Sub
 
     Private Sub Button33_Click(sender As Object, e As EventArgs) Handles Button33.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
@@ -14818,7 +14818,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
@@ -14862,21 +14862,21 @@ Public Class MainForm
     End Sub
 
     Private Sub Button35_Click(sender As Object, e As EventArgs) Handles Button35.Click
-        RemPackage.ShowDialog()
+        RemPackage.ShowDialog(Me)
     End Sub
 
     Private Sub Button36_Click(sender As Object, e As EventArgs) Handles Button36.Click
         DynaLog.LogMessage("Opening package addition dialog...")
-        AddPackageDlg.ShowDialog()
+        AddPackageDlg.ShowDialog(Me)
     End Sub
 
     Private Sub Button37_Click(sender As Object, e As EventArgs) Handles Button37.Click
         DynaLog.LogMessage("Opening image cleanup dialog...")
-        ImgCleanup.ShowDialog()
+        ImgCleanup.ShowDialog(Me)
     End Sub
 
     Private Sub Button38_Click(sender As Object, e As EventArgs) Handles Button38.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving installed package information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.PackageFiles.Count > 0 Then ImgInfoSaveDlg.PackageFiles.Clear()
@@ -14888,7 +14888,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 2
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
@@ -14933,15 +14933,15 @@ Public Class MainForm
     End Sub
 
     Private Sub Button40_Click(sender As Object, e As EventArgs) Handles Button40.Click
-        DisableFeat.ShowDialog()
+        DisableFeat.ShowDialog(Me)
     End Sub
 
     Private Sub Button41_Click(sender As Object, e As EventArgs) Handles Button41.Click
-        EnableFeat.ShowDialog()
+        EnableFeat.ShowDialog(Me)
     End Sub
 
     Private Sub Button42_Click(sender As Object, e As EventArgs) Handles Button42.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving feature information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
@@ -14953,17 +14953,17 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button43_Click(sender As Object, e As EventArgs) Handles Button43.Click
-        RemProvAppxPackage.ShowDialog()
+        RemProvAppxPackage.ShowDialog(Me)
     End Sub
 
     Private Sub Button44_Click(sender As Object, e As EventArgs) Handles Button44.Click
-        AddProvAppxPackage.ShowDialog()
+        AddProvAppxPackage.ShowDialog(Me)
     End Sub
 
     Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
@@ -15035,7 +15035,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button46_Click(sender As Object, e As EventArgs) Handles Button46.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving installed AppX package information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
@@ -15047,17 +15047,17 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button47_Click(sender As Object, e As EventArgs) Handles Button47.Click
-        RemCapabilities.ShowDialog()
+        RemCapabilities.ShowDialog(Me)
     End Sub
 
     Private Sub Button48_Click(sender As Object, e As EventArgs) Handles Button48.Click
-        AddCapabilities.ShowDialog()
+        AddCapabilities.ShowDialog(Me)
     End Sub
 
     Private Sub Button49_Click(sender As Object, e As EventArgs) Handles Button49.Click
@@ -15130,7 +15130,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button50_Click(sender As Object, e As EventArgs) Handles Button50.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving capability information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
@@ -15142,13 +15142,13 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button51_Click(sender As Object, e As EventArgs) Handles Button51.Click
-        RemDrivers.ShowDialog()
+        RemDrivers.ShowDialog(Me)
     End Sub
 
     Private Sub Button52_Click(sender As Object, e As EventArgs) Handles Button52.Click
@@ -15186,15 +15186,15 @@ Public Class MainForm
         End If
         StopMountedImageDetector()
         If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
-        GetDriverInfo.ShowDialog()
+        GetDriverInfo.ShowDialog(Me)
     End Sub
 
     Private Sub Button53_Click(sender As Object, e As EventArgs) Handles Button53.Click
-        AddDrivers.ShowDialog()
+        AddDrivers.ShowDialog(Me)
     End Sub
 
     Private Sub Button54_Click(sender As Object, e As EventArgs) Handles Button54.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving installed device driver information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
@@ -15208,17 +15208,17 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 7
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button55_Click(sender As Object, e As EventArgs) Handles Button55.Click
-        GetWinPESettings.ShowDialog()
+        GetWinPESettings.ShowDialog(Me)
     End Sub
 
     Private Sub Button56_Click(sender As Object, e As EventArgs) Handles Button56.Click
-        If ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving Windows PE configuration information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SourceImg
@@ -15229,17 +15229,17 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button57_Click(sender As Object, e As EventArgs) Handles Button57.Click
-        SetPETargetPath.ShowDialog()
+        SetPETargetPath.ShowDialog(Me)
     End Sub
 
     Private Sub Button58_Click(sender As Object, e As EventArgs) Handles Button58.Click
-        SetPEScratchSpace.ShowDialog()
+        SetPEScratchSpace.ShowDialog(Me)
     End Sub
 
 #End Region
@@ -15572,7 +15572,7 @@ Public Class MainForm
     End Sub
 
     Private Sub ImportDriver_Click(sender As Object, e As EventArgs) Handles ImportDriver.Click
-        ImportDrivers.ShowDialog()
+        ImportDrivers.ShowDialog(Me)
     End Sub
 
     Private Sub AppxDownloadHelpToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AppxDownloadHelpToolStripMenuItem.Click
@@ -15598,7 +15598,7 @@ Public Class MainForm
     End Function
 
     Private Sub SetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles SetOSUninstallWindow.Click
-        SetOSUninstWindow.ShowDialog()
+        SetOSUninstWindow.ShowDialog(Me)
     End Sub
 
     Private Sub GetOSUninstallWindow_Click(sender As Object, e As EventArgs) Handles GetOSUninstallWindow.Click
@@ -16058,7 +16058,7 @@ Public Class MainForm
 
     Private Sub ExportImage_Click(sender As Object, e As EventArgs) Handles ExportImage.Click
         DynaLog.LogMessage("Opening image export dialog...")
-        ImgExport.ShowDialog()
+        ImgExport.ShowDialog(Me)
     End Sub
 
     Private Sub CleanupMountpoints_Click(sender As Object, e As EventArgs) Handles CleanupMountpoints.Click
@@ -16142,7 +16142,7 @@ Public Class MainForm
 
     Private Sub AppendImage_Click(sender As Object, e As EventArgs) Handles AppendImage.Click
         DynaLog.LogMessage("Opening image append dialog...")
-        ImgAppend.ShowDialog()
+        ImgAppend.ShowDialog(Me)
     End Sub
 
     Private Sub Button17_Click(sender As Object, e As EventArgs) Handles Button17.Click
@@ -16427,7 +16427,7 @@ Public Class MainForm
 
     Private Sub SetLayeredDriver_Click(sender As Object, e As EventArgs) Handles SetLayeredDriver.Click
         DynaLog.LogMessage("Opening layered driver configuration dialog...")
-        SetLayeredDriverDialog.ShowDialog()
+        SetLayeredDriverDialog.ShowDialog(Me)
     End Sub
 
     Private Sub UnattendedAnswerFileManagerToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UnattendedAnswerFileManagerToolStripMenuItem.Click
@@ -16445,7 +16445,7 @@ Public Class MainForm
 
     Private Sub ApplyUnattend_Click(sender As Object, e As EventArgs) Handles ApplyUnattend.Click
         DynaLog.LogMessage("Opening unattended answer file application dialog...")
-        ApplyUnattendFile.ShowDialog()
+        ApplyUnattendFile.ShowDialog(Me)
     End Sub
 
     Private Sub VideoGetterBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles VideoGetterBW.DoWork
@@ -16878,13 +16878,13 @@ Public Class MainForm
 
     Private Sub SetProductKey_Click(sender As Object, e As EventArgs) Handles SetProductKey.Click
         StopMountedImageDetector()
-        SetImageKey.ShowDialog()
+        SetImageKey.ShowDialog(Me)
         StartMountedImageDetector()
     End Sub
 
     Private Sub SetEdition_Click(sender As Object, e As EventArgs) Handles SetEdition.Click
         StopMountedImageDetector()
-        SetImageEdition.ShowDialog()
+        SetImageEdition.ShowDialog(Me)
         StartMountedImageDetector()
     End Sub
 

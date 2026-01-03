@@ -50,7 +50,7 @@ Public Class SetPEScratchSpace
         DynaLog.LogMessage("Opening scratch space configuration dialog...")
         If MainForm.ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
+            BGProcsBusyDialog.ShowDialog(Me)
             Return False
         End If
         Return True

@@ -276,7 +276,7 @@ Public Class NewTestingEnv
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Target location of testing environment files: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             TextBox3.Text = FolderBrowserDialog1.SelectedPath
         End If

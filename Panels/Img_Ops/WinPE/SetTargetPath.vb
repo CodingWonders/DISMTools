@@ -203,7 +203,7 @@ Public Class SetPETargetPath
         DynaLog.LogMessage("Opening target path configuration dialog...")
         If MainForm.ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
+            BGProcsBusyDialog.ShowDialog(Me)
             Return False
         End If
         Return True

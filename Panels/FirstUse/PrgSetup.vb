@@ -85,7 +85,7 @@ Public Class PrgSetup
     End Sub
 
     Private Sub closeBox_Click(sender As Object, e As EventArgs) Handles closeBox.Click
-        IncompleteSetupDlg.ShowDialog()
+        IncompleteSetupDlg.ShowDialog(Me)
         If IncompleteSetupDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             Close()
         End If
@@ -808,7 +808,7 @@ Public Class PrgSetup
     End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
-        IncompleteSetupDlg.ShowDialog()
+        IncompleteSetupDlg.ShowDialog(Me)
         If IncompleteSetupDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             Close()
         End If
@@ -831,7 +831,7 @@ Public Class PrgSetup
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        SaveFileDialog1.ShowDialog()
+        SaveFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk

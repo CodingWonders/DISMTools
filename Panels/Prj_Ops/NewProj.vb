@@ -247,7 +247,7 @@ Public Class NewProj
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
             TextBox2.Text = FolderBrowserDialog1.SelectedPath
             IsReqField2Valid = True

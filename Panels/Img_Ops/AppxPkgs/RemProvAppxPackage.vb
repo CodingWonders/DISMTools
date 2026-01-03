@@ -425,6 +425,6 @@ Public Class RemProvAppxPackage
         HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\remove_provisionedappxpackage.html#questions")
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog()
+        HelpBrowserForm.ShowDialog(Me)
     End Sub
 End Class

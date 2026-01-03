@@ -127,7 +127,7 @@ Public Class AddPackageDlg
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
             ScanBW.RunWorkerAsync()

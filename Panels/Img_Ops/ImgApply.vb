@@ -104,7 +104,7 @@ Public Class ImgApply
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        ApplicationDriveSpecifier.ShowDialog()
+        ApplicationDriveSpecifier.ShowDialog(Me)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -464,7 +464,7 @@ Public Class ImgApply
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -544,7 +544,7 @@ Public Class ImgApply
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK Then
             TextBox2.Text = FolderBrowserDialog1.SelectedPath
         Else

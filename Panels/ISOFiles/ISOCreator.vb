@@ -509,11 +509,11 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        SaveFileDialog1.ShowDialog()
+        SaveFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -533,7 +533,7 @@ Public Class ISOCreator
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
-                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1), 
+                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1),
                                                                                                                        imageinfo.ImageName,
                                                                                                                        imageinfo.ImageDescription,
                                                                                                                        imageinfo.ProductVersion.ToString(),
@@ -872,7 +872,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        OpenFileDialog2.ShowDialog()
+        OpenFileDialog2.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk

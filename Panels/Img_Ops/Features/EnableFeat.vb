@@ -497,7 +497,7 @@ Public Class EnableFeat
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
             RichTextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub

@@ -20,7 +20,7 @@ Public Class ImgMount
         DynaLog.LogMessage("Checking if the mount directory exists...")
         If Not Directory.Exists(TextBox2.Text) Then
             DynaLog.LogMessage("The mount directory does not exist. Asking the user whether or not to create it...")
-            MountOpDirCreationDialog.ShowDialog()
+            MountOpDirCreationDialog.ShowDialog(Me)
             If MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
                 Try
                     DynaLog.LogMessage("The user wants the mount directory to be created. Attempting to create it...")
@@ -439,7 +439,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FileSpecDialog.ShowDialog()
+        FileSpecDialog.ShowDialog(Me)
         If TextBox1.Text <> "" Then
             If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
                 Button3.Visible = True
@@ -609,7 +609,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK Then
             TextBox2.Text = FolderBrowserDialog1.SelectedPath
         Else

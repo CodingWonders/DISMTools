@@ -334,7 +334,7 @@ Public Class MountedImgMgr
             DynaLog.LogMessage("The selected image needs to be remounted.")
             ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
             ProgressPanel.OperationNum = 18
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
             Button2.Enabled = False
         ElseIf MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 2 Then
             DynaLog.LogMessage("The selected image needs to be repaired.")
@@ -360,7 +360,7 @@ Public Class MountedImgMgr
             ProgressPanel.UMountImgIndex = ListView1.FocusedItem.SubItems(1).Text
             ProgressPanel.MountDir = ""
             ProgressPanel.UMountOp = 1
-            ProgressPanel.ShowDialog()
+            ProgressPanel.ShowDialog(Me)
         End If
     End Sub
 
@@ -471,7 +471,7 @@ Public Class MountedImgMgr
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.StopMountedImageDetector()
         ImgIndexDelete.TextBox1.Text = ListView1.FocusedItem.SubItems(0).Text
-        ImgIndexDelete.ShowDialog()
+        ImgIndexDelete.ShowDialog(Me)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click

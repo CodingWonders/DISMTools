@@ -327,7 +327,7 @@ Public Class RemPackage
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK Then
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
         Else

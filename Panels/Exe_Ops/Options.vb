@@ -1924,11 +1924,11 @@ Public Class Options
             Exit Sub
         End If
         DynaLog.LogMessage("Showing component information...")
-        DismComponents.ShowDialog()
+        DismComponents.ShowDialog(Me)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        DismOFD.ShowDialog()
+        DismOFD.ShowDialog(Me)
     End Sub
 
     Private Sub DismOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles DismOFD.FileOk
@@ -1946,7 +1946,7 @@ Public Class Options
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        LogSFD.ShowDialog()
+        LogSFD.ShowDialog(Me)
     End Sub
 
     Private Sub LogSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LogSFD.FileOk
@@ -1955,7 +1955,7 @@ Public Class Options
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        ScratchFBD.ShowDialog()
+        ScratchFBD.ShowDialog(Me)
         If DialogResult.OK And ScratchFBD.SelectedPath <> "" Then
             TextBox3.Text = ScratchFBD.SelectedPath
         End If
@@ -2681,7 +2681,7 @@ Public Class Options
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
-        BGProcsAdvSettings.ShowDialog()
+        BGProcsAdvSettings.ShowDialog(Me)
     End Sub
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
@@ -2734,7 +2734,7 @@ Public Class Options
 
     Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
         DynaLog.LogMessage("Preparing to reset settings... It will be done if the user wants to do so")
-        SettingsResetDlg.ShowDialog()
+        SettingsResetDlg.ShowDialog(Me)
         If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Proceeding to reset settings - User accepted the question.")
             MainForm.ResetDTSettings()
@@ -3191,7 +3191,7 @@ Public Class Options
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        EditorOFD.ShowDialog()
+        EditorOFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorOFD.FileOk
