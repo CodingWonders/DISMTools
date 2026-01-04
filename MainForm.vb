@@ -11,6 +11,7 @@ Imports System.Xml.Serialization
 Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
 Imports DISMTools.Elements
+Imports DISMTools.Elements.Contemporaneus
 
 Public Class MainForm
 
@@ -286,6 +287,9 @@ Public Class MainForm
 
     ' Tour server
     Public ReadOnly tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
+
+    ' Contemporaneus Preview
+    Public MountedImageList As New List(Of WindowsImage)
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -1127,6 +1131,8 @@ Public Class MainForm
             MountedImageImgStatusList.Clear()
             MountedImageReWrList.Clear()
             MountedImageImgVersionList.Clear()
+
+            MountedImageList.Clear()
         End If
         If DebugLog Then DynaLog.LogMessage("Initializing API...")
         DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
@@ -1145,6 +1151,8 @@ Public Class MainForm
             MountedImageMountDirList.Add(imageInfo.MountPath)
             MountedImageImgStatusList.Add(imageInfo.MountStatus)
             MountedImageReWrList.Add(imageInfo.MountMode)
+
+            MountedImageList.Add(New WindowsImage(imageInfo.ImageFilePath, imageInfo.ImageIndex, imageInfo.MountPath, imageInfo.MountStatus, imageInfo.MountMode))
         Next
         If DebugLog Then DynaLog.LogMessage("Passing items to arrays...")
         MountedImageImgFiles = MountedImageImgFileList.ToArray()
@@ -1152,6 +1160,7 @@ Public Class MainForm
         MountedImageMountDirs = MountedImageMountDirList.ToArray()
         MountedImageImgStatuses = MountedImageImgStatusList.ToArray()
         MountedImageMountedReWr = MountedImageReWrList.ToArray()
+        DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
         If MountedImageImgFileList.Count > 0 Then
             If DebugLog Then DynaLog.LogMessage("Populating versions...")
             For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)

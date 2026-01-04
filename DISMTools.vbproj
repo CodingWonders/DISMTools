@@ -247,6 +247,8 @@
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
     <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
+    <Compile Include="Elements\Contemporaneus\WindowsImage.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
