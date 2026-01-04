@@ -34,6 +34,7 @@ Namespace Elements.Contemporaneus
         Public Property ImageCreationDate As Date
         Public Property ImageModificationDate As Date
         Public Property ImageLanguages As IEnumerable(Of CultureInfo)
+        Public Property ImageDefaultLanguage As CultureInfo
 
         Public Property ImagePackages As DismPackageCollection
         Public Property ImageFeatures As DismFeatureCollection

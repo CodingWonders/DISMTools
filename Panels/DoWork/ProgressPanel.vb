@@ -6825,7 +6825,6 @@ Public Class ProgressPanel
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
                 MainForm.bwBackgroundProcessAction = 0
-                MainForm.bwAllBackgroundProcesses = True
                 MainForm.bwGetImageInfo = True
                 MainForm.bwGetAdvImgInfo = True
                 MainForm.DetectMountedImages(False)
@@ -6841,7 +6840,6 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
                     MainForm.bwBackgroundProcessAction = 0
-                    MainForm.bwAllBackgroundProcesses = True
                     MainForm.bwGetImageInfo = True
                     MainForm.bwGetAdvImgInfo = True
                     If remountisReadOnly Then
