@@ -53,7 +53,7 @@ Namespace Elements.Contemporaneus
             Me.ImageVersion = New Version(0, 0, 0, 0)
         End Sub
 
-        Private Function GetImageMountGuid() As Guid
+        Public Function GetImageMountGuid() As Guid
             Dim mountGuid As Guid
             Dim found As Boolean = False
 

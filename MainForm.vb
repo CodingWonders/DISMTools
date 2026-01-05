@@ -664,6 +664,7 @@ Public Class MainForm
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.BeginLogging()
+        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 --------")
     End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -724,6 +725,7 @@ Public Class MainForm
         Visible = False
         DynaLog.LogMessage("Detecting program arguments...")
         GetArguments()
+        If EnableExperiments Then DynaLog.LogMessage("Contemporaneus mode ENABLED.")
         ' Detect mounted images
         DetectMountedImages(True)
         DynaLog.LogMessage("Finished detecting mounted images. Continuing program startup...")
@@ -1200,8 +1202,12 @@ Public Class MainForm
     Sub RemountOrphanedImages()
         DynaLog.LogMessage("Do we REALLY have to do this? Let's find out!")
         Dim NeedToRemount As Boolean = False
-        If MountedImageImgStatuses.Count > 0 Then
-            NeedToRemount = MountedImageImgStatuses.Where(Function(status) status = 1).Any()
+        If EnableExperiments Then
+            NeedToRemount = MountedImageList.Any(Function(mountedImage) mountedImage.ImageMountStatus = DismMountStatus.NeedsRemount)
+        Else
+            If MountedImageImgStatuses.Count > 0 Then
+                NeedToRemount = MountedImageImgStatuses.Where(Function(status) status = 1).Any()
+            End If
         End If
         DynaLog.LogMessage(If(NeedToRemount, "Remounting any orphaned images...", "There is no need to do this. Skipping..."))
         If NeedToRemount Then AutoReloadForm.ShowDialog()
@@ -1977,39 +1983,47 @@ Public Class MainForm
         If Not OnlineMode And Not OfflineMode Then
             DynaLog.LogMessage("Creating image session...")
             Try
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageMountDirs(x) = MountDir Then
-                        Select Case Language
-                            Case 0
-                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                    Case "ENU", "ENG"
-                                        progressLabel = "Creating session for this image..."
-                                    Case "ESN"
-                                        progressLabel = "Creando sesión para esta imagen..."
-                                    Case "FRA"
-                                        progressLabel = "Création d'une session pour cette image en cours..."
-                                    Case "PTB", "PTG"
-                                        progressLabel = "Criar uma sessão para esta imagem..."
-                                    Case "ITA"
-                                        progressLabel = "Creazione della sessione per questa immagine..."
-                                End Select
-                            Case 1
-                                progressLabel = "Creating session for this image..."
-                            Case 2
-                                progressLabel = "Creando sesión para esta imagen..."
-                            Case 3
-                                progressLabel = "Création d'une session pour cette image en cours..."
-                            Case 4
-                                progressLabel = "Criar uma sessão para esta imagem..."
-                            Case 5
-                                progressLabel = "Creazione sessione per questa immagine..."
-                        End Select
-                        ImgBW.ReportProgress(0)
-                        sessionMntDir = MountedImageMountDirs(x)
-                        DynaLog.LogMessage("We have the necessary bits for the image session. Mount directory: " & Quote & sessionMntDir & Quote)
-                        Exit For
+                If EnableExperiments Then
+                    Dim imageToProcess As WindowsImage = MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MountDir)
+                    If imageToProcess IsNot Nothing Then
+                        sessionMntDir = imageToProcess.ImageMountDirectory
                     End If
-                Next
+                    DynaLog.LogMessage("We have the necessary bits for the image session. Mount directory: " & Quote & sessionMntDir & Quote)
+                Else
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            Select Case Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
+                                            progressLabel = "Creating session for this image..."
+                                        Case "ESN"
+                                            progressLabel = "Creando sesión para esta imagen..."
+                                        Case "FRA"
+                                            progressLabel = "Création d'une session pour cette image en cours..."
+                                        Case "PTB", "PTG"
+                                            progressLabel = "Criar uma sessão para esta imagem..."
+                                        Case "ITA"
+                                            progressLabel = "Creazione della sessione per questa immagine..."
+                                    End Select
+                                Case 1
+                                    progressLabel = "Creating session for this image..."
+                                Case 2
+                                    progressLabel = "Creando sesión para esta imagen..."
+                                Case 3
+                                    progressLabel = "Création d'une session pour cette image en cours..."
+                                Case 4
+                                    progressLabel = "Criar uma sessão para esta imagem..."
+                                Case 5
+                                    progressLabel = "Creazione sessione per questa immagine..."
+                            End Select
+                            ImgBW.ReportProgress(0)
+                            sessionMntDir = MountedImageMountDirs(x)
+                            DynaLog.LogMessage("We have the necessary bits for the image session. Mount directory: " & Quote & sessionMntDir & Quote)
+                            Exit For
+                        End If
+                    Next
+                End If
             Catch ex As Exception
 
             End Try
@@ -2777,6 +2791,7 @@ Public Class MainForm
                         isOrphaned = (CurrentImage.ImageMountStatus = DismMountStatus.NeedsRemount)
                         Dim ImageInformation As DismImageInfo = DismApi.GetImageInfo(CurrentImage.ImageFile).ElementAtOrDefault(CurrentImage.ImageIndex - 1)
                         If ImageInformation IsNot Nothing Then
+                            CurrentImage.ImageMountGuid = CurrentImage.GetImageMountGuid()
                             CurrentImage.ImageVersion = ImageInformation.ProductVersion
                             CurrentImage.ImageName = ImageInformation.ImageName
                             CurrentImage.ImageDescription = ImageInformation.ImageDescription
@@ -2932,6 +2947,34 @@ Public Class MainForm
                             CurrentImage.ImageCreationDate = ImageInformation.CustomizedInfo.CreatedTime
                             CurrentImage.ImageModificationDate = ImageInformation.CustomizedInfo.ModifiedTime
                             CurrentImage.ImageSize = ImageInformation.ImageSize
+                            DynaLog.LogMessage("Getting WIMBoot information")
+                            Dim args As String = "/English",
+                                out As String = ""
+                            If DismVersionChecker.ProductMajorPart = 6 AndAlso DismVersionChecker.FileMinorPart = 1 Then
+                                args &= String.Format(" /get-wiminfo /wimfile={0} ", Quote & CurrentImage.ImageFile & Quote)
+                            Else
+                                args &= String.Format(" /get-imageinfo /imagefile={0} ", Quote & CurrentImage.ImageFile & Quote)
+                            End If
+                            args &= String.Format(" /index={0}", CurrentImage.ImageIndex)
+                            Using WIMBootProc As New Process() With {
+                                .StartInfo = New ProcessStartInfo() With {
+                                    .FileName = DismExe,
+                                    .Arguments = args,
+                                    .UseShellExecute = False,
+                                    .CreateNoWindow = True,
+                                    .RedirectStandardOutput = True,
+                                    .RedirectStandardError = True,
+                                    .WindowStyle = ProcessWindowStyle.Hidden
+                                }
+                            }
+                                WIMBootProc.Start()
+                                out = WIMBootProc.StandardOutput.ReadToEnd()
+                                WIMBootProc.WaitForExit()
+
+                                If WIMBootProc.ExitCode = 0 Then
+                                    CurrentImage.ImageWimBootCompatible = out.ToLower().Contains("wim bootable : yes")
+                                End If
+                            End Using
                         End If
                     Else
                         DynaLog.LogMessage("Going through all mounted images...")
@@ -2996,56 +3039,58 @@ Public Class MainForm
                 Catch ex As Exception
                     Exit Try
                 End Try
-                ' Time to use the DISM executable
-                Try     ' Try getting image properties
-                    If Not Directory.Exists(projPath & "\tempinfo") Then
-                        Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
-                    End If
-                    DynaLog.LogMessage("Getting WIMBoot information")
-                    Select Case DismVersionChecker.ProductMajorPart
-                        Case 6
-                            Select Case DismVersionChecker.ProductMinorPart
-                                Case 1
-                                    File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                                Case Is >= 2
-                                    File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
-                                                      "@echo off" & CrLf &
-                                                      "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                            End Select
-                        Case 10
-                            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
-                                              "@echo off" & CrLf &
-                                              "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
-                    End Select
-                    If Debugger.IsAttached Then
-                        Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
-                    End If
-                    Using WIMBootProc As New Process()
-                        WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-                        WIMBootProc.StartInfo.Arguments = "/c " & Quote & Application.StartupPath & "\bin\exthelpers\imginfo.bat" & Quote
-                        WIMBootProc.StartInfo.CreateNoWindow = True
-                        WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-                        WIMBootProc.Start()
-                        WIMBootProc.WaitForExit()
-                    End Using
-                    Try
-                        imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
-                        If Not ImgBW.IsBusy Then
-                            For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-                                File.Delete(foundFile)
-                            Next
-                            Directory.Delete(projPath & "\tempinfo")
+                If Not EnableExperiments Then
+                    ' Time to use the DISM executable
+                    Try     ' Try getting image properties
+                        If Not Directory.Exists(projPath & "\tempinfo") Then
+                            Directory.CreateDirectory(projPath & "\tempinfo").Attributes = FileAttributes.Hidden
                         End If
-                        DynaLog.LogMessage("- WIMBoot Status: " & imgWimBootStatus)
-                        File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
-                    Catch ex As Exception
+                        DynaLog.LogMessage("Getting WIMBoot information")
+                        Select Case DismVersionChecker.ProductMajorPart
+                            Case 6
+                                Select Case DismVersionChecker.ProductMinorPart
+                                    Case 1
+                                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                          "@echo off" & CrLf &
+                                                          "dism /English /get-wiminfo /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                    Case Is >= 2
+                                        File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                          "@echo off" & CrLf &
+                                                          "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                                End Select
+                            Case 10
+                                File.WriteAllText(Application.StartupPath & "\bin\exthelpers\imginfo.bat",
+                                                  "@echo off" & CrLf &
+                                                  "dism /English /get-imageinfo /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " | findstr /c:" & Quote & "WIM Bootable" & Quote & " /b > " & projPath & "\tempinfo\imgwimboot", ASCII)
+                        End Select
+                        If Debugger.IsAttached Then
+                            Process.Start("\Windows\system32\notepad.exe", Application.StartupPath & "\bin\exthelpers\imginfo.bat").WaitForExit()
+                        End If
+                        Using WIMBootProc As New Process()
+                            WIMBootProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
+                            WIMBootProc.StartInfo.Arguments = "/c " & Quote & Application.StartupPath & "\bin\exthelpers\imginfo.bat" & Quote
+                            WIMBootProc.StartInfo.CreateNoWindow = True
+                            WIMBootProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+                            WIMBootProc.Start()
+                            WIMBootProc.WaitForExit()
+                        End Using
+                        Try
+                            imgWimBootStatus = My.Computer.FileSystem.ReadAllText(projPath & "\tempinfo\imgwimboot", ASCII).Replace("WIM Bootable : ", "").Trim()
+                            If Not ImgBW.IsBusy Then
+                                For Each foundFile In My.Computer.FileSystem.GetFiles(projPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
+                                    File.Delete(foundFile)
+                                Next
+                                Directory.Delete(projPath & "\tempinfo")
+                            End If
+                            DynaLog.LogMessage("- WIMBoot Status: " & imgWimBootStatus)
+                            File.Delete(Application.StartupPath & "\bin\exthelpers\imginfo.bat")
+                        Catch ex As Exception
 
+                        End Try
+                    Catch ex As Exception
+                        Exit Try
                     End Try
-                Catch ex As Exception
-                    Exit Try
-                End Try
+                End If
                 DynaLog.LogMessage("Updating buttons...")
                 ' Update the buttons in the new design accordingly
                 Button26.Enabled = False
@@ -9452,6 +9497,8 @@ Public Class MainForm
         DynaLog.LogMessage("Ending special management modes if user is in one of them...")
         If OnlineManagement Then EndOnlineManagement()
         If OfflineManagement Then EndOfflineManagement()
+        ' Set this to its default state
+        CurrentImage = Nothing
     End Sub
 
     Sub BeginOnlineManagement(ShowDialog As Boolean)
@@ -11227,7 +11274,7 @@ Public Class MainForm
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
         DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
+        If Not EnableExperiments Then StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -11264,8 +11311,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
+        If Not EnableExperiments Then StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
@@ -12128,7 +12174,11 @@ Public Class MainForm
         DynaLog.LogMessage("Images will be detected in a loop with a 1s break. No logging will be performed here...")
         Do
             If MountedImageDetectorBW.CancellationPending Or ImgBW.IsBusy Then Exit Do
-            DetectMountedImages(False)
+            Try
+                DetectMountedImages(False)
+            Catch ex As AccessViolationException
+                DynaLog.LogMessage("Procedure failed due to handled access violation.")
+            End Try
             Thread.Sleep(1000)
         Loop
     End Sub
@@ -13859,14 +13909,24 @@ Public Class MainForm
             DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
-            If MountedImageMountDirs.Count > 0 Then
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageMountDirs(x) = MountDir Then
-                        DynaLog.LogMessage("Image to get information about: " & MountedImageImgFiles(x))
-                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
-                        Exit For
-                    End If
-                Next
+            If EnableExperiments Then
+                If CurrentImage Is Nothing Then
+                    CurrentImage = MountedImageList.FirstOrDefault(Function(mountedImage) mountedImage.ImageMountDirectory = MountDir)
+                End If
+                ' If it's still nothing then we give up.
+                If CurrentImage Is Nothing Then Exit Sub
+                DynaLog.LogMessage("Image to get information about: " & CurrentImage.ImageFile)
+                ImgInfoSaveDlg.SourceImage = CurrentImage.ImageFile
+            Else
+                If MountedImageMountDirs.Count > 0 Then
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            DynaLog.LogMessage("Image to get information about: " & MountedImageImgFiles(x))
+                            ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
@@ -13923,7 +13983,7 @@ Public Class MainForm
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
         DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
+        If Not EnableExperiments Then StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
@@ -14025,7 +14085,7 @@ Public Class MainForm
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
         DynaLog.LogMessage("Stopping mounted image detector...")
-        StopMountedImageDetector()
+        If Not EnableExperiments Then StopMountedImageDetector()
         ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
