@@ -204,129 +204,66 @@ Public Class MountedImgMgr
         ' Enable buttons according to the image conditions
         If ListView1.SelectedItems.Count > 0 Then
             Button1.Enabled = True
-            If MainForm.EnableExperiments Then
-                If MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountStatus <> DismMountStatus.Ok Then
-                    Button2.Enabled = True
-                    Select Case MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountStatus
-                        Case DismMountStatus.NeedsRemount
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Button2.Text = "Reload servicing"
-                                        Case "ESN"
-                                            Button2.Text = "Recargar servicio"
-                                        Case "FRA"
-                                            Button2.Text = "Recharger le service"
-                                        Case "PTB", "PTG"
-                                            Button2.Text = "Recarregar o serviço"
-                                        Case "ITA"
-                                            Button2.Text = "Ricarica servizio"
-                                    End Select
-                                Case 1
-                                    Button2.Text = "Reload servicing"
-                                Case 2
-                                    Button2.Text = "Recargar servicio"
-                                Case 3
-                                    Button2.Text = "Recharger le service"
-                                Case 4
-                                    Button2.Text = "Recarregar o serviço"
-                                Case 5
-                                    Button2.Text = "Ricarica servizio"
-                            End Select
-                        Case DismMountStatus.Invalid
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Button2.Text = "Repair component store"
-                                        Case "ESN"
-                                            Button2.Text = "Reparar almacén de componentes"
-                                        Case "FRA"
-                                            Button2.Text = "Réparer le stock de composants"
-                                        Case "PTB", "PTG"
-                                            Button2.Text = "Reparação do armazém de componentes"
-                                        Case "ITA"
-                                            Button2.Text = "Ripara il magazzino dei componenti"
-                                    End Select
-                                Case 1
-                                    Button2.Text = "Repair component store"
-                                Case 2
-                                    Button2.Text = "Reparar almacén de componentes"
-                                Case 3
-                                    Button2.Text = "Réparer le stock de composants"
-                                Case 4
-                                    Button2.Text = "Reparação do armazém de componentes"
-                                Case 5
-                                    Button2.Text = "Ripara il magazzino dei componenti"
-                            End Select
-                    End Select
-                Else
-                    Button2.Enabled = False
-                End If
-                Button3.Enabled = (MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountMode = DismMountMode.ReadWrite)
+            If MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountStatus <> DismMountStatus.Ok Then
+                Button2.Enabled = True
+                Select Case MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountStatus
+                    Case DismMountStatus.NeedsRemount
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Button2.Text = "Reload servicing"
+                                    Case "ESN"
+                                        Button2.Text = "Recargar servicio"
+                                    Case "FRA"
+                                        Button2.Text = "Recharger le service"
+                                    Case "PTB", "PTG"
+                                        Button2.Text = "Recarregar o serviço"
+                                    Case "ITA"
+                                        Button2.Text = "Ricarica servizio"
+                                End Select
+                            Case 1
+                                Button2.Text = "Reload servicing"
+                            Case 2
+                                Button2.Text = "Recargar servicio"
+                            Case 3
+                                Button2.Text = "Recharger le service"
+                            Case 4
+                                Button2.Text = "Recarregar o serviço"
+                            Case 5
+                                Button2.Text = "Ricarica servizio"
+                        End Select
+                    Case DismMountStatus.Invalid
+                        Select Case MainForm.Language
+                            Case 0
+                                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                    Case "ENU", "ENG"
+                                        Button2.Text = "Repair component store"
+                                    Case "ESN"
+                                        Button2.Text = "Reparar almacén de componentes"
+                                    Case "FRA"
+                                        Button2.Text = "Réparer le stock de composants"
+                                    Case "PTB", "PTG"
+                                        Button2.Text = "Reparação do armazém de componentes"
+                                    Case "ITA"
+                                        Button2.Text = "Ripara il magazzino dei componenti"
+                                End Select
+                            Case 1
+                                Button2.Text = "Repair component store"
+                            Case 2
+                                Button2.Text = "Reparar almacén de componentes"
+                            Case 3
+                                Button2.Text = "Réparer le stock de composants"
+                            Case 4
+                                Button2.Text = "Reparação do armazém de componentes"
+                            Case 5
+                                Button2.Text = "Ripara il magazzino dei componenti"
+                        End Select
+                End Select
             Else
-                If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) > 0 Then
-                    Button2.Enabled = True
-                    Select Case MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index)
-                        Case 1
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Button2.Text = "Reload servicing"
-                                        Case "ESN"
-                                            Button2.Text = "Recargar servicio"
-                                        Case "FRA"
-                                            Button2.Text = "Recharger le service"
-                                        Case "PTB", "PTG"
-                                            Button2.Text = "Recarregar o serviço"
-                                        Case "ITA"
-                                            Button2.Text = "Ricarica servizio"
-                                    End Select
-                                Case 1
-                                    Button2.Text = "Reload servicing"
-                                Case 2
-                                    Button2.Text = "Recargar servicio"
-                                Case 3
-                                    Button2.Text = "Recharger le service"
-                                Case 4
-                                    Button2.Text = "Recarregar o serviço"
-                                Case 5
-                                    Button2.Text = "Ricarica servizio"
-                            End Select
-                        Case 2
-                            Select Case MainForm.Language
-                                Case 0
-                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                        Case "ENU", "ENG"
-                                            Button2.Text = "Repair component store"
-                                        Case "ESN"
-                                            Button2.Text = "Reparar almacén de componentes"
-                                        Case "FRA"
-                                            Button2.Text = "Réparer le stock de composants"
-                                        Case "PTB", "PTG"
-                                            Button2.Text = "Reparação do armazém de componentes"
-                                        Case "ITA"
-                                            Button2.Text = "Ripara il magazzino dei componenti"
-                                    End Select
-                                Case 1
-                                    Button2.Text = "Repair component store"
-                                Case 2
-                                    Button2.Text = "Reparar almacén de componentes"
-                                Case 3
-                                    Button2.Text = "Réparer le stock de composants"
-                                Case 4
-                                    Button2.Text = "Reparação do armazém de componentes"
-                                Case 5
-                                    Button2.Text = "Ripara il magazzino dei componenti"
-                            End Select
-                    End Select
-                Else
-                    Button2.Enabled = False
-                End If
-                Button3.Enabled = If(MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 1, True, False)
+                Button2.Enabled = False
             End If
+            Button3.Enabled = (MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountMode = DismMountMode.ReadWrite)
             Button4.Enabled = True
             Button5.Enabled = True
             If MainForm.isProjectLoaded And MainForm.MountDir = "N/A" Or Not Directory.Exists(MainForm.MountDir & "\Windows") Then
@@ -364,27 +301,12 @@ Public Class MountedImgMgr
             Next
         End If
         If useAlternateMethod Then
-            If MainForm.EnableExperiments Then
-                Dim ImageToLoad As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = ListView1.FocusedItem.SubItems(2).Text)
-                If ImageToLoad IsNot Nothing Then
-                    MainForm.MountDir = ImageToLoad.ImageMountDirectory
-                    MainForm.ImgIndex = ImageToLoad.ImageIndex
-                    MainForm.SourceImg = ImageToLoad.ImageFile
-                    MainForm.isReadOnly = (ImageToLoad.ImageMountMode = DismMountMode.ReadOnly)
-                End If
-            Else
-                Try
-                    For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
-                        If MainForm.MountedImageMountDirs(x) = ListView1.FocusedItem.SubItems(2).Text Then
-                            MainForm.MountDir = MainForm.MountedImageMountDirs(x)
-                            MainForm.ImgIndex = MainForm.MountedImageImgIndexes(x)
-                            MainForm.SourceImg = MainForm.MountedImageImgFiles(x)
-                            IIf(MainForm.MountedImageMountedReWr(x) = "Yes", MainForm.isReadOnly = True, MainForm.isReadOnly = False)
-                        End If
-                    Next
-                Catch ex As Exception
-                    Exit Try
-                End Try
+            Dim ImageToLoad As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = ListView1.FocusedItem.SubItems(2).Text)
+            If ImageToLoad IsNot Nothing Then
+                MainForm.MountDir = ImageToLoad.ImageMountDirectory
+                MainForm.ImgIndex = ImageToLoad.ImageIndex
+                MainForm.SourceImg = ImageToLoad.ImageFile
+                MainForm.isReadOnly = (ImageToLoad.ImageMountMode = DismMountMode.ReadOnly)
             End If
             MainForm.UpdateProjProperties(True, If(MainForm.isReadOnly, True, False))
             MainForm.SaveDTProj()
@@ -403,65 +325,32 @@ Public Class MountedImgMgr
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         DynaLog.LogMessage("Checking status of the selected mount image...")
-        If MainForm.EnableExperiments Then
-            Dim SelectedImage As WindowsImage = MainForm.MountedImageList.ElementAtOrDefault(ListView1.FocusedItem.Index)
-            If SelectedImage IsNot Nothing Then
-                Select Case SelectedImage.ImageMountStatus
-                    Case DismMountStatus.NeedsRemount
-                        DynaLog.LogMessage("The selected image needs to be remounted.")
-                        ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
-                        ProgressPanel.OperationNum = 18
-                        ProgressPanel.ShowDialog(Me)
-                        Button2.Enabled = False
-                    Case DismMountStatus.Invalid
-                        DynaLog.LogMessage("The selected image needs to be repaired.")
-                        Visible = False
-                        ImgCleanup.ComboBox1.SelectedIndex = 6
-                        ImgCleanup.ShowDialog(MainForm)
-                        Visible = True
-                End Select
-            End If
-        Else
-            If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 1 Then
-                DynaLog.LogMessage("The selected image needs to be remounted.")
-                ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
-                ProgressPanel.OperationNum = 18
-                ProgressPanel.ShowDialog(Me)
-                Button2.Enabled = False
-            ElseIf MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 2 Then
-                DynaLog.LogMessage("The selected image needs to be repaired.")
-                Visible = False
-                ImgCleanup.ComboBox1.SelectedIndex = 6
-                ImgCleanup.ShowDialog(MainForm)
-                Visible = True
-            End If
+        Dim SelectedImage As WindowsImage = MainForm.MountedImageList.ElementAtOrDefault(ListView1.FocusedItem.Index)
+        If SelectedImage IsNot Nothing Then
+            Select Case SelectedImage.ImageMountStatus
+                Case DismMountStatus.NeedsRemount
+                    DynaLog.LogMessage("The selected image needs to be remounted.")
+                    ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
+                    ProgressPanel.OperationNum = 18
+                    ProgressPanel.ShowDialog(Me)
+                    Button2.Enabled = False
+                Case DismMountStatus.Invalid
+                    DynaLog.LogMessage("The selected image needs to be repaired.")
+                    Visible = False
+                    ImgCleanup.ComboBox1.SelectedIndex = 6
+                    ImgCleanup.ShowDialog(MainForm)
+                    Visible = True
+            End Select
         End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         DynaLog.LogMessage("Determining if changes can be written to the selected Windows image...")
-        If MainForm.EnableExperiments Then
-            Select Case MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountMode
-                Case DismMountMode.ReadWrite
-                    DynaLog.LogMessage("The image has been mounted with read-write permissions.")
-                    MainForm.ImgUMountPopupCMS.Show(sender, New Point(24, Button1.Height * 0.75))
-                Case DismMountMode.ReadOnly
-                    DynaLog.LogMessage("The image has been mounted with read-only permissions. No tasks other than unmounting whilst discarding changes can be made.")
-                    ' Unmount the image discarding changes
-                    If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-                    ProgressPanel.OperationNum = 21
-                    ProgressPanel.UMountLocalDir = False
-                    ProgressPanel.RandomMountDir = ListView1.FocusedItem.SubItems(2).Text   ' Hope there isn't anything to set here
-                    ProgressPanel.UMountImgIndex = ListView1.FocusedItem.SubItems(1).Text
-                    ProgressPanel.MountDir = ""
-                    ProgressPanel.UMountOp = 1
-                    ProgressPanel.ShowDialog(Me)
-            End Select
-        Else
-            If MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 0 Then
+        Select Case MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountMode
+            Case DismMountMode.ReadWrite
                 DynaLog.LogMessage("The image has been mounted with read-write permissions.")
                 MainForm.ImgUMountPopupCMS.Show(sender, New Point(24, Button1.Height * 0.75))
-            ElseIf MainForm.MountedImageMountedReWr(ListView1.FocusedItem.Index) = 1 Then
+            Case DismMountMode.ReadOnly
                 DynaLog.LogMessage("The image has been mounted with read-only permissions. No tasks other than unmounting whilst discarding changes can be made.")
                 ' Unmount the image discarding changes
                 If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -472,8 +361,7 @@ Public Class MountedImgMgr
                 ProgressPanel.MountDir = ""
                 ProgressPanel.UMountOp = 1
                 ProgressPanel.ShowDialog(Me)
-            End If
-        End If
+        End Select
     End Sub
 
     Private Sub DetectorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles DetectorBW.DoWork
@@ -491,97 +379,29 @@ Public Class MountedImgMgr
 
     Private Sub DetectorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles DetectorBW.ProgressChanged
         If DetectorBW.CancellationPending Then Exit Sub
-        If MainForm.MountedImageImgFiles.Count <= 0 Then
+        If MainForm.MountedImageList.Select(Function(image) image.ImageFile).Count <= 0 Then
             DynaLog.LogMessage("There are no images mounted. Clearing lists...")
             ListView1.Items.Clear()
             Exit Sub
         End If
         Try
-            If MainForm.EnableExperiments Then
-                For Each MountedImage In MainForm.MountedImageList
-                    If ignoreRepeats Then
-                        If ListView1.Items.Count <> MainForm.MountedImageList.Count Then
-                            DynaLog.LogMessage("There is a different amount of images mounted now. Forcing refresh of lists...")
-                            ListView1.Items.Clear()
-                            ignoreRepeats = False
-                            Exit Sub
-                        End If
-                        For Each item As ListViewItem In ListView1.Items
-                            If Not MainForm.MountedImageList.SelectMany(Function(mountedImages) mountedImages.ImageFile).Contains(item.Text) Then
-                                ListView1.Items.Add(New ListViewItem(New String() {MountedImage.ImageFile, MountedImage.ImageIndex, MountedImage.ImageMountDirectory, MountedImage.MountStatusToString(MainForm.Language), MountedImage.MountModeToString(MainForm.Language)}))
-                            End If
-                        Next
+            For Each MountedImage In MainForm.MountedImageList
+                If ignoreRepeats Then
+                    If ListView1.Items.Count <> MainForm.MountedImageList.Count Then
+                        DynaLog.LogMessage("There is a different amount of images mounted now. Forcing refresh of lists...")
+                        ListView1.Items.Clear()
+                        ignoreRepeats = False
+                        Exit Sub
                     End If
-                    If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MountedImage.ImageFile, MountedImage.ImageIndex, MountedImage.ImageMountDirectory, MountedImage.MountStatusToString(MainForm.Language), MountedImage.MountModeToString(MainForm.Language)}))
-                Next
-                ignoreRepeats = True
-            Else
-                For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
-                    If ignoreRepeats Then
-                        If ListView1.Items.Count <> MainForm.MountedImageImgFiles.Count Then
-                            DynaLog.LogMessage("There is a different amount of images mounted now. Forcing refresh of lists...")
-                            ListView1.Items.Clear()
-                            ignoreRepeats = False
-                            Exit Sub
+                    For Each item As ListViewItem In ListView1.Items
+                        If Not MainForm.MountedImageList.SelectMany(Function(mountedImages) mountedImages.ImageFile).Contains(item.Text) Then
+                            ListView1.Items.Add(New ListViewItem(New String() {MountedImage.ImageFile, MountedImage.ImageIndex, MountedImage.ImageMountDirectory, MountedImage.MountStatusToString(MainForm.Language), MountedImage.MountModeToString(MainForm.Language)}))
                         End If
-                        For Each item As ListViewItem In ListView1.Items
-                            If Not MainForm.MountedImageImgFiles.Contains(item.Text) Then
-                                Select Case MainForm.Language
-                                    Case 0
-                                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                            Case "ENU", "ENG"
-                                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                                            Case "ESN"
-                                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                                            Case "FRA"
-                                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                                            Case "PTB", "PTG"
-                                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                                            Case "ITA"
-                                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                                        End Select
-                                    Case 1
-                                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                                    Case 2
-                                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                                    Case 3
-                                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                                    Case 4
-                                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                                    Case 5
-                                        ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                                End Select
-                            End If
-                        Next
-                    End If
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                                Case "ESN"
-                                    If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                                Case "FRA"
-                                    If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                                Case "PTB", "PTG"
-                                    If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                                Case "ITA"
-                                    If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                            End Select
-                        Case 1
-                            If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Needs Remount", "Invalid")), If(MainForm.MountedImageMountedReWr(x) = 0, "Yes", "No"), MainForm.MountedImageImgVersions(x)}))
-                        Case 2
-                            If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "Correcto", If(MainForm.MountedImageImgStatuses(x) = 1, "Necesita recarga", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sí", "No"), MainForm.MountedImageImgVersions(x)}))
-                        Case 3
-                            If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Nécessite un remontage", "Invalide")), If(MainForm.MountedImageMountedReWr(x) = 0, "Oui", "Non"), MainForm.MountedImageImgVersions(x)}))
-                        Case 4
-                            If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessita de remontagem", "Inválido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sim", "Não"), MainForm.MountedImageImgVersions(x)}))
-                        Case 5
-                            If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MainForm.MountedImageImgFiles(x), MainForm.MountedImageImgIndexes(x), MainForm.MountedImageMountDirs(x), If(MainForm.MountedImageImgStatuses(x) = 0, "OK", If(MainForm.MountedImageImgStatuses(x) = 1, "Necessità di rimontaggio", "Non valido")), If(MainForm.MountedImageMountedReWr(x) = 0, "Sì", "No"), MainForm.MountedImageImgVersions(x)}))
-                    End Select
-                Next
-                ignoreRepeats = True
-            End If
+                    Next
+                End If
+                If Not ignoreRepeats Then ListView1.Items.Add(New ListViewItem(New String() {MountedImage.ImageFile, MountedImage.ImageIndex, MountedImage.ImageMountDirectory, MountedImage.MountStatusToString(MainForm.Language), MountedImage.MountModeToString(MainForm.Language)}))
+            Next
+            ignoreRepeats = True
         Catch ex As Exception
             DynaLog.LogMessage("An error occurred. Error message: " & ex.Message)
             ' Clear ListView
@@ -606,7 +426,7 @@ Public Class MountedImgMgr
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        If MainForm.MountedImageMountDirs.Count > 0 Then
+        If MainForm.MountedImageList.Select(Function(image) image.ImageMountDirectory).Count > 0 Then
             DynaLog.LogMessage("Enabling write permissions on the selected image...")
             MainForm.EnableWritePermissions(ListView1.FocusedItem.SubItems(0).Text, CInt(ListView1.FocusedItem.SubItems(1).Text), ListView1.FocusedItem.SubItems(2).Text)
         End If

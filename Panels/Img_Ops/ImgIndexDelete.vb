@@ -52,7 +52,7 @@ Public Class ImgIndexDelete
         ProgressPanel.imgIndexDeletionSourceImg = TextBox1.Text
         ' Detect whether image is mounted
         ProgressPanel.imgIndexDeletionUnmount = False
-        If MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+        If MainForm.MountedImageList.Select(Function(image) image.ImageFile).Contains(TextBox1.Text) Then
             DynaLog.LogMessage("The image selected for index removal is mounted and needs to be unmounted before proceeding with this task.")
             Dim msg As String = ""
             Select Case MainForm.Language
@@ -81,32 +81,14 @@ Public Class ImgIndexDelete
                     msg = "Il programma ha rilevato che questa immagine è montata. Per rimuovere le immagini di volume da un file, è necessario smontarlo. È possibile rimontarla in seguito, se si desidera." & CrLf & CrLf & "Si noti che questa operazione smonterà l'immagine senza salvare le modifiche. Assicurarsi che tutte le modifiche siano state salvate prima di procedere." & CrLf & CrLf & "Si desidera smontare questa immagine?"
             End Select
             If MsgBox(msg, vbYesNo + vbExclamation, Label1.Text) = MsgBoxResult.Yes Then
-                If MainForm.EnableExperiments Then
-                    Dim mountedImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageFile = TextBox1.Text)
-                    If mountedImage IsNot Nothing Then
-                        DynaLog.LogMessage("The image has been detected. Marking for unmount...")
-                        ProgressPanel.imgIndexDeletionUnmount = True
-                        ProgressPanel.UMountImgIndex = mountedImage.ImageIndex
-                        ProgressPanel.UMountLocalDir = (mountedImage.ImageMountDirectory = MainForm.MountDir)
-                        ProgressPanel.MountDir = mountedImage.ImageMountDirectory
-                        ProgressPanel.UMountOp = 1
-                    End If
-                Else
-                    Try
-                        For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
-                            If MainForm.MountedImageImgFiles(x) = TextBox1.Text Then
-                                DynaLog.LogMessage("The image has been detected. Marking for unmount...")
-                                ProgressPanel.imgIndexDeletionUnmount = True
-                                ProgressPanel.UMountImgIndex = MainForm.MountedImageImgIndexes(x)
-                                If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then ProgressPanel.UMountLocalDir = True Else ProgressPanel.UMountLocalDir = False
-                                ProgressPanel.MountDir = MainForm.MountedImageMountDirs(x)
-                                ProgressPanel.UMountOp = 1
-                                Exit For
-                            End If
-                        Next
-                    Catch ex As Exception
-                        Exit Try
-                    End Try
+                Dim mountedImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageFile = TextBox1.Text)
+                If mountedImage IsNot Nothing Then
+                    DynaLog.LogMessage("The image has been detected. Marking for unmount...")
+                    ProgressPanel.imgIndexDeletionUnmount = True
+                    ProgressPanel.UMountImgIndex = mountedImage.ImageIndex
+                    ProgressPanel.UMountLocalDir = (mountedImage.ImageMountDirectory = MainForm.MountDir)
+                    ProgressPanel.MountDir = mountedImage.ImageMountDirectory
+                    ProgressPanel.UMountOp = 1
                 End If
             Else
                 Exit Sub
@@ -143,18 +125,9 @@ Public Class ImgIndexDelete
             DynaLog.LogMessage("Opening volume image removal dialog...")
             DynaLog.LogMessage("Stopping mounted image detector...")
             MainForm.StopMountedImageDetector()
-            If MainForm.EnableExperiments Then
-                Dim ImageToProcess As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MainForm.MountDir)
-                If ImageToProcess IsNot Nothing Then
-                    TextBox1.Text = ImageToProcess.ImageFile
-                End If
-            Else
-                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
-                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                        TextBox1.Text = MainForm.MountedImageImgFiles(x)
-                        Exit For
-                    End If
-                Next
+            Dim ImageToProcess As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MainForm.MountDir)
+            If ImageToProcess IsNot Nothing Then
+                TextBox1.Text = ImageToProcess.ImageFile
             End If
         Catch ex As Exception
             Return False

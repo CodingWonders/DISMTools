@@ -24,7 +24,7 @@ Public Class ImgUMount
             If Directory.Exists(TextBox1.Text) Then
                 DynaLog.LogMessage("The provided mount directory exists. Checking if an image is mounted there...")
                 ' Detect whether the mount dir has an image mounted (I don't believe on what users claim, just to be sure)
-                If MainForm.MountedImageMountDirs.Contains(TextBox1.Text) Then
+                If MainForm.MountedImageList.Select(Function(image) image.ImageMountDirectory).Contains(TextBox1.Text) Then
                     DynaLog.LogMessage("An image is mounted there. This is a valid mount directory.")
                     ProgressPanel.RandomMountDir = TextBox1.Text
                 Else

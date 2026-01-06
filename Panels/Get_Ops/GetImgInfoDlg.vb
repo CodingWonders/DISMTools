@@ -735,31 +735,15 @@ Public Class GetImgInfoDlg
         Button2.Enabled = False
         If RadioButton1.Checked Then
             ' Go through the mounted image listings to find the appropriate image
-            If MainForm.EnableExperiments Then
-                If MainForm.MountedImageList.Count > 0 Then
-                    TextBox1.Enabled = False
-                    Button1.Enabled = False
-                    Button3.Enabled = False
-                    Dim ActualImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MainForm.MountDir)
-                    If ActualImage IsNot Nothing Then
-                        DynaLog.LogMessage("Getting information about the mounted image...")
-                        GetImageInfo(ActualImage.ImageFile)
-                        Button2.Enabled = True
-                    End If
-                End If
-            Else
-                If MainForm.MountedImageImgFiles.Count > 0 Then
-                    TextBox1.Enabled = False
-                    Button1.Enabled = False
-                    Button3.Enabled = False
-                    For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
-                        If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                            DynaLog.LogMessage("Getting information about the mounted image...")
-                            GetImageInfo(MainForm.MountedImageImgFiles(x))
-                            Button2.Enabled = True
-                            Exit For
-                        End If
-                    Next
+            If MainForm.MountedImageList.Count > 0 Then
+                TextBox1.Enabled = False
+                Button1.Enabled = False
+                Button3.Enabled = False
+                Dim ActualImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MainForm.MountDir)
+                If ActualImage IsNot Nothing Then
+                    DynaLog.LogMessage("Getting information about the mounted image...")
+                    GetImageInfo(ActualImage.ImageFile)
+                    Button2.Enabled = True
                 End If
             End If
         Else
