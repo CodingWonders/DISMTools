@@ -2975,6 +2975,7 @@ Public Class MainForm
                                     CurrentImage.ImageWimBootCompatible = out.ToLower().Contains("wim bootable : yes")
                                 End If
                             End Using
+                            DynaLog.LogMessage(CurrentImage.ToString())
                         End If
                     Else
                         DynaLog.LogMessage("Going through all mounted images...")
@@ -13420,26 +13421,36 @@ Public Class MainForm
 
     Private Sub RemountImageWithWritePermissionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RemountImageWithWritePermissionsToolStripMenuItem.Click
         DynaLog.LogMessage("Preparing to remount the image with write permissions...")
-        ' Go through each mounted image until we find it
-        If MountedImageMountDirs.Count > 0 Then
-            DynaLog.LogMessage("This system has " & MountedImageMountDirs.Count() & " mounted image(s)")
-            If MountedImageMountDirs.Contains(MountDir) Then
-                DynaLog.LogMessage("This image is in the mounted image list...")
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageMountDirs(x) = MountDir Then
-                        DynaLog.LogMessage("Information of image to remount with write permissions:")
-                        DynaLog.LogMessage("- Image file: " & Quote & MountedImageImgFiles(x) & Quote)
-                        DynaLog.LogMessage("- Image index: " & CInt(MountedImageImgIndexes(x)))
-                        DynaLog.LogMessage("- Mount directory: " & Quote & MountedImageMountDirs(x) & Quote)
-                        EnableWritePermissions(MountedImageImgFiles(x), CInt(MountedImageImgIndexes(x)), MountedImageMountDirs(x))
-                        Exit For
-                    End If
-                Next
+        If EnableExperiments Then
+            If CurrentImage Is Nothing Then
+                CurrentImage = MountedImageList.FirstOrDefault(Function(mountedImage) mountedImage.ImageMountDirectory = MountDir)
+            End If
+            If CurrentImage Is Nothing Then
+                Exit Sub
+            End If
+            EnableWritePermissions(CurrentImage.ImageFile, CurrentImage.ImageIndex, CurrentImage.ImageMountDirectory)
+        Else
+            ' Go through each mounted image until we find it
+            If MountedImageMountDirs.Count > 0 Then
+                DynaLog.LogMessage("This system has " & MountedImageMountDirs.Count() & " mounted image(s)")
+                If MountedImageMountDirs.Contains(MountDir) Then
+                    DynaLog.LogMessage("This image is in the mounted image list...")
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            EnableWritePermissions(MountedImageImgFiles(x), CInt(MountedImageImgIndexes(x)), MountedImageMountDirs(x))
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
         End If
     End Sub
 
     Sub EnableWritePermissions(SourceImage As String, SourceIndex As Integer, DestinationPath As String)
+        DynaLog.LogMessage("Enabling write permissions of the image:")
+        DynaLog.LogMessage("- Image file: " & Quote & SourceImage & Quote)
+        DynaLog.LogMessage("- Image index: " & SourceIndex)
+        DynaLog.LogMessage("- Mount directory: " & Quote & DestinationPath & Quote)
         DynaLog.LogMessage("Checking if source image " & Quote & SourceImage & Quote & " exists...")
         If File.Exists(SourceImage) Then
             DynaLog.LogMessage("The source image exists in the file system. Preparing to remount it...")
@@ -14033,49 +14044,69 @@ Public Class MainForm
         Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage(LinkLabel18.PointToScreen(Point.Empty), True)
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("User accepted the popup.")
-            If MountedImageMountDirs.Count > 0 Then
-                MountDir = selectedImage.MountPath
-                If MountedImageMountDirs.Count > 0 Then
-                    Try
-                        For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                            If MountedImageMountDirs(x) = MountDir Then
-                                ImgIndex = MountedImageImgIndexes(x)
-                                SourceImg = MountedImageImgFiles(x)
-                                IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
-                            End If
-                        Next
-                    Catch ex As Exception
-                        Exit Try
-                    End Try
-                    DynaLog.LogMessage("Information obtained about the image to load here:")
-                    DynaLog.LogMessage("- Image file: " & SourceImg)
-                    DynaLog.LogMessage("- Image index: " & ImgIndex)
-                    DynaLog.LogMessage("- Mount directory: " & MountDir)
-                    DynaLog.LogMessage("- Loaded with read/write privileges? " & If(isReadOnly, "No", "Yes"))
-                    UpdateProjProperties(True, isReadOnly)
-                    SaveDTProj()
+            MountDir = selectedImage.MountPath
+            If EnableExperiments Then
+                Dim ImageToLoad As WindowsImage = MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MountDir)
+                If ImageToLoad IsNot Nothing Then
+                    SourceImg = ImageToLoad.ImageFile
+                    ImgIndex = ImageToLoad.ImageIndex
+                    isReadOnly = ImageToLoad.ImageMountMode = DismMountMode.ReadOnly
                 End If
             Else
-                Exit Sub
+                If MountedImageMountDirs.Count > 0 Then
+                    If MountedImageMountDirs.Count > 0 Then
+                        Try
+                            For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                                If MountedImageMountDirs(x) = MountDir Then
+                                    ImgIndex = MountedImageImgIndexes(x)
+                                    SourceImg = MountedImageImgFiles(x)
+                                    IIf(MountedImageMountedReWr(x) = 1, isReadOnly = False, isReadOnly = True)
+                                End If
+                            Next
+                        Catch ex As Exception
+                            Exit Try
+                        End Try
+                    End If
+                Else
+                    Exit Sub
+                End If
             End If
+            DynaLog.LogMessage("Information obtained about the image to load here:")
+            DynaLog.LogMessage("- Image file: " & SourceImg)
+            DynaLog.LogMessage("- Image index: " & ImgIndex)
+            DynaLog.LogMessage("- Mount directory: " & MountDir)
+            DynaLog.LogMessage("- Loaded with read/write privileges? " & If(isReadOnly, "No", "Yes"))
+            UpdateProjProperties(True, isReadOnly)
+            SaveDTProj()
         End If
     End Sub
 
     Private Sub LinkLabel19_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel19.LinkClicked
         ' If it's a read only image, directly unmount it discarding changes
-        If MountedImageImgFiles.Count > 0 Then
-            For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
-                If MountedImageMountDirs(x) = MountDir Then
-                    If MountedImageMountedReWr(x) = 1 Then
-                        DynaLog.LogMessage("The image that is about to be unmounted is mounted with read-only permissions. Committing changes to this image makes no sense.")
-                        DynaLog.LogMessage("Unmounting image directly...")
-                        If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
-                        imgCommitOperation = 1
-                        UnloadDTProj(False, True, True)
-                        Exit Sub
+        If EnableExperiments Then
+            If CurrentImage.ImageMountMode = DismMountMode.ReadOnly Then
+                DynaLog.LogMessage("The image that is about to be unmounted is mounted with read-only permissions. Committing changes to this image makes no sense.")
+                DynaLog.LogMessage("Unmounting image directly...")
+                If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                imgCommitOperation = 1
+                UnloadDTProj(False, True, True)
+                Exit Sub
+            End If
+        Else
+            If MountedImageImgFiles.Count > 0 Then
+                For x = 0 To Array.LastIndexOf(MountedImageImgFiles, MountedImageImgFiles.Last)
+                    If MountedImageMountDirs(x) = MountDir Then
+                        If MountedImageMountedReWr(x) = 1 Then
+                            DynaLog.LogMessage("The image that is about to be unmounted is mounted with read-only permissions. Committing changes to this image makes no sense.")
+                            DynaLog.LogMessage("Unmounting image directly...")
+                            If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
+                            imgCommitOperation = 1
+                            UnloadDTProj(False, True, True)
+                            Exit Sub
+                        End If
                     End If
-                End If
-            Next
+                Next
+            End If
         End If
         DynaLog.LogMessage("Opening image unmount dialog...")
         ImgUMount.RadioButton1.Checked = True
@@ -14191,14 +14222,24 @@ Public Class MainForm
             DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SaveTarget = ImgInfoSFD.FileName
-            If MountedImageMountDirs.Count > 0 Then
-                For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
-                    If MountedImageMountDirs(x) = MountDir Then
-                        DynaLog.LogMessage("Image to get information about: " & MountedImageImgFiles(x))
-                        ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
-                        Exit For
-                    End If
-                Next
+            If EnableExperiments Then
+                If CurrentImage Is Nothing Then
+                    CurrentImage = MountedImageList.FirstOrDefault(Function(mountedImage) mountedImage.ImageMountDirectory = MountDir)
+                End If
+                ' If it's still nothing then we give up.
+                If CurrentImage Is Nothing Then Exit Sub
+                DynaLog.LogMessage("Image to get information about: " & CurrentImage.ImageFile)
+                ImgInfoSaveDlg.SourceImage = CurrentImage.ImageFile
+            Else
+                If MountedImageMountDirs.Count > 0 Then
+                    For x = 0 To Array.LastIndexOf(MountedImageMountDirs, MountedImageMountDirs.Last)
+                        If MountedImageMountDirs(x) = MountDir Then
+                            DynaLog.LogMessage("Image to get information about: " & MountedImageImgFiles(x))
+                            ImgInfoSaveDlg.SourceImage = MountedImageImgFiles(x)
+                            Exit For
+                        End If
+                    Next
+                End If
             End If
             ImgInfoSaveDlg.ImgMountDir = If(Not OnlineManagement, MountDir, "")
             ImgInfoSaveDlg.OnlineMode = OnlineManagement
@@ -14913,7 +14954,7 @@ Public Class MainForm
     End Sub
 
     Private Sub WatcherBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles WatcherBW.DoWork
-        ImageStatus = ImageWatcher.WatchStatus(SourceImg, MountedImageImgFiles.ToList(), MountedImageImgStatuses.ToList())
+        ImageStatus = ImageWatcher.WatchStatus(SourceImg, MountedImageList)
     End Sub
 
     Private Sub WatcherBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles WatcherBW.RunWorkerCompleted
@@ -14941,16 +14982,18 @@ Public Class MainForm
                     If ImgBW.IsBusy Then ImgBW.CancelAsync()
                 End If
             Case ImageWatcher.Status.NotMounted
-                DynaLog.LogMessage("The image is no longer mounted. The project needs to be reconfigured")
-                If Not ReloadProjectQuestionDialog.IsDisposed Then ReloadProjectQuestionDialog.Dispose()
-                ReloadProjectQuestionDialog.ShowDialog(Me)
-                If ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.OK Then
-                    DynaLog.LogMessage("Ready to reconfigure. Doing so...")
-                    UpdateProjProperties(False, False)
-                ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
-                    DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
-                    UnloadDTProj(False, False, False)
-                    If ImgBW.IsBusy Then ImgBW.CancelAsync()
+                If IsImageMounted Then
+                    DynaLog.LogMessage("The image is no longer mounted. The project needs to be reconfigured")
+                    If Not ReloadProjectQuestionDialog.IsDisposed Then ReloadProjectQuestionDialog.Dispose()
+                    ReloadProjectQuestionDialog.ShowDialog(Me)
+                    If ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.OK Then
+                        DynaLog.LogMessage("Ready to reconfigure. Doing so...")
+                        UpdateProjProperties(False, False)
+                    ElseIf ReloadProjectQuestionDialog.DialogResult = Windows.Forms.DialogResult.Cancel Then
+                        DynaLog.LogMessage("Not ready to reconfigure. Unloading project...")
+                        UnloadDTProj(False, False, False)
+                        If ImgBW.IsBusy Then ImgBW.CancelAsync()
+                    End If
                 End If
         End Select
     End Sub

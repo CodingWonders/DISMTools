@@ -264,7 +264,7 @@ Public Class MountedImgMgr
                 Else
                     Button2.Enabled = False
                 End If
-                Button3.Enabled = MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountMode = DismMountMode.ReadWrite
+                Button3.Enabled = (MainForm.MountedImageList(ListView1.FocusedItem.Index).ImageMountMode = DismMountMode.ReadWrite)
             Else
                 If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) > 0 Then
                     Button2.Enabled = True
@@ -364,18 +364,28 @@ Public Class MountedImgMgr
             Next
         End If
         If useAlternateMethod Then
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
-                    If MainForm.MountedImageMountDirs(x) = ListView1.FocusedItem.SubItems(2).Text Then
-                        MainForm.MountDir = MainForm.MountedImageMountDirs(x)
-                        MainForm.ImgIndex = MainForm.MountedImageImgIndexes(x)
-                        MainForm.SourceImg = MainForm.MountedImageImgFiles(x)
-                        IIf(MainForm.MountedImageMountedReWr(x) = "Yes", MainForm.isReadOnly = True, MainForm.isReadOnly = False)
-                    End If
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
+            If MainForm.EnableExperiments Then
+                Dim ImageToLoad As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = ListView1.FocusedItem.SubItems(2).Text)
+                If ImageToLoad IsNot Nothing Then
+                    MainForm.MountDir = ImageToLoad.ImageMountDirectory
+                    MainForm.ImgIndex = ImageToLoad.ImageIndex
+                    MainForm.SourceImg = ImageToLoad.ImageFile
+                    MainForm.isReadOnly = (ImageToLoad.ImageMountMode = DismMountMode.ReadOnly)
+                End If
+            Else
+                Try
+                    For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
+                        If MainForm.MountedImageMountDirs(x) = ListView1.FocusedItem.SubItems(2).Text Then
+                            MainForm.MountDir = MainForm.MountedImageMountDirs(x)
+                            MainForm.ImgIndex = MainForm.MountedImageImgIndexes(x)
+                            MainForm.SourceImg = MainForm.MountedImageImgFiles(x)
+                            IIf(MainForm.MountedImageMountedReWr(x) = "Yes", MainForm.isReadOnly = True, MainForm.isReadOnly = False)
+                        End If
+                    Next
+                Catch ex As Exception
+                    Exit Try
+                End Try
+            End If
             MainForm.UpdateProjProperties(True, If(MainForm.isReadOnly, True, False))
             MainForm.SaveDTProj()
         Else
@@ -393,18 +403,38 @@ Public Class MountedImgMgr
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         DynaLog.LogMessage("Checking status of the selected mount image...")
-        If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 1 Then
-            DynaLog.LogMessage("The selected image needs to be remounted.")
-            ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
-            ProgressPanel.OperationNum = 18
-            ProgressPanel.ShowDialog(Me)
-            Button2.Enabled = False
-        ElseIf MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 2 Then
-            DynaLog.LogMessage("The selected image needs to be repaired.")
-            Visible = False
-            ImgCleanup.ComboBox1.SelectedIndex = 6
-            ImgCleanup.ShowDialog(MainForm)
-            Visible = True
+        If MainForm.EnableExperiments Then
+            Dim SelectedImage As WindowsImage = MainForm.MountedImageList.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            If SelectedImage IsNot Nothing Then
+                Select Case SelectedImage.ImageMountStatus
+                    Case DismMountStatus.NeedsRemount
+                        DynaLog.LogMessage("The selected image needs to be remounted.")
+                        ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
+                        ProgressPanel.OperationNum = 18
+                        ProgressPanel.ShowDialog(Me)
+                        Button2.Enabled = False
+                    Case DismMountStatus.Invalid
+                        DynaLog.LogMessage("The selected image needs to be repaired.")
+                        Visible = False
+                        ImgCleanup.ComboBox1.SelectedIndex = 6
+                        ImgCleanup.ShowDialog(MainForm)
+                        Visible = True
+                End Select
+            End If
+        Else
+            If MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 1 Then
+                DynaLog.LogMessage("The selected image needs to be remounted.")
+                ProgressPanel.MountDir = ListView1.FocusedItem.SubItems(2).Text
+                ProgressPanel.OperationNum = 18
+                ProgressPanel.ShowDialog(Me)
+                Button2.Enabled = False
+            ElseIf MainForm.MountedImageImgStatuses(ListView1.FocusedItem.Index) = 2 Then
+                DynaLog.LogMessage("The selected image needs to be repaired.")
+                Visible = False
+                ImgCleanup.ComboBox1.SelectedIndex = 6
+                ImgCleanup.ShowDialog(MainForm)
+                Visible = True
+            End If
         End If
     End Sub
 
