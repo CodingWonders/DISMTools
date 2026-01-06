@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.ControlChars
+Imports Microsoft.Dism
 
 Namespace Utilities
 
@@ -23,26 +24,26 @@ Namespace Utilities
             NotMounted = 2
         End Enum
 
-        Shared Function WatchStatus(imageFile As String, mountedImages As List(Of String), imageStatusList As List(Of String)) As Status
-            If mountedImages.Contains(imageFile) Then
-                If mountedImages.Count > 0 Then
-                    For x = 0 To Array.LastIndexOf(mountedImages.ToArray(), mountedImages.ToArray().Last)
-                        If mountedImages(x) = imageFile Then
-                            ' Detect its status. Do not detect whether an image is invalid, as unmounting an image causes it to become invalid
-                            If imageStatusList(x) = "0" Then
+        Shared Function WatchStatus(imageFile As String, mountedImages As List(Of WindowsImage)) As Status
+            If mountedImages IsNot Nothing AndAlso mountedImages.Count > 0 Then
+                Try
+                    Dim DetectedImage As WindowsImage = mountedImages.FirstOrDefault(Function(image) image.ImageFile = imageFile)
+                    If DetectedImage IsNot Nothing Then
+                        Select Case DetectedImage.ImageMountStatus
+                            Case DismMountStatus.Ok
                                 Debug.WriteLine("[WatchImageStatus] INFO: Watcher has detected that the image " & Quote & imageFile & Quote & " is OK")
                                 Return Status.OK
-                            ElseIf imageStatusList(x) = "1" Then
+                            Case DismMountStatus.NeedsRemount
                                 Debug.WriteLine("[WatchImageStatus] INFO: Watcher has detected that the image " & Quote & imageFile & Quote & " needs a servicing session reload")
                                 Return Status.NeedsRemount
-                            End If
-                            Exit For
-                        End If
-                    Next
-                End If
-            Else
-                Debug.WriteLine("[WatchImageStatus] INFO: The image file " & Quote & imageFile & Quote & " is no longer mounted")
-                Return Status.NotMounted
+                        End Select
+                    Else
+                        Debug.WriteLine("[WatchImageStatus] INFO: The image file " & Quote & imageFile & Quote & " is no longer mounted")
+                        Throw New Exception()
+                    End If
+                Catch ex As Exception
+                    Return Status.NotMounted
+                End Try
             End If
             Return Status.OK
         End Function

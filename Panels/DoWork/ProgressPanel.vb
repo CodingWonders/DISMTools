@@ -6825,7 +6825,6 @@ Public Class ProgressPanel
                 MainForm.ImgIndex = ImgIndex
                 MainForm.MountDir = MountDir
                 MainForm.bwBackgroundProcessAction = 0
-                MainForm.bwAllBackgroundProcesses = True
                 MainForm.bwGetImageInfo = True
                 MainForm.bwGetAdvImgInfo = True
                 MainForm.DetectMountedImages(False)
@@ -6841,7 +6840,6 @@ Public Class ProgressPanel
                 MainForm.DetectMountedImages(False)
                 If MainForm.isProjectLoaded And MountDir = MainForm.MountDir Then
                     MainForm.bwBackgroundProcessAction = 0
-                    MainForm.bwAllBackgroundProcesses = True
                     MainForm.bwGetImageInfo = True
                     MainForm.bwGetAdvImgInfo = True
                     If remountisReadOnly Then
@@ -7369,16 +7367,13 @@ Public Class ProgressPanel
         DynaLog.LogMessage("Mounted image detector might be busy. Stopping it if it is...")
         MainForm.StopMountedImageDetector()
         DynaLog.LogMessage("Setting mount directory target for operations...")
-        DynaLog.LogMessage("Images mounted in this system: " & MainForm.MountedImageMountDirs.Count)
-        If MainForm.MountedImageMountDirs.Count > 0 Then
-            ' Go through all mounted images to determine which one to get info from with the DISM API,
-            ' if a project has been loaded and if that project has a mounted image
-            If MainForm.isProjectLoaded And MainForm.IsImageMounted Then
-                For x = 0 To Array.LastIndexOf(MainForm.MountedImageMountDirs, MainForm.MountedImageMountDirs.Last)
-                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                        mntString = MainForm.MountedImageMountDirs(x)
-                    End If
-                Next
+        DynaLog.LogMessage("Images mounted in this system: " & MainForm.MountedImageList.Count)
+        ' Go through all mounted images to determine which one to get info from with the DISM API,
+        ' if a project has been loaded and if that project has a mounted image
+        If MainForm.MountedImageList.Count > 0 Then
+            Dim imageToProcess As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(mountedImage) mountedImage.ImageMountDirectory = MainForm.MountDir)
+            If imageToProcess IsNot Nothing Then
+                mntString = imageToProcess.ImageMountDirectory
             End If
         End If
         If MainForm.OfflineManagement Then mntString = MainForm.MountDir

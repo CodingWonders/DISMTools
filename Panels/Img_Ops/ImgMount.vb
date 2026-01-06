@@ -415,7 +415,7 @@ Public Class ImgMount
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+        If TextBox1.Text <> "" AndAlso File.Exists(TextBox1.Text) AndAlso MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageFile = TextBox1.Text) IsNot Nothing Then
             IsReqField1Valid = False
             OK_Button.Enabled = False
         Else
@@ -688,7 +688,7 @@ Public Class ImgMount
                 GetIndexes(TextBox1.Text)
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
                     IsReqField1Valid = False
-                ElseIf MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+                ElseIf MainForm.MountedImageList.Select(Function(image) image.ImageFile).Contains(TextBox1.Text) Then
                     IsReqField1Valid = False
                 End If
             Else
@@ -719,7 +719,7 @@ Public Class ImgMount
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         GetFields()
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageList.Select(Function(image) image.ImageFile).Contains(TextBox1.Text) Then
             DynaLog.LogMessage("The Windows image is already mounted.")
             Dim msg As String = ""
             Select Case MainForm.Language
