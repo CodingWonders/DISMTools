@@ -1340,14 +1340,8 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper_server.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Installer\Default.isl" />
-    <None Include="Installer\French.isl" />
-    <None Include="Installer\German.isl" />
-    <None Include="Installer\Italian.isl" />
-    <None Include="Installer\Portuguese.isl" />
     <None Include="Installer\Setup.e32" />
     <None Include="Installer\SetupLdr.e32" />
-    <None Include="Installer\Spanish.isl" />
     <None Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

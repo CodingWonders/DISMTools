@@ -1,7 +1,7 @@
 // Inno Setup Preprocessor
 //
-// Inno Setup (C) 1997-2025 Jordan Russell. All Rights Reserved.
-// Portions Copyright (C) 2000-2025 Martijn Laan. All Rights Reserved.
+// Inno Setup (C) 1997-2026 Jordan Russell. All Rights Reserved.
+// Portions Copyright (C) 2000-2026 Martijn Laan. All Rights Reserved.
 // Portions Copyright (C) 2001-2004 Alex Yackimoff. All Rights Reserved.
 //
 // See the ISPP help file for more documentation of the functions defined by this file
@@ -235,7 +235,7 @@
       Copy(PathName, 1, Local[1])
 
 #define ExtractFileDir(str PathName) \
-  RemoveBackslash(ExtractFilePath(PathName))
+  RemoveBackslashUnlessRoot(ExtractFilePath(PathName))
 
 #define ExtractFileExt(str PathName) \
   Local[0] = RPos(".", PathName), \
@@ -281,7 +281,7 @@
     S = Copy(S, 1, Index - 1) + SubStr + Copy(S, Index)
 
 #define YesNo(str S) \
-  (S = LowerCase(S)) == "yes" || S == "true" || S == "1"
+  S == "yes" || S == "true" || S == "1"
 
 #define IsDirSet(str SetupDirective) \
   YesNo(SetupSetting(SetupDirective))
@@ -296,9 +296,6 @@
   A > B ? A > C ? Int(A) : Int(C) : Int(B)
 
 #define SameText(str S1, str S2) \
-  LowerCase(S1) == LowerCase(S2)
-
-#define SameStr(str S1, str S2) \
   S1 == S2
 
 #define WarnRenamedVersion(str OldName, str NewName) \
