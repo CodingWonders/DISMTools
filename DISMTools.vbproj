@@ -274,6 +274,9 @@
     <Compile Include="Help\HelpVideoPlayer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="MainForm.Events.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.vb">
       <SubType>Form</SubType>
     </Compile>

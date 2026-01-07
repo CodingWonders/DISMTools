@@ -1129,6 +1129,7 @@ Public Class MainForm
 
                 MountedImageList.Add(New WindowsImage(imageInfo.ImageFilePath, imageInfo.ImageIndex, imageInfo.MountPath, imageInfo.MountStatus, imageInfo.MountMode))
             Next
+            RaiseMountedImagesUpdated()
         Catch ex As Exception
             DynaLog.LogMessage("Could not detect mounted images. Error message: " & ex.Message)
         Finally

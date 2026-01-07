@@ -31,7 +31,6 @@ Partial Class MountedImgMgr
         Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ActionsTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.Button6 = New System.Windows.Forms.Button()
         Me.Button7 = New System.Windows.Forms.Button()
@@ -40,8 +39,6 @@ Partial Class MountedImgMgr
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
-        Me.DetectorBW = New System.ComponentModel.BackgroundWorker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionsTLP.SuspendLayout()
         Me.SuspendLayout()
@@ -70,18 +67,19 @@ Partial Class MountedImgMgr
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1236, 550)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1236, 617)
         Me.TableLayoutPanel1.TabIndex = 2
         '
         'ListView1
         '
-        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5, Me.ColumnHeader6})
+        Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2, Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
         Me.ListView1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListView1.FullRowSelect = True
+        Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(3, 3)
         Me.ListView1.MultiSelect = False
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1230, 509)
+        Me.ListView1.Size = New System.Drawing.Size(1230, 576)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.Details
@@ -89,7 +87,7 @@ Partial Class MountedImgMgr
         'ColumnHeader1
         '
         Me.ColumnHeader1.Text = "Image file"
-        Me.ColumnHeader1.Width = 434
+        Me.ColumnHeader1.Width = 480
         '
         'ColumnHeader2
         '
@@ -99,7 +97,7 @@ Partial Class MountedImgMgr
         'ColumnHeader3
         '
         Me.ColumnHeader3.Text = "Mount directory"
-        Me.ColumnHeader3.Width = 374
+        Me.ColumnHeader3.Width = 420
         '
         'ColumnHeader4
         '
@@ -109,11 +107,6 @@ Partial Class MountedImgMgr
         '
         Me.ColumnHeader5.Text = "Read/write permissions?"
         Me.ColumnHeader5.Width = 147
-        '
-        'ColumnHeader6
-        '
-        Me.ColumnHeader6.Text = "Version"
-        Me.ColumnHeader6.Width = 139
         '
         'ActionsTLP
         '
@@ -133,7 +126,7 @@ Partial Class MountedImgMgr
         Me.ActionsTLP.Controls.Add(Me.Button5, 4, 0)
         Me.ActionsTLP.Controls.Add(Me.Button1, 0, 0)
         Me.ActionsTLP.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ActionsTLP.Location = New System.Drawing.Point(3, 518)
+        Me.ActionsTLP.Location = New System.Drawing.Point(3, 585)
         Me.ActionsTLP.Name = "ActionsTLP"
         Me.ActionsTLP.RowCount = 1
         Me.ActionsTLP.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -146,9 +139,9 @@ Partial Class MountedImgMgr
         Me.Button6.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button6.Enabled = False
         Me.Button6.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button6.Location = New System.Drawing.Point(988, 3)
+        Me.Button6.Location = New System.Drawing.Point(993, 3)
         Me.Button6.Name = "Button6"
-        Me.Button6.Size = New System.Drawing.Size(191, 23)
+        Me.Button6.Size = New System.Drawing.Size(192, 23)
         Me.Button6.TabIndex = 7
         Me.Button6.Text = "Load into project"
         Me.Button6.UseVisualStyleBackColor = True
@@ -159,9 +152,9 @@ Partial Class MountedImgMgr
         Me.Button7.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button7.Enabled = False
         Me.Button7.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button7.Location = New System.Drawing.Point(1185, 3)
+        Me.Button7.Location = New System.Drawing.Point(1191, 3)
         Me.Button7.Name = "Button7"
-        Me.Button7.Size = New System.Drawing.Size(42, 23)
+        Me.Button7.Size = New System.Drawing.Size(36, 23)
         Me.Button7.TabIndex = 6
         Me.Button7.Text = "..."
         Me.Button7.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -172,9 +165,9 @@ Partial Class MountedImgMgr
         Me.Button4.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button4.Enabled = False
         Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(594, 3)
+        Me.Button4.Location = New System.Drawing.Point(597, 3)
         Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(191, 23)
+        Me.Button4.Size = New System.Drawing.Size(192, 23)
         Me.Button4.TabIndex = 5
         Me.Button4.Text = "Open mount directory"
         Me.Button4.UseVisualStyleBackColor = True
@@ -185,9 +178,9 @@ Partial Class MountedImgMgr
         Me.Button3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button3.Enabled = False
         Me.Button3.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button3.Location = New System.Drawing.Point(397, 3)
+        Me.Button3.Location = New System.Drawing.Point(399, 3)
         Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(191, 23)
+        Me.Button3.Size = New System.Drawing.Size(192, 23)
         Me.Button3.TabIndex = 3
         Me.Button3.Text = "Enable write permissions"
         Me.Button3.UseVisualStyleBackColor = True
@@ -198,9 +191,9 @@ Partial Class MountedImgMgr
         Me.Button2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button2.Enabled = False
         Me.Button2.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button2.Location = New System.Drawing.Point(200, 3)
+        Me.Button2.Location = New System.Drawing.Point(201, 3)
         Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(191, 23)
+        Me.Button2.Size = New System.Drawing.Size(192, 23)
         Me.Button2.TabIndex = 2
         Me.Button2.Text = "Reload servicing"
         Me.Button2.UseVisualStyleBackColor = True
@@ -211,9 +204,9 @@ Partial Class MountedImgMgr
         Me.Button5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button5.Enabled = False
         Me.Button5.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button5.Location = New System.Drawing.Point(791, 3)
+        Me.Button5.Location = New System.Drawing.Point(795, 3)
         Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(191, 23)
+        Me.Button5.Size = New System.Drawing.Size(192, 23)
         Me.Button5.TabIndex = 1
         Me.Button5.Text = "Remove volume images..."
         Me.Button5.UseVisualStyleBackColor = True
@@ -226,38 +219,16 @@ Partial Class MountedImgMgr
         Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Button1.Location = New System.Drawing.Point(3, 3)
         Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(191, 23)
+        Me.Button1.Size = New System.Drawing.Size(192, 23)
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "Unmount image"
         Me.Button1.UseVisualStyleBackColor = True
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.LinkLabel1.LinkArea = New System.Windows.Forms.LinkArea(77, 34)
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.DodgerBlue
-        Me.LinkLabel1.Location = New System.Drawing.Point(16, 609)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(1236, 63)
-        Me.LinkLabel1.TabIndex = 3
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "This view is being updated in real time, which may cause a higher CPU usage. Chan" & _
-    "ge image detection settings..."
-        Me.LinkLabel1.UseCompatibleTextRendering = True
-        '
-        'DetectorBW
-        '
-        Me.DetectorBW.WorkerReportsProgress = True
-        Me.DetectorBW.WorkerSupportsCancellation = True
         '
         'MountedImgMgr
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1264, 681)
-        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Controls.Add(Me.Label1)
         Me.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -286,9 +257,6 @@ Partial Class MountedImgMgr
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Button5 As System.Windows.Forms.Button
     Friend WithEvents Button1 As System.Windows.Forms.Button
-    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents Button7 As System.Windows.Forms.Button
-    Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents DetectorBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents Button6 As System.Windows.Forms.Button
 End Class
