@@ -233,14 +233,10 @@ Public Class GetAppxPkgInfoDlg
         If InstalledAppxPkgInfo IsNot Nothing Then
             DynaLog.LogMessage("Host system is running Windows 10 or 11. Using the technology provided by the DISM API...")
             DynaLog.LogMessage("Detecting if the extended AppX package getter script has been run...")
-            If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+            If MainForm.CurrentImage.ImageAppxPackages_Win8.Count > InstalledAppxPkgInfo.Count Then
                 DynaLog.LogMessage("Array has more items than AppX package collection. The script has been run.")
                 DynaLog.LogMessage("Getting AppX packages from arrays...")
-                For Each PackageName In MainForm.imgAppxPackageNames
-                    ListBox1.Items.Add(PackageName)
-                Next
-                ' An empty entry will appear, so remove it
-                If ListBox1.Items.Count > 0 Then ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+                ListBox1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Win8.Select(Function(appxPackage) appxPackage.PackageFullName).ToArray())
                 SearchPanel.Visible = False
             Else
                 DynaLog.LogMessage("Array has the same items as the AppX package collection. The script has not been run.")
@@ -253,12 +249,7 @@ Public Class GetAppxPkgInfoDlg
         Else
             DynaLog.LogMessage("Host system is running Windows 8. Getting AppX packages from arrays...")
             ' This condition is met on Windows 8 hosts, as they can't get AppX package information with the DISM API.
-            For Each PackageName In MainForm.imgAppxPackageNames
-                If PackageName Is Nothing Then Continue For
-                ListBox1.Items.Add(PackageName)
-            Next
-            ' An empty entry will appear, so remove it
-            If ListBox1.Items.Count > 0 Then ListBox1.Items.RemoveAt(ListBox1.Items.Count - 1)
+            ListBox1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Win8.Select(Function(appxPackage) appxPackage.PackageFullName).ToArray())
             SearchPanel.Visible = False
         End If
         SearchBox1.Text = ""
@@ -284,14 +275,14 @@ Public Class GetAppxPkgInfoDlg
             If InstalledAppxPkgInfo IsNot Nothing Then
                 DynaLog.LogMessage("Host system is running Windows 10 or 11. Using the technology provided by the DISM API...")
                 DynaLog.LogMessage("Detecting if the extended AppX package getter script has been run...")
-                If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+                If MainForm.CurrentImage.ImageAppxPackages_Win8.Count > InstalledAppxPkgInfo.Count Then
                     DynaLog.LogMessage("Array has more items than AppX package collection. The script has been run.")
                     DynaLog.LogMessage("Getting AppX packages from arrays...")
-                    Label23.Text = MainForm.imgAppxPackageNames(ListBox1.SelectedIndex)
-                    Label25.Text = MainForm.imgAppxDisplayNames(ListBox1.SelectedIndex)
-                    Label35.Text = MainForm.imgAppxArchitectures(ListBox1.SelectedIndex)
-                    Label32.Text = MainForm.imgAppxResourceIds(ListBox1.SelectedIndex)
-                    Label40.Text = MainForm.imgAppxVersions(ListBox1.SelectedIndex)
+                    Label23.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageFullName
+                    Label25.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageName
+                    Label35.Text = Casters.CastDismArchitecture(MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageArchitecture, True)
+                    Label32.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageResourceId
+                    Label40.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageVersion.ToString()
                 Else
                     DynaLog.LogMessage("Array has the same items as the AppX package collection. The script has not been run.")
                     DynaLog.LogMessage("Getting AppX packages...")
@@ -320,11 +311,11 @@ Public Class GetAppxPkgInfoDlg
                 End If
             Else
                 DynaLog.LogMessage("Host system is running Windows 8. Getting AppX packages from arrays...")
-                Label23.Text = MainForm.imgAppxPackageNames(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
-                Label25.Text = MainForm.imgAppxDisplayNames(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
-                Label35.Text = MainForm.imgAppxArchitectures(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
-                Label32.Text = MainForm.imgAppxResourceIds(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
-                Label40.Text = MainForm.imgAppxVersions(MainForm.imgAppxPackageNames.Count - (ListBox1.Items.Count - ListBox1.SelectedIndex) - 1)
+                Label23.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageFullName
+                Label25.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageName
+                Label35.Text = Casters.CastDismArchitecture(MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageArchitecture, True)
+                Label32.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageResourceId
+                Label40.Text = MainForm.CurrentImage.ImageAppxPackages_Win8(ListBox1.SelectedIndex).PackageVersion.ToString()
             End If
 
             displayName = Label25.Text
@@ -342,7 +333,7 @@ Public Class GetAppxPkgInfoDlg
                 appDisplayName = If(Not packageDispName.StartsWith("ms-resource:"), packageDispName, "")
                 If InstalledAppxPkgInfo IsNot Nothing And packageDispName.StartsWith("ms-resource:") Then
                     DynaLog.LogMessage("Display name starts with " & Quote & "ms-resource:" & Quote & ". Using PRI reader...")
-                    If MainForm.imgAppxPackageNames.Count > InstalledAppxPkgInfo.Count Then
+                    If MainForm.CurrentImage.ImageAppxPackages_Win8.Count > InstalledAppxPkgInfo.Count Then
                         DynaLog.LogMessage("Array has more items than AppX package collection. The script has been run.")
                         Dim PriName As String = PriReader.ReadFromPri((If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text).Replace("\\", "\").Trim(), _
                                                                       Label25.Text, _
@@ -586,6 +577,7 @@ Public Class GetAppxPkgInfoDlg
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If

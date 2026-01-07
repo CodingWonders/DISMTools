@@ -1474,6 +1474,7 @@ Public Class GetPkgInfoDlg
                     If File.Exists(pkgFile) Then ImgInfoSaveDlg.PackageFiles.Add(pkgFile)
                 Next
             End If
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If

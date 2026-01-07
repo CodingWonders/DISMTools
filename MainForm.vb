@@ -143,13 +143,6 @@ Public Class MainForm
 
     Public imgFeatures As New List(Of DismFeature)
 
-    Public imgAppxDisplayNames(65535) As String
-    Public imgAppxPackageNames(65535) As String
-    Public imgAppxVersions(65535) As String
-    Public imgAppxArchitectures(65535) As String
-    Public imgAppxResourceIds(65535) As String
-    Public imgAppxRegions(65535) As String
-
     Public imgAppxPackages As New List(Of DismAppxPackage)
 
     Public imgCapabilityIds(65535) As String
@@ -2739,6 +2732,9 @@ Public Class MainForm
         LinkLabel19.Enabled = True
         LinkLabel15.Enabled = True
         LinkLabel16.Enabled = True
+
+        If CurrentImage Is Nothing Then CurrentImage = New WindowsImage()
+
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
             LinkLabel20.Enabled = False
@@ -2750,6 +2746,9 @@ Public Class MainForm
 
             ' Set installation type variable according to the InstallationType registry value
             imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
+
+            CurrentImage.ImageEditionId = imgEdition
+            CurrentImage.ImageInstallationType = imgInstType
 
             Button24.Enabled = False
             Button25.Enabled = False
@@ -2832,6 +2831,7 @@ Public Class MainForm
                             End If
                         End Using
                         DynaLog.LogMessage(CurrentImage.ToString())
+                        DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
                     End If
                 Catch ex As Exception
                     Exit Try
@@ -2916,9 +2916,6 @@ Public Class MainForm
                 MountImageToolStripMenuItem.Enabled = True
                 UnmountImageToolStripMenuItem.Enabled = False
             End If
-            DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
-            DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
-            Exit Sub
         End If
     End Sub
 
@@ -3019,13 +3016,13 @@ Public Class MainForm
                 End Select
 
                 ' Disable Windows PE stuff when not working with a Windows PE image
-                WindowsPEServicingToolStripMenuItem.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
-                GroupBox10.Enabled = imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+                WindowsPEServicingToolStripMenuItem.Enabled = CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+                GroupBox10.Enabled = CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
                 ' Disable AppX and capability stuff when working with a Windows PE image
-                AppPackagesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-                CapabilitiesToolStripMenuItem.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-                GroupBox7.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-                GroupBox8.Enabled = (Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                AppPackagesToolStripMenuItem.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                CapabilitiesToolStripMenuItem.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                GroupBox7.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                GroupBox8.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
 
                 ' Next, detect the DISM version, so that we can determine which things are applicable
                 DynaLog.LogMessage("Comparing DISM versions...")
@@ -3360,7 +3357,7 @@ Public Class MainForm
                 PackageInfoList = PackageCollection
                 DynaLog.LogMessage("Total amount of packages obtained: " & PackageCollection.Count)
                 DynaLog.LogMessage("Package information will not be listed here")
-                CurrentImage.ImagePackages = PackageCollection
+                If CurrentImage IsNot Nothing Then CurrentImage.ImagePackages = PackageCollection
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
@@ -3397,7 +3394,7 @@ Public Class MainForm
                 Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
                 FeatureInfoList = FeatureCollection
                 DynaLog.LogMessage("Total amount of features obtained: " & FeatureCollection.Count & ". States will be parsed without logging.")
-                CurrentImage.ImageFeatures = FeatureCollection
+                If CurrentImage IsNot Nothing Then CurrentImage.ImageFeatures = FeatureCollection
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
@@ -3425,6 +3422,13 @@ Public Class MainForm
     ''' <remarks>This is only for Windows 8 and newer</remarks>
     Sub GetImageAppxPackages(Optional OnlineMode As Boolean = False)
         DynaLog.LogMessage("Getting AppX package information...")
+
+        Dim imgAppxDisplayNameList As New List(Of String)
+        Dim imgAppxPackageNameList As New List(Of String)
+        Dim imgAppxVersionList As New List(Of String)
+        Dim imgAppxArchitectureList As New List(Of String)
+        Dim imgAppxResourceIdList As New List(Of String)
+
         If Environment.OSVersion.Version.Major > 6 Then
             DynaLog.LogMessage("Host system is running Windows 10 or newer. We have the benefit of using the API")
             Try
@@ -3432,17 +3436,12 @@ Public Class MainForm
                 DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 DynaLog.LogMessage("Creating session...")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
-                    Dim imgAppxDisplayNameList As New List(Of String)
-                    Dim imgAppxPackageNameList As New List(Of String)
-                    Dim imgAppxVersionList As New List(Of String)
-                    Dim imgAppxArchitectureList As New List(Of String)
-                    Dim imgAppxResourceIdList As New List(Of String)
                     Dim imgAppxRegionList As New List(Of String)
                     Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
                     AppxPackageInfoList = AppxPackageCollection
                     DynaLog.LogMessage("Total amount of AppX packages obtained: " & AppxPackageCollection.Count & ". Architectures will be parsed without logging.")
                     If Not OnlineMode Then
-                        CurrentImage.ImageAppxPackages = AppxPackageCollection
+                        If CurrentImage IsNot Nothing Then CurrentImage.ImageAppxPackages = AppxPackageCollection
                         If ImgBW.CancellationPending Then
                             DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                             If session IsNot Nothing Then DismApi.CloseSession(session)
@@ -3468,59 +3467,27 @@ Public Class MainForm
                     End If
                     If OnlineMode And ExtAppxGetter Then
                         DynaLog.LogMessage("Calling helper script...")
-                        PSExtAppxGetter()
-                        If Directory.Exists(Application.StartupPath & "\bin\extps1\out") And My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
-                            DynaLog.LogMessage("Getting additional packages...")
-                            Dim appxPkgNameRTB As New RichTextBox()
-                            Dim appxPkgFullNameRTB As New RichTextBox()
-                            Dim appxArchRTB As New RichTextBox()
-                            Dim appxResIdRTB As New RichTextBox()
-                            Dim appxVerRTB As New RichTextBox()
-                            Dim appxNonRemPolRTB As New RichTextBox()
-                            Dim appxFrameworkRTB As New RichTextBox()
-                            appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
-                            appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
-                            appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
-                            appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
-                            appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
-                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
-                            If File.Exists(Application.StartupPath & "\bin\extps1\out\appxframework") Then appxFrameworkRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxframework")
-                            For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
-                                If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
-                                    Continue For
-                                Else
-                                    If SkipNonRemovable Or (SkipFrameworks And appxFrameworkRTB.Text <> "") Then
-                                        If appxNonRemPolRTB.Lines(x) = "True" Or (SkipFrameworks And appxFrameworkRTB.Lines(x) = "True") Then
-                                            Continue For
-                                        Else
-                                            imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
-                                            imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
-                                            imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
-                                            imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
-                                            imgAppxVersionList.Add(appxVerRTB.Lines(x))
-                                        End If
-                                    Else
-                                        imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
-                                        imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
-                                        imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
-                                        imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
-                                        imgAppxVersionList.Add(appxVerRTB.Lines(x))
-                                    End If
-                                End If
-                            Next
-                            Try
-                                Directory.Delete(Application.StartupPath & "\bin\extps1\out", True)
-                            Catch ex As Exception
-                                ' Leave directory for later
-                            End Try
+                        Dim PSExtAppxGetterOutput As String = GetPSExtAppxGetterOutput()
+
+                        If PSExtAppxGetterOutput <> "" Then
+                            Dim deserializer As New XmlSerializer(GetType(PSInterop.PsObjects))
+                            Dim objectsCollection As New PSInterop.PsObjects()
+                            Using reader As New StringReader(PSExtAppxGetterOutput)
+                                objectsCollection = CType(deserializer.Deserialize(reader), PSInterop.PsObjects)
+                            End Using
+                            If objectsCollection.Items.Count > 0 Then
+                                For Each item In objectsCollection.Items
+                                    Dim propertyDictionary As Dictionary(Of String, String) = item.Properties.ToDictionary(Function(prop) prop.Name,
+                                                                                                               Function(prop) prop.Value)
+                                    CurrentImage.ImageAppxPackages_Win8.Add(New ImageAppxPackage(propertyDictionary("Name"),
+                                                                                                 propertyDictionary("PackageFullName"),
+                                                                                                 Casters.CastDismArchitectureString(propertyDictionary("Architecture")),
+                                                                                                 propertyDictionary("ResourceId"),
+                                                                                                 New Version(propertyDictionary("Version"))))
+                                Next
+                            End If
                         End If
                     End If
-                    DynaLog.LogMessage("Passing information to arrays...")
-                    imgAppxArchitectures = imgAppxArchitectureList.ToArray()
-                    imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
-                    imgAppxPackageNames = imgAppxPackageNameList.ToArray()
-                    imgAppxResourceIds = imgAppxResourceIdList.ToArray()
-                    imgAppxVersions = imgAppxVersionList.ToArray()
 
                     imgAppxPackages = AppxPackageCollection.ToList()
                 End Using
@@ -3539,168 +3506,93 @@ Public Class MainForm
         DynaLog.LogMessage("Host system is running Windows 8. Use DISM executable. DISM API when processing this info on Windows 8 crashes the program")
         ' The mounted image may be Windows 8 or later, but DISM may be from Windows 7. Get this information before running this procedure
         Dim FileVersion As FileVersionInfo = FileVersionInfo.GetVersionInfo(DismExe)
-        Select Case FileVersion.ProductMajorPart
-            Case 6
-                ' Detect if it is Windows 7
-                Select Case FileVersion.ProductMinorPart
-                    Case 1
-                        DynaLog.LogMessage("The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
-                        DynaLog.LogMessage("Signaling completion of task...")
-                        CompletedTasks(2) = False
-                        PendingTasks(2) = True
-                        Exit Sub
-                End Select
-        End Select
-        DynaLog.LogMessage("Writing getter scripts...")
-        Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxnames.bat",
-                              "@echo off" & CrLf &
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "DisplayName : " & Quote & " > .\tempinfo\appxdisplaynames" & CrLf &
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "PackageName : " & Quote & " > .\tempinfo\appxpackagenames",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxversions.bat",
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\appxversions",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxarches.bat",
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Architecture : " & Quote & " > .\tempinfo\appxarchitectures",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxresids.bat",
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "ResourceId : " & Quote & " > .\tempinfo\appxresids",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\appxregions.bat",
-                              "dism /English " & If(OnlineMode, " /online", " /image=" & Quote & MountDir & Quote) & " /get-provisionedappxpackages | findstr /c:" & Quote & "Regions : " & Quote & " > .\tempinfo\appxregions",
-                              ASCII)
-        Catch ex As Exception
-            DynaLog.LogMessage("Failed writing getter scripts. Reason: " & ex.Message)
+        If FileVersion.ProductMajorPart = 6 AndAlso FileVersion.ProductMinorPart = 1 Then
+            DynaLog.LogMessage("The image is Windows 8 or later, but this version of DISM does not support this command. Exiting...")
             DynaLog.LogMessage("Signaling completion of task...")
             CompletedTasks(2) = False
             PendingTasks(2) = True
             Exit Sub
-        End Try
-        DynaLog.LogMessage("Finished writing getter scripts. Executing them...")
-        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        ImgProcesses.StartInfo.CreateNoWindow = True
-        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each appxScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
-            If Path.GetFileName(appxScript).StartsWith("appx") Then
-                DynaLog.LogMessage("RunCommand -> " & Path.GetFileName(appxScript))
-                ImgProcesses.StartInfo.Arguments = "/c " & appxScript
-                ImgProcesses.Start()
-                ImgProcesses.WaitForExit()
-                If ImgProcesses.ExitCode = 0 Then
-                    Continue For
-                End If
-            Else
-                Continue For
-            End If
-        Next
-        DynaLog.LogMessage("Finished running getter scripts. Filling arrays...")
-        Dim FileGetterRTB As New RichTextBox()
-        Dim TypeLookups() As String = New String(5) {"DisplayName : ", "PackageName : ", "Version : ", "Architecture : ", "ResourceId : ", "Regions : "}
-        Dim lineToAppend As String = ""
-        For Each appxFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-            If Path.GetFileName(appxFile).StartsWith("appx") Then
-                DynaLog.LogMessage("FillArray -> (values_from: " & Path.GetFileName(appxFile) & ")")
-                FileGetterRTB.Clear()
-                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(appxFile)
-                For x = 0 To FileGetterRTB.Lines.Count - 1
-                    If FileGetterRTB.Lines(x) = "" Then
-                        Continue For
-                    Else
-                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("DisplayName : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgAppxDisplayNames(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("PackageName : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgAppxPackageNames(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Version : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgAppxVersions(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Architecture : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgAppxArchitectures(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(4)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("ResourceId : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgAppxResourceIds(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(5)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Regions : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgAppxRegions(x) = lineToAppend
-                        Else
-                            Continue For
-                        End If
+        End If
+        CurrentImage.ImageAppxPackages_Win8.Clear()
+        ' Run DISM and parse the output in one go.
+        Dim args As String = String.Format("/English {0} /get-provisionedappxpackages", If(OnlineMode, "/online", String.Format("/image={0}", Quote & MountDir & Quote)))
+        Using appxProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = DismExe,
+                .Arguments = args,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+            appxProc.Start()
+            Dim output As String = appxProc.StandardOutput.ReadToEnd()
+            appxProc.WaitForExit()
+            If appxProc.ExitCode = 0 Then
+                ' Parse the output.
+                Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("DisplayName : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+                Dim appxDisplayNameString As String = "",
+                    appxVersionString As String = "",
+                    appxArchitectureString As String = "",
+                    appxResourceIdString As String = "",
+                    appxPackageNameString As String = ""
+                For Each outputLine In outputLines
+                    If outputLine.StartsWith("DisplayName : ") Then
+                        appxDisplayNameString = outputLine.Replace("DisplayName : ", "")
+                    ElseIf outputLine.StartsWith("Version : ") Then
+                        appxVersionString = outputLine.Replace("Version : ", "")
+                    ElseIf outputLine.StartsWith("Architecture : ") Then
+                        appxArchitectureString = outputLine.Replace("Architecture : ", "")
+                    ElseIf outputLine.StartsWith("ResourceId : ") Then
+                        appxResourceIdString = outputLine.Replace("ResourceId : ", "")
+                    ElseIf outputLine.StartsWith("PackageName : ") Then
+                        appxPackageNameString = outputLine.Replace("PackageName : ", "")
+                    End If
+
+                    ' If we've grabbed everything at this point, we add it to our list,
+                    ' then clear everything and move on.
+                    If appxDisplayNameString <> "" AndAlso
+                            appxVersionString <> "" AndAlso
+                            appxArchitectureString <> "" AndAlso
+                            appxResourceIdString <> "" AndAlso
+                            appxPackageNameString <> "" Then
+                        CurrentImage.ImageAppxPackages_Win8.Add(New ImageAppxPackage(appxDisplayNameString,
+                                                                                     appxPackageNameString,
+                                                                                     Casters.CastDismArchitectureString(appxArchitectureString),
+                                                                                     appxResourceIdString,
+                                                                                     New Version(appxVersionString)))
+                        appxDisplayNameString = ""
+                        appxVersionString = ""
+                        appxArchitectureString = ""
+                        appxResourceIdString = ""
+                        appxPackageNameString = ""
                     End If
                 Next
-            Else
-                Continue For
             End If
-        Next
+        End Using
         If OnlineMode And ExtAppxGetter Then
-            Dim imgAppxDisplayNameList As New List(Of String)
-            Dim imgAppxPackageNameList As New List(Of String)
-            Dim imgAppxVersionList As New List(Of String)
-            Dim imgAppxArchitectureList As New List(Of String)
-            Dim imgAppxResourceIdList As New List(Of String)
-            imgAppxDisplayNameList = imgAppxDisplayNames.ToList()
-            imgAppxPackageNameList = imgAppxPackageNames.ToList()
-            imgAppxVersionList = imgAppxVersions.ToList()
-            imgAppxArchitectureList = imgAppxArchitectures.ToList()
-            imgAppxResourceIdList = imgAppxResourceIds.ToList()
-            PSExtAppxGetter()
-            If Directory.Exists(Application.StartupPath & "\bin\extps1\out") AndAlso My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\extps1\out").Count > 0 Then
-                DynaLog.LogMessage("Grabbing and adding results from extended AppX getter...")
-                Dim appxPkgNameRTB As New RichTextBox()
-                Dim appxPkgFullNameRTB As New RichTextBox()
-                Dim appxArchRTB As New RichTextBox()
-                Dim appxResIdRTB As New RichTextBox()
-                Dim appxVerRTB As New RichTextBox()
-                Dim appxNonRemPolRTB As New RichTextBox()
-                appxPkgNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgnames")
-                appxPkgFullNameRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxpkgfullnames")
-                appxArchRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxarch")
-                appxResIdRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxresid")
-                appxVerRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxver")
-                If File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then appxNonRemPolRTB.Text = File.ReadAllText(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy")
-                For x = 0 To appxPkgFullNameRTB.Lines.Count - 1
-                    If imgAppxPackageNameList.Contains(appxPkgFullNameRTB.Lines(x)) Then
-                        Continue For
-                    Else
-                        If SkipNonRemovable And File.Exists(Application.StartupPath & "\bin\extps1\out\appxnonrempolicy") Then
-                            If appxNonRemPolRTB.Lines(x) = "True" Then
-                                Continue For
-                            Else
-                                imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
-                                imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
-                                imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
-                                imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
-                                imgAppxVersionList.Add(appxVerRTB.Lines(x))
-                            End If
-                        Else
-                            imgAppxDisplayNameList.Add(appxPkgNameRTB.Lines(x))
-                            imgAppxPackageNameList.Add(appxPkgFullNameRTB.Lines(x))
-                            imgAppxArchitectureList.Add(appxArchRTB.Lines(x))
-                            imgAppxResourceIdList.Add(appxResIdRTB.Lines(x))
-                            imgAppxVersionList.Add(appxVerRTB.Lines(x))
-                        End If
-                    End If
-                Next
-                Try
-                    Directory.Delete(Application.StartupPath & "\bin\extps1\out", True)
-                Catch ex As Exception
-                    ' Leave directory for later
-                End Try
+            Dim PSExtAppxGetterOutput As String = GetPSExtAppxGetterOutput()
+
+            If PSExtAppxGetterOutput <> "" Then
+                Dim deserializer As New XmlSerializer(GetType(PSInterop.PsObjects))
+                Dim objectsCollection As New PSInterop.PsObjects()
+                Using reader As New StringReader(PSExtAppxGetterOutput)
+                    objectsCollection = CType(deserializer.Deserialize(reader), PSInterop.PsObjects)
+                End Using
+                If objectsCollection.Items.Count > 0 Then
+                    For Each item In objectsCollection.Items
+                        Dim propertyDictionary As Dictionary(Of String, String) = item.Properties.ToDictionary(Function(prop) prop.Name,
+                                                                                                               Function(prop) prop.Value)
+                        CurrentImage.ImageAppxPackages_Win8.Add(New ImageAppxPackage(propertyDictionary("Name"),
+                                                                                                 propertyDictionary("PackageFullName"),
+                                                                                                 Casters.CastDismArchitectureString(propertyDictionary("Architecture")),
+                                                                                                 propertyDictionary("ResourceId"),
+                                                                                                 New Version(propertyDictionary("Version"))))
+                    Next
+                End If
             End If
-            DynaLog.LogMessage("Passing information to arrays...")
-            imgAppxDisplayNames = imgAppxDisplayNameList.ToArray()
-            imgAppxPackageNames = imgAppxPackageNameList.ToArray()
-            imgAppxVersions = imgAppxVersionList.ToArray()
-            imgAppxArchitectures = imgAppxArchitectureList.ToArray()
-            imgAppxResourceIds = imgAppxResourceIdList.ToArray()
         End If
         DynaLog.LogMessage("Signaling completion of task...")
         CompletedTasks(2) = True
@@ -3708,25 +3600,26 @@ Public Class MainForm
         'ImgBW.ReportProgress(progressMin + progressDivs)
     End Sub
 
-    Sub PSExtAppxGetter()
+    Function GetPSExtAppxGetterOutput() As String
+        Dim output As String = ""
         DynaLog.LogMessage("Running PowerShell script...")
-        Dim PSExtAppxProc As New Process
-        PSExtAppxProc.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe"
-        PSExtAppxProc.StartInfo.WorkingDirectory = Application.StartupPath
-        ' The "executionpolicy" argument is passed to PowerShell as a temporary execution policy setting that happens once.
-        ' More on that here: https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.3#set-a-different-policy-for-one-session
-        PSExtAppxProc.StartInfo.Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote
-        If Not Debugger.IsAttached Then
-            DynaLog.LogMessage("Disabling window creation for script...")
-            PSExtAppxProc.StartInfo.CreateNoWindow = True
-            PSExtAppxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        End If
-        PSExtAppxProc.Start()
-        PSExtAppxProc.WaitForExit()
-        If PSExtAppxProc.ExitCode = 0 Then
-
-        End If
-    End Sub
+        Using PSExtAppxProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\WindowsPowerShell\v1.0\powershell.exe",
+                .WorkingDirectory = Application.StartupPath,
+                .Arguments = "-executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\extappx.ps1" & Quote & String.Format("{0}{1}", If(SkipNonRemovable, " -noNonRemovable " & Quote & "true" & Quote, ""), If(SkipFrameworks, " -noFramework " & Quote & "true" & Quote, "")),
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True
+            }
+        }
+            PSExtAppxProc.Start()
+            output = PSExtAppxProc.StandardOutput.ReadToEnd()
+            PSExtAppxProc.WaitForExit()
+        End Using
+        Return output
+    End Function
 
     ''' <summary>
     ''' Gets installed Features on Demand (capabilities) in an image and puts them in separate arrays
@@ -3744,7 +3637,7 @@ Public Class MainForm
                 Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
                 CapabilityInfoList = CapabilityCollection
                 DynaLog.LogMessage("Total amount of capabilities obtained: " & CapabilityCollection.Count & ". States will be parsed without logging.")
-                CurrentImage.ImageCapabilities = CapabilityCollection
+                If CurrentImage IsNot Nothing Then CurrentImage.ImageCapabilities = CapabilityCollection
                 If ImgBW.CancellationPending Then
                     DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                     If session IsNot Nothing Then DismApi.CloseSession(session)
@@ -3791,7 +3684,7 @@ Public Class MainForm
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
                     DriverInfoList = DriverCollection
                     DynaLog.LogMessage("Total amount of drivers obtained: " & DriverCollection.Count)
-                    CurrentImage.ImageDrivers = DriverCollection
+                    If CurrentImage IsNot Nothing Then CurrentImage.ImageDrivers = DriverCollection
                     If ImgBW.CancellationPending Then
                         DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
                         If session IsNot Nothing Then DismApi.CloseSession(session)
@@ -13576,6 +13469,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13826,6 +13720,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13896,6 +13791,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 2
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -13961,6 +13857,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -14055,6 +13952,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 5
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -14150,6 +14048,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -14216,6 +14115,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 7
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -14237,6 +14137,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 9
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
@@ -15345,6 +15246,7 @@ Public Class MainForm
             ImgInfoSaveDlg.AutoCompleteInfo = AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = True
             ImgInfoSaveDlg.SaveTask = 0
+            ImgInfoSaveDlg.ImageToGetInfoFrom = CurrentImage
             ImgInfoSaveDlg.ShowDialog(MountedImgMgr)
             InfoSaveResults.Show()
         End If

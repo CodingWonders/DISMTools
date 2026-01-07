@@ -255,6 +255,11 @@ Namespace Elements.Contemporaneus
 
 #End Region
 
+        Public Sub New()
+            ImageVersion = New Version(0, 0, 0, 0)
+            ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
+        End Sub
+
         ''' <summary>
         ''' Creates a <see cref="WindowsImage"/> object with file path, index, mount directory, status, 
         ''' and mode parameters; and default values for everything else.
@@ -272,6 +277,7 @@ Namespace Elements.Contemporaneus
             ImageMountMode = mountMode
 
             ImageVersion = New Version(0, 0, 0, 0)
+            ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
         End Sub
 
         ''' <summary>

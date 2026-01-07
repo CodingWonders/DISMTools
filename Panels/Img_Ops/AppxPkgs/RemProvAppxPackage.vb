@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
 Imports DISMTools.Utilities
+Imports Microsoft.Dism
 
 Public Class RemProvAppxPackage
     Implements IImageTaskDialog
@@ -164,42 +165,34 @@ Public Class RemProvAppxPackage
             Return False
         End If
         DynaLog.LogMessage("Adding AppX packages to arrays...")
-        If MainForm.imgAppxPackageNames.Count > MainForm.imgAppxPackages.Count Then
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                    If MainForm.imgAppxPackageNames(x) = "" Or MainForm.imgAppxPackageNames(x) = "Nothing" Then
-                        Continue For
-                    Else
-                        If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)) Then
-                            If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "No"}))
-                            Else
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "Yes"}))
-                            End If
-                        Else
-                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "No"}))
-                        End If
-                    End If
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-            End Try
+        If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Win8.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Win8.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageFullName,
+                                                                                                                                              appxPackage.PackageName,
+                                                                                                                                              Casters.CastDismArchitecture(appxPackage.PackageArchitecture),
+                                                                                                                                              appxPackage.PackageResourceId,
+                                                                                                                                              appxPackage.PackageVersion.ToString(),
+                                                                                                                                              appxPackage.GetLocalizedRegistrationStatus(MainForm.MountDir, MainForm.Language)})).ToArray())
         Else
-            For Each imgAppxPackage In MainForm.imgAppxPackages
-                Dim isRegistered As Boolean
-                If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
-                    If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                        isRegistered = False
-                    Else
-                        isRegistered = True
-                    End If
-                Else
-                    isRegistered = False
-                End If
-                ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
-            Next
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageName,
+                                                                                                                                         appxPackage.DisplayName,
+                                                                                                                                         Casters.CastDismArchitecture(appxPackage.Architecture),
+                                                                                                                                         appxPackage.ResourceId,
+                                                                                                                                         appxPackage.Version.ToString(),
+                                                                                                                                         If(IsPackageRegistered(appxPackage), "Yes", "No")})).ToArray())
         End If
         Return True
+    End Function
+
+    Private Function IsPackageRegistered(imgAppxPackage As DismAppxPackage) As Boolean
+        If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
+            If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
+                Return False
+            Else
+                Return True
+            End If
+        Else
+            Return False
+        End If
     End Function
 
     Private Sub RemProvAppxPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load

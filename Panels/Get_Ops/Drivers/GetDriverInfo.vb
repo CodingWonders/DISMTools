@@ -1271,6 +1271,7 @@ Public Class GetDriverInfo
                     If File.Exists(drvFile) Then ImgInfoSaveDlg.DriverPkgs.Add(drvFile)
                 Next
             End If
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
             ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If

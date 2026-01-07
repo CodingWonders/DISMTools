@@ -88,6 +88,22 @@ Namespace Utilities
             Return Nothing
         End Function
 
+        Shared Function CastDismArchitectureString(ArchitectureString As String) As DismProcessorArchitecture
+            Select Case ArchitectureString.ToLower()
+                Case "x86"
+                    Return DismProcessorArchitecture.Intel
+                Case "x64"
+                    Return DismProcessorArchitecture.AMD64
+                Case "arm"
+                    Return DismProcessorArchitecture.ARM
+                Case "arm64"
+                    Return DismProcessorArchitecture.ARM64
+                Case "neutral"
+                    Return DismProcessorArchitecture.Neutral
+            End Select
+            Return DismProcessorArchitecture.None
+        End Function
+
         Shared Function CastDismSignatureStatus(Signature As DismDriverSignature, Optional Translate As Boolean = False) As String
             Select Case Signature
                 Case DismDriverSignature.Unknown
