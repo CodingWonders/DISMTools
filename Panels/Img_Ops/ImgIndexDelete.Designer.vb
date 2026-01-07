@@ -171,6 +171,7 @@ Partial Class ImgIndexDelete
         '
         Me.ListView2.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3, Me.ColumnHeader4})
         Me.ListView2.Enabled = False
+        Me.ListView2.HideSelection = False
         Me.ListView2.Location = New System.Drawing.Point(343, 48)
         Me.ListView2.Name = "ListView2"
         Me.ListView2.Size = New System.Drawing.Size(321, 154)
@@ -193,6 +194,7 @@ Partial Class ImgIndexDelete
         Me.ListView1.CheckBoxes = True
         Me.ListView1.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1, Me.ColumnHeader2})
         Me.ListView1.FullRowSelect = True
+        Me.ListView1.HideSelection = False
         Me.ListView1.Location = New System.Drawing.Point(16, 48)
         Me.ListView1.Name = "ListView1"
         Me.ListView1.Size = New System.Drawing.Size(321, 154)
@@ -227,7 +229,7 @@ Partial Class ImgIndexDelete
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(532, 13)
         Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Please mark the volume images to delete on the left. The image will then have the" & _
+        Me.Label3.Text = "Please mark the volume images to delete on the left. The image will then have the" &
     " indexes shown on the right"
         '
         'CheckBox1

@@ -446,4 +446,8 @@ Public Class ImgIndexDelete
             OK_Button.Enabled = True
         End If
     End Sub
+
+    Private Sub ImgIndexDelete_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        MainForm.StartMountedImageDetector()
+    End Sub
 End Class
