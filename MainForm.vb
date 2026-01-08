@@ -150,15 +150,6 @@ Public Class MainForm
 
     Public imgCapabilities As New List(Of DismCapability)
 
-    Public imgDrvPublishedNames(65535) As String
-    Public imgDrvOGFileNames(65535) As String
-    Public imgDrvInbox(65535) As String
-    Public imgDrvClassNames(65535) As String
-    Public imgDrvProviderNames(65535) As String
-    Public imgDrvDates(65535) As String
-    Public imgDrvVersions(65535) As String
-    Public imgDrvBootCriticalStatus(65535) As Boolean
-
     Public imgDrivers As New List(Of DismDriverPackage)
 
     Public areBackgroundProcessesDone As Boolean
@@ -3672,14 +3663,6 @@ Public Class MainForm
                 DismApi.Initialize(DismLogLevel.LogErrors, Application.StartupPath & "\logs\dism.log")
                 DynaLog.LogMessage("Creating session...")
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
-                    Dim imgDrvPublishedNameList As New List(Of String)
-                    Dim imgDrvOGFileNameList As New List(Of String)
-                    Dim imgDrvInboxList As New List(Of String)
-                    Dim imgDrvClassNameList As New List(Of String)
-                    Dim imgDrvProviderNameList As New List(Of String)
-                    Dim imgDrvDateList As New List(Of String)
-                    Dim imgDrvVersionList As New List(Of String)
-                    Dim imgDrvBootCriticalStatusList As New List(Of Boolean)
                     If Not AllDrivers Then DynaLog.LogMessage("Not all drivers will be obtained because of a setting in background processes")
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
                     DriverInfoList = DriverCollection
@@ -3707,133 +3690,78 @@ Public Class MainForm
             PendingTasks(4) = False
             Exit Sub
         End If
+        CurrentImage.ImageDrivers_Win7.Clear()
         DynaLog.LogMessage("Running function...")
         DynaLog.LogMessage("Determining whether there are third-party drivers in image...")
-        Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvnums.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | find /c " & Quote & "Published Name : " & Quote & " > .\tempinfo\drvnums",
-                              ASCII)
-        Catch ex As Exception
-            DynaLog.LogMessage("Failed writing getter scripts. Reason: " & ex.Message)
-            CompletedTasks(4) = False
-            Exit Sub
-        End Try
-        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        ImgProcesses.StartInfo.CreateNoWindow = True
-        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        ImgProcesses.StartInfo.Arguments = "/c " & Application.StartupPath & "\bin\exthelpers\drvnums.bat"
-        ImgProcesses.Start()
-        ImgProcesses.WaitForExit()
-        File.Delete(Application.StartupPath & "\bin\exthelpers\drvnums.bat")
-        If ImgProcesses.ExitCode = 0 Then
-            Dim drvCount As Integer = CInt(My.Computer.FileSystem.ReadAllText(Application.StartupPath & "\tempinfo\drvnums"))
-            If drvCount = 0 Then
-                DynaLog.LogMessage("There are no available third-party drivers in this image. Exiting function...")
-                Exit Sub
-            End If
-        End If
-        DynaLog.LogMessage("Writing getter scripts...")
-        Try
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvpublishednames.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Published Name : " & Quote & " > .\tempinfo\drvpublishednames",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvogfilenames.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Original File Name : " & Quote & " > .\tempinfo\drvogfilenames",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvinbox.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Inbox : " & Quote & " > .\tempinfo\drvinbox",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvclassnames.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Class Name : " & Quote & " > .\tempinfo\drvclassnames",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvprovnames.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Provider Name : " & Quote & " > .\tempinfo\drvprovnames",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvdates.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Date : " & Quote & " > .\tempinfo\drvdates",
-                              ASCII)
-            File.WriteAllText(Application.StartupPath & "\bin\exthelpers\drvversions.bat",
-                              "@echo off" & CrLf &
-                              "dism /English /image=" & Quote & MountDir & Quote & " /get-drivers | findstr /c:" & Quote & "Version : " & Quote & " > .\tempinfo\drvversions",
-                              ASCII)
-        Catch ex As Exception
-            DynaLog.LogMessage("Failed writing getter scripts. Reason: " & ex.Message)
-            Exit Sub
-        End Try
-        DynaLog.LogMessage("Finished writing getter scripts. Executing them...")
-        ImgProcesses.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\cmd.exe"
-        ImgProcesses.StartInfo.CreateNoWindow = True
-        ImgProcesses.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-        For Each drvScript In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\bin\exthelpers", FileIO.SearchOption.SearchTopLevelOnly, "*.bat")
-            If Path.GetFileName(drvScript).StartsWith("drv") Then
-                DynaLog.LogMessage("RunCommand -> " & Path.GetFileName(drvScript))
-                ImgProcesses.StartInfo.Arguments = "/c " & drvScript
-                ImgProcesses.Start()
-                ImgProcesses.WaitForExit()
-                If ImgProcesses.ExitCode = 0 Then
-                    Continue For
-                End If
-            Else
-                Continue For
-            End If
-        Next
-        DynaLog.LogMessage("Finished running getter scripts. Filling arrays...")
-        Dim FileGetterRTB As New RichTextBox()
-        Dim TypeLookups() As String = New String(6) {"Published Name : ", "Original File Name : ", "Inbox : ", "Class Name : ", "Provider Name : ", "Date : ", "Version : "}
-        Dim lineToAppend As String = ""
-        For Each drvFile In My.Computer.FileSystem.GetFiles(Application.StartupPath & "\tempinfo", FileIO.SearchOption.SearchTopLevelOnly)
-            If Path.GetFileName(drvFile).StartsWith("drv") Then
-                DynaLog.LogMessage("FillArray -> (values_from: " & Path.GetFileName(drvFile) & ")")
-                FileGetterRTB.Clear()
-                FileGetterRTB.Text = My.Computer.FileSystem.ReadAllText(drvFile)
-                For x = 0 To FileGetterRTB.Lines.Count - 1
-                    If FileGetterRTB.Lines(x) = "" Then
-                        Continue For
-                    Else
-                        If FileGetterRTB.Lines(x).StartsWith(TypeLookups(0)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Published Name : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvPublishedNames(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(1)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Original File Name : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvOGFileNames(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(2)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Inbox : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvInbox(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(3)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Class Name : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvClassNames(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(4)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Provider Name : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvProviderNames(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(5)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Date : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvDates(x) = lineToAppend
-                        ElseIf FileGetterRTB.Lines(x).StartsWith(TypeLookups(6)) Then
-                            lineToAppend = FileGetterRTB.Lines(x).Replace("Version : ", "").Trim()
-                            If lineToAppend = "" Then lineToAppend = "Nothing"
-                            imgDrvVersions(x) = lineToAppend
-                        Else
-                            Continue For
-                        End If
+        ' Run DISM and parse the output in one go.
+        Using DriverEnumerationProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = DismExe,
+                .Arguments = String.Format("/English /image={0} /get-drivers{1}", Quote & MountDir & Quote, If(AllDrivers, " /all", "")),
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True
+            }
+        }
+            Dim output As String = ""
+            DriverEnumerationProc.Start()
+            output = DriverEnumerationProc.StandardOutput.ReadToEnd()
+            DriverEnumerationProc.WaitForExit()
+            If DriverEnumerationProc.ExitCode = 0 Then
+                ' Parse the output.
+                Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Published Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+                Dim drvPublishedNameString As String = "",
+                    drvOriginalFileNameString As String = "",
+                    drvInboxString As String = "",
+                    drvClassNameString As String = "",
+                    drvProviderNameString As String = "",
+                    drvDateString As String = "",
+                    drvVersionString As String = ""
+                For Each outputLine In outputLines
+                    If outputLine.StartsWith("Published Name : ") Then
+                        drvPublishedNameString = outputLine.Replace("Published Name : ", "")
+                    ElseIf outputLine.StartsWith("Original File Name : ") Then
+                        drvOriginalFileNameString = outputLine.Replace("Original File Name : ", "")
+                    ElseIf outputLine.StartsWith("Inbox : ") Then
+                        drvInboxString = outputLine.Replace("Inbox : ", "")
+                    ElseIf outputLine.StartsWith("Class Name : ") Then
+                        drvClassNameString = outputLine.Replace("Class Name : ", "")
+                    ElseIf outputLine.StartsWith("Provider Name : ") Then
+                        drvProviderNameString = outputLine.Replace("Provider Name : ", "")
+                    ElseIf outputLine.StartsWith("Date : ") Then
+                        drvDateString = outputLine.Replace("Date : ", "")
+                    ElseIf outputLine.StartsWith("Version : ") Then
+                        drvVersionString = outputLine.Replace("Version : ", "")
+                    End If
+
+                    ' If we've grabbed everything at this point, we add it to our list,
+                    ' then clear everything and move on.
+                    If drvPublishedNameString <> "" AndAlso
+                        drvOriginalFileNameString <> "" AndAlso
+                        drvInboxString <> "" AndAlso
+                        drvClassNameString <> "" AndAlso
+                        drvProviderNameString <> "" AndAlso
+                        drvDateString <> "" AndAlso
+                        drvVersionString <> "" Then
+                        CurrentImage.ImageDrivers_Win7.Add(New ImageDriver(drvPublishedNameString,
+                                                                           drvOriginalFileNameString,
+                                                                           drvInboxString.Equals("Yes", StringComparison.InvariantCultureIgnoreCase),
+                                                                           drvClassNameString,
+                                                                           drvProviderNameString,
+                                                                           drvDateString,
+                                                                           New Version(drvVersionString)))
+                        drvPublishedNameString = ""
+                        drvOriginalFileNameString = ""
+                        drvInboxString = ""
+                        drvClassNameString = ""
+                        drvProviderNameString = ""
+                        drvDateString = ""
+                        drvVersionString = ""
                     End If
                 Next
-            Else
-                Continue For
             End If
-        Next
+        End Using
         DynaLog.LogMessage("Signaling completion of task...")
         CompletedTasks(4) = True
         PendingTasks(4) = False

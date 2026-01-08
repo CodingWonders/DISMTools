@@ -253,11 +253,14 @@ Namespace Elements.Contemporaneus
         ''' <remarks></remarks>
         Public Property ImageDrivers As DismDriverPackageCollection
 
+        Public Property ImageDrivers_Win7 As List(Of ImageDriver)
+
 #End Region
 
         Public Sub New()
             ImageVersion = New Version(0, 0, 0, 0)
             ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
+            ImageDrivers_Win7 = New List(Of ImageDriver)
         End Sub
 
         ''' <summary>
@@ -278,6 +281,7 @@ Namespace Elements.Contemporaneus
 
             ImageVersion = New Version(0, 0, 0, 0)
             ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
+            ImageDrivers_Win7 = New List(Of ImageDriver)
         End Sub
 
         ''' <summary>
