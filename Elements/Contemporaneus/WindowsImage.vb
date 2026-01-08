@@ -253,6 +253,11 @@ Namespace Elements.Contemporaneus
         ''' <remarks></remarks>
         Public Property ImageDrivers As DismDriverPackageCollection
 
+        ''' <summary>
+        ''' The device drivers installed in the mounted Windows image.
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>This collection is filled on Windows 7 images.</remarks>
         Public Property ImageDrivers_Win7 As List(Of ImageDriver)
 
 #End Region
