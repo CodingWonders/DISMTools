@@ -131,11 +131,6 @@ Public Class MainForm
     Public dt_codeName As String = "DTVII_MK4"
 
     ' Arrays and other variables used on background processes
-    Public imgPackageNames(65535) As String
-    Public imgPackageState(65535) As String
-    Public imgPackageRelType(65535) As String
-    Public imgPackageInstTime(65535) As String
-
     Public imgPackages As New List(Of DismPackage)
 
     Public imgFeatures As New List(Of DismFeature)

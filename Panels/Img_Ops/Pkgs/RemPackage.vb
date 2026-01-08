@@ -145,18 +145,6 @@ Public Class RemPackage
             For Each imgPackage In MainForm.imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
                 CheckedListBox1.Items.Add(imgPackage.PackageName)
             Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgPackageNames, MainForm.imgPackageNames.Last)
-                    If MainForm.imgPackageNames(x) = "" Then
-                        Continue For
-                    End If
-                    CheckedListBox1.Items.Add(MainForm.imgPackageNames(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
         End If
         Return True
     End Function

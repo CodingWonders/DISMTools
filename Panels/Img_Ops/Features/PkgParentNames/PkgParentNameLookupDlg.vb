@@ -177,15 +177,7 @@ Public Class PkgParentNameLookupDlg
         Cancel_Button.Enabled = False
         ListBox1.Items.Clear()
         DynaLog.LogMessage("Grabbing packages obtained via the background processes...")
-        For x = 0 To MainForm.imgPackageNames.Length - 1
-            If MainForm.imgPackageNames(x) = "" Then
-                Continue For
-            ElseIf MainForm.imgPackageNames(x) = Nothing Then
-                Exit For
-            Else
-                ListBox1.Items.Add(MainForm.imgPackageNames(x))
-            End If
-        Next
+        ListBox1.Items.AddRange(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
         Label3.Visible = False
         OK_Button.Enabled = True
         Cancel_Button.Enabled = True
