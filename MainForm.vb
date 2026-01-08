@@ -142,9 +142,6 @@ Public Class MainForm
 
     Public imgAppxPackages As New List(Of DismAppxPackage)
 
-    Public imgCapabilityIds(65535) As String
-    Public imgCapabilityState(65535) As String
-
     Public imgCapabilities As New List(Of DismCapability)
 
     Public imgDrivers As New List(Of DismDriverPackage)

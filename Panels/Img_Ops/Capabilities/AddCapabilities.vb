@@ -252,17 +252,6 @@ Public Class AddCapabilities
             For Each imgCapability In MainForm.imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).ToList()
                 ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
             Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgCapabilityIds, MainForm.imgCapabilityIds.Last)
-                    If MainForm.imgCapabilityState(x) = "Installed" Or MainForm.imgCapabilityState(x) = "Install Pending" Then
-                        Continue For
-                    End If
-                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgCapabilityIds(x), MainForm.imgCapabilityState(x)}))
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
         End If
         Return True
     End Function
