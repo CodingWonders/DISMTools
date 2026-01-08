@@ -138,9 +138,6 @@ Public Class MainForm
 
     Public imgPackages As New List(Of DismPackage)
 
-    Public imgFeatureNames(65535) As String
-    Public imgFeatureState(65535) As String
-
     Public imgFeatures As New List(Of DismFeature)
 
     Public imgAppxPackages As New List(Of DismAppxPackage)

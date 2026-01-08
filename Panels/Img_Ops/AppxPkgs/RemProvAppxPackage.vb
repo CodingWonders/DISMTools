@@ -72,44 +72,40 @@ Public Class RemProvAppxPackage
                 If MainForm.imgInstType <> "" And (MainForm.imgInstType.Contains("Nano") Or MainForm.imgInstType.Contains("Core")) Then
                     DynaLog.LogMessage("Target Windows image contains Server Core SKU. Detecting state of Desktop Experience feature...")
                     ' Go through every feature and find Desktop Experience
-                    If MainForm.imgFeatureNames.Count > 0 Then
-                        For x = 0 To Array.LastIndexOf(MainForm.imgFeatureNames, MainForm.imgFeatureNames.Last)
-                            If MainForm.imgFeatureNames(x) = "DesktopExperience" Then
-                                ' Detect the state of the feature
-                                If MainForm.imgFeatureState(x) <> "Enabled" Then
-                                    DynaLog.LogMessage("Desktop Experience has been detected as a disabled feature.")
-                                    Dim msg As String = ""
-                                    ' Display incompatibility
-                                    Select Case MainForm.Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
-                                                Case "ESN"
-                                                    msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
-                                                Case "FRA"
-                                                    msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
-                                                Case "PTB", "PTG"
-                                                    msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
-                                                Case "ITA"
-                                                    msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
-                                            End Select
-                                        Case 1
+                    If MainForm.CurrentImage.ImageFeatures.Count > 0 Then
+                        Dim DesktopExperienceEnabled As Boolean = MainForm.CurrentImage.ImageFeatures.Any(Function(feature) feature.FeatureName = "DesktopExperience" AndAlso feature.State = DismPackageFeatureState.Installed)
+                        If Not DesktopExperienceEnabled Then
+                            DynaLog.LogMessage("Desktop Experience has been detected as a disabled feature.")
+                            Dim msg As String = ""
+                            ' Display incompatibility
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
                                             msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
-                                        Case 2
+                                        Case "ESN"
                                             msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
-                                        Case 3
+                                        Case "FRA"
                                             msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
-                                        Case 4
+                                        Case "PTB", "PTG"
                                             msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
-                                        Case 5
+                                        Case "ITA"
                                             msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
                                     End Select
-                                    MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
-                                    Exit Sub
-                                End If
-                            End If
-                        Next
+                                Case 1
+                                    msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
+                                Case 2
+                                    msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
+                                Case 3
+                                    msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
+                                Case 4
+                                    msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
+                                Case 5
+                                    msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
+                            End Select
+                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            Exit Sub
+                        End If
                     End If
                 End If
             End If
