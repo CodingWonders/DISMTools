@@ -494,12 +494,12 @@ Public Class ImportDrivers
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Information will be obtained from the popup mounted image manager...")
-            TextBox1.Text = selectedImage.MountPath
+            TextBox1.Text = selectedImage.ImageMountDirectory
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
-            Label10.Text = selectedImage.ImageFilePath
+            Label10.Text = selectedImage.ImageFile
             Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub

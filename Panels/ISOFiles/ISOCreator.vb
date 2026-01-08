@@ -817,10 +817,10 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
-            DynaLog.LogMessage("Selected image: " & selectedImage.ImageFilePath)
-            TextBox1.Text = selectedImage.ImageFilePath
+            DynaLog.LogMessage("Selected image: " & selectedImage.ImageFile)
+            TextBox1.Text = selectedImage.ImageFile
         End If
     End Sub
 
