@@ -3207,4 +3207,13 @@ Public Class Options
             Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"))
         End If
     End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim qhMessage As String = String.Format("DISMTools will enable and/or disable certain features if they are not compatible with either the specified DISM executable, or the current Windows image, or both.{0}{0}" &
+                                                "For instance, if DISMTools detects that you are working with either a Windows 7 image, or with a Windows 7 version of DISM, or both; it will disable all features related to AppX package " &
+                                                "and capability servicing because they are incompatible with the target platform and the tooling used.{0}{0}" &
+                                                "DISMTools can also disable certain features based on other parameters of the Windows image you are servicing, such as the edition. This usually happens " &
+                                                "with Windows PE images.", Environment.NewLine)
+        ShowQuickHelp(qhMessage)
+    End Sub
 End Class
