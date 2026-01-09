@@ -262,6 +262,10 @@ Namespace Elements.Contemporaneus
 
 #End Region
 
+        ''' <summary>
+        ''' Creates a <see cref="WindowsImage"/> object instance with default values.
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Sub New()
             ImageVersion = New Version(0, 0, 0, 0)
             ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
@@ -269,7 +273,7 @@ Namespace Elements.Contemporaneus
         End Sub
 
         ''' <summary>
-        ''' Creates a <see cref="WindowsImage"/> object with file path, index, mount directory, status, 
+        ''' Creates a <see cref="WindowsImage"/> object instance with file path, index, mount directory, status, 
         ''' and mode parameters; and default values for everything else.
         ''' </summary>
         ''' <param name="filePath">The path to the Windows image file</param>
