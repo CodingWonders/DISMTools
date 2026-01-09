@@ -196,7 +196,7 @@ Public Class RemDrivers
                                                                                                                     Path.GetFileName(driver.DriverOriginalFileName),
                                                                                                                     driver.DriverProviderName,
                                                                                                                     driver.DriverClassName,
-                                                                                                                    "Inbox Status",
+                                                                                                                    driver.DriverInboxToString(MainForm.Language),
                                                                                                                     "Unknown",
                                                                                                                     driver.DriverVersion.ToString(),
                                                                                                                     driver.DriverDate})).ToArray())
