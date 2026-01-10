@@ -33,6 +33,13 @@ Partial Class ImportDrivers
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.ImportSourceContainer = New System.Windows.Forms.Panel()
+        Me.WinImagePanel = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.OfflineInstPanel = New System.Windows.Forms.Panel()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.ListView1 = New System.Windows.Forms.ListView()
@@ -49,20 +56,13 @@ Partial Class ImportDrivers
         Me.Label7 = New System.Windows.Forms.Label()
         Me.DefaultPanel = New System.Windows.Forms.Panel()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.WinImagePanel = New System.Windows.Forms.Panel()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ImportSourceContainer.SuspendLayout()
+        Me.WinImagePanel.SuspendLayout()
         Me.OfflineInstPanel.SuspendLayout()
         Me.DefaultPanel.SuspendLayout()
-        Me.WinImagePanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -173,6 +173,76 @@ Partial Class ImportDrivers
         Me.ImportSourceContainer.Name = "ImportSourceContainer"
         Me.ImportSourceContainer.Size = New System.Drawing.Size(596, 278)
         Me.ImportSourceContainer.TabIndex = 9
+        '
+        'WinImagePanel
+        '
+        Me.WinImagePanel.Controls.Add(Me.Label10)
+        Me.WinImagePanel.Controls.Add(Me.Label9)
+        Me.WinImagePanel.Controls.Add(Me.Label6)
+        Me.WinImagePanel.Controls.Add(Me.Button1)
+        Me.WinImagePanel.Controls.Add(Me.TextBox1)
+        Me.WinImagePanel.Controls.Add(Me.Label5)
+        Me.WinImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.WinImagePanel.Location = New System.Drawing.Point(0, 0)
+        Me.WinImagePanel.Name = "WinImagePanel"
+        Me.WinImagePanel.Size = New System.Drawing.Size(596, 278)
+        Me.WinImagePanel.TabIndex = 0
+        Me.WinImagePanel.Visible = False
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Location = New System.Drawing.Point(23, 84)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(556, 13)
+        Me.Label10.TabIndex = 4
+        Me.Label10.Text = "<imgFile>"
+        Me.Label10.Visible = False
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(23, 64)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(58, 13)
+        Me.Label9.TabIndex = 4
+        Me.Label9.Text = "Image file:"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(20, 243)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(257, 13)
+        Me.Label6.TabIndex = 3
+        Me.Label6.Text = "You can't use the import target as the import source"
+        Me.Label6.Visible = False
+        '
+        'Button1
+        '
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(504, 35)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "Pick..."
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'TextBox1
+        '
+        Me.TextBox1.Location = New System.Drawing.Point(23, 36)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(475, 21)
+        Me.TextBox1.TabIndex = 1
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(20, 20)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(192, 13)
+        Me.Label5.TabIndex = 0
+        Me.Label5.Text = "Windows image to import drivers from:"
         '
         'OfflineInstPanel
         '
@@ -301,81 +371,11 @@ Partial Class ImportDrivers
         Me.Label4.Text = "Choose a source listed above to configure its settings."
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'WinImagePanel
-        '
-        Me.WinImagePanel.Controls.Add(Me.Label10)
-        Me.WinImagePanel.Controls.Add(Me.Label9)
-        Me.WinImagePanel.Controls.Add(Me.Label6)
-        Me.WinImagePanel.Controls.Add(Me.Button1)
-        Me.WinImagePanel.Controls.Add(Me.TextBox1)
-        Me.WinImagePanel.Controls.Add(Me.Label5)
-        Me.WinImagePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.WinImagePanel.Location = New System.Drawing.Point(0, 0)
-        Me.WinImagePanel.Name = "WinImagePanel"
-        Me.WinImagePanel.Size = New System.Drawing.Size(596, 278)
-        Me.WinImagePanel.TabIndex = 0
-        Me.WinImagePanel.Visible = False
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(20, 243)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(257, 13)
-        Me.Label6.TabIndex = 3
-        Me.Label6.Text = "You can't use the import target as the import source"
-        Me.Label6.Visible = False
-        '
-        'Button1
-        '
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(504, 35)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Pick..."
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'TextBox1
-        '
-        Me.TextBox1.Location = New System.Drawing.Point(23, 36)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(475, 21)
-        Me.TextBox1.TabIndex = 1
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(20, 20)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(192, 13)
-        Me.Label5.TabIndex = 0
-        Me.Label5.Text = "Windows image to import drivers from:"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(23, 64)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(58, 13)
-        Me.Label9.TabIndex = 4
-        Me.Label9.Text = "Image file:"
-        '
-        'Label10
-        '
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.Location = New System.Drawing.Point(23, 84)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(556, 13)
-        Me.Label10.TabIndex = 4
-        Me.Label10.Text = "<imgFile>"
-        Me.Label10.Visible = False
-        '
         'ImportDrivers
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(624, 441)
         Me.Controls.Add(Me.ImportSourceContainer)
@@ -397,11 +397,11 @@ Partial Class ImportDrivers
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ImportSourceContainer.ResumeLayout(False)
+        Me.WinImagePanel.ResumeLayout(False)
+        Me.WinImagePanel.PerformLayout()
         Me.OfflineInstPanel.ResumeLayout(False)
         Me.OfflineInstPanel.PerformLayout()
         Me.DefaultPanel.ResumeLayout(False)
-        Me.WinImagePanel.ResumeLayout(False)
-        Me.WinImagePanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

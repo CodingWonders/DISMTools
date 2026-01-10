@@ -229,7 +229,7 @@ Partial Class ImgIndexDelete
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(532, 13)
         Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Please mark the volume images to delete on the left. The image will then have the" &
+        Me.Label3.Text = "Please mark the volume images to delete on the left. The image will then have the" & _
     " indexes shown on the right"
         '
         'CheckBox1
@@ -250,8 +250,8 @@ Partial Class ImgIndexDelete
         'ImgIndexDelete
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(704, 361)
         Me.Controls.Add(Me.CheckBox1)

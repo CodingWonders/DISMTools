@@ -45,6 +45,13 @@ Partial Class ADDSJoinDialog
         Me.Label1 = New System.Windows.Forms.Label()
         Me.DNSConfigHeader = New System.Windows.Forms.Label()
         Me.DSDomainConfigPanel = New System.Windows.Forms.Panel()
+        Me.DomainAutoUserPanel = New System.Windows.Forms.Panel()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
         Me.AddsNtLogonPathText = New System.Windows.Forms.Label()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.AddsUpnPathText = New System.Windows.Forms.Label()
@@ -74,19 +81,13 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
-        Me.RadioButton3 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton4 = New System.Windows.Forms.RadioButton()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
-        Me.Label16 = New System.Windows.Forms.Label()
-        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
-        Me.DomainAutoUserPanel = New System.Windows.Forms.Panel()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
         Me.DNSConfigPanel.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.DSDomainConfigPanel.SuspendLayout()
+        Me.DomainAutoUserPanel.SuspendLayout()
         Me.DSNoDomainPanel.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.HeaderPanel.SuspendLayout()
@@ -94,7 +95,6 @@ Partial Class ADDSJoinDialog
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
-        Me.DomainAutoUserPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -346,6 +346,73 @@ Partial Class ADDSJoinDialog
         Me.DSDomainConfigPanel.Size = New System.Drawing.Size(784, 449)
         Me.DSDomainConfigPanel.TabIndex = 1
         Me.DSDomainConfigPanel.Visible = False
+        '
+        'DomainAutoUserPanel
+        '
+        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox3)
+        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox2)
+        Me.DomainAutoUserPanel.Controls.Add(Me.Label16)
+        Me.DomainAutoUserPanel.Controls.Add(Me.Label15)
+        Me.DomainAutoUserPanel.Location = New System.Drawing.Point(117, 132)
+        Me.DomainAutoUserPanel.Name = "DomainAutoUserPanel"
+        Me.DomainAutoUserPanel.Size = New System.Drawing.Size(565, 32)
+        Me.DomainAutoUserPanel.TabIndex = 11
+        '
+        'ComboBox3
+        '
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Location = New System.Drawing.Point(348, 5)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(209, 21)
+        Me.ComboBox3.TabIndex = 10
+        '
+        'ComboBox2
+        '
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Location = New System.Drawing.Point(40, 5)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(263, 21)
+        Me.ComboBox2.TabIndex = 10
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Location = New System.Drawing.Point(309, 8)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(33, 13)
+        Me.Label16.TabIndex = 5
+        Me.Label16.Text = "User:"
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Location = New System.Drawing.Point(7, 8)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(26, 13)
+        Me.Label15.TabIndex = 5
+        Me.Label15.Text = "OU:"
+        '
+        'RadioButton4
+        '
+        Me.RadioButton4.AutoSize = True
+        Me.RadioButton4.Location = New System.Drawing.Point(103, 171)
+        Me.RadioButton4.Name = "RadioButton4"
+        Me.RadioButton4.Size = New System.Drawing.Size(142, 17)
+        Me.RadioButton4.TabIndex = 9
+        Me.RadioButton4.Text = "Specify a user manually:"
+        Me.RadioButton4.UseVisualStyleBackColor = True
+        '
+        'RadioButton3
+        '
+        Me.RadioButton3.AutoSize = True
+        Me.RadioButton3.Checked = True
+        Me.RadioButton3.Location = New System.Drawing.Point(103, 109)
+        Me.RadioButton3.Name = "RadioButton3"
+        Me.RadioButton3.Size = New System.Drawing.Size(216, 17)
+        Me.RadioButton3.TabIndex = 9
+        Me.RadioButton3.TabStop = True
+        Me.RadioButton3.Text = "Pick the following user from the domain:"
+        Me.RadioButton3.UseVisualStyleBackColor = True
         '
         'AddsNtLogonPathText
         '
@@ -631,77 +698,10 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
-        'RadioButton3
-        '
-        Me.RadioButton3.AutoSize = True
-        Me.RadioButton3.Checked = True
-        Me.RadioButton3.Location = New System.Drawing.Point(103, 109)
-        Me.RadioButton3.Name = "RadioButton3"
-        Me.RadioButton3.Size = New System.Drawing.Size(216, 17)
-        Me.RadioButton3.TabIndex = 9
-        Me.RadioButton3.TabStop = True
-        Me.RadioButton3.Text = "Pick the following user from the domain:"
-        Me.RadioButton3.UseVisualStyleBackColor = True
-        '
-        'RadioButton4
-        '
-        Me.RadioButton4.AutoSize = True
-        Me.RadioButton4.Location = New System.Drawing.Point(103, 171)
-        Me.RadioButton4.Name = "RadioButton4"
-        Me.RadioButton4.Size = New System.Drawing.Size(142, 17)
-        Me.RadioButton4.TabIndex = 9
-        Me.RadioButton4.Text = "Specify a user manually:"
-        Me.RadioButton4.UseVisualStyleBackColor = True
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Location = New System.Drawing.Point(7, 8)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(26, 13)
-        Me.Label15.TabIndex = 5
-        Me.Label15.Text = "OU:"
-        '
-        'ComboBox2
-        '
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(40, 5)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(263, 21)
-        Me.ComboBox2.TabIndex = 10
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Location = New System.Drawing.Point(309, 8)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(33, 13)
-        Me.Label16.TabIndex = 5
-        Me.Label16.Text = "User:"
-        '
-        'ComboBox3
-        '
-        Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Location = New System.Drawing.Point(348, 5)
-        Me.ComboBox3.Name = "ComboBox3"
-        Me.ComboBox3.Size = New System.Drawing.Size(209, 21)
-        Me.ComboBox3.TabIndex = 10
-        '
-        'DomainAutoUserPanel
-        '
-        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox3)
-        Me.DomainAutoUserPanel.Controls.Add(Me.ComboBox2)
-        Me.DomainAutoUserPanel.Controls.Add(Me.Label16)
-        Me.DomainAutoUserPanel.Controls.Add(Me.Label15)
-        Me.DomainAutoUserPanel.Location = New System.Drawing.Point(117, 132)
-        Me.DomainAutoUserPanel.Name = "DomainAutoUserPanel"
-        Me.DomainAutoUserPanel.Size = New System.Drawing.Size(565, 32)
-        Me.DomainAutoUserPanel.TabIndex = 11
-        '
         'ADDSJoinDialog
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(784, 561)
         Me.Controls.Add(Me.ExpressPanelContainer)
         Me.Controls.Add(Me.FooterContainer)
@@ -724,6 +724,8 @@ Partial Class ADDSJoinDialog
         Me.GroupBox1.PerformLayout()
         Me.DSDomainConfigPanel.ResumeLayout(False)
         Me.DSDomainConfigPanel.PerformLayout()
+        Me.DomainAutoUserPanel.ResumeLayout(False)
+        Me.DomainAutoUserPanel.PerformLayout()
         Me.DSNoDomainPanel.ResumeLayout(False)
         Me.DSNoDomainPanel.PerformLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -734,8 +736,6 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
-        Me.DomainAutoUserPanel.ResumeLayout(False)
-        Me.DomainAutoUserPanel.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

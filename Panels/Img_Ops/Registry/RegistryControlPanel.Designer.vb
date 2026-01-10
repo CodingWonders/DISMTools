@@ -25,6 +25,9 @@ Partial Class RegistryControlPanel
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(RegistryControlPanel))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Button12 = New System.Windows.Forms.Button()
+        Me.Button11 = New System.Windows.Forms.Button()
+        Me.Button10 = New System.Windows.Forms.Button()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Label4 = New System.Windows.Forms.Label()
@@ -33,6 +36,7 @@ Partial Class RegistryControlPanel
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Button9 = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Button6 = New System.Windows.Forms.Button()
@@ -45,10 +49,6 @@ Partial Class RegistryControlPanel
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Button9 = New System.Windows.Forms.Button()
-        Me.Button10 = New System.Windows.Forms.Button()
-        Me.Button11 = New System.Windows.Forms.Button()
-        Me.Button12 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -94,6 +94,42 @@ Partial Class RegistryControlPanel
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
         Me.TableLayoutPanel1.Size = New System.Drawing.Size(600, 118)
         Me.TableLayoutPanel1.TabIndex = 1
+        '
+        'Button12
+        '
+        Me.Button12.AutoEllipsis = True
+        Me.Button12.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button12.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button12.Location = New System.Drawing.Point(391, 90)
+        Me.Button12.Name = "Button12"
+        Me.Button12.Size = New System.Drawing.Size(102, 25)
+        Me.Button12.TabIndex = 15
+        Me.Button12.Text = "Load"
+        Me.Button12.UseVisualStyleBackColor = True
+        '
+        'Button11
+        '
+        Me.Button11.AutoEllipsis = True
+        Me.Button11.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button11.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button11.Location = New System.Drawing.Point(391, 61)
+        Me.Button11.Name = "Button11"
+        Me.Button11.Size = New System.Drawing.Size(102, 23)
+        Me.Button11.TabIndex = 14
+        Me.Button11.Text = "Load"
+        Me.Button11.UseVisualStyleBackColor = True
+        '
+        'Button10
+        '
+        Me.Button10.AutoEllipsis = True
+        Me.Button10.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button10.Location = New System.Drawing.Point(391, 32)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(102, 23)
+        Me.Button10.TabIndex = 13
+        Me.Button10.Text = "Load"
+        Me.Button10.UseVisualStyleBackColor = True
         '
         'Label5
         '
@@ -186,6 +222,18 @@ Partial Class RegistryControlPanel
         Me.Button1.TabIndex = 2
         Me.Button1.Text = "Open"
         Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Button9
+        '
+        Me.Button9.AutoEllipsis = True
+        Me.Button9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button9.Location = New System.Drawing.Point(391, 3)
+        Me.Button9.Name = "Button9"
+        Me.Button9.Size = New System.Drawing.Size(102, 23)
+        Me.Button9.TabIndex = 12
+        Me.Button9.Text = "Load"
+        Me.Button9.UseVisualStyleBackColor = True
         '
         'GroupBox1
         '
@@ -315,58 +363,10 @@ Partial Class RegistryControlPanel
         'OpenFileDialog1
         '
         '
-        'Button9
-        '
-        Me.Button9.AutoEllipsis = True
-        Me.Button9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button9.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button9.Location = New System.Drawing.Point(391, 3)
-        Me.Button9.Name = "Button9"
-        Me.Button9.Size = New System.Drawing.Size(102, 23)
-        Me.Button9.TabIndex = 12
-        Me.Button9.Text = "Load"
-        Me.Button9.UseVisualStyleBackColor = True
-        '
-        'Button10
-        '
-        Me.Button10.AutoEllipsis = True
-        Me.Button10.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button10.Location = New System.Drawing.Point(391, 32)
-        Me.Button10.Name = "Button10"
-        Me.Button10.Size = New System.Drawing.Size(102, 23)
-        Me.Button10.TabIndex = 13
-        Me.Button10.Text = "Load"
-        Me.Button10.UseVisualStyleBackColor = True
-        '
-        'Button11
-        '
-        Me.Button11.AutoEllipsis = True
-        Me.Button11.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button11.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button11.Location = New System.Drawing.Point(391, 61)
-        Me.Button11.Name = "Button11"
-        Me.Button11.Size = New System.Drawing.Size(102, 23)
-        Me.Button11.TabIndex = 14
-        Me.Button11.Text = "Load"
-        Me.Button11.UseVisualStyleBackColor = True
-        '
-        'Button12
-        '
-        Me.Button12.AutoEllipsis = True
-        Me.Button12.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button12.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button12.Location = New System.Drawing.Point(391, 90)
-        Me.Button12.Name = "Button12"
-        Me.Button12.Size = New System.Drawing.Size(102, 25)
-        Me.Button12.TabIndex = 15
-        Me.Button12.Text = "Load"
-        Me.Button12.UseVisualStyleBackColor = True
-        '
         'RegistryControlPanel
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(624, 381)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.TableLayoutPanel1)

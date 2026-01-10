@@ -17,7 +17,8 @@ Public Class PopupMountedImagePicker
             .KeyPreview = True,
             .BackColor = CurrentTheme.SectionBackgroundColor,
             .ForeColor = CurrentTheme.ForegroundColor,
-            .Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            .Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            .AutoScaleMode = AutoScaleMode.Dpi
         }
         Dim pmipInstructionLabel As Label = New Label With {
             .Location = New Point(10, 10),
