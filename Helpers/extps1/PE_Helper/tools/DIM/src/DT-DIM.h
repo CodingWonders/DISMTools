@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <string>
+// ReSharper disable CppUnusedIncludeDirective
 #include <vector>
 #include <thread>
 #include <commdlg.h>
@@ -11,6 +12,7 @@
 #include <fstream>
 #include <codecvt>
 #include "resource.h"
+// ReSharper restore CppUnusedIncludeDirective
 
 #pragma comment(lib, "comctl32.lib")
 #pragma warning(disable: 4312)
@@ -26,27 +28,27 @@
 #define IDC_ADD_DRV_FOLDER 109
 
 // Version Constant
-const LPCWSTR DIM_VERSION = L"0.7.2_msvcv145";
-const LPCWSTR DIM_ABOUT_MESSAGE = L"Driver Installation Module version %s \n(c) 2024-2026 CodingWonders Software.";
+const auto DIM_VERSION = L"0.7.3_msvcv145";
+const auto DIM_ABOUT_MESSAGE = L"Driver Installation Module version %s \n(c) 2024-2026 CodingWonders Software.";
 
 // Instruction Message Constants
 
 /// <summary>
 /// The initial greeting message
 /// </summary>
-const LPCWSTR INSTR_DRIVER_BEGIN = L"Begin by adding drivers to the queue. Click the \"Add\" button.";
+const auto INSTR_DRIVER_BEGIN = L"Begin by adding drivers to the queue. Click the \"Add\" button.";
 /// <summary>
 /// The modification instruction message
 /// </summary>
-const LPCWSTR INSTR_DRIVER_MODIFY_ADD = L"Modify the driver selection or click the \"Install\" button to add the selected driver(s).";
+const auto INSTR_DRIVER_MODIFY_ADD = L"Modify the driver selection or click the \"Install\" button to add the selected driver(s).";
 /// <summary>
 /// The driver installation progress instruction message
 /// </summary>
-const wchar_t* INSTR_DRIVER_INSTALL_PROGRESS = L"Installing driver %d of %d...";
+const auto* INSTR_DRIVER_INSTALL_PROGRESS = L"Installing driver %d of %d...";
 /// <summary>
 /// The driver installation summary instruction message
 /// </summary>
-const wchar_t* INSTR_DRIVER_INSTALL_SUMMARY = L"Out of %d driver(s), %d were installed successfully.";
+const auto* INSTR_DRIVER_INSTALL_SUMMARY = L"Out of %d driver(s), %d were installed successfully.";
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
