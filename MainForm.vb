@@ -10744,31 +10744,30 @@ Public Class MainForm
     End Sub
 
     Private Sub Button14_Click(sender As Object, e As EventArgs) Handles ProjectPropertiesToolStripMenuItem.Click, Button23.Click
-        ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                        ProjProperties.Label1.Text = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                        ProjProperties.Label1.Text = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                        ProjProperties.Label1.Text = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                        ProjProperties.Label1.Text = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                        ProjProperties.Label1.Text = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                ProjProperties.Label1.Text = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                ProjProperties.Label1.Text = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                ProjProperties.Label1.Text = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                ProjProperties.Label1.Text = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                ProjProperties.Label1.Text = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
@@ -10780,31 +10779,31 @@ Public Class MainForm
     End Sub
 
     Private Sub Button15_Click(sender As Object, e As EventArgs) Handles ImagePropertiesToolStripMenuItem.Click
-        ProjProperties.TabControl1.SelectedIndex = 1
+
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                        ProjProperties.Label1.Text = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                        ProjProperties.Label1.Text = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                        ProjProperties.Label1.Text = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                        ProjProperties.Label1.Text = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                        ProjProperties.Label1.Text = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                ProjProperties.Label1.Text = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                ProjProperties.Label1.Text = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                ProjProperties.Label1.Text = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                ProjProperties.Label1.Text = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                ProjProperties.Label1.Text = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
@@ -13433,32 +13432,30 @@ Public Class MainForm
 #Region "Task Links"
 
     Private Sub LinkLabel15_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel15.LinkClicked
-        DynaLog.LogMessage("Stopping mounted image detector...")
-        ProjProperties.TabControl1.SelectedIndex = 0
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                        ProjProperties.Label1.Text = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                        ProjProperties.Label1.Text = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                        ProjProperties.Label1.Text = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                        ProjProperties.Label1.Text = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                        ProjProperties.Label1.Text = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                ProjProperties.Label1.Text = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                ProjProperties.Label1.Text = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                ProjProperties.Label1.Text = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                ProjProperties.Label1.Text = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                ProjProperties.Label1.Text = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""
@@ -13517,31 +13514,30 @@ Public Class MainForm
     End Sub
 
     Private Sub LinkLabel20_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel20.LinkClicked
-        ProjProperties.TabControl1.SelectedIndex = 1
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                        ProjProperties.Label1.Text = "Properties"
                     Case "ESN"
-                        ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                        ProjProperties.Label1.Text = "Propiedades"
                     Case "FRA"
-                        ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                        ProjProperties.Label1.Text = "Propriétés"
                     Case "PTB", "PTG"
-                        ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                        ProjProperties.Label1.Text = "Propriedades"
                     Case "ITA"
-                        ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                        ProjProperties.Label1.Text = "Proprietà"
                 End Select
             Case 1
-                ProjProperties.Label1.Text = ProjProperties.TabControl1.SelectedTab.Text & " properties"
+                ProjProperties.Label1.Text = "Properties"
             Case 2
-                ProjProperties.Label1.Text = "Propiedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                ProjProperties.Label1.Text = "Propiedades"
             Case 3
-                ProjProperties.Label1.Text = "Propriétés " & If(ProjProperties.TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                ProjProperties.Label1.Text = "Propriétés"
             Case 4
-                ProjProperties.Label1.Text = "Propriedades " & If(ProjProperties.TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                ProjProperties.Label1.Text = "Propriedades"
             Case 5
-                ProjProperties.Label1.Text = "Proprietà " & If(ProjProperties.TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                ProjProperties.Label1.Text = "Proprietà"
         End Select
         If Environment.OSVersion.Version.Major = 10 Then
             ProjProperties.Text = ""

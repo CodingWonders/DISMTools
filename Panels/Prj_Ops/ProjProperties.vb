@@ -104,6 +104,7 @@ Public Class ProjProperties
             imgSPBuild.Text = MainForm.CurrentImage.ImageVersion.Revision
             imgSPLvl.Text = MainForm.CurrentImage.ImageSpLevel
             imgEdition.Text = MainForm.CurrentImage.ImageEditionId
+            imgInstType.Text = MainForm.CurrentImage.ImageInstallationType
             imgPType.Text = MainForm.CurrentImage.ImageProductType
             imgPSuite.Text = MainForm.CurrentImage.ImageProductSuite
             imgSysRoot.Text = MainForm.CurrentImage.ImageSystemRoot
@@ -204,8 +205,6 @@ Public Class ProjProperties
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        Label2.Text = "View project properties, such as name or location"
-                        Label3.Text = "View mounted image properties, such as name, description, or index"
                         Label4.Text = "Getting project and image information. Please wait..."
                         Label5.Text = "Name:"
                         Label6.Text = "Location:"
@@ -235,8 +234,6 @@ Public Class ProjProperties
                         Label58.Text = "Installed languages:"
                         Label60.Text = "File format:"
                         Label62.Text = "Image R/W permissions:"
-                        TabPage1.Text = "Project"
-                        TabPage2.Text = "Image"
                         RecoverButton.Text = "Recover"
                         RemountImgBtn.Text = "Reload"
                         RWRemountBtn.Text = "Remount with write permissions"
@@ -244,8 +241,6 @@ Public Class ProjProperties
                         Cancel_Button.Text = "Cancel"
                         LinkLabel2.Text = "Many properties cannot be seen because an image has not yet been mounted. Once you mount it, detailed information will be shown here. Click here to mount an image"
                     Case "ESN"
-                        Label2.Text = "Ver propiedades del proyecto, como nombre y ubicación"
-                        Label3.Text = "Ver propiedades de la imagen montada, como nombre, descripción, o índice"
                         Label4.Text = "Obteniendo información del proyecto y la imagen. Espere..."
                         Label5.Text = "Nombre:"
                         Label6.Text = "Ubicación:"
@@ -275,8 +270,6 @@ Public Class ProjProperties
                         Label58.Text = "Idiomas instalados:"
                         Label60.Text = "Formato de archivo:"
                         Label62.Text = "Permisos de L/E de imagen:"
-                        TabPage1.Text = "Proyecto"
-                        TabPage2.Text = "Imagen"
                         RecoverButton.Text = "Recuperar"
                         RemountImgBtn.Text = "Recargar"
                         RWRemountBtn.Text = "Recargar con permisos de escritura"
@@ -284,8 +277,6 @@ Public Class ProjProperties
                         Cancel_Button.Text = "Cancelar"
                         LinkLabel2.Text = "Las propiedades no pueden ser obtenidas porque aún no se ha montado una imagen. Cuando lo haga, información detallada aparecerá aquí. Haga clic aquí para montar una imagen"
                     Case "FRA"
-                        Label2.Text = "Voir les propriétés du projet, telles que le nom ou l'emplacement"
-                        Label3.Text = "Voir les propriétés de l'image montée, telles que le nom, la description ou l'index"
                         Label4.Text = "Obtention des informations sur les projets et les images en cours. Veuillez patienter..."
                         Label5.Text = "Nom :"
                         Label6.Text = "Lieu :"
@@ -315,8 +306,6 @@ Public Class ProjProperties
                         Label58.Text = "Langues installées :"
                         Label60.Text = "Format du fichier :"
                         Label62.Text = "Droits L/E de l'image :"
-                        TabPage1.Text = "Projet"
-                        TabPage2.Text = "Image"
                         RecoverButton.Text = "Récupérer"
                         RemountImgBtn.Text = "Recharger"
                         RWRemountBtn.Text = "Remonter avec les droits d'écriture"
@@ -324,8 +313,6 @@ Public Class ProjProperties
                         Cancel_Button.Text = "Annuler"
                         LinkLabel2.Text = "De nombreuses propriétés ne sont pas visibles car l'image n'a pas encore été montée. Une fois l'image montée, des informations détaillées s'afficheront ici. Cliquez ici pour monter une image"
                     Case "PTB", "PTG"
-                        Label2.Text = "Ver as propriedades do projeto, como o nome ou a localização"
-                        Label3.Text = "Ver as propriedades da imagem montada, como o nome, a descrição ou o índice"
                         Label4.Text = "Obter informações sobre o projeto e a imagem. Aguarde..."
                         Label5.Text = "Nome:"
                         Label6.Text = "Localização:"
@@ -355,8 +342,6 @@ Public Class ProjProperties
                         Label58.Text = "Idiomas instalados:"
                         Label60.Text = "Formato do ficheiro:"
                         Label62.Text = "Permissões de imagem R/W:"
-                        TabPage1.Text = "Projeto"
-                        TabPage2.Text = "Imagem"
                         RecoverButton.Text = "Recuperar"
                         RemountImgBtn.Text = "Recarregar"
                         RWRemountBtn.Text = "Remontar com permissões de escrita"
@@ -364,8 +349,6 @@ Public Class ProjProperties
                         Cancel_Button.Text = "Cancelar"
                         LinkLabel2.Text = "Muitas propriedades não podem ser vistas porque a imagem ainda não foi montada. Depois de a montar, serão mostradas aqui informações detalhadas. Clique aqui para montar uma imagem"
                     Case "ITA"
-                        Label2.Text = "Visualizza le proprietà del progetto, come il nome o l'ubicazione"
-                        Label3.Text = "Visualizza le proprietà dell'immagine montata, come il nome, la descrizione o l'indice"
                         Label4.Text = "Ottenere informazioni sul progetto e sull'immagine. Attendere..."
                         Label5.Text = "Nome:"
                         Label6.Text = " Ubicazione:"
@@ -395,8 +378,6 @@ Public Class ProjProperties
                         Label58.Text = "Lingue installate:"
                         Label60.Text = "Formato file:"
                         Label62.Text = "Autorizzazioni R/W immagine:"
-                        TabPage1.Text = "Progetto"
-                        TabPage2.Text = "Immagine"
                         RecoverButton.Text = "Recupera"
                         RemountImgBtn.Text = "Ricaricare"
                         RWRemountBtn.Text = "Rimonta con i permessi di scrittura"
@@ -405,8 +386,6 @@ Public Class ProjProperties
                         LinkLabel2.Text = "Molte proprietà non possono essere visualizzate perché l'immagine non è ancora stata montata. Una volta montata, le informazioni dettagliate saranno mostrate qui. Fare clic qui per montare un'immagine"
                 End Select
             Case 1
-                Label2.Text = "View project properties, such as name or location"
-                Label3.Text = "View mounted image properties, such as name, description, or index"
                 Label4.Text = "Getting project and image information. Please wait..."
                 Label5.Text = "Name:"
                 Label6.Text = "Location:"
@@ -436,8 +415,6 @@ Public Class ProjProperties
                 Label58.Text = "Installed languages:"
                 Label60.Text = "File format:"
                 Label62.Text = "Image R/W permissions:"
-                TabPage1.Text = "Project"
-                TabPage2.Text = "Image"
                 RecoverButton.Text = "Recover"
                 RemountImgBtn.Text = "Reload"
                 RWRemountBtn.Text = "Remount with write permissions"
@@ -445,8 +422,6 @@ Public Class ProjProperties
                 Cancel_Button.Text = "Cancel"
                 LinkLabel2.Text = "Many properties cannot be seen because an image has not yet been mounted. Once you mount it, detailed information will be shown here. Click here to mount an image"
             Case 2
-                Label2.Text = "Ver propiedades del proyecto, como nombre y ubicación"
-                Label3.Text = "Ver propiedades de la imagen montada, como nombre, descripción, o índice"
                 Label4.Text = "Obteniendo información del proyecto y la imagen. Espere..."
                 Label5.Text = "Nombre:"
                 Label6.Text = "Ubicación:"
@@ -476,8 +451,6 @@ Public Class ProjProperties
                 Label58.Text = "Idiomas instalados:"
                 Label60.Text = "Formato de archivo:"
                 Label62.Text = "Permisos de L/E de imagen:"
-                TabPage1.Text = "Proyecto"
-                TabPage2.Text = "Imagen"
                 RecoverButton.Text = "Recuperar"
                 RemountImgBtn.Text = "Recargar"
                 RWRemountBtn.Text = "Recargar con permisos de escritura"
@@ -485,8 +458,6 @@ Public Class ProjProperties
                 Cancel_Button.Text = "Cancelar"
                 LinkLabel2.Text = "Las propiedades no pueden ser obtenidas porque aún no se ha montado una imagen. Cuando lo haga, información detallada aparecerá aquí. Haga clic aquí para montar una imagen"
             Case 3
-                Label2.Text = "Voir les propriétés du projet, telles que le nom ou l'emplacement"
-                Label3.Text = "Voir les propriétés de l'image montée, telles que le nom, la description ou l'index"
                 Label4.Text = "Obtention des informations sur les projets et les images en cours. Veuillez patienter..."
                 Label5.Text = "Nom :"
                 Label6.Text = "Lieu :"
@@ -516,8 +487,6 @@ Public Class ProjProperties
                 Label58.Text = "Langues installées :"
                 Label60.Text = "Format du fichier :"
                 Label62.Text = "Droits L/E de l'image :"
-                TabPage1.Text = "Projet"
-                TabPage2.Text = "Image"
                 RecoverButton.Text = "Récupérer"
                 RemountImgBtn.Text = "Recharger"
                 RWRemountBtn.Text = "Remonter avec les droits d'écriture"
@@ -525,8 +494,6 @@ Public Class ProjProperties
                 Cancel_Button.Text = "Annuler"
                 LinkLabel2.Text = "De nombreuses propriétés ne sont pas visibles car l'image n'a pas encore été montée. Une fois l'image montée, des informations détaillées s'afficheront ici. Cliquez ici pour monter une image"
             Case 4
-                Label2.Text = "Ver as propriedades do projeto, como o nome ou a localização"
-                Label3.Text = "Ver as propriedades da imagem montada, como o nome, a descrição ou o índice"
                 Label4.Text = "Obter informações sobre o projeto e a imagem. Aguarde..."
                 Label5.Text = "Nome:"
                 Label6.Text = "Localização:"
@@ -556,8 +523,6 @@ Public Class ProjProperties
                 Label58.Text = "Idiomas instalados:"
                 Label60.Text = "Formato do ficheiro:"
                 Label62.Text = "Permissões de imagem R/W:"
-                TabPage1.Text = "Projeto"
-                TabPage2.Text = "Imagem"
                 RecoverButton.Text = "Recuperar"
                 RemountImgBtn.Text = "Recarregar"
                 RWRemountBtn.Text = "Remontar com permissões de escrita"
@@ -565,8 +530,6 @@ Public Class ProjProperties
                 Cancel_Button.Text = "Cancelar"
                 LinkLabel2.Text = "Muitas propriedades não podem ser vistas porque a imagem ainda não foi montada. Depois de a montar, serão mostradas aqui informações detalhadas. Clique aqui para montar uma imagem"
             Case 5
-                Label2.Text = "Visualizza le proprietà del progetto, come il nome o l'ubicazione"
-                Label3.Text = "Visualizza le proprietà dell'immagine montata, come il nome, la descrizione o l'indice"
                 Label4.Text = "Ottenere informazioni sul progetto e sull'immagine. Attendere..."
                 Label5.Text = "Nome:"
                 Label6.Text = " Ubicazione:"
@@ -596,8 +559,6 @@ Public Class ProjProperties
                 Label58.Text = "Lingue installate:"
                 Label60.Text = "Formato file:"
                 Label62.Text = "Autorizzazioni R/W immagine:"
-                TabPage1.Text = "Progetto"
-                TabPage2.Text = "Immagine"
                 RecoverButton.Text = "Recupera"
                 RemountImgBtn.Text = "Ricaricare"
                 RWRemountBtn.Text = "Rimonta con i permessi di scrittura"
@@ -609,33 +570,31 @@ Public Class ProjProperties
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        Label1.Text = TabControl1.SelectedTab.Text & " properties"
+                        Label1.Text = "Properties"
                     Case "ESN"
-                        Label1.Text = "Propiedades " & If(TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                        Label1.Text = "Propiedades"
                     Case "FRA"
-                        Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                        Label1.Text = "Propriétés"
                     Case "PTB", "PTG"
-                        Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                        Label1.Text = "Propriedades"
                     Case "ITA"
-                        Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                        Label1.Text = "Proprietà"
                 End Select
             Case 1
-                Label1.Text = TabControl1.SelectedTab.Text & " properties"
+                Label1.Text = "Properties"
             Case 2
-                Label1.Text = "Propiedades " & If(TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
+                Label1.Text = "Propiedades"
             Case 3
-                Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
+                Label1.Text = "Propriétés"
             Case 4
-                Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
+                Label1.Text = "Propriedades"
             Case 5
-                Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
+                Label1.Text = "Proprietà"
         End Select
         ' Set program colors
         Win10Title.BackColor = CurrentTheme.BackgroundColor
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
-        TabPage1.BackColor = CurrentTheme.SectionBackgroundColor
-        TabPage2.BackColor = CurrentTheme.SectionBackgroundColor
         LanguageList.BackColor = CurrentTheme.SectionBackgroundColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
@@ -1070,39 +1029,6 @@ Public Class ProjProperties
             End Select
             Panel3.Visible = True
             Label4.Visible = False
-        End If
-    End Sub
-
-    Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
-        Select Case MainForm.Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        Label1.Text = TabControl1.SelectedTab.Text & " properties"
-                    Case "ESN"
-                        Label1.Text = "Propiedades " & If(TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
-                    Case "FRA"
-                        Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
-                    Case "PTB", "PTG"
-                        Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
-                    Case "ITA"
-                        Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
-                End Select
-            Case 1
-                Label1.Text = TabControl1.SelectedTab.Text & " properties"
-            Case 2
-                Label1.Text = "Propiedades " & If(TabControl1.SelectedIndex = 0, "del proyecto", "de la imagen")
-            Case 3
-                Label1.Text = "Propriétés " & If(TabControl1.SelectedIndex = 0, "du projet", "de l'image")
-            Case 4
-                Label1.Text = "Propriedades " & If(TabControl1.SelectedIndex = 0, "do projeto", "da imagem")
-            Case 5
-                Label1.Text = "Proprietà " & If(TabControl1.SelectedIndex = 0, "del progetto", "dell'immagine")
-        End Select
-        If Environment.OSVersion.Version.Major = 10 Then
-            Text = ""
-        Else
-            Text = Label1.Text
         End If
     End Sub
 
