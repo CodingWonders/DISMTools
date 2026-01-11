@@ -2059,6 +2059,12 @@ IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
 	del "Tools\ThemeDesigner\*.zip" /F /S /Q
 )
 
+:: Copy Starter Script Editor
+IF EXIST "$(SolutionDir)Tools\StarterScriptEditor\out\*.exe" (
+	xcopy "$(SolutionDir)Tools\StarterScriptEditor\out\*.*" "Tools\StarterScriptEditor" /cehyi
+	del "Tools\StarterScriptEditor\*.zip" /F /S /Q
+)
+
 :: Copy PE Helper Main Menu
 IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.exe" (
 	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
