@@ -28,7 +28,7 @@ XCOPY ARM64\Debug\DT-DIM.exe ..\aarch64\DT-DIM.exe /cey /-i
 EXIT /B
 
 :Fail_NoVS
-ECHO No Visual Studio 2022 installation has been found in the standard location.
+ECHO No Visual Studio 2026 installation has been found in the standard location.
 EXIT /B
 
 :Fail_NoBuildTools
