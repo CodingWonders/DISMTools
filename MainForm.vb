@@ -2755,6 +2755,10 @@ Public Class MainForm
             Button27.Enabled = False
             Button28.Enabled = False
             Button29.Enabled = False
+
+            CurrentImage.ImageEditionId = imgEdition
+            CurrentImage.ImageInstallationType = imgInstType
+
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
             DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
             Exit Sub
