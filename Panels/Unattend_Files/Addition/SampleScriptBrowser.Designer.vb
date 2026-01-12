@@ -44,6 +44,7 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
+        Me.CreateStarterScriptBtn = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
@@ -92,6 +93,7 @@ Partial Class SampleScriptBrowser
         '
         'ActionPanel
         '
+        Me.ActionPanel.Controls.Add(Me.CreateStarterScriptBtn)
         Me.ActionPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.ActionPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ActionPanel.Location = New System.Drawing.Point(0, 513)
@@ -275,6 +277,17 @@ Partial Class SampleScriptBrowser
         Me.Label8.Text = resources.GetString("Label8.Text")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
+        'CreateStarterScriptBtn
+        '
+        Me.CreateStarterScriptBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CreateStarterScriptBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CreateStarterScriptBtn.Location = New System.Drawing.Point(12, 10)
+        Me.CreateStarterScriptBtn.Name = "CreateStarterScriptBtn"
+        Me.CreateStarterScriptBtn.Size = New System.Drawing.Size(205, 23)
+        Me.CreateStarterScriptBtn.TabIndex = 1
+        Me.CreateStarterScriptBtn.Text = "Create your own starter scripts..."
+        Me.CreateStarterScriptBtn.UseVisualStyleBackColor = True
+        '
         'SampleScriptBrowser
         '
         Me.AcceptButton = Me.OK_Button
@@ -326,5 +339,6 @@ Partial Class SampleScriptBrowser
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents CreateStarterScriptBtn As System.Windows.Forms.Button
 
 End Class
