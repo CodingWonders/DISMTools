@@ -1,0 +1,8 @@
+﻿Language: Batch
+Name: Display Bugcheck Parameters
+Description: This script shows the 4 additional parameters of a bugcheck during a system crash.
+
+@echo off
+REM This script shows the 4 additional parameters of a bugcheck during a system crash.
+
+reg add "HKLM\System\CurrentControlSet\Control\CrashControl" /f /v "DisplayParameters" /t REG_DWORD /d 1
