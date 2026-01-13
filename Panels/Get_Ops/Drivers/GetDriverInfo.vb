@@ -23,6 +23,7 @@ Public Class GetDriverInfo
     Enum SearchMode As Integer
         OriginalFileName
         ProviderName
+        ClassName
         NoInBox
         InBox
         NoBootCritical
@@ -1300,6 +1301,8 @@ Public Class GetDriverInfo
                     FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
                 Case SearchMode.ProviderName
                     FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                Case SearchMode.ClassName
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
                 Case SearchMode.InBox
                     FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.InBox)
                 Case SearchMode.NoInBox
@@ -1325,6 +1328,8 @@ Public Class GetDriverInfo
                 modeToUse = SearchMode.OriginalFileName
             ElseIf SearchBox1.Text.StartsWith("prov:") Then
                 modeToUse = SearchMode.ProviderName
+            ElseIf SearchBox1.Text.StartsWith("classname:") Or SearchBox1.Text.StartsWith("cn:") Then
+                modeToUse = SearchMode.ClassName
             ElseIf SearchBox1.Text.StartsWith("inbox:") Then
                 modeToUse = SearchMode.InBox
             ElseIf SearchBox1.Text.StartsWith("noinbox:") Then
