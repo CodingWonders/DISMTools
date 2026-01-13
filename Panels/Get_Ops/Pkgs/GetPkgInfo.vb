@@ -20,6 +20,7 @@ Public Class GetPkgInfoDlg
         ListBox2.BackColor = CurrentTheme.SectionBackgroundColor
         cPropPathView.BackColor = CurrentTheme.SectionBackgroundColor
         cPropValue.BackColor = CurrentTheme.SectionBackgroundColor
+        cPropValue.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, If(MainForm.LogFontIsBold, FontStyle.Bold, FontStyle.Regular))
         SearchBox1.BackColor = BackColor
         SearchBox1.ForeColor = ForeColor
         cPropPathView.ForeColor = ForeColor

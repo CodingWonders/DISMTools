@@ -21,6 +21,7 @@ Public Class GetFeatureInfoDlg
         ListView1.ForeColor = ForeColor
         cPropPathView.ForeColor = ForeColor
         cPropValue.ForeColor = ForeColor
+        cPropValue.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, If(MainForm.LogFontIsBold, FontStyle.Bold, FontStyle.Regular))
         SearchPic.Image = GetGlyphResource("search")
         Select Case MainForm.Language
             Case 0
