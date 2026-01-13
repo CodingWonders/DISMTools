@@ -23,6 +23,10 @@ Public Class GetDriverInfo
     Enum SearchMode As Integer
         OriginalFileName
         ProviderName
+        NoInBox
+        InBox
+        NoBootCritical
+        BootCritical
         None
     End Enum
 
@@ -1296,6 +1300,14 @@ Public Class GetDriverInfo
                     FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
                 Case SearchMode.ProviderName
                     FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                Case SearchMode.InBox
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.InBox)
+                Case SearchMode.NoInBox
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.InBox)
+                Case SearchMode.BootCritical
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.BootCritical)
+                Case SearchMode.NoBootCritical
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.BootCritical)
                 Case Else
                     FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End Select
@@ -1313,6 +1325,14 @@ Public Class GetDriverInfo
                 modeToUse = SearchMode.OriginalFileName
             ElseIf SearchBox1.Text.StartsWith("prov:") Then
                 modeToUse = SearchMode.ProviderName
+            ElseIf SearchBox1.Text.StartsWith("inbox:") Then
+                modeToUse = SearchMode.InBox
+            ElseIf SearchBox1.Text.StartsWith("noinbox:") Then
+                modeToUse = SearchMode.NoInBox
+            ElseIf SearchBox1.Text.StartsWith("bc:") Then
+                modeToUse = SearchMode.BootCritical
+            ElseIf SearchBox1.Text.StartsWith("nobc:") Then
+                modeToUse = SearchMode.NoBootCritical
             Else
                 modeToUse = SearchMode.None
             End If
