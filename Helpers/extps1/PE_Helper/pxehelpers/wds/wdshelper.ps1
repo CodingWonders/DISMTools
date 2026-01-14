@@ -222,6 +222,10 @@ function Get-Disks
                 }
                 Get-Disks
             }
+            "R" {
+                # Refresh results
+                Get-Disks
+            }
             default {
                 Write-Host "Please specify a number and try again.`n"
                 Get-Disks
@@ -264,6 +268,10 @@ function Get-Partitions
     elseif ($part -eq "B")
     {
         return $part
+    }
+    elseif ($part -eq "R")
+    {
+        Get-Partitions $driveNum
     }
     else
     {
