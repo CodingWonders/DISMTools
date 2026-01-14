@@ -176,48 +176,40 @@ Public Class RemDrivers
             Return False
         End If
         DynaLog.LogMessage("Adding device drivers to arrays...")
-        If MainForm.imgDrivers.Count > 0 Then
-            For Each imgDriver In MainForm.imgDrivers
-                If CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
-                If CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
-                ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
-            Next
-        Else
-            Try
-                If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers_Win7.Count > MainForm.CurrentImage.ImageDrivers.Count Then
-                    CheckBox1.Enabled = False
+        Try
+            If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers_Backup.Count > MainForm.CurrentImage.ImageDrivers.Count Then
+                CheckBox1.Enabled = False
 
-                    Dim filteredDrivers As IEnumerable(Of ImageDriver) = MainForm.CurrentImage.ImageDrivers_Win7.AsEnumerable()
-                    If CheckBox2.Checked Then
-                        filteredDrivers = filteredDrivers.Where(Function(driver) Not driver.DriverInbox)
-                    End If
-
-                    ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName,
-                                                                                                                    Path.GetFileName(driver.DriverOriginalFileName),
-                                                                                                                    driver.DriverProviderName,
-                                                                                                                    driver.DriverClassName,
-                                                                                                                    driver.DriverInboxToString(MainForm.Language),
-                                                                                                                    "Unknown",
-                                                                                                                    driver.DriverVersion.ToString(),
-                                                                                                                    driver.DriverDate})).ToArray())
-                Else
-                    CheckBox1.Enabled = True
-
-                    Dim filteredDrivers As IEnumerable(Of DismDriverPackage) = MainForm.CurrentImage.ImageDrivers.AsEnumerable()
-                    filteredDrivers = filteredDrivers.Where(Function(driver) driver.BootCritical = Not CheckBox1.Checked And driver.InBox = Not CheckBox2.Checked)
-                    ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName,
-                                                                                                                    Path.GetFileName(driver.OriginalFileName),
-                                                                                                                    driver.ProviderName,
-                                                                                                                    driver.ClassName,
-                                                                                                                    If(driver.InBox, "Yes", "No"),
-                                                                                                                    If(driver.BootCritical, "Yes", "No"),
-                                                                                                                    driver.Version.ToString(),
-                                                                                                                    driver.Date})).ToArray())
+                Dim filteredDrivers As IEnumerable(Of ImageDriver) = MainForm.CurrentImage.ImageDrivers_Backup.AsEnumerable()
+                If CheckBox2.Checked Then
+                    filteredDrivers = filteredDrivers.Where(Function(driver) Not driver.DriverInbox)
                 End If
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
+
+                ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName,
+                                                                                                                Path.GetFileName(driver.DriverOriginalFileName),
+                                                                                                                driver.DriverProviderName,
+                                                                                                                driver.DriverClassName,
+                                                                                                                driver.DriverInboxToString(MainForm.Language),
+                                                                                                                "Unknown",
+                                                                                                                driver.DriverVersion.ToString(),
+                                                                                                                driver.DriverDate})).ToArray())
+            Else
+                CheckBox1.Enabled = True
+
+                Dim filteredDrivers As IEnumerable(Of DismDriverPackage) = MainForm.CurrentImage.ImageDrivers.AsEnumerable()
+                filteredDrivers = filteredDrivers.Where(Function(driver) driver.BootCritical = Not CheckBox1.Checked And driver.InBox = Not CheckBox2.Checked)
+                ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName,
+                                                                                                                Path.GetFileName(driver.OriginalFileName),
+                                                                                                                driver.ProviderName,
+                                                                                                                driver.ClassName,
+                                                                                                                If(driver.InBox, "Yes", "No"),
+                                                                                                                If(driver.BootCritical, "Yes", "No"),
+                                                                                                                driver.Version.ToString(),
+                                                                                                                driver.Date})).ToArray())
+            End If
+        Catch ex As Exception
+            Exit Try
+        End Try
         Return True
     End Function
 
@@ -438,51 +430,40 @@ Public Class RemDrivers
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If MainForm.imgDrivers.Count > 0 Then
-            For Each imgDriver In MainForm.imgDrivers
-                If CheckBox1.Checked AndAlso imgDriver.BootCritical Then Continue For
-                If CheckBox2.Checked AndAlso imgDriver.InBox Then Continue For
-                ListView1.Items.Add(New ListViewItem(New String() {imgDriver.PublishedName, Path.GetFileName(imgDriver.OriginalFileName), imgDriver.ProviderName, imgDriver.ClassName, If(imgDriver.InBox, "Yes", "No"), If(imgDriver.BootCritical, "Yes", "No"), imgDriver.Version.ToString(), imgDriver.Date}))
-            Next
-        Else
-            Try
-                Try
-                    If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers_Win7.Count > MainForm.CurrentImage.ImageDrivers.Count Then
-                        CheckBox1.Enabled = False
+        Try
+            If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers_Backup.Count > MainForm.CurrentImage.ImageDrivers.Count Then
+                CheckBox1.Enabled = False
 
-                        Dim filteredDrivers As IEnumerable(Of ImageDriver) = MainForm.CurrentImage.ImageDrivers_Win7.AsEnumerable()
-                        If CheckBox2.Checked Then
-                            filteredDrivers = filteredDrivers.Where(Function(driver) Not driver.DriverInbox)
-                        End If
+                Dim filteredDrivers As IEnumerable(Of ImageDriver) = MainForm.CurrentImage.ImageDrivers_Backup.AsEnumerable()
+                If CheckBox2.Checked Then
+                    filteredDrivers = filteredDrivers.Where(Function(driver) Not driver.DriverInbox)
+                End If
 
-                        ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName,
-                                                                                                                        Path.GetFileName(driver.DriverOriginalFileName),
-                                                                                                                        driver.DriverProviderName,
-                                                                                                                        driver.DriverClassName,
-                                                                                                                        "Inbox Status",
-                                                                                                                        "Unknown",
-                                                                                                                        driver.DriverVersion.ToString(),
-                                                                                                                        driver.DriverDate})).ToArray())
-                    Else
-                        CheckBox1.Enabled = True
+                ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName,
+                                                                                                                Path.GetFileName(driver.DriverOriginalFileName),
+                                                                                                                driver.DriverProviderName,
+                                                                                                                driver.DriverClassName,
+                                                                                                                "Inbox Status",
+                                                                                                                "Unknown",
+                                                                                                                driver.DriverVersion.ToString(),
+                                                                                                                driver.DriverDate})).ToArray())
+            Else
+                CheckBox1.Enabled = True
 
-                        Dim filteredDrivers As IEnumerable(Of DismDriverPackage) = MainForm.CurrentImage.ImageDrivers.AsEnumerable()
-                        filteredDrivers = filteredDrivers.Where(Function(driver) driver.BootCritical = Not CheckBox1.Checked And driver.InBox = Not CheckBox2.Checked)
-                        ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName,
-                                                                                                                        Path.GetFileName(driver.OriginalFileName),
-                                                                                                                        driver.ProviderName,
-                                                                                                                        driver.ClassName,
-                                                                                                                        If(driver.InBox, "Yes", "No"),
-                                                                                                                        If(driver.BootCritical, "Yes", "No"),
-                                                                                                                        driver.Version.ToString(),
-                                                                                                                        driver.Date})).ToArray())
-                    End If
-                Catch ex As Exception
-                    Exit Try
-                End Try
-            Catch ex As Exception
-                Exit Try
-            End Try
-        End If
+                Dim filteredDrivers As IEnumerable(Of DismDriverPackage) = MainForm.CurrentImage.ImageDrivers.AsEnumerable()
+                If CheckBox1.Checked Then filteredDrivers = filteredDrivers.Where(Function(driver) Not driver.BootCritical)
+                If CheckBox2.Checked Then filteredDrivers = filteredDrivers.Where(Function(driver) Not driver.InBox)
+                ListView1.Items.AddRange(filteredDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName,
+                                                                                                                Path.GetFileName(driver.OriginalFileName),
+                                                                                                                driver.ProviderName,
+                                                                                                                driver.ClassName,
+                                                                                                                If(driver.InBox, "Yes", "No"),
+                                                                                                                If(driver.BootCritical, "Yes", "No"),
+                                                                                                                driver.Version.ToString(),
+                                                                                                                driver.Date})).ToArray())
+            End If
+        Catch ex As Exception
+            Exit Try
+        End Try
     End Sub
 End Class

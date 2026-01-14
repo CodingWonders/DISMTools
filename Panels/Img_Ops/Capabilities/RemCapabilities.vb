@@ -105,10 +105,8 @@ Public Class RemCapabilities
             Return False
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        If MainForm.imgCapabilities.Count > 0 Then
-            For Each imgCapability In MainForm.imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Removed, DismPackageFeatureState.NotPresent, DismPackageFeatureState.Staged}.Contains(capability.State)).ToList()
-                ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
-            Next
+        If MainForm.CurrentImage.ImageCapabilities.Count > 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Where(Function(capability) New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismFeatureState(capability.State, True)})).ToArray())
         End If
         Return True
     End Function

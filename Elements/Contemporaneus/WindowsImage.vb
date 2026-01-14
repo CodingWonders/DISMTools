@@ -219,11 +219,25 @@ Namespace Elements.Contemporaneus
         Public Property ImagePackages As DismPackageCollection
 
         ''' <summary>
+        ''' The packages available in the mounted Windows image
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>This collection is filled when the program can't get the info with the DISM API</remarks>
+        Public Property ImagePackages_Backup As List(Of ImagePackage)
+
+        ''' <summary>
         ''' The features available in the mounted Windows image.
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Property ImageFeatures As DismFeatureCollection
+
+        ''' <summary>
+        ''' The features available in the mounted Windows image
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>This collection is filled when the program can't get the info with the DISM API</remarks>
+        Public Property ImageFeatures_Backup As List(Of ImageFeature)
 
         ''' <summary>
         ''' The Microsoft Store packages (AppX packages) available in the mounted Windows image.
@@ -237,7 +251,7 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks>This collection is filled on hosts running Windows 8.</remarks>
-        Public Property ImageAppxPackages_Win8 As List(Of ImageAppxPackage)
+        Public Property ImageAppxPackages_Backup As List(Of ImageAppxPackage)
 
         ''' <summary>
         ''' The capabilities/Features on Demand available in the mounted Windows image.
@@ -245,6 +259,13 @@ Namespace Elements.Contemporaneus
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Property ImageCapabilities As DismCapabilityCollection
+
+        ''' <summary>
+        ''' The capabilities/Features on Demand available in the mounted Windows image.
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>This collection is filled when the program can't get the info with the DISM API</remarks>
+        Public Property ImageCapabilities_Backup As List(Of ImageCapability)
 
         ''' <summary>
         ''' The device drivers installed in the mounted Windows image.
@@ -258,7 +279,7 @@ Namespace Elements.Contemporaneus
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks>This collection is filled on Windows 7 images.</remarks>
-        Public Property ImageDrivers_Win7 As List(Of ImageDriver)
+        Public Property ImageDrivers_Backup As List(Of ImageDriver)
 
 #End Region
 
@@ -268,8 +289,11 @@ Namespace Elements.Contemporaneus
         ''' <remarks></remarks>
         Public Sub New()
             ImageVersion = New Version(0, 0, 0, 0)
-            ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
-            ImageDrivers_Win7 = New List(Of ImageDriver)
+            ImagePackages_Backup = New List(Of ImagePackage)
+            ImageFeatures_Backup = New List(Of ImageFeature)
+            ImageAppxPackages_Backup = New List(Of ImageAppxPackage)
+            ImageCapabilities_Backup = New List(Of ImageCapability)
+            ImageDrivers_Backup = New List(Of ImageDriver)
         End Sub
 
         ''' <summary>
@@ -289,8 +313,11 @@ Namespace Elements.Contemporaneus
             ImageMountMode = mountMode
 
             ImageVersion = New Version(0, 0, 0, 0)
-            ImageAppxPackages_Win8 = New List(Of ImageAppxPackage)
-            ImageDrivers_Win7 = New List(Of ImageDriver)
+            ImagePackages_Backup = New List(Of ImagePackage)
+            ImageFeatures_Backup = New List(Of ImageFeature)
+            ImageAppxPackages_Backup = New List(Of ImageAppxPackage)
+            ImageCapabilities_Backup = New List(Of ImageCapability)
+            ImageDrivers_Backup = New List(Of ImageDriver)
         End Sub
 
         ''' <summary>

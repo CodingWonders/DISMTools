@@ -131,16 +131,6 @@ Public Class MainForm
     Public dt_codeName As String = "DTVII_MK4"
 
     ' Arrays and other variables used on background processes
-    Public imgPackages As New List(Of DismPackage)
-
-    Public imgFeatures As New List(Of DismFeature)
-
-    Public imgAppxPackages As New List(Of DismAppxPackage)
-
-    Public imgCapabilities As New List(Of DismCapability)
-
-    Public imgDrivers As New List(Of DismDriverPackage)
-
     Public areBackgroundProcessesDone As Boolean
 
     Dim pbOpNums As Integer
@@ -3349,11 +3339,14 @@ Public Class MainForm
                     PendingTasks(0) = True
                     Exit Sub
                 End If
-                imgPackages = PackageCollection.ToList()
             End Using
         Catch ex As Exception
-            DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
-            ThrowAPIException(ex)
+            DynaLog.LogMessage("Could not get package information with DISM API. Error: " & ex.Message)
+            DynaLog.LogMessage("Getting package information with DISM executable...")
+            If Not GetImagePackagesWithExecutable(OnlineMode) Then
+                DynaLog.LogMessage("Package information could not be obtained with DISM executable.")
+                ThrowAPIException(ex)
+            End If
         Finally
             DynaLog.LogMessage("Shutting down API...")
             DismApi.Shutdown()
@@ -3362,6 +3355,66 @@ Public Class MainForm
         CompletedTasks(0) = True
         PendingTasks(0) = False
     End Sub
+
+    Function GetImagePackagesWithExecutable(Optional OnlineMode As Boolean = False) As Boolean
+        Dim args As String = String.Format("/English {0} /get-packages", If(OnlineMode, "/online", String.Format("/image={0}", Quote & MountDir & Quote)))
+
+        Using pkgProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = DismExe,
+                .Arguments = args,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+            pkgProc.Start()
+            Dim output As String = pkgProc.StandardOutput.ReadToEnd()
+            pkgProc.WaitForExit()
+            If pkgProc.ExitCode <> 0 Then
+                Return False
+            End If
+
+            ' Parse the output
+            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Package Identity : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+            Dim pkgNameString As String = "",
+                pkgStateString As String = "",
+                pkgReleaseTypeString As String = "",
+                pkgInstallTimeString As String = ""
+            For Each outputLine In outputLines
+                If outputLine.StartsWith("Package Identity : ") Then
+                    pkgNameString = outputLine.Replace("Package Identity : ", "")
+                ElseIf outputLine.StartsWith("State : ") Then
+                    pkgStateString = outputLine.Replace("State : ", "")
+                ElseIf outputLine.StartsWith("Release Type : ") Then
+                    pkgReleaseTypeString = outputLine.Replace("Release Type : ", "")
+                ElseIf outputLine.StartsWith("Install Time : ") Then
+                    pkgInstallTimeString = outputLine.Replace("Install Time : ", "")
+                End If
+
+                ' If we've grabbed everything at this point, we add it to our list,
+                ' then clear everything and move on.
+                If pkgNameString <> "" AndAlso
+                        pkgStateString <> "" AndAlso
+                        pkgReleaseTypeString <> "" AndAlso
+                        pkgInstallTimeString <> "" Then
+
+                    ' TODO add functions to parse state and reltype strings to enum values
+                    CurrentImage.ImagePackages_Backup.Add(New ImagePackage(pkgNameString,
+                                                                                 DismPackageFeatureState.Installed,
+                                                                                 New Date(pkgInstallTimeString),
+                                                                                 DismReleaseType.Update))
+                    pkgNameString = ""
+                    pkgStateString = ""
+                    pkgReleaseTypeString = ""
+                    pkgInstallTimeString = ""
+                End If
+            Next
+        End Using
+        Return True
+    End Function
 
     ''' <summary>
     ''' Gets present features in an image and puts them in separate arrays
@@ -3386,11 +3439,14 @@ Public Class MainForm
                     PendingTasks(1) = True
                     Exit Sub
                 End If
-                imgFeatures = FeatureCollection.ToList()
             End Using
         Catch ex As Exception
-            DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
-            ThrowAPIException(ex)
+            DynaLog.LogMessage("Could not get feature information. Error: " & ex.Message)
+            DynaLog.LogMessage("Getting feature information with DISM executable...")
+            If Not GetImageFeaturesWithExecutable(OnlineMode) Then
+                DynaLog.LogMessage("Feature information could not be obtained with DISM executable.")
+                ThrowAPIException(ex)
+            End If
         Finally
             DynaLog.LogMessage("Shutting down API...")
             DismApi.Shutdown()
@@ -3399,6 +3455,51 @@ Public Class MainForm
         CompletedTasks(1) = True
         PendingTasks(1) = False
     End Sub
+
+    Function GetImageFeaturesWithExecutable(Optional OnlineMode As Boolean = False) As Boolean
+        Dim args As String = String.Format("/English {0} /get-features", If(OnlineMode, "/online", String.Format("/image={0}", Quote & MountDir & Quote)))
+
+        Using featProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = DismExe,
+                .Arguments = args,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+            featProc.Start()
+            Dim output As String = featProc.StandardOutput.ReadToEnd()
+            featProc.WaitForExit()
+            If featProc.ExitCode <> 0 Then Return False
+
+            ' Parse the output
+            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Feature Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+            Dim featNameString As String = "",
+                featStateString As String = ""
+            For Each outputLine In outputLines
+                If outputLine.StartsWith("Feature Name : ") Then
+                    featNameString = outputLine.Replace("Feature Name : ", "")
+                ElseIf outputLine.StartsWith("State : ") Then
+                    featStateString = outputLine.Replace("State : ", "")
+                End If
+
+                ' If we've grabbed everything at this point, we add it to our list,
+                ' then clear everything and move on.
+                If featNameString <> "" AndAlso
+                    featStateString <> "" Then
+                    ' TODO add functions to parse state strings to enum values
+                    CurrentImage.ImageFeatures_Backup.Add(New ImageFeature(featNameString, DismPackageFeatureState.Installed))
+
+                    featNameString = ""
+                    featStateString = ""
+                End If
+            Next
+        End Using
+        Return True
+    End Function
 
     ''' <summary>
     ''' Gets installed provisioned APPX packages in an image and puts them in separate arrays
@@ -3463,7 +3564,7 @@ Public Class MainForm
                                 For Each item In objectsCollection.Items
                                     Dim propertyDictionary As Dictionary(Of String, String) = item.Properties.ToDictionary(Function(prop) prop.Name,
                                                                                                                Function(prop) prop.Value)
-                                    CurrentImage.ImageAppxPackages_Win8.Add(New ImageAppxPackage(propertyDictionary("Name"),
+                                    CurrentImage.ImageAppxPackages_Backup.Add(New ImageAppxPackage(propertyDictionary("Name"),
                                                                                                  propertyDictionary("PackageFullName"),
                                                                                                  Casters.CastDismArchitectureString(propertyDictionary("Architecture")),
                                                                                                  propertyDictionary("ResourceId"),
@@ -3472,8 +3573,6 @@ Public Class MainForm
                             End If
                         End If
                     End If
-
-                    imgAppxPackages = AppxPackageCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
@@ -3497,7 +3596,7 @@ Public Class MainForm
             PendingTasks(2) = True
             Exit Sub
         End If
-        CurrentImage.ImageAppxPackages_Win8.Clear()
+        CurrentImage.ImageAppxPackages_Backup.Clear()
         ' Run DISM and parse the output in one go.
         Dim args As String = String.Format("/English {0} /get-provisionedappxpackages", If(OnlineMode, "/online", String.Format("/image={0}", Quote & MountDir & Quote)))
         Using appxProc As New Process() With {
@@ -3542,7 +3641,7 @@ Public Class MainForm
                             appxArchitectureString <> "" AndAlso
                             appxResourceIdString <> "" AndAlso
                             appxPackageNameString <> "" Then
-                        CurrentImage.ImageAppxPackages_Win8.Add(New ImageAppxPackage(appxDisplayNameString,
+                        CurrentImage.ImageAppxPackages_Backup.Add(New ImageAppxPackage(appxDisplayNameString,
                                                                                      appxPackageNameString,
                                                                                      Casters.CastDismArchitectureString(appxArchitectureString),
                                                                                      appxResourceIdString,
@@ -3569,7 +3668,7 @@ Public Class MainForm
                     For Each item In objectsCollection.Items
                         Dim propertyDictionary As Dictionary(Of String, String) = item.Properties.ToDictionary(Function(prop) prop.Name,
                                                                                                                Function(prop) prop.Value)
-                        CurrentImage.ImageAppxPackages_Win8.Add(New ImageAppxPackage(propertyDictionary("Name"),
+                        CurrentImage.ImageAppxPackages_Backup.Add(New ImageAppxPackage(propertyDictionary("Name"),
                                                                                                  propertyDictionary("PackageFullName"),
                                                                                                  Casters.CastDismArchitectureString(propertyDictionary("Architecture")),
                                                                                                  propertyDictionary("ResourceId"),
@@ -3629,11 +3728,14 @@ Public Class MainForm
                     PendingTasks(3) = True
                     Exit Sub
                 End If
-                imgCapabilities = CapabilityCollection.ToList()
             End Using
         Catch ex As Exception
             DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
-            ThrowAPIException(ex)
+            DynaLog.LogMessage("Getting capability information with DISM executable...")
+            If Not GetImageCapabilitiesWithExecutable(OnlineMode) Then
+                DynaLog.LogMessage("Capability information could not be obtained with DISM executable.")
+                ThrowAPIException(ex)
+            End If
         Finally
             DynaLog.LogMessage("Shutting down API...")
             DismApi.Shutdown()
@@ -3642,6 +3744,41 @@ Public Class MainForm
         CompletedTasks(3) = True
         PendingTasks(3) = False
     End Sub
+
+    Function GetImageCapabilitiesWithExecutable(Optional OnlineMode As Boolean = False) As Boolean
+        Dim args As String = String.Format("/English {0} /get-capabilities", If(OnlineMode, "/online", String.Format("/image={0}", Quote & MountDir & Quote)))
+
+        Using capProc As New Process() With {
+            .StartInfo = New ProcessStartInfo() With {
+                .FileName = DismExe,
+                .Arguments = args,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True
+            }
+        }
+            capProc.Start()
+            Dim output As String = capProc.StandardOutput.ReadToEnd()
+            capProc.WaitForExit()
+
+            If capProc.ExitCode <> 0 Then Return False
+
+            ' Parse the output
+            Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Capability Identity : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
+            Dim capNameString As String = "",
+                capStateString As String = ""
+            For Each outputLine In outputLines
+                If outputLine.StartsWith("Capability Identity : ") Then
+                    capNameString = outputLine.Replace("Capability Identity : ", "")
+                ElseIf outputLine.StartsWith("State : ") Then
+                    capStateString = outputLine.Replace("State : ", "")
+                End If
+            Next
+        End Using
+        Return True
+    End Function
 
     ''' <summary>
     ''' Gets installed third-party drivers in an image and puts them in separate arrays
@@ -3668,8 +3805,6 @@ Public Class MainForm
                         PendingTasks(4) = True
                         Exit Sub
                     End If
-
-                    imgDrivers = DriverCollection.ToList()
                 End Using
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
@@ -3683,7 +3818,7 @@ Public Class MainForm
             PendingTasks(4) = False
             Exit Sub
         End If
-        CurrentImage.ImageDrivers_Win7.Clear()
+        CurrentImage.ImageDrivers_Backup.Clear()
         DynaLog.LogMessage("Running function...")
         DynaLog.LogMessage("Determining whether there are third-party drivers in image...")
         ' Run DISM and parse the output in one go.
@@ -3737,7 +3872,7 @@ Public Class MainForm
                         drvProviderNameString <> "" AndAlso
                         drvDateString <> "" AndAlso
                         drvVersionString <> "" Then
-                        CurrentImage.ImageDrivers_Win7.Add(New ImageDriver(drvPublishedNameString,
+                        CurrentImage.ImageDrivers_Backup.Add(New ImageDriver(drvPublishedNameString,
                                                                            drvOriginalFileNameString,
                                                                            drvInboxString.Equals("Yes", StringComparison.InvariantCultureIgnoreCase),
                                                                            drvClassNameString,

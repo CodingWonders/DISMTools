@@ -1173,7 +1173,7 @@ Public Class ImgInfoSaveDlg
             Try
                 ' Windows 8 can't get this information with the API. Use the MainForm arrays
                 If Environment.OSVersion.Version.Major < 10 Then
-                    Contents &= GetParagraph("Information summary for " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count() & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
+                    Contents &= GetParagraph("Information summary for " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count() & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
                         GetTableHeader(New String() {"Package name",
                                                      "Application display name",
                                                      "Architecture",
@@ -1186,33 +1186,33 @@ Public Class ImgInfoSaveDlg
                                                      "Main store logo asset"}.
                                                  ToList())
                     Dim idx As Integer = 0
-                    For Each AppxPackage In ImageToGetInfoFrom.ImageAppxPackages_Win8
+                    For Each AppxPackage In ImageToGetInfoFrom.ImageAppxPackages_Backup
                         Select Case MainForm.Language
                             Case 0
                                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                     Case "ENU", "ENG"
-                                        msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                        msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                     Case "ESN"
-                                        msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                        msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                     Case "FRA"
-                                        msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                        msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                     Case "PTB", "PTG"
-                                        msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                        msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                     Case "ITA"
-                                        msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                        msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                 End Select
                             Case 1
-                                msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                             Case 2
-                                msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                             Case 3
-                                msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                             Case 4
-                                msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                             Case 5
-                                msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                         End Select
-                        ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Win8.Count) * 100)
+                        ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Backup.Count) * 100)
                         Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                         ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                         If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
@@ -1321,8 +1321,8 @@ Public Class ImgInfoSaveDlg
                         ' Determine if MainForm arrays contain more stuff
                         Dim pkgNames As New List(Of String)
                         pkgNames.AddRange(InstalledAppxPackageInfo.Select(Function(appx) appx.PackageName))
-                        Contents &= CrLf & GetParagraph("Information summary for " & If(ImageToGetInfoFrom.ImageAppxPackages_Win8.Count() > pkgNames.Count,
-                                                                                        ImageToGetInfoFrom.ImageAppxPackages_Win8.Count(), pkgNames.Count) & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
+                        Contents &= CrLf & GetParagraph("Information summary for " & If(ImageToGetInfoFrom.ImageAppxPackages_Backup.Count() > pkgNames.Count,
+                                                                                        ImageToGetInfoFrom.ImageAppxPackages_Backup.Count(), pkgNames.Count) & " AppX package(s):", ParagraphStyle.Bold) & CrLf &
                             GetTableHeader(New String() {"Package name",
                                                          "Application display name",
                                                          "Architecture",
@@ -1362,35 +1362,35 @@ Public Class ImgInfoSaveDlg
                         ReportChanges(msg(0), 10)
                         If SkipQuestions And AutoCompleteInfo(2) Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                            If Not ForceAppxApi AndAlso ImageToGetInfoFrom.ImageAppxPackages_Win8.Count - 1 > pkgNames.Count Then
+                            If Not ForceAppxApi AndAlso ImageToGetInfoFrom.ImageAppxPackages_Backup.Count - 1 > pkgNames.Count Then
                                 Dim idx As Integer = 0
-                                For Each AppxPackage In ImageToGetInfoFrom.ImageAppxPackages_Win8
+                                For Each AppxPackage In ImageToGetInfoFrom.ImageAppxPackages_Backup
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                                 Case "ENU", "ENG"
-                                                    msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "ESN"
-                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "FRA"
-                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "PTB", "PTG"
-                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "ITA"
-                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                             End Select
                                         Case 1
-                                            msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 2
-                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 3
-                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 4
-                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 5
-                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                     End Select
-                                    ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Win8.Count) * 100)
+                                    ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Backup.Count) * 100)
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                                     If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _
@@ -1610,35 +1610,35 @@ Public Class ImgInfoSaveDlg
                             Contents &= CrLf & GetParagraph("Complete AppX package information has been gathered") & CrLf
                         ElseIf (Not SkipQuestions Or Not AutoCompleteInfo(2)) And MsgBox(msg(1), vbYesNo + vbQuestion, msg(2)) = MsgBoxResult.Yes Then
                             Debug.WriteLine("[GetAppxInformation] Getting complete AppX package information...")
-                            If ImageToGetInfoFrom.ImageAppxPackages_Win8.Count - 1 > pkgNames.Count Then
+                            If ImageToGetInfoFrom.ImageAppxPackages_Backup.Count - 1 > pkgNames.Count Then
                                 Dim idx As Integer = 0
-                                For Each AppxPackage In ImageToGetInfoFrom.ImageAppxPackages_Win8
+                                For Each AppxPackage In ImageToGetInfoFrom.ImageAppxPackages_Backup
                                     Select Case MainForm.Language
                                         Case 0
                                             Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                                                 Case "ENU", "ENG"
-                                                    msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "ESN"
-                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "FRA"
-                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "PTB", "PTG"
-                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                                 Case "ITA"
-                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                                    msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                             End Select
                                         Case 1
-                                            msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Getting information of AppX packages... (AppX package " & idx + 1 & " of " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 2
-                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Obteniendo información de paquetes AppX... (paquete AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 3
-                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Obtention des informations sur les paquets AppX en cours... (paquet AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 4
-                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Obter informações sobre os pacotes AppX... (pacote AppX " & idx + 1 & " de " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                         Case 5
-                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Win8.Count & ")"
+                                            msg(0) = "Ottenere informazioni sui pacchetti AppX... (pacchetto AppX " & idx + 1 & " di " & ImageToGetInfoFrom.ImageAppxPackages_Backup.Count & ")"
                                     End Select
-                                    ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Win8.Count) * 100)
+                                    ReportChanges(msg(0), ((idx + 1) / ImageToGetInfoFrom.ImageAppxPackages_Backup.Count) * 100)
                                     Dim registrationStatus As String = ""                         ' Use to pass final result to Markdown report
                                     ' Detect if *.pckgdep files are present in the AppRepository folder, as that's how this program gets the registration status of an AppX package
                                     If Directory.Exists(If(OnlineMode, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & AppxPackage.PackageFullName, _

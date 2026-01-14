@@ -161,8 +161,8 @@ Public Class RemProvAppxPackage
             Return False
         End If
         DynaLog.LogMessage("Adding AppX packages to arrays...")
-        If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Win8.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
-            ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Win8.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageFullName,
+        If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Backup.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageFullName,
                                                                                                                                               appxPackage.PackageName,
                                                                                                                                               Casters.CastDismArchitecture(appxPackage.PackageArchitecture),
                                                                                                                                               appxPackage.PackageResourceId,
