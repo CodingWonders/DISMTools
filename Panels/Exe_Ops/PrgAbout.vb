@@ -13,6 +13,7 @@ Public Class PrgAbout
     End Sub
 
     Private Sub PrgAbout_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ResizeImage()
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -361,6 +362,22 @@ Public Class PrgAbout
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         UpdCheckBtn.Enabled = Not MainForm.SkipUpdates
+    End Sub
+
+    Private Sub ResizeImage()
+        If BackgroundImage Is Nothing Then Exit Sub
+
+        Dim scale As Double = WindowHelper.ScaleLogical(100) / 96.0F
+
+        ' we don't need to resize with 100% display scaling
+        If scale = 96.0F Then Exit Sub
+
+        Dim newWidth As Integer = BackgroundImage.Width * scale,
+            newHeight As Integer = BackgroundImage.Height * scale
+
+        Dim scaled As New Bitmap(BackgroundImage, New Size(newWidth, newHeight))
+
+        BackgroundImage = scaled
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked

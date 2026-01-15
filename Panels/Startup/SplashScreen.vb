@@ -10,6 +10,11 @@ Public Class SplashScreen
                                           My.Application.Info.Version.ToString(),
                                           MainForm.dtBranch,
                                           RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm"))
+        Try
+            ResizeImage()
+        Catch ex As Exception
+
+        End Try
         If MainForm.dtBranch.Contains("pre") Then
             LogoPic.Image = My.Resources.dt_branding_preview
             VersionLabel.Visible = True
@@ -43,5 +48,21 @@ Public Class SplashScreen
         If WindowState = FormWindowState.Maximized Then
             WindowState = FormWindowState.Normal
         End If
+    End Sub
+
+    Private Sub ResizeImage()
+        If BackgroundImage Is Nothing Then Exit Sub
+
+        Dim scale As Double = WindowHelper.ScaleLogical(100) / 96.0F
+
+        ' we don't need to resize with 100% display scaling
+        If scale = 96.0F Then Exit Sub
+
+        Dim newWidth As Integer = BackgroundImage.Width * scale,
+            newHeight As Integer = BackgroundImage.Height * scale
+
+        Dim scaled As New Bitmap(BackgroundImage, New Size(newWidth, newHeight))
+
+        BackgroundImage = scaled
     End Sub
 End Class
