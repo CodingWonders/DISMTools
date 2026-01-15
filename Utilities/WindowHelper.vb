@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.Control
 
 Public Class WindowHelper
 
@@ -68,6 +69,20 @@ Public Class WindowHelper
     Private Shared Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
         Dim version = Environment.OSVersion.Version
         Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)
+    End Function
+
+    Public Shared Function ScaleLogical(px As Integer) As Integer
+        Dim dx As Single
+        Dim ctrl As New Control()
+        Dim g As Graphics = ctrl.CreateGraphics()
+
+        Try
+            dx = g.DpiX
+        Finally
+            g.Dispose()
+        End Try
+
+        Return CInt(px * (dx / 96.0))
     End Function
 
 End Class

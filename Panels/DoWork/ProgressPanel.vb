@@ -224,6 +224,8 @@ Public Class ProgressPanel
     ' Backup command arguments
     Dim BckArgs As String
 
+    Dim IsExpanded As Boolean
+
 
     ' OperationNum: 0
     Public projName As String
@@ -539,7 +541,9 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub LogButton_Click(sender As Object, e As EventArgs) Handles LogButton.Click
-        If Height = 240 Then
+        Dim collapsedHeight As Integer = WindowHelper.ScaleLogical(240)
+        Dim expandedHeight As Integer = WindowHelper.ScaleLogical(420)
+        If Not IsExpanded Then
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -565,8 +569,8 @@ Public Class ProgressPanel
                 Case 5
                     LogButton.Text = "Nascondi registro"
             End Select
-            Height = 420
-        ElseIf Height = 420 Then
+            Height = expandedHeight
+        Else
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -592,8 +596,9 @@ Public Class ProgressPanel
                 Case 5
                     LogButton.Text = "Visualizza registro"
             End Select
-            Height = 240
+            Height = collapsedHeight
         End If
+        IsExpanded = Not IsExpanded
         BodyPanel.Refresh()
         CenterToParent()
     End Sub
@@ -7059,7 +7064,7 @@ Public Class ProgressPanel
             End Select
             CurrentPB.Value = CurrentPB.Maximum
             AllPB.Value = AllPB.Maximum
-            If Height <> 420 Then
+            If Not IsExpanded Then
                 LogButton.PerformClick()
             End If
             Select Case MainForm.Language
@@ -7229,7 +7234,7 @@ Public Class ProgressPanel
                         Label1.Text = "Image operations in progress..."
                         Label2.Text = "Please wait while the following tasks are done. This may take some time."
                         Cancel_Button.Text = "Cancel"
-                        LogButton.Text = If(Height = 240, "Show log", "Hide log")
+                        LogButton.Text = If(Not IsExpanded, "Show log", "Hide log")
                         LinkLabel1.Text = "Show DISM log file (advanced)"
                         allTasks.Text = "Please wait..."
                         currentTask.Text = "Please wait..."
@@ -7238,7 +7243,7 @@ Public Class ProgressPanel
                         Label1.Text = "Operaciones en progreso..."
                         Label2.Text = "Espere mientras las siguientes tareas se realizan. Esto puede llevar algo de tiempo."
                         Cancel_Button.Text = "Cancelar"
-                        LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
+                        LogButton.Text = If(Not IsExpanded, "Mostrar registro", "Ocultar registro")
                         LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                         allTasks.Text = "Por favor, espere..."
                         currentTask.Text = "Por favor, espere..."
@@ -7247,7 +7252,7 @@ Public Class ProgressPanel
                         Label1.Text = "Opérations de l'image en cours..."
                         Label2.Text = "Veuillez patienter pendant que les tâches suivantes sont effectuées. Cela peut prendre un certain temps."
                         Cancel_Button.Text = "Annuler"
-                        LogButton.Text = If(Height = 240, "Afficher le journal", "Cacher le journal")
+                        LogButton.Text = If(Not IsExpanded, "Afficher le journal", "Cacher le journal")
                         LinkLabel1.Text = "Afficher le fichier journal DISM (avancé)"
                         allTasks.Text = "Veuillez patienter..."
                         currentTask.Text = "Veuillez patienter..."
@@ -7256,7 +7261,7 @@ Public Class ProgressPanel
                         Label1.Text = "Operações de imagem em curso..."
                         Label2.Text = "Aguarde enquanto as seguintes tarefas são efectuadas. Isto pode demorar algum tempo"
                         Cancel_Button.Text = "Cancelar"
-                        LogButton.Text = If(Height = 240, " Mostrar registo", "Ocultar registo")
+                        LogButton.Text = If(Not IsExpanded, " Mostrar registo", "Ocultar registo")
                         LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
                         allTasks.Text = "Aguarde..."
                         currentTask.Text = "Por favor, aguarde..."
@@ -7265,7 +7270,7 @@ Public Class ProgressPanel
                         Label1.Text = "Operazioni immagine..."
                         Label2.Text = "Attendi mentre vengono eseguite le operazioni. L'operazione potrebbe richiedere del tempo"
                         Cancel_Button.Text = "Annulla"
-                        LogButton.Text = If(Height = 240, " Visualizza registro", "Nascondi registro")
+                        LogButton.Text = If(Not IsExpanded, " Visualizza registro", "Nascondi registro")
                         LinkLabel1.Text = "Visualizza il file registro DISM (avanzato)"
                         allTasks.Text = "Attendi..."
                         currentTask.Text = "Attendi..."
@@ -7275,7 +7280,7 @@ Public Class ProgressPanel
                 Label1.Text = "Image operations in progress..."
                 Label2.Text = "Please wait while the following tasks are done. This may take some time."
                 Cancel_Button.Text = "Cancel"
-                LogButton.Text = If(Height = 240, "Show log", "Hide log")
+                LogButton.Text = If(Not IsExpanded, "Show log", "Hide log")
                 LinkLabel1.Text = "Show DISM log file (advanced)"
                 allTasks.Text = "Please wait..."
                 currentTask.Text = "Please wait..."
@@ -7284,7 +7289,7 @@ Public Class ProgressPanel
                 Label1.Text = "Operaciones en progreso..."
                 Label2.Text = "Espere mientras las siguientes tareas se realizan. Esto puede llevar algo de tiempo."
                 Cancel_Button.Text = "Cancelar"
-                LogButton.Text = If(Height = 240, "Mostrar registro", "Ocultar registro")
+                LogButton.Text = If(Not IsExpanded, "Mostrar registro", "Ocultar registro")
                 LinkLabel1.Text = "Mostrar archivo de registro de DISM (avanzado)"
                 allTasks.Text = "Por favor, espere..."
                 currentTask.Text = "Por favor, espere..."
@@ -7293,7 +7298,7 @@ Public Class ProgressPanel
                 Label1.Text = "Opérations de l'image en cours..."
                 Label2.Text = "Veuillez patienter pendant que les tâches suivantes sont effectuées. Cela peut prendre un certain temps."
                 Cancel_Button.Text = "Annuler"
-                LogButton.Text = If(Height = 240, "Afficher le journal", "Cacher le journal")
+                LogButton.Text = If(Not IsExpanded, "Afficher le journal", "Cacher le journal")
                 LinkLabel1.Text = "Afficher le fichier journal DISM (avancé)"
                 allTasks.Text = "Veuillez patienter..."
                 currentTask.Text = "Veuillez patienter..."
@@ -7302,7 +7307,7 @@ Public Class ProgressPanel
                 Label1.Text = "Operações de imagem em curso..."
                 Label2.Text = "Aguarde enquanto as seguintes tarefas são efectuadas. Isto pode demorar algum tempo"
                 Cancel_Button.Text = "Cancelar"
-                LogButton.Text = If(Height = 240, " Mostrar registo", "Ocultar registo")
+                LogButton.Text = If(Not IsExpanded, " Mostrar registo", "Ocultar registo")
                 LinkLabel1.Text = "Mostrar ficheiro de registo DISM (avançado)"
                 allTasks.Text = "Aguarde..."
                 currentTask.Text = "Por favor, aguarde..."
@@ -7311,12 +7316,12 @@ Public Class ProgressPanel
                 Label1.Text = "Operazioni immagine..."
                 Label2.Text = "Attendi mentre vengono eseguite le operazioni. L'operazione potrebbe richiedere del tempo"
                 Cancel_Button.Text = "Annulla"
-                LogButton.Text = If(Height = 240, " Visualizza registro", "Nascondi registro")
+                LogButton.Text = If(Not IsExpanded, " Visualizza registro", "Nascondi registro")
                 LinkLabel1.Text = "Visualizza il file registro DISM (avanzato)"
                 allTasks.Text = "Attendi..."
                 currentTask.Text = "Attendi..."
         End Select
-        If MainForm.ExpandedProgressPanel AndAlso Height = 240 Then
+        If MainForm.ExpandedProgressPanel AndAlso Not IsExpanded Then
             LogButton.PerformClick()
         End If
         taskCountLbl.Visible = False
