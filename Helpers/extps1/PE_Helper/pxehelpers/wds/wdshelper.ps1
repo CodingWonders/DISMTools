@@ -190,6 +190,7 @@ function Get-Disks
 
     # Show additional tools
     Write-Host "- To load drivers, type `"DIM`" and press ENTER"
+    Write-Host "- To reload results, press R"
     Write-Host ""
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"
@@ -259,6 +260,7 @@ function Get-Partitions
     diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" | Out-Host
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
+    Write-Host "- To reload results, press R"
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
