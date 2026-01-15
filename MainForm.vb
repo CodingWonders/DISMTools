@@ -3401,11 +3401,10 @@ Public Class MainForm
                         pkgReleaseTypeString <> "" AndAlso
                         pkgInstallTimeString <> "" Then
 
-                    ' TODO add functions to parse state and reltype strings to enum values
                     CurrentImage.ImagePackages_Backup.Add(New ImagePackage(pkgNameString,
-                                                                                 DismPackageFeatureState.Installed,
+                                                                                 Casters.CastDismPackageStateString(pkgStateString),
                                                                                  New Date(pkgInstallTimeString),
-                                                                                 DismReleaseType.Update))
+                                                                                 Casters.CastDismReleaseTypeString(pkgReleaseTypeString)))
                     pkgNameString = ""
                     pkgStateString = ""
                     pkgReleaseTypeString = ""
@@ -3490,8 +3489,7 @@ Public Class MainForm
                 ' then clear everything and move on.
                 If featNameString <> "" AndAlso
                     featStateString <> "" Then
-                    ' TODO add functions to parse state strings to enum values
-                    CurrentImage.ImageFeatures_Backup.Add(New ImageFeature(featNameString, DismPackageFeatureState.Installed))
+                    CurrentImage.ImageFeatures_Backup.Add(New ImageFeature(featNameString, Casters.CastDismPackageStateString(featStateString)))
 
                     featNameString = ""
                     featStateString = ""
