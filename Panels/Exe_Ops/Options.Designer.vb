@@ -171,6 +171,18 @@ Partial Class Options
         Me.PictureBox20 = New System.Windows.Forms.PictureBox()
         Me.Label34 = New System.Windows.Forms.Label()
         Me.ValueContainer = New System.Windows.Forms.Panel()
+        Me.Options_ImgOps = New System.Windows.Forms.Panel()
+        Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.Panel6 = New System.Windows.Forms.Panel()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
+        Me.Panel7 = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Panel21 = New System.Windows.Forms.Panel()
+        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
+        Me.Label69 = New System.Windows.Forms.Label()
+        Me.Label67 = New System.Windows.Forms.Label()
+        Me.Label68 = New System.Windows.Forms.Label()
         Me.Options_Personalization = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel16 = New System.Windows.Forms.Panel()
@@ -190,13 +202,6 @@ Partial Class Options
         Me.Label61 = New System.Windows.Forms.Label()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
         Me.ProgressPanelPic = New System.Windows.Forms.PictureBox()
-        Me.Options_ImgOps = New System.Windows.Forms.Panel()
-        Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.Label32 = New System.Windows.Forms.Label()
-        Me.CheckBox23 = New System.Windows.Forms.CheckBox()
-        Me.Panel7 = New System.Windows.Forms.Panel()
-        Me.Label9 = New System.Windows.Forms.Label()
         Me.Options_Program = New System.Windows.Forms.Panel()
         Me.FlowLayoutPanel2 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel14 = New System.Windows.Forms.Panel()
@@ -241,11 +246,6 @@ Partial Class Options
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
-        Me.Panel21 = New System.Windows.Forms.Panel()
-        Me.Label67 = New System.Windows.Forms.Label()
-        Me.Label68 = New System.Windows.Forms.Label()
-        Me.Label69 = New System.Windows.Forms.Label()
-        Me.ComboBox7 = New System.Windows.Forms.ComboBox()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -296,6 +296,11 @@ Partial Class Options
         Me.ShutdownSectionBtn.SuspendLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ValueContainer.SuspendLayout()
+        Me.Options_ImgOps.SuspendLayout()
+        Me.FlowLayoutPanel5.SuspendLayout()
+        Me.Panel6.SuspendLayout()
+        Me.Panel7.SuspendLayout()
+        Me.Panel21.SuspendLayout()
         Me.Options_Personalization.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.Panel16.SuspendLayout()
@@ -304,10 +309,6 @@ Partial Class Options
         Me.Panel18.SuspendLayout()
         Me.Panel22.SuspendLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Options_ImgOps.SuspendLayout()
-        Me.FlowLayoutPanel5.SuspendLayout()
-        Me.Panel6.SuspendLayout()
-        Me.Panel7.SuspendLayout()
         Me.Options_Program.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.Panel14.SuspendLayout()
@@ -340,7 +341,6 @@ Partial Class Options
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
-        Me.Panel21.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1890,6 +1890,132 @@ Partial Class Options
         Me.ValueContainer.Size = New System.Drawing.Size(748, 465)
         Me.ValueContainer.TabIndex = 4
         '
+        'Options_ImgOps
+        '
+        Me.Options_ImgOps.Controls.Add(Me.FlowLayoutPanel5)
+        Me.Options_ImgOps.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Options_ImgOps.Location = New System.Drawing.Point(0, 0)
+        Me.Options_ImgOps.Name = "Options_ImgOps"
+        Me.Options_ImgOps.Size = New System.Drawing.Size(748, 465)
+        Me.Options_ImgOps.TabIndex = 3
+        Me.Options_ImgOps.Visible = False
+        '
+        'FlowLayoutPanel5
+        '
+        Me.FlowLayoutPanel5.AutoScroll = True
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel6)
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel7)
+        Me.FlowLayoutPanel5.Controls.Add(Me.Panel21)
+        Me.FlowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.FlowLayoutPanel5.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
+        Me.FlowLayoutPanel5.Size = New System.Drawing.Size(748, 465)
+        Me.FlowLayoutPanel5.TabIndex = 0
+        '
+        'Panel6
+        '
+        Me.Panel6.Controls.Add(Me.CheckBox2)
+        Me.Panel6.Controls.Add(Me.Label32)
+        Me.Panel6.Controls.Add(Me.Label19)
+        Me.Panel6.Controls.Add(Me.CheckBox23)
+        Me.Panel6.Controls.Add(Me.CheckBox3)
+        Me.Panel6.Controls.Add(Me.Label18)
+        Me.Panel6.Location = New System.Drawing.Point(0, 0)
+        Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel6.Name = "Panel6"
+        Me.Panel6.Size = New System.Drawing.Size(728, 239)
+        Me.Panel6.TabIndex = 0
+        '
+        'Label32
+        '
+        Me.Label32.AutoEllipsis = True
+        Me.Label32.Location = New System.Drawing.Point(38, 188)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(680, 51)
+        Me.Label32.TabIndex = 8
+        Me.Label32.Text = resources.GetString("Label32.Text")
+        '
+        'CheckBox23
+        '
+        Me.CheckBox23.AutoSize = True
+        Me.CheckBox23.Location = New System.Drawing.Point(21, 167)
+        Me.CheckBox23.Name = "CheckBox23"
+        Me.CheckBox23.Size = New System.Drawing.Size(346, 19)
+        Me.CheckBox23.TabIndex = 6
+        Me.CheckBox23.Text = "Map system accounts to application registration information"
+        Me.CheckBox23.UseVisualStyleBackColor = True
+        '
+        'Panel7
+        '
+        Me.Panel7.Controls.Add(Me.Label9)
+        Me.Panel7.Controls.Add(Me.CheckBox14)
+        Me.Panel7.Controls.Add(Me.Label48)
+        Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
+        Me.Panel7.Location = New System.Drawing.Point(0, 239)
+        Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel7.Name = "Panel7"
+        Me.Panel7.Size = New System.Drawing.Size(728, 172)
+        Me.Panel7.TabIndex = 1
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(18, 18)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(150, 15)
+        Me.Label9.TabIndex = 3
+        Me.Label9.Text = "Saving image information"
+        '
+        'Panel21
+        '
+        Me.Panel21.Controls.Add(Me.ComboBox7)
+        Me.Panel21.Controls.Add(Me.Label69)
+        Me.Panel21.Controls.Add(Me.Label67)
+        Me.Panel21.Controls.Add(Me.Label68)
+        Me.Panel21.Location = New System.Drawing.Point(0, 411)
+        Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel21.Name = "Panel21"
+        Me.Panel21.Size = New System.Drawing.Size(728, 172)
+        Me.Panel21.TabIndex = 2
+        '
+        'ComboBox7
+        '
+        Me.ComboBox7.FormattingEnabled = True
+        Me.ComboBox7.Location = New System.Drawing.Point(43, 129)
+        Me.ComboBox7.Name = "ComboBox7"
+        Me.ComboBox7.Size = New System.Drawing.Size(313, 23)
+        Me.ComboBox7.TabIndex = 5
+        '
+        'Label69
+        '
+        Me.Label69.AutoSize = True
+        Me.Label69.Location = New System.Drawing.Point(40, 104)
+        Me.Label69.Name = "Label69"
+        Me.Label69.Size = New System.Drawing.Size(210, 15)
+        Me.Label69.TabIndex = 4
+        Me.Label69.Text = "Search Engine to use for web searches:"
+        '
+        'Label67
+        '
+        Me.Label67.AutoSize = True
+        Me.Label67.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label67.Location = New System.Drawing.Point(18, 18)
+        Me.Label67.Name = "Label67"
+        Me.Label67.Size = New System.Drawing.Size(205, 15)
+        Me.Label67.TabIndex = 3
+        Me.Label67.Text = "Searching image information online"
+        '
+        'Label68
+        '
+        Me.Label68.AutoEllipsis = True
+        Me.Label68.Location = New System.Drawing.Point(41, 47)
+        Me.Label68.Name = "Label68"
+        Me.Label68.Size = New System.Drawing.Size(665, 48)
+        Me.Label68.TabIndex = 0
+        Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
+    "se the settings the program should consider for web searches:"
+        '
         'Options_Personalization
         '
         Me.Options_Personalization.Controls.Add(Me.FlowLayoutPanel3)
@@ -2103,83 +2229,6 @@ Partial Class Options
         Me.ProgressPanelPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.ProgressPanelPic.TabIndex = 7
         Me.ProgressPanelPic.TabStop = False
-        '
-        'Options_ImgOps
-        '
-        Me.Options_ImgOps.Controls.Add(Me.FlowLayoutPanel5)
-        Me.Options_ImgOps.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Options_ImgOps.Location = New System.Drawing.Point(0, 0)
-        Me.Options_ImgOps.Name = "Options_ImgOps"
-        Me.Options_ImgOps.Size = New System.Drawing.Size(748, 465)
-        Me.Options_ImgOps.TabIndex = 3
-        Me.Options_ImgOps.Visible = False
-        '
-        'FlowLayoutPanel5
-        '
-        Me.FlowLayoutPanel5.AutoScroll = True
-        Me.FlowLayoutPanel5.Controls.Add(Me.Panel6)
-        Me.FlowLayoutPanel5.Controls.Add(Me.Panel7)
-        Me.FlowLayoutPanel5.Controls.Add(Me.Panel21)
-        Me.FlowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.FlowLayoutPanel5.Location = New System.Drawing.Point(0, 0)
-        Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
-        Me.FlowLayoutPanel5.Size = New System.Drawing.Size(748, 465)
-        Me.FlowLayoutPanel5.TabIndex = 0
-        '
-        'Panel6
-        '
-        Me.Panel6.Controls.Add(Me.CheckBox2)
-        Me.Panel6.Controls.Add(Me.Label32)
-        Me.Panel6.Controls.Add(Me.Label19)
-        Me.Panel6.Controls.Add(Me.CheckBox23)
-        Me.Panel6.Controls.Add(Me.CheckBox3)
-        Me.Panel6.Controls.Add(Me.Label18)
-        Me.Panel6.Location = New System.Drawing.Point(0, 0)
-        Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(728, 239)
-        Me.Panel6.TabIndex = 0
-        '
-        'Label32
-        '
-        Me.Label32.AutoEllipsis = True
-        Me.Label32.Location = New System.Drawing.Point(38, 188)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(680, 51)
-        Me.Label32.TabIndex = 8
-        Me.Label32.Text = resources.GetString("Label32.Text")
-        '
-        'CheckBox23
-        '
-        Me.CheckBox23.AutoSize = True
-        Me.CheckBox23.Location = New System.Drawing.Point(21, 167)
-        Me.CheckBox23.Name = "CheckBox23"
-        Me.CheckBox23.Size = New System.Drawing.Size(346, 19)
-        Me.CheckBox23.TabIndex = 6
-        Me.CheckBox23.Text = "Map system accounts to application registration information"
-        Me.CheckBox23.UseVisualStyleBackColor = True
-        '
-        'Panel7
-        '
-        Me.Panel7.Controls.Add(Me.Label9)
-        Me.Panel7.Controls.Add(Me.CheckBox14)
-        Me.Panel7.Controls.Add(Me.Label48)
-        Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
-        Me.Panel7.Location = New System.Drawing.Point(0, 239)
-        Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel7.Name = "Panel7"
-        Me.Panel7.Size = New System.Drawing.Size(728, 172)
-        Me.Panel7.TabIndex = 1
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(18, 18)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(150, 15)
-        Me.Label9.TabIndex = 3
-        Me.Label9.Text = "Saving image information"
         '
         'Options_Program
         '
@@ -2675,60 +2724,11 @@ Partial Class Options
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
         '
-        'Panel21
-        '
-        Me.Panel21.Controls.Add(Me.ComboBox7)
-        Me.Panel21.Controls.Add(Me.Label69)
-        Me.Panel21.Controls.Add(Me.Label67)
-        Me.Panel21.Controls.Add(Me.Label68)
-        Me.Panel21.Location = New System.Drawing.Point(0, 411)
-        Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel21.Name = "Panel21"
-        Me.Panel21.Size = New System.Drawing.Size(728, 172)
-        Me.Panel21.TabIndex = 2
-        '
-        'Label67
-        '
-        Me.Label67.AutoSize = True
-        Me.Label67.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label67.Location = New System.Drawing.Point(18, 18)
-        Me.Label67.Name = "Label67"
-        Me.Label67.Size = New System.Drawing.Size(205, 15)
-        Me.Label67.TabIndex = 3
-        Me.Label67.Text = "Searching image information online"
-        '
-        'Label68
-        '
-        Me.Label68.AutoEllipsis = True
-        Me.Label68.Location = New System.Drawing.Point(41, 47)
-        Me.Label68.Name = "Label68"
-        Me.Label68.Size = New System.Drawing.Size(665, 48)
-        Me.Label68.TabIndex = 0
-        Me.Label68.Text = "If you want to learn more about an item online, you can leverage Web search. Choo" & _
-    "se the settings the program should consider for web searches:"
-        '
-        'Label69
-        '
-        Me.Label69.AutoSize = True
-        Me.Label69.Location = New System.Drawing.Point(40, 104)
-        Me.Label69.Name = "Label69"
-        Me.Label69.Size = New System.Drawing.Size(210, 15)
-        Me.Label69.TabIndex = 4
-        Me.Label69.Text = "Search Engine to use for web searches:"
-        '
-        'ComboBox7
-        '
-        Me.ComboBox7.FormattingEnabled = True
-        Me.ComboBox7.Location = New System.Drawing.Point(43, 129)
-        Me.ComboBox7.Name = "ComboBox7"
-        Me.ComboBox7.Size = New System.Drawing.Size(313, 23)
-        Me.ComboBox7.TabIndex = 5
-        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.OptionContainer)
@@ -2809,6 +2809,14 @@ Partial Class Options
         Me.ShutdownSectionBtn.PerformLayout()
         CType(Me.PictureBox20, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ValueContainer.ResumeLayout(False)
+        Me.Options_ImgOps.ResumeLayout(False)
+        Me.FlowLayoutPanel5.ResumeLayout(False)
+        Me.Panel6.ResumeLayout(False)
+        Me.Panel6.PerformLayout()
+        Me.Panel7.ResumeLayout(False)
+        Me.Panel7.PerformLayout()
+        Me.Panel21.ResumeLayout(False)
+        Me.Panel21.PerformLayout()
         Me.Options_Personalization.ResumeLayout(False)
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.Panel16.ResumeLayout(False)
@@ -2821,12 +2829,6 @@ Partial Class Options
         Me.Panel22.ResumeLayout(False)
         Me.Panel22.PerformLayout()
         CType(Me.ProgressPanelPic, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Options_ImgOps.ResumeLayout(False)
-        Me.FlowLayoutPanel5.ResumeLayout(False)
-        Me.Panel6.ResumeLayout(False)
-        Me.Panel6.PerformLayout()
-        Me.Panel7.ResumeLayout(False)
-        Me.Panel7.PerformLayout()
         Me.Options_Program.ResumeLayout(False)
         Me.FlowLayoutPanel2.ResumeLayout(False)
         Me.Panel14.ResumeLayout(False)
@@ -2872,8 +2874,6 @@ Partial Class Options
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
         Me.Panel23.PerformLayout()
-        Me.Panel21.ResumeLayout(False)
-        Me.Panel21.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

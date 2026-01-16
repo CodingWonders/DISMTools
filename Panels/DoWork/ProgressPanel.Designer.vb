@@ -33,7 +33,6 @@ Partial Class ProgressPanel
         Me.taskCountLbl = New System.Windows.Forms.Label()
         Me.LogTextContainer = New System.Windows.Forms.Panel()
         Me.DISM_OpLogs = New System.Windows.Forms.Panel()
-        Me.DISM_LogView = New DISMTools.ConsoleControl()
         Me.DT_OpLogs = New System.Windows.Forms.Panel()
         Me.LogView = New System.Windows.Forms.TextBox()
         Me.LogButton = New System.Windows.Forms.Button()
@@ -47,6 +46,7 @@ Partial Class ProgressPanel
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.DISMProc = New System.Diagnostics.Process()
+        Me.DISM_LogView = New DISMTools.ConsoleControl()
         Me.LogTextContainer.SuspendLayout()
         Me.DISM_OpLogs.SuspendLayout()
         Me.DT_OpLogs.SuspendLayout()
@@ -69,6 +69,8 @@ Partial Class ProgressPanel
         '
         'Label2
         '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(55, 53)
         Me.Label2.Name = "Label2"
@@ -104,6 +106,8 @@ Partial Class ProgressPanel
         '
         'currentTask
         '
+        Me.currentTask.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.currentTask.AutoEllipsis = True
         Me.currentTask.Location = New System.Drawing.Point(55, 84)
         Me.currentTask.Name = "currentTask"
@@ -150,14 +154,6 @@ Partial Class ProgressPanel
         Me.DISM_OpLogs.TabIndex = 4
         Me.DISM_OpLogs.Visible = False
         '
-        'DISM_LogView
-        '
-        Me.DISM_LogView.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DISM_LogView.Location = New System.Drawing.Point(0, 0)
-        Me.DISM_LogView.Name = "DISM_LogView"
-        Me.DISM_LogView.Size = New System.Drawing.Size(654, 161)
-        Me.DISM_LogView.TabIndex = 0
-        '
         'DT_OpLogs
         '
         Me.DT_OpLogs.Controls.Add(Me.LogView)
@@ -198,6 +194,7 @@ Partial Class ProgressPanel
         '
         'BodyPanel
         '
+        Me.BodyPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.BodyPanel.BackColor = System.Drawing.Color.White
         Me.BodyPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.BodyPanel.Controls.Add(Me.LogContainerPanel)
@@ -312,10 +309,18 @@ Partial Class ProgressPanel
         Me.DISMProc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
         Me.DISMProc.SynchronizingObject = Me
         '
+        'DISM_LogView
+        '
+        Me.DISM_LogView.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DISM_LogView.Location = New System.Drawing.Point(0, 0)
+        Me.DISM_LogView.Name = "DISM_LogView"
+        Me.DISM_LogView.Size = New System.Drawing.Size(654, 161)
+        Me.DISM_LogView.TabIndex = 0
+        '
         'ProgressPanel
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(800, 240)
         Me.ControlBox = False
         Me.Controls.Add(Me.BodyPanel)

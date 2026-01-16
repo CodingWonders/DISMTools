@@ -198,6 +198,6 @@ Public Class SetImageKey
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = CurrentTheme.ForegroundColor
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
     End Sub
 End Class

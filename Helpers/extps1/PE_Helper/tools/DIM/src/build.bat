@@ -18,8 +18,8 @@ FOR /F %%I IN ('dir "%VsDirectory%" /B') DO (
 GOTO Fail_NoBuildTools
 
 :BuildNow
-%BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=Win32 /p:PlatformToolset=v110
-%BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:PlatformToolset=v110
+%BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=Win32
+%BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=x64
 %BuildToolPath% DT-DIM.vcxproj /p:Configuration=Debug /p:Platform=ARM64
 ECHO Executables were built. Copying them to final outputs...
 XCOPY Win32\Debug\DT-DIM.exe ..\i386\DT-DIM.exe /cey /-i
@@ -28,7 +28,7 @@ XCOPY ARM64\Debug\DT-DIM.exe ..\aarch64\DT-DIM.exe /cey /-i
 EXIT /B
 
 :Fail_NoVS
-ECHO No Visual Studio 2022 installation has been found in the standard location.
+ECHO No Visual Studio 2026 installation has been found in the standard location.
 EXIT /B
 
 :Fail_NoBuildTools

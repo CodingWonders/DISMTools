@@ -75,10 +75,10 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.Button10 = New System.Windows.Forms.Button()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Button10 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -663,17 +663,6 @@ Partial Class AddProvAppxPackage
         Me.CheckBox3.Text = "License file:"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
-        'Button10
-        '
-        Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button10.Location = New System.Drawing.Point(871, 583)
-        Me.Button10.Name = "Button10"
-        Me.Button10.Size = New System.Drawing.Size(32, 23)
-        Me.Button10.TabIndex = 12
-        Me.Button10.Text = "..."
-        Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.Button10.UseVisualStyleBackColor = True
-        '
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.ComboBox1)
@@ -682,6 +671,16 @@ Partial Class AddProvAppxPackage
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(504, 41)
         Me.Panel2.TabIndex = 11
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Items.AddRange(New Object() {"Do not configure stub preference", "Install application as a stub package", "Install application as a full package"})
+        Me.ComboBox1.Location = New System.Drawing.Point(131, 10)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(364, 21)
+        Me.ComboBox1.TabIndex = 12
+        Me.ComboBox1.Text = "Do not configure stub preference"
         '
         'Label4
         '
@@ -694,21 +693,22 @@ Partial Class AddProvAppxPackage
         Me.Label4.TabIndex = 11
         Me.Label4.Text = "Stub preference:"
         '
-        'ComboBox1
+        'Button10
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Do not configure stub preference", "Install application as a stub package", "Install application as a full package"})
-        Me.ComboBox1.Location = New System.Drawing.Point(131, 10)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(364, 21)
-        Me.ComboBox1.TabIndex = 12
-        Me.ComboBox1.Text = "Do not configure stub preference"
+        Me.Button10.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button10.Location = New System.Drawing.Point(871, 583)
+        Me.Button10.Name = "Button10"
+        Me.Button10.Size = New System.Drawing.Size(32, 23)
+        Me.Button10.TabIndex = 12
+        Me.Button10.Text = "..."
+        Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.Button10.UseVisualStyleBackColor = True
         '
         'AddProvAppxPackage
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1064, 621)
         Me.Controls.Add(Me.Button10)

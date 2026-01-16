@@ -768,8 +768,8 @@ Public Class NewUnattendWiz
         NumericUpDown7.ForeColor = ForeColor
         NumericUpDown8.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
@@ -1127,7 +1127,7 @@ Public Class NewUnattendWiz
                 SaveFileDialog1.InitialDirectory = ""
             End If
             SaveFileDialog1.FileName = "autounattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
-            SaveFileDialog1.ShowDialog()
+            SaveFileDialog1.ShowDialog(Me)
             UnattendGeneratorBW.RunWorkerAsync()
         ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
             SaveTarget = ""
@@ -1649,7 +1649,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -2448,7 +2448,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
-        EditorModeOFD.ShowDialog()
+        EditorModeOFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorModeOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeOFD.FileOk
@@ -2463,7 +2463,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
-        EditorModeSFD.ShowDialog()
+        EditorModeSFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorModeSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeSFD.FileOk
@@ -2481,7 +2481,7 @@ Public Class NewUnattendWiz
         HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create.html")
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog()
+        HelpBrowserForm.ShowDialog(Me)
     End Sub
 
     Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
@@ -2660,7 +2660,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        ScriptEditorOFD.ShowDialog()
+        ScriptEditorOFD.ShowDialog(Me)
     End Sub
 
     Private Sub ScriptEditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptEditorOFD.FileOk
@@ -2927,7 +2927,7 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
         DynaLog.LogMessage("Preparing to copy non-Windows UnattendGen...")
-        If CPUnattendGenFBD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If CPUnattendGenFBD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("FBD accepted. Copying non-Windows UnattendGen...")
             For Each CrossPlatformZip In Directory.GetFiles(Path.Combine(Application.StartupPath, "Tools", "UnattendGen"), "*.zip", SearchOption.TopDirectoryOnly).
                 Where(Function(zip) Path.GetFileNameWithoutExtension(zip).ToLower().Contains("linux") OrElse
@@ -3063,7 +3063,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
-        OpenFileDialog2.ShowDialog()
+        OpenFileDialog2.ShowDialog(Me)
     End Sub
 
     Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click

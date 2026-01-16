@@ -1687,8 +1687,8 @@ Public Class Options
 
         End Try
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         If Not File.Exists(Application.StartupPath & "\portable") Then
             Panel2.Enabled = False
             Panel3.Visible = True
@@ -1924,11 +1924,11 @@ Public Class Options
             Exit Sub
         End If
         DynaLog.LogMessage("Showing component information...")
-        DismComponents.ShowDialog()
+        DismComponents.ShowDialog(Me)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        DismOFD.ShowDialog()
+        DismOFD.ShowDialog(Me)
     End Sub
 
     Private Sub DismOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles DismOFD.FileOk
@@ -1946,7 +1946,7 @@ Public Class Options
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        LogSFD.ShowDialog()
+        LogSFD.ShowDialog(Me)
     End Sub
 
     Private Sub LogSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LogSFD.FileOk
@@ -1955,7 +1955,7 @@ Public Class Options
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        ScratchFBD.ShowDialog()
+        ScratchFBD.ShowDialog(Me)
         If DialogResult.OK And ScratchFBD.SelectedPath <> "" Then
             TextBox3.Text = ScratchFBD.SelectedPath
         End If
@@ -2681,7 +2681,7 @@ Public Class Options
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
-        BGProcsAdvSettings.ShowDialog()
+        BGProcsAdvSettings.ShowDialog(Me)
     End Sub
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
@@ -2734,7 +2734,7 @@ Public Class Options
 
     Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
         DynaLog.LogMessage("Preparing to reset settings... It will be done if the user wants to do so")
-        SettingsResetDlg.ShowDialog()
+        SettingsResetDlg.ShowDialog(Me)
         If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Proceeding to reset settings - User accepted the question.")
             MainForm.ResetDTSettings()
@@ -3191,7 +3191,7 @@ Public Class Options
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        EditorOFD.ShowDialog()
+        EditorOFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorOFD.FileOk
@@ -3206,5 +3206,14 @@ Public Class Options
         If File.Exists(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")) Then
             Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"))
         End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim qhMessage As String = String.Format("DISMTools will enable and/or disable certain features if they are not compatible with either the specified DISM executable, or the current Windows image, or both.{0}{0}" &
+                                                "For instance, if DISMTools detects that you are working with either a Windows 7 image, or with a Windows 7 version of DISM, or both; it will disable all features related to AppX package " &
+                                                "and capability servicing because they are incompatible with the target platform and the tooling used.{0}{0}" &
+                                                "DISMTools can also disable certain features based on other parameters of the Windows image you are servicing, such as the edition. This usually happens " &
+                                                "with Windows PE images.", Environment.NewLine)
+        ShowQuickHelp(qhMessage)
     End Sub
 End Class

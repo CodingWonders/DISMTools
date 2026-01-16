@@ -36,7 +36,7 @@ Public Class IncompleteSetupDlg
                 OK_Button.Text = "Sì"
                 Cancel_Button.Text = "No"
         End Select
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         Beep()

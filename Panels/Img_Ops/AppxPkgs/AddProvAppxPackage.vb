@@ -726,8 +726,8 @@ Public Class AddProvAppxPackage
             Win10Title.Visible = True
         End If
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
@@ -754,7 +754,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        AppxFileOFD.ShowDialog()
+        AppxFileOFD.ShowDialog(Me)
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -803,7 +803,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        AppxDependencyOFD.ShowDialog()
+        AppxDependencyOFD.ShowDialog(Me)
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
@@ -2469,11 +2469,11 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        LicenseFileOFD.ShowDialog()
+        LicenseFileOFD.ShowDialog(Me)
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        CustomDataFileOFD.ShowDialog()
+        CustomDataFileOFD.ShowDialog(Me)
     End Sub
 
     Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox1.DragEnter

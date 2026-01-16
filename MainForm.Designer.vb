@@ -107,7 +107,6 @@ Partial Class MainForm
         Me.GetAppPatches = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetAppInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetApps = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Discord = New System.Windows.Forms.ToolStripMenuItem()
         Me.DefaultAppAssociationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportDefaultAppAssociations = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetDefaultAppAssociations = New System.Windows.Forms.ToolStripMenuItem()
@@ -210,6 +209,7 @@ Partial Class MainForm
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Discord = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator35 = New System.Windows.Forms.ToolStripSeparator()
@@ -1490,7 +1490,7 @@ Partial Class MainForm
         'WIMESDToolStripMenuItem
         '
         Me.WIMESDToolStripMenuItem.Name = "WIMESDToolStripMenuItem"
-        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.WIMESDToolStripMenuItem.Text = "WIM <-> ESD"
         '
         'ToolStripSeparator12
@@ -1702,12 +1702,6 @@ Partial Class MainForm
         Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
         '
-        'Discord
-        '
-        Me.Discord.Name = "Discord"
-        Me.Discord.Size = New System.Drawing.Size(286, 22)
-        Me.Discord.Text = "Join the discord (opens in web browser)"
-        '
         'GlossaryToolStripMenuItem
         '
         Me.GlossaryToolStripMenuItem.Name = "GlossaryToolStripMenuItem"
@@ -1739,6 +1733,12 @@ Partial Class MainForm
         '
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
         Me.ToolStripSeparator21.Size = New System.Drawing.Size(283, 6)
+        '
+        'Discord
+        '
+        Me.Discord.Name = "Discord"
+        Me.Discord.Size = New System.Drawing.Size(286, 22)
+        Me.Discord.Text = "Join the discord (opens in web browser)"
         '
         'ReportFeedbackToolStripMenuItem
         '
@@ -4558,8 +4558,8 @@ Partial Class MainForm
         '
         'MainForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
         Me.Controls.Add(Me.HomePanel)
         Me.Controls.Add(Me.PrjPanel)

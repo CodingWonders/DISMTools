@@ -20,7 +20,7 @@ Public Class ImgMount
         DynaLog.LogMessage("Checking if the mount directory exists...")
         If Not Directory.Exists(TextBox2.Text) Then
             DynaLog.LogMessage("The mount directory does not exist. Asking the user whether or not to create it...")
-            MountOpDirCreationDialog.ShowDialog()
+            MountOpDirCreationDialog.ShowDialog(Me)
             If MountOpDirCreationDialog.DialogResult = Windows.Forms.DialogResult.Yes Then
                 Try
                     DynaLog.LogMessage("The user wants the mount directory to be created. Attempting to create it...")
@@ -413,9 +413,9 @@ Public Class ImgMount
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        If TextBox1.Text <> "" AndAlso File.Exists(TextBox1.Text) AndAlso MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageFile = TextBox1.Text) IsNot Nothing Then
             IsReqField1Valid = False
             OK_Button.Enabled = False
         Else
@@ -439,7 +439,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FileSpecDialog.ShowDialog()
+        FileSpecDialog.ShowDialog(Me)
         If TextBox1.Text <> "" Then
             If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Then
                 Button3.Visible = True
@@ -609,7 +609,7 @@ Public Class ImgMount
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK Then
             TextBox2.Text = FolderBrowserDialog1.SelectedPath
         Else
@@ -688,7 +688,7 @@ Public Class ImgMount
                 GetIndexes(TextBox1.Text)
                 If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
                     IsReqField1Valid = False
-                ElseIf MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+                ElseIf MainForm.MountedImageList.Select(Function(image) image.ImageFile).Contains(TextBox1.Text) Then
                     IsReqField1Valid = False
                 End If
             Else
@@ -719,7 +719,7 @@ Public Class ImgMount
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
         GetFields()
-        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageImgFiles.Contains(TextBox1.Text) Then
+        If TextBox1.Text <> "" And File.Exists(TextBox1.Text) And MainForm.MountedImageList.Select(Function(image) image.ImageFile).Contains(TextBox1.Text) Then
             DynaLog.LogMessage("The Windows image is already mounted.")
             Dim msg As String = ""
             Select Case MainForm.Language

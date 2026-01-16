@@ -155,8 +155,8 @@ Public Class SampleScriptBrowser
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
         If ComboBox1.SelectedIndex = FinalScriptStage Then
             ' force showing again
@@ -201,5 +201,11 @@ Public Class SampleScriptBrowser
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub CreateStarterScriptBtn_Click(sender As Object, e As EventArgs) Handles CreateStarterScriptBtn.Click
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"))
+        End If
     End Sub
 End Class

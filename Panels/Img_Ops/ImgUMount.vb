@@ -24,7 +24,7 @@ Public Class ImgUMount
             If Directory.Exists(TextBox1.Text) Then
                 DynaLog.LogMessage("The provided mount directory exists. Checking if an image is mounted there...")
                 ' Detect whether the mount dir has an image mounted (I don't believe on what users claim, just to be sure)
-                If MainForm.MountedImageMountDirs.Contains(TextBox1.Text) Then
+                If MainForm.MountedImageList.Select(Function(image) image.ImageMountDirectory).Contains(TextBox1.Text) Then
                     DynaLog.LogMessage("An image is mounted there. This is a valid mount directory.")
                     ProgressPanel.RandomMountDir = TextBox1.Text
                 Else
@@ -338,8 +338,8 @@ Public Class ImgUMount
             TextBox1.Enabled = True
             Button1.Enabled = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -355,9 +355,9 @@ Public Class ImgUMount
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
-            TextBox1.Text = selectedImage.MountPath
+            TextBox1.Text = selectedImage.ImageMountDirectory
             DynaLog.LogMessage("Checking if selected item is the mount directory of the project...")
             If TextBox1.Text = MainForm.MountDir Then
                 DynaLog.LogMessage("The selected item is the mount directory of the project.")

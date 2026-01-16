@@ -20,6 +20,17 @@ Public Class GetDriverInfo
 
     Dim IsInDrvPkgs As Boolean
 
+    Enum SearchMode As Integer
+        OriginalFileName
+        ProviderName
+        ClassName
+        NoInBox
+        InBox
+        NoBootCritical
+        BootCritical
+        None
+    End Enum
+
     Private Sub GetDriverInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
             Case 0
@@ -488,8 +499,8 @@ Public Class GetDriverInfo
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Updating items in list...")
         InstalledDriverList.Clear()
         SearchedDriverList.Clear()
@@ -519,7 +530,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -1252,7 +1263,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If MainForm.ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving installed device driver information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
@@ -1271,25 +1282,38 @@ Public Class GetDriverInfo
                     If File.Exists(drvFile) Then ImgInfoSaveDlg.DriverPkgs.Add(drvFile)
                 Next
             End If
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
-        DriverFileInfoDlg.ShowDialog()
+        DriverFileInfoDlg.ShowDialog(Me)
     End Sub
 
-    Sub SearchDrivers(sQuery As String, OriginalNames As Boolean)
+    Sub SearchDrivers(sQuery As String, Optional driverSearchMode As SearchMode = SearchMode.None)
         DynaLog.LogMessage("Search query: " & sQuery)
-        DynaLog.LogMessage("Will original file names be searched instead of published names? " & If(OriginalNames, "Yes", "No"))
         If InstalledDriverInfo.Count > 0 Then
             Dim FilteredDrivers As IEnumerable(Of DismDriverPackage)
-            If OriginalNames Then
-                FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
-            Else
-                FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
-            End If
+            Select Case driverSearchMode
+                Case SearchMode.OriginalFileName
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
+                Case SearchMode.ProviderName
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                Case SearchMode.ClassName
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
+                Case SearchMode.InBox
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.InBox)
+                Case SearchMode.NoInBox
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.InBox)
+                Case SearchMode.BootCritical
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.BootCritical)
+                Case SearchMode.NoBootCritical
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.BootCritical)
+                Case Else
+                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+            End Select
             ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
             SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))
         End If
@@ -1299,7 +1323,25 @@ Public Class GetDriverInfo
         ListView1.Items.Clear()
         SearchedDriverList.Clear()
         If SearchBox1.Text <> "" Then
-            SearchDrivers(SearchBox1.Text, SearchBox1.Text.StartsWith("og:", StringComparison.OrdinalIgnoreCase))
+            Dim modeToUse As SearchMode
+            If SearchBox1.Text.StartsWith("og:") Then
+                modeToUse = SearchMode.OriginalFileName
+            ElseIf SearchBox1.Text.StartsWith("prov:") Then
+                modeToUse = SearchMode.ProviderName
+            ElseIf SearchBox1.Text.StartsWith("classname:") Or SearchBox1.Text.StartsWith("cn:") Then
+                modeToUse = SearchMode.ClassName
+            ElseIf SearchBox1.Text.StartsWith("inbox:") Then
+                modeToUse = SearchMode.InBox
+            ElseIf SearchBox1.Text.StartsWith("noinbox:") Then
+                modeToUse = SearchMode.NoInBox
+            ElseIf SearchBox1.Text.StartsWith("bc:") Then
+                modeToUse = SearchMode.BootCritical
+            ElseIf SearchBox1.Text.StartsWith("nobc:") Then
+                modeToUse = SearchMode.NoBootCritical
+            Else
+                modeToUse = SearchMode.None
+            End If
+            SearchDrivers(SearchBox1.Text, modeToUse)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
             ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())

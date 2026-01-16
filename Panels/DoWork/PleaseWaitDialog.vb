@@ -36,7 +36,7 @@ Public Class PleaseWaitDialog
                 Label1.Visible = False
                 Label2.TextAlign = ContentAlignment.MiddleCenter
                 Label2.Location = New Point(8, 8)
-                Label2.Size = New Size(343, 43)
+                Label2.Size = New Size(WindowHelper.ScaleLogical(343), WindowHelper.ScaleLogical(43))
                 Label2.Font = New Font("Segoe UI", 11.25)
         End Select
         Select Case MainForm.Language

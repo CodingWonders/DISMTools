@@ -4,23 +4,22 @@ Imports Microsoft.Dism
 
 Public Class PopupMountedImagePicker
 
-    Private Shared mountedImages As DismMountedImageInfoCollection
+    Private Shared mountedImages As New List(Of WindowsImage)
     Private Shared focusedIndex As Integer
 
-    Public Shared Function PickImage(Optional position As Nullable(Of Point) = Nothing, Optional showUpwards As Boolean = False) As DismMountedImageInfo
+    Public Shared Function PickImage() As WindowsImage
         Dim pmipForm As Form = New Form With {
-            .Location = If(position IsNot Nothing, position, New Point(0, 0)),
             .Size = New Size(800, 376),
             .FormBorderStyle = FormBorderStyle.None,
-            .StartPosition = If(position IsNot Nothing, FormStartPosition.Manual, FormStartPosition.CenterScreen),
+            .StartPosition = FormStartPosition.CenterScreen,
             .ControlBox = False,
             .Font = New Font("Tahoma", 8.25F),
             .KeyPreview = True,
             .BackColor = CurrentTheme.SectionBackgroundColor,
             .ForeColor = CurrentTheme.ForegroundColor,
-            .Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location)
+            .Icon = Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            .AutoScaleMode = AutoScaleMode.Dpi
         }
-        If showUpwards Then pmipForm.Top -= pmipForm.Height
         Dim pmipInstructionLabel As Label = New Label With {
             .Location = New Point(10, 10),
             .AutoSize = True
@@ -48,12 +47,6 @@ Public Class PopupMountedImagePicker
             .Anchor = CType((AnchorStyles.Bottom Or AnchorStyles.Right), AnchorStyles),
             .FlatStyle = FlatStyle.System
         }
-        Dim pmipRefreshButton As Button = New Button With {
-            .Location = New Point(0, 300),
-            .Size = New Size(75, 23),
-            .Anchor = CType((AnchorStyles.Bottom Or AnchorStyles.Right), AnchorStyles),
-            .FlatStyle = FlatStyle.System
-        }
         pmipMountedImageList.Columns.AddRange(New ColumnHeader() {
                                               New ColumnHeader With {
                                                   .Width = 434
@@ -67,10 +60,9 @@ Public Class PopupMountedImagePicker
                                              })
         pmipForm.AcceptButton = pmipOkButton
         ' Add controls to form
-        pmipForm.Controls.AddRange(New Control() {pmipInstructionLabel, pmipMountedImageList, pmipOkButton, pmipCancelButton, pmipRefreshButton})
+        pmipForm.Controls.AddRange(New Control() {pmipInstructionLabel, pmipMountedImageList, pmipOkButton, pmipCancelButton})
         pmipOkButton.BringToFront()
         pmipCancelButton.BringToFront()
-        pmipRefreshButton.BringToFront()
 
         ' Event Handlers
         AddHandler pmipMountedImageList.SelectedIndexChanged, Sub(sender, e)
@@ -104,18 +96,46 @@ Public Class PopupMountedImagePicker
                                                pmipForm.DialogResult = DialogResult.Cancel
                                                pmipForm.Close()
                                            End Sub
-        AddHandler pmipRefreshButton.Click, Sub(sender, e)
-                                                pmipForm.Cursor = Cursors.WaitCursor
-                                                pmipMountedImageList.Items.Clear()
-                                                pmipForm.Refresh()
-                                                GetMountedImages()
-                                                pmipForm.Cursor = Cursors.Arrow
-                                                If mountedImages IsNot Nothing Then
-                                                    pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFilePath,
-                                                                                                                                                                   mountedImage.ImageIndex,
-                                                                                                                                                                   mountedImage.MountPath})).ToArray())
-                                                End If
-                                            End Sub
+
+        ' Subscribe to MainForm mounted-images updates so the popup list refreshes in real time
+        Dim mountedUpdatedHandler As EventHandler = Sub(s, ev)
+                                                        Try
+                                                            If pmipForm.IsDisposed Then Exit Sub
+                                                            If pmipForm.InvokeRequired Then
+                                                                pmipForm.BeginInvoke(New MethodInvoker(Sub()
+                                                                                                           Try
+                                                                                                               If mountedImages.Count = pmipMountedImageList.Items.Count Then Exit Sub
+                                                                                                               pmipOkButton.Enabled = False
+                                                                                                               pmipMountedImageList.Items.Clear()
+                                                                                                               If mountedImages IsNot Nothing Then
+                                                                                                                   pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFile,
+                                                                                                                                                                                                                                  mountedImage.ImageIndex,
+                                                                                                                                                                                                                                  mountedImage.ImageMountDirectory})).ToArray())
+                                                                                                               End If
+                                                                                                           Catch ex As Exception
+                                                                                                               DynaLog.LogMessage("PMIP Update error: " & ex.Message)
+                                                                                                           End Try
+                                                                                                       End Sub))
+                                                            Else
+                                                                Try
+                                                                    If mountedImages.Count = pmipMountedImageList.Items.Count Then Exit Sub
+                                                                    pmipOkButton.Enabled = False
+                                                                    pmipMountedImageList.Items.Clear()
+                                                                    If mountedImages IsNot Nothing Then
+                                                                        pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFile,
+                                                                                                                                                                                       mountedImage.ImageIndex,
+                                                                                                                                                                                       mountedImage.ImageMountDirectory})).ToArray())
+                                                                    End If
+                                                                Catch ex As Exception
+                                                                    DynaLog.LogMessage("PMIP update error: " & ex.Message)
+                                                                End Try
+                                                            End If
+                                                        Catch ex As Exception
+                                                            DynaLog.LogMessage("PMIP handler error: " & ex.Message)
+                                                        End Try
+                                                    End Sub
+
+        AddHandler MainForm.MountedImagesUpdated, mountedUpdatedHandler
 
         ' Translate
         Select Case MainForm.Language
@@ -125,7 +145,6 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Pick image"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Cancel"
-                        pmipRefreshButton.Text = "Refresh"
                         pmipInstructionLabel.Text = "Pick an image from the list below:"
                         pmipMountedImageList.Columns(0).Text = "Image file"
                         pmipMountedImageList.Columns(1).Text = "Index"
@@ -134,7 +153,6 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Escoger imagen"
                         pmipOkButton.Text = "Aceptar"
                         pmipCancelButton.Text = "Cancelar"
-                        pmipRefreshButton.Text = "Actualizar"
                         pmipInstructionLabel.Text = "Escoja una imagen de la lista de abajo:"
                         pmipMountedImageList.Columns(0).Text = "Archivo de imagen"
                         pmipMountedImageList.Columns(1).Text = "Índice"
@@ -143,7 +161,6 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Choisir l'image"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Annuler"
-                        pmipRefreshButton.Text = "Actualiser"
                         pmipInstructionLabel.Text = "Choisissez une image dans la liste ci-dessous :"
                         pmipMountedImageList.Columns(0).Text = "Fichier de l'image"
                         pmipMountedImageList.Columns(1).Text = "Index"
@@ -152,7 +169,6 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Escolher imagem"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Cancelar"
-                        pmipRefreshButton.Text = "Atualizar"
                         pmipInstructionLabel.Text = "Escolher uma imagem da lista abaixo:"
                         pmipMountedImageList.Columns(0).Text = "Ficheiro de imagem"
                         pmipMountedImageList.Columns(1).Text = "Índice"
@@ -161,7 +177,6 @@ Public Class PopupMountedImagePicker
                         pmipForm.Text = "Scegli immagine"
                         pmipOkButton.Text = "OK"
                         pmipCancelButton.Text = "Annulla"
-                        pmipRefreshButton.Text = "Aggiorna"
                         pmipInstructionLabel.Text = "Scegli un'immagine dall'elenco sottostante:"
                         pmipMountedImageList.Columns(0).Text = "File immagine"
                         pmipMountedImageList.Columns(1).Text = "Indice"
@@ -171,7 +186,6 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Pick image"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Cancel"
-                pmipRefreshButton.Text = "Refresh"
                 pmipInstructionLabel.Text = "Pick an image from the list below:"
                 pmipMountedImageList.Columns(0).Text = "Image file"
                 pmipMountedImageList.Columns(1).Text = "Index"
@@ -180,7 +194,6 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Escoger imagen"
                 pmipOkButton.Text = "Aceptar"
                 pmipCancelButton.Text = "Cancelar"
-                pmipRefreshButton.Text = "Actualizar"
                 pmipInstructionLabel.Text = "Escoja una imagen de la lista de abajo:"
                 pmipMountedImageList.Columns(0).Text = "Archivo de imagen"
                 pmipMountedImageList.Columns(1).Text = "Índice"
@@ -189,7 +202,6 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Choisir l'image"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Annuler"
-                pmipRefreshButton.Text = "Actualiser"
                 pmipInstructionLabel.Text = "Choisissez une image dans la liste ci-dessous :"
                 pmipMountedImageList.Columns(0).Text = "Fichier de l'image"
                 pmipMountedImageList.Columns(1).Text = "Index"
@@ -198,7 +210,6 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Escolher imagem"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Cancelar"
-                pmipRefreshButton.Text = "Atualizar"
                 pmipInstructionLabel.Text = "Escolher uma imagem da lista abaixo:"
                 pmipMountedImageList.Columns(0).Text = "Ficheiro de imagem"
                 pmipMountedImageList.Columns(1).Text = "Índice"
@@ -207,48 +218,41 @@ Public Class PopupMountedImagePicker
                 pmipForm.Text = "Scegli immagine"
                 pmipOkButton.Text = "OK"
                 pmipCancelButton.Text = "Annulla"
-                pmipRefreshButton.Text = "Aggiorna"
                 pmipInstructionLabel.Text = "Scegli un'immagine dall'elenco sottostante:"
                 pmipMountedImageList.Columns(0).Text = "File immagine"
                 pmipMountedImageList.Columns(1).Text = "Indice"
                 pmipMountedImageList.Columns(2).Text = "Directory di montaggio"
         End Select
 
+        ' Initial population and show the dialog
         GetMountedImages()
         If mountedImages IsNot Nothing Then
-            pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFilePath,
+            pmipMountedImageList.Items.AddRange(mountedImages.Select(Function(mountedImage) New ListViewItem(New String() {mountedImage.ImageFile,
                                                                                                                            mountedImage.ImageIndex,
-                                                                                                                           mountedImage.MountPath})).ToArray())
+                                                                                                                           mountedImage.ImageMountDirectory})).ToArray())
         End If
 
-        Return If(pmipForm.ShowDialog() = DialogResult.OK, mountedImages(focusedIndex), Nothing)
+        Dim dlgResult = pmipForm.ShowDialog()
+
+        ' Unsubscribe the handler after dialog closes
+        Try
+            RemoveHandler MainForm.MountedImagesUpdated, mountedUpdatedHandler
+        Catch
+            ' ignore
+        End Try
+
+        Return If(dlgResult = DialogResult.OK, mountedImages(focusedIndex), Nothing)
     End Function
 
     Private Shared Sub GetMountedImages()
-        If MainForm.ImgBW.IsBusy Then
-            mountedImages = Nothing
-            Exit Sub
-        End If
-
         Try
             DynaLog.LogMessage("Preparing to get mounted images...")
-            MainForm.StopMountedImageDetector()
-            DynaLog.LogMessage("Initializing API...")
-            DismApi.Initialize(DismLogLevel.LogErrors)
             DynaLog.LogMessage("Getting mounted images...")
-            mountedImages = DismApi.GetMountedImages()
+            mountedImages = MainForm.MountedImageList
         Catch ex As Exception
             DynaLog.LogMessage("Could not get mounted images. Error message: " & ex.Message)
             MsgBox(ex.Message, vbOKOnly + vbCritical, "")
-        Finally
-            Try
-                DynaLog.LogMessage("Shutting down API...")
-                DismApi.Shutdown()
-            Catch ex As Exception
-                ' Do nothing
-            End Try
         End Try
-        MainForm.StartMountedImageDetector()
     End Sub
 
 End Class

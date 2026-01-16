@@ -209,22 +209,8 @@ Public Class EnableFeat
             Return False
         End If
         DynaLog.LogMessage("Adding features to arrays...")
-        If MainForm.imgFeatures.Count > 0 Then
-            For Each imgFeature In MainForm.imgFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(feature.State)).ToList()
-                ListView1.Items.Add(New ListViewItem(New String() {imgFeature.FeatureName, Casters.CastDismFeatureState(imgFeature.State, True)}))
-            Next
-        Else
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgFeatureNames, MainForm.imgFeatureNames.Last)
-                    If MainForm.imgFeatureState(x).Contains("Enable") Or MainForm.imgFeatureState(x) = "" Or MainForm.imgFeatureState(x) = "Nothing" Then
-                        Continue For
-                    End If
-                    ListView1.Items.Add(MainForm.imgFeatureNames(x)).SubItems.Add(MainForm.imgFeatureState(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
+        If MainForm.CurrentImage.ImageFeatures.Count > 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
         End If
         Return True
     End Function
@@ -469,8 +455,8 @@ Public Class EnableFeat
             CheckBox4.Checked = False
             CheckBox4.Enabled = False
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -497,7 +483,7 @@ Public Class EnableFeat
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK And FolderBrowserDialog1.SelectedPath <> "" Then
             RichTextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub

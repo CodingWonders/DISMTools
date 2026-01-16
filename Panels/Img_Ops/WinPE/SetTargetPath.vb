@@ -203,7 +203,7 @@ Public Class SetPETargetPath
         DynaLog.LogMessage("Opening target path configuration dialog...")
         If MainForm.ImgBW.IsBusy Then
             DynaLog.LogMessage("Background processes are still busy.")
-            BGProcsBusyDialog.ShowDialog()
+            BGProcsBusyDialog.ShowDialog(Me)
             Return False
         End If
         Return True
@@ -298,8 +298,8 @@ Public Class SetPETargetPath
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = ForeColor
 
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         GetTargetPath()
     End Sub
 End Class
