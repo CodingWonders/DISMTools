@@ -1287,6 +1287,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\fullcopy.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
