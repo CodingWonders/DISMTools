@@ -983,17 +983,25 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- The unattended answer file creation wizard no longer goes to the Finish page when it can't find UnattendGen
+- Fixed an issue in the capability removal dialog where the incorrect items would be shown
 
 New features:
 
-- A menu option has been added to the DISMTools Preinstallation Environment to change the keyboard layout to use
-- Desktop background overrides have been implemented for the DISMTools Preinstallation Environment
-- The "Show File Extensions" starter script has been introduced
-- The Starter Script Browser can now show starter scripts created by users
-- When selecting a service host (svchost) group, services in that group are now sorted alphabetically by display name
-- CODE: many item visualization procedures now use LINQ
-- The program now stores user-created data (themes, starter scripts, and DT PE backgrounds) in a safe location</value>
+- The Driver Installation Module now has improved HiDPI awareness
+- CODE: the Driver Installation Module now uses modern C++ standards when using supported compilers
+- CODE: the build script of the Driver Installation Module no longer requires version 11 of the platform toolset (for VS2012) and fully uses version 19.5 (VS2026)
+- The PE Helper now lets you reload disk and partition listings
+- The WDS Helper client now lets you reload disk and partition listings, as well as the installation images and groups in the WDS server. It also performs validation of your input now
+- A new Starter Script Editor lets you easily create your own starter scripts
+- The "Display Bugcheck Parameters" starter script has been introduced
+- New search filters have been added to the driver information dialog when working with installed drivers
+- You can now save the HTML image information reports to any location
+- Custom property viewers in the package and feature information dialogs now follow user-preferred font settings
+- CODE: large parts of the codebase are being refactored to improve speed and reliability
+- Inno Setup has been updated to version 6.7
+- DISMTools now handles HiDPI displays much better
+- The managed DISM API has been updated to version 4.0.7
+- WindowsAPICodePack has been updated to version 8.0.14</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

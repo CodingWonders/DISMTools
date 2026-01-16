@@ -2153,15 +2153,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
+        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
         '''
         '''New features:
         '''
-        '''- A menu option has been added to the DISMTools Preinstallation Environment to change the keyboard layout to use
-        '''- Desktop background overrides have been implemented for the DISMTools Preinstallation Environment
-        '''- The &quot;Show File Extensions&quot; starter script has been introduced
-        '''- The Starter Script Browser can now show starter scripts created by users
-        '''- When selecti [resto de la cadena truncado]&quot;;.
+        '''- The Driver Installation Module now has improved HiDPI awareness
+        '''- CODE: the Driver Installation Module now uses modern C++ standards when using supported compilers
+        '''- CODE: the build script of the Driver Installation Module no longer requires version 11 of the platform toolset (for VS2012) and fully uses version 19.5 (VS2026)
+        '''- The PE Helper now lets you reload disk and partition l [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
