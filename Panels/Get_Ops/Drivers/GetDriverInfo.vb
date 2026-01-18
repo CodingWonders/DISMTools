@@ -1244,7 +1244,11 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Label25_MouseHover(sender As Object, e As EventArgs) Handles Label25.MouseHover
-        ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        If SearchBox1.Text = "" Then
+            ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        Else
+            ButtonTT.SetToolTip(sender, SearchedDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        End If
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
