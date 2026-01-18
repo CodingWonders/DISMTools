@@ -173,6 +173,7 @@ for /d %%f in (%~1:\Users\*) do (
 if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
 	echo \$DISMTOOLS.~BT >> %configlistpath%
 	echo \$DISMTOOLS.~WS >> %configlistpath%
+	echo \CWS_SYSPRP >> %configlistpath%
 )
 echo. >> %configlistpath%
 echo [CompressionExclusionList] >> %configlistpath%
@@ -204,6 +205,7 @@ echo winpepge.sys >> %wdscapturepath%
 echo %%SYSTEMROOT%%\CSC >> %wdscapturepath%
 echo $DISMTOOLS.~BT >> %wdscapturepath%
 echo $DISMTOOLS.~WS >> %wdscapturepath%
+echo CWS_SYSPRP >> %wdscapturepath%
 echo. >> %wdscapturepath%
 echo [WDS] >> %wdscapturepath%
 echo UploadToWDSServer=No >> %wdscapturepath%
