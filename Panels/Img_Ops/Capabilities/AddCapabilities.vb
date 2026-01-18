@@ -211,7 +211,7 @@ Public Class AddCapabilities
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case MainForm.Language
                 Case 0

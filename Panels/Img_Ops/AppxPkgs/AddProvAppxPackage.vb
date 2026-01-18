@@ -264,7 +264,7 @@ Public Class AddProvAppxPackage
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If Not MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("All requirements are met. Continuing with the task...")
             Return True
         Else

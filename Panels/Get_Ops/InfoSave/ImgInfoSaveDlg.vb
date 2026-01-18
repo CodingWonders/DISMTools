@@ -1160,11 +1160,11 @@ Public Class ImgInfoSaveDlg
         End Select
         Contents &= GetHeader("AppX package information", HeaderSize.Header2) & CrLf & _
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
-        If MainForm.imgEdition Is Nothing Then
-            MainForm.imgEdition = " "
+        If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
+            ImageToGetInfoFrom.ImageEditionId = " "
         End If
         ' Detect if the image is Windows 8 or later. If not, skip this task
-        If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
+        If (Not OnlineMode And (Not MainForm.IsWindows8OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows8OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= GetParagraph("This task is not supported on the specified Windows image. Check that it contains Windows 8 or a later Windows version, and that it isn't a Windows PE image. Skipping task...", ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
@@ -1979,10 +1979,10 @@ Public Class ImgInfoSaveDlg
         End Select
         Contents &= GetHeader("Capability information", HeaderSize.Header2) & CrLf & _
                     GetListItems(New String() {"Image file to get information from: " & If(SourceImage <> "" And Not OnlineMode, Quote & SourceImage & Quote, "active installation")}.ToList()) & CrLf
-        If MainForm.imgEdition Is Nothing Then
-            MainForm.imgEdition = " "
+        If ImageToGetInfoFrom.ImageEditionId Is Nothing Then
+            ImageToGetInfoFrom.ImageEditionId = " "
         End If
-        If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
+        If (Not OnlineMode And (Not MainForm.IsWindows10OrHigher(ImgMountDir & "\Windows\system32\ntoskrnl.exe") Or ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase))) Or (OnlineMode And Not MainForm.IsWindows10OrHigher(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe")) Then
             Contents &= GetParagraph("This task is not supported on the specified Windows image. Check that it contains Windows 10 or a later Windows version, and that it isn't a Windows PE image. Skipping task...", ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else
@@ -2615,7 +2615,7 @@ Public Class ImgInfoSaveDlg
                 msg = "Preparazione per ottenere la configurazione di Windows PE..."
         End Select
         Contents &= GetHeader("Windows PE configuration", HeaderSize.Header2) & CrLf & CrLf
-        If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+        If Not ImageToGetInfoFrom.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
             Contents &= GetParagraph("This task is not supported on the specified Windows image. Check that it is a Windows PE image. Skipping task...", ParagraphStyle.Bold) & CrLf
             Exit Sub
         Else

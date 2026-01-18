@@ -3089,10 +3089,12 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
-        If EditionMapping.ContainsKey(MainForm.imgEdition) Then
-            ComboBox6.SelectedItem = EditionMapping(MainForm.imgEdition)
+        If MainForm.CurrentImage Is Nothing Then Exit Sub
+
+        If EditionMapping.ContainsKey(MainForm.CurrentImage.ImageEditionId) Then
+            ComboBox6.SelectedItem = EditionMapping(MainForm.CurrentImage.ImageEditionId)
         Else
-            MsgBox("There is no product key for the " & Quote & MainForm.imgEdition & Quote & " edition.", vbOKOnly + vbInformation)
+            MsgBox("There is no product key for the " & Quote & MainForm.CurrentImage.ImageEditionId & Quote & " edition.", vbOKOnly + vbInformation)
         End If
     End Sub
 
