@@ -15654,36 +15654,62 @@ Public Class MainForm
 
     Private Sub GetCurrentEdition_Click(sender As Object, e As EventArgs) Handles GetCurrentEdition.Click
         DynaLog.LogMessage("Getting current image edition...")
-        DynaLog.LogMessage("Image edition: " & Quote & imgEdition & Quote)
-        If imgEdition <> "" Then
+        DynaLog.LogMessage("Image edition: " & Quote & CurrentImage.ImageEditionId & Quote)
+        If CurrentImage.ImageEditionId <> "" Then
             DynaLog.LogMessage("Image edition field has been populated. Showing and checking...")
             Dim msg As String = ""
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            msg = "The current edition is " & Quote & imgEdition & Quote & CrLf
+                            msg = "The current edition is " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                         Case "ESN"
-                            msg = "La edición actual es " & Quote & imgEdition & Quote & CrLf
+                            msg = "La edición actual es " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                         Case "FRA"
-                            msg = "L'édition actuelle est " & Quote & imgEdition & Quote & CrLf
+                            msg = "L'édition actuelle est " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                         Case "PTB", "PTG"
-                            msg = "A edição atual é " & Quote & imgEdition & Quote & CrLf
+                            msg = "A edição atual é " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                         Case "ITA"
-                            msg = "L'edizione attuale è " & Quote & imgEdition & Quote & CrLf
+                            msg = "L'edizione attuale è " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                     End Select
                 Case 1
-                    msg = "The current edition is " & Quote & imgEdition & Quote & CrLf
+                    msg = "The current edition is " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                 Case 2
-                    msg = "La edición actual es " & Quote & imgEdition & Quote & CrLf
+                    msg = "La edición actual es " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                 Case 3
-                    msg = "L'édition actuelle est " & Quote & imgEdition & Quote & CrLf
+                    msg = "L'édition actuelle est " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                 Case 4
-                    msg = "A edição atual é " & Quote & imgEdition & Quote & CrLf
+                    msg = "A edição atual é " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
                 Case 5
-                    msg = "L'edizione attuale è " & Quote & imgEdition & Quote & CrLf
+                    msg = "L'edizione attuale è " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
             End Select
-            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            If CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
+                Select Case Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                msg &= CrLf & "Windows PE images cannot be upgraded to higher editions."
+                            Case "ESN"
+                                msg &= CrLf & "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                            Case "FRA"
+                                msg &= CrLf & "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                            Case "PTB", "PTG"
+                                msg &= CrLf & "As imagens do Windows PE não podem ser atualizadas para edições superiores."
+                            Case "ITA"
+                                msg &= CrLf & "Le immagini Windows PE non possono essere aggiornate a edizioni superiori."
+                        End Select
+                    Case 1
+                        msg &= CrLf & "Windows PE images cannot be upgraded to higher editions."
+                    Case 2
+                        msg &= CrLf & "Las imágenes de Windows PE no pueden ser actualizadas a ediciones superiores."
+                    Case 3
+                        msg &= CrLf & "Les images Windows PE ne peuvent pas être mises à niveau vers des éditions supérieures."
+                    Case 4
+                        msg &= CrLf & "As imagens do Windows PE não podem ser atualizadas para edições superiores."
+                    Case 5
+                        msg &= CrLf & "Le immagini Windows PE non possono essere aggiornate a edizioni superiori."
+                End Select
             Else
                 DynaLog.LogMessage("Image edition is not WindowsPE. This is not a Windows PE image.")
                 Select Case Language
