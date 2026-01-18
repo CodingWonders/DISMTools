@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../../../img/favicon.ico" />
+    <title>Módulo de instalación de controladores - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "M\u00f3dulo de instalaci\u00f3n de controladores";
+        var mkdocs_page_input_path = "img_tasks\\tools\\isocreator\\exttools\\dim.es.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../../../index.html">
+          <img src="../../../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navegación">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Inicio</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/start.html">Comienzo</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../whats_new/highlights.html">Novedades</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operaciones con imágenes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../img_tasks.html">Resumen</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../online_inst_mgmt.html">Modo de administración de imágenes en línea</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../offline_inst_mgmt.html">Modo de administración de imágenes fuera de línea</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Administración de imágenes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/append_image.html">Anexar a una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/apply_image.html">Aplicar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/capture_image.html">Capturar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/delete_image.html">Eliminar archivos de volumen de un archivo de imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/export_image.html">Exportar una imagen de Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/list_image.html">Listar contenidos de imágenes de Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/mount_image.html">Montar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/remount_image.html">Remontar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/split_image.html">Dividir una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/unmount_image.html">Desmontar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Diálogos de información de imagen</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/infodlgs.html">Resumen</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/img_info.html">Información de archivos de imagen</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/pkg_info.html">Información de paquetes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/feat_info.html">Información de características</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/appxpkg_info.html">Información de paquetes AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/cap_info.html">Información de funcionalidades</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/drv_info.html">Información de controladores</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/winpe_info.html">Información de configuración de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Paquetes del sistema operativo</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/pkgs.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/add_package.html">Añadir paquetes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/remove_package.html">Eliminar paquetes</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Características</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/features.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/enable_feature.html">Habilitar características</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/disable_feature.html">Deshabilitar características</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Paquetes AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/appx.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/add_provisionedappxpackage.html">Añadir paquetes AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/remove_provisionedappxpackage.html">Eliminar paquetes AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Servicio de ediciones</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/editions.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/set_edition.html">Actualizar imagen a una edición superior</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/set_productkey.html">Establecer la clave de producto</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Servicio de idiomas y regional</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../langs/set_layereddriver.html">Establecer controladores de capas de teclado</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Funcionalidades</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/caps.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/add_capability.html">Añadir funcionalidades</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/remove_capability.html">Eliminar funcionalidades</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Controladores</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/drvs.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/add_driver.html">Añadir controladores</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/export_driver.html">Exportar controladores</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/import_driver.html">Importar controladores</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/remove_driver.html">Eliminar controladores</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Herramientas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../mimgmgr.html">Administrador de imágenes montadas</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../wim2esd.html">Conversión de imágenes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../swm2wim.html">Combinación de archivos SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../configlisteditor.html">Editor de listas de configuración de DISM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Herramientas de creación de ISO</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../isocreator.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../isocreate.html">Creación de archivos ISO</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" >Instalación del sistema operativo</a>
+    <ul class="current">
+                <li class="toctree-l3"><a class="reference internal" href="../install/localinstall.html">Instalaciones locales</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Instalaciones basadas en red</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/pxehelpers.html">Resumen</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/wds.html">Ayudante de WDS</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3 current"><a class="reference internal current" >External Tools</a>
+    <ul class="current">
+                <li class="toctree-l4 current"><a class="reference internal current" href="#">Módulo de instalación de controladores</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="dtpe_es.html">Suite de extensibilidad</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="sysprep.html">Herramienta de preparación de SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../cmdline/cmdline.html">Resumen</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../regcpl.html">Panel de control del registro de imágenes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../servicemgr.html">Administrador de servicios del sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../envvarmgr.html">Administrador de variables de entorno del sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Archivos de respuesta desatendida</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unattend.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_man.html">Administrador de archivos de respuesta desatendida</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_create.html">Creador de archivos de respuesta desatendida</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_apply.html">Aplicar archivos de respuesta desatendida</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Herramientas externas</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/themedesigner.html">Creando tus temas</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/dynaviewer.html">Ver registros de diagnóstico</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menú de navegación en móvil">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html" class="icon icon-home" aria-label="Documentos"></a></li>
+          <li class="breadcrumb-item">Herramientas</li>
+          <li class="breadcrumb-item">Herramientas de creación de ISO</li>
+          <li class="breadcrumb-item">Instalación del sistema operativo</li>
+          <li class="breadcrumb-item">External Tools</li>
+      <li class="breadcrumb-item active">Módulo de instalación de controladores</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="modulo-de-instalacion-de-controladores">Módulo de Instalación de Controladores</h1>
+<p>El <strong>Módulo de Instalación de Controladores</strong> (DIM) es una forma rápida y sencilla de añadir controladores de dispositivos a entornos de preinstalación de Windows iniciados:</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/isocreator/dim/DIM_MainScreen.png" />
+</p>
+
+<p>Aunque la funcionalidad completa se logra con el Entorno de Preinstalación de DISMTools, aún puedes usar el DIM en cualquier Entorno de Preinstalación. Esto es compatible con las arquitecturas x86, amd64 y arm64.</p>
+<p><em>NOTA: El soporte para arm64 del DIM llegó en la versión 0.6.2.</em></p>
+<h4 id="uso">Uso</h4>
+<ol>
+<li>
+<p>Haz clic en el botón "Add" y elige entre un archivo de controlador único o una carpeta completa</p>
+<ul>
+<li>Si eliges una carpeta, el Módulo de Instalación de Controladores realizará un escaneo recursivo en busca de archivos INF. Esto puede recoger archivos INF inválidos que puedas tener</li>
+</ul>
+</li>
+<li>
+<p>Realiza cualquier cambio con los botones "Edit" y "Remove"</p>
+</li>
+<li>Haz clic en el botón "Install" y deja que el programa añada los controladores</li>
+</ol>
+<p>Después de la instalación de controladores, verás un resumen de instalación:</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/isocreator/dim/DIM_Summary.png" />
+</p>
+
+<p>Más tarde, después de aplicar tu imagen de Windows, el Ayudante del Entorno de Preinstalación añadirá esos controladores a la imagen objetivo.</p>
+<h4 id="uso-practico-computadoras-con-controladores-de-disco-de-terceros">Uso práctico: computadoras con controladores de disco de terceros</h4>
+<p>Un uso práctico del Módulo de Instalación de Controladores es añadir compatibilidad para controladores de disco que no se incluyen con los Windows PE por defecto. Este es el caso si el sistema de prueba es relativamente nuevo.</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/isocreator/dim/practical_use/disk_before.jpg" />
+</p>
+
+<p>Aquí está cómo puedes proceder:</p>
+<ol>
+<li>
+<p>Inicia en un entorno Linux vivo y usa el administrador de particiones que pueda venir con él para obtener el modelo de la unidad deseada. Si no tienes un ISO de Linux disponible, recomendamos <a href="https://gparted.org/livecd.php">GParted Live</a> por su simplicidad y su pequeño tamaño</p>
+<p><img alt="GParted" src="../../../../../res/img_tasks/tools/isocreator/dim/practical_use/diskinfo.jpg" /></p>
+</li>
+<li>
+<p>Además, puedes querer obtener información sobre el modelo de la computadora. En la mayoría de los sistemas Linux, puedes ejecutar <code>sudo lshw</code> en el terminal</p>
+<p><img alt="Información de la computadora" src="../../../../../res/img_tasks/tools/isocreator/dim/practical_use/compinfo.jpg" /></p>
+<p>Después de obtener el modelo de la computadora, ve al sitio web del fabricante de la computadora para descargar controladores compatibles. <strong>Asegúrate de que los extraigas y que NO los instales en tu sistema por accidente</strong>. Después de eso, copia los controladores a donde quieras</p>
+</li>
+<li>
+<p>Abre el Módulo de Instalación de Controladores, añade la carpeta que contiene los controladores y haz clic en Install</p>
+<p><img alt="Instalación DIM" src="../../../../../res/img_tasks/tools/isocreator/dim/practical_use/dim_install.jpg" /></p>
+</li>
+<li>
+<p>Verifica los discos una vez más</p>
+<p><img alt="Lista de discos" src="../../../../../res/img_tasks/tools/isocreator/dim/practical_use/disk_after.jpg" /></p>
+</li>
+</ol>
+<!-- Y sí, sé cómo hacer capturas de pantalla -->
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Construído con <a href="https://www.mkdocs.org/">MkDocs</a> usando un <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a> provisto por <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versiones">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../install/netinst/wds.html" style="color: #fcfcfc">&laquo; Anterior</a></span>
+    
+    
+      <span><a href="dtpe_es.html" style="color: #fcfcfc">Siguiente &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../../../..";</script>
+    <script src="../../../../../js/theme_extra.js"></script>
+    <script src="../../../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>
