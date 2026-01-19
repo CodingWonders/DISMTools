@@ -69,7 +69,7 @@ Public Class RemProvAppxPackage
                 ' If the image contains a Server Core/Nano Server installation, detect whether the Desktop Experience
                 ' feature is installed
                 DynaLog.LogMessage("Detecting conditions imposed by the Windows image...")
-                If MainForm.imgInstType <> "" And (MainForm.imgInstType.Contains("Nano") Or MainForm.imgInstType.Contains("Core")) Then
+                If MainForm.CurrentImage.ImageInstallationType <> "" And (MainForm.CurrentImage.ImageInstallationType.Contains("Nano") Or MainForm.CurrentImage.ImageInstallationType.Contains("Core")) Then
                     DynaLog.LogMessage("Target Windows image contains Server Core SKU. Detecting state of Desktop Experience feature...")
                     ' Go through every feature and find Desktop Experience
                     If MainForm.CurrentImage.ImageFeatures.Count > 0 Then
