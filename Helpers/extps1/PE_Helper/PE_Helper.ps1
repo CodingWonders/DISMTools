@@ -1312,6 +1312,8 @@ function Get-Partitions
             Gets the partitions of a drive using DiskPart
         .PARAMETER driveNum
             The drive number
+        .PARAMETER override
+            The partition table override mode
         .EXAMPLE
             Get-Partitions 0
     #>
@@ -1332,21 +1334,23 @@ function Get-Partitions
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
     Write-Host "- To reload results, press R"
-    switch ($override) {
-        NoOverride {
-            Write-Host "`n    No partition table overrides have been set. The selected disk will use MBR on BIOS systems and GPT on UEFI systems.`n"
+    if (-not (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall")) {
+        switch ($override) {
+            NoOverride {
+                Write-Host "`n    No partition table overrides have been set. The selected disk will use MBR on BIOS systems and GPT on UEFI systems.`n"
+            }
+            AlwaysMBR {
+                Write-Host "`n    On a clean drive, a MBR partition table will be used regardless of the platform.`n"
+            }
+            AlwaysGPT {
+                Write-Host "`n    On a clean drive, a GPT partition table will be used regardless of the platform.`n"
+            }
         }
-        AlwaysMBR {
-            Write-Host "`n    On a clean drive, a MBR partition table will be used regardless of the platform.`n"
+        if ($override -eq [PartitionTableOverride]::NoOverride) {
+            Write-Host "- To specify a partition table override, press O"
+        } else {
+            Write-Host "- To specify or change a partition table override, press O"
         }
-        AlwaysGPT {
-            Write-Host "`n    On a clean drive, a GPT partition table will be used regardless of the platform.`n"
-        }
-    }
-    if ($override -eq [PartitionTableOverride]::NoOverride) {
-        Write-Host "- To specify a partition table override, press O"
-    } else {
-        Write-Host "- To specify or change a partition table override, press O"
     }
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
@@ -1360,39 +1364,41 @@ function Get-Partitions
     }
     elseif ($part -eq "O")
     {
-        Write-Host ""
-        Write-Host "Partition table overrides let you configure a disk using a specific partition table regardless of your current"
-        Write-Host "platform. This is useful if you are deploying an operating system to another computer using this computer. Do"
-        Write-Host "not use partition table overrides if you want to install an operating system to a disk on this computer.`n"
-        Write-Host "Partition table overrides will not be used when you specify a partition number on the partition screen. In"
-        Write-Host "that case, the existing partition table will be kept."
-        Write-Host ""
-        Write-Host "Currently," -NoNewline
-        switch ($override) {
-            NoOverride {
-                if ($env:FIRMWARE_TYPE -eq "UEFI") {
-                    Write-Host " a GPT partition table scheme will be used because this computer uses UEFI."
-                } else {
-                    Write-Host " a MBR partition table scheme will be used because this computer uses BIOS."
+        if (-not (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall")) {
+            Write-Host ""
+            Write-Host "Partition table overrides let you configure a disk using a specific partition table regardless of your current"
+            Write-Host "platform. This is useful if you are deploying an operating system to another computer using this computer. Do"
+            Write-Host "not use partition table overrides if you want to install an operating system to a disk on this computer.`n"
+            Write-Host "Partition table overrides will not be used when you specify a partition number on the partition screen. In"
+            Write-Host "that case, the existing partition table will be kept."
+            Write-Host ""
+            Write-Host "Currently," -NoNewline
+            switch ($override) {
+                NoOverride {
+                    if ($env:FIRMWARE_TYPE -eq "UEFI") {
+                        Write-Host " a GPT partition table scheme will be used because this computer uses UEFI."
+                    } else {
+                        Write-Host " a MBR partition table scheme will be used because this computer uses BIOS."
+                    }
+                }
+                AlwaysMBR {
+                    Write-Host " a MBR partition table scheme will be used because of an override."
+                }
+                AlwaysGPT {
+                    Write-Host " a GPT partition table scheme will be used because of an override."
                 }
             }
-            AlwaysMBR {
-                Write-Host " a MBR partition table scheme will be used because of an override."
+            Write-Host ""
+            if ($override -ne [PartitionTableOverride]::NoOverride) { Write-Host "- Press C to clear the overrides" }
+            if ($override -ne [PartitionTableOverride]::AlwaysMBR) { Write-Host "- Press M to set a MBR partition table override" }
+            if ($override -ne [PartitionTableOverride]::AlwaysGPT) { Write-Host "- Press G to set a GPT partition table override" }
+            Write-Host "- Press B to go back"
+            $overrideOption = Read-Host -Prompt "Select the option that you want to use and press ENTER"
+            switch ($overrideOption) {
+                "C" { $override = [PartitionTableOverride]::NoOverride }
+                "M" { $override = [PartitionTableOverride]::AlwaysMBR }
+                "G" { $override = [PartitionTableOverride]::AlwaysGPT }
             }
-            AlwaysGPT {
-                Write-Host " a GPT partition table scheme will be used because of an override."
-            }
-        }
-        Write-Host ""
-        if ($override -ne [PartitionTableOverride]::NoOverride) { Write-Host "- Press C to clear the overrides" }
-        if ($override -ne [PartitionTableOverride]::AlwaysMBR) { Write-Host "- Press M to set a MBR partition table override" }
-        if ($override -ne [PartitionTableOverride]::AlwaysGPT) { Write-Host "- Press G to set a GPT partition table override" }
-        Write-Host "- Press B to go back"
-        $overrideOption = Read-Host -Prompt "Select the option that you want to use and press ENTER"
-        switch ($overrideOption) {
-            "C" { $override = [PartitionTableOverride]::NoOverride }
-            "M" { $override = [PartitionTableOverride]::AlwaysMBR }
-            "G" { $override = [PartitionTableOverride]::AlwaysGPT }
         }
         Get-Partitions $driveNum $override
     }
@@ -1426,6 +1432,8 @@ function Write-DiskConfiguration
             Determine whether to clean the entire drive. Useful for single-boot scenarios
         .PARAMETER partId
             The partition number
+        .PARAMETER override
+            The partition table override mode
         .NOTES
             The partition ID is 0 if the user decides to clean a drive
         .EXAMPLE
@@ -1986,6 +1994,8 @@ function New-BootFiles
             The index of a disk
         .PARAMETER cleanDrive
             Determine whether to run detections for specific boot scenarios
+        .PARAMETER override
+            The partition table override mode
         .PARAMETER espLetter
             The letter of the EFI System Partition volume. By default, it's W if not specified
         .EXAMPLE
