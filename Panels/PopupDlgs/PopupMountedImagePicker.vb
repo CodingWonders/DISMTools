@@ -241,7 +241,7 @@ Public Class PopupMountedImagePicker
             ' ignore
         End Try
 
-        Return If(dlgResult = DialogResult.OK, mountedImages(focusedIndex), Nothing)
+        Return If(dlgResult = DialogResult.OK, mountedImages.ElementAtOrDefault(focusedIndex), Nothing)
     End Function
 
     Private Shared Sub GetMountedImages()
