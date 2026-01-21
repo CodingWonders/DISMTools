@@ -53,6 +53,7 @@ Partial Class ImgMount
         Me.Label11 = New System.Windows.Forms.Label()
         Me.FileSpecDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.IsoExtractorBW = New System.ComponentModel.BackgroundWorker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -347,7 +348,12 @@ Partial Class ImgMount
         '
         'FileSpecDialog
         '
-        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx;"
+        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx|ISO fil" & _
+    "es|*.iso"
+        '
+        'IsoExtractorBW
+        '
+        Me.IsoExtractorBW.WorkerReportsProgress = True
         '
         'ImgMount
         '
@@ -417,5 +423,6 @@ Partial Class ImgMount
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents IsoExtractorBW As System.ComponentModel.BackgroundWorker
 
 End Class

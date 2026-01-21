@@ -895,6 +895,7 @@
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
+    <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />

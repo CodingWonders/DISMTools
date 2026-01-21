@@ -14,6 +14,8 @@ Public Class ImgMount
     Dim IsReqField3Valid As Boolean
     Dim DismVerChecker As FileVersionInfo
 
+    Dim projPath As String
+
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         DynaLog.LogMessage("Disposing of progress panel if not disposed of previously...")
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
@@ -591,6 +593,10 @@ Public Class ImgMount
                             MsgBox("È necessario unire i file SWM in un file WIM per poterlo montare", vbOKOnly + vbExclamation, Label1.Text)
                     End Select
                 End If
+            ElseIf Path.GetExtension(TextBox1.Text).EndsWith(".iso", StringComparison.OrdinalIgnoreCase) Then
+                DynaLog.LogMessage("Performing extraction of this ISO file...")
+                projPath = MainForm.projPath
+                IsoExtractorBW.RunWorkerAsync()
             End If
         Else
             Button3.Visible = False
@@ -685,12 +691,14 @@ Public Class ImgMount
             If File.Exists(TextBox1.Text) Then
                 IsReqField1Valid = True
                 ProgressPanel.SourceImg = TextBox1.Text
-                GetIndexes(TextBox1.Text)
-                If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Then
+                If Path.GetExtension(TextBox1.Text).EndsWith("esd", StringComparison.OrdinalIgnoreCase) Or
+                    Path.GetExtension(TextBox1.Text).EndsWith("swm", StringComparison.OrdinalIgnoreCase) Or
+                    Path.GetExtension(TextBox1.Text).EndsWith("iso", StringComparison.OrdinalIgnoreCase) Then
                     IsReqField1Valid = False
                 ElseIf MainForm.MountedImageList.Select(Function(image) image.ImageFile).Contains(TextBox1.Text) Then
                     IsReqField1Valid = False
                 End If
+                If IsReqField1Valid Then GetIndexes(TextBox1.Text)
             Else
                 IsReqField1Valid = False
             End If
@@ -849,6 +857,57 @@ Public Class ImgMount
         Else
             Button3.Visible = False
             Label4.Visible = False
+        End If
+    End Sub
+
+    Private Sub ExtractIsoFileContents(ProjectPath As String, IsoFile As String)
+        Try
+            ProgressReporter.SetMessage("Preparing to mount ISO file...")
+            IsoExtractorBW.ReportProgress(0)
+            Dim extractedImagePath As String = Path.Combine(ProjectPath, "IsoFileContents")
+            If Not Directory.Exists(extractedImagePath) Then
+                Directory.CreateDirectory(extractedImagePath)
+            End If
+            ProgressReporter.SetMessage("Mounting ISO file...")
+            IsoExtractorBW.ReportProgress(10)
+            Dim mountLetter As Char = IsoHelper.MountIso(IsoFile)
+            If mountLetter = Chr(0) Then Exit Sub
+            ProgressReporter.SetMessage("Scanning mounted ISO file for Windows images...")
+            IsoExtractorBW.ReportProgress(25)
+            Dim WindowsImageFiles As String() = Directory.EnumerateFiles(String.Format("{0}:\", mountLetter), "*.*", SearchOption.AllDirectories).Where(Function(fileInDisc) {".wim", ".esd"}.Contains(Path.GetExtension(fileInDisc))).ToArray()
+            For Each WindowsImageFile In WindowsImageFiles
+                ProgressReporter.SetMessage(String.Format("Copying file {0} to your project...", Quote & Path.GetFileName(WindowsImageFile) & Quote))
+                IsoExtractorBW.ReportProgress(50)
+                File.Copy(WindowsImageFile, Path.Combine(ProjectPath, "IsoFileContents", Path.GetFileName(WindowsImageFile)), True)
+            Next
+            ProgressReporter.SetMessage("Unmounting ISO file...")
+            IsoExtractorBW.ReportProgress(95)
+            IsoHelper.DismountIso(IsoFile)
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not extract relevant contents. Error message: " & ex.Message)
+            Throw
+        End Try
+        ProgressReporter.SetMessage("Extraction complete.")
+        IsoExtractorBW.ReportProgress(100)
+    End Sub
+
+    Private Sub IsoExtractorBW_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles IsoExtractorBW.DoWork
+        ExtractIsoFileContents(projPath, TextBox1.Text)
+    End Sub
+
+    Private Sub IsoExtractorBW_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles IsoExtractorBW.ProgressChanged
+        ProgressReporter.ReportProgress(Me, e.ProgressPercentage)
+    End Sub
+
+    Private Sub IsoExtractorBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles IsoExtractorBW.RunWorkerCompleted
+        ProgressReporter.Hide()
+        If e.Error Is Nothing Then
+            ' Then we've succeeded
+            MessageBox.Show("The Windows images in the specified ISO file have been successfully copied to your local disk under a folder called " &
+                            Quote & "IsoFileContents" & Quote & ". Now, specify one of the images there.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Else
+            ' Then we've failed
+            MessageBox.Show("The Windows images in the specified ISO file were not copied to your local disk. Copy any WIM or ESD files from the sources folder of your ISO file.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
 End Class
