@@ -4544,7 +4544,7 @@ Public Class MainForm
         ToolStripButton2.Image = GetGlyphResource("save_glyph")
         ToolStripButton3.Image = GetGlyphResource("prj_unload_glyph")
         ToolStripButton4.Image = GetGlyphResource("progress_window")
-        RefreshViewTSB.Image = My.Resources.refresh_glyph_dark
+        RefreshViewTSB.Image = GetGlyphResource("refresh_glyph")
         Try
             If prjTreeView.SelectedNode.IsExpanded Then
                 ExpandCollapseTSB.Image = GetGlyphResource("collapse_glyph")
