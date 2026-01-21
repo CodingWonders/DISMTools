@@ -210,7 +210,7 @@ Public Class EnableFeat
         End If
         DynaLog.LogMessage("Adding features to arrays...")
         If MainForm.CurrentImage.ImageFeatures.Count > 0 Then
-            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Where(Function(feature) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Where(Function(feature) New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.UninstallPending, DismPackageFeatureState.Staged}.Contains(feature.State)).Select(Function(feature) New ListViewItem(New String() {feature.FeatureName, Casters.CastDismFeatureState(feature.State, True)})).ToArray())
         End If
         Return True
     End Function

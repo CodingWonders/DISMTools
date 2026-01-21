@@ -732,14 +732,14 @@ Public Class AddProvAppxPackage
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
             If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
-                (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+                (MainForm.CurrentImage.ImageVersion.Major >= 10 And MainForm.CurrentImage.ImageVersion.Build >= 17134) Then
                 DynaLog.LogMessage("All conditions met for AppX regions (image version >= 10.0.17134; DISM version >= 10.0.17134.)")
                 GroupBox3.Enabled = True
             Else
                 DynaLog.LogMessage("Not all or no conditions met for AppX regions.")
                 GroupBox3.Enabled = False
             End If
-            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
+            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.CurrentImage.ImageVersion.Major >= 10 Then
                 DynaLog.LogMessage("All conditions met for stub package preferences (image version >= 10.0; DISM version >= 10.0.)")
                 Panel2.Enabled = True
             Else
@@ -1997,7 +1997,7 @@ Public Class AddProvAppxPackage
                     CheckBox4.Checked = False
                 End If
                 DynaLog.LogMessage("Detecting conditions imposed by DISM and the Windows image for stub package preferences...")
-                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10) And
+                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.CurrentImage.ImageVersion.Major >= 10) And
                     Packages(ListView1.FocusedItem.Index).SupportsStub Then
                     DynaLog.LogMessage("All requirements are met.")
                     Panel2.Enabled = True

@@ -205,7 +205,7 @@ Public Class Options
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
-        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.imgVersionInfo)
+        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.CurrentImage.ImageVersion)
         MainForm.SkipQuestions = CheckBox14.Checked
         MainForm.AutoCompleteInfo(0) = CheckBox15.Checked
         MainForm.AutoCompleteInfo(1) = CheckBox16.Checked
