@@ -59,9 +59,6 @@ Public Class MainForm
 
     ' Var used to detect whether the image is orphaned (needs servicing session reload)
     Public isOrphaned As Boolean    ' This variable is true when the host system is shut down or restarted (the servicing session stops abruptly)
-    Public mountedImgStatus As String
-
-    Public imgIndexCount As Integer
 
     ' Program settings
     ' This is the initial batch of settings for this version (0.1). As the program continues development,
