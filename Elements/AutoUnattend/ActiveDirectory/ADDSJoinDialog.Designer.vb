@@ -81,6 +81,8 @@ Partial Class ADDSJoinDialog
         Me.Help_Button = New System.Windows.Forms.Button()
         Me.ADDSInitBW = New System.ComponentModel.BackgroundWorker()
         Me.DnsValidatorBW = New System.ComponentModel.BackgroundWorker()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
@@ -95,6 +97,8 @@ Partial Class ADDSJoinDialog
         Me.FooterContainer.SuspendLayout()
         Me.ExpressPanelFooter.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'ExpressPanelContainer
@@ -140,10 +144,11 @@ Partial Class ADDSJoinDialog
         '
         'GroupBox1
         '
-        Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.GroupBox1.Controls.Add(Me.Panel1)
         Me.GroupBox1.Controls.Add(Me.DnsSyntaxCheckerBtn)
-        Me.GroupBox1.Controls.Add(Me.RichTextBox1)
         Me.GroupBox1.Controls.Add(Me.TextBox2)
         Me.GroupBox1.Controls.Add(Me.TextBox3)
         Me.GroupBox1.Controls.Add(Me.Label5)
@@ -174,10 +179,11 @@ Partial Class ADDSJoinDialog
         '
         'RichTextBox1
         '
-        Me.RichTextBox1.Location = New System.Drawing.Point(27, 209)
+        Me.RichTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBox1.Location = New System.Drawing.Point(0, 0)
         Me.RichTextBox1.Name = "RichTextBox1"
         Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
-        Me.RichTextBox1.Size = New System.Drawing.Size(657, 67)
+        Me.RichTextBox1.Size = New System.Drawing.Size(657, 66)
         Me.RichTextBox1.TabIndex = 6
         Me.RichTextBox1.Text = ""
         '
@@ -232,6 +238,8 @@ Partial Class ADDSJoinDialog
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoEllipsis = True
         Me.Label7.Location = New System.Drawing.Point(24, 280)
         Me.Label7.Name = "Label7"
@@ -324,13 +332,10 @@ Partial Class ADDSJoinDialog
         '
         'DSDomainConfigPanel
         '
+        Me.DSDomainConfigPanel.Controls.Add(Me.TableLayoutPanel2)
         Me.DSDomainConfigPanel.Controls.Add(Me.DomainAutoUserPanel)
         Me.DSDomainConfigPanel.Controls.Add(Me.RadioButton4)
         Me.DSDomainConfigPanel.Controls.Add(Me.RadioButton3)
-        Me.DSDomainConfigPanel.Controls.Add(Me.AddsNtLogonPathText)
-        Me.DSDomainConfigPanel.Controls.Add(Me.Label14)
-        Me.DSDomainConfigPanel.Controls.Add(Me.AddsUpnPathText)
-        Me.DSDomainConfigPanel.Controls.Add(Me.Label13)
         Me.DSDomainConfigPanel.Controls.Add(Me.DSNoDomainPanel)
         Me.DSDomainConfigPanel.Controls.Add(Me.TextBox6)
         Me.DSDomainConfigPanel.Controls.Add(Me.Label12)
@@ -417,41 +422,49 @@ Partial Class ADDSJoinDialog
         'AddsNtLogonPathText
         '
         Me.AddsNtLogonPathText.AutoEllipsis = True
-        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(327, 221)
+        Me.AddsNtLogonPathText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AddsNtLogonPathText.Location = New System.Drawing.Point(298, 21)
         Me.AddsNtLogonPathText.Name = "AddsNtLogonPathText"
-        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(343, 13)
+        Me.AddsNtLogonPathText.Size = New System.Drawing.Size(290, 21)
         Me.AddsNtLogonPathText.TabIndex = 8
+        Me.AddsNtLogonPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label14
         '
         Me.Label14.AutoEllipsis = True
-        Me.Label14.Location = New System.Drawing.Point(31, 221)
+        Me.Label14.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label14.Location = New System.Drawing.Point(3, 21)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(293, 13)
+        Me.Label14.Size = New System.Drawing.Size(289, 21)
         Me.Label14.TabIndex = 8
         Me.Label14.Text = "Logon Path (pre-Windows 2000):"
-        Me.Label14.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'AddsUpnPathText
         '
         Me.AddsUpnPathText.AutoEllipsis = True
-        Me.AddsUpnPathText.Location = New System.Drawing.Point(327, 200)
+        Me.AddsUpnPathText.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AddsUpnPathText.Location = New System.Drawing.Point(298, 0)
         Me.AddsUpnPathText.Name = "AddsUpnPathText"
-        Me.AddsUpnPathText.Size = New System.Drawing.Size(343, 13)
+        Me.AddsUpnPathText.Size = New System.Drawing.Size(290, 21)
         Me.AddsUpnPathText.TabIndex = 8
+        Me.AddsUpnPathText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Label13
         '
         Me.Label13.AutoEllipsis = True
-        Me.Label13.Location = New System.Drawing.Point(31, 200)
+        Me.Label13.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label13.Location = New System.Drawing.Point(3, 0)
         Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(293, 13)
+        Me.Label13.Size = New System.Drawing.Size(289, 21)
         Me.Label13.TabIndex = 8
         Me.Label13.Text = "User Principal Name (Windows 2000):"
-        Me.Label13.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'DSNoDomainPanel
         '
+        Me.DSNoDomainPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DSNoDomainPanel.Controls.Add(Me.PictureBox2)
         Me.DSNoDomainPanel.Controls.Add(Me.Label11)
         Me.DSNoDomainPanel.Location = New System.Drawing.Point(91, 295)
@@ -490,6 +503,9 @@ Partial Class ADDSJoinDialog
         '
         'Label12
         '
+        Me.Label12.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label12.AutoEllipsis = True
         Me.Label12.Location = New System.Drawing.Point(88, 367)
         Me.Label12.Name = "Label12"
@@ -698,6 +714,31 @@ Partial Class ADDSJoinDialog
         '
         Me.DnsValidatorBW.WorkerReportsProgress = True
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.RichTextBox1)
+        Me.Panel1.Location = New System.Drawing.Point(27, 208)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(657, 66)
+        Me.Panel1.TabIndex = 8
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label13, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label14, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.AddsUpnPathText, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.AddsNtLogonPathText, 1, 1)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(91, 203)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 2
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(591, 42)
+        Me.TableLayoutPanel2.TabIndex = 12
+        '
         'ADDSJoinDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -736,6 +777,8 @@ Partial Class ADDSJoinDialog
         Me.ExpressPanelFooter.ResumeLayout(False)
         Me.ExpressPanelFooter.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -797,4 +840,6 @@ Partial Class ADDSJoinDialog
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents RadioButton4 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton3 As System.Windows.Forms.RadioButton
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
 End Class
