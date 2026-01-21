@@ -141,8 +141,10 @@ Public Class RemPackage
             Return False
         End If
         DynaLog.LogMessage("Adding packages to arrays...")
-        If MainForm.CurrentImage.ImagePackages.Count > 0 Then
+        If MainForm.CurrentImage.ImagePackages IsNot Nothing AndAlso MainForm.CurrentImage.ImagePackages.Count > 0 Then
             CheckedListBox1.Items.AddRange(MainForm.CurrentImage.ImagePackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).Select(Function(package) package.PackageName).ToArray())
+        Else
+            CheckedListBox1.Items.AddRange(MainForm.CurrentImage.ImagePackages_Backup.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).Select(Function(package) package.PackageName).ToArray())
         End If
         Return True
     End Function
