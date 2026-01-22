@@ -913,13 +913,13 @@ Public Class MainForm
             DynaLog.LogMessage("DPI X-axis: " & dx)
             DynaLog.LogMessage("DPI Y-axis: " & dy)
 
-            ' 100% display scaling is equal to 96 DPI. Higher display scaling settings make
+            ' 125% display scaling is equal to 120 DPI. Higher display scaling settings make
             ' some items in the program not look correctly. It is better to tell the user
             ' about this.
-            If dx > 96 Or dy > 96 Then
-                DynaLog.LogMessage("Display scaling is over 100%. The program may not look correctly...")
+            If dx > 120 Or dy > 120 Then
+                DynaLog.LogMessage("Display scaling is over 125%. The program may not look correctly...")
                 MsgBox("DISMTools has detected that a higher display scaling setting has been set. This can make the program look incorrectly." & CrLf & CrLf &
-                       "We recommend that you lower your scaling setting to 100% (96 DPI), unless you have a small display panel set to a large resolution.",
+                       "We recommend that you lower your scaling setting to 125% (120 DPI) or less, unless you have a small display panel set to a large resolution.",
                        vbOKOnly + vbInformation, "Higher display scaling setting detected")
             End If
         Catch ex As Exception
@@ -1010,6 +1010,9 @@ Public Class MainForm
         InstallationTypeRk.Close()
 
         PxeHelperServersTSMI.Enabled = InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase)
+
+        ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer is we don't correct this.
+        Focus()
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
