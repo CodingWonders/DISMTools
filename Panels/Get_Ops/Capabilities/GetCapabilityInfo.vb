@@ -197,7 +197,11 @@ Public Class GetCapabilityInfoDlg
         DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting capabilities...")
-        ListView1.Items.AddRange(InstalledCapabilityInfo.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
+        If MainForm.CurrentImage.ImageCapabilities Is Nothing OrElse MainForm.CurrentImage.ImageCapabilities.Count = 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities_Backup.Select(Function(capability) New ListViewItem(New String() {capability.CapabilityName, Casters.CastDismPackageState(capability.CapabilityState, True)})).ToArray())
+        Else
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
+        End If
         SearchBox1.Text = ""
     End Sub
 
@@ -497,8 +501,14 @@ Public Class GetCapabilityInfoDlg
                     expectedCapabilityState = DismPackageFeatureState.PartiallyInstalled
             End Select
         End If
-        If InstalledCapabilityInfo.Count > 0 Then
-            Dim finalCapabilityLookup As IEnumerable(Of DismCapability) = InstalledCapabilityInfo.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+        If MainForm.CurrentImage.ImageCapabilities Is Nothing OrElse MainForm.CurrentImage.ImageCapabilities.Count = 0 Then
+            Dim finalCapabilityLookup As IEnumerable(Of ImageCapability) = MainForm.CurrentImage.ImageCapabilities_Backup.Where(Function(capability) capability.CapabilityName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If capState <> "" Then      ' We filter them again based on the state
+                finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.CapabilityState = expectedCapabilityState)
+            End If
+            ListView1.Items.AddRange(finalCapabilityLookup.Select(Function(filteredCapability) New ListViewItem(New String() {filteredCapability.CapabilityName, Casters.CastDismPackageState(filteredCapability.CapabilityState, True)})).ToArray())
+        Else
+            Dim finalCapabilityLookup As IEnumerable(Of DismCapability) = MainForm.CurrentImage.ImageCapabilities.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
             If capState <> "" Then      ' We filter them again based on the state
                 finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.State = expectedCapabilityState)
             End If
@@ -517,7 +527,11 @@ Public Class GetCapabilityInfoDlg
             End If
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            ListView1.Items.AddRange(InstalledCapabilityInfo.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
+            If MainForm.CurrentImage.ImageCapabilities Is Nothing OrElse MainForm.CurrentImage.ImageCapabilities.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities_Backup.Select(Function(capability) New ListViewItem(New String() {capability.CapabilityName, Casters.CastDismPackageState(capability.CapabilityState, True)})).ToArray())
+            Else
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
+            End If
         End If
     End Sub
 

@@ -508,9 +508,13 @@ Public Class GetDriverInfo
         SearchedDriverList.Clear()
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting installed drivers...")
-        If InstalledDriverInfo.Count > 0 Then
-            InstalledDriverList.AddRange(InstalledDriverInfo.Select(Function(driver) driver))
-            ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+        If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
+            SearchPanel.Visible = False
+        Else
+            InstalledDriverList.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) driver))
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            SearchPanel.Visible = True
         End If
 
         ' Detect if the "Detect all drivers" option is checked and act accordingly
@@ -1300,6 +1304,7 @@ Public Class GetDriverInfo
 
     Sub SearchDrivers(sQuery As String, Optional driverSearchMode As SearchMode = SearchMode.None)
         DynaLog.LogMessage("Search query: " & sQuery)
+        If InstalledDriverInfo Is Nothing Then Exit Sub
         If InstalledDriverInfo.Count > 0 Then
             Dim FilteredDrivers As IEnumerable(Of DismDriverPackage)
             Select Case driverSearchMode
@@ -1350,7 +1355,12 @@ Public Class GetDriverInfo
             SearchDrivers(SearchBox1.Text, modeToUse)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
+            Else
+                InstalledDriverList.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) driver))
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            End If
         End If
     End Sub
 
