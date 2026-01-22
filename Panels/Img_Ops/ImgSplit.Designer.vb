@@ -198,6 +198,8 @@ Partial Class ImgSplit
         '
         'Label5
         '
+        Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(9, 135)
         Me.Label5.Name = "Label5"

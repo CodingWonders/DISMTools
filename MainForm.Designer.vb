@@ -2162,7 +2162,7 @@ Partial Class MainForm
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Date"
-        Me.ColumnHeader2.Width = 254
+        Me.ColumnHeader2.Width = 320
         '
         'FeedErrorPanel
         '

@@ -47,12 +47,14 @@ Partial Class AddPackageDlg
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ScanBW = New System.ComponentModel.BackgroundWorker()
         Me.Button4 = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -126,8 +128,8 @@ Partial Class AddPackageDlg
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Panel1)
         Me.GroupBox1.Controls.Add(Me.Label4)
-        Me.GroupBox1.Controls.Add(Me.CheckedListBox1)
         Me.GroupBox1.Controls.Add(Me.TableLayoutPanel2)
         Me.GroupBox1.Controls.Add(Me.RadioButton2)
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
@@ -144,7 +146,8 @@ Partial Class AddPackageDlg
         '
         'Label4
         '
-        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Enabled = False
         Me.Label4.Location = New System.Drawing.Point(45, 294)
@@ -155,17 +158,15 @@ Partial Class AddPackageDlg
         '
         'CheckedListBox1
         '
-        Me.CheckedListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CheckedListBox1.Enabled = False
         Me.CheckedListBox1.FormattingEnabled = True
         Me.CheckedListBox1.HorizontalScrollbar = True
         Me.CheckedListBox1.IntegralHeight = False
-        Me.CheckedListBox1.Location = New System.Drawing.Point(48, 120)
+        Me.CheckedListBox1.Location = New System.Drawing.Point(0, 0)
         Me.CheckedListBox1.Name = "CheckedListBox1"
         Me.CheckedListBox1.ScrollAlwaysVisible = True
-        Me.CheckedListBox1.Size = New System.Drawing.Size(706, 160)
+        Me.CheckedListBox1.Size = New System.Drawing.Size(706, 164)
         Me.CheckedListBox1.TabIndex = 7
         Me.CheckedListBox1.ThreeDCheckBoxes = True
         '
@@ -324,6 +325,16 @@ Partial Class AddPackageDlg
         Me.Button4.Text = "Add update manifest..."
         Me.Button4.UseVisualStyleBackColor = True
         '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.CheckedListBox1)
+        Me.Panel1.Location = New System.Drawing.Point(48, 119)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(706, 164)
+        Me.Panel1.TabIndex = 9
+        '
         'AddPackageDlg
         '
         Me.AcceptButton = Me.OK_Button
@@ -353,6 +364,7 @@ Partial Class AddPackageDlg
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -381,5 +393,6 @@ Partial Class AddPackageDlg
     Friend WithEvents ScanBW As System.ComponentModel.BackgroundWorker
     Friend WithEvents CheckBox3 As System.Windows.Forms.CheckBox
     Friend WithEvents Button4 As System.Windows.Forms.Button
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
 
 End Class

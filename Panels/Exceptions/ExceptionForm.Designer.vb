@@ -39,6 +39,8 @@ Partial Class ExceptionForm
         '
         'Label1
         '
+        Me.Label1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoEllipsis = True
         Me.Label1.Location = New System.Drawing.Point(51, 13)
         Me.Label1.Name = "Label1"
@@ -84,6 +86,8 @@ Partial Class ExceptionForm
         '
         'Label3
         '
+        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoEllipsis = True
         Me.Label3.Location = New System.Drawing.Point(733, 61)
         Me.Label3.Name = "Label3"
@@ -106,6 +110,8 @@ Partial Class ExceptionForm
         '
         'Label5
         '
+        Me.Label5.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoEllipsis = True
         Me.Label5.Location = New System.Drawing.Point(733, 204)
         Me.Label5.Name = "Label5"
@@ -115,6 +121,8 @@ Partial Class ExceptionForm
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.Location = New System.Drawing.Point(733, 158)

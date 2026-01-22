@@ -186,7 +186,9 @@ Partial Class AddProvAppxPackage
         '
         'Label6
         '
-        Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label6.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.Location = New System.Drawing.Point(0, 26)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(527, 30)
@@ -637,6 +639,7 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Size = New System.Drawing.Size(527, 437)
         Me.FlowLayoutPanel1.TabIndex = 11
+        Me.FlowLayoutPanel1.Visible = False
         Me.FlowLayoutPanel1.WrapContents = False
         '
         'Panel1

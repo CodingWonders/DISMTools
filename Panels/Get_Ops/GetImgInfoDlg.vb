@@ -349,6 +349,8 @@ Public Class GetImgInfoDlg
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         LanguageList.ForeColor = ForeColor
+        SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)

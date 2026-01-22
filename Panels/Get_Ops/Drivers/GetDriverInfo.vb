@@ -499,6 +499,8 @@ Public Class GetDriverInfo
             Text = ""
             Win10Title.Visible = True
         End If
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+        SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Updating items in list...")

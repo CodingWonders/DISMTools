@@ -114,6 +114,7 @@ Partial Class WimScriptEditor
         'SplitContainer1
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
         '

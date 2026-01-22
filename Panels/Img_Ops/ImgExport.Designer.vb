@@ -305,9 +305,7 @@ Partial Class ImgExport
         '
         'ListBox1
         '
-        Me.ListBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox1.FormattingEnabled = True
         Me.ListBox1.IntegralHeight = False
         Me.ListBox1.Location = New System.Drawing.Point(0, 64)

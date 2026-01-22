@@ -270,6 +270,7 @@ Public Class WimScriptEditor
         For Each fntFamily As FontFamily In FontFamily.Families
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         InitScintilla("Consolas", 11)
         FontFamilyTSCB.SelectedItem = "Consolas"
     End Sub

@@ -78,7 +78,7 @@ Partial Class AppInstallerDownloader
         '
         'StatusLbl
         '
-        Me.StatusLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.StatusLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.StatusLbl.AutoEllipsis = True
         Me.StatusLbl.Location = New System.Drawing.Point(52, 199)
@@ -179,6 +179,7 @@ Partial Class AppInstallerDownloader
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
+        Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.ClientSize = New System.Drawing.Size(704, 281)
         Me.ControlBox = False
         Me.Controls.Add(Me.Cancel_Button)

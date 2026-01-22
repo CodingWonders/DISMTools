@@ -99,6 +99,8 @@ Partial Class ServiceManagementForm
         Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.SelectedServicePanel = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Panel4 = New System.Windows.Forms.Panel()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -117,6 +119,8 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.SuspendLayout()
         Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SelectedServicePanel.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        Me.Panel4.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -188,9 +192,9 @@ Partial Class ServiceManagementForm
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.Panel3)
         Me.TabPage1.Controls.Add(Me.ComboBox1)
         Me.TabPage1.Controls.Add(Me.CheckBox1)
-        Me.TabPage1.Controls.Add(Me.TextBox3)
         Me.TabPage1.Controls.Add(Me.Label4)
         Me.TabPage1.Controls.Add(Me.TextBox7)
         Me.TabPage1.Controls.Add(Me.Label8)
@@ -232,10 +236,9 @@ Partial Class ServiceManagementForm
         '
         'TextBox3
         '
-        Me.TextBox3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextBox3.Location = New System.Drawing.Point(224, 68)
+        Me.TextBox3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox3.Location = New System.Drawing.Point(0, 0)
         Me.TextBox3.Multiline = True
         Me.TextBox3.Name = "TextBox3"
         Me.TextBox3.ReadOnly = True
@@ -408,8 +411,8 @@ Partial Class ServiceManagementForm
         '
         'TabPage3
         '
+        Me.TabPage3.Controls.Add(Me.Panel4)
         Me.TabPage3.Controls.Add(Me.GroupBox1)
-        Me.TabPage3.Controls.Add(Me.TextBox8)
         Me.TabPage3.Controls.Add(Me.Label9)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
         Me.TabPage3.Name = "TabPage3"
@@ -542,10 +545,9 @@ Partial Class ServiceManagementForm
         '
         'TextBox8
         '
-        Me.TextBox8.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TextBox8.Location = New System.Drawing.Point(258, 14)
+        Me.TextBox8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TextBox8.Location = New System.Drawing.Point(0, 0)
         Me.TextBox8.Multiline = True
         Me.TextBox8.Name = "TextBox8"
         Me.TextBox8.ReadOnly = True
@@ -853,6 +855,24 @@ Partial Class ServiceManagementForm
         Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
         Me.SelectedServicePanel.TabIndex = 1
         '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Controls.Add(Me.TextBox3)
+        Me.Panel3.Location = New System.Drawing.Point(224, 70)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(992, 53)
+        Me.Panel3.TabIndex = 5
+        '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.TextBox8)
+        Me.Panel4.Location = New System.Drawing.Point(258, 14)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(943, 53)
+        Me.Panel4.TabIndex = 6
+        '
         'ServiceManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -895,6 +915,10 @@ Partial Class ServiceManagementForm
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
         Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.SelectedServicePanel.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -974,4 +998,6 @@ Partial Class ServiceManagementForm
     Friend WithEvents TextBox6 As System.Windows.Forms.TextBox
     Friend WithEvents Label16 As System.Windows.Forms.Label
     Friend WithEvents GetSvchostGroupsBtn As System.Windows.Forms.Button
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
+    Friend WithEvents Panel4 As System.Windows.Forms.Panel
 End Class
