@@ -349,7 +349,9 @@ Public Class GetImgInfoDlg
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         LanguageList.ForeColor = ForeColor
-        SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        If SplitContainer2.SplitterDistance = 440 Then
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
 
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
