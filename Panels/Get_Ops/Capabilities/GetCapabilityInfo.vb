@@ -187,7 +187,9 @@ Public Class GetCapabilityInfoDlg
             Text = ""
             Win10Title.Visible = True
         End If
-        SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        If SplitContainer2.SplitterDistance = 440 Then
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ' Populate feature information list

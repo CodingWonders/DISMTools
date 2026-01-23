@@ -12,6 +12,7 @@ Imports System.ServiceModel.Syndication
 Imports DISMTools.Utilities
 Imports DISMTools.Elements
 Imports DISMTools.Elements.Contemporaneus
+Imports System.ComponentModel
 
 Public Class MainForm
 
@@ -164,6 +165,7 @@ Public Class MainForm
 
     Public CompletedTasks(4) As Boolean
     Public PendingTasks(4) As Boolean
+    Dim FailedBGProcResultDic As New Dictionary(Of String, Exception)
 
     Dim HasRemounted As Boolean
 
@@ -1833,6 +1835,7 @@ Public Class MainForm
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
         DynaLog.LogMessage("Preparing to run background processes...")
+        FailedBGProcResultDic.Clear()
         If Not IsImageMounted Then
             Button26.Enabled = True
             Button27.Enabled = False
@@ -3231,84 +3234,19 @@ Public Class MainForm
         End Try
     End Function
 
-    Public Event APIExceptionThrown(errorEx As Exception, windowTitle As String)
+    Public Event APIExceptionThrown(errorEx As Exception, bgProcTitle As String)
 
-    Private Sub APIExceptionHandler(errorEx As Exception, windowTitle As String) Handles Me.APIExceptionThrown
+    Private Sub APIExceptionHandler(errorEx As Exception, bgProcTitle As String) Handles Me.APIExceptionThrown
         DynaLog.LogMessage("An error occurred with the DISM API. Error message: " & errorEx.Message)
-        MsgBox(errorEx.Message, vbOKOnly + vbExclamation, windowTitle)
+        FailedBGProcResultDic.Add(bgProcTitle, errorEx)
     End Sub
 
-    Sub ThrowAPIException(APIException As DismException)
-        Dim errorMsg As String = ""
-        Dim wndTitle As String = ""
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        wndTitle = "API error"
-                        errorMsg = "An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
-                                   APIException.Message & CrLf & CrLf &
-                                   "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
-                                   "Error code: " & Hex(APIException.HResult)
-                    Case "ESN"
-                        wndTitle = "Error de la API"
-                        errorMsg = "Se produjo un error al obtener información con la API de DISM. Considere leer el mensaje de abajo para más información:" & CrLf & CrLf &
-                                   APIException.Message & CrLf & CrLf &
-                                   "Esto no indica un error del programa, pero implica que no podrá realizar algunas operaciones a menos que el error sea resuelto." & CrLf & CrLf &
-                                   "Código de error: " & Hex(APIException.HResult)
-                    Case "FRA"
-                        wndTitle = "Erreur API"
-                        errorMsg = "Une erreur s'est produite lors de l'obtention d'informations avec l'API DISM. Veuillez lire le message ci-dessous pour plus d'informations :" & CrLf & CrLf &
-                                   APIException.Message & CrLf & CrLf &
-                                   "Ceci n'indique pas une erreur de programme, mais implique que vous ne pourrez pas effectuer certaines opérations tant que le problème n'aura pas été résolu." & CrLf & CrLf &
-                                   "Code d'erreur : " & Hex(APIException.HResult)
-                    Case "PTB"
-                        wndTitle = "Erro da API"
-                        errorMsg = "Ocorreu um erro ao obter informações com a API DISM. Considere ler a mensagem abaixo para obter mais informações:" & CrLf & CrLf &
-                                   APIException.Message & CrLf & CrLf &
-                                   "Isto não indica um erro de programa, mas implica que não poderá efetuar algumas operações a menos que o problema seja resolvido." & CrLf & CrLf &
-                                   "Código de erro: " & Hex(APIException.HResult)
-                    Case "ITA"
-                        wndTitle = "Errore API"
-                        errorMsg = "Si è verificato un errore durante la ricerca di informazioni con l'API DISM. Per ulteriori informazioni ti consigliamo di leggere il messaggio sottostante:" & CrLf & CrLf &
-                                   APIException.Message & CrLf & CrLf &
-                                   "Questo non indica un errore del programma, ma implica che non sarà possibile eseguire alcune operazioni a meno che il problema non venga risolto." & CrLf & CrLf &
-                                   "Codice di errore: " & Hex(APIException.HResult)
-                End Select
-            Case 1
-                wndTitle = "API error"
-                errorMsg = "An error occurred while getting information with the DISM API. Consider reading the message below for more information:" & CrLf & CrLf &
-                           APIException.Message & CrLf & CrLf &
-                           "This does not indicate a program error, but it implies that you will not be able to perform some operations unless the issue is resolved." & CrLf & CrLf &
-                           "Error code: " & Hex(APIException.HResult)
-            Case 2
-                wndTitle = "Error de la API"
-                errorMsg = "Se produjo un error al obtener información con la API de DISM. Considere leer el mensaje de abajo para más información:" & CrLf & CrLf &
-                           APIException.Message & CrLf & CrLf &
-                           "Esto no indica un error del programa, pero implica que no podrá realizar algunas operaciones a menos que el error sea resuelto." & CrLf & CrLf &
-                           "Código de error: " & Hex(APIException.HResult)
-            Case 3
-                wndTitle = "Erreur API"
-                errorMsg = "Une erreur s'est produite lors de l'obtention d'informations avec l'API DISM. Veuillez lire le message ci-dessous pour plus d'informations :" & CrLf & CrLf &
-                           APIException.Message & CrLf & CrLf &
-                           "Ceci n'indique pas une erreur de programme, mais implique que vous ne pourrez pas effectuer certaines opérations tant que le problème n'aura pas été résolu." & CrLf & CrLf &
-                           "Code d'erreur : " & Hex(APIException.HResult)
-            Case 4
-                wndTitle = "Erro da API"
-                errorMsg = "Ocorreu um erro ao obter informações com a API DISM. Considere ler a mensagem abaixo para obter mais informações:" & CrLf & CrLf &
-                           APIException.Message & CrLf & CrLf &
-                           "Isto não indica um erro de programa, mas implica que não poderá efetuar algumas operações a menos que o problema seja resolvido." & CrLf & CrLf &
-                           "Código de erro: " & Hex(APIException.HResult)
-            Case 5
-                wndTitle = "Errore API"
-                errorMsg = "Si è verificato un errore durante la ricerca di informazioni con l'API DISM. Per ulteriori informazioni ti consigliamo di leggere il messaggio sottostante :" & CrLf & CrLf &
-                           APIException.Message & CrLf & CrLf &
-                           "Questo non indica un errore del programma, ma implica che non sarà possibile eseguire alcune operazioni a meno che il problema non venga risolto." & CrLf & CrLf &
-                           "Codice di errore: " & Hex(APIException.HResult)
-        End Select
-        Dim errorEx As New Exception(errorMsg, APIException)
+    Sub ThrowAPIException(ProcessTitle As String, Optional APIException As DismException = Nothing, Optional GeneralException As Exception = Nothing)
+        Dim errorEx As Exception = Nothing
+        If APIException IsNot Nothing Then errorEx = New Exception("DISM API Task Error", APIException)
+        If GeneralException IsNot Nothing Then errorEx = New Exception("DISM API Task Error", GeneralException)
         DynaLog.LogMessage("Raising awareness to the event handler")
-        RaiseEvent APIExceptionThrown(errorEx, wndTitle)
+        RaiseEvent APIExceptionThrown(errorEx, ProcessTitle)
     End Sub
 
     ''' <summary>
@@ -3340,10 +3278,10 @@ Public Class MainForm
             End Using
         Catch ex As Exception
             DynaLog.LogMessage("Could not get package information with DISM API. Error: " & ex.Message)
+            ThrowAPIException("Package Information", ex)
             DynaLog.LogMessage("Getting package information with DISM executable...")
             If Not GetImagePackagesWithExecutable(OnlineMode) Then
                 DynaLog.LogMessage("Package information could not be obtained with DISM executable.")
-                ThrowAPIException(ex)
             End If
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -3372,6 +3310,7 @@ Public Class MainForm
             Dim output As String = pkgProc.StandardOutput.ReadToEnd()
             pkgProc.WaitForExit()
             If pkgProc.ExitCode <> 0 Then
+                ThrowAPIException("Package Information (DISM Executable)", GeneralException:=New Win32Exception(pkgProc.ExitCode))
                 Return False
             End If
 
@@ -3440,9 +3379,9 @@ Public Class MainForm
         Catch ex As Exception
             DynaLog.LogMessage("Could not get feature information. Error: " & ex.Message)
             DynaLog.LogMessage("Getting feature information with DISM executable...")
+            ThrowAPIException("Feature Information", ex)
             If Not GetImageFeaturesWithExecutable(OnlineMode) Then
                 DynaLog.LogMessage("Feature information could not be obtained with DISM executable.")
-                ThrowAPIException(ex)
             End If
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -3470,7 +3409,10 @@ Public Class MainForm
             featProc.Start()
             Dim output As String = featProc.StandardOutput.ReadToEnd()
             featProc.WaitForExit()
-            If featProc.ExitCode <> 0 Then Return False
+            If featProc.ExitCode <> 0 Then
+                ThrowAPIException("Feature Information (DISM Executable)", GeneralException:=New Win32Exception(featProc.ExitCode))
+                Return False
+            End If
 
             ' Parse the output
             Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Feature Name : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
@@ -3570,9 +3512,9 @@ Public Class MainForm
                         End If
                     End If
                 End Using
-            Catch ex As Exception
+            Catch ex As DismException
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
-                ThrowAPIException(ex)
+                ThrowAPIException("AppX Package Information", ex)
             Finally
                 DynaLog.LogMessage("Shutting down API...")
                 DismApi.Shutdown()
@@ -3649,6 +3591,8 @@ Public Class MainForm
                         appxPackageNameString = ""
                     End If
                 Next
+            Else
+                ThrowAPIException("AppX Package Information", GeneralException:=New Win32Exception(appxProc.ExitCode))
             End If
         End Using
         If OnlineMode And ExtAppxGetter Then
@@ -3728,9 +3672,9 @@ Public Class MainForm
         Catch ex As Exception
             DynaLog.LogMessage("Could not get capability information. Error: " & ex.Message)
             DynaLog.LogMessage("Getting capability information with DISM executable...")
+            ThrowAPIException("Capability Information", ex)
             If Not GetImageCapabilitiesWithExecutable(OnlineMode) Then
                 DynaLog.LogMessage("Capability information could not be obtained with DISM executable.")
-                ThrowAPIException(ex)
             End If
         Finally
             DynaLog.LogMessage("Shutting down API...")
@@ -3759,7 +3703,10 @@ Public Class MainForm
             Dim output As String = capProc.StandardOutput.ReadToEnd()
             capProc.WaitForExit()
 
-            If capProc.ExitCode <> 0 Then Return False
+            If capProc.ExitCode <> 0 Then
+                ThrowAPIException("Capability Information (DISM Executable)", GeneralException:=New Win32Exception(capProc.ExitCode))
+                Return False
+            End If
 
             ' Parse the output
             Dim outputLines As String() = output.Split({vbCrLf, vbLf}, StringSplitOptions.RemoveEmptyEntries).SkipWhile(Function(line) Not line.StartsWith("Capability Identity : ", StringComparison.InvariantCultureIgnoreCase)).ToArray()
@@ -3802,9 +3749,9 @@ Public Class MainForm
                         Exit Sub
                     End If
                 End Using
-            Catch ex As Exception
+            Catch ex As DismException
                 DynaLog.LogMessage("Could not get package information. Error: " & ex.Message)
-                ThrowAPIException(ex)
+                ThrowAPIException("Driver Information", ex)
             Finally
                 DynaLog.LogMessage("Shutting down API...")
                 DismApi.Shutdown()
@@ -3884,6 +3831,8 @@ Public Class MainForm
                         drvVersionString = ""
                     End If
                 Next
+            Else
+                ThrowAPIException("Driver Information (DISM Executable)", GeneralException:=New Win32Exception(DriverEnumerationProc.ExitCode))
             End If
         End Using
         DynaLog.LogMessage("Signaling completion of task...")
@@ -11585,6 +11534,10 @@ Public Class MainForm
 
     Private Sub ImgBW_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles ImgBW.RunWorkerCompleted
         DynaLog.LogMessage("Background processes have finished")
+        If FailedBGProcResultDic.Count > 0 Then
+            DynaLog.LogMessage("One or more background processes has failed.")
+            MessageBox.Show("One or more errors happened while getting image information.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
         CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
         BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
         If Not MountedImageDetectorBW.IsBusy Then Call MountedImageDetectorBW.RunWorkerAsync()

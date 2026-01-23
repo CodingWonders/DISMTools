@@ -7331,7 +7331,9 @@ Public Class ProgressPanel
         Language = MainForm.Language
         AllDrivers = MainForm.AllDrivers
         BodyPanel.BorderStyle = BorderStyle.None
-        ImgVersion = MainForm.CurrentImage.ImageVersion
+        If MainForm.CurrentImage IsNot Nothing Then
+            ImgVersion = MainForm.CurrentImage.ImageVersion
+        End If
         ' Determine program colors
         BodyPanel.BackColor = CurrentTheme.BackgroundColor
         BodyPanel.ForeColor = CurrentTheme.ForegroundColor

@@ -158,6 +158,8 @@ Partial Class ImgMount
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Location = New System.Drawing.Point(16, 58)
         Me.Label4.Name = "Label4"
@@ -197,6 +199,8 @@ Partial Class ImgMount
         '
         'Label3
         '
+        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.Location = New System.Drawing.Point(13, 28)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(131, 13)
@@ -235,6 +239,8 @@ Partial Class ImgMount
         '
         'Label6
         '
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.Location = New System.Drawing.Point(13, 28)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(131, 13)
@@ -330,6 +336,8 @@ Partial Class ImgMount
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.Location = New System.Drawing.Point(13, 27)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(131, 13)

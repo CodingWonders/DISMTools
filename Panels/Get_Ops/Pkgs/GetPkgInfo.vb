@@ -657,8 +657,10 @@ Public Class GetPkgInfoDlg
             Text = ""
             Win10Title.Visible = True
         End If
-        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
-        SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        If SplitContainer1.SplitterDistance = 440 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
@@ -669,7 +671,7 @@ Public Class GetPkgInfoDlg
         If MainForm.CurrentImage.ImagePackages Is Nothing OrElse MainForm.CurrentImage.ImagePackages.Count = 0 Then
             ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages_Backup.Select(Function(package) package.PackageName).ToArray())
         Else
-            ListBox2.Items.Add(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
+            ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
         End If
         NoPkgPanel.Visible = True
         PackageFileInfoPanel.Visible = False
