@@ -2152,7 +2152,7 @@ Public Class MainForm
                 End If
                 If imgEdition Is Nothing Then imgEdition = ""
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-                    If Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
+                    If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
                         DynaLog.LogMessage("Windows 8 or later")
                         pbOpNums += 1
                         Select Case Language
@@ -2193,8 +2193,8 @@ Public Class MainForm
                 Else
                     DynaLog.LogMessage("Not Windows 8 or later")
                 End If
-                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    If Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not CurrentImage.ImageInstallationType.Contains("Nano") Then
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Then
+                    If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not CurrentImage.ImageInstallationType.Contains("Nano") Then
                         DynaLog.LogMessage("Windows 10 or later")
                         pbOpNums += 1
                         Select Case Language
@@ -2462,15 +2462,15 @@ Public Class MainForm
             DynaLog.LogMessage("Determining whether or not AppX package information processes remain. Do them if they do remain...")
             If PendingTasks(2) Then
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
-                    If Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
+                    If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
                         GetImageAppxPackages(OnlineMode)
                     End If
                 End If
             End If
             DynaLog.LogMessage("Determining whether or not capability information processes remain. Do them if they do remain...")
             If PendingTasks(3) Then
-                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
-                    If Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And Not CurrentImage.ImageInstallationType.Contains("Nano") Then
+                If IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") And Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Then
+                    If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not CurrentImage.ImageInstallationType.Contains("Nano") Then
                         GetImageCapabilities(OnlineMode)
                     End If
                 End If
@@ -2694,6 +2694,32 @@ Public Class MainForm
         RegistryHelper.UnloadRegistryHive("HKLM\IMG_SOFT")
     End Sub
 
+    Private Function IsWinPeInDisguise(MountDirectory As String) As Boolean
+        DynaLog.LogMessage("Checking if mounted Windows image is WinPE in disguise...")
+        DynaLog.LogMessage("Mount directory: " & MountDirectory)
+        If Not Directory.Exists(MountDirectory) Then Return False
+
+        Dim disguised As Boolean = False
+
+        ' Windows PE images in disguise, while they modify the EditionID, they don't seem to modify the registry keys. So, by just
+        ' checking for a WinPE key, we can determine this.
+        Dim softwareHivePath As String = Path.Combine(MountDirectory, "Windows", "system32", "config", "SOFTWARE")
+        If Not File.Exists(softwareHivePath) Then Return False
+
+        If Not RegistryHelper.LoadRegistryHive(softwareHivePath, "HKLM\zSOFT") = 0 Then Return False
+        Try
+            Dim WinPeSoftwareKey As RegistryKey = Registry.LocalMachine.OpenSubKey("zSOFT\Microsoft\Windows NT\CurrentVersion")
+            disguised = WinPeSoftwareKey.GetSubKeyNames().Any(Function(key) key.Equals("WinPE", StringComparison.OrdinalIgnoreCase))
+            WinPeSoftwareKey.Close()
+        Catch ex As Exception
+            ' ignore
+        Finally
+            RegistryHelper.UnloadRegistryHive("HKLM\zSOFT")
+        End Try
+
+        Return disguised
+    End Function
+
     ''' <summary>
     ''' Gets advanced image information, such as number of files and directories, image name, and more
     ''' </summary>
@@ -2766,6 +2792,15 @@ Public Class MainForm
                         CurrentImage.ImageSpBuild = ImageInformation.ProductVersion.Revision
                         CurrentImage.ImageSpLevel = ImageInformation.SpLevel
                         CurrentImage.ImageEditionId = ImageInformation.EditionId
+
+                        ' HACK: The edition ID might not be the correct one in an image. There are certain
+                        ' WinPE images (like Sergei Strelec WinPE) that use a different EditionID. Images such
+                        ' as Sergei Strelec WinPE are not recommended to be used in this program because they are
+                        ' heavily modified, to the point even DISM can't service them. Detect these WinPE images in disguise.
+                        If ImageInformation.EditionId <> "WindowsPE" Then
+                            CurrentImage.WinPeInDisguise = IsWinPeInDisguise(MountDir)
+                        End If
+
                         CurrentImage.ImageInstallationType = ImageInformation.InstallationType
                         CurrentImage.ImageProductType = ImageInformation.ProductType
                         CurrentImage.ImageProductSuite = ImageInformation.ProductSuite
@@ -2991,13 +3026,13 @@ Public Class MainForm
                 End Select
 
                 ' Disable Windows PE stuff when not working with a Windows PE image
-                WindowsPEServicingToolStripMenuItem.Enabled = CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
-                GroupBox10.Enabled = CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase)
+                WindowsPEServicingToolStripMenuItem.Enabled = CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise
+                GroupBox10.Enabled = CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise
                 ' Disable AppX and capability stuff when working with a Windows PE image
-                AppPackagesToolStripMenuItem.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-                CapabilitiesToolStripMenuItem.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-                GroupBox7.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
-                GroupBox8.Enabled = (Not CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                AppPackagesToolStripMenuItem.Enabled = (Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                CapabilitiesToolStripMenuItem.Enabled = (Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                GroupBox7.Enabled = (Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
+                GroupBox8.Enabled = (Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe"))
 
                 ' Next, detect the DISM version, so that we can determine which things are applicable
                 DynaLog.LogMessage("Comparing DISM versions...")
@@ -13128,7 +13163,7 @@ Public Class MainForm
 
     Private Sub GetCapabilities_Click(sender As Object, e As EventArgs) Handles GetCapabilities.Click
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
@@ -13235,7 +13270,7 @@ Public Class MainForm
 
     Private Sub GetProvisionedAppxPackages_Click(sender As Object, e As EventArgs) Handles GetProvisionedAppxPackages.Click
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
@@ -13874,7 +13909,7 @@ Public Class MainForm
 
     Private Sub Button45_Click(sender As Object, e As EventArgs) Handles Button45.Click
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
@@ -13969,7 +14004,7 @@ Public Class MainForm
 
     Private Sub Button49_Click(sender As Object, e As EventArgs) Handles Button49.Click
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) Or Not IsWindows10OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case Language
                 Case 0
@@ -15641,7 +15676,7 @@ Public Class MainForm
                 Case 5
                     msg = "L'edizione attuale è " & Quote & CurrentImage.ImageEditionId & Quote & CrLf
             End Select
-            If CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            If CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise Then
                 DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
                 Select Case Language
                     Case 0
@@ -15778,7 +15813,7 @@ Public Class MainForm
         Catch ex As Exception
             DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
             msgSuccess = False
-            If imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            If CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise Then
                 DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
                 Select Case Language
                     Case 0
