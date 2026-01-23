@@ -14316,7 +14316,7 @@ Public Class MainForm
                 TextBox1.Text = FeedEx.ToString() & " - " & FeedEx.Message
             End If
         Catch ex As Exception
-            DynaLog.LogMessage("Could not get feed news. Error message: " & FeedEx.Message)
+            DynaLog.LogMessage("Could not get feed news. Error message: " & ex.Message)
             FeedsPanel.Visible = False
             FeedErrorPanel.Visible = True
             TextBox1.Text = ex.ToString() & " - " & ex.Message
