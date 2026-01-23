@@ -236,7 +236,7 @@ Public Class MainForm
 
     ' Contemporaneus Preview
     Public MountedImageList As New List(Of WindowsImage)
-    Public CurrentImage As WindowsImage
+    Public CurrentImage As New WindowsImage()
 
     Sub GetArguments()
         Dim args() As String = Environment.GetCommandLineArgs()
@@ -611,7 +611,7 @@ Public Class MainForm
                            "Peter William Wagner (" & GetCopyrightTimespan(2017, 2024) & ")")
         DynaLog.LogMessage("- INI File Parser: (c) " & GetCopyrightTimespan(2008, 2008) & " Ricardo Amores Hernández")
         DynaLog.BeginLogging()
-        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 --------")
+        DynaLog.LogMessage("-------- Powered by CONTEMPOR/\NE\/S Wave 1 PREVIEW 2 --------")
     End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1013,7 +1013,7 @@ Public Class MainForm
 
         PxeHelperServersTSMI.Enabled = InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase)
 
-        ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer is we don't correct this.
+        ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
     End Sub
 
