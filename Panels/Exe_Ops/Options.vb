@@ -1698,6 +1698,10 @@ Public Class Options
         End If
         ChangeSections(SectionNum)
         FlowLayoutPanel1.BackColor = Win10Title.BackColor
+
+        If SplitContainer1.SplitterDistance = 256 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+        End If
     End Sub
 
     Sub GetSystemFonts()
