@@ -221,6 +221,8 @@ Public Class MainForm
 
     Public NoNTSamMappings As Boolean = False       ' Whether to map AppX pckgdep SIDs with SIDs from system's SAM file
 
+    Public AppxDisplayNameFormatOnRemoval As Integer = 1        ' The format to use when showing disply names in the appx removal dialog. 0: display name only; 1: disp name + friendly disp name; 2: friendly disp name only
+
     Public IsFirstTime As Boolean = False           ' Whether the user has launched this software for the first time
 
     ' Preinstallation Environment Helper Settings
@@ -1347,6 +1349,7 @@ Public Class MainForm
                 PEHelper_UnattendedFile = ImgOpKey.GetValue("PEHelper.UnattendedFile").ToString().Replace(Quote, "").Trim()
                 PEHelper_CopyToVentoy = (CInt(ImgOpKey.GetValue("PEHelper.CopyToVentoy")) = 1)
                 PEHelper_Use2023EFI = (CInt(ImgOpKey.GetValue("PEHelper.Use2023EFI")) = 1)
+                AppxDisplayNameFormatOnRemoval = CInt(ImgOpKey.GetValue("AppxRemovalDisplayNameFormat"))
                 ImgOpKey.Close()
                 Dim ScrDirKey As RegistryKey = Key.OpenSubKey("ScratchDir")
                 UseScratch = (CInt(ScrDirKey.GetValue("UseScratch")) = 1)
@@ -1496,6 +1499,8 @@ Public Class MainForm
                         If StartPosition <> FormStartPosition.CenterScreen Then Top = CInt(line.Replace("WndTop=", "").Trim())
                     ElseIf line.StartsWith("EngineName=", StringComparison.OrdinalIgnoreCase) Then
                         SearchEngineName = line.Replace("EngineName=", "").Trim().Replace(Quote, "")
+                    ElseIf line.StartsWith("AppxRemovalDisplayNameFormat=", StringComparison.OrdinalIgnoreCase) Then
+                        AppxDisplayNameFormatOnRemoval = CInt(line.Replace("AppxRemovalDisplayNameFormat=", "").Trim())
                     End If
                 Next
                 ' Apply program colors immediately
@@ -1756,6 +1761,9 @@ Public Class MainForm
                 End Try
             End If
         End If
+        If AppxDisplayNameFormatOnRemoval < 0 OrElse AppxDisplayNameFormatOnRemoval > 2 Then
+            AppxDisplayNameFormatOnRemoval = 1
+        End If
         If isExeProblematic Or isLogFontProblematic Or isLogFileProblematic Or isScratchDirProblematic Then
             InvalidSettingsTSMI.Visible = True
         End If
@@ -1793,6 +1801,7 @@ Public Class MainForm
                            "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
                            "NoRestart                  =    " & SysNoRestart & CrLf &
+                           "AppxRemovalDisplayNameFrmt =    " & AppxDisplayNameFormatOnRemoval & CrLf &
                            "UseScratch                 =    " & UseScratch & CrLf &
                            "AutoScratch                =    " & AutoScrDir & CrLf &
                            "ScratchDirLocation         =    " & Quote & ScratchDir & Quote & CrLf &
@@ -3498,30 +3507,13 @@ Public Class MainForm
                     Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
                     AppxPackageInfoList = AppxPackageCollection
                     DynaLog.LogMessage("Total amount of AppX packages obtained: " & AppxPackageCollection.Count & ". Architectures will be parsed without logging.")
-                    If Not OnlineMode Then
-                        If CurrentImage IsNot Nothing Then CurrentImage.ImageAppxPackages = AppxPackageCollection
-                        If ImgBW.CancellationPending Then
-                            DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
-                            If session IsNot Nothing Then DismApi.CloseSession(session)
-                            CompletedTasks(2) = False
-                            PendingTasks(2) = True
-                            Exit Sub
-                        End If
-                    Else
-                        For Each AppxPackage As DismAppxPackage In AppxPackageCollection
-                            If ImgBW.CancellationPending Then
-                                DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
-                                If session IsNot Nothing Then DismApi.CloseSession(session)
-                                CompletedTasks(2) = False
-                                PendingTasks(2) = True
-                                Exit Sub
-                            End If
-                            imgAppxArchitectureList.Add(Casters.CastDismArchitecture(AppxPackage.Architecture, False))
-                            imgAppxDisplayNameList.Add(AppxPackage.DisplayName)
-                            imgAppxPackageNameList.Add(AppxPackage.PackageName)
-                            imgAppxResourceIdList.Add(AppxPackage.ResourceId)
-                            imgAppxVersionList.Add(AppxPackage.Version.ToString())
-                        Next
+                    If CurrentImage IsNot Nothing Then CurrentImage.ImageAppxPackages = AppxPackageCollection
+                    If ImgBW.CancellationPending Then
+                        DynaLog.LogMessage("The user is cancelling these processes. Exiting...")
+                        If session IsNot Nothing Then DismApi.CloseSession(session)
+                        CompletedTasks(2) = False
+                        PendingTasks(2) = True
+                        Exit Sub
                     End If
                     If OnlineMode And ExtAppxGetter Then
                         DynaLog.LogMessage("Calling helper script...")
@@ -3941,6 +3933,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.UnattendedFile=" & Quote & Quote)
         DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.CopyToVentoy=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AppxRemovalDisplayNameFormat=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("UseScratch=0")
         DTSettingForm.RichTextBox2.AppendText(CrLf & "AutoScratch=1")
@@ -4022,6 +4015,7 @@ Public Class MainForm
         ImgOpKey.SetValue("PEHelper.UnattendedFile", "", RegistryValueKind.String)
         ImgOpKey.SetValue("PEHelper.CopyToVentoy", 0, RegistryValueKind.DWord)
         ImgOpKey.SetValue("PEHelper.Use2023EFI", 0, RegistryValueKind.DWord)
+        ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", 1, RegistryValueKind.DWord)
         ImgOpKey.Close()
         Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")
         ScrDirKey.SetValue("UseScratch", 0, RegistryValueKind.DWord)
@@ -4196,6 +4190,7 @@ Public Class MainForm
                 Else
                     DTSettingForm.RichTextBox2.AppendText(CrLf & "PEHelper.Use2023EFI=0")
                 End If
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AppxRemovalDisplayNameFormat=" & AppxDisplayNameFormatOnRemoval)
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[ScratchDir]" & CrLf)
                 If UseScratch Then
                     DTSettingForm.RichTextBox2.AppendText("UseScratch=1")
@@ -4346,6 +4341,7 @@ Public Class MainForm
                     ImgOpKey.SetValue("PEHelper.UnattendedFile", PEHelper_UnattendedFile, RegistryValueKind.String)
                     ImgOpKey.SetValue("PEHelper.CopyToVentoy", PEHelper_CopyToVentoy, RegistryValueKind.DWord)
                     ImgOpKey.SetValue("PEHelper.Use2023EFI", PEHelper_Use2023EFI, RegistryValueKind.DWord)
+                    ImgOpKey.SetValue("AppxRemovalDisplayNameFormat", AppxDisplayNameFormatOnRemoval, RegistryValueKind.DWord)
                     ImgOpKey.Close()
                     DynaLog.LogMessage("Configuring scratch directory settings...")
                     Dim ScrDirKey As RegistryKey = Key.CreateSubKey("ScratchDir")

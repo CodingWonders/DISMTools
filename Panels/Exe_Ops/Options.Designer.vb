@@ -246,6 +246,15 @@ Partial Class Options
         Me.Label60 = New System.Windows.Forms.Label()
         Me.CheckBox22 = New System.Windows.Forms.CheckBox()
         Me.EditorOFD = New System.Windows.Forms.OpenFileDialog()
+        Me.Label70 = New System.Windows.Forms.Label()
+        Me.ComboBox8 = New System.Windows.Forms.ComboBox()
+        Me.Label71 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label72 = New System.Windows.Forms.Label()
+        Me.Label73 = New System.Windows.Forms.Label()
+        Me.Label74 = New System.Windows.Forms.Label()
+        Me.Label75 = New System.Windows.Forms.Label()
+        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -341,6 +350,7 @@ Partial Class Options
         Me.Options_Shutdown.SuspendLayout()
         Me.FlowLayoutPanel12.SuspendLayout()
         Me.Panel23.SuspendLayout()
+        Me.TableLayoutPanel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -1914,6 +1924,11 @@ Partial Class Options
         '
         'Panel6
         '
+        Me.Panel6.Controls.Add(Me.LinkLabel4)
+        Me.Panel6.Controls.Add(Me.TableLayoutPanel3)
+        Me.Panel6.Controls.Add(Me.ComboBox8)
+        Me.Panel6.Controls.Add(Me.Label71)
+        Me.Panel6.Controls.Add(Me.Label70)
         Me.Panel6.Controls.Add(Me.CheckBox2)
         Me.Panel6.Controls.Add(Me.Label32)
         Me.Panel6.Controls.Add(Me.Label19)
@@ -1923,7 +1938,7 @@ Partial Class Options
         Me.Panel6.Location = New System.Drawing.Point(0, 0)
         Me.Panel6.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(728, 239)
+        Me.Panel6.Size = New System.Drawing.Size(728, 400)
         Me.Panel6.TabIndex = 0
         '
         'Label32
@@ -1951,7 +1966,7 @@ Partial Class Options
         Me.Panel7.Controls.Add(Me.CheckBox14)
         Me.Panel7.Controls.Add(Me.Label48)
         Me.Panel7.Controls.Add(Me.TableLayoutPanel2)
-        Me.Panel7.Location = New System.Drawing.Point(0, 239)
+        Me.Panel7.Location = New System.Drawing.Point(0, 400)
         Me.Panel7.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel7.Name = "Panel7"
         Me.Panel7.Size = New System.Drawing.Size(728, 172)
@@ -1973,7 +1988,7 @@ Partial Class Options
         Me.Panel21.Controls.Add(Me.Label69)
         Me.Panel21.Controls.Add(Me.Label67)
         Me.Panel21.Controls.Add(Me.Label68)
-        Me.Panel21.Location = New System.Drawing.Point(0, 411)
+        Me.Panel21.Location = New System.Drawing.Point(0, 572)
         Me.Panel21.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel21.Name = "Panel21"
         Me.Panel21.Size = New System.Drawing.Size(728, 172)
@@ -2724,6 +2739,105 @@ Partial Class Options
         Me.EditorOFD.Filter = "Programs|*.exe"
         Me.EditorOFD.Title = "Specify the editor to use"
         '
+        'Label70
+        '
+        Me.Label70.AutoSize = True
+        Me.Label70.Location = New System.Drawing.Point(18, 248)
+        Me.Label70.Name = "Label70"
+        Me.Label70.Size = New System.Drawing.Size(384, 15)
+        Me.Label70.TabIndex = 9
+        Me.Label70.Text = "When removing AppX packages, show display names using this format:"
+        '
+        'ComboBox8
+        '
+        Me.ComboBox8.FormattingEnabled = True
+        Me.ComboBox8.Items.AddRange(New Object() {"Display name only", "Display name, then friendly display name", "Friendly display name only"})
+        Me.ComboBox8.Location = New System.Drawing.Point(20, 271)
+        Me.ComboBox8.Name = "ComboBox8"
+        Me.ComboBox8.Size = New System.Drawing.Size(686, 23)
+        Me.ComboBox8.TabIndex = 10
+        '
+        'Label71
+        '
+        Me.Label71.AutoSize = True
+        Me.Label71.Location = New System.Drawing.Point(17, 303)
+        Me.Label71.Name = "Label71"
+        Me.Label71.Size = New System.Drawing.Size(54, 15)
+        Me.Label71.TabIndex = 9
+        Me.Label71.Text = "Example:"
+        '
+        'TableLayoutPanel3
+        '
+        Me.TableLayoutPanel3.ColumnCount = 2
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19.1919193!))
+        Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80.8080826!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Label72, 0, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label73, 1, 0)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label74, 0, 1)
+        Me.TableLayoutPanel3.Controls.Add(Me.Label75, 1, 1)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(48, 326)
+        Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
+        Me.TableLayoutPanel3.RowCount = 2
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Size = New System.Drawing.Size(632, 40)
+        Me.TableLayoutPanel3.TabIndex = 11
+        '
+        'Label72
+        '
+        Me.Label72.AutoSize = True
+        Me.Label72.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label72.Location = New System.Drawing.Point(3, 0)
+        Me.Label72.Name = "Label72"
+        Me.Label72.Size = New System.Drawing.Size(115, 20)
+        Me.Label72.TabIndex = 9
+        Me.Label72.Text = "Package Name:"
+        Me.Label72.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label73
+        '
+        Me.Label73.AutoSize = True
+        Me.Label73.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label73.Location = New System.Drawing.Point(124, 0)
+        Me.Label73.Name = "Label73"
+        Me.Label73.Size = New System.Drawing.Size(505, 20)
+        Me.Label73.TabIndex = 9
+        Me.Label73.Text = "UbisoftEntertainment.RaymanJungleRun_1.2.0.88_x86__dbgk1hhpxymar"
+        Me.Label73.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label74
+        '
+        Me.Label74.AutoSize = True
+        Me.Label74.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label74.Location = New System.Drawing.Point(3, 20)
+        Me.Label74.Name = "Label74"
+        Me.Label74.Size = New System.Drawing.Size(115, 20)
+        Me.Label74.TabIndex = 9
+        Me.Label74.Text = "Display Name:"
+        Me.Label74.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Label75
+        '
+        Me.Label75.AutoSize = True
+        Me.Label75.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label75.Location = New System.Drawing.Point(124, 20)
+        Me.Label75.Name = "Label75"
+        Me.Label75.Size = New System.Drawing.Size(505, 20)
+        Me.Label75.TabIndex = 9
+        Me.Label75.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'LinkLabel4
+        '
+        Me.LinkLabel4.AutoSize = True
+        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
+        Me.LinkLabel4.LinkColor = System.Drawing.Color.DodgerBlue
+        Me.LinkLabel4.Location = New System.Drawing.Point(18, 378)
+        Me.LinkLabel4.Name = "LinkLabel4"
+        Me.LinkLabel4.Size = New System.Drawing.Size(397, 15)
+        Me.LinkLabel4.TabIndex = 12
+        Me.LinkLabel4.TabStop = True
+        Me.LinkLabel4.Text = "What is the difference between display names and friendly display names?"
+        '
         'Options
         '
         Me.AcceptButton = Me.OK_Button
@@ -2874,6 +2988,8 @@ Partial Class Options
         Me.FlowLayoutPanel12.ResumeLayout(False)
         Me.Panel23.ResumeLayout(False)
         Me.Panel23.PerformLayout()
+        Me.TableLayoutPanel3.ResumeLayout(False)
+        Me.TableLayoutPanel3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3100,5 +3216,14 @@ Partial Class Options
     Friend WithEvents Label69 As System.Windows.Forms.Label
     Friend WithEvents Label67 As System.Windows.Forms.Label
     Friend WithEvents Label68 As System.Windows.Forms.Label
+    Friend WithEvents LinkLabel4 As System.Windows.Forms.LinkLabel
+    Friend WithEvents TableLayoutPanel3 As System.Windows.Forms.TableLayoutPanel
+    Friend WithEvents Label72 As System.Windows.Forms.Label
+    Friend WithEvents Label73 As System.Windows.Forms.Label
+    Friend WithEvents Label74 As System.Windows.Forms.Label
+    Friend WithEvents Label75 As System.Windows.Forms.Label
+    Friend WithEvents ComboBox8 As System.Windows.Forms.ComboBox
+    Friend WithEvents Label71 As System.Windows.Forms.Label
+    Friend WithEvents Label70 As System.Windows.Forms.Label
 
 End Class

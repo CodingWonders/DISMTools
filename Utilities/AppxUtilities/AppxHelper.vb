@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports Microsoft.Win32
 Imports Microsoft.Dism
+Imports DISMTools.Utilities
 
 Module AppxHelper
 
@@ -90,6 +91,8 @@ Module AppxHelper
             DynaLog.LogMessage("AppX Package Root: " & PackageRootPath)
         End If
 
+        Dim pkgName As String = ""
+
         Try
             DynaLog.LogMessage("Copying AppX package manifest to local directory...")
             If File.Exists(CopiedAppxFilePath) Then File.Delete(CopiedAppxFilePath)
@@ -106,11 +109,12 @@ Module AppxHelper
                         For y = x To XmlReaderLines.Count - 1
                             If XmlReaderLines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
                                 DynaLog.LogMessage("Line " & y + 1 & " contains display name information. Grabbing display name...")
-                                Dim pkgName As String = XmlReaderLines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                pkgName = XmlReaderLines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
                                 DynaLog.LogMessage("Deleting AppX manifest...")
                                 File.Delete(CopiedAppxFilePath)
                                 DynaLog.LogMessage("Package display name: " & pkgName)
-                                Return pkgName
+                                DynaLog.LogMessage("Name treatment will be done if needed.")
+                                pkgName = pkgName.Replace("&amp;", "&").Replace("&quot;", ControlChars.Quote).Replace("&gt;", ">").Replace("&lt;", "<")
                             End If
                         Next
                     End If
@@ -138,11 +142,12 @@ Module AppxHelper
                                     For y = x To XmlReaderLines.Count - 1
                                         If XmlReaderLines(y).Replace("<", "").Trim().Replace(">", "").Trim().Replace(" ", "").Trim().StartsWith("DisplayName", StringComparison.OrdinalIgnoreCase) Then
                                             DynaLog.LogMessage("Line " & y + 1 & " contains display name information. Grabbing display name...")
-                                            Dim pkgName As String = XmlReaderLines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
+                                            pkgName = XmlReaderLines(y).Replace("<DisplayName>", "").Trim().Replace("</DisplayName>", "").Trim()
                                             DynaLog.LogMessage("Deleting AppX manifest...")
                                             File.Delete(CopiedAppxFilePath)
                                             DynaLog.LogMessage("Package display name: " & pkgName)
-                                            Return pkgName
+                                            DynaLog.LogMessage("Name treatment will be done if needed.")
+                                            pkgName = pkgName.Replace("&amp;", "&").Replace("&quot;", ControlChars.Quote).Replace("&gt;", ">").Replace("&lt;", "<")
                                         End If
                                     Next
                                 End If
@@ -153,10 +158,15 @@ Module AppxHelper
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not grab AppX package display name. Error message: " & ex.Message)
-            Return ""
         End Try
-        DynaLog.LogMessage("Could not grab AppX package display name because there isn't any")
-        Return ""
+
+        If pkgName.StartsWith("ms-resource:") Then
+            DynaLog.LogMessage("Name starts with resource PRI identifier. Parsing...")
+            pkgName = PriReader.ReadFromPri(String.Format("{0}\{1}", PackageRootPath, PackageName), DisplayName, pkgName)
+            If pkgName = "" Then pkgName = DisplayName
+        End If
+
+        Return pkgName
     End Function
 
     Public Function IsPackageRegistered(MountDirectory As String, imgAppxPackage As Object) As Boolean

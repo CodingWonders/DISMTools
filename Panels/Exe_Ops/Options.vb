@@ -218,6 +218,7 @@ Public Class Options
         MainForm.TimeLabel.Visible = CheckBox21.Checked
 
         MainForm.SearchEngineName = ComboBox7.SelectedItem
+        MainForm.AppxDisplayNameFormatOnRemoval = ComboBox8.SelectedIndex
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1622,6 +1623,8 @@ Public Class Options
         ComboBox6.ForeColor = CurrentTheme.ForegroundColor
         ComboBox7.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox7.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox8.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox8.ForeColor = CurrentTheme.ForegroundColor
         DarkThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
         DarkThemesCB.ForeColor = CurrentTheme.ForegroundColor
         LightThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1827,6 +1830,8 @@ Public Class Options
         CheckBox23.Checked = Not MainForm.NoNTSamMappings
 
         ComboBox7.SelectedItem = MainForm.SearchEngineName
+
+        ComboBox8.SelectedIndex = MainForm.AppxDisplayNameFormatOnRemoval
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -3219,5 +3224,27 @@ Public Class Options
                                                 "DISMTools can also disable certain features based on other parameters of the Windows image you are servicing, such as the edition. This usually happens " &
                                                 "with Windows PE images.", Environment.NewLine)
         ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
+        Dim exampleDisplayName As String = "UbisoftEntertainment.RaymanJungleRun",
+            exampleFriendlyDisplayName As String = "Rayman Jungle Run"
+
+        Select Case ComboBox8.SelectedIndex
+            Case 0
+                Label75.Text = exampleDisplayName
+            Case 1
+                Label75.Text = String.Format("{0} ({1})", exampleDisplayName, exampleFriendlyDisplayName)
+            Case 2
+                Label75.Text = exampleFriendlyDisplayName
+        End Select
+    End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        Dim qhMessage As String = String.Format("AppX package display names are a portion of package family names that don't contain package-specific application information, such as architectures, versions, or the per-publisher hash.{0}{0}" &
+                                                "AppX package {1}friendly display names{1} are the names that you see when looking at them in your Start menu. These are derived from either application identity information in an application's manifest, " &
+                                                "or from embedded strings in an application's resources file (resources.pri).{0}{0}" &
+                                                "If DISMTools can't get the friendly display name, it will display the application's display name.", Environment.NewLine, Quote)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
     End Sub
 End Class

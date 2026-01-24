@@ -165,14 +165,24 @@ Public Class RemProvAppxPackage
         DynaLog.LogMessage("Adding AppX packages to arrays...")
         If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Backup.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageFullName,
-                                                                                                                                              appxPackage.PackageName,
+                                                                                                                                              String.Format("{0}{1}", If(MainForm.AppxDisplayNameFormatOnRemoval < 2, appxPackage.PackageName, ""),
+                                                                                                                                                            If(MainForm.AppxDisplayNameFormatOnRemoval > 0,
+                                                                                                                                                               If(MainForm.AppxDisplayNameFormatOnRemoval < 2,
+                                                                                                                                                                  " (" & AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageFullName, appxPackage.PackageName) & ")",
+                                                                                                                                                                  AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageFullName, appxPackage.PackageName)
+                                                                                                                                               ), "")),
                                                                                                                                               Casters.CastDismArchitecture(appxPackage.PackageArchitecture),
                                                                                                                                               appxPackage.PackageResourceId,
                                                                                                                                               appxPackage.PackageVersion.ToString(),
                                                                                                                                               appxPackage.GetLocalizedRegistrationStatus(MainForm.MountDir, MainForm.Language)})).ToArray())
         Else
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageName,
-                                                                                                                                         appxPackage.DisplayName,
+                                                                                                                                         String.Format("{0}{1}", If(MainForm.AppxDisplayNameFormatOnRemoval < 2, appxPackage.PackageName, ""),
+                                                                                                                                                       If(MainForm.AppxDisplayNameFormatOnRemoval > 0,
+                                                                                                                                                          If(MainForm.AppxDisplayNameFormatOnRemoval < 2,
+                                                                                                                                                             " (" & AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageName, appxPackage.DisplayName) & ")",
+                                                                                                                                                             AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageName, appxPackage.DisplayName)
+                                                                                                                                        ), "")),
                                                                                                                                          Casters.CastDismArchitecture(appxPackage.Architecture),
                                                                                                                                          appxPackage.ResourceId,
                                                                                                                                          appxPackage.Version.ToString(),

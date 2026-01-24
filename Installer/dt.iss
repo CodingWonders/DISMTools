@@ -164,6 +164,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: string; Valu
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.CopyToVentoy"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.Use2023EFI"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "AppxRemovalDisplayNameFormat"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
