@@ -254,6 +254,9 @@ Public Class GetAppxPkgInfoDlg
             ListBox1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Backup.Select(Function(appxPackage) appxPackage.PackageFullName).ToArray())
         End If
         SearchBox1.Text = ""
+
+        AppxHelper.ClearRootPaths()
+        AppxHelper.SetRootPaths(MainForm.MountDir)
     End Sub
 
     Private Sub ListBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListBox1.SelectedIndexChanged
@@ -343,7 +346,7 @@ Public Class GetAppxPkgInfoDlg
             DynaLog.LogMessage("Getting AppX display name (the one you would see if the app is installed)...")
             DynaLog.LogMessage("- Package name: " & Label23.Text)
             DynaLog.LogMessage("- Package display name: " & Label25.Text)
-            Dim packageDispName As String = MainForm.GetPackageDisplayName(Label23.Text, Label25.Text)
+            Dim packageDispName As String = AppxHelper.GetPackageDisplayName(MainForm.MountDir, Label23.Text, Label25.Text)
 
             Dim appDisplayName As String = ""
 
@@ -383,71 +386,50 @@ Public Class GetAppxPkgInfoDlg
 
             DynaLog.LogMessage("Getting registration status of AppX package...")
             ' Get exclusive things that can't be obtained with the DISM API
-            If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text) Then
-                If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label42.Text = "No"
-                                Case "ESN"
-                                    Label42.Text = "No"
-                                Case "FRA"
-                                    Label42.Text = "Non"
-                                Case "PTB", "PTG"
-                                    Label42.Text = "Não"
-                                Case "ITA"
-                                    Label42.Text = "No"
-                            End Select
-                        Case 1
-                            Label42.Text = "No"
-                        Case 2
-                            Label42.Text = "No"
-                        Case 3
-                            Label42.Text = "Non"
-                        Case 4
-                            Label42.Text = "Não"
-                        Case 5
-                            Label42.Text = "No"
-                    End Select
-                Else
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label42.Text = "Yes"
-                                Case "ESN"
-                                    Label42.Text = "Sí"
-                                Case "FRA"
-                                    Label42.Text = "Oui"
-                                Case "PTB", "PTG"
-                                    Label42.Text = "Sim"
-                                Case "ITA"
-                                    Label42.Text = "Sì"
-                            End Select
-                        Case 1
-                            Label42.Text = "Yes"
-                        Case 2
-                            Label42.Text = "Sí"
-                        Case 3
-                            Label42.Text = "Oui"
-                        Case 4
-                            Label42.Text = "Sim"
-                        Case 5
-                            Label42.Text = "Sì"
-                    End Select
-                    If MainForm.OnlineManagement AndAlso Not MainForm.NoNTSamMappings Then
-                        DynaLog.LogMessage("Online installation management mode has been detected and we're expected to map SAM information. Proceeding...")
-                        Try
-                            Dim profileFiles As New List(Of String)
-                            profileFiles = My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").ToList()
-                            If profileFiles.Count > 0 Then
-                                Label42.Text &= ":" & CrLf & SamHelper.MapPckgdepsToSamProfiles(profileFiles)
-                            End If
-                        Catch ex As Exception
+            Dim IsPackageRegistered As Boolean
+            If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+                IsPackageRegistered = AppxHelper.IsPackageRegistered(MainForm.MountDir, MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListBox1.SelectedIndex))
+            Else
+                IsPackageRegistered = AppxHelper.IsPackageRegistered(MainForm.MountDir, MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListBox1.SelectedIndex))
+            End If
 
-                        End Try
-                    End If
+            If IsPackageRegistered Then
+                Select Case MainForm.Language
+                    Case 0
+                        Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                            Case "ENU", "ENG"
+                                Label42.Text = "Yes"
+                            Case "ESN"
+                                Label42.Text = "Sí"
+                            Case "FRA"
+                                Label42.Text = "Oui"
+                            Case "PTB", "PTG"
+                                Label42.Text = "Sim"
+                            Case "ITA"
+                                Label42.Text = "Sì"
+                        End Select
+                    Case 1
+                        Label42.Text = "Yes"
+                    Case 2
+                        Label42.Text = "Sí"
+                    Case 3
+                        Label42.Text = "Oui"
+                    Case 4
+                        Label42.Text = "Sim"
+                    Case 5
+                        Label42.Text = "Sì"
+                End Select
+                If MainForm.OnlineManagement AndAlso Not MainForm.NoNTSamMappings Then
+                    DynaLog.LogMessage("Online installation management mode has been detected and we're expected to map SAM information. Proceeding...")
+                    Try
+                        Dim profileFiles As New List(Of String)
+                        profileFiles = My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & Label23.Text, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").ToList()
+                        If profileFiles.Count > 0 Then
+                            Label42.Text &= ":" & CrLf & SamHelper.MapPckgdepsToSamProfiles(profileFiles)
+                        End If
+                    Catch ex As Exception
+
+                    End Try
                 End If
             Else
                 Select Case MainForm.Language
@@ -476,6 +458,7 @@ Public Class GetAppxPkgInfoDlg
                         Label42.Text = "No"
                 End Select
             End If
+
             DynaLog.LogMessage("Getting AppX main Store logo asset...")
             mainAsset = MainForm.GetStoreAppMainLogo(Label23.Text)
             DynaLog.LogMessage("Main asset location: " & Quote & mainAsset & Quote)

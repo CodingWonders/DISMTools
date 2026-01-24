@@ -123,6 +123,8 @@ Public Class RemProvAppxPackage
     End Sub
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        AppxHelper.ClearRootPaths()
+        AppxHelper.SetRootPaths(MainForm.MountDir)
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
         If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
@@ -174,21 +176,9 @@ Public Class RemProvAppxPackage
                                                                                                                                          Casters.CastDismArchitecture(appxPackage.Architecture),
                                                                                                                                          appxPackage.ResourceId,
                                                                                                                                          appxPackage.Version.ToString(),
-                                                                                                                                         If(IsPackageRegistered(appxPackage), "Yes", "No")})).ToArray())
+                                                                                                                                         If(IsPackageRegistered(MainForm.MountDir, appxPackage), "Yes", "No")})).ToArray())
         End If
         Return True
-    End Function
-
-    Private Function IsPackageRegistered(imgAppxPackage As DismAppxPackage) As Boolean
-        If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
-            If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                Return False
-            Else
-                Return True
-            End If
-        Else
-            Return False
-        End If
     End Function
 
     Private Sub RemProvAppxPackage_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -377,31 +367,58 @@ Public Class RemProvAppxPackage
         If ListView1.SelectedItems.Count = 1 Then
             MainForm.ResViewTSMI.Visible = True
             DynaLog.LogMessage("Updating context menu items...")
+            Dim selectedAppx
+            If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+                selectedAppx = MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            Else
+                selectedAppx = MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            End If
+
+            If selectedAppx Is Nothing Then
+                MainForm.ResViewTSMI.Text = ""
+                MainForm.ResViewTSMI.Visible = False
+            End If
+
+            Dim friendlyDisplayName As String = ""
+            If TypeOf (selectedAppx) Is ImageAppxPackage Then
+                friendlyDisplayName = AppxHelper.GetPackageDisplayName(MainForm.MountDir, CType(selectedAppx, ImageAppxPackage).PackageFullName, CType(selectedAppx, ImageAppxPackage).PackageName)
+            ElseIf TypeOf (selectedAppx) Is DismAppxPackage Then
+                friendlyDisplayName = AppxHelper.GetPackageDisplayName(MainForm.MountDir, CType(selectedAppx, DismAppxPackage).PackageName, CType(selectedAppx, DismAppxPackage).DisplayName)
+            End If
+
+            If friendlyDisplayName.StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase) Then
+                If TypeOf (selectedAppx) Is ImageAppxPackage Then
+                    friendlyDisplayName = CType(selectedAppx, ImageAppxPackage).PackageName
+                ElseIf TypeOf (selectedAppx) Is DismAppxPackage Then
+                    friendlyDisplayName = CType(selectedAppx, DismAppxPackage).DisplayName
+                End If
+            End If
+
             Try
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "View resources of " & friendlyDisplayName
                             Case "ESN"
-                                MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                             Case "FRA"
-                                MainForm.ResViewTSMI.Text = "Voir les ressources de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Voir les ressources de " & friendlyDisplayName
                             Case "PTB", "PTG"
-                                MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                             Case "ITA"
-                                MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & friendlyDisplayName
                         End Select
                     Case 1
-                        MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "View resources of " & friendlyDisplayName
                     Case 2
-                        MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                     Case 3
-                        MainForm.ResViewTSMI.Text = "Voir les ressources de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Voir les ressources de " & friendlyDisplayName
                     Case 4
-                        MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                     Case 5
-                        MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & friendlyDisplayName
                 End Select
             Catch ex As Exception
                 MainForm.ResViewTSMI.Text = ""
