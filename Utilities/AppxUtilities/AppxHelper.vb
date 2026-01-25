@@ -21,8 +21,7 @@ Module AppxHelper
             PackageRootPath = AppxRootKey.GetValue("PackageRoot", "")
             AppxRootKey.Close()
         Catch ex As Exception
-
-            Return ""
+            DynaLog.LogMessage("Could not check root path. Error message: " & ex.Message)
         Finally
             RegistryHelper.UnloadRegistryHive("HKLM\zSOFT")
         End Try
@@ -46,8 +45,7 @@ Module AppxHelper
             PackageRepositoryRootPath = AppxRootKey.GetValue("PackageRepositoryRoot", "")
             AppxRootKey.Close()
         Catch ex As Exception
-
-            Return ""
+            DynaLog.LogMessage("Could not check root path. Error message: " & ex.Message)
         Finally
             RegistryHelper.UnloadRegistryHive("HKLM\zSOFT")
         End Try
