@@ -1844,6 +1844,7 @@ Public Class MainForm
     Sub RunBackgroundProcesses(bgProcOptn As Integer, GatherBasicInfo As Boolean, GatherAdvancedInfo As Boolean, Optional OnlineMode As Boolean = False, Optional OfflineMode As Boolean = False)
         IsCompatible = True
         DynaLog.LogMessage("Preparing to run background processes...")
+        BWFailPanel.Visible = False
         FailedBGProcResultDic.Clear()
         If Not IsImageMounted Then
             Button26.Enabled = True
@@ -3287,8 +3288,8 @@ Public Class MainForm
 
     Sub ThrowAPIException(ProcessTitle As String, Optional APIException As DismException = Nothing, Optional GeneralException As Exception = Nothing)
         Dim errorEx As Exception = Nothing
-        If APIException IsNot Nothing Then errorEx = New Exception("DISM API Task Error", APIException)
-        If GeneralException IsNot Nothing Then errorEx = New Exception("DISM API Task Error", GeneralException)
+        If APIException IsNot Nothing Then errorEx = New Exception(String.Format("DISM API Task Error: {0}", New Win32Exception(APIException.HResult).Message), APIException)
+        If GeneralException IsNot Nothing Then errorEx = New Exception(String.Format("DISM Task Error: {0}", New Win32Exception(GeneralException.HResult).Message), GeneralException)
         DynaLog.LogMessage("Raising awareness to the event handler")
         RaiseEvent APIExceptionThrown(errorEx, ProcessTitle)
     End Sub
@@ -8142,6 +8143,7 @@ Public Class MainForm
     End Sub
 
     Sub LoadDTProj(DTProjPath As String, DTProjFileName As String, BypassFileDialog As Boolean, SkipBGProcs As Boolean)
+        BWFailPanel.Visible = False
         DynaLog.LogMessage("Getting state of image registry control panel...")
         If RegistryControlPanel.Visible Then
             DynaLog.LogMessage("Image registry control panel is open. Attempting to close...")
@@ -11567,7 +11569,8 @@ Public Class MainForm
         DynaLog.LogMessage("Background processes have finished")
         If FailedBGProcResultDic.Count > 0 Then
             DynaLog.LogMessage("One or more background processes has failed.")
-            MessageBox.Show("One or more errors happened while getting image information.", "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            BWFailPanel.Visible = True
+            Beep()
         End If
         CompletedTasks = Enumerable.Repeat(True, CompletedTasks.Length).ToArray()
         BGProcDetails.ProgressBar1.Style = ProgressBarStyle.Blocks
@@ -16027,5 +16030,11 @@ Public Class MainForm
         Else
             DynaLog.LogMessage("FOGHS UNIX notes do not exist.")
         End If
+    End Sub
+
+    Private Sub BWFailLearnMoreBtn_Click(sender As Object, e As EventArgs) Handles BWFailLearnMoreBtn.Click
+        BGProcFailureDialog.FailedTasks = FailedBGProcResultDic
+        BGProcFailureDialog.ImageInQuestion = CurrentImage
+        BGProcFailureDialog.ShowDialog(Me)
     End Sub
 End Class
