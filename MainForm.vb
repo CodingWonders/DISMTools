@@ -230,6 +230,7 @@ Public Class MainForm
 
     ' Web Search Settings
     Public SearchEngineName As String = "DuckDuckGo" ' The name of the selected search engine
+    Public SearchEngineAITolerance As Integer = 1    ' The amount of tolerance of AI in search engines
 
     ' Tour server
     Public ReadOnly tourServer As TourServer = New TourServer(Path.Combine(Application.StartupPath, "docs", "tour"), 2022)
@@ -1397,6 +1398,7 @@ Public Class MainForm
                 InfoSaverKey.Close()
                 Dim SearchKey As RegistryKey = Key.OpenSubKey("SearchSettings")
                 SearchEngineName = SearchKey.GetValue("EngineName").ToString().Replace(Quote, "").Trim()
+                SearchEngineAITolerance = CInt(SearchKey.GetValue("AITolerance"))
                 SearchKey.Close()
                 Key.Close()
                 ' Apply program colors immediately
@@ -1499,6 +1501,8 @@ Public Class MainForm
                         SearchEngineName = line.Replace("EngineName=", "").Trim().Replace(Quote, "")
                     ElseIf line.StartsWith("AppxRemovalDisplayNameFormat=", StringComparison.OrdinalIgnoreCase) Then
                         AppxDisplayNameFormatOnRemoval = CInt(line.Replace("AppxRemovalDisplayNameFormat=", "").Trim())
+                    ElseIf line.StartsWith("AITolerance=", StringComparison.OrdinalIgnoreCase) Then
+                        SearchEngineAITolerance = CInt(line.Replace("AITolerance=", "").Trim())
                     End If
                 Next
                 ' Apply program colors immediately
@@ -1795,6 +1799,7 @@ Public Class MainForm
                            "Quiet                      =    " & QuietOperations & CrLf &
                            "NoNTSamMappings            =    " & NoNTSamMappings & CrLf &
                            "WebSearchEngineName        =    " & SearchEngineName & CrLf &
+                           "WebSearchAITolerance       =    " & SearchEngineAITolerance & CrLf &
                            "PEHelper_UnattendedFile    =    " & Quote & PEHelper_UnattendedFile & Quote & CrLf &
                            "PEHelper_CopyToVentoy      =    " & PEHelper_CopyToVentoy & CrLf &
                            "PEHelper_Use2023EFI        =    " & PEHelper_Use2023EFI & CrLf &
@@ -2763,7 +2768,6 @@ Public Class MainForm
 
             DynaLog.LogMessage("- Edition ID: " & imgEdition)
             DynaLog.LogMessage("- Installation type: " & CurrentImage.ImageInstallationType)
-            DynaLog.LogMessage(CurrentImage.ToString())
 
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
             DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
@@ -2782,7 +2786,6 @@ Public Class MainForm
             Button29.Enabled = False
 
             CurrentImage.ImageEditionId = imgEdition
-            DynaLog.LogMessage(CurrentImage.ToString())
 
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
             DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
@@ -3968,6 +3971,7 @@ Public Class MainForm
         DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=1")
         DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
         DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & "DuckDuckGo" & Quote)
+        DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=1")
         File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
         If File.Exists(Application.StartupPath & "\portable") Then Exit Sub
         DynaLog.LogMessage("Portable marker does not exist. Configuring settings in registry...")
@@ -4061,6 +4065,7 @@ Public Class MainForm
         InfoSaverKey.Close()
         Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
         SearchKey.SetValue("EngineName", "DuckDuckGo", RegistryValueKind.String)
+        SearchKey.SetValue("AITolerance", 1, RegistryValueKind.DWord)
         SearchKey.Close()
         Key.Close()
     End Sub
@@ -4289,6 +4294,7 @@ Public Class MainForm
                 DTSettingForm.RichTextBox2.AppendText(CrLf & "Drv_CompleteInfo=" & If(AutoCompleteInfo(4), "1", "0"))
                 DTSettingForm.RichTextBox2.AppendText(CrLf & CrLf & "[SearchSettings]" & CrLf)
                 DTSettingForm.RichTextBox2.AppendText("EngineName=" & Quote & SearchEngineName & Quote)
+                DTSettingForm.RichTextBox2.AppendText(CrLf & "AITolerance=" & SearchEngineAITolerance)
                 File.WriteAllText(Application.StartupPath & "\settings.ini", DTSettingForm.RichTextBox2.Text, ASCII)
             Else
                 DynaLog.LogMessage("Attempting to write to registry...")
@@ -4398,6 +4404,7 @@ Public Class MainForm
                     InfoSaverKey.Close()
                     Dim SearchKey As RegistryKey = Key.CreateSubKey("SearchSettings")
                     SearchKey.SetValue("EngineName", SearchEngineName, RegistryValueKind.String)
+                    SearchKey.SetValue("AITolerance", SearchEngineAITolerance, RegistryValueKind.DWord)
                     SearchKey.Close()
                     Key.Close()
                 Catch ex As Exception
