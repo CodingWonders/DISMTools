@@ -10,6 +10,7 @@
         New SearchEngine("Google Search", "Google LLC", "https://google.com/search?q={0}&udm=14"),
         New SearchEngine("Bing", "Microsoft", "https://bing.com/search?q={0}"),
         New SearchEngine("DuckDuckGo", "", "https://duckduckgo.com/?q={0}&ia=web"),
+        New SearchEngine("DuckDuckGo (No AI)", "", "https://noai.duckduckgo.com/?q={0}&ia=web"),
         New SearchEngine("Startpage", "", "https://startpage.com/sp/search?q={0}"),
         New SearchEngine("Brave Search", "", "https://search.brave.com/search?q={0}&source=web&summary=0")
     }
