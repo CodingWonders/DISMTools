@@ -56,8 +56,6 @@ Public Class MainForm
     Public CreationTime As String
     Public ModifyTime As String
 
-    Public imgInstType As String       ' Image installation type, used to determine whether an image contains a Server Core/Nano Server installation
-
     ' Var used to detect whether the image is orphaned (needs servicing session reload)
     Public isOrphaned As Boolean    ' This variable is true when the host system is shut down or restarted (the servicing session stops abruptly)
 
@@ -2695,9 +2693,9 @@ Public Class MainForm
             DynaLog.LogMessage("Getting values...")
             Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
             imgEdition = edReg.GetValue("EditionID", "").ToString()
-            imgInstType = edReg.GetValue("InstallationType", "").ToString()
+            CurrentImage.ImageInstallationType = edReg.GetValue("InstallationType", "").ToString()
             DynaLog.LogMessage("Edition: " & imgEdition)
-            DynaLog.LogMessage("Installation type: " & imgInstType)
+            DynaLog.LogMessage("Installation type: " & CurrentImage.ImageInstallationType)
             edReg.Close()
         End If
         DynaLog.LogMessage("Unloading installation registry...")
@@ -2752,10 +2750,9 @@ Public Class MainForm
             imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
 
             ' Set installation type variable according to the InstallationType registry value
-            imgInstType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
+            CurrentImage.ImageInstallationType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
 
             CurrentImage.ImageEditionId = imgEdition
-            CurrentImage.ImageInstallationType = imgInstType
 
             Button24.Enabled = False
             Button25.Enabled = False
@@ -2765,7 +2762,8 @@ Public Class MainForm
             Button29.Enabled = False
 
             DynaLog.LogMessage("- Edition ID: " & imgEdition)
-            DynaLog.LogMessage("- Installation type: " & imgInstType)
+            DynaLog.LogMessage("- Installation type: " & CurrentImage.ImageInstallationType)
+            DynaLog.LogMessage(CurrentImage.ToString())
 
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
             DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
@@ -2784,7 +2782,7 @@ Public Class MainForm
             Button29.Enabled = False
 
             CurrentImage.ImageEditionId = imgEdition
-            CurrentImage.ImageInstallationType = imgInstType
+            DynaLog.LogMessage(CurrentImage.ToString())
 
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
             DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
