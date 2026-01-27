@@ -9096,7 +9096,9 @@ Public Class MainForm
 
     Sub BeginOnlineManagement(ShowDialog As Boolean)
         DynaLog.LogMessage("Beginning active installation management. Show warning? " & If(ShowDialog, "Yes", "No"))
-        If ShowDialog Then ActiveInstAccessWarn.ShowDialog(Me)
+        If ShowDialog Then
+            If ActiveInstAccessWarn.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then Exit Sub
+        End If
         IsImageMounted = True
         isProjectLoaded = True
         Select Case Language
@@ -12897,7 +12899,7 @@ Public Class MainForm
         If isProjectLoaded Then
             DynaLog.LogMessage("Showing warning and proceeding to unload project...")
             ActiveInstAccessWarn.Label2.Visible = True
-            ActiveInstAccessWarn.ShowDialog(Me)
+            If ActiveInstAccessWarn.ShowDialog(Me) = Windows.Forms.DialogResult.Cancel Then Exit Sub
             If ActiveInstAccessWarn.DialogResult = Windows.Forms.DialogResult.OK Then UnloadDTProj(False, True, False)
             If ImgBW.IsBusy Then Exit Sub
         End If
