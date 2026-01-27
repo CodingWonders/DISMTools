@@ -27,6 +27,7 @@ echo - To install drivers if you don't see your drives, type "DIM"
 if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
 echo - To save the image to a network share, type "NET"
 echo - To perform quick disk and partition administration, type "DP"
+echo - To change the keyboard layout to use, type "KBD"
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
@@ -95,6 +96,11 @@ if /i "%sourcedrive%" equ "NET" (
 if /i "%sourcedrive%" equ "DP" (
 	echo Entering DiskPart...
 	diskpart
+	goto :main
+)
+
+if /i "%sourcedrive%" equ "KBD" (
+	powershell -noprofile -file "%sysdrive%\ChangeKeyboardLayout.ps1"
 	goto :main
 )
 
