@@ -26,6 +26,7 @@ echo.
 echo - To install drivers if you don't see your drives, type "DIM"
 if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
 echo - To save the image to a network share, type "NET"
+echo - To perform quick disk and partition administration, type "DP"
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
@@ -34,12 +35,12 @@ if not defined sourcedrive (
 	exit /b 1
 )
 
-if "%sourcedrive%" equ "DIM" (
+if /i "%sourcedrive%" equ "DIM" (
 	call :dt_dim_driver_install
 	goto :main
 )
 
-if "%sourcedrive%" equ "WDS" (
+if /i "%sourcedrive%" equ "WDS" (
 	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
 	call :create_wdscapture_config_list
 	"%SYSTEMROOT%\system32\wdscapture.exe"
@@ -50,7 +51,7 @@ if "%sourcedrive%" equ "WDS" (
 	exit /b
 )
 
-if "%sourcedrive%" equ "NET" (
+if /i "%sourcedrive%" equ "NET" (
 	cls
 	echo This process will help you map a network drive to which you can save your Windows image. Keep
 	echo in mind, however, that this will NOT produce an installation image compatible with network-based
@@ -88,6 +89,12 @@ if "%sourcedrive%" equ "NET" (
 	ping /n 3 127.0.0.1 >nul 2>&1
 	
 	REM we have to ask for the source drive again
+	goto :main
+)
+
+if /i "%sourcedrive%" equ "DP" (
+	echo Entering DiskPart...
+	diskpart
 	goto :main
 )
 
