@@ -6,7 +6,6 @@ Imports DISMTools.Utilities
 
 Public Class GetCapabilityInfoDlg
 
-    Public InstalledCapabilityInfo As DismCapabilityCollection
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load

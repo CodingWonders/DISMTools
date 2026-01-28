@@ -22,8 +22,6 @@ Public Class MainForm
     Public IsImageMounted As Boolean
     Public projPath As String
     Public isReadOnly As Boolean
-    Public isOptimized As Boolean
-    Public isIntegrityTested As Boolean
     Public isProjectLoaded As Boolean
     Public isModified As Boolean
 
@@ -31,30 +29,6 @@ Public Class MainForm
     Public SourceImg As String
     Public ImgIndex As Integer
     Public MountDir As String       ' ProjProperties.imgMountDir
-    Public imgMountedStatus As String
-    Public imgVersion As String
-    Public imgMountedName As String
-    Public imgMountedDesc As String
-    Public imgSize As String
-    Public imgWimBootStatus As String
-    Public imgArch As String
-    Public imgHal As String
-    Public imgSPBuild As String
-    Public imgSPLvl As String
-    Public imgEdition As String
-    Public imgPType As String
-    Public imgPSuite As String
-    Public imgSysRoot As String
-    Public imgDirs As Integer
-    Public imgFiles As Integer
-    Public imgCreation As String
-    Public imgModification As String
-    Public imgLangs As String
-    Public imgFormat As String
-    Public imgRW As String
-
-    Public CreationTime As String
-    Public ModifyTime As String
 
     ' Var used to detect whether the image is orphaned (needs servicing session reload)
     Public isOrphaned As Boolean    ' This variable is true when the host system is shut down or restarted (the servicing session stops abruptly)
@@ -170,15 +144,6 @@ Public Class MainForm
     Dim IsCompatible As Boolean = True
 
     Dim SysVer As Version
-
-    ' Lists for information dialogs
-    Dim PackageInfoList As DismPackageCollection
-    Dim FeatureInfoList As DismFeatureCollection
-    Dim AppxPackageInfoList As DismAppxPackageCollection
-    Dim CapabilityInfoList As DismCapabilityCollection
-    Dim DriverInfoList As DismDriverPackageCollection
-
-    Public imgVersionInfo As Version = Nothing
 
     Dim NoMigration As Boolean                                           ' Set this variable to true ONLY if the IDE started the program
     Public SkipUpdates As Boolean                                        ' Same for this one
@@ -2163,7 +2128,6 @@ Public Class MainForm
                     If session IsNot Nothing Then DismApi.CloseSession(session)
                     Exit Sub
                 End If
-                If imgEdition Is Nothing Then imgEdition = ""
                 If IsWindows8OrHigher(MountDir & "\Windows\system32\ntoskrnl.exe") Then
                     If Not (CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) OrElse CurrentImage.WinPeInDisguise) And Not (CurrentImage.ImageInstallationType.Contains("Nano") Or CurrentImage.ImageInstallationType.Contains("Core")) Then
                         DynaLog.LogMessage("Windows 8 or later")
@@ -2516,7 +2480,7 @@ Public Class MainForm
         If OnlineMode Then
             DynaLog.LogMessage("Getting information about the active installation...")
             Label48.Text = Environment.OSVersion.Version.Major & "." & Environment.OSVersion.Version.Minor & "." & Environment.OSVersion.Version.Build & "." & FileVersionInfo.GetVersionInfo(Environment.GetFolderPath(Environment.SpecialFolder.Windows) & "\system32\ntoskrnl.exe").ProductPrivatePart
-            imgVersionInfo = Environment.OSVersion.Version
+            CurrentImage.ImageVersion = Environment.OSVersion.Version
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2580,7 +2544,7 @@ Public Class MainForm
         ElseIf OfflineMode Then
             DynaLog.LogMessage("Getting information about the offline installation...")
             Label48.Text = FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion
-            imgVersionInfo = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
+            CurrentImage.ImageVersion = New Version(FileVersionInfo.GetVersionInfo(MountDir & "\Windows\system32\ntoskrnl.exe").ProductVersion)
             Select Case Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -2693,13 +2657,13 @@ Public Class MainForm
         Dim regExitCode As Integer = RegistryHelper.LoadRegistryHive(Path.Combine(MountDir, "Windows", "system32", "config", "SOFTWARE"), "HKLM\IMG_SOFT")
         If regExitCode <> 0 Then
             DynaLog.LogMessage("The edition could not be grabbed. Process exit code: " & Hex(regExitCode))
-            imgEdition = ""
+            CurrentImage.ImageEditionId = ""
         Else
             DynaLog.LogMessage("Getting values...")
             Dim edReg As RegistryKey = Registry.LocalMachine.OpenSubKey("IMG_SOFT\Microsoft\Windows NT\CurrentVersion", False)
-            imgEdition = edReg.GetValue("EditionID", "").ToString()
+            CurrentImage.ImageEditionId = edReg.GetValue("EditionID", "").ToString()
             CurrentImage.ImageInstallationType = edReg.GetValue("InstallationType", "").ToString()
-            DynaLog.LogMessage("Edition: " & imgEdition)
+            DynaLog.LogMessage("Edition: " & CurrentImage.ImageEditionId)
             DynaLog.LogMessage("Installation type: " & CurrentImage.ImageInstallationType)
             edReg.Close()
         End If
@@ -2752,12 +2716,10 @@ Public Class MainForm
             LinkLabel15.Enabled = False
             LinkLabel16.Enabled = False
             ' Set edition variable according to the EditionID registry value
-            imgEdition = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
+            CurrentImage.ImageEditionId = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("EditionID")
 
             ' Set installation type variable according to the InstallationType registry value
             CurrentImage.ImageInstallationType = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue("InstallationType")
-
-            CurrentImage.ImageEditionId = imgEdition
 
             Button24.Enabled = False
             Button25.Enabled = False
@@ -2766,11 +2728,11 @@ Public Class MainForm
             Button28.Enabled = False
             Button29.Enabled = False
 
-            DynaLog.LogMessage("- Edition ID: " & imgEdition)
+            DynaLog.LogMessage("- Edition ID: " & CurrentImage.ImageEditionId)
             DynaLog.LogMessage("- Installation type: " & CurrentImage.ImageInstallationType)
 
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
-            DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
+            DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
             Exit Sub
         ElseIf OfflineMode Then
             DynaLog.LogMessage("Getting information about the offline installation...")
@@ -2785,10 +2747,8 @@ Public Class MainForm
             Button28.Enabled = False
             Button29.Enabled = False
 
-            CurrentImage.ImageEditionId = imgEdition
-
             DynaLog.LogMessage("Comparing versions to determine the tasks you can do...")
-            DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), imgVersionInfo)
+            DetectVersions(FileVersionInfo.GetVersionInfo(DismExe), CurrentImage.ImageVersion)
             Exit Sub
         Else
             If IsImageMounted Then
@@ -3310,7 +3270,6 @@ Public Class MainForm
                 Dim imgPackageRelTypeList As New List(Of String)
                 Dim imgPackageInstTimeList As New List(Of String)
                 Dim PackageCollection As DismPackageCollection = DismApi.GetPackages(session)
-                PackageInfoList = PackageCollection
                 DynaLog.LogMessage("Total amount of packages obtained: " & PackageCollection.Count)
                 DynaLog.LogMessage("Package information will not be listed here")
                 If CurrentImage IsNot Nothing Then CurrentImage.ImagePackages = PackageCollection
@@ -3411,7 +3370,6 @@ Public Class MainForm
                 Dim imgFeatureNameList As New List(Of String)
                 Dim imgFeatureStateList As New List(Of String)
                 Dim FeatureCollection As DismFeatureCollection = DismApi.GetFeatures(session)
-                FeatureInfoList = FeatureCollection
                 DynaLog.LogMessage("Total amount of features obtained: " & FeatureCollection.Count & ". States will be parsed without logging.")
                 If CurrentImage IsNot Nothing Then CurrentImage.ImageFeatures = FeatureCollection
                 If ImgBW.CancellationPending Then
@@ -3507,7 +3465,6 @@ Public Class MainForm
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     Dim imgAppxRegionList As New List(Of String)
                     Dim AppxPackageCollection As DismAppxPackageCollection = DismApi.GetProvisionedAppxPackages(session)
-                    AppxPackageInfoList = AppxPackageCollection
                     DynaLog.LogMessage("Total amount of AppX packages obtained: " & AppxPackageCollection.Count & ". Architectures will be parsed without logging.")
                     If CurrentImage IsNot Nothing Then CurrentImage.ImageAppxPackages = AppxPackageCollection
                     If ImgBW.CancellationPending Then
@@ -3687,7 +3644,6 @@ Public Class MainForm
                 Dim imgCapabilityNameList As New List(Of String)
                 Dim imgCapabilityStateList As New List(Of String)
                 Dim CapabilityCollection As DismCapabilityCollection = DismApi.GetCapabilities(session)
-                CapabilityInfoList = CapabilityCollection
                 DynaLog.LogMessage("Total amount of capabilities obtained: " & CapabilityCollection.Count & ". States will be parsed without logging.")
                 If CurrentImage IsNot Nothing Then CurrentImage.ImageCapabilities = CapabilityCollection
                 If ImgBW.CancellationPending Then
@@ -3767,7 +3723,6 @@ Public Class MainForm
                 Using session As DismSession = If(OnlineMode, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(sessionMntDir))
                     If Not AllDrivers Then DynaLog.LogMessage("Not all drivers will be obtained because of a setting in background processes")
                     Dim DriverCollection As DismDriverPackageCollection = DismApi.GetDrivers(session, AllDrivers)
-                    DriverInfoList = DriverCollection
                     DynaLog.LogMessage("Total amount of drivers obtained: " & DriverCollection.Count)
                     If CurrentImage IsNot Nothing Then CurrentImage.ImageDrivers = DriverCollection
                     If ImgBW.CancellationPending Then
@@ -8361,58 +8316,11 @@ Public Class MainForm
                             ' The conversion could not be possible. Maybe because it's "N/A" on the RTB?
                         End Try
                         MountDir = ProjectValueLoadForm.RichTextBox7.Text
-                        imgVersion = ProjectValueLoadForm.RichTextBox8.Text
-                        imgMountedName = ProjectValueLoadForm.RichTextBox9.Text
-                        imgMountedDesc = ProjectValueLoadForm.RichTextBox10.Text
-                        imgWimBootStatus = ProjectValueLoadForm.RichTextBox11.Text
-                        imgArch = ProjectValueLoadForm.RichTextBox12.Text
-                        imgHal = ProjectValueLoadForm.RichTextBox13.Text
-                        imgSPBuild = ProjectValueLoadForm.RichTextBox14.Text
-                        imgSPLvl = ProjectValueLoadForm.RichTextBox15.Text
-                        imgEdition = ProjectValueLoadForm.RichTextBox16.Text
-                        imgPType = ProjectValueLoadForm.RichTextBox17.Text
-                        imgPSuite = ProjectValueLoadForm.RichTextBox18.Text
-                        imgSysRoot = ProjectValueLoadForm.RichTextBox19.Text
-                        Try
-                            imgDirs = ProjectValueLoadForm.RichTextBox20.Text
-                        Catch ex As Exception
-                            ' Like before, the conversion could not be possible
-                        End Try
-                        Try
-                            imgFiles = ProjectValueLoadForm.RichTextBox21.Text
-                        Catch ex As Exception
-                            ' Like before, the conversion could not be possible
-                        End Try
-                        Try
-                            CreationTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
-                            ModifyTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
-                        Catch ex As Exception
-                            ' Like before, the conversion could not be possible
-                        End Try
-                        imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                        imgRW = ""
 
                         DynaLog.LogMessage("Project settings:" & CrLf &
                                            "- Source image: " & SourceImg & CrLf &
                                            "- Image index: " & ImgIndex & CrLf &
-                                           "- Mount directory: " & MountDir & CrLf &
-                                           "- Image version: " & imgVersion & CrLf &
-                                           "- Image name: " & imgMountedName & CrLf &
-                                           "- Image description: " & imgMountedDesc & CrLf &
-                                           "- WIMBoot-capable? " & imgWimBootStatus & CrLf &
-                                           "- Architecture: " & imgArch & CrLf &
-                                           "- HAL: " & imgHal & CrLf &
-                                           "- Service Pack build: " & imgSPBuild & CrLf &
-                                           "- Service Pack level: " & imgSPLvl & CrLf &
-                                           "- Edition: " & imgEdition & CrLf &
-                                           "- Product type: " & imgPType & CrLf &
-                                           "- Product Suite: " & imgPSuite & CrLf &
-                                           "- System root: " & imgSysRoot & CrLf &
-                                           "- Directory count: " & imgDirs & CrLf &
-                                           "- File count: " & imgFiles & CrLf &
-                                           "- Epoch creation time: " & CreationTime & CrLf &
-                                           "- Epoch modification time: " & ModifyTime & CrLf &
-                                           "- Languages: " & imgLangs)
+                                           "- Mount directory: " & MountDir & CrLf)
 
 
                         DynaLog.LogMessage("Preparing work of background processes...")
@@ -8431,26 +8339,12 @@ Public Class MainForm
                             ' This will be changed in the future but, because this is in alpha, scan
                             ' whether the image's Windows folder exists
                             IsImageMounted = True
-                            If imgRW = "Yes" Then
-                                UpdateProjProperties(True, False, SkipBGProcs)
-                            ElseIf imgRW = "No" Then
-                                UpdateProjProperties(True, True, SkipBGProcs)
-                            Else
-                                ' Assume it has read-write permissions
-                                UpdateProjProperties(True, False, SkipBGProcs)
-                            End If
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         ElseIf Directory.Exists(MountDir & "\Windows") Then
                             DynaLog.LogMessage("An image was mounted somewhere else")
                             ' This is for these cases where image was mounted to outside the project
                             IsImageMounted = True
-                            If imgRW = "Yes" Then
-                                UpdateProjProperties(True, False, SkipBGProcs)
-                            ElseIf imgRW = "No" Then
-                                UpdateProjProperties(True, True, SkipBGProcs)
-                            Else
-                                ' Assume it has read-write permissions
-                                UpdateProjProperties(True, False, SkipBGProcs)
-                            End If
+                            UpdateProjProperties(True, False, SkipBGProcs)
                         Else
                             DynaLog.LogMessage("This image is bad.")
                             IsImageMounted = False
@@ -8591,58 +8485,11 @@ Public Class MainForm
                         ' The conversion could not be possible. Maybe because it's "N/A" on the RTB?
                     End Try
                     MountDir = ProjectValueLoadForm.RichTextBox7.Text
-                    imgVersion = ProjectValueLoadForm.RichTextBox8.Text
-                    imgMountedName = ProjectValueLoadForm.RichTextBox9.Text
-                    imgMountedDesc = ProjectValueLoadForm.RichTextBox10.Text
-                    imgWimBootStatus = ProjectValueLoadForm.RichTextBox11.Text
-                    imgArch = ProjectValueLoadForm.RichTextBox12.Text
-                    imgHal = ProjectValueLoadForm.RichTextBox13.Text
-                    imgSPBuild = ProjectValueLoadForm.RichTextBox14.Text
-                    imgSPLvl = ProjectValueLoadForm.RichTextBox15.Text
-                    imgEdition = ProjectValueLoadForm.RichTextBox16.Text
-                    imgPType = ProjectValueLoadForm.RichTextBox17.Text
-                    imgPSuite = ProjectValueLoadForm.RichTextBox18.Text
-                    imgSysRoot = ProjectValueLoadForm.RichTextBox19.Text
-                    Try
-                        imgDirs = ProjectValueLoadForm.RichTextBox20.Text
-                    Catch ex As Exception
-                        ' Like before, the conversion could not be possible
-                    End Try
-                    Try
-                        imgFiles = ProjectValueLoadForm.RichTextBox21.Text
-                    Catch ex As Exception
-                        ' Like before, the conversion could not be possible
-                    End Try
-                    Try
-                        CreationTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox22.Text, Long)).ToString().Replace(" +00:00", "").Trim()
-                        ModifyTime = DateTimeOffset.FromUnixTimeSeconds(CType(ProjectValueLoadForm.RichTextBox23.Text, Long)).ToString().Replace(" +00:00", "").Trim()
-                    Catch ex As Exception
-                        ' Like before, the conversion could not be possible
-                    End Try
-                    imgLangs = ProjectValueLoadForm.RichTextBox24.Text
-                    imgRW = ""
 
                     DynaLog.LogMessage("Project settings:" & CrLf &
                                        "- Source image: " & SourceImg & CrLf &
                                        "- Image index: " & ImgIndex & CrLf &
-                                       "- Mount directory: " & MountDir & CrLf &
-                                       "- Image version: " & imgVersion & CrLf &
-                                       "- Image name: " & imgMountedName & CrLf &
-                                       "- Image description: " & imgMountedDesc & CrLf &
-                                       "- WIMBoot-capable? " & imgWimBootStatus & CrLf &
-                                       "- Architecture: " & imgArch & CrLf &
-                                       "- HAL: " & imgHal & CrLf &
-                                       "- Service Pack build: " & imgSPBuild & CrLf &
-                                       "- Service Pack level: " & imgSPLvl & CrLf &
-                                       "- Edition: " & imgEdition & CrLf &
-                                       "- Product type: " & imgPType & CrLf &
-                                       "- Product Suite: " & imgPSuite & CrLf &
-                                       "- System root: " & imgSysRoot & CrLf &
-                                       "- Directory count: " & imgDirs & CrLf &
-                                       "- File count: " & imgFiles & CrLf &
-                                       "- Epoch creation time: " & CreationTime & CrLf &
-                                       "- Epoch modification time: " & ModifyTime & CrLf &
-                                       "- Languages: " & imgLangs)
+                                       "- Mount directory: " & MountDir)
 
 
                     DynaLog.LogMessage("Preparing work of background processes...")
@@ -8661,26 +8508,12 @@ Public Class MainForm
                         ' This will be changed in the future but, because this is in alpha, scan
                         ' whether the image's Windows folder exists
                         IsImageMounted = True
-                        If imgRW = "Yes" Then
-                            UpdateProjProperties(True, False, SkipBGProcs)
-                        ElseIf imgRW = "No" Then
-                            UpdateProjProperties(True, True, SkipBGProcs)
-                        Else
-                            ' Assume it has read-write permissions
-                            UpdateProjProperties(True, False, SkipBGProcs)
-                        End If
+                        UpdateProjProperties(True, False, SkipBGProcs)
                     ElseIf Directory.Exists(MountDir & "\Windows") Then
                         DynaLog.LogMessage("An image was mounted somewhere else")
                         ' This is for these cases where image was mounted to outside the project
                         IsImageMounted = True
-                        If imgRW = "Yes" Then
-                            UpdateProjProperties(True, False)
-                        ElseIf imgRW = "No" Then
-                            UpdateProjProperties(True, True)
-                        Else
-                            ' Assume it has read-write permissions
-                            UpdateProjProperties(True, False)
-                        End If
+                        UpdateProjProperties(True, False)
                     Else
                         DynaLog.LogMessage("This image is bad.")
                         IsImageMounted = False
@@ -8839,39 +8672,6 @@ Public Class MainForm
             ProjectValueLoadForm.RichTextBox6.Text = CStr(ImgIndex)
         End If
         ProjectValueLoadForm.RichTextBox7.Text = MountDir
-        ProjectValueLoadForm.RichTextBox8.Text = imgVersion
-        ProjectValueLoadForm.RichTextBox9.Text = imgMountedName
-        ProjectValueLoadForm.RichTextBox10.Text = imgMountedDesc
-        ProjectValueLoadForm.RichTextBox11.Text = imgWimBootStatus
-        ProjectValueLoadForm.RichTextBox12.Text = imgArch
-        ProjectValueLoadForm.RichTextBox13.Text = imgHal
-        ProjectValueLoadForm.RichTextBox14.Text = imgSPBuild
-        ProjectValueLoadForm.RichTextBox15.Text = imgSPLvl
-        ProjectValueLoadForm.RichTextBox16.Text = imgEdition
-        ProjectValueLoadForm.RichTextBox17.Text = imgPType
-        ProjectValueLoadForm.RichTextBox18.Text = imgPSuite
-        ProjectValueLoadForm.RichTextBox19.Text = imgSysRoot
-        If imgDirs = 0 Or Not IsImageMounted Then
-            ProjectValueLoadForm.RichTextBox20.Text = "N/A"
-        Else
-            ProjectValueLoadForm.RichTextBox20.Text = CStr(imgDirs)
-        End If
-        If imgFiles = 0 Or Not IsImageMounted Then
-            ProjectValueLoadForm.RichTextBox21.Text = "N/A"
-        Else
-            ProjectValueLoadForm.RichTextBox21.Text = CStr(imgFiles)
-        End If
-        Try
-            ProjectValueLoadForm.RichTextBox22.Text = DateTimeOffset.Parse(CreationTime).ToUnixTimeSeconds()
-            ProjectValueLoadForm.RichTextBox23.Text = DateTimeOffset.Parse(ModifyTime).ToUnixTimeSeconds()
-        Catch ex As Exception
-            ProjectValueLoadForm.RichTextBox22.Text = "N/A"
-            ProjectValueLoadForm.RichTextBox23.Text = "N/A"
-        End Try
-
-        ProjectValueLoadForm.RichTextBox24.Text = imgLangs
-        ProjectValueLoadForm.RichTextBox25.Text = imgRW
-        ProjectValueLoadForm.RichTextBox26.Text = ""
         ProjectValueLoadForm.RichTextBox26.AppendText("[ProjOptions]" & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(1) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(2) & CrLf & ProjectValueLoadForm.RichTextBox1.Lines(3) & CrLf & CrLf &
                                                       "[ImageOptions]" & CrLf &
                                                       "ImageFile=" & ProjectValueLoadForm.RichTextBox5.Text & CrLf &
@@ -9091,7 +8891,7 @@ Public Class MainForm
         If OnlineManagement Then EndOnlineManagement()
         If OfflineManagement Then EndOfflineManagement()
         ' Set this to its default state
-        CurrentImage = Nothing
+        CurrentImage = New WindowsImage()
     End Sub
 
     Sub BeginOnlineManagement(ShowDialog As Boolean)
@@ -9718,24 +9518,6 @@ Public Class MainForm
             SourceImg = "N/A"
             ImgIndex = 0
             MountDir = "N/A"
-            imgVersion = "N/A"
-            imgMountedName = "N/A"
-            imgMountedDesc = "N/A"
-            imgWimBootStatus = "N/A"
-            imgArch = "N/A"
-            imgHal = "N/A"
-            imgSPBuild = "N/A"
-            imgSPLvl = "N/A"
-            imgEdition = "N/A"
-            imgPType = "N/A"
-            imgPSuite = "N/A"
-            imgSysRoot = "N/A"
-            imgDirs = 0
-            imgFiles = 0
-            CreationTime = "N/A"
-            ModifyTime = "N/A"
-            imgLangs = "N/A"
-            imgRW = "N/A"
             ' Update the buttons in the new design accordingly
             Button26.Enabled = True
             Button27.Enabled = False
@@ -13019,7 +12801,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog(Me)
     End Sub
 
@@ -13079,7 +12860,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13148,7 +12928,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13186,7 +12965,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13254,7 +13032,6 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If AppxPackageInfoList IsNot Nothing Then GetAppxPkgInfoDlg.InstalledAppxPkgInfo = AppxPackageInfoList
         GetAppxPkgInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13718,7 +13495,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If PackageInfoList IsNot Nothing Then GetPkgInfoDlg.InstalledPkgInfo = PackageInfoList
         GetPkgInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13790,7 +13566,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If FeatureInfoList IsNot Nothing Then GetFeatureInfoDlg.InstalledFeatureInfo = FeatureInfoList
         GetFeatureInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13893,7 +13668,6 @@ Public Class MainForm
             PleaseWaitDialog.ShowDialog(Me)
             Exit Sub
         End If
-        If AppxPackageInfoList IsNot Nothing Then GetAppxPkgInfoDlg.InstalledAppxPkgInfo = AppxPackageInfoList
         GetAppxPkgInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -13989,7 +13763,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If CapabilityInfoList IsNot Nothing Then GetCapabilityInfoDlg.InstalledCapabilityInfo = CapabilityInfoList
         GetCapabilityInfoDlg.ShowDialog(Me)
     End Sub
 
@@ -14050,7 +13823,6 @@ Public Class MainForm
             Exit Sub
         End If
         StopMountedImageDetector()
-        If DriverInfoList IsNot Nothing Then GetDriverInfo.InstalledDriverInfo = DriverInfoList
         GetDriverInfo.ShowDialog(Me)
     End Sub
 

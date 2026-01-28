@@ -270,7 +270,7 @@ Public Class SetImageEdition
         GroupBox1.ForeColor = ForeColor
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Determining EULA option compatibility...")
-        DynaLog.LogMessage("- Image Installation Type: " & MainForm.imgPType)
+        DynaLog.LogMessage("- Image Installation Type: " & MainForm.CurrentImage.ImageProductType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))
         ' Disable group box if not managing an active server installation
         If MainForm.CurrentImage.ImageInstallationType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then

@@ -8,7 +8,6 @@ Imports DISMTools.Utilities
 Public Class GetDriverInfo
 
     Dim DriverInfoList As New List(Of DismDriverCollection)
-    Public InstalledDriverInfo As DismDriverPackageCollection
     Dim InstalledDriverList As New List(Of DismDriverPackage)
     Dim SearchedDriverList As New List(Of DismDriverPackage)
 
@@ -1306,26 +1305,26 @@ Public Class GetDriverInfo
 
     Sub SearchDrivers(sQuery As String, Optional driverSearchMode As SearchMode = SearchMode.None)
         DynaLog.LogMessage("Search query: " & sQuery)
-        If InstalledDriverInfo Is Nothing Then Exit Sub
-        If InstalledDriverInfo.Count > 0 Then
+        If MainForm.CurrentImage.ImageDrivers Is Nothing Then Exit Sub
+        If MainForm.CurrentImage.ImageDrivers.Count > 0 Then
             Dim FilteredDrivers As IEnumerable(Of DismDriverPackage)
             Select Case driverSearchMode
                 Case SearchMode.OriginalFileName
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
                 Case SearchMode.ProviderName
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
                 Case SearchMode.ClassName
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
                 Case SearchMode.InBox
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.InBox)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.InBox)
                 Case SearchMode.NoInBox
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.InBox)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.InBox)
                 Case SearchMode.BootCritical
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.BootCritical)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.BootCritical)
                 Case SearchMode.NoBootCritical
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.BootCritical)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.BootCritical)
                 Case Else
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End Select
             ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
             SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))

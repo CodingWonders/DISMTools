@@ -6,7 +6,6 @@ Imports DISMTools.Utilities
 
 Public Class GetFeatureInfoDlg
 
-    Public InstalledFeatureInfo As DismFeatureCollection
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetFeatureInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -645,7 +644,11 @@ Public Class GetFeatureInfoDlg
             End If
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            ListView1.Items.AddRange(InstalledFeatureInfo.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
+            If MainForm.CurrentImage.ImageFeatures Is Nothing OrElse MainForm.CurrentImage.ImageFeatures.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures_Backup.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.FeatureState, True)})).ToArray())
+            Else
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
+            End If
         End If
     End Sub
 

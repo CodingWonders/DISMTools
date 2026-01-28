@@ -45,7 +45,6 @@ Public Class ProjProperties
             RecoverButton.Visible = MainForm.CurrentImage.ImageMountStatus = DismMountStatus.Invalid
             RemountImgBtn.Visible = MainForm.CurrentImage.ImageMountStatus = DismMountStatus.NeedsRemount
             imgVersion.Text = MainForm.CurrentImage.ImageVersion.ToString()
-            MainForm.imgVersion = imgVersion.Text
             DetectFeatureUpdate(MainForm.CurrentImage.ImageVersion)
             imgMountedName.Text = MainForm.CurrentImage.ImageName
             imgMountedDesc.Text = MainForm.CurrentImage.ImageDescription
@@ -667,42 +666,7 @@ Public Class ProjProperties
                 Case 5
                     Label19.Text = "Sì"
             End Select
-            Try
-                If Not Directory.Exists(MainForm.projPath & "\tempinfo") Then
-                    Directory.CreateDirectory(MainForm.projPath & "\tempinfo").Attributes = FileAttributes.Hidden
-                End If
-                DetectImageProperties()
-                MainForm.imgMountedStatus = imgMountedStatus.Text
-                MainForm.imgMountedName = imgMountedName.Text
-                MainForm.imgMountedDesc = imgMountedDesc.Text
-                MainForm.imgWimBootStatus = imgWimBootStatus.Text
-                MainForm.imgArch = imgArch.Text
-                MainForm.imgHal = imgHal.Text
-                MainForm.imgSPBuild = imgSPBuild.Text
-                MainForm.imgSPLvl = imgSPLvl.Text
-                MainForm.imgEdition = imgEdition.Text
-                MainForm.imgPType = imgPType.Text
-                MainForm.imgPSuite = imgPSuite.Text
-                MainForm.imgSysRoot = imgSysRoot.Text
-                MainForm.imgDirs = CInt(imgDirs.Text)
-                MainForm.imgFiles = CInt(imgFiles.Text)
-                MainForm.imgCreation = imgCreation.Text
-                MainForm.CreationTime = MainForm.imgCreation.Replace(" - ", " ")
-                MainForm.imgModification = imgModification.Text
-                MainForm.ModifyTime = MainForm.imgModification.Replace(" - ", " ")
-                If LanguageList.Items.Count > 0 Then
-                    Dim langStr As String = ""
-                    For x = 0 To LanguageList.Items.Count - 1
-                        langStr &= LanguageList.Items(x)
-                        If x >= LanguageList.Items.Count - 1 Then Exit For
-                        langStr &= ", "
-                    Next
-                    MainForm.imgLangs = langStr
-                End If
-                MainForm.imgRW = imgRW.Text
-            Catch ex As Exception
-
-            End Try
+            DetectImageProperties()
             If imgMountedName.Text = "<undefined>" Then
                 DynaLog.LogMessage("Getting name and edition...")
                 ' Determine name. Do this for both Windows 10 and 11, as this seems to occur with VHDX images (for Windows-on-ARM)
@@ -749,9 +713,6 @@ Public Class ProjProperties
                 End Select
                 ' The image description may be the same as its name
                 imgMountedDesc.Text = imgMountedName.Text
-                ' Set MainForm variables
-                MainForm.imgMountedName = imgMountedName.Text
-                MainForm.imgMountedDesc = imgMountedDesc.Text
             End If
             Label4.Visible = False
             Panel3.Visible = False

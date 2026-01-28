@@ -9,7 +9,6 @@ Public Class GetPkgInfoDlg
 
     Dim PackageInfoExList As New List(Of DismPackageInfoEx)
     Dim PackageInfoList As New List(Of DismPackageInfo)
-    Public InstalledPkgInfo As DismPackageCollection
     Dim OSVer As Version
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -1493,7 +1492,7 @@ Public Class GetPkgInfoDlg
             ListBox2.Items.AddRange(FilteredPackages.Select(Function(package) package.PackageName).ToArray())
         Else
             Dim FilteredPackages As IEnumerable(Of DismPackage) = MainForm.CurrentImage.ImagePackages.Where(Function(package) package.PackageName.ToLower().Contains(sQuery.ToLower()))
-            ListBox2.Items.Add(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
+            ListBox2.Items.AddRange(FilteredPackages.Select(Function(package) package.PackageName).ToArray())
         End If
     End Sub
 
@@ -1506,7 +1505,7 @@ Public Class GetPkgInfoDlg
             If MainForm.CurrentImage.ImagePackages Is Nothing OrElse MainForm.CurrentImage.ImagePackages.Count = 0 Then
                 ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages_Backup.Select(Function(package) package.PackageName).ToArray())
             Else
-                ListBox2.Items.Add(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
+                ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
             End If
         End If
     End Sub

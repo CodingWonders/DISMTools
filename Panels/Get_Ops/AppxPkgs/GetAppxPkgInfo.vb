@@ -6,7 +6,6 @@ Imports Microsoft.VisualBasic.ControlChars
 
 Public Class GetAppxPkgInfoDlg
 
-    Public InstalledAppxPkgInfo As DismAppxPackageCollection
     Dim mainAsset As String = ""
     Dim assetDir As String = ""
 
@@ -236,10 +235,10 @@ Public Class GetAppxPkgInfoDlg
         ListBox1.Items.Clear()
         ' The PowerShell helper may have added stuff to the MainForm arrays. Check that
         DynaLog.LogMessage("Detecting conditions imposed by host system...")
-        If InstalledAppxPkgInfo IsNot Nothing Then
+        If MainForm.CurrentImage.ImageAppxPackages IsNot Nothing Then
             DynaLog.LogMessage("Host system is running Windows 10 or 11. Using the technology provided by the DISM API...")
             DynaLog.LogMessage("Detecting if the extended AppX package getter script has been run...")
-            If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > InstalledAppxPkgInfo.Count Then
+            If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
                 DynaLog.LogMessage("Array has more items than AppX package collection. The script has been run.")
                 DynaLog.LogMessage("Getting AppX packages from arrays...")
                 ListBox1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Backup.Select(Function(appxPackage) appxPackage.PackageFullName).ToArray())
@@ -294,10 +293,10 @@ Public Class GetAppxPkgInfoDlg
                     Label40.Text = FilteredAppxPackages(ListBox1.SelectedIndex).Version.ToString()
                 End If
             Else
-                If InstalledAppxPkgInfo IsNot Nothing Then
+                If MainForm.CurrentImage.ImageAppxPackages IsNot Nothing Then
                     DynaLog.LogMessage("Host system is running Windows 10 or 11. Using the technology provided by the DISM API...")
                     DynaLog.LogMessage("Detecting if the extended AppX package getter script has been run...")
-                    If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > InstalledAppxPkgInfo.Count Then
+                    If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
                         DynaLog.LogMessage("Array has more items than AppX package collection. The script has been run.")
                         DynaLog.LogMessage("Getting AppX packages from arrays...")
                         Label23.Text = MainForm.CurrentImage.ImageAppxPackages_Backup(ListBox1.SelectedIndex).PackageFullName
@@ -309,26 +308,26 @@ Public Class GetAppxPkgInfoDlg
                         DynaLog.LogMessage("Array has the same items as the AppX package collection. The script has not been run.")
                         DynaLog.LogMessage("Getting AppX packages...")
                         DynaLog.LogMessage("Search function may have been used. Grabbing true index of selected AppX package...")
-                        For Each InstalledAppx As DismAppxPackage In InstalledAppxPkgInfo
+                        For Each InstalledAppx As DismAppxPackage In MainForm.CurrentImage.ImageAppxPackages
                             If InstalledAppx.PackageName.ToLower().Contains(SearchBox1.Text.ToLower()) And InstalledAppx.PackageName = ListBox1.Items(ListBox1.SelectedIndex) Then
-                                trueIndex = InstalledAppxPkgInfo.IndexOf(InstalledAppx)
+                                trueIndex = MainForm.CurrentImage.ImageAppxPackages.IndexOf(InstalledAppx)
                             End If
                         Next
                         DynaLog.LogMessage("True index: " & trueIndex)
                         If SearchBox1.Text = "" Then
                             DynaLog.LogMessage("No search query has been typed.")
-                            Label23.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).PackageName
-                            Label25.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName
-                            Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(ListBox1.SelectedIndex).Architecture, True)
-                            Label32.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).ResourceId
-                            Label40.Text = InstalledAppxPkgInfo(ListBox1.SelectedIndex).Version.ToString()
+                            Label23.Text = MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).PackageName
+                            Label25.Text = MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).DisplayName
+                            Label35.Text = Casters.CastDismArchitecture(MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).Architecture, True)
+                            Label32.Text = MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).ResourceId
+                            Label40.Text = MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).Version.ToString()
                         Else
                             DynaLog.LogMessage("A search query has been typed. Using true index...")
-                            Label23.Text = InstalledAppxPkgInfo(trueIndex).PackageName
-                            Label25.Text = InstalledAppxPkgInfo(trueIndex).DisplayName
-                            Label35.Text = Casters.CastDismArchitecture(InstalledAppxPkgInfo(trueIndex).Architecture, True)
-                            Label32.Text = InstalledAppxPkgInfo(trueIndex).ResourceId
-                            Label40.Text = InstalledAppxPkgInfo(trueIndex).Version.ToString()
+                            Label23.Text = MainForm.CurrentImage.ImageAppxPackages(trueIndex).PackageName
+                            Label25.Text = MainForm.CurrentImage.ImageAppxPackages(trueIndex).DisplayName
+                            Label35.Text = Casters.CastDismArchitecture(MainForm.CurrentImage.ImageAppxPackages(trueIndex).Architecture, True)
+                            Label32.Text = MainForm.CurrentImage.ImageAppxPackages(trueIndex).ResourceId
+                            Label40.Text = MainForm.CurrentImage.ImageAppxPackages(trueIndex).Version.ToString()
                         End If
                     End If
                 Else
@@ -354,9 +353,9 @@ Public Class GetAppxPkgInfoDlg
                 DynaLog.LogMessage("Package display name: " & packageDispName)
                 DynaLog.LogMessage("Checking if display name relies on a PRI...")
                 appDisplayName = If(Not packageDispName.StartsWith("ms-resource:"), packageDispName, "")
-                If InstalledAppxPkgInfo IsNot Nothing And packageDispName.StartsWith("ms-resource:") Then
+                If MainForm.CurrentImage.ImageAppxPackages IsNot Nothing And packageDispName.StartsWith("ms-resource:") Then
                     DynaLog.LogMessage("Display name starts with " & Quote & "ms-resource:" & Quote & ". Using PRI reader...")
-                    If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > InstalledAppxPkgInfo.Count Then
+                    If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
                         DynaLog.LogMessage("Array has more items than AppX package collection. The script has been run.")
                         Dim PriName As String = PriReader.ReadFromPri((If(MainForm.OnlineManagement, Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), MainForm.MountDir) & "\Program Files\WindowsApps\" & Label23.Text).Replace("\\", "\").Trim(), _
                                                                       Label25.Text, _
@@ -366,17 +365,17 @@ Public Class GetAppxPkgInfoDlg
                     Else
                         DynaLog.LogMessage("Array has the same items as the AppX package collection. The script has not been run.")
                         If SearchBox1.Text = "" Then
-                            Dim PriName As String = PriReader.ReadFromPri(InstalledAppxPkgInfo(ListBox1.SelectedIndex).InstallLocation, _
-                                                                          InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName, _
+                            Dim PriName As String = PriReader.ReadFromPri(MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).InstallLocation, _
+                                                                          MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).DisplayName, _
                                                                           packageDispName)
                             DynaLog.LogMessage("Name obtained from " & Quote & "resources.pri" & Quote & ": " & PriName)
-                            If PriName <> "" And Not PriName = InstalledAppxPkgInfo(ListBox1.SelectedIndex).DisplayName Then appDisplayName = PriName
+                            If PriName <> "" And Not PriName = MainForm.CurrentImage.ImageAppxPackages(ListBox1.SelectedIndex).DisplayName Then appDisplayName = PriName
                         Else
-                            Dim PriName As String = PriReader.ReadFromPri(InstalledAppxPkgInfo(trueIndex).InstallLocation, _
-                                                                          InstalledAppxPkgInfo(trueIndex).DisplayName, _
+                            Dim PriName As String = PriReader.ReadFromPri(MainForm.CurrentImage.ImageAppxPackages(trueIndex).InstallLocation, _
+                                                                          MainForm.CurrentImage.ImageAppxPackages(trueIndex).DisplayName, _
                                                                           packageDispName)
                             DynaLog.LogMessage("Name obtained from " & Quote & "resources.pri" & Quote & ": " & PriName)
-                            If PriName <> "" And Not PriName = InstalledAppxPkgInfo(trueIndex).DisplayName Then appDisplayName = PriName
+                            If PriName <> "" And Not PriName = MainForm.CurrentImage.ImageAppxPackages(trueIndex).DisplayName Then appDisplayName = PriName
                         End If
                     End If
                 End If
@@ -598,6 +597,7 @@ Public Class GetAppxPkgInfoDlg
             ListBox1.Items.AddRange(FilteredAppxPackages_Backup.Select(Function(AppxPackage) AppxPackage.PackageFullName).ToArray())
         Else
             FilteredAppxPackages = MainForm.CurrentImage.ImageAppxPackages.Where(Function(AppxPackage) AppxPackage.PackageName.ToLower().Contains(sQuery.ToLower()))
+            FilteredAppxPackages_Backup = Enumerable.Repeat(Of ImageAppxPackage)(Nothing, FilteredAppxPackages.Count)
             ListBox1.Items.AddRange(FilteredAppxPackages.Select(Function(AppxPackage) AppxPackage.PackageName).ToArray())
         End If
     End Sub
@@ -608,8 +608,8 @@ Public Class GetAppxPkgInfoDlg
             SearchPackages(SearchBox1.Text)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            If InstalledAppxPkgInfo IsNot Nothing Then
-                If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > InstalledAppxPkgInfo.Count Then
+            If MainForm.CurrentImage.ImageAppxPackages IsNot Nothing Then
+                If MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
                     ListBox1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Backup.Select(Function(appxPackage) appxPackage.PackageFullName).ToArray())
                 Else
                     ListBox1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages.Select(Function(appxPackage) appxPackage.PackageName).ToArray())

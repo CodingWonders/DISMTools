@@ -215,7 +215,7 @@ Public Class ImgIndexSwitch
             Win10Title.Visible = True
         End If
         Label5.Text = indexNames(NumericUpDown1.Value - 1)
-        If Label5.Text = MainForm.imgMountedName Then
+        If Label5.Text = MainForm.CurrentImage.ImageName Then
             Label6.Visible = True
             OK_Button.Enabled = False
         Else
@@ -228,7 +228,7 @@ Public Class ImgIndexSwitch
 
     Private Sub NumericUpDown1_ValueChanged(sender As Object, e As EventArgs) Handles NumericUpDown1.ValueChanged
         Label5.Text = indexNames(NumericUpDown1.Value - 1)
-        If Label5.Text = MainForm.imgMountedName Then
+        If Label5.Text = MainForm.CurrentImage.ImageName Then
             DynaLog.LogMessage("The index target is already mounted.")
             Label6.Visible = True
             OK_Button.Enabled = False

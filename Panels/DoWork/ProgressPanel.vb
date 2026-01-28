@@ -6983,7 +6983,6 @@ Public Class ProgressPanel
                 DynaLog.LogMessage("Updating mounted image lists, updating project configuration and saving project...")
                 MainForm.DetectMountedImages(False)
                 MainForm.ImgIndex = SwitchTargetIndex
-                MainForm.imgMountedName = SwitchTargetIndexName
                 MainForm.SaveDTProj()
                 If SwitchMountAsReadOnly Then
                     MainForm.UpdateProjProperties(True, True)
