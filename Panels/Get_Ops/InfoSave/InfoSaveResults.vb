@@ -111,8 +111,7 @@ Public Class InfoSaveResults
                                        "                border-bottom: 1px solid #222" & CrLf &
                                        "            }" & CrLf &
                                        "            code {" & CrLf &
-                                       "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
-                                       "                font-size: 16px" & CrLf &
+                                       "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & CrLf &
                                        "            }" & CrLf &
                                        "            #sidebar {" & CrLf &
                                        "                width: 200px;" & CrLf &
