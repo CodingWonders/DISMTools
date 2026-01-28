@@ -8,6 +8,8 @@ Public Class MainForm
     Private CurrentScript As StarterScript
     Private SupportedLanguageList As New List(Of String)
 
+    Private UserDataScriptFolder As String
+
     Private Function GetNewStarterScript() As StarterScript
         Return New StarterScript("PowerShell")
     End Function
@@ -81,6 +83,17 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        If Environment.GetCommandLineArgs().Length = 2 Then
+            ' The second parameter (counting the app path) determines
+            ' the path to a DT UserData folder.
+            Dim userDataPath As String = Environment.GetCommandLineArgs()(1).Replace("/userdata=", "")
+
+            If Directory.Exists(userDataPath) Then
+                UserDataScriptFolder = userDataPath
+            End If
+        End If
+        SaveFileDialog1.InitialDirectory = UserDataScriptFolder
+
         SupportedLanguageList.AddRange(New String(1) {"batch", "powershell"})
         CurrentScript = GetNewStarterScript()
     End Sub
