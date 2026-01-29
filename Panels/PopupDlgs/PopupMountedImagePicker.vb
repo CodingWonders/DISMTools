@@ -9,7 +9,7 @@ Public Class PopupMountedImagePicker
 
     Public Shared Function PickImage() As WindowsImage
         Dim pmipForm As Form = New Form With {
-            .Size = New Size(800, 376),
+            .Size = WindowHelper.ScaleSizeLogical(800, 376),
             .FormBorderStyle = FormBorderStyle.None,
             .StartPosition = FormStartPosition.CenterScreen,
             .ControlBox = False,
@@ -21,12 +21,12 @@ Public Class PopupMountedImagePicker
             .AutoScaleMode = AutoScaleMode.Dpi
         }
         Dim pmipInstructionLabel As Label = New Label With {
-            .Location = New Point(10, 10),
+            .Location = WindowHelper.ScalePositionLogical(10, 10),
             .AutoSize = True
         }
         Dim pmipMountedImageList As ListView = New ListView With {
-            .Location = New Point(12, 32),
-            .Size = New Size(760, 260),
+            .Location = WindowHelper.ScalePositionLogical(12, 32),
+            .Size = WindowHelper.ScaleSizeLogical(760, 260),
             .BackColor = pmipForm.BackColor,
             .ForeColor = pmipForm.ForeColor,
             .Anchor = CType((AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right), AnchorStyles),
@@ -35,27 +35,27 @@ Public Class PopupMountedImagePicker
             .View = View.Details
         }
         Dim pmipOkButton As Button = New Button With {
-            .Location = New Point(616, 300),
-            .Size = New Size(75, 23),
+            .Location = WindowHelper.ScalePositionLogical(616, 300),
+            .Size = WindowHelper.ScaleSizeLogical(75, 23),
             .Anchor = CType((AnchorStyles.Bottom Or AnchorStyles.Right), AnchorStyles),
             .FlatStyle = FlatStyle.System,
             .Enabled = False
         }
         Dim pmipCancelButton As Button = New Button With {
-            .Location = New Point(698, 300),
-            .Size = New Size(75, 23),
+            .Location = WindowHelper.ScalePositionLogical(698, 300),
+            .Size = WindowHelper.ScaleSizeLogical(75, 23),
             .Anchor = CType((AnchorStyles.Bottom Or AnchorStyles.Right), AnchorStyles),
             .FlatStyle = FlatStyle.System
         }
         pmipMountedImageList.Columns.AddRange(New ColumnHeader() {
                                               New ColumnHeader With {
-                                                  .Width = 434
+                                                  .Width = WindowHelper.ScaleLogical(434)
                                               },
                                               New ColumnHeader With {
-                                                  .Width = 64
+                                                  .Width = WindowHelper.ScaleLogical(64)
                                               },
                                               New ColumnHeader With {
-                                                  .Width = 374
+                                                  .Width = WindowHelper.ScaleLogical(374)
                                               }
                                              })
         pmipForm.AcceptButton = pmipOkButton

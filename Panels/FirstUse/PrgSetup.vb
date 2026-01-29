@@ -250,11 +250,11 @@ Public Class PrgSetup
         If pageInt = 0 Then
             Back_Button.Enabled = False
             backBox.Visible = False
-            Label1.Left = 8
+            Label1.Left = WindowHelper.ScaleLogical(8)
         Else
             Back_Button.Enabled = True
             backBox.Visible = True
-            Label1.Left = 54
+            Label1.Left = WindowHelper.ScaleLogical(54)
         End If
     End Sub
 
@@ -333,11 +333,11 @@ Public Class PrgSetup
         If pageInt = 0 Then
             Back_Button.Enabled = False
             backBox.Visible = False
-            Label1.Left = 8
+            Label1.Left = WindowHelper.ScaleLogical(8)
         Else
             Back_Button.Enabled = True
             backBox.Visible = True
-            Label1.Left = 54
+            Label1.Left = WindowHelper.ScaleLogical(54)
         End If
     End Sub
 
@@ -357,7 +357,16 @@ Public Class PrgSetup
 
         MainForm.IsFirstTime = True
 
-        Next_Button.Left = 998
+        ' Reposition and resize buttons
+        If WindowHelper.GetSystemDpi() > 96.0F Then
+            backBox.SizeMode = PictureBoxSizeMode.Zoom
+            minBox.SizeMode = PictureBoxSizeMode.Zoom
+            closeBox.SizeMode = PictureBoxSizeMode.Zoom
+        End If
+        backBox.Size = WindowHelper.ScaleSizeLogical(46, 32)
+        minBox.Size = WindowHelper.ScaleSizeLogical(46, 32)
+        closeBox.Size = WindowHelper.ScaleSizeLogical(46, 32)
+        Next_Button.Left = WindowHelper.ScaleLogical(998)
 
         ' Set color modes
         BodyPanelContainer.BackColor = CurrentTheme.BackgroundColor

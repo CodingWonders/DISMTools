@@ -85,4 +85,16 @@ Public Class WindowHelper
         Return CInt(px * (dx / 96.0))
     End Function
 
+    Public Shared Function ScalePositionLogical(posX As Integer, posY As Integer) As Point
+        Return New Point(ScaleLogical(posX), ScaleLogical(posY))
+    End Function
+
+    Public Shared Function ScaleSizeLogical(width As Integer, height As Integer) As Size
+        Return New Size(ScaleLogical(width), ScaleLogical(height))
+    End Function
+
+    Public Shared Function GetSystemDpi() As Single
+        Return CSng(ScaleLogical(100))
+    End Function
+
 End Class
