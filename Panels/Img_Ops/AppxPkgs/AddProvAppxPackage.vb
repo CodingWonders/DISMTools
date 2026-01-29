@@ -728,7 +728,7 @@ Public Class AddProvAppxPackage
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
             If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
@@ -772,7 +772,7 @@ Public Class AddProvAppxPackage
         Button9.Enabled = False
         NoAppxFilePanel.Visible = True
         AppxFilePanel.Visible = False
-        AppxDetailsPanel.Height = 520
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(520)
         FlowLayoutPanel1.Visible = False
     End Sub
 
@@ -1824,7 +1824,7 @@ Public Class AddProvAppxPackage
 
             NoAppxFilePanel.Visible = (ListView1.SelectedItems.Count <= 0)
             AppxFilePanel.Visible = Not (ListView1.SelectedItems.Count <= 0)
-            AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+            AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
             FlowLayoutPanel1.Visible = Not (ListView1.SelectedItems.Count <= 0)
         End If
     End Sub
@@ -1892,7 +1892,7 @@ Public Class AddProvAppxPackage
         End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         If ListView1.SelectedItems.Count = 1 Then
             Try
@@ -2018,7 +2018,7 @@ Public Class AddProvAppxPackage
         Catch ex As Exception
             NoAppxFilePanel.Visible = True
             AppxFilePanel.Visible = False
-            AppxDetailsPanel.Height = 520
+            AppxDetailsPanel.Height = WindowHelper.ScaleLogical(520)
             FlowLayoutPanel1.Visible = False
         End Try
     End Sub
@@ -2026,7 +2026,7 @@ Public Class AddProvAppxPackage
     Sub DetectMultiSelectionCommonProperties()
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         Select Case MainForm.Language
             Case 0
