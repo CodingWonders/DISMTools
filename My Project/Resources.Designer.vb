@@ -2153,14 +2153,13 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
+        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
+        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
         '''
         '''New features:
         '''
-        '''- The Driver Installation Module now has improved HiDPI awareness
-        '''- CODE: the Driver Installation Module now uses modern C++ standards when using supported compilers
-        '''- CODE: the build script of the Driver Installation Module no longer requires version 11 of the platform toolset (for VS2012) and fully uses version 19.5 (VS2026)
-        '''- The PE Helper now lets you reload disk and partition l [resto de la cadena truncado]&quot;;.
+        '''- The PE Helper now supports partition table overrides
+        '''- The Sysprep Preparation Tool has been updated to the latest release, with support for exporting and adding SCSI adapters and other storage controllers to the DT PE image, improved DPI handling, and more [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get
