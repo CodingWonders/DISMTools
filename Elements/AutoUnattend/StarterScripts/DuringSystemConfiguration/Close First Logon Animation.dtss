@@ -17,5 +17,5 @@ REM It is recommended that you add this script if you had added more scripts in 
 REM that require user input, to avoid waiting (potentially) indefinitely.
 
 reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /f
-reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /ve /t REG_SZ /d "Stop First Logon Animation Process" /f
-reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /v StubPath /t REG_EXPAND_SZ /d "\"%SYSTEMROOT%\System32\cmd.exe\" /C \"taskkill /f /im firstlogonanim.exe\"" /f
+reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /f /ve /t REG_SZ /d "Stop First Logon Animation Process"
+reg add "HKLM\Software\Microsoft\Active Setup\Installed Components\Cmp_NoFLA" /f /v StubPath /t REG_EXPAND_SZ /d "\"%SYSTEMROOT%\System32\cmd.exe\" /C \"taskkill /f /im firstlogonanim.exe\""

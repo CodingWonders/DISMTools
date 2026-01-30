@@ -729,6 +729,7 @@ function Start-PECustomization
                 Set-Content -Path "$imagePath\Windows\system32\startnet.cmd" -Value $contents -Force
             }
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
+            Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
@@ -1226,6 +1227,7 @@ function Get-Disks
     if (Test-Path -Path "$env:SYSTEMDRIVE\HotInstall\DSCReport.txt" -PathType Leaf) {
         Write-Host "- To get a look at what disks are applicable for operating system installation, type DSCR"
     }
+    Write-Host "- To reload results, press R"
     Write-Host ""
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"
@@ -1267,6 +1269,10 @@ function Get-Disks
                 }
                 Get-Disks
             }
+            "R" {
+                # Refresh results
+                Get-Disks
+            }
             default {
                 Write-Host "Please specify a number and try again.`n"
                 Get-Disks
@@ -1300,6 +1306,7 @@ function Get-Partitions
     diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" | Out-Host
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
+    Write-Host "- To reload results, press R"
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
@@ -1309,6 +1316,10 @@ function Get-Partitions
     elseif ($part -eq "B")
     {
         return $part
+    }
+    elseif ($part -eq "R")
+    {
+        Get-Partitions $driveNum
     }
     else
     {

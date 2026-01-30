@@ -2151,15 +2151,9 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Overall changes:
+        '''  Busca una cadena traducida similar a To get more information about what&apos;s new in this release, check out the release notes over at:
         '''
-        '''-- Bugfixes
-        '''
-        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
-        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
-        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
-        '''- Fixed a crash when opening the popup mounted image picker in some cases
-        '''- When picking a starter script using the predefined collection, language highlighting  [resto de la cadena truncado]&quot;;.
+        '''https://github.com/CodingWonders/DISMTools/releases/tag/v0.7.2_upd1.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

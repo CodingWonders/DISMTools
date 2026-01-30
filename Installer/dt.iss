@@ -61,6 +61,8 @@ WizardImageFile=mainImg.bmp
 WizardImageFileDynamicDark=mainImg_dark.bmp
 WizardSmallImageFile=logo.png
 WizardSmallImageFileDynamicDark=logo.png
+WizardBackImageFile=SetupBackground.png
+WizardBackImageFileDynamicDark=SetupBackgroundDark.png
 WizardSizePercent=150
 
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
@@ -85,11 +87,11 @@ UsedUserAreasWarning=no
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "es"; MessagesFile: "compiler:Spanish.isl"
-Name: "fr"; MessagesFile: "compiler:French.isl"
-Name: "de"; MessagesFile: "compiler:German.isl"
-Name: "it"; MessagesFile: "compiler:Italian.isl"
-Name: "pt"; MessagesFile: "compiler:Portuguese.isl"
+Name: "es"; MessagesFile: ".\Languages\Spanish.isl"
+Name: "fr"; MessagesFile: ".\Languages\French.isl"
+Name: "de"; MessagesFile: ".\Languages\German.isl"
+Name: "it"; MessagesFile: ".\Languages\Italian.isl"
+Name: "pt"; MessagesFile: ".\Languages\Portuguese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -219,6 +221,12 @@ Root: HKCU; Subkey: "Software\DISMTools\Stable\SearchSettings"; ValueType: strin
 
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist
+
+[Messages]
+SetupAppTitle={#MyAppName} {#verConst} Installer
+SetupWindowTitle={#MyAppName} {#verConst} Installer ({#MyAppVersion})
+UninstallAppTitle={#MyAppName} {#verConst} Uninstaller
+UninstallAppFullTitle={#MyAppName} {#verConst} Uninstaller ({#MyAppVersion})
 
 [Icons]
 Name: "{autoprograms}\{#scName}"; Filename: "{#pfDir}\{#MyAppExeName}"
