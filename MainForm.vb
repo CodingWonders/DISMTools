@@ -15816,4 +15816,44 @@ Public Class MainForm
         BGProcFailureDialog.ImageInQuestion = CurrentImage
         BGProcFailureDialog.ShowDialog(Me)
     End Sub
+
+    Private Sub EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Click
+        DynaLog.LogMessage("Preparing to evaluate readiness...")
+        Dim SecureBootKey As RegistryKey = Nothing
+        Try
+            SecureBootKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot")
+
+            Dim SBStateKey As RegistryKey = SecureBootKey.OpenSubKey("State")
+            Dim SecureBootEnabled As Boolean = SBStateKey.GetValue("UEFISecureBootEnabled", False)
+            SBStateKey.Close()
+
+            DynaLog.LogMessage("State of SecureBoot: " & SecureBootEnabled)
+
+            If Not SecureBootEnabled Then
+                MessageBox.Show("Secure Boot is not enabled on this machine.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Exit Try
+            End If
+
+            Dim SBServicingKey As RegistryKey = SecureBootKey.OpenSubKey("Servicing")
+            Dim CA23Updated As String = SBServicingKey.GetValue("UEFICA2023Status", "")
+            SBServicingKey.Close()
+
+            DynaLog.LogMessage("UEFI CA 2023 Status: " & CA23Updated)
+
+            Select Case CA23Updated
+                Case "NotStarted"
+                    MessageBox.Show("Secure Boot is enabled on this machine but does not contain Windows UEFI CA 2023 in its database. Make sure your computer receives the Secure Boot updates before Windows UEFI CA 2011 certificates expire in June 2026.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Case "InProgress"
+                    MessageBox.Show("An update to Secure Boot to support Windows UEFI CA 2023 is in progress.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Case "Updated"
+                    MessageBox.Show("Secure Boot is enabled on this machine and contains Windows UEFI CA 2023 in its database.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Case Else
+                    MessageBox.Show("We could not determine the status of the Windows UEFI CA 2023 update.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End Select
+        Catch ex As Exception
+
+        Finally
+            If SecureBootKey IsNot Nothing Then SecureBootKey.Close()
+        End Try
+    End Sub
 End Class
