@@ -116,6 +116,11 @@ if not defined destfile (
 	set destfile=install_%RANDOM%.wim
 )
 
+REM verify if we typed the correct extension -- if not, add it
+for %%a in (%destfile%) do (
+	if /i not "%%~xa" == ".WIM" set destfile=!destfile!.wim
+)
+
 set /p imagename=Provide a custom name (without quotes) for the resulting Windows image (e.g., "My Amazing Windows installation"): 
 if not defined imagename (
 	set imagename=Windows
@@ -154,6 +159,10 @@ exit /b
 :sysprep_hotinstall_remove_temp_files
 echo The capture script was invoked by the Sysprep preparation tool. Removing files...
 bcdedit /delete {current} /f
+if exist "%sourcedrive%:\$DISMTOOLS.~BT" rd "%sourcedrive%:\$DISMTOOLS.~BT" /s /q >nul 2>&1
+if exist "%sourcedrive%:\$DISMTOOLS.~WS" rd "%sourcedrive%:\$DISMTOOLS.~WS" /s /q >nul 2>&1
+if exist "%sourcedrive%:\CWS_SYSPRP" rd "%sourcedrive%:\CWS_SYSPRP" /s /q >nul 2>&1
+if exist "%sourcedrive%:\capture_completed" del "%sourcedrive%:\capture_completed" /f /s /q >nul 2>&1
 exit /b
 
 :dt_dim_driver_install
@@ -187,6 +196,7 @@ if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
 	echo \$DISMTOOLS.~BT >> %configlistpath%
 	echo \$DISMTOOLS.~WS >> %configlistpath%
 	echo \CWS_SYSPRP >> %configlistpath%
+	echo \capture_completed >> %configlistpath%
 )
 echo. >> %configlistpath%
 echo [CompressionExclusionList] >> %configlistpath%
@@ -219,6 +229,7 @@ echo %%SYSTEMROOT%%\CSC >> %wdscapturepath%
 echo $DISMTOOLS.~BT >> %wdscapturepath%
 echo $DISMTOOLS.~WS >> %wdscapturepath%
 echo CWS_SYSPRP >> %wdscapturepath%
+echo capture_completed >> %wdscapturepath%
 echo. >> %wdscapturepath%
 echo [WDS] >> %wdscapturepath%
 echo UploadToWDSServer=No >> %wdscapturepath%
