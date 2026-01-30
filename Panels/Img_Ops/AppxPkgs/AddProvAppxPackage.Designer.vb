@@ -79,6 +79,7 @@ Partial Class AddProvAppxPackage
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Button10 = New System.Windows.Forms.Button()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -93,6 +94,7 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -186,7 +188,9 @@ Partial Class AddProvAppxPackage
         '
         'Label6
         '
-        Me.Label6.Anchor = System.Windows.Forms.AnchorStyles.None
+        Me.Label6.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.Location = New System.Drawing.Point(0, 26)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(527, 30)
@@ -373,8 +377,8 @@ Partial Class AddProvAppxPackage
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.Panel3)
         Me.GroupBox2.Controls.Add(Me.TableLayoutPanel3)
-        Me.GroupBox2.Controls.Add(Me.ListBox1)
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Location = New System.Drawing.Point(3, 3)
         Me.GroupBox2.Name = "GroupBox2"
@@ -439,13 +443,12 @@ Partial Class AddProvAppxPackage
         'ListBox1
         '
         Me.ListBox1.AllowDrop = True
-        Me.ListBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(10, 58)
+        Me.ListBox1.Location = New System.Drawing.Point(0, 0)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.ScrollAlwaysVisible = True
-        Me.ListBox1.Size = New System.Drawing.Size(484, 121)
+        Me.ListBox1.Size = New System.Drawing.Size(491, 122)
         Me.ListBox1.TabIndex = 1
         '
         'Label3
@@ -637,6 +640,7 @@ Partial Class AddProvAppxPackage
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Size = New System.Drawing.Size(527, 437)
         Me.FlowLayoutPanel1.TabIndex = 11
+        Me.FlowLayoutPanel1.Visible = False
         Me.FlowLayoutPanel1.WrapContents = False
         '
         'Panel1
@@ -704,6 +708,16 @@ Partial Class AddProvAppxPackage
         Me.Button10.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.Button10.UseVisualStyleBackColor = True
         '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Controls.Add(Me.ListBox1)
+        Me.Panel3.Location = New System.Drawing.Point(7, 57)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(491, 122)
+        Me.Panel3.TabIndex = 4
+        '
         'AddProvAppxPackage
         '
         Me.AcceptButton = Me.OK_Button
@@ -745,6 +759,7 @@ Partial Class AddProvAppxPackage
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -806,5 +821,6 @@ Partial Class AddProvAppxPackage
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents Panel3 As System.Windows.Forms.Panel
 
 End Class

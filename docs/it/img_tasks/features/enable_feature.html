@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="it" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Abilitazione delle funzioni - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Abilitazione delle funzioni";
+        var mkdocs_page_input_path = "img_tasks\\features\\enable_feature.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start.html">Iniziare</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights.html">Novità</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Attività immagine</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../img_tasks.html">Panoramica</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../online_inst_mgmt.html">Modalità di gestione dell'installazione online</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../offline_inst_mgmt.html">Modalità di gestione dell'installazione offline</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gestione immagini</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image.html">Aggiunta a un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image.html">Applicazione di un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image.html">Acquisizione di un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image.html">Rimozione delle immagini del volume da un file immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image.html">Esportazione di un'immagine Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/list_image.html">Elencazione del contenuto delle immagini di Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image.html">Montaggio di un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/remount_image.html">Rimontaggio di un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/split_image.html">Suddivisione di un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/unmount_image.html">Smontaggio di un'immagine</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Finestre di dialogo informazioni immagine</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../info/infodlgs.html">Panoramica</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/img_info.html">Informazioni file immagine</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/pkg_info.html">Informazioni pacchetto</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/feat_info.html">Informazioni funzione</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/appxpkg_info.html">Informazioni pacchetto AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/cap_info.html">Informazioni capacità</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/drv_info.html">Informazioni driver</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/winpe_info.html">Informazioni configurazione Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pacchetti del sistema operativo</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/pkgs.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/add_package.html">Aggiunta di pacchetti</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/remove_package.html">Rimozione di pacchetti</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Funzioni</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="features.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Abilitazione delle funzioni</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#target-os-support">Target OS support</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#options">Options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#related-topics">Related topics</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="disable_feature.html">Disabilitazione delle funzioni</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pacchetti AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/appx.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/add_provisionedappxpackage.html">Aggiunta di pacchetti AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/remove_provisionedappxpackage.html">Rimozione di pacchetti AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Manutenzione edizione</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/editions.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_edition.html">Aggiornamento di un'immagine a un'edizione superiore</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_productkey.html">Impostazione del codice prodotto</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Manutenzione lingue e area geografica</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../langs/set_layereddriver.html">Impostazione dei driver della tastiera in livelli</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacità</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/caps.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/add_capability.html">Aggiunta di capacità</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/remove_capability.html">Rimozione di capacità</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Driver</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/drvs.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/add_driver.html">Aggiunta di driver</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver.html">Esportazione di driver</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver.html">Importazione di driver</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver.html">Rimozione di driver</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Strumenti</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/mimgmgr.html">Gestore immagini montate</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/wim2esd.html">Conversione immagini</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/swm2wim.html">Fusione file SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/configlisteditor.html">Editor elenco configurazione DISM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Strumenti creazione ISO</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/isocreate.html">Creazione di file ISO</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installazione del sistema operativo</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../tools/isocreator/install/localinstall.html">Installazioni locali</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Installazioni basate su rete</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/pxehelpers.html">Panoramica</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/wds.html">Assistente Servizi di distribuzione Windows (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dim.html">Modulo installazione driver</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dtpe_es.html">Suite di estensibilità</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/sysprep.html">Strumento di preparazione SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/cmdline.html">Panoramica</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/regcpl.html">Pannello di controllo del Registro di sistema immagini</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/servicemgr.html">Gestore servizi di sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/envvarmgr.html">Gestore variabili di ambiente di sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >File di risposta automatica</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unattend.html">Panoramica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_man.html">Gestore file di risposta automatica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_create.html">Creatore file di risposta automatica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_apply.html">Applicazione dei file di risposta automatica</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Strumenti esterni</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/themedesigner.html">Creazione dei temi</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Visualizzazione dei log di diagnostica</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menu di navigazione mobile">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Documenti"></a></li>
+          <li class="breadcrumb-item">Attività immagine</li>
+          <li class="breadcrumb-item">Funzioni</li>
+      <li class="breadcrumb-item active">Abilitazione delle funzioni</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="enabling-features">Enabling features</h1>
+<p align="center">
+    <img src="../../res/img_tasks/features/enable_feature.png" />
+</p>
+
+<p>With DISMTools you can enable features of an image to add optional components to a Windows installation. This action can be accessed by clicking Commands &gt; OS packages &gt; Enable feature..., or by clicking the "Enable feature..." button.</p>
+<h2 id="target-os-support">Target OS support</h2>
+<p>This action is supported on the following platforms:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Platform</th>
+<th style="text-align: center;">Supported?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Windows 7/Server 2008 R2</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8/Server 2012</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8.1/Server 2012 R2</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 10/Server 2016/2019/2022</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 11/Server 2025</td>
+<td style="text-align: center;">✔</td>
+</tr>
+</tbody>
+</table>
+<p><i>This action is supported on DISMTools 0.1.1 and newer</i></p>
+<h2 id="usage">Usage</h2>
+<p>You need to specify the features you want to enable on your Windows image or installation, and specify settings in order to get the result you want.</p>
+<h2 id="options">Options</h2>
+<ul>
+<li>If the parent package is not a Windows Foundation package, the name of the <strong>parent package</strong> needs to be provided. You can perform a quick package lookup to specify the name of the parent package</li>
+</ul>
+<p align="center">
+    <img src="../../res/img_tasks/features/pkg_lookup.png" />
+</p>
+
+<ul>
+<li>If a feature, whose state can be found in the list, has previously been removed from the image or installation; a <strong>feature source</strong> needs to be provided. You can browse your file system for an appropriate source, or get the source from group policy</li>
+<li>If you strictly want this operation to use the source and not Windows Update, untick the <strong>Windows Update contact</strong> option. Do note that this only applies to online installations</li>
+<li>If you want to enable all parent features of the specified features, tick the "Enable all parent features" option</li>
+<li>If you want, you can <strong>commit the image after enabling the features</strong> (Windows images only)</li>
+</ul>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="https://example.com">Command-line help</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Creato con <a href="https://www.mkdocs.org/">MkDocs</a> utilizzando un <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a> fornito da <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versioni">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="features.html" style="color: #fcfcfc">&laquo; Precedente</a></span>
+    
+    
+      <span><a href="disable_feature.html" style="color: #fcfcfc">Successivo &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

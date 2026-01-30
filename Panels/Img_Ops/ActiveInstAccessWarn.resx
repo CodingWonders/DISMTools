@@ -124,8 +124,6 @@ Given that this mode lets you modify your installation, you should be extremely 
 
 If you carelessly perform an operation to an online image, you may break it, to the point of making the installation unbootable.
 
-We AREN'T RESPONSIBLE for any damage done to your active installation. If you are left with an unbootable system, you should re-install Windows (while backing up your files first, if possible)
-
-If you understand this warning, and would like to proceed, click OK. Otherwise, click OK, and then click "Unload project". This will end online installation management.</value>
+We AREN'T RESPONSIBLE for any damage done to your active installation. If you are left with an unbootable system, you should re-install Windows (while backing up your files first, if possible)</value>
   </data>
 </root>

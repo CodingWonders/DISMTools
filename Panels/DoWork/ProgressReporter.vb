@@ -13,8 +13,7 @@ Module ProgressReporter
         progressForm = New Form With {
             .StartPosition = FormStartPosition.CenterScreen,
             .Text = "Progress",
-            .Width = 384,
-            .Height = 72,
+            .Size = WindowHelper.ScaleSizeLogical(384, 72),
             .FormBorderStyle = FormBorderStyle.None,
             .MinimizeBox = False,
             .MaximizeBox = False,
@@ -22,30 +21,25 @@ Module ProgressReporter
             .ForeColor = CurrentTheme.ForegroundColor,
             .ShowIcon = False,
             .ShowInTaskbar = False,
-            .Cursor = Cursors.WaitCursor
+            .Cursor = Cursors.WaitCursor,
+            .AutoScaleMode = AutoScaleMode.Dpi
         }
         progressLabel = New Label With {
-            .Left = 4,
-            .Top = 4,
-            .Width = 374,
-            .Height = 56,
+            .Location = WindowHelper.ScalePositionLogical(4, 4),
+            .Size = WindowHelper.ScaleSizeLogical(374, 56),
             .TextAlign = ContentAlignment.MiddleCenter,
             .AutoEllipsis = True,
             .AutoSize = False,
             .Font = New Font("Segoe UI", 11.25)
         }
         progressBarContainer = New Panel With {
-            .Left = 8,
-            .Top = 62,
-            .Width = 368,
-            .Height = 2,
+            .Location = WindowHelper.ScalePositionLogical(8, 62),
+            .Size = WindowHelper.ScaleSizeLogical(368, 2),
             .BackColor = CurrentTheme.DisabledForegroundColor
         }
         progressBarCompletedProgress = New Panel With {
-            .Left = 8,
-            .Top = 62,
-            .Width = 0,
-            .Height = 2,
+            .Location = WindowHelper.ScalePositionLogical(8, 62),
+            .Size = WindowHelper.ScaleSizeLogical(0, 2),
             .BackColor = CurrentTheme.ForegroundColor
         }
         progressForm.Controls.AddRange(New Control() {progressLabel, progressBarContainer, progressBarCompletedProgress})

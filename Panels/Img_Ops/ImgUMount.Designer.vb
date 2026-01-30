@@ -163,6 +163,8 @@ Partial Class ImgUMount
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Enabled = False
         Me.Label4.Location = New System.Drawing.Point(19, 96)
@@ -248,6 +250,8 @@ Partial Class ImgUMount
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoEllipsis = True
         Me.Label7.Location = New System.Drawing.Point(19, 37)
         Me.Label7.Name = "Label7"

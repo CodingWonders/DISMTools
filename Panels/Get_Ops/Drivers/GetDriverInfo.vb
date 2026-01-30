@@ -8,7 +8,6 @@ Imports DISMTools.Utilities
 Public Class GetDriverInfo
 
     Dim DriverInfoList As New List(Of DismDriverCollection)
-    Public InstalledDriverInfo As DismDriverPackageCollection
     Dim InstalledDriverList As New List(Of DismDriverPackage)
     Dim SearchedDriverList As New List(Of DismDriverPackage)
 
@@ -499,6 +498,10 @@ Public Class GetDriverInfo
             Text = ""
             Win10Title.Visible = True
         End If
+        If SplitContainer1.SplitterDistance = 440 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Updating items in list...")
@@ -506,9 +509,13 @@ Public Class GetDriverInfo
         SearchedDriverList.Clear()
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting installed drivers...")
-        If InstalledDriverInfo.Count > 0 Then
-            InstalledDriverList.AddRange(InstalledDriverInfo.Select(Function(driver) driver))
-            ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+        If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
+            SearchPanel.Visible = False
+        Else
+            InstalledDriverList.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) driver))
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            SearchPanel.Visible = True
         End If
 
         ' Detect if the "Detect all drivers" option is checked and act accordingly
@@ -1253,7 +1260,11 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Label25_MouseHover(sender As Object, e As EventArgs) Handles Label25.MouseHover
-        ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        If SearchBox1.Text = "" Then
+            ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        Else
+            ButtonTT.SetToolTip(sender, SearchedDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        End If
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
@@ -1294,25 +1305,26 @@ Public Class GetDriverInfo
 
     Sub SearchDrivers(sQuery As String, Optional driverSearchMode As SearchMode = SearchMode.None)
         DynaLog.LogMessage("Search query: " & sQuery)
-        If InstalledDriverInfo.Count > 0 Then
+        If MainForm.CurrentImage.ImageDrivers Is Nothing Then Exit Sub
+        If MainForm.CurrentImage.ImageDrivers.Count > 0 Then
             Dim FilteredDrivers As IEnumerable(Of DismDriverPackage)
             Select Case driverSearchMode
                 Case SearchMode.OriginalFileName
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
                 Case SearchMode.ProviderName
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
                 Case SearchMode.ClassName
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
                 Case SearchMode.InBox
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.InBox)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.InBox)
                 Case SearchMode.NoInBox
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.InBox)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.InBox)
                 Case SearchMode.BootCritical
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.BootCritical)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.BootCritical)
                 Case SearchMode.NoBootCritical
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Not Driver.BootCritical)
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.BootCritical)
                 Case Else
-                    FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End Select
             ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
             SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))
@@ -1344,7 +1356,12 @@ Public Class GetDriverInfo
             SearchDrivers(SearchBox1.Text, modeToUse)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            ListView1.Items.AddRange(InstalledDriverInfo.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
+            Else
+                InstalledDriverList.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) driver))
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            End If
         End If
     End Sub
 

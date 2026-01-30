@@ -1,4 +1,4 @@
-![Product image](https://github.com/CodingWonders/DISMTools/blob/stable/res/product_overview.png)
+![Product image](./res/product_overview.png)
 
 <!-- Tags (powered by Shields.io) -->
 

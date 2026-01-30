@@ -29,7 +29,6 @@ Partial Class PrgSetup
         Me.minBox = New System.Windows.Forms.PictureBox()
         Me.closeBox = New System.Windows.Forms.PictureBox()
         Me.btnControlPanel = New System.Windows.Forms.Panel()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.Back_Button = New System.Windows.Forms.Button()
         Me.Next_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -189,7 +188,6 @@ Partial Class PrgSetup
         '
         Me.btnControlPanel.BackColor = System.Drawing.Color.Transparent
         Me.btnControlPanel.BackgroundImage = Global.DISMTools.My.Resources.Resources.wndPanel_Backdrop
-        Me.btnControlPanel.Controls.Add(Me.Label4)
         Me.btnControlPanel.Controls.Add(Me.Back_Button)
         Me.btnControlPanel.Controls.Add(Me.Next_Button)
         Me.btnControlPanel.Controls.Add(Me.Cancel_Button)
@@ -198,18 +196,6 @@ Partial Class PrgSetup
         Me.btnControlPanel.Name = "btnControlPanel"
         Me.btnControlPanel.Size = New System.Drawing.Size(1280, 48)
         Me.btnControlPanel.TabIndex = 1
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.Color.White
-        Me.Label4.Location = New System.Drawing.Point(204, 17)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(169, 15)
-        Me.Label4.TabIndex = 1
-        Me.Label4.Text = "This content is not finished yet"
-        Me.Label4.Visible = False
         '
         'Back_Button
         '
@@ -1064,7 +1050,6 @@ Partial Class PrgSetup
         CType(Me.minBox, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.closeBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.btnControlPanel.ResumeLayout(False)
-        Me.btnControlPanel.PerformLayout()
         Me.BodyPanelContainer.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
         Me.WelcomePanel.PerformLayout()
@@ -1109,7 +1094,6 @@ Partial Class PrgSetup
     Friend WithEvents WelcomePanel As System.Windows.Forms.Panel
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents CustomizationPanel As System.Windows.Forms.Panel
     Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
     Friend WithEvents Label9 As System.Windows.Forms.Label

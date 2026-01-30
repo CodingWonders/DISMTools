@@ -68,7 +68,7 @@ Public Class RemCapabilities
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case MainForm.Language
                 Case 0
@@ -105,8 +105,10 @@ Public Class RemCapabilities
             Return False
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        If MainForm.CurrentImage.ImageCapabilities.Count > 0 Then
+        If MainForm.CurrentImage.ImageCapabilities IsNot Nothing AndAlso MainForm.CurrentImage.ImageCapabilities.Count > 0 Then
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Where(Function(capability) New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismFeatureState(capability.State, True)})).ToArray())
+        Else
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities_Backup.Where(Function(capability) New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.CapabilityState)).Select(Function(capability) New ListViewItem(New String() {capability.CapabilityName, Casters.CastDismFeatureState(capability.CapabilityState, True)})).ToArray())
         End If
         Return True
     End Function

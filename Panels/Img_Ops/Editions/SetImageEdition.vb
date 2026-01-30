@@ -11,7 +11,7 @@ Public Class SetImageEdition
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.imgEditionNewEdition = ComboBox1.SelectedItem
-        If MainForm.imgInstType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+        If MainForm.CurrentImage.ImageInstallationType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
             ProgressPanel.imgEditionCopyEula = RadioButton1.Checked
             ProgressPanel.imgEditionAcceptEula = RadioButton2.Checked
             If RadioButton1.Checked Then
@@ -95,7 +95,7 @@ Public Class SetImageEdition
             End Using
         Catch ex As Exception
             DynaLog.LogMessage("Could not grab edition targets. Error message: " & ex.Message)
-            If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+            If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
                 DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
                 Select Case MainForm.Language
                     Case 0
@@ -270,10 +270,10 @@ Public Class SetImageEdition
         GroupBox1.ForeColor = ForeColor
         WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Determining EULA option compatibility...")
-        DynaLog.LogMessage("- Image Installation Type: " & MainForm.imgPType)
+        DynaLog.LogMessage("- Image Installation Type: " & MainForm.CurrentImage.ImageProductType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))
         ' Disable group box if not managing an active server installation
-        If MainForm.imgInstType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+        If MainForm.CurrentImage.ImageInstallationType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
             DynaLog.LogMessage("All requirements are met. We are managing a Windows Server installation")
             GroupBox1.Enabled = True
         Else

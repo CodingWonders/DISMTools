@@ -138,6 +138,16 @@ Namespace Elements.Contemporaneus
         Public Property ImageEditionId As String
 
         ''' <summary>
+        ''' Determines whether a certain Windows image is a Windows PE image in disguise.
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' Certain Windows PE images, like the Sergei Strelec WinPE, have set their EditionIDs
+        ''' to things other than WindowsPE.
+        ''' </remarks>
+        Public Property WinPeInDisguise As Boolean
+
+        ''' <summary>
         ''' The installation type of the mounted Windows image.
         ''' </summary>
         ''' <returns></returns>
@@ -574,7 +584,7 @@ Namespace Elements.Contemporaneus
                                  Casters.CastDismArchitecture(ImageArchitecture),
                                  ImageSpBuild,
                                  ImageSpLevel,
-                                 ImageEditionId,
+                                 String.Format("{0}{1}", ImageEditionId, If(WinPeInDisguise, " (in reality a heavily modified WinPE image)", "")),
                                  ImageProductType,
                                  ImageProductSuite,
                                  ImageSystemRoot,

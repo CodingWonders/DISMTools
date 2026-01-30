@@ -117,6 +117,8 @@ Partial Class ProgressPanel
         '
         'allTasks
         '
+        Me.allTasks.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.allTasks.AutoEllipsis = True
         Me.allTasks.Location = New System.Drawing.Point(55, 144)
         Me.allTasks.Name = "allTasks"
@@ -126,6 +128,8 @@ Partial Class ProgressPanel
         '
         'taskCountLbl
         '
+        Me.taskCountLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.taskCountLbl.AutoEllipsis = True
         Me.taskCountLbl.Location = New System.Drawing.Point(642, 144)
         Me.taskCountLbl.Name = "taskCountLbl"

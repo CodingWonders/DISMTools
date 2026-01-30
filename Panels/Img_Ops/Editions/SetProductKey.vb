@@ -67,7 +67,7 @@ Public Class SetImageKey
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         Dim msg As String = ""
-        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+        If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
             Select Case MainForm.Language
                 Case 0

@@ -140,6 +140,7 @@ Public Class AppInstallerDownloader
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Language = MainForm.Language
+        Height = WindowHelper.ScaleLogical(320)
         Visible = True
         DynaLog.LogMessage("App Installer file passed: " & Quote & Path.GetFileName(AppInstallerFile) & Quote)
         If AppInstallerFile IsNot Nothing And File.Exists(AppInstallerFile) Then

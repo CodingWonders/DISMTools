@@ -7,16 +7,6 @@ Imports Microsoft.Dism
 
 Public Class PleaseWaitDialog
 
-    Public Sup_CommandArgs As String
-
-    ' OperationNum: 993
-    Public pkgSourceImgStr As String
-
-    Public featOpType As Integer    ' 0: enable; 1: disable
-
-    ' OperationNum: 994
-    Public featSourceImg As String
-
     ' OperationNum: 995
     Public indexesSourceImg As String
     Public imgIndexes As Integer

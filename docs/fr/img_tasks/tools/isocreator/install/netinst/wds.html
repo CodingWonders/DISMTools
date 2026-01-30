@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../../../../img/favicon.ico" />
+    <title>Assistant des services de déploiement Windows (WDS) - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Assistant des services de d\u00e9ploiement Windows (WDS)";
+        var mkdocs_page_input_path = "img_tasks\\tools\\isocreator\\install\\netinst\\wds.fr.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../../../../index.html">
+          <img src="../../../../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navigation">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started/start.html">Commencer</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../../whats_new/highlights.html">Nouveautés</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tâches d'image</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../../img_tasks.html">Aperçu</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../../online_inst_mgmt.html">Mode de gestion de l'installation en ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../../offline_inst_mgmt.html">Mode de gestion de l'installation hors ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gestion des images</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/append_image.html">Ajouter à une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/apply_image.html">Appliquer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/capture_image.html">Capturer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/delete_image.html">Supprimer les images de volume d'un fichier image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/export_image.html">Exporter une image Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/list_image.html">Lister le contenu des images Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/mount_image.html">Monter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/remount_image.html">Remonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/split_image.html">Fractionner une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/unmount_image.html">Démonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Boîtes de dialogue d'informations d'image</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/infodlgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/img_info.html">Informations du fichier image</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/pkg_info.html">Informations sur les packages</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/feat_info.html">Informations sur les fonctionnalités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/appxpkg_info.html">Informations sur les packages AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/cap_info.html">Informations sur les capacités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/drv_info.html">Informations sur les pilotes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/winpe_info.html">Informations de configuration de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../packages/pkgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../packages/add_package.html">Ajout de packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../packages/remove_package.html">Suppression de packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fonctionnalités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../features/features.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../features/enable_feature.html">Activation des fonctionnalités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../features/disable_feature.html">Désactivation des fonctionnalités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../appx/appx.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../appx/add_provisionedappxpackage.html">Ajout de packages AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../appx/remove_provisionedappxpackage.html">Suppression de packages AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des éditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../editions/editions.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../editions/set_edition.html">Mettre à niveau une image vers une édition supérieure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../editions/set_productkey.html">Définir la clé de produit</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des langues et régionales</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../langs/set_layereddriver.html">Définir les pilotes de clavier en couches</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../capabilities/caps.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../capabilities/add_capability.html">Ajout de capacités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../capabilities/remove_capability.html">Suppression de capacités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pilotes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/drvs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/add_driver.html">Ajout de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/export_driver.html">Export de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/import_driver.html">Import de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/remove_driver.html">Suppression de pilotes</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Outils</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../../mimgmgr.html">Gestionnaire d'images montées</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../wim2esd.html">Conversion d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../swm2wim.html">Fusion de fichiers SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../configlisteditor.html">Éditeur de liste de configuration DISM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Outils de création d'ISO</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../../isocreator.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../isocreate.html">Création de fichiers ISO</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" >Installation du système d'exploitation</a>
+    <ul class="current">
+                <li class="toctree-l3"><a class="reference internal" href="../localinstall.html">Installations locales</a>
+                </li>
+                <li class="toctree-l3 current"><a class="reference internal current" >Installations basées sur le réseau</a>
+    <ul class="current">
+                <li class="toctree-l4"><a class="reference internal" href="pxehelpers.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4 current"><a class="reference internal current" href="#">Assistant des services de déploiement Windows (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../exttools/dim.html">Module d'installation des pilotes</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../exttools/dtpe_es.html">Suite d'extensibilité</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../exttools/sysprep.html">Outil de préparation SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../cmdline/cmdline.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../regcpl.html">Panneau de contrôle du registre d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../servicemgr.html">Gestionnaire de services système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../envvarmgr.html">Gestionnaire de variables d'environnement système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fichiers de réponse sans assistance</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unattend.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unatt_man.html">Gestionnaire de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unatt_create.html">Créateur de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unatt_apply.html">Application des fichiers de réponse sans assistance</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils externes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../exttools/themedesigner.html">Création de vos thèmes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../exttools/dynaviewer.html">Affichage des journaux de diagnostic</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menu de navigation sur mobile">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Documents"></a></li>
+          <li class="breadcrumb-item">Outils</li>
+          <li class="breadcrumb-item">Outils de création d'ISO</li>
+          <li class="breadcrumb-item">Installation du système d'exploitation</li>
+          <li class="breadcrumb-item">Installations basées sur le réseau</li>
+      <li class="breadcrumb-item active">Assistant des services de déploiement Windows (WDS)</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ayudante-de-windows-deployment-services">Ayudante de Windows Deployment Services</h1>
+<p>El Ayudante de WDS permite desplegar imágenes de Windows por red usando Windows Deployment Services (WDS). Forma parte de las herramientas de creación de ISO y está disponible en DISMTools 0.7 y posteriores.</p>
+<h2 id="configurar-el-servidor-wds">Configurar el servidor WDS</h2>
+<p><strong>NOTA:</strong> esta sección era en versiones previas la continuación de la guía de preparación del servidor DHCP. Esta guía asume que ya has configurado un servidor DHCP. Si no es así, consulta la <a href="setup.html">guía de preparación del servidor DHCP</a>.</p>
+<p>Ahora que el servidor puede usar tu conmutador (switch), debemos configurarlo para que funcione con WDS. Abre la herramienta de administración de WDS y selecciona tu servidor. Haz clic derecho y elige "Configure Server":</p>
+<p><img alt="Configure Server" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_configure_server.png" /></p>
+<p>A continuación, selecciona el modo en el que operará el servidor. Este modo no puede cambiarse posteriormente sin quitar y volver a configurar el servidor, así que selecciona el modo correcto.</p>
+<p>Si dispones de un servidor distinto que actúe como Controlador de Dominio (DC) con Active Directory, o si el servidor actual ya actúa como DC, deja marcada la primera opción. Si no tienes un Controlador de Dominio, o sólo quieres experimentar con despliegues por red, elige el modo Standalone:</p>
+<p><img alt="Server Modes" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_modes.png" /></p>
+<p><em>Para esta guía usaremos el modo Standalone, ya que no contamos con un controlador de dominio.</em></p>
+<p>Seguidamente, selecciona la ruta donde se almacenarán los archivos de instalación remota. Por defecto, la carpeta <code>RemoteInstall</code> se crea en la raíz del disco del sistema. Cámbiala si es necesario; para nuestro ejemplo está bien la ubicación por defecto:</p>
+<p><img alt="Remote Install Location" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_remoteinstall.png" /></p>
+<p>El siguiente paso es importante y depende de cómo hayas configurado el servidor DHCP. Si el servidor WDS también es el servidor DHCP, deja marcadas ambas opciones. En caso contrario, deja marcada sólo la primera opción y configura la opción 60 en el servidor DHCP. Más adelante trataremos estas opciones con detalle:</p>
+<p><img alt="Proxy DHCP" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_proxy_dhcp.png" /></p>
+<p>Finalmente, configura las opciones PXE iniciales para responder tanto a equipos conocidos como desconocidos. Además, puedes exigir la aprobación del administrador para clientes desconocidos, lo que te da mayor control sobre qué dispositivos pueden conectarse. Estas opciones se pueden modificar más adelante:</p>
+<p><img alt="Initial PXE Settings" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_pxe_initial_settings.png" /></p>
+<p>Tras hacer clic en Siguiente, el servidor quedará configurado y el servicio WDS se iniciará. Es posible que encuentres un problema al intentar arrancar el servicio:</p>
+<p><img alt="WDS Service Startup Error" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_server_startup_error.png" /></p>
+<p>Si esto ocurre, intenta iniciar el servicio manualmente desde aquí:</p>
+<p><img alt="Service Manual Startup" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_manual_start.png" /></p>
+<h2 id="anadir-las-imagenes-de-windows">Añadir las imágenes de Windows</h2>
+<p>Antes de arrancar los clientes para realizar despliegues por red, primero debemos añadir las imágenes de Windows. Hazlo así:</p>
+<ol>
+<li>
+<p>Inserta o monta el archivo ISO recién creado y copia todos los archivos WIM a una carpeta en el servidor:</p>
+<p><img alt="Copy Files" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_copy_images.png" /></p>
+</li>
+<li>
+<p>En WDS, ve a "(Your Server) -&gt; Boot images", haz clic derecho en el área vacía y selecciona "Add boot image..."</p>
+<p><img alt="Add Boot Image" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_add_boot_image.png" /></p>
+</li>
+<li>
+<p>Selecciona la imagen de arranque (<code>boot.wim</code>) y finaliza el asistente:</p>
+<p><img alt="Boot Image Location" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_boot_image_location.png" /></p>
+</li>
+<li>
+<p>Después, ve a "(Your Server) -&gt; Install Images", haz clic derecho en el área vacía y selecciona "Add install image..."</p>
+<p><img alt="Add Install Image" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_add_install_image.png" /></p>
+</li>
+<li>
+<p>Esto requerirá crear un grupo de imágenes. Ponle el nombre que prefieras y especifica la imagen de instalación a añadir (<code>install.wim</code>):</p>
+<p><img alt="Image Group" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_add_image_group.png" /></p>
+<p><img alt="Install Image Location" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_install_image_location.png" /></p>
+</li>
+<li>
+<p>La imagen de instalación puede contener más de un índice. Marca los índices que quieras desplegar con WDS y finaliza el asistente. También puedes proporcionar nombres y descripciones personalizados para cada índice:</p>
+<p><img alt="Indexes" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_install_image_indexes.png" /></p>
+</li>
+</ol>
+<p>Finalmente, deberías tener esta configuración:</p>
+<p><img alt="Image Setup" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_final_image_config.png" /></p>
+<p>Ahora puedes arrancar los clientes PXE. En el servidor, además, debes iniciar el componente servidor del WDS Helper. Para ello, haz clic derecho en <code>wdshelper_server.ps1</code> dentro de <code>&lt;Drive Root&gt;\pxehelpers\wds</code> y selecciona "Run with PowerShell"</p>
+<p><img alt="WDSH Server Startup" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_server_startup.png" /></p>
+<h3 id="iniciar-la-instalacion-via-pxe">Iniciar la instalación vía PXE</h3>
+<p>Si seguiste cada paso correctamente, deberías ver una pantalla como la siguiente:</p>
+<p><img alt="WDS Startup" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_startup.png" /></p>
+<p>Pulsa <kbd>INTRO</kbd> y espera a que arranque el entorno WinPE de DISMTools. Una vez arrancado, selecciona la opción 2 para instalación por red:</p>
+<p><img alt="DT PE Network" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dt_pe_netinstall.png" /></p>
+<p>Llegarás a esta pantalla: indica la dirección IP del servidor, el puerto en el que escucha (normalmente 8080), el nombre del usuario que hospeda las imágenes (por lo general <code>Administrator</code>) y la contraseña:</p>
+<p><img alt="WDSHC AuthInfo" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_authinfo.png" /></p>
+<p>Elige la imagen del listado y el grupo al que pertenece; pulsa INTRO:</p>
+<p><img alt="WDSHC Install Images" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_install_images.png" /></p>
+<p>Tras preparar el despliegue de la imagen, configura los discos según sea necesario:</p>
+<p><img alt="WDSHC Disk Configuration" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_diskconfig.png" /></p>
+<p>Selecciona el índice:</p>
+<p><img alt="WDSHC Install Image Index" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_select_image_index.png" /></p>
+<p>Y, finalmente, espera a que la imagen se aplique:</p>
+<p><img alt="WDSHC Applying Image" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wdsh_client_apply_image.png" /></p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Générée avec <a href="https://www.mkdocs.org/">MkDocs</a> avec un <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a> fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="setup.html" style="color: #fcfcfc">&laquo; Précédent</a></span>
+    
+    
+      <span><a href="../../exttools/dim.html" style="color: #fcfcfc">Suivant &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../../../../..";</script>
+    <script src="../../../../../../js/theme_extra.js"></script>
+    <script src="../../../../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

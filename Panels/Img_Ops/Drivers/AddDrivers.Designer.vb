@@ -46,6 +46,7 @@ Partial Class AddDrivers
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -53,6 +54,7 @@ Partial Class AddDrivers
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -138,6 +140,8 @@ Partial Class AddDrivers
         '
         'Label2
         '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.Location = New System.Drawing.Point(6, 21)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(536, 32)
@@ -234,8 +238,8 @@ Partial Class AddDrivers
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.Panel1)
         Me.GroupBox2.Controls.Add(Me.Label3)
-        Me.GroupBox2.Controls.Add(Me.CheckedListBox1)
         Me.GroupBox2.Location = New System.Drawing.Point(566, 54)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(430, 460)
@@ -245,6 +249,8 @@ Partial Class AddDrivers
         '
         'Label3
         '
+        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.Location = New System.Drawing.Point(7, 21)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(417, 42)
@@ -254,10 +260,11 @@ Partial Class AddDrivers
         '
         'CheckedListBox1
         '
+        Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Location = New System.Drawing.Point(7, 66)
+        Me.CheckedListBox1.Location = New System.Drawing.Point(0, 0)
         Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(417, 388)
+        Me.CheckedListBox1.Size = New System.Drawing.Size(414, 395)
         Me.CheckedListBox1.TabIndex = 0
         '
         'GroupBox3
@@ -302,6 +309,16 @@ Partial Class AddDrivers
     "f it needs to be scanned recursively:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.CheckedListBox1)
+        Me.Panel1.Location = New System.Drawing.Point(10, 59)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(414, 395)
+        Me.Panel1.TabIndex = 2
+        '
         'AddDrivers
         '
         Me.AcceptButton = Me.OK_Button
@@ -331,6 +348,7 @@ Partial Class AddDrivers
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -358,5 +376,6 @@ Partial Class AddDrivers
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
     Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
 
 End Class

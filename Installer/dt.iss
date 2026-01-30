@@ -164,6 +164,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: string; Valu
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.CopyToVentoy"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "PEHelper.Use2023EFI"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "Quiet"; ValueData: 0; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\ImgOps"; ValueType: dword; ValueName: "AppxRemovalDisplayNameFormat"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\Logs"; ValueType: dword; ValueName: "AutoLogs"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
@@ -218,6 +219,7 @@ Root: HKCU; Subkey: "Software\DISMTools\Preview\InfoSaver"; ValueType: dword; Va
 
 Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; ValueType: string; ValueName: "EngineName"; ValueData: "DuckDuckGo"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\DISMTools\Preview\SearchSettings"; ValueType: dword; ValueName: "AITolerance"; ValueData: 1; Flags: uninsdeletevalue createvalueifdoesntexist
 
 ; Special - Set Internet Explorer browser emulation settings
 Root: HKCU; Subkey: "Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION"; ValueType: dword; ValueName: "DISMTools.exe"; ValueData: 11001; Flags: uninsdeletevalue createvalueifdoesntexist

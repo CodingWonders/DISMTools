@@ -205,7 +205,7 @@ Public Class Options
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
-        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.imgVersionInfo)
+        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.CurrentImage.ImageVersion)
         MainForm.SkipQuestions = CheckBox14.Checked
         MainForm.AutoCompleteInfo(0) = CheckBox15.Checked
         MainForm.AutoCompleteInfo(1) = CheckBox16.Checked
@@ -218,6 +218,11 @@ Public Class Options
         MainForm.TimeLabel.Visible = CheckBox21.Checked
 
         MainForm.SearchEngineName = ComboBox7.SelectedItem
+        If SearchEngineHelper.GetAllSearchEngines().ElementAt(ComboBox7.SelectedIndex).AIPermission > ComboBox9.SelectedIndex Then
+            MainForm.SearchEngineAITolerance = SearchEngineHelper.GetAllSearchEngines().ElementAt(ComboBox7.SelectedIndex).AIPermission
+        End If
+
+        MainForm.AppxDisplayNameFormatOnRemoval = ComboBox8.SelectedIndex
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1622,6 +1627,10 @@ Public Class Options
         ComboBox6.ForeColor = CurrentTheme.ForegroundColor
         ComboBox7.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox7.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox8.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox8.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox9.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox9.ForeColor = CurrentTheme.ForegroundColor
         DarkThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
         DarkThemesCB.ForeColor = CurrentTheme.ForegroundColor
         LightThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1698,6 +1707,10 @@ Public Class Options
         End If
         ChangeSections(SectionNum)
         FlowLayoutPanel1.BackColor = Win10Title.BackColor
+
+        If SplitContainer1.SplitterDistance = 256 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+        End If
     End Sub
 
     Sub GetSystemFonts()
@@ -1822,7 +1835,10 @@ Public Class Options
         CheckBox21.Checked = MainForm.ShowDateAndTime
         CheckBox23.Checked = Not MainForm.NoNTSamMappings
 
+        ComboBox9.SelectedIndex = MainForm.SearchEngineAITolerance      ' This goes first because we need to configure the tolerance; otherwise we get a dialog on launch
         ComboBox7.SelectedItem = MainForm.SearchEngineName
+
+        ComboBox8.SelectedIndex = MainForm.AppxDisplayNameFormatOnRemoval
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -3215,5 +3231,50 @@ Public Class Options
                                                 "DISMTools can also disable certain features based on other parameters of the Windows image you are servicing, such as the edition. This usually happens " &
                                                 "with Windows PE images.", Environment.NewLine)
         ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
+        Dim exampleDisplayName As String = "UbisoftEntertainment.RaymanJungleRun",
+            exampleFriendlyDisplayName As String = "Rayman Jungle Run"
+
+        Select Case ComboBox8.SelectedIndex
+            Case 0
+                Label75.Text = exampleDisplayName
+            Case 1
+                Label75.Text = String.Format("{0} ({1})", exampleDisplayName, exampleFriendlyDisplayName)
+            Case 2
+                Label75.Text = exampleFriendlyDisplayName
+        End Select
+    End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        Dim qhMessage As String = String.Format("AppX package display names are a portion of package family names that don't contain package-specific application information, such as architectures, versions, or the per-publisher hash.{0}{0}" &
+                                                "AppX package {1}friendly display names{1} are the names that you see when looking at them in your Start menu. These are derived from either application identity information in an application's manifest, " &
+                                                "or from embedded strings in an application's resources file (resources.pri).{0}{0}" &
+                                                "If DISMTools can't get the friendly display name, it will display the application's display name.", Environment.NewLine, Quote)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
+        If SearchEngineHelper.GetAllSearchEngines().ElementAt(ComboBox7.SelectedIndex).AIPermission > ComboBox9.SelectedIndex Then
+            ' The user has selected a search engine with a higher AI tolerance level.
+            If MessageBox.Show(String.Format("The selected search engine, {1}{2}{1}, exceeds the current AI tolerance setting, {1}{3}{1}. " &
+                                             "If you continue with this search engine, AI tolerance will be increased after applying the settings.{0}{0}" &
+                                             "If you decide not to continue with this search engine, DISMTools will use the first search engine that stays " &
+                                             "within tolerance boundaries.{0}{0}" &
+                                             "Do you want to continue with this search engine?", Environment.NewLine, Quote, ComboBox7.SelectedItem, ComboBox9.SelectedItem),
+                                         "AI Tolerance Exceeded", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                ComboBox7.SelectedItem = SearchEngineHelper.GetAllSearchEngines().First(Function(engine) engine.AIPermission = ComboBox9.SelectedIndex).Name
+            End If
+        End If
+    End Sub
+
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+        Dim qhMessage As String = String.Format("When specifying search engine settings, you can specify the amount of tolerance of artificial intelligence (AI) features in a search engine.{0}{0}" &
+                                                "- {1}Turn off as many AI features as possible{1} will let you pick from a selection of search engines that have AI features disabled, or not implemented, by default{0}" &
+                                                "- {1}Let me control the AI features in my search engine{1} will let you pick from the former selection, plus search engines that do have AI features turned on by default, but configured via URL parameters or other engine settings{0}" &
+                                                "- {1}Turn on as many AI features as possible{1} will let you pick from all available search engines, including those that are based on AI or have dedicated modes for AI that are being advertised too much.{0}{0}" &
+                                                "Normally, the second option is what you can go with, as it gives you greater control. If you prefer a more privacy-focused experience, you can turn these features off.", Environment.NewLine, Quote)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
     End Sub
 End Class

@@ -67,11 +67,11 @@ std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const 
     return result;
 }
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLine, int nShowCmd) {
 #if (_MSC_VER < 1950)
     const wchar_t CLASS_NAME[] = L"Driver Installation Module";
 #else
-	constexpr wchar_t CLASS_NAME[] = L"Driver Installation Module";
+    constexpr wchar_t CLASS_NAME[] = L"Driver Installation Module";
 #endif
 
     WNDCLASS wc = {};
@@ -107,7 +107,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
         return 0;
     }
 
-    ShowWindow(hwnd, nCmdShow);
+    ShowWindow(hwnd, nShowCmd);
 
     MSG msg = {};
     while (GetMessage(&msg, nullptr, 0, 0)) {
@@ -369,7 +369,7 @@ static installationStatus GetStatusFromLVI(HWND hwndList, int itemIndex) {
 #if (_MSC_VER < 1950)
         WCHAR buffer[256];
 #else
-		WCHAR buffer[256]{};
+        WCHAR buffer[256]{};
 #endif
         LVITEM lvItem = {0};
         lvItem.iSubItem = 1;
@@ -445,7 +445,7 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
 #if (_MSC_VER < 1950)
                 WCHAR buffer[256];
 #else
-				WCHAR buffer[256]{};
+                WCHAR buffer[256]{};
 #endif
                 LVITEM lvItem = {0};
                 lvItem.mask = LVIF_TEXT;

@@ -493,6 +493,12 @@
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.Designer.vb">
+      <DependentUpon>BGProcFailureDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.Designer.vb">
       <DependentUpon>BGProcNotify.vb</DependentUpon>
     </Compile>
@@ -890,11 +896,13 @@
     <Compile Include="UserControls\ConsoleControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Utilities\AppxUtilities\AppxHelper.vb" />
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
+    <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
@@ -1028,6 +1036,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.resx">
       <DependentUpon>BGProcDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.resx">
+      <DependentUpon>BGProcFailureDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.resx">
       <DependentUpon>BGProcNotify.vb</DependentUpon>
@@ -1285,6 +1296,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\fullcopy.bat">

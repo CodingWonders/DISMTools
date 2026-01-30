@@ -264,7 +264,7 @@ Public Class AddProvAppxPackage
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If Not MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("All requirements are met. Continuing with the task...")
             Return True
         Else
@@ -728,18 +728,18 @@ Public Class AddProvAppxPackage
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
             If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
-                (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+                (MainForm.CurrentImage.ImageVersion.Major >= 10 And MainForm.CurrentImage.ImageVersion.Build >= 17134) Then
                 DynaLog.LogMessage("All conditions met for AppX regions (image version >= 10.0.17134; DISM version >= 10.0.17134.)")
                 GroupBox3.Enabled = True
             Else
                 DynaLog.LogMessage("Not all or no conditions met for AppX regions.")
                 GroupBox3.Enabled = False
             End If
-            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
+            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.CurrentImage.ImageVersion.Major >= 10 Then
                 DynaLog.LogMessage("All conditions met for stub package preferences (image version >= 10.0; DISM version >= 10.0.)")
                 Panel2.Enabled = True
             Else
@@ -772,7 +772,7 @@ Public Class AddProvAppxPackage
         Button9.Enabled = False
         NoAppxFilePanel.Visible = True
         AppxFilePanel.Visible = False
-        AppxDetailsPanel.Height = 520
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(520)
         FlowLayoutPanel1.Visible = False
     End Sub
 
@@ -1824,7 +1824,7 @@ Public Class AddProvAppxPackage
 
             NoAppxFilePanel.Visible = (ListView1.SelectedItems.Count <= 0)
             AppxFilePanel.Visible = Not (ListView1.SelectedItems.Count <= 0)
-            AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+            AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
             FlowLayoutPanel1.Visible = Not (ListView1.SelectedItems.Count <= 0)
         End If
     End Sub
@@ -1892,7 +1892,7 @@ Public Class AddProvAppxPackage
         End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         If ListView1.SelectedItems.Count = 1 Then
             Try
@@ -1997,7 +1997,7 @@ Public Class AddProvAppxPackage
                     CheckBox4.Checked = False
                 End If
                 DynaLog.LogMessage("Detecting conditions imposed by DISM and the Windows image for stub package preferences...")
-                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10) And
+                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.CurrentImage.ImageVersion.Major >= 10) And
                     Packages(ListView1.FocusedItem.Index).SupportsStub Then
                     DynaLog.LogMessage("All requirements are met.")
                     Panel2.Enabled = True
@@ -2018,7 +2018,7 @@ Public Class AddProvAppxPackage
         Catch ex As Exception
             NoAppxFilePanel.Visible = True
             AppxFilePanel.Visible = False
-            AppxDetailsPanel.Height = 520
+            AppxDetailsPanel.Height = WindowHelper.ScaleLogical(520)
             FlowLayoutPanel1.Visible = False
         End Try
     End Sub
@@ -2026,7 +2026,7 @@ Public Class AddProvAppxPackage
     Sub DetectMultiSelectionCommonProperties()
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         Select Case MainForm.Language
             Case 0

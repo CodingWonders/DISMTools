@@ -131,6 +131,9 @@ Public Class ServiceManagementForm
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+        ListView4.Size = New Size(WindowHelper.ScaleLogical(ListView4.Width), WindowHelper.ScaleLogical(ListView4.Height))
+
         isModified = False
 
         DynaLog.DisableLogging()

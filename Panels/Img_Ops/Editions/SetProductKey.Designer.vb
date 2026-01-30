@@ -116,6 +116,8 @@ Partial Class SetImageKey
         '
         'Label2
         '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(13, 114)
         Me.Label2.Name = "Label2"

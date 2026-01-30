@@ -205,7 +205,8 @@ Public Class SampleScriptBrowser
 
     Private Sub CreateStarterScriptBtn_Click(sender As Object, e As EventArgs) Handles CreateStarterScriptBtn.Click
         If File.Exists(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")) Then
-            Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"))
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"),
+                          String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & ControlChars.Quote))
         End If
     End Sub
 End Class

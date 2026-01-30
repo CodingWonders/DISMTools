@@ -983,25 +983,23 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue in the capability removal dialog where the incorrect items would be shown
+- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
+- Scaling issues have been fixed. The program should look nicer at 125% scaling
 
 New features:
 
-- The Driver Installation Module now has improved HiDPI awareness
-- CODE: the Driver Installation Module now uses modern C++ standards when using supported compilers
-- CODE: the build script of the Driver Installation Module no longer requires version 11 of the platform toolset (for VS2012) and fully uses version 19.5 (VS2026)
-- The PE Helper now lets you reload disk and partition listings
-- The WDS Helper client now lets you reload disk and partition listings, as well as the installation images and groups in the WDS server. It also performs validation of your input now
-- A new Starter Script Editor lets you easily create your own starter scripts
-- The "Display Bugcheck Parameters" starter script has been introduced
-- New search filters have been added to the driver information dialog when working with installed drivers
-- You can now save the HTML image information reports to any location
-- Custom property viewers in the package and feature information dialogs now follow user-preferred font settings
-- CODE: large parts of the codebase are being refactored to improve speed and reliability
-- Inno Setup has been updated to version 6.7
-- DISMTools now handles HiDPI displays much better
-- The managed DISM API has been updated to version 4.0.7
-- WindowsAPICodePack has been updated to version 8.0.14</value>
+- The PE Helper now supports partition table overrides
+- The Sysprep Preparation Tool has been updated to the latest release, with support for exporting and adding SCSI adapters and other storage controllers to the DT PE image, improved DPI handling, and more
+- The DISMTools Preinstallation Environment now contains a script to create boot entries depending on the system's firmware type
+- You can now access the DiskPart command line from the image capture script. You can also change the keyboard layout from that script. The image capture script will also append ".wim" to the destination file name if you hadn't given it a (valid) file extension
+- The Starter Script editor now supports saving to user data folders by default
+- You can now search AppX package information when the extended AppX package getter is run
+- DISMTools now detects Windows PE images in disguise, such as Sergei Strelec's WinPE. These images spoof the edition IDs to resemble something else, such as "Professional". This makes DISM and any program that queries the edition ID think it's not a Windows PE image
+- When a background process fails, DISMTools will now continue running the remaining processes, as opposed to abruptly stopping them. After finishing, you can now see which failed and why
+- When mounting an image, you can now specify an ISO file. DISMTools will mount the ISO file and grab the installation images that you can use from it
+- DISMTools can now show you the names of the AppX packages that you see from your Start menu ("friendly display names") when removing them
+- New search engines and engine modes are available, and you can now filter them based on how much you tolerate AI features in them
+- DISMTools now contains Help documentation files in Spanish (EXPERIMENTAL ONLY)</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

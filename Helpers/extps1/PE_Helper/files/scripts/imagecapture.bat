@@ -26,6 +26,8 @@ echo.
 echo - To install drivers if you don't see your drives, type "DIM"
 if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
 echo - To save the image to a network share, type "NET"
+echo - To perform quick disk and partition administration, type "DP"
+echo - To change the keyboard layout to use, type "KBD"
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
@@ -34,12 +36,12 @@ if not defined sourcedrive (
 	exit /b 1
 )
 
-if "%sourcedrive%" equ "DIM" (
+if /i "%sourcedrive%" equ "DIM" (
 	call :dt_dim_driver_install
 	goto :main
 )
 
-if "%sourcedrive%" equ "WDS" (
+if /i "%sourcedrive%" equ "WDS" (
 	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
 	call :create_wdscapture_config_list
 	"%SYSTEMROOT%\system32\wdscapture.exe"
@@ -50,7 +52,7 @@ if "%sourcedrive%" equ "WDS" (
 	exit /b
 )
 
-if "%sourcedrive%" equ "NET" (
+if /i "%sourcedrive%" equ "NET" (
 	cls
 	echo This process will help you map a network drive to which you can save your Windows image. Keep
 	echo in mind, however, that this will NOT produce an installation image compatible with network-based
@@ -91,6 +93,17 @@ if "%sourcedrive%" equ "NET" (
 	goto :main
 )
 
+if /i "%sourcedrive%" equ "DP" (
+	echo Entering DiskPart...
+	diskpart
+	goto :main
+)
+
+if /i "%sourcedrive%" equ "KBD" (
+	powershell -noprofile -file "%sysdrive%\ChangeKeyboardLayout.ps1"
+	goto :main
+)
+
 if not defined destdrive ( set /p destdrive=Please enter the letter of the volume the file will be stored on: )
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
@@ -101,6 +114,11 @@ echo.
 set /p destfile=Enter a file name for the target WIM file. Press ENTER without specifying anything to continue with a random name: 
 if not defined destfile (
 	set destfile=install_%RANDOM%.wim
+)
+
+REM verify if we typed the correct extension -- if not, add it
+for %%a in (%destfile%) do (
+	if /i not "%%~xa" == ".WIM" set destfile=!destfile!.wim
 )
 
 set /p imagename=Provide a custom name (without quotes) for the resulting Windows image (e.g., "My Amazing Windows installation"): 
@@ -141,6 +159,10 @@ exit /b
 :sysprep_hotinstall_remove_temp_files
 echo The capture script was invoked by the Sysprep preparation tool. Removing files...
 bcdedit /delete {current} /f
+if exist "%sourcedrive%:\$DISMTOOLS.~BT" rd "%sourcedrive%:\$DISMTOOLS.~BT" /s /q >nul 2>&1
+if exist "%sourcedrive%:\$DISMTOOLS.~WS" rd "%sourcedrive%:\$DISMTOOLS.~WS" /s /q >nul 2>&1
+if exist "%sourcedrive%:\CWS_SYSPRP" rd "%sourcedrive%:\CWS_SYSPRP" /s /q >nul 2>&1
+if exist "%sourcedrive%:\capture_completed" del "%sourcedrive%:\capture_completed" /f /s /q >nul 2>&1
 exit /b
 
 :dt_dim_driver_install
@@ -173,6 +195,8 @@ for /d %%f in (%~1:\Users\*) do (
 if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
 	echo \$DISMTOOLS.~BT >> %configlistpath%
 	echo \$DISMTOOLS.~WS >> %configlistpath%
+	echo \CWS_SYSPRP >> %configlistpath%
+	echo \capture_completed >> %configlistpath%
 )
 echo. >> %configlistpath%
 echo [CompressionExclusionList] >> %configlistpath%
@@ -204,6 +228,8 @@ echo winpepge.sys >> %wdscapturepath%
 echo %%SYSTEMROOT%%\CSC >> %wdscapturepath%
 echo $DISMTOOLS.~BT >> %wdscapturepath%
 echo $DISMTOOLS.~WS >> %wdscapturepath%
+echo CWS_SYSPRP >> %wdscapturepath%
+echo capture_completed >> %wdscapturepath%
 echo. >> %wdscapturepath%
 echo [WDS] >> %wdscapturepath%
 echo UploadToWDSServer=No >> %wdscapturepath%

@@ -488,7 +488,7 @@ Public Class ImgExport
         Try
             ' WIMBoot is only compatible with Windows 8.1
             DynaLog.LogMessage("Detecting if the Windows image that is being serviced supports WIMBoot...")
-            If MainForm.imgVersionInfo IsNot Nothing And MainForm.imgVersionInfo.Build = 9600 Then
+            If MainForm.CurrentImage.ImageVersion IsNot Nothing And MainForm.CurrentImage.ImageVersion.Build = 9600 Then
                 ' We are dealing with Windows 8.1
                 DynaLog.LogMessage("The image that is being serviced contains Windows 8.1. It supports WIMBoot.")
                 CheckBox4.Enabled = True

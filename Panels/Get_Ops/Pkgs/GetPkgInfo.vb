@@ -9,7 +9,6 @@ Public Class GetPkgInfoDlg
 
     Dim PackageInfoExList As New List(Of DismPackageInfoEx)
     Dim PackageInfoList As New List(Of DismPackageInfo)
-    Public InstalledPkgInfo As DismPackageCollection
     Dim OSVer As Version
 
     Private Sub GetPkgInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -657,6 +656,10 @@ Public Class GetPkgInfoDlg
             Text = ""
             Win10Title.Visible = True
         End If
+        If SplitContainer1.SplitterDistance = 440 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
@@ -664,10 +667,11 @@ Public Class GetPkgInfoDlg
         DynaLog.LogMessage("Updating items in list...")
         ListBox2.Items.Clear()
         DynaLog.LogMessage("Getting installed packages...")
-        For Each InstalledPackage As DismPackage In InstalledPkgInfo
-            ListBox2.Items.Add(InstalledPackage.PackageName)
-        Next
-
+        If MainForm.CurrentImage.ImagePackages Is Nothing OrElse MainForm.CurrentImage.ImagePackages.Count = 0 Then
+            ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages_Backup.Select(Function(package) package.PackageName).ToArray())
+        Else
+            ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
+        End If
         NoPkgPanel.Visible = True
         PackageFileInfoPanel.Visible = False
         Panel4.Visible = False
@@ -1483,11 +1487,12 @@ Public Class GetPkgInfoDlg
 
     Sub SearchPackages(sQuery As String)
         DynaLog.LogMessage("Search query: " & sQuery)
-        If InstalledPkgInfo.Count > 0 Then
-            Dim FilteredPackages = InstalledPkgInfo.Where(Function(package) package.PackageName.ToLower().Contains(sQuery.ToLower()))
-            For Each FilteredPackage As DismPackage In FilteredPackages
-                ListBox2.Items.Add(FilteredPackage.PackageName)
-            Next
+        If MainForm.CurrentImage.ImagePackages Is Nothing OrElse MainForm.CurrentImage.ImagePackages.Count = 0 Then
+            Dim FilteredPackages As IEnumerable(Of ImagePackage) = MainForm.CurrentImage.ImagePackages_Backup.Where(Function(package) package.PackageName.ToLower().Contains(sQuery.ToLower()))
+            ListBox2.Items.AddRange(FilteredPackages.Select(Function(package) package.PackageName).ToArray())
+        Else
+            Dim FilteredPackages As IEnumerable(Of DismPackage) = MainForm.CurrentImage.ImagePackages.Where(Function(package) package.PackageName.ToLower().Contains(sQuery.ToLower()))
+            ListBox2.Items.AddRange(FilteredPackages.Select(Function(package) package.PackageName).ToArray())
         End If
     End Sub
 
@@ -1497,9 +1502,11 @@ Public Class GetPkgInfoDlg
             SearchPackages(SearchBox1.Text)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledPackage As DismPackage In InstalledPkgInfo
-                ListBox2.Items.Add(InstalledPackage.PackageName)
-            Next
+            If MainForm.CurrentImage.ImagePackages Is Nothing OrElse MainForm.CurrentImage.ImagePackages.Count = 0 Then
+                ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages_Backup.Select(Function(package) package.PackageName).ToArray())
+            Else
+                ListBox2.Items.AddRange(MainForm.CurrentImage.ImagePackages.Select(Function(package) package.PackageName).ToArray())
+            End If
         End If
     End Sub
 

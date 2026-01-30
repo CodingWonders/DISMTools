@@ -495,6 +495,9 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.BWFailPanel = New System.Windows.Forms.Panel()
+        Me.BWFailLabel = New System.Windows.Forms.Label()
+        Me.BWFailLearnMoreBtn = New System.Windows.Forms.Button()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -566,6 +569,7 @@ Partial Class MainForm
         Me.AppxResCMS.SuspendLayout()
         Me.AppxRelatedLinksCMS.SuspendLayout()
         Me.ImgSpecialToolsCMS.SuspendLayout()
+        Me.BWFailPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'MenuStrip1
@@ -2162,7 +2166,7 @@ Partial Class MainForm
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Date"
-        Me.ColumnHeader2.Width = 254
+        Me.ColumnHeader2.Width = 320
         '
         'FeedErrorPanel
         '
@@ -2658,6 +2662,7 @@ Partial Class MainForm
         'Panel11
         '
         Me.Panel11.Controls.Add(Me.FlowLayoutPanel1)
+        Me.Panel11.Controls.Add(Me.BWFailPanel)
         Me.Panel11.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel11.Location = New System.Drawing.Point(300, 48)
         Me.Panel11.Name = "Panel11"
@@ -2678,10 +2683,10 @@ Partial Class MainForm
         Me.FlowLayoutPanel1.Controls.Add(Me.SpaceLabel)
         Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 48)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(8)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(708, 558)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(708, 510)
         Me.FlowLayoutPanel1.TabIndex = 1
         '
         'GroupBox4
@@ -4556,6 +4561,42 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
+        'BWFailPanel
+        '
+        Me.BWFailPanel.BackColor = System.Drawing.Color.LemonChiffon
+        Me.BWFailPanel.Controls.Add(Me.BWFailLearnMoreBtn)
+        Me.BWFailPanel.Controls.Add(Me.BWFailLabel)
+        Me.BWFailPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.BWFailPanel.Location = New System.Drawing.Point(0, 0)
+        Me.BWFailPanel.Name = "BWFailPanel"
+        Me.BWFailPanel.Size = New System.Drawing.Size(708, 48)
+        Me.BWFailPanel.TabIndex = 2
+        Me.BWFailPanel.Visible = False
+        '
+        'BWFailLabel
+        '
+        Me.BWFailLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BWFailLabel.AutoEllipsis = True
+        Me.BWFailLabel.ForeColor = System.Drawing.Color.Black
+        Me.BWFailLabel.Location = New System.Drawing.Point(15, 18)
+        Me.BWFailLabel.Name = "BWFailLabel"
+        Me.BWFailLabel.Size = New System.Drawing.Size(530, 13)
+        Me.BWFailLabel.TabIndex = 0
+        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " & _
+    "may not be available."
+        '
+        'BWFailLearnMoreBtn
+        '
+        Me.BWFailLearnMoreBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BWFailLearnMoreBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.BWFailLearnMoreBtn.Location = New System.Drawing.Point(551, 13)
+        Me.BWFailLearnMoreBtn.Name = "BWFailLearnMoreBtn"
+        Me.BWFailLearnMoreBtn.Size = New System.Drawing.Size(147, 23)
+        Me.BWFailLearnMoreBtn.TabIndex = 1
+        Me.BWFailLearnMoreBtn.Text = "Learn more..."
+        Me.BWFailLearnMoreBtn.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -4662,6 +4703,7 @@ Partial Class MainForm
         Me.AppxResCMS.ResumeLayout(False)
         Me.AppxRelatedLinksCMS.ResumeLayout(False)
         Me.ImgSpecialToolsCMS.ResumeLayout(False)
+        Me.BWFailPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -5137,4 +5179,7 @@ Partial Class MainForm
     Friend WithEvents StartFogHelperTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator46 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents UnixFogInstructionTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BWFailPanel As System.Windows.Forms.Panel
+    Friend WithEvents BWFailLearnMoreBtn As System.Windows.Forms.Button
+    Friend WithEvents BWFailLabel As System.Windows.Forms.Label
 End Class
