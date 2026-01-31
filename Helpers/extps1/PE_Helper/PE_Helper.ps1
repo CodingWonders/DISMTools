@@ -555,6 +555,7 @@ function Add-PEPackages {
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-StorageWMI_en-us.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WDS-Tools.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WDS-Tools_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-SecureBootCmdlets.cab")
         # Add ARM64EC packages
         if ($architecture -eq 'arm64') {
             $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
@@ -1100,6 +1101,27 @@ function Start-OSApplication
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
+    $usebootex = $false
+    if (($partOverride -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+        # Quick run-down: we only ask for EFI boot binary when no overrides are used, we find Secure Boot on the system, AND
+        # if the provided bcdboot supports bootex.
+        Write-Host "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions"
+        Write-Host "of the EFI boot binary that will later be used when creating boot files:`n"
+        Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
+        Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
+        Write-Host "   will expire in June 2026."
+        Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
+        Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
+        Write-Host "   updates will not work using these boot binaries.`n"
+        if (([System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI DB).Bytes) -match 'Windows UEFI CA 2023') -eq $true) {
+            Write-Host "You may be able to use the UEFI CA 2023 binaries on this system."
+        } else {
+            Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
+        }
+        Write-Host ""
+        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/N)"
+        $usebootex = ($bootOptn -eq "Y")
+    }
     Write-Host "Applying Windows image. This can take some time..."
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
@@ -1173,7 +1195,7 @@ function Start-OSApplication
     {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride -bootEx $usebootex
     Start-Sleep -Milliseconds 250
     Clear-Host
     Write-Host "`n`n`n`n`n`n`n`n`n`n"
@@ -2009,7 +2031,8 @@ function New-BootFiles
         [Parameter(Mandatory = $true, Position = 2)] [int]$diskId,
         [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive,
         [Parameter(Position = 4)] [string]$espLetter = "W",
-        [Parameter(Position = 5)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
+        [Parameter(Position = 5)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride,
+        [Parameter(Position = 6)] [bool]$bootEx = $false
     )
     switch ($override) {
         NoOverride {
@@ -2045,11 +2068,19 @@ function New-BootFiles
                             }
                         }
                     }
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                    if ($bootEx) {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+                    } else {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                    }
                 }
                 else
                 {
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                    if ($bootEx) {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+                    } else {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                    }
                 }
             }
             else
