@@ -735,6 +735,17 @@ Public Class ISOCreator
         If Not CheckBox1.Checked Then
             unattFile = ""
         End If
+
+        ' get build time to show on watermark
+        If File.Exists(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "let_it_rain")) Then
+            Try
+                Dim buildTime As String = BuildGetter.RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm")
+                File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "version"), buildTime)
+            Catch ex As Exception
+
+            End Try
+        End If
+
         ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()

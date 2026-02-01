@@ -1319,6 +1319,9 @@
     <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\ShowWatermark.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -2138,7 +2141,10 @@ IF %25GEN_INSTALLER%25=="Yes" (
 		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
 		rd "$(SolutionDir)Installer\files" /s /q
 	)
-)</PostBuildEvent>
+)
+
+REM make it so that DTPE reports version info via watermark
+BREAK &gt; bin\extps1\PE_Helper\let_it_rain</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...
