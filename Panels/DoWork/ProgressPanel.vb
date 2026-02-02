@@ -5717,7 +5717,14 @@ Public Class ProgressPanel
         If Directory.Exists(Application.StartupPath & "\export_temp") Then
             DynaLog.LogMessage("Exporting drivers...")
             LogView.AppendText(CrLf & "Exporting third-party drivers from import source..." & CrLf)
-            CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
+            Dim importSource As String = ""
+            Select Case ImportSourceInt
+                Case 0
+                    importSource = If(Path.GetPathRoot(DrvImport_SourceImage) = DrvImport_SourceImage, DrvImport_SourceImage, Quote & DrvImport_SourceImage & Quote)
+                Case 2
+                    importSource = If(Path.GetPathRoot(DrvImport_SourceDisk) = DrvImport_SourceDisk, DrvImport_SourceDisk, Quote & DrvImport_SourceDisk & Quote)
+            End Select
+            CommandArgs &= If(ImportSourceInt = 1, " /online", " /image=" & importSource) & " /export-driver /destination=" & Quote & Application.StartupPath & "\export_temp" & Quote
             RunProcess(DismProgram, CommandArgs)
             LogView.AppendText(CrLf & "Getting error level...")
             If Hex(DismExitCode).Length < 8 Then
@@ -5761,8 +5768,30 @@ Public Class ProgressPanel
                 End Select
                 LogView.AppendText(CrLf & "Importing third-party drivers from the temporary export directory to the destination image...")
                 CommandArgs = BckArgs
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
-                RunProcess(DismProgram, CommandArgs)
+                If OnlineMgmt Then
+                    DynaLog.LogMessage("Online installation management mode detected. Using PNPUTIL to add the driver...")
+                    DynaLog.LogMessage("Checking pnputil version...")
+                    Dim pnpUtilArgs As String = ""
+                    Dim pnputilVersionInfo As FileVersionInfo = FileVersionInfo.GetVersionInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"))
+                    DynaLog.LogMessage("PNPUTIL version info: " & pnputilVersionInfo.FileVersion)
+                    If pnputilVersionInfo.FileMajorPart >= 10 Then
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 10 or newer.")
+                        pnpUtilArgs = String.Format("/add-driver {0} /install", Quote & Application.StartupPath & "\export_temp" & "\*.inf" & Quote & " /subdirs")
+                        RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                   pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                    Else
+                        DynaLog.LogMessage("System PNPUTIL comes from Windows 8.")
+                        For Each InfFile In Directory.EnumerateFiles(Path.Combine(Application.StartupPath, "export_temp"), "*.inf", SearchOption.AllDirectories)
+                            pnpUtilArgs = String.Format("-i -a {0}", Quote & InfFile & Quote)
+                            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                       pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                        Next
+                    End If
+                Else
+                    DynaLog.LogMessage("Online installation management mode not detected. Using DISM to add the driver...")
+                    CommandArgs &= " /image=" & targetImage & " /add-driver /driver=" & Quote & Application.StartupPath & "\export_temp" & Quote & " /recurse"
+                    RunProcess(DismProgram, CommandArgs)
+                End If
                 If Hex(DismExitCode).Length < 8 Then
                     errCode = DismExitCode
                 Else
