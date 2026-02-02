@@ -77,6 +77,8 @@ class DiskLayout {
     }
 }
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
 {
     Write-Host "You need to run this script as an administrator"
@@ -176,7 +178,7 @@ function Start-PEGeneration
                     if (($scratchPath -ne "") -and (Test-Path "$scratchPath")) {
                         $mountDirectory = $scratchPath
                     } else {
-                        $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+                        $mountDirectory = "$tempDir\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
                         New-Item "$mountDirectory" -ItemType Directory | Out-Null
                     }
                 }
@@ -345,7 +347,7 @@ icon=autorun.ico
                 }
                 Write-Host "Deleting temporary files..."
                 Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
-                if ($mountDirectory.StartsWith("$env:TEMP"))
+                if ($mountDirectory.StartsWith("$tempDir"))
                 {
                     Remove-Item -Path "$mountDirectory" -Recurse -Force -ErrorAction SilentlyContinue
                 }
@@ -2285,7 +2287,7 @@ function Start-ProjectDevelopment {
                 Write-Host "Creating temporary mount directory..."
                 try
                 {
-                    $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+                    $mountDirectory = "$tempDir\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
                     New-Item "$mountDirectory" -ItemType Directory | Out-Null
                 }
                 catch
@@ -2354,7 +2356,7 @@ function Start-ProjectDevelopment {
                 Copy-Item -Path "$((Get-Location).Path)\tools\RestartDialog\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\RestartDialog" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Write-Host "Deleting temporary files..."
                 Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
-                if ($mountDirectory.StartsWith("$env:TEMP"))
+                if ($mountDirectory.StartsWith("$tempDir"))
                 {
                     Remove-Item -Path "$mountDirectory" -Recurse -Force -ErrorAction SilentlyContinue
                 }

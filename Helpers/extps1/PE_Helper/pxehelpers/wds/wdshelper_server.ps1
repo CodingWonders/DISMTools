@@ -85,8 +85,10 @@ $version = "0.7.3"
 
 Clear-Host
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 # Start logging stuff
-Start-Transcript -Path "$env:TEMP\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
+Start-Transcript -Path "$tempDir\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - Windows Deployment Services Helper Server"
 Write-Host "(c) 2025-2026. CodingWonders Software"
@@ -696,7 +698,7 @@ try {
                 }
             }
             "/api/viewlogs" {
-                notepad "$env:TEMP\DT_WDSHS_Log.log"
+                notepad "$tempDir\DT_WDSHS_Log.log"
             }
             "/api/exit" {
                 $sendJson.Invoke(@{ success = $true })
