@@ -393,6 +393,14 @@ Public Class RemDrivers
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(89)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(160)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(153)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(86)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(176)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(96)
+        ColumnHeader7.Width = WindowHelper.ScaleLogical(71)
+        ColumnHeader8.Width = WindowHelper.ScaleLogical(67)
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged, CheckBox2.CheckedChanged

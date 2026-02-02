@@ -751,6 +751,12 @@ Public Class AddProvAppxPackage
             GroupBox3.Enabled = False
             Panel2.Enabled = False
         End Try
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(343)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(120)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(139)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(275)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(162)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

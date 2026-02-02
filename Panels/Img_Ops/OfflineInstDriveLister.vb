@@ -188,6 +188,15 @@ Public Class OfflineInstDriveLister
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Timer1.Enabled = True
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(68)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(128)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(70)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(94)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(110)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(77)
+        ColumnHeader7.Width = WindowHelper.ScaleLogical(110)
+        ColumnHeader8.Width = WindowHelper.ScaleLogical(104)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

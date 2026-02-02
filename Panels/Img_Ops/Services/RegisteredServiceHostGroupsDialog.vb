@@ -28,6 +28,12 @@ Public Class RegisteredServiceHostGroupsDialog
 
         Dim count As Integer = GroupInformation.Select(Function(serviceGroup) serviceGroup.Services.Count).Aggregate(Function(x, y) x + y)
         Label2.Text = String.Format("{0} service(s) are registered in the service host.", count)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(274)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(233)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(175)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(274)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(192)
     End Sub
 
     Private Sub ServiceGroupDetailsLv_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ServiceGroupDetailsLv.SelectedIndexChanged

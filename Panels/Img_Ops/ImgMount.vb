@@ -438,6 +438,11 @@ Public Class ImgMount
         Catch ex As Exception
 
         End Try
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

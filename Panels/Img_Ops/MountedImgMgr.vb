@@ -163,6 +163,12 @@ Public Class MountedImgMgr
 
         ' Subscribe to MainForm event to get updates
         AddHandler MainForm.MountedImagesUpdated, AddressOf OnMountedImagesUpdated
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(480)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(72)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(420)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(60)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(148)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

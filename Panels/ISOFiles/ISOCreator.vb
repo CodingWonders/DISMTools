@@ -451,6 +451,12 @@ Public Class ISOCreator
         CheckBox3.Checked = MainForm.PEHelper_Use2023EFI
 
         AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(29)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(265)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
     End Sub
 
     Private Sub DownloadADK()

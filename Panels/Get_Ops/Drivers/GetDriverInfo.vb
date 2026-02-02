@@ -534,6 +534,8 @@ Public Class GetDriverInfo
         NoDrvPanel.Visible = True
 
         SearchBox1.Text = ""
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(188)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(220)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

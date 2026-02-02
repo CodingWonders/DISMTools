@@ -146,6 +146,11 @@ Public Class ApplicationDriveSpecifier
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ListDisks()
         BringToFront()
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(246)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(347)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(127)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(179)
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click

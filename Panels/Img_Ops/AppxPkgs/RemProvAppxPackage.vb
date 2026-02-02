@@ -362,6 +362,13 @@ Public Class RemProvAppxPackage
         MainForm.ViewPackageDirectoryToolStripMenuItem.Image = GetGlyphResource("openfile")
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(243)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(202)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(74)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(74)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(80)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(130)
     End Sub
 
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick

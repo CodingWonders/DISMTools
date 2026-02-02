@@ -204,6 +204,8 @@ Public Class GetCapabilityInfoDlg
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
         End If
         SearchBox1.Text = ""
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

@@ -981,6 +981,14 @@ Public Class MainForm
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
+
+        ' On higher DPI settings listview column widths don't adapt correctly, causing stuff to be even more truncated than
+        ' necessary. Scale these appropriately
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(726)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(320)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(592)
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image

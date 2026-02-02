@@ -164,6 +164,8 @@ Public Class SampleScriptBrowser
         Else
             ComboBox1.SelectedIndex = FinalScriptStage
         End If
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(286)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged

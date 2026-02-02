@@ -6,6 +6,7 @@ Imports System.Net
 Public Class PrgAbout
 
     Dim PictureToolTip As New ToolTip()
+    Private resized As Boolean = False
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -13,7 +14,7 @@ Public Class PrgAbout
     End Sub
 
     Private Sub PrgAbout_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ResizeImage()
+        If Not resized Then ResizeImage()
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -378,6 +379,8 @@ Public Class PrgAbout
         Dim scaled As New Bitmap(BackgroundImage, New Size(newWidth, newHeight))
 
         BackgroundImage = scaled
+
+        resized = True
     End Sub
 
     Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
