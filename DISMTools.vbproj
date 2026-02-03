@@ -1612,6 +1612,8 @@
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
     <None Include="Resources\envvar_pic_32px.png" />
+    <Content Include="Resources\assistant_dark.png" />
+    <Content Include="Resources\assistant_light.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
@@ -1972,6 +1974,7 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
+    <Folder Include="Panels\Get_Ops\FilterAssistants\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
