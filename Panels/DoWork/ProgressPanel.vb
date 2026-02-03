@@ -5288,10 +5288,21 @@ Public Class ProgressPanel
                         pnpUtilArgs = String.Format("/add-driver {0} /install", If(isRecursive, Quote & drvAdditionPkgs(x) & "\*.inf" & Quote & " /subdirs", Quote & drvAdditionPkgs(x) & Quote))
                     Else
                         DynaLog.LogMessage("System PNPUTIL comes from Windows 8.")
-                        pnpUtilArgs = String.Format("-i -a {0}", If(isRecursive, Quote & drvAdditionPkgs(x) & "\*.inf" & Quote, Quote & drvAdditionPkgs(x) & Quote))
+
+                        ' NT6 pnputil does not support recursive driver package addition like NT10 pnputil, in that it does not support
+                        ' the /subdirs parameter of the NT10 pnputil. Thus, we have to intervene with INF file enumeration.
+                        If isRecursive Then
+                            For Each InfFile In Directory.EnumerateFiles(drvAdditionPkgs(x), "*.inf", SearchOption.AllDirectories)
+                                pnpUtilArgs = String.Format("-i -a {0}", Quote & InfFile & Quote)
+                                RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                           pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                            Next
+                        Else
+                            pnpUtilArgs = String.Format("-i -a {0}", Quote & drvAdditionPkgs(x) & Quote)
+                            RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
+                                       pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
+                        End If
                     End If
-                    RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32", "pnputil.exe"),
-                               pnpUtilArgs, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32"), True)
                 Catch ex As Exception
                     DynaLog.LogMessage("An error occurred with this method. Error message: " & ex.Message & " (exit code " & Hex(ex.HResult) & "). Since it's our only way of removing drivers in this mode, signal an error message")
                     DismExitCode = ex.HResult
