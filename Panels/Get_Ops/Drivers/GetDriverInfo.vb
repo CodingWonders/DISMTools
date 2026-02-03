@@ -28,6 +28,8 @@ Public Class GetDriverInfo
         NoBootCritical
         BootCritical
         DateField
+        NotSigned
+        Signed
         None
     End Enum
 
@@ -1372,6 +1374,10 @@ Public Class GetDriverInfo
                     Catch ex As Exception
                         FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
                     End Try
+                Case SearchMode.NotSigned
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature <> DismDriverSignature.Signed)
+                Case SearchMode.Signed
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature = DismDriverSignature.Signed)
                 Case Else
                     FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End Select
@@ -1403,6 +1409,10 @@ Public Class GetDriverInfo
                 modeToUse = SearchMode.NoBootCritical
             ElseIf SearchBox1.Text.StartsWith("date:") Then
                 modeToUse = SearchMode.DateField
+            ElseIf SearchBox1.Text.StartsWith("nosig:") Then
+                modeToUse = SearchMode.NotSigned
+            ElseIf SearchBox1.Text.StartsWith("sig:") Then
+                modeToUse = SearchMode.Signed
             Else
                 modeToUse = SearchMode.None
             End If
