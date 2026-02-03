@@ -27,6 +27,7 @@ Public Class GetDriverInfo
         InBox
         NoBootCritical
         BootCritical
+        DateField
         None
     End Enum
 
@@ -1309,7 +1310,7 @@ Public Class GetDriverInfo
         DynaLog.LogMessage("Search query: " & sQuery)
         If MainForm.CurrentImage.ImageDrivers Is Nothing Then Exit Sub
         If MainForm.CurrentImage.ImageDrivers.Count > 0 Then
-            Dim FilteredDrivers As IEnumerable(Of DismDriverPackage)
+            Dim FilteredDrivers As IEnumerable(Of DismDriverPackage) = Nothing
             Select Case driverSearchMode
                 Case SearchMode.OriginalFileName
                     FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
@@ -1325,11 +1326,59 @@ Public Class GetDriverInfo
                     FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.BootCritical)
                 Case SearchMode.NoBootCritical
                     FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.BootCritical)
+                Case SearchMode.DateField
+                    ' We guess the SUBMODE by the operator used
+                    Try
+                        Dim dateComparatorFormats() As String = {"dd/MM/yyyy", "dd/M/yyyy", "d/M/yyyy", "d/MM/yyyy", "dd/MM/yy", "dd/M/yy", "d/M/yy", "d/MM/yy"}
+
+                        Dim fullField As String = sQuery.Replace("date:", "")
+                        ' Syntax: Operator-Field
+                        Dim fieldParts() As String = fullField.Split("-")
+                        Dim searchOperator As String = fieldParts(0),
+                            field As String = If(fieldParts.ElementAtOrDefault(1), "")
+                        Dim convertedField As Object = Nothing
+                        If {"eq", "ne", "gt", "ge", "lt", "le"}.Contains(searchOperator.ToLower()) Then
+                            ' Perform date conversion
+                            If Not Date.TryParseExact(field, dateComparatorFormats, Nothing, Globalization.DateTimeStyles.None, convertedField) Then
+                                convertedField = New Date(1970, 1, 1, 0, 0, 0)
+                            End If
+                        Else
+                            ' Perform integer conversion
+                            If Not Integer.TryParse(field, convertedField) Then
+                                convertedField = 1970
+                            End If
+                        End If
+                        Select Case searchOperator
+                            Case "eqy" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year = CInt(convertedField))
+                            Case "eqm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month = CInt(convertedField))
+                            Case "eq" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date = CType(convertedField, Date))
+                            Case "ney" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year <> CInt(convertedField))
+                            Case "nem" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month <> CInt(convertedField))
+                            Case "ne" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date <> CType(convertedField, Date))
+                            Case "gty" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year > CInt(convertedField))
+                            Case "gtm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month > CInt(convertedField))
+                            Case "gt" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date > CType(convertedField, Date))
+                            Case "gey" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year >= CInt(convertedField))
+                            Case "gem" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month >= CInt(convertedField))
+                            Case "ge" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date >= CType(convertedField, Date))
+                            Case "lty" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year < CInt(convertedField))
+                            Case "ltm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month < CInt(convertedField))
+                            Case "lt" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date < CType(convertedField, Date))
+                            Case "ley" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year <= CInt(convertedField))
+                            Case "lem" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month <= CInt(convertedField))
+                            Case "le" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date <= CType(convertedField, Date))
+                            Case Else : Throw New Exception()
+                        End Select
+                    Catch ex As Exception
+                        FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+                    End Try
                 Case Else
                     FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
             End Select
-            ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
-            SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))
+            If FilteredDrivers IsNot Nothing Then
+                ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
+                SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))
+            End If
         End If
     End Sub
 
@@ -1352,6 +1401,8 @@ Public Class GetDriverInfo
                 modeToUse = SearchMode.BootCritical
             ElseIf SearchBox1.Text.StartsWith("nobc:") Then
                 modeToUse = SearchMode.NoBootCritical
+            ElseIf SearchBox1.Text.StartsWith("date:") Then
+                modeToUse = SearchMode.DateField
             Else
                 modeToUse = SearchMode.None
             End If
