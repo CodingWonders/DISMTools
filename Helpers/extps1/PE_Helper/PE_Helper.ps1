@@ -1127,7 +1127,8 @@ function Start-OSApplication
         } else {
             Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
         }
-        Write-Host ""
+        Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
+        Write-Host "the new version of such files."
         $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/N)"
         $usebootex = ($bootOptn -eq "Y")
     }
@@ -2080,7 +2081,14 @@ function New-BootFiles
                     if ($bootEx) {
                         bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
                     } else {
-                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                        # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                        # we said we didn't want to.
+                        if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        } else {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                        }
                     }
                 }
                 else
@@ -2088,7 +2096,14 @@ function New-BootFiles
                     if ($bootEx) {
                         bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
                     } else {
-                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                        # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                        # we said we didn't want to.
+                        if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        } else {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                        }
                     }
                 }
             }
