@@ -1347,10 +1347,14 @@ Public Class GetDriverInfo
                         Else
                             ' Perform integer conversion
                             If Not Integer.TryParse(field, convertedField) Then
-                                convertedField = 1970
+                                If searchOperator.EndsWith("y", StringComparison.OrdinalIgnoreCase) Then
+                                    convertedField = 1970
+                                Else
+                                    convertedField = 1
+                                End If
                             End If
                         End If
-                        Select Case searchOperator
+                        Select Case searchOperator.ToLower()
                             Case "eqy" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year = CInt(convertedField))
                             Case "eqm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month = CInt(convertedField))
                             Case "eq" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date = CType(convertedField, Date))
