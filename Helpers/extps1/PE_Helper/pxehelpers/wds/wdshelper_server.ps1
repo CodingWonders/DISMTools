@@ -103,7 +103,7 @@ if ([Environment]::OSVersion.Platform -ne "Win32NT") {
 }
 
 $compInfo = Get-ComputerInfo
-if ($compInfo.WindowsInstallationType -ne "Server") {
+if ($compInfo.WindowsInstallationType -notlike "Server*") {
     Write-LogMessage -message "This computer is not running Windows Server."
     return $false
 }

@@ -157,7 +157,7 @@ function Get-PxeOptionStatus {
             - DHCP
     #>
 
-    if ((Get-ComputerInfo).WindowsInstallationType -ne "Server") {
+    if ((Get-ComputerInfo).WindowsInstallationType -notlike "Server*") {
         Write-Host "This computer is not running Windows Server."
         return $false
     }

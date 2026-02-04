@@ -977,7 +977,7 @@ Public Class MainForm
         Dim InstallationType As String = InstallationTypeRk.GetValue("InstallationType", "")
         InstallationTypeRk.Close()
 
-        PxeHelperServersTSMI.Enabled = InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase)
+        PxeHelperServersTSMI.Enabled = InstallationType.ToLower().Contains("server")
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
@@ -989,6 +989,11 @@ Public Class MainForm
         ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
         ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
         ColumnHeader5.Width = WindowHelper.ScaleLogical(592)
+
+        If InstallationType.Equals("Server Core", StringComparison.InvariantCultureIgnoreCase) Then
+            MessageBox.Show("DISMTools has detected that it is running on a Windows Server Core system. Some functionality may not work as expected.",
+                            "Windows Server Core detected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
