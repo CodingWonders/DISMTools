@@ -164,6 +164,7 @@ Imports DISMTools.Elements
 Imports DISMTools.Utilities
 Imports System.ComponentModel
 Imports System.Runtime.InteropServices
+Imports DISMTools.Elements.Contemporaneus.ImageOperations
 
 Public Class ProgressPanel
 
@@ -530,6 +531,56 @@ Public Class ProgressPanel
     ' Miscellaneous error variables
     Dim PackageErrorCodes As New List(Of String)
     Dim FeatureErrorCodes As New List(Of String)
+
+    ' Contemporaneus WAVE 2
+    Private EnableExperiments As Boolean
+
+    Private ImageOperationDefinitions As New Dictionary(Of Integer, ImageOperation) From {
+        {15, New MountImageIO(Function(filePath, args) DISM_LogView.StartProcess(filePath, args))}
+    }
+
+    ' --- Event handlers
+    Private Event AllTasksLogReported(AllTasksMessage As String)
+    Private Event CurrTaskLogReported(CurrTaskMessage As String)
+    Private Event LogActivityReported(LogMessage As String)
+
+    Private Sub OnAllTasksLogReported(AllTasksMessage As String) Handles Me.AllTasksLogReported
+        allTasks.Text = AllTasksMessage
+    End Sub
+
+    Private Sub OnCurrTaskLogReported(CurrTaskMessage As String) Handles Me.CurrTaskLogReported
+        currentTask.Text = CurrTaskMessage
+    End Sub
+
+    Private Sub OnLogActivityReported(LogMessage As String) Handles Me.LogActivityReported
+        LogView.AppendText(LogMessage)
+    End Sub
+
+    Private Sub ReportAllTasks(AllTasksMessage As String)
+        RaiseEvent AllTasksLogReported(AllTasksMessage)
+    End Sub
+
+    Private Sub ReportCurrTask(CurrTaskMessage As String)
+        RaiseEvent CurrTaskLogReported(CurrTaskMessage)
+    End Sub
+
+    Private Sub ReportLogActivity(LogMessage As String)
+        RaiseEvent LogActivityReported(LogMessage)
+    End Sub
+
+    Private Sub PrepareAllReporters()
+        For Each OperationKey In ImageOperationDefinitions.Keys
+            ImageOperationDefinitions(OperationKey).LogCurrTaskReporter = Sub(CurrTaskMessage As String)
+                                                                              ReportCurrTask(CurrTaskMessage)
+                                                                          End Sub
+            ImageOperationDefinitions(OperationKey).LogAllTasksReporter = Sub(AllTasksMessage As String)
+                                                                              ReportAllTasks(AllTasksMessage)
+                                                                          End Sub
+            ImageOperationDefinitions(OperationKey).LogActivityReporter = Sub(LogMessage As String)
+                                                                              ReportLogActivity(LogMessage)
+                                                                          End Sub
+        Next
+    End Sub
 
     Private Sub Cancel_Button_Click(sender As Object, e As EventArgs) Handles Cancel_Button.Click
         If Cancel_Button.Text = "Cancel" Or Cancel_Button.Text = "Cancelar" Or Cancel_Button.Text = "Annulla" Then
@@ -1963,118 +2014,132 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub MountImage()
-        DynaLog.LogMessage("Preparing to mount the Windows image...")
-        DynaLog.LogMessage("- Image file to mount: " & Quote & SourceImg & Quote)
-        DynaLog.LogMessage("- Image index to mount: " & ImgIndex)
-        DynaLog.LogMessage("- Location to mount image to: " & Quote & MountDir & Quote)
-        DynaLog.LogMessage("- Mount with read-only permissions? " & If(isReadOnly, "Yes", "No"))
-        DynaLog.LogMessage("- Optimize mount times? " & If(isOptimized, "Yes", "No"))
-        DynaLog.LogMessage("- Check image integrity? " & If(isIntegrityTested, "Yes", "No"))
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        allTasks.Text = "Mounting image..."
-                        currentTask.Text = "Mounting specified image..."
-                    Case "ESN"
-                        allTasks.Text = "Montando imagen..."
-                        currentTask.Text = "Montando imagen especificada..."
-                    Case "FRA"
-                        allTasks.Text = "Montage de l'image en cours..."
-                        currentTask.Text = "Montage de l'image spécifiée en cours..."
-                    Case "PTB", "PTG"
-                        allTasks.Text = "Montagem de imagem..."
-                        currentTask.Text = "Montagem da imagem especificada..."
-                    Case "ITA"
-                        allTasks.Text = "Montaggio immagine..."
-                        currentTask.Text = "Montaggio immagine specificata..."
-                End Select
-            Case 1
-                allTasks.Text = "Mounting image..."
-                currentTask.Text = "Mounting specified image..."
-            Case 2
-                allTasks.Text = "Montando imagen..."
-                currentTask.Text = "Montando imagen especificada..."
-            Case 3
-                allTasks.Text = "Montage de l'image en cours..."
-                currentTask.Text = "Montage de l'image spécifiée en cours..."
-            Case 4
-                allTasks.Text = "Montagem de imagem..."
-                currentTask.Text = "Montagem da imagem especificada..."
-            Case 5
-                allTasks.Text = "Montaggio immagine..."
-                currentTask.Text = "Montaggio immagine specificata..."
-        End Select
-        LogView.AppendText(CrLf & "Mounting image..." & CrLf & "Options:" & CrLf &
-                           "- Image file: " & SourceImg & CrLf &
-                           "- Image index: " & ImgIndex & CrLf &
-                           "- Mount point: " & MountDir)
-        Try
-            If Not isReadOnly AndAlso (File.GetAttributes(SourceImg) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
-                DynaLog.LogMessage("Source image contains read-only flag. Attempting to remove it...")
-                ' Remove readonly flag
-                File.SetAttributes(SourceImg, (File.GetAttributes(SourceImg) And Not FileAttributes.ReadOnly))
-                DynaLog.LogMessage("Flags were removed successfully.")
+        If EnableExperiments Then
+            ImageOperationDefinitions(15).OperationOptions = New Dictionary(Of String, Object) From {
+                {"DismProgram", DismProgram},
+                {"DismVersionChecker", DismVersionChecker},
+                {"SourceImg", SourceImg},
+                {"ImgIndex", ImgIndex},
+                {"MountDir", MountDir},
+                {"IsReadOnly", isReadOnly},
+                {"IsOptimized", isOptimized},
+                {"IsIntegrityTested", isIntegrityTested}
+            }
+            errCode = ImageOperationDefinitions(15).RunOperation().ToString()
+        Else
+            DynaLog.LogMessage("Preparing to mount the Windows image...")
+            DynaLog.LogMessage("- Image file to mount: " & Quote & SourceImg & Quote)
+            DynaLog.LogMessage("- Image index to mount: " & ImgIndex)
+            DynaLog.LogMessage("- Location to mount image to: " & Quote & MountDir & Quote)
+            DynaLog.LogMessage("- Mount with read-only permissions? " & If(isReadOnly, "Yes", "No"))
+            DynaLog.LogMessage("- Optimize mount times? " & If(isOptimized, "Yes", "No"))
+            DynaLog.LogMessage("- Check image integrity? " & If(isIntegrityTested, "Yes", "No"))
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            allTasks.Text = "Mounting image..."
+                            currentTask.Text = "Mounting specified image..."
+                        Case "ESN"
+                            allTasks.Text = "Montando imagen..."
+                            currentTask.Text = "Montando imagen especificada..."
+                        Case "FRA"
+                            allTasks.Text = "Montage de l'image en cours..."
+                            currentTask.Text = "Montage de l'image spécifiée en cours..."
+                        Case "PTB", "PTG"
+                            allTasks.Text = "Montagem de imagem..."
+                            currentTask.Text = "Montagem da imagem especificada..."
+                        Case "ITA"
+                            allTasks.Text = "Montaggio immagine..."
+                            currentTask.Text = "Montaggio immagine specificata..."
+                    End Select
+                Case 1
+                    allTasks.Text = "Mounting image..."
+                    currentTask.Text = "Mounting specified image..."
+                Case 2
+                    allTasks.Text = "Montando imagen..."
+                    currentTask.Text = "Montando imagen especificada..."
+                Case 3
+                    allTasks.Text = "Montage de l'image en cours..."
+                    currentTask.Text = "Montage de l'image spécifiée en cours..."
+                Case 4
+                    allTasks.Text = "Montagem de imagem..."
+                    currentTask.Text = "Montagem da imagem especificada..."
+                Case 5
+                    allTasks.Text = "Montaggio immagine..."
+                    currentTask.Text = "Montaggio immagine specificata..."
+            End Select
+            LogView.AppendText(CrLf & "Mounting image..." & CrLf & "Options:" & CrLf &
+                               "- Image file: " & SourceImg & CrLf &
+                               "- Image index: " & ImgIndex & CrLf &
+                               "- Mount point: " & MountDir)
+            Try
+                If Not isReadOnly AndAlso (File.GetAttributes(SourceImg) And FileAttributes.ReadOnly) = FileAttributes.ReadOnly Then
+                    DynaLog.LogMessage("Source image contains read-only flag. Attempting to remove it...")
+                    ' Remove readonly flag
+                    File.SetAttributes(SourceImg, (File.GetAttributes(SourceImg) And Not FileAttributes.ReadOnly))
+                    DynaLog.LogMessage("Flags were removed successfully.")
+                End If
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not remove or get flags. Error message: " & ex.Message)
+            End Try
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                        Case Is >= 2
+                            CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+                    End Select
+                Case 10
+                    CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
+            End Select
+            If isReadOnly Then
+                LogView.AppendText(CrLf & "- Mount image with read-only permissions? Yes")
+                CommandArgs &= " /readonly"
+            Else
+                LogView.AppendText(CrLf & "- Mount image with read-only permissions? No")
             End If
-        Catch ex As Exception
-            DynaLog.LogMessage("Could not remove or get flags. Error message: " & ex.Message)
-        End Try
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-wim /wimfile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
-                    Case Is >= 2
-                        CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
-                End Select
-            Case 10
-                CommandArgs = "/logpath=" & Quote & Application.StartupPath & "\logs\" & GetCurrentDateAndTime(Now) & Quote & " /english /mount-image /imagefile=" & Quote & SourceImg & Quote & " /index=" & ImgIndex & " /mountdir=" & Quote & MountDir & Quote
-        End Select
-        If isReadOnly Then
-            LogView.AppendText(CrLf & "- Mount image with read-only permissions? Yes")
-            CommandArgs &= " /readonly"
-        Else
-            LogView.AppendText(CrLf & "- Mount image with read-only permissions? No")
+            If isOptimized Then
+                LogView.AppendText(CrLf & "- Optimize mount time? Yes")
+                CommandArgs &= " /optimize"
+            Else
+                LogView.AppendText(CrLf & "- Optimize mount time? No")
+            End If
+            If isIntegrityTested Then
+                LogView.AppendText(CrLf & "- Check image integrity? Yes")
+                CommandArgs &= " /checkintegrity"
+            Else
+                LogView.AppendText(CrLf & "- Check image integrity? No")
+            End If
+            RunProcess(DismProgram, CommandArgs)
+            Select Case Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
+                            currentTask.Text = "Gathering error level..."
+                        Case "ESN"
+                            currentTask.Text = "Recopilando nivel de error..."
+                        Case "FRA"
+                            currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                        Case "PTB", "PTG"
+                            currentTask.Text = "A recolher o nível de erro..."
+                        Case "ITA"
+                            currentTask.Text = "Raccolta livello errore..."
+                    End Select
+                Case 1
+                    currentTask.Text = "Gathering error level..."
+                Case 2
+                    currentTask.Text = "Recopilando nivel de error..."
+                Case 3
+                    currentTask.Text = "Recueil du niveau d'erreur en cours..."
+                Case 4
+                    currentTask.Text = "A recolher o nível de erro..."
+                Case 5
+                    currentTask.Text = "Raccolta del livello di errore..."
+            End Select
+            LogView.AppendText(CrLf & "Gathering error level...")
         End If
-        If isOptimized Then
-            LogView.AppendText(CrLf & "- Optimize mount time? Yes")
-            CommandArgs &= " /optimize"
-        Else
-            LogView.AppendText(CrLf & "- Optimize mount time? No")
-        End If
-        If isIntegrityTested Then
-            LogView.AppendText(CrLf & "- Check image integrity? Yes")
-            CommandArgs &= " /checkintegrity"
-        Else
-            LogView.AppendText(CrLf & "- Check image integrity? No")
-        End If
-        RunProcess(DismProgram, CommandArgs)
-        Select Case Language
-            Case 0
-                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                    Case "ENU", "ENG"
-                        currentTask.Text = "Gathering error level..."
-                    Case "ESN"
-                        currentTask.Text = "Recopilando nivel de error..."
-                    Case "FRA"
-                        currentTask.Text = "Recueil du niveau d'erreur en cours..."
-                    Case "PTB", "PTG"
-                        currentTask.Text = "A recolher o nível de erro..."
-                    Case "ITA"
-                        currentTask.Text = "Raccolta livello errore..."
-                End Select
-            Case 1
-                currentTask.Text = "Gathering error level..."
-            Case 2
-                currentTask.Text = "Recopilando nivel de error..."
-            Case 3
-                currentTask.Text = "Recueil du niveau d'erreur en cours..."
-            Case 4
-                currentTask.Text = "A recolher o nível de erro..."
-            Case 5
-                currentTask.Text = "Raccolta del livello di errore..."
-        End Select
-        LogView.AppendText(CrLf & "Gathering error level...")
         GetErrorCode(False)
         If errCode.Length >= 8 Then
             LogView.AppendText(CrLf & CrLf & "    Error level : 0x" & errCode)
@@ -7264,6 +7329,7 @@ Public Class ProgressPanel
     End Sub
 
     Private Sub ProgressPanel_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        EnableExperiments = MainForm.EnableExperiments
         DynaLog.LogMessage("Preparing to start image operations...")
         Select Case MainForm.Language
             Case 0
@@ -7360,6 +7426,7 @@ Public Class ProgressPanel
                 allTasks.Text = "Attendi..."
                 currentTask.Text = "Attendi..."
         End Select
+        PrepareAllReporters()
         If MainForm.ExpandedProgressPanel AndAlso Not IsExpanded Then
             LogButton.PerformClick()
         End If
