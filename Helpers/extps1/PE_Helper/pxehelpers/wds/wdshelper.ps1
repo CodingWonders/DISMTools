@@ -681,6 +681,29 @@ function Start-OSApplication {
     Show-SectionMessage -sectionTitle "Select the Windows image to install"
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
+    
+    $usebootex = $false
+    if (((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+        Show-SectionMessage -sectionTitle "Select UEFI boot binary" -sectionDescription "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions of the EFI boot binary that will later be used when creating boot files:"
+        # Quick run-down: we only ask for EFI boot binary when we find Secure Boot on the system, AND
+        # if the provided bcdboot supports bootex.
+        Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
+        Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
+        Write-Host "   will expire in June 2026."
+        Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
+        Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
+        Write-Host "   updates will not work using these boot binaries.`n"
+        if (([System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI DB).Bytes) -match 'Windows UEFI CA 2023') -eq $true) {
+            Write-Host "You may be able to use the UEFI CA 2023 binaries on this system."
+        } else {
+            Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
+        }
+        Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
+        Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
+        Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
+        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/N)"
+        $usebootex = ($bootOptn -eq "Y")
+    }
 
     Show-SectionMessage -sectionTitle "Collecting information and copying files needed for Setup" -sectionDescription "Please wait while Setup applies the Windows image. This can take some time, depending on the speed of your computer's disks."
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
@@ -758,7 +781,7 @@ function Start-OSApplication {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter -bootEx $usebootex
 }
 
 function Start-DismCommand
@@ -1054,6 +1077,8 @@ function New-BootFiles
             Determine whether to run detections for specific boot scenarios
         .PARAMETER espLetter
             The letter of the EFI System Partition volume. By default, it's W if not specified
+        .PARAMETER bootEx
+            Determine whether to use the Windows UEFI CA 2023 or the Microsoft Windows Production PCA 2011 boot binaries
         .EXAMPLE
             New-BootFiles -drLetter "C:" -bootPart "auto" -diskId 0 -cleanDrive $false
         .EXAMPLE
@@ -1064,7 +1089,8 @@ function New-BootFiles
         [Parameter(Mandatory = $true, Position = 1)] [string]$bootPart,
         [Parameter(Mandatory = $true, Position = 2)] [int]$diskId,
         [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive,
-        [Parameter(Position = 4)] [string]$espLetter = "W"
+        [Parameter(Position = 4)] [string]$espLetter = "W",
+        [Parameter(Position = 5)] [bool]$bootEx = $false
     )
     if ($env:firmware_type -eq "UEFI")
     {
@@ -1098,11 +1124,33 @@ function New-BootFiles
                     }
                 }
             }
-            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+            if ($bootEx) {
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+            } else {
+                # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                # we said we didn't want to.
+                if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                } else {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                }
+            }
         }
         else
         {
-            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+            if ($bootEx) {
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+            } else {
+                # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                # we said we didn't want to.
+                if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                } else {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                }
+            }
         }
     }
     else
