@@ -45,6 +45,8 @@ enum installationStatus : int8_t {
     StatusUnknown = 4
 };
 
+float dpiMultiplier = 0.f;
+
 std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const wchar_t* valueName) {
     HKEY hKey;
     if (RegOpenKeyEx(key, subKey, 0, KEY_READ, &hKey) != ERROR_SUCCESS) {
@@ -100,12 +102,31 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
                                WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX),
                                WndX, WndY, 640, 400, nullptr, nullptr, hInstance, nullptr);
 
+    UINT dpiX = 0;
+
+    dpiX = GetDpiForWindow(hwnd);
+    dpiMultiplier = (dpiX / 96.f);
+    if (dpiMultiplier <= 0) {
+        // If we couldn't grab the DPI multiplier we set it to 1
+        dpiMultiplier = 1;
+    }
+
     HICON icon = LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ICON1));
     SendMessage(hwnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
 
     if (hwnd == nullptr) {
         return 0;
     }
+
+    RECT rc = { 0, 0, 640.f * dpiMultiplier, 400.f * dpiMultiplier };
+    AdjustWindowRectEx(&rc, GetWindowLong(hwnd, GWL_STYLE), FALSE, GetWindowLong(hwnd, GWL_EXSTYLE));
+    WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - (640.f * dpiMultiplier)) / 2;
+    WndY = monInfo.rcMonitor.top + ((monInfo.rcMonitor.bottom - monInfo.rcMonitor.top) - (400.f * dpiMultiplier)) / 2;
+
+    SetWindowPos(hwnd, nullptr, WndX, WndY, 
+                 rc.right - abs(rc.left), 
+                 (rc.bottom - abs(rc.top) < 400 ? 400 : rc.bottom - abs(rc.top)), 
+                 SWP_NOMOVE | SWP_NOZORDER);
 
     ShowWindow(hwnd, nShowCmd);
 
@@ -118,10 +139,27 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLin
     return 0;
 }
 
+static float GetDpiMultiplier(HWND window) {
+    float dpiMult = 0.f;
+
+    UINT dpiX = 0;
+
+    dpiX = GetDpiForWindow(window);
+    dpiMult = (dpiX / 96.f);
+    if (dpiMult <= 0) {
+        // If we couldn't grab the DPI multiplier we set it to 1
+        dpiMult = 1;
+    }
+
+    return dpiMult;
+}
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     // ReSharper disable CppEntityAssignedButNoRead
     static HWND hwndList, hAddButton, hEditButton, hRemoveButton, hInstallButton, hExitButton, hAboutButton, hInstructionLabel;
     // ReSharper restore CppEntityAssignedButNoRead
+
+    dpiMultiplier = GetDpiMultiplier(hwnd);
 
     switch (uMsg) {
         case WM_CREATE: {
@@ -129,7 +167,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             hwndList = CreateWindow(WC_LISTVIEW, L"",
                                     WS_CHILD | WS_VISIBLE | LVS_REPORT,
-                                    10, 10, 600, 274, hwnd, reinterpret_cast<HMENU>(IDC_DRIVER_LIST), nullptr, nullptr);
+                                    10, 10, 600.f * dpiMultiplier, 274.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_DRIVER_LIST), nullptr, nullptr);
 
             // Set some more styles
             DWORD lvStyles = ListView_GetExtendedListViewStyle(hwndList);
@@ -138,35 +176,35 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             LVCOLUMN lvColumn;
             lvColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
-            lvColumn.cx = 384;
+            lvColumn.cx = 384.f * dpiMultiplier;
             lvColumn.pszText = L"Path";
             ListView_InsertColumn(hwndList, 0, &lvColumn);
 
-            lvColumn.cx = 150;
+            lvColumn.cx = 150.f * dpiMultiplier;
             lvColumn.pszText = L"Status";
             ListView_InsertColumn(hwndList, 1, &lvColumn);
 
             hAddButton = CreateWindow(L"BUTTON", L"Add...", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                      10, 320, 100, 30, hwnd, reinterpret_cast<HMENU>(IDC_ADD_BUTTON), nullptr, nullptr);
+                                      10, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_ADD_BUTTON), nullptr, nullptr);
 
             hEditButton = CreateWindow(L"BUTTON", L"Change...", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                       120, 320, 100, 30, hwnd, reinterpret_cast<HMENU>(IDC_EDIT_BUTTON), nullptr, nullptr);
+                                       120.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_EDIT_BUTTON), nullptr, nullptr);
 
             hRemoveButton = CreateWindow(L"BUTTON", L"Remove", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                         230, 320, 100, 30, hwnd, reinterpret_cast<HMENU>(IDC_REMOVE_BUTTON), nullptr, nullptr);
+                                         230.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_REMOVE_BUTTON), nullptr, nullptr);
 
             hInstallButton = CreateWindow(L"BUTTON", L"Install", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                          340, 320, 100, 30, hwnd, reinterpret_cast<HMENU>(IDC_INSTALL_BUTTON), nullptr, nullptr);
+                                          340.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_INSTALL_BUTTON), nullptr, nullptr);
 
             hExitButton = CreateWindow(L"BUTTON", L"Exit", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                       450, 320, 100, 30, hwnd, reinterpret_cast<HMENU>(IDC_EXIT_BUTTON), nullptr, nullptr);
+                                       450.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_EXIT_BUTTON), nullptr, nullptr);
 
             hAboutButton = CreateWindow(L"BUTTON", L"i", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
-                                        560, 320, 48, 30, hwnd, reinterpret_cast<HMENU>(IDC_ABOUT_BUTTON), nullptr, nullptr);
+                                        560.f * dpiMultiplier, 320.f * dpiMultiplier, 48.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_ABOUT_BUTTON), nullptr, nullptr);
 
             hInstructionLabel = CreateWindowEx(WS_EX_TRANSPARENT, L"static", L"ST_U", 
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-                10, 298, 600, 16, hwnd, reinterpret_cast<HMENU>(501), reinterpret_cast<HINSTANCE>(GetWindowLong(hwnd, GWLP_HINSTANCE)), nullptr);
+                10, 298.f * dpiMultiplier, 600.f * dpiMultiplier, 16.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(501), reinterpret_cast<HINSTANCE>(GetWindowLong(hwnd, GWLP_HINSTANCE)), nullptr);
 
             UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_BEGIN);
 
