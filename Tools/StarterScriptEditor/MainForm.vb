@@ -140,4 +140,40 @@ Public Class MainForm
             vbOKOnly + vbInformation, "About")
 #End If
     End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        OpenFileDialog2.ShowDialog(Me)
+    End Sub
+
+    Private Sub OpenFileDialog2_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk
+        If Not File.Exists(OpenFileDialog2.FileName) Then Exit Sub
+
+        If TextBox3.Text <> "" Then
+            If MessageBox.Show("Importing the selected script will replace existing contents of your script.", "Import Existing Script", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) = Windows.Forms.DialogResult.Cancel Then
+                Exit Sub
+            End If
+        End If
+
+        Dim scriptFileName As String = OpenFileDialog2.FileName
+        Dim scriptExtension As String = Path.GetExtension(scriptFileName)
+
+        Dim expectedBatchExtensions As New List(Of String)
+        expectedBatchExtensions.AddRange(New String(2) {".bat", ".cmd", ".nt"})
+        If expectedBatchExtensions.Contains(scriptExtension) Then
+            ComboBox1.SelectedIndex = 0
+        ElseIf scriptExtension.ToLower() = ".ps1" Then
+            ComboBox1.SelectedIndex = 1
+        Else
+            MessageBox.Show("This script is not supported by the Starter Script Editor.", "Unrecognized script", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Exit Sub
+        End If
+
+        Try
+            Dim scriptContents As String = File.ReadAllText(scriptFileName)
+            TextBox3.Text = scriptContents
+        Catch ex As Exception
+            MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+    End Sub
 End Class
