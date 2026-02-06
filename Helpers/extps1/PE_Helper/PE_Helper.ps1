@@ -1389,11 +1389,11 @@ function Get-Partitions
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
-        return @{"partitionNumber" = $partition; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override}
     }
     elseif ($part -eq "B")
     {
-        return @{"partitionNumber" = $partition; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override}
     }
     elseif ($part -eq "O")
     {
