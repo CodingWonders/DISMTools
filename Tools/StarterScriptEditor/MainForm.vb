@@ -96,6 +96,7 @@ Public Class MainForm
 
         SupportedLanguageList.AddRange(New String(1) {"batch", "powershell"})
         CurrentScript = GetNewStarterScript()
+        UpdateCaretPosition()
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
@@ -130,14 +131,27 @@ Public Class MainForm
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
 #If VBC_VER >= 9.0 Then
+#If DEBUG Then
+        MsgBox(String.Format("DISMTools Starter Script Editor version {0} (DEBUG)" & CrLf & CrLf & "{1}", _
+                My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
+                My.Application.Info.Copyright), _
+            vbOKOnly + vbInformation, "About")
+#Else
         MsgBox(String.Format("DISMTools Starter Script Editor version {0}" & CrLf & CrLf & "{1}", _
                 My.Application.Info.Version.ToString() & "_" & RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm") , _
                 My.Application.Info.Copyright), _
+            vbOKOnly + vbInformation, "About")
+#End If
+#Else
+#If DEBUG Then
+        MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL (DEBUG)" & CrLf & CrLf & "{1}", _
+                My.Application.Info.Version.ToString(), My.Application.Info.Copyright), _
             vbOKOnly + vbInformation, "About")
 #Else
         MsgBox(String.Format("DISMTools Starter Script Editor version {0}_NET2REL" & CrLf & CrLf & "{1}", _
                 My.Application.Info.Version.ToString(), My.Application.Info.Copyright), _
             vbOKOnly + vbInformation, "About")
+#End If
 #End If
     End Sub
 
@@ -175,5 +189,27 @@ Public Class MainForm
             MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckBox1.CheckedChanged
+        TextBox3.WordWrap = CheckBox1.Checked
+        Label6.Visible = Not CheckBox1.Checked
+        UpdateCaretPosition()
+    End Sub
+
+    Private Sub TextBox3_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyUp
+        UpdateCaretPosition()
+    End Sub
+
+    Private Sub TextBox3_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TextBox3.MouseUp
+        UpdateCaretPosition()
+    End Sub
+
+    Private Sub UpdateCaretPosition()
+        Dim caret As Integer = TextBox3.SelectionStart, _
+            line As Integer = TextBox3.GetLineFromCharIndex(caret), _
+            column As Integer = caret - TextBox3.GetFirstCharIndexFromLine(line)
+
+        Label6.Text = String.Format("Ln {0}, Col {1}", line + 1, column + 1)
     End Sub
 End Class
