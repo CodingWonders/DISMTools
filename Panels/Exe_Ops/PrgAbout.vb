@@ -510,11 +510,11 @@ Public Class PrgAbout
     End Sub
 #End Region
 
-    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter
+    Private Sub Picture_MouseEnter(sender As Object, e As EventArgs) Handles PictureBox3.MouseEnter, PictureBox2.MouseEnter, PictureBox4.MouseEnter, PictureBox5.MouseEnter
         Cursor = Cursors.Hand
     End Sub
 
-    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave
+    Private Sub Picture_MouseLeave(sender As Object, e As EventArgs) Handles PictureBox3.MouseLeave, PictureBox2.MouseLeave, PictureBox4.MouseLeave, PictureBox5.MouseLeave
         Cursor = Cursors.Arrow
     End Sub
 
@@ -655,5 +655,37 @@ Public Class PrgAbout
             Exit Sub
         End Try
         If File.Exists(Application.StartupPath & "\update.exe") Then Process.Start(Application.StartupPath & "\update.exe", "/" & MainForm.dtBranch & " /pid=" & Process.GetCurrentProcess().Id)
+    End Sub
+
+    Private Sub PictureBox5_MouseHover(sender As Object, e As EventArgs) Handles PictureBox5.MouseHover
+        Select Case MainForm.Language
+            Case 0
+                Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                    Case "ENU", "ENG"
+                        PictureToolTip.SetToolTip(sender, "Join the CodingWonders Software Discord server")
+                    Case "ESN"
+                        PictureToolTip.SetToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
+                    Case "FRA"
+                        PictureToolTip.SetToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
+                    Case "PTB", "PTG"
+                        PictureToolTip.SetToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
+                    Case "ITA"
+                        PictureToolTip.SetToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
+                End Select
+            Case 1
+                PictureToolTip.SetToolTip(sender, "Join the CodingWonders Software Discord server")
+            Case 2
+                PictureToolTip.SetToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
+            Case 3
+                PictureToolTip.SetToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
+            Case 4
+                PictureToolTip.SetToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
+            Case 5
+                PictureToolTip.SetToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
+        End Select
+    End Sub
+
+    Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click
+        Process.Start("https://discord.gg/vPrZXHPP")
     End Sub
 End Class

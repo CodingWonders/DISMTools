@@ -1615,6 +1615,7 @@
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
     <None Include="Resources\envvar_pic_32px.png" />
+    <None Include="Resources\about\cws_discord.png" />
     <Content Include="Resources\assistant_dark.png" />
     <Content Include="Resources\assistant_light.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
@@ -1711,7 +1712,6 @@
     <None Include="Resources\settings\options_program_light.png" />
     <None Include="Resources\settings\options_scratch_dark.png" />
     <None Include="Resources\settings\options_scratch_light.png" />
-    <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
     <None Include="Resources\onedrive_exclusion.png" />
     <None Include="Resources\color_schemes\CS_Idle_Blue.png" />

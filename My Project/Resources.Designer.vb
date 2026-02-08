@@ -551,6 +551,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property cws_discord() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("cws_discord", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca una cadena traducida similar a REM EXAMPLE SCRIPT. PLEASE MODIFY
         '''REM -----------------------------------------
         '''SELECT DISK=0

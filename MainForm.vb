@@ -11634,7 +11634,7 @@ Public Class MainForm
 
     Private Sub Discord_Click(sender As Object, e As EventArgs) Handles Discord.Click
         DynaLog.LogMessage("Launching discord join link...")
-        Process.Start("https://discord.gg/hJJTrMNP5p")
+        Process.Start("https://discord.gg/vPrZXHPP")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
