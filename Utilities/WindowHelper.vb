@@ -97,4 +97,11 @@ Public Class WindowHelper
         Return CSng(ScaleLogical(100))
     End Function
 
+    Public Shared Sub DisplayToolTip(tooltipSender As Object, toolTipMessage As String)
+        If TypeOf (tooltipSender) Is Control Then
+            Dim displayedToolTip As New ToolTip()
+            displayedToolTip.SetToolTip(tooltipSender, toolTipMessage)
+        End If
+    End Sub
+
 End Class
