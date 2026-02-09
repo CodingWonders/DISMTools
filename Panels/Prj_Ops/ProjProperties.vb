@@ -10,7 +10,6 @@ Public Class ProjProperties
 
     Dim ImgSizeStr As String
     Dim DismVersionChecker As FileVersionInfo
-    Dim HalHelper As New ToolTip()
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -1149,26 +1148,26 @@ Public Class ProjProperties
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        HalHelper.SetToolTip(sender, "Hardware Abstraction Layer")
+                        WindowHelper.DisplayToolTip(sender, "Hardware Abstraction Layer")
                     Case "ESN"
-                        HalHelper.SetToolTip(sender, "Capa de abstracción de hardware")
+                        WindowHelper.DisplayToolTip(sender, "Capa de abstracción de hardware")
                     Case "FRA"
-                        HalHelper.SetToolTip(sender, "Couche d'abstraction du matériel")
+                        WindowHelper.DisplayToolTip(sender, "Couche d'abstraction du matériel")
                     Case "PTB", "PTG"
-                        HalHelper.SetToolTip(sender, "Camada de abstração de hardware")
+                        WindowHelper.DisplayToolTip(sender, "Camada de abstração de hardware")
                     Case "ITA"
-                        HalHelper.SetToolTip(sender, "Livello di astrazione hardware")
+                        WindowHelper.DisplayToolTip(sender, "Livello di astrazione hardware")
                 End Select
             Case 1
-                HalHelper.SetToolTip(sender, "Hardware Abstraction Layer")
+                WindowHelper.DisplayToolTip(sender, "Hardware Abstraction Layer")
             Case 2
-                HalHelper.SetToolTip(sender, "Capa de abstracción de hardware")
+                WindowHelper.DisplayToolTip(sender, "Capa de abstracción de hardware")
             Case 3
-                HalHelper.SetToolTip(sender, "Couche d'abstraction du matériel")
+                WindowHelper.DisplayToolTip(sender, "Couche d'abstraction du matériel")
             Case 4
-                HalHelper.SetToolTip(sender, "Camada de abstração de hardware")
+                WindowHelper.DisplayToolTip(sender, "Camada de abstração de hardware")
             Case 5
-                HalHelper.SetToolTip(sender, "Livello di astrazione hardware")
+                WindowHelper.DisplayToolTip(sender, "Livello di astrazione hardware")
         End Select
     End Sub
 End Class

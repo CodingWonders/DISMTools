@@ -7722,8 +7722,7 @@ Public Class ProgressPanel
             Case 5
                 olcText = "Registri operazioni"
         End Select
-        Dim olcToolTip As New ToolTip()
-        olcToolTip.SetToolTip(sender, olcText)
+        WindowHelper.DisplayToolTip(sender, olcText)
     End Sub
 
     Private Sub LogSwitcherPic2_MouseHover(sender As Object, e As EventArgs) Handles LogSwitcherPic2.MouseHover
@@ -7753,8 +7752,7 @@ Public Class ProgressPanel
             Case 5
                 olcText = "Uscita DISM"
         End Select
-        Dim olcToolTip As New ToolTip()
-        olcToolTip.SetToolTip(sender, olcText)
+        WindowHelper.DisplayToolTip(sender, olcText)
     End Sub
 
     Private Sub ProgressPanel_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged

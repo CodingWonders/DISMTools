@@ -15,8 +15,6 @@ Public Class GetDriverInfo
     Dim CurrentHWFile As Integer = -1        ' This variable gets updated every time an element is selected in the driver packages list box
     Dim JumpTo As Integer = -1               ' This variable gets updated every time a target is specified in the Jump To panel
 
-    Dim ButtonTT As New ToolTip()
-
     Dim IsInDrvPkgs As Boolean
 
     Enum SearchMode As Integer
@@ -1058,7 +1056,7 @@ Public Class GetDriverInfo
             Case 5
                 msg = "Destinazione hardware precedente"
         End Select
-        ButtonTT.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 
     Private Sub Button5_MouseHover(sender As Object, e As EventArgs) Handles Button5.MouseHover
@@ -1088,7 +1086,7 @@ Public Class GetDriverInfo
             Case 5
                 msg = "Destinazione hardware sucecssiva"
         End Select
-        ButtonTT.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 
     Private Sub Button6_MouseHover(sender As Object, e As EventArgs) Handles Button6.MouseHover
@@ -1118,7 +1116,7 @@ Public Class GetDriverInfo
             Case 5
                 msg = "Salta ad una destinazione hardware specifica"
         End Select
-        ButtonTT.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -1266,9 +1264,9 @@ Public Class GetDriverInfo
 
     Private Sub Label25_MouseHover(sender As Object, e As EventArgs) Handles Label25.MouseHover
         If SearchBox1.Text = "" Then
-            ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+            WindowHelper.DisplayToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
         Else
-            ButtonTT.SetToolTip(sender, SearchedDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+            WindowHelper.DisplayToolTip(sender, SearchedDriverList(ListView1.FocusedItem.Index).OriginalFileName)
         End If
     End Sub
 

@@ -5,7 +5,6 @@ Imports System.Net
 
 Public Class PrgAbout
 
-    Dim PictureToolTip As New ToolTip()
     Private resized As Boolean = False
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
@@ -535,26 +534,26 @@ Public Class PrgAbout
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
+                        WindowHelper.DisplayToolTip(sender, "Check out the project's repository on GitHub")
                     Case "ESN"
-                        PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+                        WindowHelper.DisplayToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
                     Case "FRA"
-                        PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
+                        WindowHelper.DisplayToolTip(sender, "Consultez le dépôt du projet sur GitHub")
                     Case "PTB", "PTG"
-                        PictureToolTip.SetToolTip(sender, "Consulte o repositório do projeto no GitHub")
+                        WindowHelper.DisplayToolTip(sender, "Consulte o repositório do projeto no GitHub")
                     Case "ITA"
-                        PictureToolTip.SetToolTip(sender, "Controlla il repository del progetto su GitHub")
+                        WindowHelper.DisplayToolTip(sender, "Controlla il repository del progetto su GitHub")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check out the project's repository on GitHub")
+                WindowHelper.DisplayToolTip(sender, "Check out the project's repository on GitHub")
             Case 2
-                PictureToolTip.SetToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
+                WindowHelper.DisplayToolTip(sender, "Consulte el repositorio del proyecto en GitHub")
             Case 3
-                PictureToolTip.SetToolTip(sender, "Consultez le dépôt du projet sur GitHub")
+                WindowHelper.DisplayToolTip(sender, "Consultez le dépôt du projet sur GitHub")
             Case 4
-                PictureToolTip.SetToolTip(sender, "Consulte o repositório do projeto no GitHub")
+                WindowHelper.DisplayToolTip(sender, "Consulte o repositório do projeto no GitHub")
             Case 5
-                PictureToolTip.SetToolTip(sender, "Controlla il repository del progetto su GitHub")
+                WindowHelper.DisplayToolTip(sender, "Controlla il repository del progetto su GitHub")
         End Select
     End Sub
 
@@ -563,26 +562,26 @@ Public Class PrgAbout
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
+                        WindowHelper.DisplayToolTip(sender, "Check out the project's official subreddit")
                     Case "ESN"
-                        PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+                        WindowHelper.DisplayToolTip(sender, "Consulte el subreddit oficial del proyecto")
                     Case "FRA"
-                        PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
+                        WindowHelper.DisplayToolTip(sender, "Consultez le subreddit officiel du projet")
                     Case "PTB", "PTG"
-                        PictureToolTip.SetToolTip(sender, "Consulte o subreddit oficial do projeto")
+                        WindowHelper.DisplayToolTip(sender, "Consulte o subreddit oficial do projeto")
                     Case "ITA"
-                        PictureToolTip.SetToolTip(sender, "Controlla il subreddit ufficiale del progetto")
+                        WindowHelper.DisplayToolTip(sender, "Controlla il subreddit ufficiale del progetto")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check out the project's official subreddit")
+                WindowHelper.DisplayToolTip(sender, "Check out the project's official subreddit")
             Case 2
-                PictureToolTip.SetToolTip(sender, "Consulte el subreddit oficial del proyecto")
+                WindowHelper.DisplayToolTip(sender, "Consulte el subreddit oficial del proyecto")
             Case 3
-                PictureToolTip.SetToolTip(sender, "Consultez le subreddit officiel du projet")
+                WindowHelper.DisplayToolTip(sender, "Consultez le subreddit officiel du projet")
             Case 4
-                PictureToolTip.SetToolTip(sender, "Consulte o subreddit oficial do projeto")
+                WindowHelper.DisplayToolTip(sender, "Consulte o subreddit oficial do projeto")
             Case 5
-                PictureToolTip.SetToolTip(sender, "Controlla il subreddit ufficiale del progetto")
+                WindowHelper.DisplayToolTip(sender, "Controlla il subreddit ufficiale del progetto")
         End Select
     End Sub
 
@@ -591,26 +590,26 @@ Public Class PrgAbout
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
+                        WindowHelper.DisplayToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
                     Case "ESN"
-                        PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
+                        WindowHelper.DisplayToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
                     Case "FRA"
-                        PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
+                        WindowHelper.DisplayToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
                     Case "PTB", "PTG"
-                        PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
+                        WindowHelper.DisplayToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
                     Case "ITA"
-                        PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
+                        WindowHelper.DisplayToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
+                WindowHelper.DisplayToolTip(sender, "Check out the project's discussion on the My Digital Life forums")
             Case 2
-                PictureToolTip.SetToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
+                WindowHelper.DisplayToolTip(sender, "Consulte la discusión del proyecto en los foros de My Digital Life")
             Case 3
-                PictureToolTip.SetToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
+                WindowHelper.DisplayToolTip(sender, "Consultez les discussions sur le projet sur les forums de My Digital Life")
             Case 4
-                PictureToolTip.SetToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
+                WindowHelper.DisplayToolTip(sender, "Consulte o debate sobre o projeto nos fóruns do My Digital Life")
             Case 5
-                PictureToolTip.SetToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
+                WindowHelper.DisplayToolTip(sender, "Controlla la discussione del progetto nei forum di My Digital Life")
         End Select
     End Sub
 
@@ -662,26 +661,26 @@ Public Class PrgAbout
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                     Case "ENU", "ENG"
-                        PictureToolTip.SetToolTip(sender, "Join the CodingWonders Software Discord server")
+                        WindowHelper.DisplayToolTip(sender, "Join the CodingWonders Software Discord server")
                     Case "ESN"
-                        PictureToolTip.SetToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
+                        WindowHelper.DisplayToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
                     Case "FRA"
-                        PictureToolTip.SetToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
+                        WindowHelper.DisplayToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
                     Case "PTB", "PTG"
-                        PictureToolTip.SetToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
+                        WindowHelper.DisplayToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
                     Case "ITA"
-                        PictureToolTip.SetToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
+                        WindowHelper.DisplayToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
                 End Select
             Case 1
-                PictureToolTip.SetToolTip(sender, "Join the CodingWonders Software Discord server")
+                WindowHelper.DisplayToolTip(sender, "Join the CodingWonders Software Discord server")
             Case 2
-                PictureToolTip.SetToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
+                WindowHelper.DisplayToolTip(sender, "Unirse al servidor Discord de CodingWonders Software")
             Case 3
-                PictureToolTip.SetToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
+                WindowHelper.DisplayToolTip(sender, "Inscrivez-vous au serveur Discord de CodingWonders Software")
             Case 4
-                PictureToolTip.SetToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
+                WindowHelper.DisplayToolTip(sender, "Entre no servidor Discord da CodingWonders Software")
             Case 5
-                PictureToolTip.SetToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
+                WindowHelper.DisplayToolTip(sender, "Unisciti al server Discord di CodingWonders Software")
         End Select
     End Sub
 
