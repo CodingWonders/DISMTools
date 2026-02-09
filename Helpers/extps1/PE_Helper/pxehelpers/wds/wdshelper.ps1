@@ -1092,6 +1092,15 @@ function New-BootFiles
         [Parameter(Position = 4)] [string]$espLetter = "W",
         [Parameter(Position = 5)] [bool]$bootEx = $false
     )
+    
+    # Old Windows images don't come with the required UEFI CA 2023 binaries, causing bcdboot
+    # to fail. The files in question are in \WINDOWS\Boot\EFI_EX. So, if we can't find the _EX
+    # variants of the boot files we disable UEFI CA 2023 support and inform.
+    if (-not (Test-Path -Path "$($drLetter):\WINDOWS\Boot\EFI_EX")) {
+        Write-Warning "UEFI CA 2023 boot binaries not found on the target installation. Falling back to Microsoft Windows Production PCA 2011..."
+        $bootEx = $false
+    }
+    
     if ($env:firmware_type -eq "UEFI")
     {
         # Make boot files for both BIOS and UEFI firmwares
