@@ -323,4 +323,9 @@ Public Class ImgWim2Esd
             End Try
         End If
     End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim qhMessage As String = "Choose the WIM format to work with the broadest range of Windows images and to modify them. Choose the ESD format if you prefer a smaller Windows image, with the disadvantage of not being modifiable."
+        QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
 End Class
