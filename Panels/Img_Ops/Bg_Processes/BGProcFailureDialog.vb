@@ -51,7 +51,11 @@ Public Class BGProcFailureDialog
             Next
         End If
         If ImageInQuestion IsNot Nothing Then
-            TextBox1.Text &= ControlChars.CrLf & ControlChars.CrLf & ImageInQuestion.ToString()
+            Try
+                TextBox1.Text &= ControlChars.CrLf & ControlChars.CrLf & ImageInQuestion.ToString()
+            Catch ex As Exception
+                ' Don't show it
+            End Try
         End If
     End Sub
 End Class
