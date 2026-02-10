@@ -1292,6 +1292,31 @@
             Gets the options.
             </summary>
         </member>
+        <member name="M:Markdig.Extensions.Tables.PipeTableParser.PromoteNestedPipesToRootLevel(System.Collections.Generic.List{Markdig.Syntax.Inlines.Inline},Markdig.Syntax.Inlines.ContainerInline)">
+            <summary>
+            Promotes nested pipe delimiters and line breaks to root level.
+            </summary>
+            <remarks>
+            Handles cases like `*a | b*|` where the pipe ends up inside an unmatched emphasis container.
+            After promotion, all delimiters become siblings at root level for consistent cell boundary detection.
+            </remarks>
+        </member>
+        <member name="M:Markdig.Extensions.Tables.PipeTableParser.SplitContainerAtDelimiter(Markdig.Syntax.Inlines.Inline,Markdig.Syntax.Inlines.Inline)">
+            <summary>
+            Splits a container at the delimiter, promoting the delimiter to root level.
+            </summary>
+            <remarks>
+            For input `*a | b*`, the pipe is inside the emphasis container:
+                EmphasisDelimiter { "a", Pipe, "b" }
+            After splitting:
+                EmphasisDelimiter { "a" }, Pipe, Container { "b" }
+            </remarks>
+        </member>
+        <member name="M:Markdig.Extensions.Tables.PipeTableParser.CreateMatchingContainer(Markdig.Syntax.Inlines.ContainerInline)">
+            <summary>
+            Creates a container to wrap content split from the source container.
+            </summary>
+        </member>
         <member name="T:Markdig.Extensions.Tables.Table">
             <summary>
             Defines a table that contains an optional <see cref="T:Markdig.Extensions.Tables.TableRow"/>.
@@ -1606,6 +1631,57 @@
             <summary>
             Helper class for handling characters.
             </summary>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsWhitespace(System.Char)">
+            <summary>
+            <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace character</see>.
+            </summary>
+            <param name="c">The character to evaluate.</param>
+            <returns><see langword="true"/> if the character is a Unicode whitespace character</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsWhitespace(System.Text.Rune)">
+            <summary>
+            <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace character</see>.
+            </summary>
+            <param name="r">The character to evaluate. A supplementary character is also accepted.</param>
+            <returns><see langword="true"/> if the character is a Unicode whitespace character</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.CheckUnicodeCategory(System.Char,System.Boolean@,System.Boolean@)">
+            <summary>
+            Checks the Unicode category of the given character and determines whether it is a whitespace or punctuation character.
+            </summary>
+            <param name="c">The character to check.</param>
+            <param name="space">Output parameter indicating whether the character is a whitespace character.</param>
+            <param name="punctuation">Output parameter indicating whether the character is a punctuation character.</param>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.CheckUnicodeCategory(System.Text.Rune,System.Boolean@,System.Boolean@)">
+            <summary>
+            Check if a character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace</see> or <see href="https://spec.commonmark.org/0.31.2/#unicode-punctuation-character">punctuation character</see>.
+            </summary>
+            <param name="r">The character to evaluate. A supplementary character is also accepted.</param>
+            <param name="space"><see langword="true"/> if the character is an <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace character</see></param>
+            <param name="punctuation"><see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-punctuation-character">Unicode punctuation character</see></param>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsSpace(System.Char)">
+            <summary>
+            Returns <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#space">space</see> (U+0020).
+            </summary>
+            <param name="c">The character to evaluate</param>
+            <returns><see langword="true"/> if the character is a space</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsTab(System.Char)">
+            <summary>
+            Returns <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#tab">tab</see> (U+0009).
+            </summary>
+            <param name="c">The character to evaluate</param>
+            <returns><see langword="true"/> if the character is a tab</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsSpaceOrTab(System.Char)">
+            <summary>
+            Returns <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#space">space</see> (U+0020) or <see href="https://spec.commonmark.org/0.31.2/#tab">tab</see> (U+0009).
+            </summary>
+            <param name="c">The character to evaluate.</param>
+            <returns><see langword="true"/> if the character is a space or tab</returns>
         </member>
         <member name="T:Markdig.Helpers.CharNormalizer">
             <summary>
@@ -2286,6 +2362,12 @@
             Gets the current character.
             </summary>
         </member>
+        <member name="P:Markdig.Helpers.StringSlice.CurrentRune">
+            <summary>
+            Gets the current <see cref="T:System.Text.Rune"/>. Recognizes supplementary code points that cannot be covered by a single <see cref="T:System.Char"/>.
+            </summary>
+            <returns>The current rune or <see langword="default"/> if the current position contains an incomplete surrogate pair or <see cref="P:Markdig.Helpers.StringSlice.IsEmpty"/>.</returns>
+        </member>
         <member name="P:Markdig.Helpers.StringSlice.IsEmpty">
             <summary>
             Gets a value indicating whether this instance is empty.
@@ -2298,6 +2380,15 @@
             <param name="index">The index.</param>
             <returns>A character in the slice at the specified index (not from <see cref="P:Markdig.Helpers.StringSlice.Start"/> but from the begining of the slice)</returns>
         </member>
+        <member name="M:Markdig.Helpers.StringSlice.RuneAt(System.Int32)">
+            <summary>
+            Gets the <see cref="T:System.Text.Rune"/> at the specified index.
+            Recognizes supplementary code points that cannot be covered by a single <see cref="T:System.Char"/>.
+            </summary>
+            <param name="index">The index into <see cref="F:Markdig.Helpers.StringSlice.Text"/>.</param>
+            <returns>The rune at the specified index or <see langword="default"/> if the location contains an incomplete surrogate pair.</returns>
+            <exception cref="T:System.IndexOutOfRangeException">Thrown when the given <paramref name="index"/> is out of range</exception>
+        </member>
         <member name="M:Markdig.Helpers.StringSlice.NextChar">
             <summary>
             Goes to the next character, incrementing the <see cref="P:Markdig.Helpers.StringSlice.Start" /> position.
@@ -2305,6 +2396,13 @@
             <returns>
             The next character. `\0` is end of the iteration.
             </returns>
+        </member>
+        <member name="M:Markdig.Helpers.StringSlice.NextRune">
+            <summary>
+            Goes to the next <see cref="T:System.Text.Rune"/>, incrementing the <see cref="P:Markdig.Helpers.StringSlice.Start"/> position.
+            If <see cref="P:Markdig.Helpers.StringSlice.CurrentRune"/> is a supplementary character, <see cref="P:Markdig.Helpers.StringSlice.Start"/> will be advanced by 2.
+            </summary>
+            <returns>The current rune or <see langword="default"/> if the next position contains an incomplete surrogate pair or <see cref="P:Markdig.Helpers.StringSlice.IsEmpty"/>.</returns>
         </member>
         <member name="M:Markdig.Helpers.StringSlice.SkipChar">
             <summary>
@@ -2339,6 +2437,16 @@
             </summary>
             <param name="offset">The offset.</param>
             <returns>The character at offset, returns `\0` if none.</returns>
+        </member>
+        <member name="M:Markdig.Helpers.StringSlice.PeekRuneExtra(System.Int32)">
+            <summary>
+            Peeks a <see cref="T:System.Text.Rune"/> at the specified offset from the current beginning of the slice
+            without using the range <see cref="P:Markdig.Helpers.StringSlice.Start"/> or <see cref="P:Markdig.Helpers.StringSlice.End"/>, returns <see langword="default"/> if outside the <see cref="F:Markdig.Helpers.StringSlice.Text"/>.
+            Recognizes supplementary code points that cannot be covered by a single <see cref="T:System.Char"/>.
+            A positive <paramref name="offset"/> value expects the <em>high</em> surrogate and a negative <paramref name="offset"/> expects the <em>low</em> surrogate of the surrogate pair of a supplementary character at that position.
+            </summary>
+            <param name="offset">The offset.</param>
+            <returns>The rune at the specified offset, returns default if none.</returns>
         </member>
         <member name="M:Markdig.Helpers.StringSlice.Match(System.String,System.Int32)">
             <summary>
@@ -5882,6 +5990,14 @@
             <typeparam name="T">Type of the parent to check</typeparam>
             <returns><c>true</c> if this instance contains a parent of the specified type; <c>false</c> otherwise</returns>
         </member>
+        <member name="M:Markdig.Syntax.Inlines.Inline.ContainsParentOrSiblingOfType``1">
+            <summary>
+            Determines whether there is a sibling of the specified type among root-level siblings.
+            This walks up to find the root container, then checks all siblings.
+            </summary>
+            <typeparam name="T">Type of the sibling to check</typeparam>
+            <returns><c>true</c> if a sibling of the specified type exists; <c>false</c> otherwise</returns>
+        </member>
         <member name="M:Markdig.Syntax.Inlines.Inline.FindParentOfType``1">
             <summary>
             Iterates on parents of the specified type.
@@ -6651,6 +6767,371 @@
             Initializes a new instance of the <see cref="T:Markdig.Syntax.ThematicBreakBlock"/> class.
             </summary>
             <param name="parser">The parser used to create this block.</param>
+        </member>
+        <member name="F:System.Text.UnicodeUtility.ReplacementChar">
+            <summary>
+            The Unicode replacement character U+FFFD.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.GetPlane(System.UInt32)">
+            <summary>
+            Returns the Unicode plane (0 through 16, inclusive) which contains this code point.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.GetScalarFromUtf16SurrogatePair(System.UInt32,System.UInt32)">
+            <summary>
+            Returns a Unicode scalar value from two code points representing a UTF-16 surrogate pair.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.IsAsciiCodePoint(System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is an ASCII
+            character ([ U+0000..U+007F ]).
+            </summary>
+            <remarks>
+            Per http://www.unicode.org/glossary/#ASCII, ASCII is only U+0000..U+007F.
+            </remarks>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.IsHighSurrogateCodePoint(System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is a UTF-16 high surrogate code point,
+            i.e., is in [ U+D800..U+DBFF ], inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.IsInRangeInclusive(System.UInt32,System.UInt32,System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is between
+            <paramref name="lowerBound"/> and <paramref name="upperBound"/>, inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.IsLowSurrogateCodePoint(System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is a UTF-16 low surrogate code point,
+            i.e., is in [ U+DC00..U+DFFF ], inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.IsSurrogateCodePoint(System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is a UTF-16 surrogate code point,
+            i.e., is in [ U+D800..U+DFFF ], inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.IsValidCodePoint(System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="codePoint"/> is a valid Unicode code
+            point, i.e., is in [ U+0000..U+10FFFF ], inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.GetUtf16SequenceLength(System.UInt32)">
+            <summary>
+            Given a Unicode scalar value, gets the number of UTF-16 code units required to represent this value.
+            </summary>
+        </member>
+        <member name="M:System.Text.UnicodeUtility.GetUtf8SequenceLength(System.UInt32)">
+            <summary>
+            Given a Unicode scalar value, gets the number of UTF-8 code units required to represent this value.
+            </summary>
+        </member>
+        <member name="T:System.Text.Rune">
+            <summary>
+            Represents a Unicode scalar value ([ U+0000..U+D7FF ], inclusive; or [ U+E000..U+10FFFF ], inclusive).
+            </summary>
+            <remarks>
+            This type's constructors and conversion operators validate the input, so consumers can call the APIs
+            assuming that the underlying <see cref="T:System.Text.Rune"/> instance is well-formed.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.#ctor(System.Char)">
+            <summary>
+            Creates a <see cref="T:System.Text.Rune"/> from the provided UTF-16 code unit.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            If <paramref name="ch"/> represents a UTF-16 surrogate code point
+            U+D800..U+DFFF, inclusive.
+            </exception>
+        </member>
+        <member name="M:System.Text.Rune.#ctor(System.Char,System.Char)">
+            <summary>
+            Creates a <see cref="T:System.Text.Rune"/> from the provided UTF-16 surrogate pair.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            If <paramref name="highSurrogate"/> does not represent a UTF-16 high surrogate code point
+            or <paramref name="lowSurrogate"/> does not represent a UTF-16 low surrogate code point.
+            </exception>
+        </member>
+        <member name="M:System.Text.Rune.#ctor(System.Int32)">
+            <summary>
+            Creates a <see cref="T:System.Text.Rune"/> from the provided Unicode scalar value.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            If <paramref name="value"/> does not represent a value Unicode scalar value.
+            </exception>
+        </member>
+        <member name="M:System.Text.Rune.#ctor(System.UInt32)">
+            <summary>
+            Creates a <see cref="T:System.Text.Rune"/> from the provided Unicode scalar value.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            If <paramref name="value"/> does not represent a value Unicode scalar value.
+            </exception>
+        </member>
+        <member name="P:System.Text.Rune.IsAscii">
+            <summary>
+            Returns true if and only if this scalar value is ASCII ([ U+0000..U+007F ])
+            and therefore representable by a single UTF-8 code unit.
+            </summary>
+        </member>
+        <member name="P:System.Text.Rune.IsBmp">
+            <summary>
+            Returns true if and only if this scalar value is within the BMP ([ U+0000..U+FFFF ])
+            and therefore representable by a single UTF-16 code unit.
+            </summary>
+        </member>
+        <member name="P:System.Text.Rune.Plane">
+            <summary>
+            Returns the Unicode plane (0 to 16, inclusive) which contains this scalar.
+            </summary>
+        </member>
+        <member name="P:System.Text.Rune.ReplacementChar">
+            <summary>
+            A <see cref="T:System.Text.Rune"/> instance that represents the Unicode replacement character U+FFFD.
+            </summary>
+        </member>
+        <member name="P:System.Text.Rune.Utf16SequenceLength">
+            <summary>
+            Returns the length in code units (<see cref="T:System.Char"/>) of the
+            UTF-16 sequence required to represent this scalar value.
+            </summary>
+            <remarks>
+            The return value will be 1 or 2.
+            </remarks>
+        </member>
+        <member name="P:System.Text.Rune.Utf8SequenceLength">
+            <summary>
+            Returns the length in code units of the
+            UTF-8 sequence required to represent this scalar value.
+            </summary>
+            <remarks>
+            The return value will be 1 through 4, inclusive.
+            </remarks>
+        </member>
+        <member name="P:System.Text.Rune.Value">
+            <summary>
+            Returns the Unicode scalar value as an integer.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.DecodeFromUtf16(System.ReadOnlySpan{System.Char},System.Text.Rune@,System.Int32@)">
+            <summary>
+            Decodes the <see cref="T:System.Text.Rune"/> at the beginning of the provided UTF-16 source buffer.
+            </summary>
+            <returns>
+            <para>
+            If the source buffer begins with a valid UTF-16 encoded scalar value, returns <see cref="F:System.Buffers.OperationStatus.Done"/>,
+            and outs via <paramref name="result"/> the decoded <see cref="T:System.Text.Rune"/> and via <paramref name="charsConsumed"/> the
+            number of <see langword="char"/>s used in the input buffer to encode the <see cref="T:System.Text.Rune"/>.
+            </para>
+            <para>
+            If the source buffer is empty or contains only a standalone UTF-16 high surrogate character, returns <see cref="F:System.Buffers.OperationStatus.NeedMoreData"/>,
+            and outs via <paramref name="result"/> <see cref="P:System.Text.Rune.ReplacementChar"/> and via <paramref name="charsConsumed"/> the length of the input buffer.
+            </para>
+            <para>
+            If the source buffer begins with an ill-formed UTF-16 encoded scalar value, returns <see cref="F:System.Buffers.OperationStatus.InvalidData"/>,
+            and outs via <paramref name="result"/> <see cref="P:System.Text.Rune.ReplacementChar"/> and via <paramref name="charsConsumed"/> the number of
+            <see langword="char"/>s used in the input buffer to encode the ill-formed sequence.
+            </para>
+            </returns>
+            <remarks>
+            The general calling convention is to call this method in a loop, slicing the <paramref name="source"/> buffer by
+            <paramref name="charsConsumed"/> elements on each iteration of the loop. On each iteration of the loop <paramref name="result"/>
+            will contain the real scalar value if successfully decoded, or it will contain <see cref="P:System.Text.Rune.ReplacementChar"/> if
+            the data could not be successfully decoded. This pattern provides convenient automatic U+FFFD substitution of
+            invalid sequences while iterating through the loop.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{System.Byte},System.Text.Rune@,System.Int32@)">
+            <summary>
+            Decodes the <see cref="T:System.Text.Rune"/> at the beginning of the provided UTF-8 source buffer.
+            </summary>
+            <returns>
+            <para>
+            If the source buffer begins with a valid UTF-8 encoded scalar value, returns <see cref="F:System.Buffers.OperationStatus.Done"/>,
+            and outs via <paramref name="result"/> the decoded <see cref="T:System.Text.Rune"/> and via <paramref name="bytesConsumed"/> the
+            number of <see langword="byte"/>s used in the input buffer to encode the <see cref="T:System.Text.Rune"/>.
+            </para>
+            <para>
+            If the source buffer is empty or contains only a partial UTF-8 subsequence, returns <see cref="F:System.Buffers.OperationStatus.NeedMoreData"/>,
+            and outs via <paramref name="result"/> <see cref="P:System.Text.Rune.ReplacementChar"/> and via <paramref name="bytesConsumed"/> the length of the input buffer.
+            </para>
+            <para>
+            If the source buffer begins with an ill-formed UTF-8 encoded scalar value, returns <see cref="F:System.Buffers.OperationStatus.InvalidData"/>,
+            and outs via <paramref name="result"/> <see cref="P:System.Text.Rune.ReplacementChar"/> and via <paramref name="bytesConsumed"/> the number of
+            <see langword="char"/>s used in the input buffer to encode the ill-formed sequence.
+            </para>
+            </returns>
+            <remarks>
+            The general calling convention is to call this method in a loop, slicing the <paramref name="source"/> buffer by
+            <paramref name="bytesConsumed"/> elements on each iteration of the loop. On each iteration of the loop <paramref name="result"/>
+            will contain the real scalar value if successfully decoded, or it will contain <see cref="P:System.Text.Rune.ReplacementChar"/> if
+            the data could not be successfully decoded. This pattern provides convenient automatic U+FFFD substitution of
+            invalid sequences while iterating through the loop.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.DecodeLastFromUtf16(System.ReadOnlySpan{System.Char},System.Text.Rune@,System.Int32@)">
+            <summary>
+            Decodes the <see cref="T:System.Text.Rune"/> at the end of the provided UTF-16 source buffer.
+            </summary>
+            <remarks>
+            This method is very similar to <see cref="M:System.Text.Rune.DecodeFromUtf16(System.ReadOnlySpan{System.Char},System.Text.Rune@,System.Int32@)"/>, but it allows
+            the caller to loop backward instead of forward. The typical calling convention is that on each iteration
+            of the loop, the caller should slice off the final <paramref name="charsConsumed"/> elements of
+            the <paramref name="source"/> buffer.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.DecodeLastFromUtf8(System.ReadOnlySpan{System.Byte},System.Text.Rune@,System.Int32@)">
+            <summary>
+            Decodes the <see cref="T:System.Text.Rune"/> at the end of the provided UTF-8 source buffer.
+            </summary>
+            <remarks>
+            This method is very similar to <see cref="M:System.Text.Rune.DecodeFromUtf8(System.ReadOnlySpan{System.Byte},System.Text.Rune@,System.Int32@)"/>, but it allows
+            the caller to loop backward instead of forward. The typical calling convention is that on each iteration
+            of the loop, the caller should slice off the final <paramref name="bytesConsumed"/> elements of
+            the <paramref name="source"/> buffer.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.EncodeToUtf16(System.Span{System.Char})">
+            <summary>
+            Encodes this <see cref="T:System.Text.Rune"/> to a UTF-16 destination buffer.
+            </summary>
+            <param name="destination">The buffer to which to write this value as UTF-16.</param>
+            <returns>The number of <see cref="T:System.Char"/>s written to <paramref name="destination"/>.</returns>
+            <exception cref="T:System.ArgumentException">
+            If <paramref name="destination"/> is not large enough to hold the output.
+            </exception>
+        </member>
+        <member name="M:System.Text.Rune.EncodeToUtf8(System.Span{System.Byte})">
+            <summary>
+            Encodes this <see cref="T:System.Text.Rune"/> to a UTF-8 destination buffer.
+            </summary>
+            <param name="destination">The buffer to which to write this value as UTF-8.</param>
+            <returns>The number of <see cref="T:System.Byte"/>s written to <paramref name="destination"/>.</returns>
+            <exception cref="T:System.ArgumentException">
+            If <paramref name="destination"/> is not large enough to hold the output.
+            </exception>
+        </member>
+        <member name="M:System.Text.Rune.Equals(System.Text.Rune,System.StringComparison)">
+            <summary>
+            Returns a value that indicates whether the current instance and a specified rune are equal using the specified comparison option.
+            </summary>
+            <param name="other">The rune to compare with the current instance.</param>
+            <param name="comparisonType">One of the enumeration values that specifies the rules to use in the comparison.</param>
+            <returns><see langword="true"/> if the current instance and <paramref name="other"/> are equal; otherwise, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:System.Text.Rune.IsValid(System.Int32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is a valid Unicode scalar
+            value, i.e., is in [ U+0000..U+D7FF ], inclusive; or [ U+E000..U+10FFFF ], inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.IsValid(System.UInt32)">
+            <summary>
+            Returns <see langword="true"/> iff <paramref name="value"/> is a valid Unicode scalar
+            value, i.e., is in [ U+0000..U+D7FF ], inclusive; or [ U+E000..U+10FFFF ], inclusive.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> representation of this <see cref="T:System.Text.Rune"/> instance.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.TryCreate(System.Char,System.Text.Rune@)">
+            <summary>
+            Attempts to create a <see cref="T:System.Text.Rune"/> from the provided input value.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.TryCreate(System.Char,System.Char,System.Text.Rune@)">
+            <summary>
+            Attempts to create a <see cref="T:System.Text.Rune"/> from the provided UTF-16 surrogate pair.
+            Returns <see langword="false"/> if the input values don't represent a well-formed UTF-16surrogate pair.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.TryCreate(System.Int32,System.Text.Rune@)">
+            <summary>
+            Attempts to create a <see cref="T:System.Text.Rune"/> from the provided input value.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.TryCreate(System.UInt32,System.Text.Rune@)">
+            <summary>
+            Attempts to create a <see cref="T:System.Text.Rune"/> from the provided input value.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.TryEncodeToUtf16(System.Span{System.Char},System.Int32@)">
+            <summary>
+            Encodes this <see cref="T:System.Text.Rune"/> to a UTF-16 destination buffer.
+            </summary>
+            <param name="destination">The buffer to which to write this value as UTF-16.</param>
+            <param name="charsWritten">
+            The number of <see cref="T:System.Char"/>s written to <paramref name="destination"/>,
+            or 0 if the destination buffer is not large enough to contain the output.</param>
+            <returns>True if the value was written to the buffer; otherwise, false.</returns>
+            <remarks>
+            The <see cref="P:System.Text.Rune.Utf16SequenceLength"/> property can be queried ahead of time to determine
+            the required size of the <paramref name="destination"/> buffer.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.TryEncodeToUtf8(System.Span{System.Byte},System.Int32@)">
+            <summary>
+            Encodes this <see cref="T:System.Text.Rune"/> to a destination buffer as UTF-8 bytes.
+            </summary>
+            <param name="destination">The buffer to which to write this value as UTF-8.</param>
+            <param name="bytesWritten">
+            The number of <see cref="T:System.Byte"/>s written to <paramref name="destination"/>,
+            or 0 if the destination buffer is not large enough to contain the output.</param>
+            <returns>True if the value was written to the buffer; otherwise, false.</returns>
+            <remarks>
+            The <see cref="P:System.Text.Rune.Utf8SequenceLength"/> property can be queried ahead of time to determine
+            the required size of the <paramref name="destination"/> buffer.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.UnsafeCreate(System.UInt32)">
+            <summary>
+            Creates a <see cref="T:System.Text.Rune"/> without performing validation on the input.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.Utf16Utility.AllCharsInUInt32AreAscii(System.UInt32)">
+            <summary>
+            Returns true iff the UInt32 represents two ASCII UTF-16 characters in machine endianness.
+            </summary>
+        </member>
+        <member name="M:System.Text.Rune.Utf16Utility.ConvertAllAsciiCharsInUInt32ToLowercase(System.UInt32)">
+            <summary>
+            Given a UInt32 that represents two ASCII UTF-16 characters, returns the invariant
+            lowercase representation of those characters. Requires the input value to contain
+            two ASCII UTF-16 characters in machine endianness.
+            </summary>
+            <remarks>
+            This is a branchless implementation.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.Utf16Utility.ConvertAllAsciiCharsInUInt32ToUppercase(System.UInt32)">
+            <summary>
+            Given a UInt32 that represents two ASCII UTF-16 characters, returns the invariant
+            uppercase representation of those characters. Requires the input value to contain
+            two ASCII UTF-16 characters in machine endianness.
+            </summary>
+            <remarks>
+            This is a branchless implementation.
+            </remarks>
+        </member>
+        <member name="M:System.Text.Rune.System#IComparable#CompareTo(System.Object)">
+            <inheritdoc cref="M:System.IComparable.CompareTo(System.Object)" />
+        </member>
+        <member name="M:System.Text.UnicodeDebug.ToHexString(System.UInt32)">
+            <summary>
+            Formats a code point as the hex string "U+XXXX".
+            </summary>
+            <remarks>
+            The input value doesn't have to be a real code point in the Unicode codespace. It can be any integer.
+            </remarks>
         </member>
     </members>
 </doc>
