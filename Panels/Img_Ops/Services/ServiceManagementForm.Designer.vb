@@ -38,6 +38,8 @@ Partial Class ServiceManagementForm
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.Label4 = New System.Windows.Forms.Label()
+        Me.TextBox14 = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.TextBox7 = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
@@ -98,11 +100,9 @@ Partial Class ServiceManagementForm
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.ReloadServiceInformationBtn = New System.Windows.Forms.Button()
         Me.ServiceInfoContainerPanel = New System.Windows.Forms.Panel()
+        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
         Me.NoServiceSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label15 = New System.Windows.Forms.Label()
-        Me.SelectedServicePanel = New System.Windows.Forms.Panel()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.TextBox14 = New System.Windows.Forms.TextBox()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -121,8 +121,8 @@ Partial Class ServiceManagementForm
         Me.TabPage5.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.ServiceInfoContainerPanel.SuspendLayout()
-        Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SelectedServicePanel.SuspendLayout()
+        Me.NoServiceSelectedPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -268,6 +268,26 @@ Partial Class ServiceManagementForm
         Me.Label4.Size = New System.Drawing.Size(102, 13)
         Me.Label4.TabIndex = 1
         Me.Label4.Text = "Service Description:"
+        '
+        'TextBox14
+        '
+        Me.TextBox14.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox14.Enabled = False
+        Me.TextBox14.Location = New System.Drawing.Point(652, 208)
+        Me.TextBox14.Name = "TextBox14"
+        Me.TextBox14.ReadOnly = True
+        Me.TextBox14.Size = New System.Drawing.Size(239, 14)
+        Me.TextBox14.TabIndex = 2
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.Enabled = False
+        Me.Label19.Location = New System.Drawing.Point(504, 208)
+        Me.Label19.Name = "Label19"
+        Me.Label19.Size = New System.Drawing.Size(99, 13)
+        Me.Label19.TabIndex = 1
+        Me.Label19.Text = "User Service Flags:"
         '
         'TextBox7
         '
@@ -839,12 +859,21 @@ Partial Class ServiceManagementForm
         '
         Me.ServiceInfoContainerPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ServiceInfoContainerPanel.Controls.Add(Me.SelectedServicePanel)
         Me.ServiceInfoContainerPanel.Controls.Add(Me.NoServiceSelectedPanel)
+        Me.ServiceInfoContainerPanel.Controls.Add(Me.SelectedServicePanel)
         Me.ServiceInfoContainerPanel.Location = New System.Drawing.Point(12, 376)
         Me.ServiceInfoContainerPanel.Name = "ServiceInfoContainerPanel"
         Me.ServiceInfoContainerPanel.Size = New System.Drawing.Size(1240, 265)
         Me.ServiceInfoContainerPanel.TabIndex = 7
+        '
+        'SelectedServicePanel
+        '
+        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
+        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
+        Me.SelectedServicePanel.Name = "SelectedServicePanel"
+        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
+        Me.SelectedServicePanel.TabIndex = 1
         '
         'NoServiceSelectedPanel
         '
@@ -867,35 +896,6 @@ Partial Class ServiceManagementForm
         Me.Label15.TabIndex = 0
         Me.Label15.Text = "No service has been selected. Select a service above to view details."
         Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'SelectedServicePanel
-        '
-        Me.SelectedServicePanel.Controls.Add(Me.TabControl1)
-        Me.SelectedServicePanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SelectedServicePanel.Location = New System.Drawing.Point(0, 0)
-        Me.SelectedServicePanel.Name = "SelectedServicePanel"
-        Me.SelectedServicePanel.Size = New System.Drawing.Size(1240, 265)
-        Me.SelectedServicePanel.TabIndex = 1
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = True
-        Me.Label19.Enabled = False
-        Me.Label19.Location = New System.Drawing.Point(504, 208)
-        Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(99, 13)
-        Me.Label19.TabIndex = 1
-        Me.Label19.Text = "User Service Flags:"
-        '
-        'TextBox14
-        '
-        Me.TextBox14.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.TextBox14.Enabled = False
-        Me.TextBox14.Location = New System.Drawing.Point(652, 208)
-        Me.TextBox14.Name = "TextBox14"
-        Me.TextBox14.ReadOnly = True
-        Me.TextBox14.Size = New System.Drawing.Size(239, 14)
-        Me.TextBox14.TabIndex = 2
         '
         'ServiceManagementForm
         '
@@ -941,8 +941,8 @@ Partial Class ServiceManagementForm
         Me.TabPage5.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.ServiceInfoContainerPanel.ResumeLayout(False)
-        Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.SelectedServicePanel.ResumeLayout(False)
+        Me.NoServiceSelectedPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
