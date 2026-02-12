@@ -915,4 +915,10 @@ Public Class ImgMount
             MessageBox.Show("The Windows images in the specified ISO file were not copied to your local disk. Copy any WIM or ESD files from the sources folder of your ISO file.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
     End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            NumericUpDown1.Value = ListView1.FocusedItem.Index + 1
+        End If
+    End Sub
 End Class
