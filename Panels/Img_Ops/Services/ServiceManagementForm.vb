@@ -49,6 +49,20 @@ Public Class ServiceManagementForm
         CheckBox1.Checked = If(ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic, ServiceList(Index).DelayedStart, False)
         CheckBox1.Enabled = ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic
 
+        ' Only enable user service flags with certain service types
+        Label19.Enabled = {80, 96}.Contains(ServiceList(Index).Type)
+        TextBox14.Enabled = {80, 96}.Contains(ServiceList(Index).Type)
+
+        If {80, 96}.Contains(ServiceList(Index).Type) Then
+            If ServiceList(Index).UserServiceFlags = Integer.MinValue Then
+                TextBox14.Text = "Undefined"
+            Else
+                TextBox14.Text = ServiceList(Index).UserServiceFlags
+            End If
+        Else
+            TextBox14.Text = "Not a per-user service"
+        End If
+
         ListView2.Items.Clear()
         ListView2.Items.AddRange(ServiceList(Index).RequiredPrivileges.Select(Function(RequiredPrivilege) New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription})).ToArray())
 
@@ -124,6 +138,8 @@ Public Class ServiceManagementForm
         TextBox12.ForeColor = ForeColor
         TextBox13.BackColor = BackColor
         TextBox13.ForeColor = ForeColor
+        TextBox14.BackColor = BackColor
+        TextBox14.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         ComboBox1.BackColor = BackColor

@@ -373,7 +373,8 @@ Module WindowsServiceHelper
                         serviceErrorControl As WindowsService.ServiceErrorControl = WindowsService.ServiceErrorControl.Unknown,
                         serviceRequiredPrivilegesString() As String = New String() {},
                         serviceDependencies() As String = New String() {},
-                        serviceFailActionByteArr() As Byte = New Byte() {}
+                        serviceFailActionByteArr() As Byte = New Byte() {},
+                        serviceUserServFlags As Integer = Integer.MinValue
                     Using ServiceInfoRk As RegistryKey = Registry.LocalMachine.OpenSubKey(String.Format("zSYSTEM\ControlSet{0}\Services\{1}", DefaultControlSet.ToString().PadLeft(3, "0"), ServiceName), False)
                         ' We explicitly tell that we want to grab the raw data without env var expansion because REG_EXPAND_SZ values
                         ' are still string values, but with unexpanded environment variables. If the variable exists in the target system,
@@ -422,6 +423,7 @@ Module WindowsServiceHelper
                         ' Same goes for dependencies
                         serviceDependencies = ServiceInfoRk.GetValue("DependOnService", New String() {})
                         serviceFailActionByteArr = ServiceInfoRk.GetValue("FailureActions", New Byte() {})
+                        serviceUserServFlags = ServiceInfoRk.GetValue("UserServiceFlags", Integer.MinValue)
 
                         Dim serviceRequiredPrivilegeList As New List(Of NTSecurityPrivilegeConstant)
                         DynaLog.LogMessage("Privilege items defined by the service: " & serviceRequiredPrivilegesString.Count)
@@ -452,7 +454,8 @@ Module WindowsServiceHelper
                                                            serviceErrorControl,
                                                            serviceRequiredPrivilegeList,
                                                            serviceDependencies,
-                                                           ParseFailureActionByteArray(serviceFailActionByteArr)))
+                                                           ParseFailureActionByteArray(serviceFailActionByteArr),
+                                                           serviceUserServFlags))
                     End Using
                 Next
             Catch ex As Exception
