@@ -97,7 +97,7 @@ Public Class MainForm
     Public isSqlServerDTProj As Boolean
 
     ' Set branch name and codenames
-    Public dtBranch As String = "dt_pre_0.7.3"
+    Public dtBranch As String = "dt_pre_0.7.3_relcndid"
     Public dt_codeName As String = "DTVII_MK4"
 
     ' Arrays and other variables used on background processes
