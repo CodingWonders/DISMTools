@@ -983,23 +983,30 @@ GPT ATTRIBUTES=0x8000000000000001</value>
   <data name="WhatsNew" xml:space="preserve">
     <value>Bugfixes:
 
-- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
-- Scaling issues have been fixed. The program should look nicer at 125% scaling
+- Fixed issues with recursive driver addition on Windows 8 hosts not working correctly
+- Fixed an issue where the PE Helper would not go back to the disk selection screen when pressing B
+- Fixed an issue where the image capture script would take longer to start the image capture process after having used the Sysprep Preparation Tool
+- To get "%TEMP%" more accurately, the PE Helper and its components now use .NET APIs as opposed to relying on "$env:TEMP"
 
 New features:
 
-- The PE Helper now supports partition table overrides
-- The Sysprep Preparation Tool has been updated to the latest release, with support for exporting and adding SCSI adapters and other storage controllers to the DT PE image, improved DPI handling, and more
-- The DISMTools Preinstallation Environment now contains a script to create boot entries depending on the system's firmware type
-- You can now access the DiskPart command line from the image capture script. You can also change the keyboard layout from that script. The image capture script will also append ".wim" to the destination file name if you hadn't given it a (valid) file extension
-- The Starter Script editor now supports saving to user data folders by default
-- You can now search AppX package information when the extended AppX package getter is run
-- DISMTools now detects Windows PE images in disguise, such as Sergei Strelec's WinPE. These images spoof the edition IDs to resemble something else, such as "Professional". This makes DISM and any program that queries the edition ID think it's not a Windows PE image
-- When a background process fails, DISMTools will now continue running the remaining processes, as opposed to abruptly stopping them. After finishing, you can now see which failed and why
-- When mounting an image, you can now specify an ISO file. DISMTools will mount the ISO file and grab the installation images that you can use from it
-- DISMTools can now show you the names of the AppX packages that you see from your Start menu ("friendly display names") when removing them
-- New search engines and engine modes are available, and you can now filter them based on how much you tolerate AI features in them
-- DISMTools now contains Help documentation files in Spanish (EXPERIMENTAL ONLY)</value>
+- The PE Helper and the WDS Helper client now let you pick the EFI boot binary to use, whether it is the Microsoft Windows Production PCA 2011 or the Windows UEFI CA 2023 boot binary
+- HotInstall now detects the presence of the RAMDisk Options (`{ramdiskoptions}`) BCD object
+- PXE Helper Servers can now be started on Windows Server Core. Still, running DISMTools or any of its components on Server Core is not recommended
+- The Driver Installation Module now handles DPI scaling better
+- The Sysprep Preparation Tool has been updated
+- The Starter Script Editor now lets you import Batch and PowerShell script files to make them part of your starter script. It also lets you toggle word wrap, and you'll now see the position of the caret in the script code. It also handles DPI scaling much better
+- When configuring regional settings, you can now switch to Ireland (a EEA member) automatically
+- When browsing through starter scripts you can now export the script code so that you can use it anywhere
+- Services of types 80 and 96 are now shown as per-user services. User service flags will be shown for such types of services
+- Environment variables in the user scope now show on Windows PE images
+- You can now filter drivers by release date and signature status
+- You can now import drivers from the online installation management mode
+- A script is now included to help you add drivers recursively on Windows NT 6.x systems (Windows Vista-8.1, including Server 2008-2012 R2)
+- You can now select items in the image index overview list of the image mount dialog to specify the image index
+- A new tool has been added to detect UEFI CA 2023 readiness
+- Markdig has been updated to version 0.45.0
+- 7-Zip has been updated to version 26.00</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
