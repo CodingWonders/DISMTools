@@ -1292,6 +1292,31 @@
             Gets the options.
             </summary>
         </member>
+        <member name="M:Markdig.Extensions.Tables.PipeTableParser.PromoteNestedPipesToRootLevel(System.Collections.Generic.List{Markdig.Syntax.Inlines.Inline},Markdig.Syntax.Inlines.ContainerInline)">
+            <summary>
+            Promotes nested pipe delimiters and line breaks to root level.
+            </summary>
+            <remarks>
+            Handles cases like `*a | b*|` where the pipe ends up inside an unmatched emphasis container.
+            After promotion, all delimiters become siblings at root level for consistent cell boundary detection.
+            </remarks>
+        </member>
+        <member name="M:Markdig.Extensions.Tables.PipeTableParser.SplitContainerAtDelimiter(Markdig.Syntax.Inlines.Inline,Markdig.Syntax.Inlines.Inline)">
+            <summary>
+            Splits a container at the delimiter, promoting the delimiter to root level.
+            </summary>
+            <remarks>
+            For input `*a | b*`, the pipe is inside the emphasis container:
+                EmphasisDelimiter { "a", Pipe, "b" }
+            After splitting:
+                EmphasisDelimiter { "a" }, Pipe, Container { "b" }
+            </remarks>
+        </member>
+        <member name="M:Markdig.Extensions.Tables.PipeTableParser.CreateMatchingContainer(Markdig.Syntax.Inlines.ContainerInline)">
+            <summary>
+            Creates a container to wrap content split from the source container.
+            </summary>
+        </member>
         <member name="T:Markdig.Extensions.Tables.Table">
             <summary>
             Defines a table that contains an optional <see cref="T:Markdig.Extensions.Tables.TableRow"/>.
@@ -1606,6 +1631,57 @@
             <summary>
             Helper class for handling characters.
             </summary>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsWhitespace(System.Char)">
+            <summary>
+            <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace character</see>.
+            </summary>
+            <param name="c">The character to evaluate.</param>
+            <returns><see langword="true"/> if the character is a Unicode whitespace character</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsWhitespace(System.Text.Rune)">
+            <summary>
+            <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace character</see>.
+            </summary>
+            <param name="r">The character to evaluate. A supplementary character is also accepted.</param>
+            <returns><see langword="true"/> if the character is a Unicode whitespace character</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.CheckUnicodeCategory(System.Char,System.Boolean@,System.Boolean@)">
+            <summary>
+            Checks the Unicode category of the given character and determines whether it is a whitespace or punctuation character.
+            </summary>
+            <param name="c">The character to check.</param>
+            <param name="space">Output parameter indicating whether the character is a whitespace character.</param>
+            <param name="punctuation">Output parameter indicating whether the character is a punctuation character.</param>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.CheckUnicodeCategory(System.Text.Rune,System.Boolean@,System.Boolean@)">
+            <summary>
+            Check if a character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace</see> or <see href="https://spec.commonmark.org/0.31.2/#unicode-punctuation-character">punctuation character</see>.
+            </summary>
+            <param name="r">The character to evaluate. A supplementary character is also accepted.</param>
+            <param name="space"><see langword="true"/> if the character is an <see href="https://spec.commonmark.org/0.31.2/#unicode-whitespace-character">Unicode whitespace character</see></param>
+            <param name="punctuation"><see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#unicode-punctuation-character">Unicode punctuation character</see></param>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsSpace(System.Char)">
+            <summary>
+            Returns <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#space">space</see> (U+0020).
+            </summary>
+            <param name="c">The character to evaluate</param>
+            <returns><see langword="true"/> if the character is a space</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsTab(System.Char)">
+            <summary>
+            Returns <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#tab">tab</see> (U+0009).
+            </summary>
+            <param name="c">The character to evaluate</param>
+            <returns><see langword="true"/> if the character is a tab</returns>
+        </member>
+        <member name="M:Markdig.Helpers.CharHelper.IsSpaceOrTab(System.Char)">
+            <summary>
+            Returns <see langword="true"/> if the character is a <see href="https://spec.commonmark.org/0.31.2/#space">space</see> (U+0020) or <see href="https://spec.commonmark.org/0.31.2/#tab">tab</see> (U+0009).
+            </summary>
+            <param name="c">The character to evaluate.</param>
+            <returns><see langword="true"/> if the character is a space or tab</returns>
         </member>
         <member name="T:Markdig.Helpers.CharNormalizer">
             <summary>
@@ -2286,6 +2362,12 @@
             Gets the current character.
             </summary>
         </member>
+        <member name="P:Markdig.Helpers.StringSlice.CurrentRune">
+            <summary>
+            Gets the current <see cref="T:System.Text.Rune"/>. Recognizes supplementary code points that cannot be covered by a single <see cref="T:System.Char"/>.
+            </summary>
+            <returns>The current rune or <see langword="default"/> if the current position contains an incomplete surrogate pair or <see cref="P:Markdig.Helpers.StringSlice.IsEmpty"/>.</returns>
+        </member>
         <member name="P:Markdig.Helpers.StringSlice.IsEmpty">
             <summary>
             Gets a value indicating whether this instance is empty.
@@ -2298,6 +2380,15 @@
             <param name="index">The index.</param>
             <returns>A character in the slice at the specified index (not from <see cref="P:Markdig.Helpers.StringSlice.Start"/> but from the begining of the slice)</returns>
         </member>
+        <member name="M:Markdig.Helpers.StringSlice.RuneAt(System.Int32)">
+            <summary>
+            Gets the <see cref="T:System.Text.Rune"/> at the specified index.
+            Recognizes supplementary code points that cannot be covered by a single <see cref="T:System.Char"/>.
+            </summary>
+            <param name="index">The index into <see cref="F:Markdig.Helpers.StringSlice.Text"/>.</param>
+            <returns>The rune at the specified index or <see langword="default"/> if the location contains an incomplete surrogate pair.</returns>
+            <exception cref="T:System.IndexOutOfRangeException">Thrown when the given <paramref name="index"/> is out of range</exception>
+        </member>
         <member name="M:Markdig.Helpers.StringSlice.NextChar">
             <summary>
             Goes to the next character, incrementing the <see cref="P:Markdig.Helpers.StringSlice.Start" /> position.
@@ -2305,6 +2396,13 @@
             <returns>
             The next character. `\0` is end of the iteration.
             </returns>
+        </member>
+        <member name="M:Markdig.Helpers.StringSlice.NextRune">
+            <summary>
+            Goes to the next <see cref="T:System.Text.Rune"/>, incrementing the <see cref="P:Markdig.Helpers.StringSlice.Start"/> position.
+            If <see cref="P:Markdig.Helpers.StringSlice.CurrentRune"/> is a supplementary character, <see cref="P:Markdig.Helpers.StringSlice.Start"/> will be advanced by 2.
+            </summary>
+            <returns>The current rune or <see langword="default"/> if the next position contains an incomplete surrogate pair or <see cref="P:Markdig.Helpers.StringSlice.IsEmpty"/>.</returns>
         </member>
         <member name="M:Markdig.Helpers.StringSlice.SkipChar">
             <summary>
@@ -2339,6 +2437,16 @@
             </summary>
             <param name="offset">The offset.</param>
             <returns>The character at offset, returns `\0` if none.</returns>
+        </member>
+        <member name="M:Markdig.Helpers.StringSlice.PeekRuneExtra(System.Int32)">
+            <summary>
+            Peeks a <see cref="T:System.Text.Rune"/> at the specified offset from the current beginning of the slice
+            without using the range <see cref="P:Markdig.Helpers.StringSlice.Start"/> or <see cref="P:Markdig.Helpers.StringSlice.End"/>, returns <see langword="default"/> if outside the <see cref="F:Markdig.Helpers.StringSlice.Text"/>.
+            Recognizes supplementary code points that cannot be covered by a single <see cref="T:System.Char"/>.
+            A positive <paramref name="offset"/> value expects the <em>high</em> surrogate and a negative <paramref name="offset"/> expects the <em>low</em> surrogate of the surrogate pair of a supplementary character at that position.
+            </summary>
+            <param name="offset">The offset.</param>
+            <returns>The rune at the specified offset, returns default if none.</returns>
         </member>
         <member name="M:Markdig.Helpers.StringSlice.Match(System.String,System.Int32)">
             <summary>
@@ -5881,6 +5989,14 @@
             </summary>
             <typeparam name="T">Type of the parent to check</typeparam>
             <returns><c>true</c> if this instance contains a parent of the specified type; <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:Markdig.Syntax.Inlines.Inline.ContainsParentOrSiblingOfType``1">
+            <summary>
+            Determines whether there is a sibling of the specified type among root-level siblings.
+            This walks up to find the root container, then checks all siblings.
+            </summary>
+            <typeparam name="T">Type of the sibling to check</typeparam>
+            <returns><c>true</c> if a sibling of the specified type exists; <c>false</c> otherwise</returns>
         </member>
         <member name="M:Markdig.Syntax.Inlines.Inline.FindParentOfType``1">
             <summary>

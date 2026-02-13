@@ -246,6 +246,11 @@ Public Class ImgSwmToWim
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked

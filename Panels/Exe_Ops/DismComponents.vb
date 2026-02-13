@@ -85,5 +85,8 @@ Public Class DismComponents
                 Continue For
             End Try
         Next
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(250)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(238)
     End Sub
 End Class

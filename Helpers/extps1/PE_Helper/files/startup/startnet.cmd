@@ -24,6 +24,9 @@ if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
 	)
 )
+if exist "%sysdrive%\ShowWatermark.ps1" (
+	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
+)
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 	if exist "%sysdrive%\scripts\imagecapture.bat" (
 		echo An image capture will begin now...

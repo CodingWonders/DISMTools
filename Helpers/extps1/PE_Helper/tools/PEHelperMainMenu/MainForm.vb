@@ -15,9 +15,9 @@ Public Class MainForm
         Dim instTypeRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows NT\CurrentVersion", False)
         Dim instTypeVal As String = instTypeRk.GetValue("InstallationType", "")
         instTypeRk.Close()
-        LinkLabel3.Enabled = (instTypeVal = "Server")
-        PictureBox4.Image = If(instTypeVal = "Server", My.Resources.arrow_normal, My.Resources.arrow_disabled)
-        PictureBox4.Enabled = (instTypeVal = "Server")
+        LinkLabel3.Enabled = (instTypeVal.ToLower().Contains("server"))
+        PictureBox4.Image = If(instTypeVal.ToLower().Contains("server"), My.Resources.arrow_normal, My.Resources.arrow_disabled)
+        PictureBox4.Enabled = (instTypeVal.ToLower().Contains("server"))
 
         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
             Case "ENU", "ENG"

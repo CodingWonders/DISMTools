@@ -183,6 +183,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property assistant_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("assistant_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property assistant_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("assistant_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property backbox() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("backbox", resourceCulture)
@@ -526,6 +546,16 @@ Namespace My.Resources
         Friend ReadOnly Property CS_ProgressPanel_Green() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("CS_ProgressPanel_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property cws_discord() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("cws_discord", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2153,13 +2183,14 @@ Namespace My.Resources
         '''<summary>
         '''  Busca una cadena traducida similar a Bugfixes:
         '''
-        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
-        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
+        '''- Fixed issues with recursive driver addition on Windows 8 hosts not working correctly
+        '''- Fixed an issue where the PE Helper would not go back to the disk selection screen when pressing B
+        '''- Fixed an issue where the image capture script would take longer to start the image capture process after having used the Sysprep Preparation Tool
+        '''- To get &quot;%TEMP%&quot; more accurately, the PE Helper and its components now use .NET APIs as opposed to relying on &quot;$env:TEMP&quot;
         '''
         '''New features:
         '''
-        '''- The PE Helper now supports partition table overrides
-        '''- The Sysprep Preparation Tool has been updated to the latest release, with support for exporting and adding SCSI adapters and other storage controllers to the DT PE image, improved DPI handling, and more [resto de la cadena truncado]&quot;;.
+        '''- The PE Helper an [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

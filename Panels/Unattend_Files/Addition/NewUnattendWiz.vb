@@ -3101,4 +3101,14 @@ Public Class NewUnattendWiz
     Private Sub Button21_MouseHover(sender As Object, e As EventArgs) Handles Button21.MouseHover
         CNameTTip.Show("Click here to attempt to grab the edition of the currently loaded image. This will help you use a suitable product key for said Windows image.", sender)
     End Sub
+
+    Private Sub Button22_Click(sender As Object, e As EventArgs) Handles Button22.Click
+        ComboBox4.SelectedItem = "Ireland"
+    End Sub
+
+    Private Sub Button22_MouseHover(sender As Object, e As EventArgs) Handles Button22.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Choose this option to automatically configure the target location to one of the countries in the European Economic Area (EEA). This will let you" & CrLf &
+                                    "configure settings in the target system that you would not be able to when using a region outside the EEA. After Setup is complete, you can reconfigure" & CrLf &
+                                    "the region to your current location.")
+    End Sub
 End Class

@@ -438,6 +438,11 @@ Public Class ImgMount
         Catch ex As Exception
 
         End Try
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -908,6 +913,12 @@ Public Class ImgMount
         Else
             ' Then we've failed
             MessageBox.Show("The Windows images in the specified ISO file were not copied to your local disk. Copy any WIM or ESD files from the sources folder of your ISO file.", "Extraction succeeded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+        If ListView1.SelectedItems.Count = 1 Then
+            NumericUpDown1.Value = ListView1.FocusedItem.Index + 1
         End If
     End Sub
 End Class

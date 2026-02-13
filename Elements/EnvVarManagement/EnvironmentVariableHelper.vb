@@ -31,13 +31,29 @@ Module EnvironmentVariableHelper
             If Not RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Users", "Default", "NTUSER.DAT"), "HKLM\zDEFAULT") = 0 Then Throw New Exception("Registry hive could not be loaded. User variables cannot be obtained")
 
             Dim envVarRk As RegistryKey = Registry.LocalMachine.OpenSubKey("zDEFAULT\Environment", False)
-            For Each VariableName In envVarRk.GetValueNames()
-                userEnvironmentVariables.Add(New EnvironmentVariable(VariableName, envVarRk.GetValue(VariableName, "", RegistryValueOptions.DoNotExpandEnvironmentNames), EnvironmentVariable.EnvironmentVariableScope.User, envVarRk.GetValueKind(VariableName)))
-            Next
-            envVarRk.Close()
+            Try
+                For Each VariableName In envVarRk.GetValueNames()
+                    userEnvironmentVariables.Add(New EnvironmentVariable(VariableName, envVarRk.GetValue(VariableName, "", RegistryValueOptions.DoNotExpandEnvironmentNames), EnvironmentVariable.EnvironmentVariableScope.User, envVarRk.GetValueKind(VariableName)))
+                Next
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not get variables from DEFAULT.")
+            Finally
+                If envVarRk IsNot Nothing Then envVarRk.Close()
+            End Try
 
             RegistryHelper.UnloadRegistryHive("HKLM\zDEFAULT")
 
+            ' If there are no env vars in DEFAULT\Environment, try SOFTWARE\DefaultUserEnvironment
+            If Not userEnvironmentVariables.Any() Then
+                If Not RegistryHelper.LoadRegistryHive(Path.Combine(MountPath, "Windows", "system32", "config", "SOFTWARE"), "HKLM\zSOFTWARE") = 0 Then Throw New Exception("Registry hive could not be loaded. User variables cannot be obtained")
+                envVarRk = Registry.LocalMachine.OpenSubKey("zSOFTWARE\DefaultUserEnvironment", False)
+                For Each VariableName In envVarRk.GetValueNames()
+                    userEnvironmentVariables.Add(New EnvironmentVariable(VariableName, envVarRk.GetValue(VariableName, "", RegistryValueOptions.DoNotExpandEnvironmentNames), EnvironmentVariable.EnvironmentVariableScope.User, envVarRk.GetValueKind(VariableName)))
+                Next
+                envVarRk.Close()
+
+                RegistryHelper.UnloadRegistryHive("HKLM\zSOFTWARE")
+            End If
         Catch ex As Exception
 
         End Try

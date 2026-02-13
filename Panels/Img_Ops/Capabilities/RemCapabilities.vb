@@ -203,5 +203,7 @@ Public Class RemCapabilities
         ListView1.ForeColor = ForeColor
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(524)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(199)
     End Sub
 End Class

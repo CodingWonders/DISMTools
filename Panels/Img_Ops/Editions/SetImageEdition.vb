@@ -11,7 +11,7 @@ Public Class SetImageEdition
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         If Not ProgressPanel.IsDisposed Then ProgressPanel.Dispose()
         ProgressPanel.imgEditionNewEdition = ComboBox1.SelectedItem
-        If MainForm.CurrentImage.ImageInstallationType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+        If MainForm.CurrentImage.ImageInstallationType.ToLower().Contains("server") AndAlso MainForm.OnlineManagement Then
             ProgressPanel.imgEditionCopyEula = RadioButton1.Checked
             ProgressPanel.imgEditionAcceptEula = RadioButton2.Checked
             If RadioButton1.Checked Then
@@ -273,7 +273,7 @@ Public Class SetImageEdition
         DynaLog.LogMessage("- Image Installation Type: " & MainForm.CurrentImage.ImageProductType)
         DynaLog.LogMessage("- Managing Active Installation? " & If(MainForm.OnlineManagement, "Yes", "No"))
         ' Disable group box if not managing an active server installation
-        If MainForm.CurrentImage.ImageInstallationType.Equals("Server", StringComparison.OrdinalIgnoreCase) AndAlso MainForm.OnlineManagement Then
+        If MainForm.CurrentImage.ImageInstallationType.ToLower().Contains("server") AndAlso MainForm.OnlineManagement Then
             DynaLog.LogMessage("All requirements are met. We are managing a Windows Server installation")
             GroupBox1.Enabled = True
         Else

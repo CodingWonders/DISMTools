@@ -566,6 +566,6 @@ Public Class ImgAppend
             Case 5
                 msg = "Ottenere il nome dell'ultimo indice dell'immagine di destinazione"
         End Select
-        ToolTip1.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 End Class

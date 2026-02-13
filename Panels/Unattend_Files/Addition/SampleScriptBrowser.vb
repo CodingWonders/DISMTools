@@ -112,13 +112,13 @@ Public Class SampleScriptBrowser
         Try
             Select Case FinalScriptStage
                 Case 0
-                    Return SysConfigScripts(index)
+                    Return SysConfigScripts.ElementAtOrDefault(index)
                 Case 1
-                    Return FirstUserLogonScripts(index)
+                    Return FirstUserLogonScripts.ElementAtOrDefault(index)
                 Case 2
-                    Return UserFirstLogonScripts(index)
+                    Return UserFirstLogonScripts.ElementAtOrDefault(index)
                 Case 3
-                    Return UserScripts(index)
+                    Return UserScripts.ElementAtOrDefault(index)
             End Select
         Catch ex As Exception
 
@@ -164,6 +164,8 @@ Public Class SampleScriptBrowser
         Else
             ComboBox1.SelectedIndex = FinalScriptStage
         End If
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(286)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -208,5 +210,33 @@ Public Class SampleScriptBrowser
             Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"),
                           String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & ControlChars.Quote))
         End If
+    End Sub
+
+    Private Sub ExportScriptCodeBtn_Click(sender As Object, e As EventArgs) Handles ExportScriptCodeBtn.Click
+        ' Modify the filter of the file picker according to the language
+        Dim targetSS As StarterScript = GetScriptFromIndex(ListView1.FocusedItem.Index)
+        If targetSS IsNot Nothing Then
+            Select Case targetSS.Language.ToLower()
+                Case "batch"
+                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd;*.nt"
+                Case "powershell"
+                    ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
+                Case Else
+                    ScriptCodeExporterSFD.Filter = "All Files|*.*"
+            End Select
+        Else
+            ScriptCodeExporterSFD.Filter = "All Files|*.*"
+        End If
+        ScriptCodeExporterSFD.ShowDialog(Me)
+    End Sub
+
+    Private Sub ScriptCodeExporterSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptCodeExporterSFD.FileOk
+        Try
+            DynaLog.LogMessage("Saving script code to destination...")
+            File.WriteAllText(ScriptCodeExporterSFD.FileName, RichTextBox1.Text)
+            DynaLog.LogMessage("Script code was successfully saved to the destination")
+        Catch ex As Exception
+            DynaLog.LogMessage("Script code could not be saved to the destination")
+        End Try
     End Sub
 End Class

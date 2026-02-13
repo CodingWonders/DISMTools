@@ -30,9 +30,9 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ServiceDetailsLv = New System.Windows.Forms.ListView()
-        Me.ColumnHeader15 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader16 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.ColumnHeader17 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader5 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
@@ -98,7 +98,7 @@ Partial Class RegisteredServiceHostGroupsDialog
         '
         Me.ServiceDetailsLv.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ServiceDetailsLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader15, Me.ColumnHeader16, Me.ColumnHeader17})
+        Me.ServiceDetailsLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3, Me.ColumnHeader4, Me.ColumnHeader5})
         Me.ServiceDetailsLv.FullRowSelect = True
         Me.ServiceDetailsLv.HideSelection = False
         Me.ServiceDetailsLv.Location = New System.Drawing.Point(14, 192)
@@ -108,20 +108,20 @@ Partial Class RegisteredServiceHostGroupsDialog
         Me.ServiceDetailsLv.UseCompatibleStateImageBehavior = False
         Me.ServiceDetailsLv.View = System.Windows.Forms.View.Details
         '
-        'ColumnHeader15
+        'ColumnHeader3
         '
-        Me.ColumnHeader15.Text = "Service Name"
-        Me.ColumnHeader15.Width = 175
+        Me.ColumnHeader3.Text = "Service Name"
+        Me.ColumnHeader3.Width = 175
         '
-        'ColumnHeader16
+        'ColumnHeader4
         '
-        Me.ColumnHeader16.Text = "Display Name"
-        Me.ColumnHeader16.Width = 274
+        Me.ColumnHeader4.Text = "Display Name"
+        Me.ColumnHeader4.Width = 274
         '
-        'ColumnHeader17
+        'ColumnHeader5
         '
-        Me.ColumnHeader17.Text = "Type"
-        Me.ColumnHeader17.Width = 192
+        Me.ColumnHeader5.Text = "Type"
+        Me.ColumnHeader5.Width = 192
         '
         'Label2
         '
@@ -164,9 +164,9 @@ Partial Class RegisteredServiceHostGroupsDialog
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ServiceDetailsLv As System.Windows.Forms.ListView
-    Friend WithEvents ColumnHeader15 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents ColumnHeader16 As System.Windows.Forms.ColumnHeader
-    Friend WithEvents ColumnHeader17 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader5 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Label2 As System.Windows.Forms.Label
 
 End Class

@@ -49,6 +49,20 @@ Public Class ServiceManagementForm
         CheckBox1.Checked = If(ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic, ServiceList(Index).DelayedStart, False)
         CheckBox1.Enabled = ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic
 
+        ' Only enable user service flags with certain service types
+        Label19.Enabled = {80, 96}.Contains(ServiceList(Index).Type)
+        TextBox14.Enabled = {80, 96}.Contains(ServiceList(Index).Type)
+
+        If {80, 96}.Contains(ServiceList(Index).Type) Then
+            If ServiceList(Index).UserServiceFlags = Integer.MinValue Then
+                TextBox14.Text = "Undefined"
+            Else
+                TextBox14.Text = ServiceList(Index).UserServiceFlags
+            End If
+        Else
+            TextBox14.Text = "Not a per-user service"
+        End If
+
         ListView2.Items.Clear()
         ListView2.Items.AddRange(ServiceList(Index).RequiredPrivileges.Select(Function(RequiredPrivilege) New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription})).ToArray())
 
@@ -124,6 +138,8 @@ Public Class ServiceManagementForm
         TextBox12.ForeColor = ForeColor
         TextBox13.BackColor = BackColor
         TextBox13.ForeColor = ForeColor
+        TextBox14.BackColor = BackColor
+        TextBox14.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         ComboBox1.BackColor = BackColor
@@ -141,6 +157,24 @@ Public Class ServiceManagementForm
         DynaLog.EnableLogging()
 
         ListView1.Items.AddRange(ServiceList.Select(Function(Service) New ListViewItem(New String() {Service.Name, Service.DisplayName, Service.Description, Service.StartTypeToString(), Service.TypeToString()})).ToArray())
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(218)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(279)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(237)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(173)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(170)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(177)
+        ColumnHeader7.Width = WindowHelper.ScaleLogical(592)
+        ColumnHeader8.Width = WindowHelper.ScaleLogical(209)
+        ColumnHeader9.Width = WindowHelper.ScaleLogical(209)
+        ColumnHeader10.Width = WindowHelper.ScaleLogical(120)
+        ColumnHeader11.Width = WindowHelper.ScaleLogical(209)
+        ColumnHeader12.Width = WindowHelper.ScaleLogical(195)
+        ColumnHeader13.Width = WindowHelper.ScaleLogical(209)
+        ColumnHeader14.Width = WindowHelper.ScaleLogical(120)
+        ColumnHeader15.Width = WindowHelper.ScaleLogical(209)
+        ColumnHeader16.Width = WindowHelper.ScaleLogical(567)
+        ColumnHeader17.Width = WindowHelper.ScaleLogical(311)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

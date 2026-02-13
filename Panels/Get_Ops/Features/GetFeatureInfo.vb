@@ -209,6 +209,8 @@ Public Class GetFeatureInfoDlg
             ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
         End If
         SearchBox1.Text = ""
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

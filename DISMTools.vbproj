@@ -80,8 +80,8 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.44.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.44.0\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.45.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.0.45.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Dism.4.0.7\lib\net40\Microsoft.Dism.dll</HintPath>
@@ -208,6 +208,7 @@
   <ItemGroup>
     <Import Include="DISMTools.Elements.Contemporaneus" />
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.ControlChars" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -251,6 +252,8 @@
     <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
     <Compile Include="Elements\Contemporaneus\ImageCapability.vb" />
     <Compile Include="Elements\Contemporaneus\ImageDriver.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageOperations\ImageOperation.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageOperations\MountImageIO.vb" />
     <Compile Include="Elements\Contemporaneus\PSInterop\PSObjects.vb" />
     <Compile Include="Elements\Contemporaneus\ImageFeature.vb" />
     <Compile Include="Elements\Contemporaneus\WindowsImage.vb" />
@@ -1280,6 +1283,9 @@
     <None Include="Helpers\extbatch\cmdhelp.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extbatch\nt6_online_pnputil_recurse.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extbatch\options.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1317,6 +1323,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\ShowWatermark.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
@@ -1606,6 +1615,9 @@
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
     <None Include="Resources\envvar_pic_32px.png" />
+    <None Include="Resources\about\cws_discord.png" />
+    <Content Include="Resources\assistant_dark.png" />
+    <Content Include="Resources\assistant_light.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
@@ -1700,7 +1712,6 @@
     <None Include="Resources\settings\options_program_light.png" />
     <None Include="Resources\settings\options_scratch_dark.png" />
     <None Include="Resources\settings\options_scratch_light.png" />
-    <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
     <None Include="Resources\onedrive_exclusion.png" />
     <None Include="Resources\color_schemes\CS_Idle_Blue.png" />
@@ -1966,6 +1977,7 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
+    <Folder Include="Panels\Get_Ops\FilterAssistants\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
@@ -2138,7 +2150,10 @@ IF %25GEN_INSTALLER%25=="Yes" (
 		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
 		rd "$(SolutionDir)Installer\files" /s /q
 	)
-)</PostBuildEvent>
+)
+
+REM make it so that DTPE reports version info via watermark
+BREAK &gt; bin\extps1\PE_Helper\let_it_rain</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...

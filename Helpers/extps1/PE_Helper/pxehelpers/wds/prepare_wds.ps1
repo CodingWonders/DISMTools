@@ -57,6 +57,8 @@ if (-not (Test-Path "$winpeToolsPath")) {
     return $false
 }
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 function Update-WinPEForWds {
     <#
         .SYNOPSIS
@@ -76,7 +78,7 @@ function Update-WinPEForWds {
     Write-Host "Creating temporary mount directory..."
     try
     {
-        $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+        $mountDirectory = "$tempDir\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
         New-Item "$mountDirectory" -ItemType Directory | Out-Null
     }
     catch
@@ -155,7 +157,7 @@ function Get-PxeOptionStatus {
             - DHCP
     #>
 
-    if ((Get-ComputerInfo).WindowsInstallationType -ne "Server") {
+    if ((Get-ComputerInfo).WindowsInstallationType -notlike "Server*") {
         Write-Host "This computer is not running Windows Server."
         return $false
     }

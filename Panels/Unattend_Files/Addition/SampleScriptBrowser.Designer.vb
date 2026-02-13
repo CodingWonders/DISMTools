@@ -27,6 +27,7 @@ Partial Class SampleScriptBrowser
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.ActionPanel = New System.Windows.Forms.Panel()
+        Me.CreateStarterScriptBtn = New System.Windows.Forms.Button()
         Me.ScriptListPanel = New System.Windows.Forms.Panel()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -44,7 +45,8 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.CreateStarterScriptBtn = New System.Windows.Forms.Button()
+        Me.ExportScriptCodeBtn = New System.Windows.Forms.Button()
+        Me.ScriptCodeExporterSFD = New System.Windows.Forms.SaveFileDialog()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
@@ -100,6 +102,17 @@ Partial Class SampleScriptBrowser
         Me.ActionPanel.Name = "ActionPanel"
         Me.ActionPanel.Size = New System.Drawing.Size(1008, 48)
         Me.ActionPanel.TabIndex = 1
+        '
+        'CreateStarterScriptBtn
+        '
+        Me.CreateStarterScriptBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CreateStarterScriptBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CreateStarterScriptBtn.Location = New System.Drawing.Point(12, 10)
+        Me.CreateStarterScriptBtn.Name = "CreateStarterScriptBtn"
+        Me.CreateStarterScriptBtn.Size = New System.Drawing.Size(205, 23)
+        Me.CreateStarterScriptBtn.TabIndex = 1
+        Me.CreateStarterScriptBtn.Text = "Create your own starter scripts..."
+        Me.CreateStarterScriptBtn.UseVisualStyleBackColor = True
         '
         'ScriptListPanel
         '
@@ -168,6 +181,7 @@ Partial Class SampleScriptBrowser
         '
         'ScriptDetailsPanel
         '
+        Me.ScriptDetailsPanel.Controls.Add(Me.ExportScriptCodeBtn)
         Me.ScriptDetailsPanel.Controls.Add(Me.RichTextBox1)
         Me.ScriptDetailsPanel.Controls.Add(Me.Label7)
         Me.ScriptDetailsPanel.Controls.Add(Me.Label6)
@@ -277,16 +291,19 @@ Partial Class SampleScriptBrowser
         Me.Label8.Text = resources.GetString("Label8.Text")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
-        'CreateStarterScriptBtn
+        'ExportScriptCodeBtn
         '
-        Me.CreateStarterScriptBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.CreateStarterScriptBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CreateStarterScriptBtn.Location = New System.Drawing.Point(12, 10)
-        Me.CreateStarterScriptBtn.Name = "CreateStarterScriptBtn"
-        Me.CreateStarterScriptBtn.Size = New System.Drawing.Size(205, 23)
-        Me.CreateStarterScriptBtn.TabIndex = 1
-        Me.CreateStarterScriptBtn.Text = "Create your own starter scripts..."
-        Me.CreateStarterScriptBtn.UseVisualStyleBackColor = True
+        Me.ExportScriptCodeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ExportScriptCodeBtn.Location = New System.Drawing.Point(446, 158)
+        Me.ExportScriptCodeBtn.Name = "ExportScriptCodeBtn"
+        Me.ExportScriptCodeBtn.Size = New System.Drawing.Size(192, 23)
+        Me.ExportScriptCodeBtn.TabIndex = 7
+        Me.ExportScriptCodeBtn.Text = "Export script code to a file..."
+        Me.ExportScriptCodeBtn.UseVisualStyleBackColor = True
+        '
+        'ScriptCodeExporterSFD
+        '
+        Me.ScriptCodeExporterSFD.Title = "Export Script Code"
         '
         'SampleScriptBrowser
         '
@@ -340,5 +357,7 @@ Partial Class SampleScriptBrowser
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
     Friend WithEvents CreateStarterScriptBtn As System.Windows.Forms.Button
+    Friend WithEvents ExportScriptCodeBtn As System.Windows.Forms.Button
+    Friend WithEvents ScriptCodeExporterSFD As System.Windows.Forms.SaveFileDialog
 
 End Class

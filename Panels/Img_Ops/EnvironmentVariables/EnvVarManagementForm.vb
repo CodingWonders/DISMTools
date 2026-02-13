@@ -74,6 +74,11 @@ Public Class EnvVarManagementForm
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
         ReloadEnvironmentVariableInformation(True)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(221)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(476)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(221)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(476)
     End Sub
 
     Private Sub UserEnvVarLV_SelectedIndexChanged(sender As Object, e As EventArgs) Handles UserEnvVarLV.SelectedIndexChanged

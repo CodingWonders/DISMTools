@@ -26,7 +26,6 @@ Public Class AddProvAppxPackage
 
     Dim LogoAssetPopupForm As New Form()
     Dim LogoAssetPreview As New PictureBox()
-    Dim previewer As New ToolTip()
 
     Dim Packages As New List(Of AppxPackage)
 
@@ -751,6 +750,12 @@ Public Class AddProvAppxPackage
             GroupBox3.Enabled = False
             Panel2.Enabled = False
         End Try
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(343)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(120)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(139)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(275)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(162)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -2275,52 +2280,52 @@ Public Class AddProvAppxPackage
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
                         Case "ESN"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
                         Case "FRA"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
                         Case "PTB", "PTG"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
                         Case "ITA"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
                     End Select
                 Case 1
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
                 Case 2
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
                 Case 3
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
                 Case 4
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
                 Case 5
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
             End Select
         Catch ex As Exception
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
+                            WindowHelper.DisplayToolTip(sender, "The logo assets for this file could not be detected")
                         Case "ESN"
-                            previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
+                            WindowHelper.DisplayToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
                         Case "FRA"
-                            previewer.SetToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
+                            WindowHelper.DisplayToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
                         Case "PTB", "PTG"
-                            previewer.SetToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
+                            WindowHelper.DisplayToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
                         Case "ITA"
-                            previewer.SetToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
+                            WindowHelper.DisplayToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
                     End Select
                 Case 1
-                    previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
+                    WindowHelper.DisplayToolTip(sender, "The logo assets for this file could not be detected")
                 Case 2
-                    previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
+                    WindowHelper.DisplayToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
                 Case 3
-                    previewer.SetToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
+                    WindowHelper.DisplayToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
                 Case 4
-                    previewer.SetToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
+                    WindowHelper.DisplayToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
                 Case 5
-                    previewer.SetToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
+                    WindowHelper.DisplayToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
             End Select
         End Try
     End Sub

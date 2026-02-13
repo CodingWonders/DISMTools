@@ -301,12 +301,19 @@
     Public Property FailureActions As ServiceFailureActions
 
     ''' <summary>
+    ''' The service flags of a per-user service
+    ''' </summary>
+    ''' <remarks>Undocumented values for now</remarks>
+    Public Property UserServiceFlags As Integer
+
+    ''' <summary>
     ''' Initializes an object of the Windows Service class with specified values
     ''' </summary>
     ''' <param name="name">The name of the Windows service</param>
     ''' <param name="displayName">The name of the Windows service to display to the user</param>
     ''' <param name="description">The description of the Windows service</param>
     ''' <param name="objectName">The object name of the Windows service</param>
+    ''' <param name="group">The group the service is in</param>
     ''' <param name="imagePath">The path of the application to run when the service starts</param>
     ''' <param name="startType">The start type of a service</param>
     ''' <param name="delayedStart">Whether a service has a delayed startup type</param>
@@ -315,8 +322,9 @@
     ''' <param name="ntPrivileges">The privileges associated to the Windows service</param>
     ''' <param name="deps">The names of the services this Windows service depends on</param>
     ''' <param name="failureActions">The failure actions of the Windows service</param>
+    ''' <param name="userServiceFlags">The service flags of a per-user service</param>
     ''' <remarks></remarks>
-    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, group As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions)
+    Public Sub New(name As String, displayName As String, description As String, objectName As String, imagePath As String, group As String, startType As ServiceStartType, delayedStart As Boolean, type As ServiceType, errorControl As ServiceErrorControl, ntPrivileges As List(Of NTSecurityPrivilegeConstant), deps As String(), failureActions As ServiceFailureActions, userServiceFlags As Integer)
         Me.Name = name
         Me.DisplayName = displayName
         Me.Description = description
@@ -330,6 +338,7 @@
         Me.RequiredPrivileges = ntPrivileges
         Me.Dependencies = deps
         Me.FailureActions = failureActions
+        Me.UserServiceFlags = userServiceFlags
     End Sub
 
     ''' <summary>
@@ -371,6 +380,9 @@
                 Return "Windows Application"
             Case WindowsService.ServiceType.WindowsService
                 Return "Windows Service"
+            Case 80, 96
+                ' https://woshub.com/manage-per-user-services-windows/
+                Return "Per-user Service"
             Case Else
                 Return String.Format("Unknown (Type {0})", Type)
         End Select

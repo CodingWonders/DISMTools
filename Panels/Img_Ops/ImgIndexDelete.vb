@@ -327,6 +327,11 @@ Public Class ImgIndexDelete
         Dim bm As New Bitmap(ListView2.ClientSize.Width, ListView2.ClientSize.Height)
         Graphics.FromImage(bm).Clear(ListView2.BackColor)
         ListView2.BackgroundImage = bm
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(41)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(254)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(41)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(254)
     End Sub
 
     Sub GetImageIndexInfo(SourceImage As String)

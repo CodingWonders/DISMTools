@@ -977,10 +977,23 @@ Public Class MainForm
         Dim InstallationType As String = InstallationTypeRk.GetValue("InstallationType", "")
         InstallationTypeRk.Close()
 
-        PxeHelperServersTSMI.Enabled = InstallationType.Equals("Server", StringComparison.InvariantCultureIgnoreCase)
+        PxeHelperServersTSMI.Enabled = InstallationType.ToLower().Contains("server")
 
         ' For some reason, on Windows 11 it does not focus the window. Keyboard users may suffer if we don't correct this.
         Focus()
+
+        ' On higher DPI settings listview column widths don't adapt correctly, causing stuff to be even more truncated than
+        ' necessary. Scale these appropriately
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(726)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(320)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(163)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(375)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(592)
+
+        If InstallationType.Equals("Server Core", StringComparison.InvariantCultureIgnoreCase) Then
+            MessageBox.Show("DISMTools has detected that it is running on a Windows Server Core system. Some functionality may not work as expected.",
+                            "Windows Server Core detected", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
     End Sub
 
     Function GetItemThumbnail(videoId As String) As Image
@@ -11621,7 +11634,7 @@ Public Class MainForm
 
     Private Sub Discord_Click(sender As Object, e As EventArgs) Handles Discord.Click
         DynaLog.LogMessage("Launching discord join link...")
-        Process.Start("https://discord.gg/hJJTrMNP5p")
+        Process.Start("https://discord.gg/vPrZXHPP")
     End Sub
 
     Private Sub UnmountImage_Click(sender As Object, e As EventArgs) Handles UnmountImage.Click, UnmountSettingsToolStripMenuItem.Click
@@ -15815,5 +15828,45 @@ Public Class MainForm
         BGProcFailureDialog.FailedTasks = FailedBGProcResultDic
         BGProcFailureDialog.ImageInQuestion = CurrentImage
         BGProcFailureDialog.ShowDialog(Me)
+    End Sub
+
+    Private Sub EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Click
+        DynaLog.LogMessage("Preparing to evaluate readiness...")
+        Dim SecureBootKey As RegistryKey = Nothing
+        Try
+            SecureBootKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\SecureBoot")
+
+            Dim SBStateKey As RegistryKey = SecureBootKey.OpenSubKey("State")
+            Dim SecureBootEnabled As Boolean = SBStateKey.GetValue("UEFISecureBootEnabled", False)
+            SBStateKey.Close()
+
+            DynaLog.LogMessage("State of SecureBoot: " & SecureBootEnabled)
+
+            If Not SecureBootEnabled Then
+                MessageBox.Show("Secure Boot is not enabled on this machine.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Exit Try
+            End If
+
+            Dim SBServicingKey As RegistryKey = SecureBootKey.OpenSubKey("Servicing")
+            Dim CA23Updated As String = SBServicingKey.GetValue("UEFICA2023Status", "")
+            SBServicingKey.Close()
+
+            DynaLog.LogMessage("UEFI CA 2023 Status: " & CA23Updated)
+
+            Select Case CA23Updated
+                Case "NotStarted"
+                    MessageBox.Show("Secure Boot is enabled on this machine but does not contain Windows UEFI CA 2023 in its database. Make sure your computer receives the Secure Boot updates before Windows UEFI CA 2011 certificates expire in June 2026.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Case "InProgress"
+                    MessageBox.Show("An update to Secure Boot to support Windows UEFI CA 2023 is in progress.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Case "Updated"
+                    MessageBox.Show("Secure Boot is enabled on this machine and contains Windows UEFI CA 2023 in its database.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Case Else
+                    MessageBox.Show("We could not determine the status of the Windows UEFI CA 2023 update.", "Secure Boot status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End Select
+        Catch ex As Exception
+
+        Finally
+            If SecureBootKey IsNot Nothing Then SecureBootKey.Close()
+        End Try
     End Sub
 End Class

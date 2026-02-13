@@ -77,6 +77,8 @@ class DiskLayout {
     }
 }
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
 {
     Write-Host "You need to run this script as an administrator"
@@ -176,7 +178,7 @@ function Start-PEGeneration
                     if (($scratchPath -ne "") -and (Test-Path "$scratchPath")) {
                         $mountDirectory = $scratchPath
                     } else {
-                        $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+                        $mountDirectory = "$tempDir\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
                         New-Item "$mountDirectory" -ItemType Directory | Out-Null
                     }
                 }
@@ -345,7 +347,7 @@ icon=autorun.ico
                 }
                 Write-Host "Deleting temporary files..."
                 Remove-Item -Path "$((Get-Location).Path)\ISOTEMP" -Recurse -Force -ErrorAction SilentlyContinue
-                if ($mountDirectory.StartsWith("$env:TEMP"))
+                if ($mountDirectory.StartsWith("$tempDir"))
                 {
                     Remove-Item -Path "$mountDirectory" -Recurse -Force -ErrorAction SilentlyContinue
                 }
@@ -555,6 +557,7 @@ function Add-PEPackages {
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-StorageWMI_en-us.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-WDS-Tools.cab")
         $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\en-US\WinPE-WDS-Tools_en-us.cab")
+        $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-SecureBootCmdlets.cab")
         # Add ARM64EC packages
         if ($architecture -eq 'arm64') {
             $pkgs.Add("$((Get-Location).Path)\ISOTEMP\OCs\WinPE-x64-Support.cab")
@@ -742,6 +745,9 @@ function Start-PECustomization
             Copy-Item -Path "$((Get-Location).Path)\files\startup\StartInstall.ps1" -Destination "$imagePath\StartInstall.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\ChangeKeyboardLayout.ps1" -Destination "$imagePath\ChangeKeyboardLayout.ps1" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\DTPE_Inventory.ps1" -Destination "$imagePath\DTPE_Inventory.ps1" -Force
+            if (Test-Path -Path "$((Get-Location).Path)\let_it_rain" -PathType Leaf) {
+                Copy-Item -Path "$((Get-Location).Path)\files\startup\ShowWatermark.ps1" -Destination "$imagePath\ShowWatermark.ps1" -Force
+            }
             Copy-Item -Path "$((Get-Location).Path)\files\dim_start\dimstart.bat" -Destination "$imagePath\dimstart.bat" -Force
             Copy-Item -Path "$((Get-Location).Path)\files\startup\menu.ps1" -Destination "$imagePath\menu.ps1" -Force
             New-Item -Path "$imagePath\scripts" -ItemType Directory | Out-Null
@@ -761,7 +767,11 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "MinBuild" /t REG_SZ /d "$version"
-            reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$((Get-Date).ToString('yyMMdd-HHmm'))"
+            if (Test-Path -Path "$((Get-Location).Path)\version" -PathType Leaf) {
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$(Get-Content -Path "$((Get-Location).Path)\version")"
+            } else {
+                reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment" /f /v "FullBuild" /t REG_SZ /d "$($version).dtpe_$version.$((Get-Date).ToString('yyMMdd-HHmm'))"
+            }
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Registry changed."
         }
@@ -1100,6 +1110,29 @@ function Start-OSApplication
     wpeutil createpagefile /path="$($driveLetter):\WinPEpge.sys" /size=256
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
+    $usebootex = $false
+    if (($partOverride -eq [PartitionTableOverride]::NoOverride) -and ((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+        # Quick run-down: we only ask for EFI boot binary when no overrides are used, we find Secure Boot on the system, AND
+        # if the provided bcdboot supports bootex.
+        Write-Host "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions"
+        Write-Host "of the EFI boot binary that will later be used when creating boot files:`n"
+        Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
+        Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
+        Write-Host "   will expire in June 2026."
+        Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
+        Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
+        Write-Host "   updates will not work using these boot binaries.`n"
+        if (([System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI DB).Bytes) -match 'Windows UEFI CA 2023') -eq $true) {
+            Write-Host "You may be able to use the UEFI CA 2023 binaries on this system."
+        } else {
+            Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
+        }
+        Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
+        Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
+        Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
+        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/N)"
+        $usebootex = ($bootOptn -eq "Y")
+    }
     Write-Host "Applying Windows image. This can take some time..."
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
     {
@@ -1173,7 +1206,7 @@ function Start-OSApplication
     {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partNumber -eq 0) -espLetter $bootLetter -override $partOverride -bootEx $usebootex
     Start-Sleep -Milliseconds 250
     Clear-Host
     Write-Host "`n`n`n`n`n`n`n`n`n`n"
@@ -1356,11 +1389,11 @@ function Get-Partitions
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
     {
-        return @{"partitionNumber" = $partition; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override}
     }
     elseif ($part -eq "B")
     {
-        return @{"partitionNumber" = $partition; "selectedOverride" = $override}
+        return @{"partitionNumber" = $part; "selectedOverride" = $override}
     }
     elseif ($part -eq "O")
     {
@@ -1996,6 +2029,8 @@ function New-BootFiles
             Determine whether to run detections for specific boot scenarios
         .PARAMETER override
             The partition table override mode
+        .PARAMETER bootEx
+            Determine whether to use the Windows UEFI CA 2023 or the Microsoft Windows Production PCA 2011 boot binaries
         .PARAMETER espLetter
             The letter of the EFI System Partition volume. By default, it's W if not specified
         .EXAMPLE
@@ -2009,8 +2044,18 @@ function New-BootFiles
         [Parameter(Mandatory = $true, Position = 2)] [int]$diskId,
         [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive,
         [Parameter(Position = 4)] [string]$espLetter = "W",
-        [Parameter(Position = 5)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
+        [Parameter(Position = 5)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride,
+        [Parameter(Position = 6)] [bool]$bootEx = $false
     )
+
+    # Old Windows images don't come with the required UEFI CA 2023 binaries, causing bcdboot
+    # to fail. The files in question are in \WINDOWS\Boot\EFI_EX. So, if we can't find the _EX
+    # variants of the boot files we disable UEFI CA 2023 support and inform.
+    if (($bootEx -eq $true) -and (-not (Test-Path -Path "$($drLetter):\WINDOWS\Boot\EFI_EX"))) {
+        Write-Warning "UEFI CA 2023 boot binaries not found on the target installation. Falling back to Microsoft Windows Production PCA 2011..."
+        $bootEx = $false
+    }
+
     switch ($override) {
         NoOverride {
             if ($env:firmware_type -eq "UEFI")
@@ -2045,11 +2090,33 @@ function New-BootFiles
                             }
                         }
                     }
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                    if ($bootEx) {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+                    } else {
+                        # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                        # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                        # we said we didn't want to.
+                        if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        } else {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                        }
+                    }
                 }
                 else
                 {
-                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                    if ($bootEx) {
+                        bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+                    } else {
+                        # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                        # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                        # we said we didn't want to.
+                        if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                        } else {
+                            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                        }
+                    }
                 }
             }
             else
@@ -2247,7 +2314,7 @@ function Start-ProjectDevelopment {
                 Write-Host "Creating temporary mount directory..."
                 try
                 {
-                    $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+                    $mountDirectory = "$tempDir\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
                     New-Item "$mountDirectory" -ItemType Directory | Out-Null
                 }
                 catch
@@ -2316,7 +2383,7 @@ function Start-ProjectDevelopment {
                 Copy-Item -Path "$((Get-Location).Path)\tools\RestartDialog\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\RestartDialog" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Write-Host "Deleting temporary files..."
                 Remove-Item -Path "$((Get-Location).Path)\ISOTEMP\OCs" -Recurse -Force -ErrorAction SilentlyContinue
-                if ($mountDirectory.StartsWith("$env:TEMP"))
+                if ($mountDirectory.StartsWith("$tempDir"))
                 {
                     Remove-Item -Path "$mountDirectory" -Recurse -Force -ErrorAction SilentlyContinue
                 }

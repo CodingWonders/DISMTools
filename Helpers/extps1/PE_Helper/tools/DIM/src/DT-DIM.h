@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include <commctrl.h>
+#include <ShellScalingApi.h>
 #include <string>
 // ReSharper disable CppUnusedIncludeDirective
 #include <vector>
@@ -15,6 +16,7 @@
 // ReSharper restore CppUnusedIncludeDirective
 
 #pragma comment(lib, "comctl32.lib")
+#pragma comment(lib, "Shcore.lib")
 #pragma warning(disable: 4312)
 
 #define IDC_DRIVER_LIST   101
@@ -49,6 +51,8 @@ const auto* INSTR_DRIVER_INSTALL_PROGRESS = L"Installing driver %d of %d...";
 /// The driver installation summary instruction message
 /// </summary>
 const auto* INSTR_DRIVER_INSTALL_SUMMARY = L"Out of %d driver(s), %d were installed successfully.";
+
+static float GetDpiMultiplier(HWND window);
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

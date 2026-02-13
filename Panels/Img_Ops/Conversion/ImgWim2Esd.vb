@@ -279,6 +279,10 @@ Public Class ImgWim2Esd
         End If
         Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
@@ -318,5 +322,10 @@ Public Class ImgWim2Esd
                 End Try
             End Try
         End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim qhMessage As String = "Choose the WIM format to work with the broadest range of Windows images and to modify them. Choose the ESD format if you prefer a smaller Windows image, with the disadvantage of not being modifiable."
+        QuickHelpModule.ShowQuickHelp(qhMessage)
     End Sub
 End Class
