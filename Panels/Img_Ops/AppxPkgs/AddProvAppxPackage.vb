@@ -2359,6 +2359,8 @@ Public Class AddProvAppxPackage
         Cursor = Cursors.WaitCursor
         DynaLog.LogMessage("Interpreting items to add to queue...")
         For Each PackageFile In PackageFiles
+            ' Force the indication of waiting
+            Cursor = Cursors.WaitCursor
             If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or

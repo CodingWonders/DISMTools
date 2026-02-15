@@ -24,6 +24,8 @@ Public Class AppInstallerDownloader
     Private sw As Stopwatch = New Stopwatch()
     Private time As TimeSpan = New TimeSpan()
 
+    Private originalTitle As String
+
     Private Sub AppInstallerDownloader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Enabled = True
         downUriLbl.Text = ""
@@ -141,6 +143,7 @@ Public Class AppInstallerDownloader
         WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Language = MainForm.Language
         Height = WindowHelper.ScaleLogical(320)
+        originalTitle = Text
         Visible = True
         DynaLog.LogMessage("App Installer file passed: " & Quote & Path.GetFileName(AppInstallerFile) & Quote)
         If AppInstallerFile IsNot Nothing And File.Exists(AppInstallerFile) Then
@@ -357,6 +360,7 @@ Public Class AppInstallerDownloader
         End Select
         If ProgressBar1.Value <= ProgressBar1.Maximum Then
             TaskbarHelper.SetIndicatorState(ProgressBar1.Value, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
+            Text = String.Format("[{0}%] {1}", Math.Round(ProgressBar1.Value, 0), originalTitle)
         End If
     End Sub
 
