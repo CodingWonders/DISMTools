@@ -106,10 +106,17 @@ Namespace Elements
     End Class
 
     <Serializable(), XmlRoot("MainBundle")>
-    Public Class AppInstallers
+    Public Class AppInstallerBundle
 
         <XmlAttribute("Uri")>
         Public Property MainBundleUri As String
+    End Class
+
+    <Serializable(), XmlRoot("MainPackage")>
+    Public Class AppInstallerStandalone
+
+        <XmlAttribute("Uri")>
+        Public Property MainPackageUri As String
     End Class
 
     ''' <summary>
