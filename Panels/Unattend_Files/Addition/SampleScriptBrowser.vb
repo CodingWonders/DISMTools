@@ -209,6 +209,9 @@ Public Class SampleScriptBrowser
         If File.Exists(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")) Then
             Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"),
                           String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & ControlChars.Quote))
+            TableLayoutPanel1.Enabled = False
+            WindowHelper.DisableCloseCapability(Handle)
+            SSETimer.Enabled = True
         End If
     End Sub
 
@@ -238,5 +241,37 @@ Public Class SampleScriptBrowser
         Catch ex As Exception
             DynaLog.LogMessage("Script code could not be saved to the destination")
         End Try
+    End Sub
+
+    Private Sub SSETimer_Tick(sender As Object, e As EventArgs) Handles SSETimer.Tick
+        If Not Process.GetProcessesByName("StarterScriptEditor").Any() Then
+            UserDataManagerModule.CopyUserDataToProgramFiles()
+            TableLayoutPanel1.Enabled = True
+            WindowHelper.EnableCloseCapability(Handle)
+            SSETimer.Enabled = False
+            TriggerStarterScriptEnumRefresh()
+        End If
+    End Sub
+
+    Private Sub TriggerStarterScriptEnumRefresh()
+        ' Clear existing items
+        SysConfigScripts.Clear()
+        FirstUserLogonScripts.Clear()
+        UserFirstLogonScripts.Clear()
+        UserScripts.Clear()
+        ' Show all items in the combobox
+        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
+
+        If Not LoadAllStarterScripts() Then
+            ' starter scripts could not be loaded. stop
+            AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+            MessageBox.Show("The starter scripts could not be refreshed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ' Force script enumeration for first stage
+        ComboBox1.SelectedIndex = 0
     End Sub
 End Class
