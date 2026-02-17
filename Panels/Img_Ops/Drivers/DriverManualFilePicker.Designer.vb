@@ -109,6 +109,7 @@ Partial Class DriverManualFilePicker
         '
         'CheckedListBox1
         '
+        Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CheckedListBox1.FormattingEnabled = True
         Me.CheckedListBox1.IntegralHeight = False

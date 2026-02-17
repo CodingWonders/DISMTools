@@ -23,19 +23,19 @@ Partial Class NewUnattendWiz
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim TreeNode27 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
-        Dim TreeNode28 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
-        Dim TreeNode29 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
-        Dim TreeNode30 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
-        Dim TreeNode31 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
-        Dim TreeNode32 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
-        Dim TreeNode33 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
-        Dim TreeNode34 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
-        Dim TreeNode35 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
-        Dim TreeNode36 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
-        Dim TreeNode37 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
-        Dim TreeNode38 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
-        Dim TreeNode39 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
+        Dim TreeNode1 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Welcome")
+        Dim TreeNode2 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Regional Configuration")
+        Dim TreeNode3 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Basic System Configuration")
+        Dim TreeNode4 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Time Zone")
+        Dim TreeNode5 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Disk Configuration")
+        Dim TreeNode6 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Product Key")
+        Dim TreeNode7 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("User Accounts")
+        Dim TreeNode8 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Virtual Machine Support")
+        Dim TreeNode9 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Wireless Networking")
+        Dim TreeNode10 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("System Telemetry")
+        Dim TreeNode11 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Post-Installation Scripts")
+        Dim TreeNode12 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Component Settings")
+        Dim TreeNode13 As System.Windows.Forms.TreeNode = New System.Windows.Forms.TreeNode("Finish")
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(NewUnattendWiz))
         Me.SidePanel = New System.Windows.Forms.Panel()
         Me.ExpressModeSteps = New System.Windows.Forms.Panel()
@@ -49,23 +49,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer = New System.Windows.Forms.Panel()
         Me.ExperimentalPanel = New System.Windows.Forms.Panel()
         Me.StepsContainer = New System.Windows.Forms.Panel()
-        Me.RegionalSettingsPanel = New System.Windows.Forms.Panel()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.RegionalSettings = New System.Windows.Forms.Panel()
-        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.Button22 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
-        Me.RegionalSettingsHeader = New System.Windows.Forms.Label()
         Me.FinishPanel = New System.Windows.Forms.Panel()
         Me.Label59 = New System.Windows.Forms.Label()
         Me.LinkLabel7 = New System.Windows.Forms.LinkLabel()
@@ -333,6 +316,23 @@ Partial Class NewUnattendWiz
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.SysConfigHeader = New System.Windows.Forms.Label()
+        Me.RegionalSettingsPanel = New System.Windows.Forms.Panel()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.RegionalSettings = New System.Windows.Forms.Panel()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.ComboBox3 = New System.Windows.Forms.ComboBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.Button22 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton()
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.RegionalSettingsHeader = New System.Windows.Forms.Label()
         Me.WelcomePanel = New System.Windows.Forms.Panel()
         Me.LinkLabel10 = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
@@ -386,9 +386,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.SuspendLayout()
         Me.ExperimentalPanel.SuspendLayout()
         Me.StepsContainer.SuspendLayout()
-        Me.RegionalSettingsPanel.SuspendLayout()
-        Me.RegionalSettings.SuspendLayout()
-        Me.TableLayoutPanel2.SuspendLayout()
         Me.FinishPanel.SuspendLayout()
         Me.UnattendProgressPanel.SuspendLayout()
         Me.FinalReviewPanel.SuspendLayout()
@@ -465,6 +462,9 @@ Partial Class NewUnattendWiz
         Me.ScriptedComputerNamePanel.SuspendLayout()
         Me.ManualComputerNamePanel.SuspendLayout()
         Me.WinSVSettingsPanel.SuspendLayout()
+        Me.RegionalSettingsPanel.SuspendLayout()
+        Me.RegionalSettings.SuspendLayout()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
         Me.EditorPanelContainer.SuspendLayout()
         Me.DarkToolStrip1.SuspendLayout()
@@ -508,33 +508,33 @@ Partial Class NewUnattendWiz
         Me.StepsTreeView.ItemHeight = 24
         Me.StepsTreeView.Location = New System.Drawing.Point(6, 6)
         Me.StepsTreeView.Name = "StepsTreeView"
-        TreeNode27.Name = "Nodo0"
-        TreeNode27.Text = "Welcome"
-        TreeNode28.Name = "Nodo1"
-        TreeNode28.Text = "Regional Configuration"
-        TreeNode29.Name = "Nodo2"
-        TreeNode29.Text = "Basic System Configuration"
-        TreeNode30.Name = "Nodo3"
-        TreeNode30.Text = "Time Zone"
-        TreeNode31.Name = "Nodo4"
-        TreeNode31.Text = "Disk Configuration"
-        TreeNode32.Name = "Nodo5"
-        TreeNode32.Text = "Product Key"
-        TreeNode33.Name = "Nodo6"
-        TreeNode33.Text = "User Accounts"
-        TreeNode34.Name = "Nodo9"
-        TreeNode34.Text = "Virtual Machine Support"
-        TreeNode35.Name = "Nodo10"
-        TreeNode35.Text = "Wireless Networking"
-        TreeNode36.Name = "Nodo11"
-        TreeNode36.Text = "System Telemetry"
-        TreeNode37.Name = "Nodo12"
-        TreeNode37.Text = "Post-Installation Scripts"
-        TreeNode38.Name = "Nodo13"
-        TreeNode38.Text = "Component Settings"
-        TreeNode39.Name = "Nodo14"
-        TreeNode39.Text = "Finish"
-        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode27, TreeNode28, TreeNode29, TreeNode30, TreeNode31, TreeNode32, TreeNode33, TreeNode34, TreeNode35, TreeNode36, TreeNode37, TreeNode38, TreeNode39})
+        TreeNode1.Name = "Nodo0"
+        TreeNode1.Text = "Welcome"
+        TreeNode2.Name = "Nodo1"
+        TreeNode2.Text = "Regional Configuration"
+        TreeNode3.Name = "Nodo2"
+        TreeNode3.Text = "Basic System Configuration"
+        TreeNode4.Name = "Nodo3"
+        TreeNode4.Text = "Time Zone"
+        TreeNode5.Name = "Nodo4"
+        TreeNode5.Text = "Disk Configuration"
+        TreeNode6.Name = "Nodo5"
+        TreeNode6.Text = "Product Key"
+        TreeNode7.Name = "Nodo6"
+        TreeNode7.Text = "User Accounts"
+        TreeNode8.Name = "Nodo9"
+        TreeNode8.Text = "Virtual Machine Support"
+        TreeNode9.Name = "Nodo10"
+        TreeNode9.Text = "Wireless Networking"
+        TreeNode10.Name = "Nodo11"
+        TreeNode10.Text = "System Telemetry"
+        TreeNode11.Name = "Nodo12"
+        TreeNode11.Text = "Post-Installation Scripts"
+        TreeNode12.Name = "Nodo13"
+        TreeNode12.Text = "Component Settings"
+        TreeNode13.Name = "Nodo14"
+        TreeNode13.Text = "Finish"
+        Me.StepsTreeView.Nodes.AddRange(New System.Windows.Forms.TreeNode() {TreeNode1, TreeNode2, TreeNode3, TreeNode4, TreeNode5, TreeNode6, TreeNode7, TreeNode8, TreeNode9, TreeNode10, TreeNode11, TreeNode12, TreeNode13})
         Me.StepsTreeView.ShowLines = False
         Me.StepsTreeView.ShowPlusMinus = False
         Me.StepsTreeView.ShowRootLines = False
@@ -646,209 +646,6 @@ Partial Class NewUnattendWiz
         Me.StepsContainer.Name = "StepsContainer"
         Me.StepsContainer.Size = New System.Drawing.Size(1008, 569)
         Me.StepsContainer.TabIndex = 1
-        '
-        'RegionalSettingsPanel
-        '
-        Me.RegionalSettingsPanel.Controls.Add(Me.Label10)
-        Me.RegionalSettingsPanel.Controls.Add(Me.RegionalSettings)
-        Me.RegionalSettingsPanel.Controls.Add(Me.RadioButton2)
-        Me.RegionalSettingsPanel.Controls.Add(Me.RadioButton1)
-        Me.RegionalSettingsPanel.Controls.Add(Me.RegionalSettingsHeader)
-        Me.RegionalSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RegionalSettingsPanel.Location = New System.Drawing.Point(0, 0)
-        Me.RegionalSettingsPanel.Name = "RegionalSettingsPanel"
-        Me.RegionalSettingsPanel.Size = New System.Drawing.Size(1008, 569)
-        Me.RegionalSettingsPanel.TabIndex = 1
-        '
-        'Label10
-        '
-        Me.Label10.AutoEllipsis = True
-        Me.Label10.Enabled = False
-        Me.Label10.Location = New System.Drawing.Point(84, 289)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(636, 68)
-        Me.Label10.TabIndex = 4
-        Me.Label10.Text = "You will need to configure these settings during the setup process"
-        '
-        'RegionalSettings
-        '
-        Me.RegionalSettings.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RegionalSettings.Controls.Add(Me.TableLayoutPanel2)
-        Me.RegionalSettings.Controls.Add(Me.Button1)
-        Me.RegionalSettings.Location = New System.Drawing.Point(85, 100)
-        Me.RegionalSettings.Name = "RegionalSettings"
-        Me.RegionalSettings.Size = New System.Drawing.Size(891, 159)
-        Me.RegionalSettings.TabIndex = 3
-        '
-        'TableLayoutPanel2
-        '
-        Me.TableLayoutPanel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel2.ColumnCount = 3
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.6666698!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.3333282!))
-        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.Label6, 0, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label7, 0, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox4, 1, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label9, 0, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox3, 1, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 0, 2)
-        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox2, 1, 1)
-        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox1, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.Button22, 2, 3)
-        Me.TableLayoutPanel2.Location = New System.Drawing.Point(11, 9)
-        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
-        Me.TableLayoutPanel2.RowCount = 4
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(869, 107)
-        Me.TableLayoutPanel2.TabIndex = 3
-        '
-        'Label6
-        '
-        Me.Label6.AutoEllipsis = True
-        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label6.Location = New System.Drawing.Point(3, 0)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(225, 26)
-        Me.Label6.TabIndex = 1
-        Me.Label6.Text = "System language:"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'Label7
-        '
-        Me.Label7.AutoEllipsis = True
-        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label7.Location = New System.Drawing.Point(3, 26)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(225, 26)
-        Me.Label7.TabIndex = 1
-        Me.Label7.Text = "System locale:"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ComboBox4
-        '
-        Me.ComboBox4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox4.FormattingEnabled = True
-        Me.ComboBox4.Location = New System.Drawing.Point(234, 81)
-        Me.ComboBox4.Name = "ComboBox4"
-        Me.ComboBox4.Size = New System.Drawing.Size(457, 21)
-        Me.ComboBox4.TabIndex = 0
-        Me.ComboBox4.Text = "United States"
-        '
-        'Label9
-        '
-        Me.Label9.AutoEllipsis = True
-        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label9.Location = New System.Drawing.Point(3, 78)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(225, 29)
-        Me.Label9.TabIndex = 1
-        Me.Label9.Text = "Home location:"
-        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ComboBox3
-        '
-        Me.TableLayoutPanel2.SetColumnSpan(Me.ComboBox3, 2)
-        Me.ComboBox3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox3.FormattingEnabled = True
-        Me.ComboBox3.Location = New System.Drawing.Point(234, 55)
-        Me.ComboBox3.Name = "ComboBox3"
-        Me.ComboBox3.Size = New System.Drawing.Size(632, 21)
-        Me.ComboBox3.TabIndex = 0
-        Me.ComboBox3.Text = "US"
-        '
-        'Label8
-        '
-        Me.Label8.AutoEllipsis = True
-        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label8.Location = New System.Drawing.Point(3, 52)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(225, 26)
-        Me.Label8.TabIndex = 1
-        Me.Label8.Text = "Keyboard layout/IME:"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'ComboBox2
-        '
-        Me.TableLayoutPanel2.SetColumnSpan(Me.ComboBox2, 2)
-        Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox2.FormattingEnabled = True
-        Me.ComboBox2.Location = New System.Drawing.Point(234, 29)
-        Me.ComboBox2.Name = "ComboBox2"
-        Me.ComboBox2.Size = New System.Drawing.Size(632, 21)
-        Me.ComboBox2.TabIndex = 0
-        Me.ComboBox2.Text = "English (United States)"
-        '
-        'ComboBox1
-        '
-        Me.TableLayoutPanel2.SetColumnSpan(Me.ComboBox1, 2)
-        Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(234, 3)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(632, 21)
-        Me.ComboBox1.TabIndex = 0
-        Me.ComboBox1.Text = "English"
-        '
-        'Button22
-        '
-        Me.Button22.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Button22.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button22.Location = New System.Drawing.Point(697, 81)
-        Me.Button22.Name = "Button22"
-        Me.Button22.Size = New System.Drawing.Size(169, 23)
-        Me.Button22.TabIndex = 2
-        Me.Button22.Text = "Choose country from the EEA"
-        Me.Button22.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Enabled = False
-        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button1.Location = New System.Drawing.Point(741, 124)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(137, 23)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Additional layouts"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
-        'RadioButton2
-        '
-        Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(65, 265)
-        Me.RadioButton2.Name = "RadioButton2"
-        Me.RadioButton2.Size = New System.Drawing.Size(168, 17)
-        Me.RadioButton2.TabIndex = 2
-        Me.RadioButton2.Text = "Configure these settings later"
-        Me.RadioButton2.UseVisualStyleBackColor = True
-        '
-        'RadioButton1
-        '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(65, 71)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(170, 17)
-        Me.RadioButton1.TabIndex = 2
-        Me.RadioButton1.TabStop = True
-        Me.RadioButton1.Text = "Configure these settings now:"
-        Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'RegionalSettingsHeader
-        '
-        Me.RegionalSettingsHeader.AutoEllipsis = True
-        Me.RegionalSettingsHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
-        Me.RegionalSettingsHeader.Location = New System.Drawing.Point(16, 17)
-        Me.RegionalSettingsHeader.Name = "RegionalSettingsHeader"
-        Me.RegionalSettingsHeader.Size = New System.Drawing.Size(708, 51)
-        Me.RegionalSettingsHeader.TabIndex = 1
-        Me.RegionalSettingsHeader.Text = "Configure your language, keyboard layout, and other regional settings"
         '
         'FinishPanel
         '
@@ -3632,6 +3429,7 @@ Partial Class NewUnattendWiz
         '
         Me.CheckedListBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.FormattingEnabled = True
         Me.CheckedListBox1.Items.AddRange(New Object() {"x86 (Desktop 32-Bit)", "x64 (Desktop 64-Bit)", "ARM64 (Windows on ARM)"})
         Me.CheckedListBox1.Location = New System.Drawing.Point(182, 82)
@@ -3869,6 +3667,209 @@ Partial Class NewUnattendWiz
         Me.SysConfigHeader.Size = New System.Drawing.Size(708, 51)
         Me.SysConfigHeader.TabIndex = 2
         Me.SysConfigHeader.Text = "Configure basic system settings"
+        '
+        'RegionalSettingsPanel
+        '
+        Me.RegionalSettingsPanel.Controls.Add(Me.Label10)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RegionalSettings)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RadioButton2)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RadioButton1)
+        Me.RegionalSettingsPanel.Controls.Add(Me.RegionalSettingsHeader)
+        Me.RegionalSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RegionalSettingsPanel.Location = New System.Drawing.Point(0, 0)
+        Me.RegionalSettingsPanel.Name = "RegionalSettingsPanel"
+        Me.RegionalSettingsPanel.Size = New System.Drawing.Size(1008, 569)
+        Me.RegionalSettingsPanel.TabIndex = 1
+        '
+        'Label10
+        '
+        Me.Label10.AutoEllipsis = True
+        Me.Label10.Enabled = False
+        Me.Label10.Location = New System.Drawing.Point(84, 289)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(636, 68)
+        Me.Label10.TabIndex = 4
+        Me.Label10.Text = "You will need to configure these settings during the setup process"
+        '
+        'RegionalSettings
+        '
+        Me.RegionalSettings.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RegionalSettings.Controls.Add(Me.TableLayoutPanel2)
+        Me.RegionalSettings.Controls.Add(Me.Button1)
+        Me.RegionalSettings.Location = New System.Drawing.Point(85, 100)
+        Me.RegionalSettings.Name = "RegionalSettings"
+        Me.RegionalSettings.Size = New System.Drawing.Size(891, 159)
+        Me.RegionalSettings.TabIndex = 3
+        '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TableLayoutPanel2.ColumnCount = 3
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.6666698!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.3333282!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label6, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label7, 0, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox4, 1, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label9, 0, 3)
+        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox3, 1, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label8, 0, 2)
+        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox2, 1, 1)
+        Me.TableLayoutPanel2.Controls.Add(Me.ComboBox1, 1, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Button22, 2, 3)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(11, 9)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 4
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(869, 107)
+        Me.TableLayoutPanel2.TabIndex = 3
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label6.Location = New System.Drawing.Point(3, 0)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(225, 26)
+        Me.Label6.TabIndex = 1
+        Me.Label6.Text = "System language:"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'Label7
+        '
+        Me.Label7.AutoEllipsis = True
+        Me.Label7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label7.Location = New System.Drawing.Point(3, 26)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(225, 26)
+        Me.Label7.TabIndex = 1
+        Me.Label7.Text = "System locale:"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Location = New System.Drawing.Point(234, 81)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(457, 21)
+        Me.ComboBox4.TabIndex = 0
+        Me.ComboBox4.Text = "United States"
+        '
+        'Label9
+        '
+        Me.Label9.AutoEllipsis = True
+        Me.Label9.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label9.Location = New System.Drawing.Point(3, 78)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(225, 29)
+        Me.Label9.TabIndex = 1
+        Me.Label9.Text = "Home location:"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ComboBox3
+        '
+        Me.TableLayoutPanel2.SetColumnSpan(Me.ComboBox3, 2)
+        Me.ComboBox3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox3.FormattingEnabled = True
+        Me.ComboBox3.Location = New System.Drawing.Point(234, 55)
+        Me.ComboBox3.Name = "ComboBox3"
+        Me.ComboBox3.Size = New System.Drawing.Size(632, 21)
+        Me.ComboBox3.TabIndex = 0
+        Me.ComboBox3.Text = "US"
+        '
+        'Label8
+        '
+        Me.Label8.AutoEllipsis = True
+        Me.Label8.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label8.Location = New System.Drawing.Point(3, 52)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(225, 26)
+        Me.Label8.TabIndex = 1
+        Me.Label8.Text = "Keyboard layout/IME:"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'ComboBox2
+        '
+        Me.TableLayoutPanel2.SetColumnSpan(Me.ComboBox2, 2)
+        Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox2.FormattingEnabled = True
+        Me.ComboBox2.Location = New System.Drawing.Point(234, 29)
+        Me.ComboBox2.Name = "ComboBox2"
+        Me.ComboBox2.Size = New System.Drawing.Size(632, 21)
+        Me.ComboBox2.TabIndex = 0
+        Me.ComboBox2.Text = "English (United States)"
+        '
+        'ComboBox1
+        '
+        Me.TableLayoutPanel2.SetColumnSpan(Me.ComboBox1, 2)
+        Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(234, 3)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(632, 21)
+        Me.ComboBox1.TabIndex = 0
+        Me.ComboBox1.Text = "English"
+        '
+        'Button22
+        '
+        Me.Button22.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Button22.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button22.Location = New System.Drawing.Point(697, 81)
+        Me.Button22.Name = "Button22"
+        Me.Button22.Size = New System.Drawing.Size(169, 23)
+        Me.Button22.TabIndex = 2
+        Me.Button22.Text = "Choose country from the EEA"
+        Me.Button22.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button1.Enabled = False
+        Me.Button1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button1.Location = New System.Drawing.Point(741, 124)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(137, 23)
+        Me.Button1.TabIndex = 2
+        Me.Button1.Text = "Additional layouts"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(65, 265)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(168, 17)
+        Me.RadioButton2.TabIndex = 2
+        Me.RadioButton2.Text = "Configure these settings later"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(65, 71)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(170, 17)
+        Me.RadioButton1.TabIndex = 2
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Configure these settings now:"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'RegionalSettingsHeader
+        '
+        Me.RegionalSettingsHeader.AutoEllipsis = True
+        Me.RegionalSettingsHeader.Font = New System.Drawing.Font("Segoe UI", 12.0!)
+        Me.RegionalSettingsHeader.Location = New System.Drawing.Point(16, 17)
+        Me.RegionalSettingsHeader.Name = "RegionalSettingsHeader"
+        Me.RegionalSettingsHeader.Size = New System.Drawing.Size(708, 51)
+        Me.RegionalSettingsHeader.TabIndex = 1
+        Me.RegionalSettingsHeader.Text = "Configure your language, keyboard layout, and other regional settings"
         '
         'WelcomePanel
         '
@@ -4308,10 +4309,6 @@ Partial Class NewUnattendWiz
         Me.ExpressPanelContainer.ResumeLayout(False)
         Me.ExperimentalPanel.ResumeLayout(False)
         Me.StepsContainer.ResumeLayout(False)
-        Me.RegionalSettingsPanel.ResumeLayout(False)
-        Me.RegionalSettingsPanel.PerformLayout()
-        Me.RegionalSettings.ResumeLayout(False)
-        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.FinishPanel.ResumeLayout(False)
         Me.FinishPanel.PerformLayout()
         Me.UnattendProgressPanel.ResumeLayout(False)
@@ -4432,6 +4429,10 @@ Partial Class NewUnattendWiz
         Me.ManualComputerNamePanel.PerformLayout()
         Me.WinSVSettingsPanel.ResumeLayout(False)
         Me.WinSVSettingsPanel.PerformLayout()
+        Me.RegionalSettingsPanel.ResumeLayout(False)
+        Me.RegionalSettingsPanel.PerformLayout()
+        Me.RegionalSettings.ResumeLayout(False)
+        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.WelcomePanel.ResumeLayout(False)
         Me.EditorPanelContainer.ResumeLayout(False)
         Me.DarkToolStrip1.ResumeLayout(False)

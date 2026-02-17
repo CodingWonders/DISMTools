@@ -29,8 +29,9 @@ Partial Class AddPackageDlg
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
+        Me.Label4 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -47,14 +48,13 @@ Partial Class AddPackageDlg
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.ScanBW = New System.ComponentModel.BackgroundWorker()
         Me.Button4 = New System.Windows.Forms.Button()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -144,20 +144,19 @@ Partial Class AddPackageDlg
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Packages"
         '
-        'Label4
+        'Panel1
         '
-        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label4.AutoEllipsis = True
-        Me.Label4.Enabled = False
-        Me.Label4.Location = New System.Drawing.Point(45, 294)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(495, 32)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "This folder contains <pkgnum> packages."
+        Me.Panel1.Controls.Add(Me.CheckedListBox1)
+        Me.Panel1.Location = New System.Drawing.Point(48, 119)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(706, 164)
+        Me.Panel1.TabIndex = 9
         '
         'CheckedListBox1
         '
+        Me.CheckedListBox1.CheckOnClick = True
         Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CheckedListBox1.Enabled = False
         Me.CheckedListBox1.FormattingEnabled = True
@@ -169,6 +168,18 @@ Partial Class AddPackageDlg
         Me.CheckedListBox1.Size = New System.Drawing.Size(706, 164)
         Me.CheckedListBox1.TabIndex = 7
         Me.CheckedListBox1.ThreeDCheckBoxes = True
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoEllipsis = True
+        Me.Label4.Enabled = False
+        Me.Label4.Location = New System.Drawing.Point(45, 294)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(495, 32)
+        Me.Label4.TabIndex = 8
+        Me.Label4.Text = "This folder contains <pkgnum> packages."
         '
         'TableLayoutPanel2
         '
@@ -325,16 +336,6 @@ Partial Class AddPackageDlg
         Me.Button4.Text = "Add update manifest..."
         Me.Button4.UseVisualStyleBackColor = True
         '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.CheckedListBox1)
-        Me.Panel1.Location = New System.Drawing.Point(48, 119)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(706, 164)
-        Me.Panel1.TabIndex = 9
-        '
         'AddPackageDlg
         '
         Me.AcceptButton = Me.OK_Button
@@ -361,10 +362,10 @@ Partial Class AddPackageDlg
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
