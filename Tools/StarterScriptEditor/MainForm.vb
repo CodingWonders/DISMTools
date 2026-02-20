@@ -170,7 +170,7 @@ Public Class MainForm
         End If
 
         Dim scriptFileName As String = OpenFileDialog2.FileName
-        Dim scriptExtension As String = Path.GetExtension(scriptFileName)
+        Dim scriptExtension As String = Path.GetExtension(scriptFileName).ToLower()
 
         Dim expectedBatchExtensions As New List(Of String)
         expectedBatchExtensions.AddRange(New String(2) {".bat", ".cmd", ".nt"})
