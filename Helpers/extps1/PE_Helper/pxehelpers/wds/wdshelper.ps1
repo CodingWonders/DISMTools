@@ -782,6 +782,11 @@ function Start-OSApplication {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 
+    # NetInstall apparently isn't removed after this function ends, so we move it here.
+    if (Test-Path "$($driveLetter):\NetInstall") {
+        Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter -bootEx $usebootex
 }
 
