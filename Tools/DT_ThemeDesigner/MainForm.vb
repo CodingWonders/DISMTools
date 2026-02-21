@@ -5,10 +5,30 @@ Public Class MainForm
 
     Public NewTheme As Theme
 
+    Private UserDataScriptFolder As String
+
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        GetArguments()
+        SaveFileDialog1.InitialDirectory = UserDataScriptFolder
         NewTheme = GetNewTheme()
         ChangeColorPreviews()
         LoadCurrentTheme()
+    End Sub
+
+    Private Sub GetArguments()
+        Dim args As String() = Environment.GetCommandLineArgs()
+        If args.Length <= 1 Then Exit Sub
+
+        For Each arg As String In args
+            If arg.StartsWith("/userdata", StringComparison.OrdinalIgnoreCase) Then
+                ' This parameter determines the path to a DT UserData folder.
+                Dim userDataPath As String = arg.Replace("/userdata=", "")
+
+                If Directory.Exists(userDataPath) Then
+                    UserDataScriptFolder = userDataPath
+                End If
+            End If
+        Next
     End Sub
 
     Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
