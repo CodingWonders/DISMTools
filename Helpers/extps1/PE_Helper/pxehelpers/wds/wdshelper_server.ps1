@@ -234,6 +234,11 @@ function Deploy-WimImage {
     if ($shareGuid -eq "") {
         throw "The Share GUID cannot be empty."
     }
+    try {
+        $conv = [Guid]$shareGuid
+    } catch {
+        throw "Invalid format for GUID."
+    }
     Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Please wait..." -PercentComplete 0
     Write-LogMessage -message "Preparing the deployment of a WIM file..."
     try {
@@ -286,6 +291,11 @@ function Remove-SharedFolderByGuid {
         [Parameter(Mandatory)] [string]$guid
     )
     if ($guid -eq "") {
+        return $false
+    }
+    try {
+        $conv = [Guid]$guid
+    } catch {
         return $false
     }
     Remove-Item -Path "$tmpImageFolderPath\$guid" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
