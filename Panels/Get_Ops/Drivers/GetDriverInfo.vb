@@ -842,9 +842,7 @@ Public Class GetDriverInfo
             ComboBox1.Text = ""
             Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
             DynaLog.LogMessage("Showing " & CurrentDriverCollection.Count & " entry/ies...")
-            For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
-                ComboBox1.Items.Add(CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1 & " - " & DriverPackageInfo.HardwareDescription & " (" & DriverPackageInfo.HardwareId & ")")
-            Next
+            ComboBox1.Items.AddRange(CurrentDriverCollection.Select(Function(DriverPackageInfo) String.Format("{0} - {1} ({2})", CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1, DriverPackageInfo.HardwareDescription, DriverPackageInfo.HardwareId)).ToArray())
         End If
     End Sub
 
