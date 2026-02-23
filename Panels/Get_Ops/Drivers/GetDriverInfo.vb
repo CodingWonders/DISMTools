@@ -760,74 +760,71 @@ Public Class GetDriverInfo
         DynaLog.LogMessage("Selected Hardware Target: " & HWTarget)
         Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
         DynaLog.LogMessage("Driver collection has " & CurrentDriverCollection.Count & " hardware target(s) available.")
-        For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
-            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget - 1 Then
-                DynaLog.LogMessage("We have the appropriate hardware target. Displaying information...")
-                Label9.Text = DriverPackageInfo.HardwareDescription
-                Label11.Text = DriverPackageInfo.HardwareId
-                Label14.Text = DriverPackageInfo.CompatibleIds
-                Label15.Text = DriverPackageInfo.ExcludeIds
-                Label18.Text = DriverPackageInfo.ManufacturerName
-                Label19.Text = Casters.CastDismArchitecture(DriverPackageInfo.Architecture, True)
-                If Label14.Text = "" Then
-                    DynaLog.LogMessage("There are no Compatible IDs declared by the device manufacturer (" & Quote & DriverPackageInfo.ManufacturerName & Quote & ")")
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label14.Text = "None declared by the hardware manufacturer"
-                                Case "ESN"
-                                    Label14.Text = "Ninguno declarado por el fabricante del hardware"
-                                Case "FRA"
-                                    Label14.Text = "Aucune déclarée par le fabricant du matériel"
-                                Case "PTB", "PTG"
-                                    Label14.Text = "Nenhum declarado pelo fabricante do hardware"
-                                Case "ITA"
-                                    Label14.Text = "Nessuno dichiarato dal produttore hardware"
-                            End Select
-                        Case 1
+        Dim selectedDriver As DismDriver = CurrentDriverCollection.ElementAtOrDefault(HWTarget - 1)
+        If selectedDriver Is Nothing Then Exit Sub
+        DynaLog.LogMessage("We have the appropriate hardware target. Displaying information...")
+        Label9.Text = selectedDriver.HardwareDescription
+        Label11.Text = selectedDriver.HardwareId
+        Label14.Text = selectedDriver.CompatibleIds
+        Label15.Text = selectedDriver.ExcludeIds
+        Label18.Text = selectedDriver.ManufacturerName
+        Label19.Text = Casters.CastDismArchitecture(selectedDriver.Architecture, True)
+        If Label14.Text = "" Then
+            DynaLog.LogMessage("There are no Compatible IDs declared by the device manufacturer (" & Quote & selectedDriver.ManufacturerName & Quote & ")")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
                             Label14.Text = "None declared by the hardware manufacturer"
-                        Case 2
+                        Case "ESN"
                             Label14.Text = "Ninguno declarado por el fabricante del hardware"
-                        Case 3
+                        Case "FRA"
                             Label14.Text = "Aucune déclarée par le fabricant du matériel"
-                        Case 4
+                        Case "PTB", "PTG"
                             Label14.Text = "Nenhum declarado pelo fabricante do hardware"
-                        Case 5
+                        Case "ITA"
                             Label14.Text = "Nessuno dichiarato dal produttore hardware"
                     End Select
-                End If
-                If Label15.Text = "" Then
-                    DynaLog.LogMessage("There are no Exclude IDs declared by the device manufacturer (" & Quote & DriverPackageInfo.ManufacturerName & Quote & ")")
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label15.Text = "None declared by the hardware manufacturer"
-                                Case "ESN"
-                                    Label15.Text = "Ninguno declarado por el fabricante del hardware"
-                                Case "FRA"
-                                    Label15.Text = "Aucune déclarée par le fabricant du matériel"
-                                Case "PTB", "PTG"
-                                    Label15.Text = "Nenhum declarado pelo fabricante do hardware"
-                                Case "ITA"
-                                    Label15.Text = "Nessuno dichiarato dal produttore hardware"
-                            End Select
-                        Case 1
+                Case 1
+                    Label14.Text = "None declared by the hardware manufacturer"
+                Case 2
+                    Label14.Text = "Ninguno declarado por el fabricante del hardware"
+                Case 3
+                    Label14.Text = "Aucune déclarée par le fabricant du matériel"
+                Case 4
+                    Label14.Text = "Nenhum declarado pelo fabricante do hardware"
+                Case 5
+                    Label14.Text = "Nessuno dichiarato dal produttore hardware"
+            End Select
+        End If
+        If Label15.Text = "" Then
+            DynaLog.LogMessage("There are no Exclude IDs declared by the device manufacturer (" & Quote & selectedDriver.ManufacturerName & Quote & ")")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
                             Label15.Text = "None declared by the hardware manufacturer"
-                        Case 2
+                        Case "ESN"
                             Label15.Text = "Ninguno declarado por el fabricante del hardware"
-                        Case 3
+                        Case "FRA"
                             Label15.Text = "Aucune déclarée par le fabricant du matériel"
-                        Case 4
+                        Case "PTB", "PTG"
                             Label15.Text = "Nenhum declarado pelo fabricante do hardware"
-                        Case 5
+                        Case "ITA"
                             Label15.Text = "Nessuno dichiarato dal produttore hardware"
                     End Select
-                End If
-                Exit For
-            End If
-        Next
+                Case 1
+                    Label15.Text = "None declared by the hardware manufacturer"
+                Case 2
+                    Label15.Text = "Ninguno declarado por el fabricante del hardware"
+                Case 3
+                    Label15.Text = "Aucune déclarée par le fabricant du matériel"
+                Case 4
+                    Label15.Text = "Nenhum declarado pelo fabricante do hardware"
+                Case 5
+                    Label15.Text = "Nessuno dichiarato dal produttore hardware"
+            End Select
+        End If
     End Sub
 
     Sub DisplayHardwareTargetOverview()
@@ -854,11 +851,7 @@ Public Class GetDriverInfo
 
     Private Sub ListBox1_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
-        For Each PackageFile In PackageFiles
-            If Path.GetExtension(PackageFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then
-                ListBox1.Items.Add(PackageFile)
-            End If
-        Next
+        ListBox1.Items.AddRange(PackageFiles.Where(Function(PackageFile) Path.GetExtension(PackageFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase)).Select(Function(PackageFile) PackageFile).ToArray())
         Button3.Enabled = True
         Button8.Enabled = True
         GetDriverInformation()
