@@ -199,6 +199,10 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#serviceability-tests">Serviceability tests</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#partition-table-overrides">Partition table overrides</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#uefi-boot-binary-selection">UEFI boot binary selection</a>
+    </li>
     </ul>
                 </li>
                 <li class="toctree-l3"><a class="reference internal" >Instalações baseadas em rede</a>
@@ -256,6 +260,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../../../exttools/themedesigner.html">Criando seus temas</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../exttools/dynaviewer.html">Visualizando logs de diagnóstico</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/sse.html">Creating your starter scripts</a>
                 </li>
     </ul>
                   </li>
@@ -368,6 +374,53 @@
 <p>Serviceability tests are performed during OS installation to make sure that the image that has been applied is valid. They are only run if the architectures of the PE and the image are the same, and must pass in order to successfully complete the installation of the operating system.</p>
 <p>Windows Setup also performs serviceability tests right before the first reboot.</p>
 <p>If these tests fail, you may need to repair the component store of your Windows image.</p>
+<h2 id="partition-table-overrides">Partition table overrides</h2>
+<p>Picture this. You have 2 machines: a laptop that you've been working on to repair it and/or upgrade it; and a desktop PC on which you do all your OS deployment tasks. Both machines use different firmware types, with the desktop PC using BIOS and the laptop using UEFI without the Compatibility Support Module. The laptop is still being serviced, but you still want to deploy the operating system to it. So, you grab the laptop's internal drive and plug it into your desktop PC. That is where <strong>partition table overrides</strong> can help.</p>
+<p>Partition table overrides allow you to configure the PE Helper to use a specific partition table scheme on a destination disk regardless of the platform you're running it on. At the partition selection screen, press <code>O</code> to configure the partition table override. You can use one of the following by selecting their respective option keys:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Partition table override</th>
+<th style="text-align: center;">Option Key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">MBR partition table override (for BIOS systems)</td>
+<td style="text-align: center;"><code>M</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">GPT partition table override (for UEFI systems)</td>
+<td style="text-align: center;"><code>G</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">No partition table overrides if previously set</td>
+<td style="text-align: center;"><code>C</code></td>
+</tr>
+</tbody>
+</table>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_part_table_override.png" />
+</p>
+
+<p><strong>Note that partition table overrides will only take effect if the target disk is cleaned of any existing partitions. Partition table overrides don't have any effect if you use them to deploy an operating system to the same computer you've booted the environment from.</strong></p>
+<p>Partition table overrides not only affect the target disk layout, but also the procedures taken to create boot files to be the most optimal for the target system's platform. After OS deployment with partition table overrides set, your computer will shut down, so you can take out that drive and put it on its target system.</p>
+<h2 id="uefi-boot-binary-selection">UEFI boot binary selection</h2>
+<p>During OS installation, you may be asked which UEFI boot binary you want to use. This happens when the following conditions are met:</p>
+<ul>
+<li>No partition table overrides are set,</li>
+<li>The target platform is UEFI,</li>
+<li>Secure Boot is enabled, and</li>
+<li>The boot file creation application, <code>bcdboot.exe</code>, contains flags to copy boot files signed with new certificates (<code>/bootex</code>)</li>
+</ul>
+<p>If all conditions are met, you will be asked to choose whether you want to use boot binaries signed with Microsoft Windows Production PCA 2011, or with Windows UEFI CA 2023:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/dt_pe/dt_pe_uefica23.png" />
+</p>
+
+<p>This question is asked by both the PE Helper and the WDS Helper Client.</p>
+<p>You should know which binary to use based on whether the required certificates are present in the target system's Secure Boot database, and whether the target operating system you want to deploy comes with updated boot binaries out of the box. You will be told if you can use UEFI CA 2023 binaries with the current system, but not if the target operating system supports them. </p>
+<p>If your computer does support UEFI CA 2023, but you are not sure whether to use them, continue with the default option by pressing ENTER, and the PE Helper will use the UEFI CA 2023 binaries, if available. If the PE Helper does not find updated boot binaries, it will fall back to using Microsoft Windows Production PCA 2011 binaries. Typically, operating system releases start supporting UEFI CA 2023 binaries after updates released on or after February 2024.</p>
               
             </div>
           </div><footer>

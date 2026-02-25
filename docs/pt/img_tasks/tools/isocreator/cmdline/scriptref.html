@@ -247,6 +247,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../exttools/dynaviewer.html">Visualizando logs de diagnóstico</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/sse.html">Creating your starter scripts</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -284,7 +286,7 @@
 </p>
 
 <h2 id="available-scripts">Available scripts</h2>
-<p>Currently, 3 scripts are included:</p>
+<p>Currently, 4 scripts are included:</p>
 <h3 id="initialize-networking-initializenetworkbat">Initialize Networking (<code>initializenetwork.bat</code>)</h3>
 <p>This script initializes the networking stack in the Preinstallation Environment for use with network-ready applications, and also enables the firewall.</p>
 <h3 id="full-disk-copy-fullcopybat">Full Disk Copy (<code>fullcopy.bat</code>)</h3>
@@ -296,7 +298,7 @@
 <li>Wait for the process to complete</li>
 </ol>
 <h3 id="capture-image-imagecapturebat">Capture Image (<code>imagecapture.bat</code>)</h3>
-<p>This script captures a Windows system drive into a WIM file that can be used later. In DISMTools 0.7.2 and later, this tool can be launched automatically after Sysprep completes.</p>
+<p>This script captures a Windows system drive into a WIM file that can be used later. In DISMTools 0.7.2 and later, this tool can be launched automatically after Sysprep completes, using the <a href="../exttools/sysprep.html">Sysprep Preparation Tool</a>.</p>
 <p>Usage:</p>
 <ol>
 <li>Enter the source drive letter (the Windows installation to capture), or an action to perform:<ul>
@@ -311,6 +313,39 @@
 <li>Wait for the process to complete</li>
 </ol>
 <p>After DISM completes, you will see a result screen.</p>
+<h3 id="create-boot-files-createbootfilesbat">Create Boot Files (<code>createbootfiles.bat</code>)</h3>
+<p>This script allows you to reconfigure a disk to make it bootable by copying the boot files of the installation to its System Reserved partition (MSR) or EFI System Partition (ESP), based on the firmware type that you pass to it as an argument.</p>
+<p>Usage:</p>
+<ul>
+<li>
+<p>Pass one of the following values as an argument:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Value</th>
+<th style="text-align: center;">Operating mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>BIOS</code>, <code>MBR</code>, <code>LEGACY</code></td>
+<td style="text-align: center;">Legacy mode</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>UEFI</code>, <code>GPT</code></td>
+<td style="text-align: center;">UEFI mode</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>Once the script launches:</p>
+<ol>
+<li>Provide the number of the source disk</li>
+<li>Provide the number of the destination MSR/ESP partition in the selected disk</li>
+<li>Provide the letter of the volume to copy boot files from</li>
+<li>Wait for the tool to do its work, and restart the computer</li>
+</ol>
               
             </div>
           </div><footer>

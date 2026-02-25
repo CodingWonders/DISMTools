@@ -257,6 +257,8 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#set-quick-machine-recovery-settings">Set Quick Machine Recovery Settings</a>
     </li>
+    <li class="toctree-l4"><a class="reference internal" href="#display-bugcheck-parameters">Display Bugcheck Parameters</a>
+    </li>
     <li class="toctree-l4"><a class="reference internal" href="#configure-folders-for-git-integration">Configure folders for Git integration</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#invoke-winutil-configuration">Invoke WinUtil Configuration</a>
@@ -272,6 +274,10 @@
     <li class="toctree-l4"><a class="reference internal" href="#disable-second-chance-oobe">Disable Second Chance OOBE</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#disable-windows-notification-sources">Disable Windows Notification Sources</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#show-file-extensions">Show File Extensions</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#disable-drag-tray">Disable Drag Tray</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#change-history">Change History</a>
     </li>
@@ -290,6 +296,8 @@
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/themedesigner.html">Creazione dei temi</a>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Visualizzazione dei log di diagnostica</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
                 </li>
     </ul>
                   </li>
@@ -466,6 +474,7 @@
 <p>Finally, like with the <strong>Windows Image Explorer</strong>, you can use the generator program separately. You can check out its repository <a href="https://github.com/CodingWonders/UnattendGen">here</a></p>
 <h2 id="active-directory-domain-services-domain-join">Active Directory Domain Services domain join</h2>
 <p>If the unattended answer file and, by extension, the Windows image, will be targeted to a fleet of computers in a domain; you can configure domain join settings using the <strong>Domain Services Wizard</strong>.</p>
+<p><strong>DOMAIN JOIN SETTINGS ARE NOT AVAILABLE ON HOME VERSIONS OF WINDOWS.</strong></p>
 <p>You can access the Domain Services Wizard by clicking the <strong>Join target device to domain...</strong> button that will appear in the following pages:</p>
 <ul>
 <li>System Configuration</li>
@@ -503,11 +512,11 @@
 <li>Select the OU from the drop-down list. After selecting the OU, the list of users in the OU will be populated automatically</li>
 <li>Select the user from the list</li>
 </ol>
-<p>Both the UPN and the SAM account names will be filled in automatically. When specifying this information manually, you will need to specify the user part of the UPN. For instance, <code>johndoe</code>.</p>
+<p>Both the UPN (<em>User Principal Name</em>) and the SAM (<em>Security Account Manager</em>) account names will be filled in automatically. When specifying this information manually, you will need to specify the user part of the UPN. For instance, <code>johndoe</code>.</p>
 <p>Finally, specify the password of the user. Since DISMTools will <strong>NOT</strong> check if the password is correct, make sure that you type it correctly.</p>
 <p>You've finished the Domain Services Wizard. When you get to the components screen, you will see that the necessary components and settings have been added to your answer file.</p>
 <h2 id="starter-script-reference">Starter Script Reference</h2>
-<p>Currently, there are 12 starter scripts available:</p>
+<p>Currently, there are <strong>15</strong> starter scripts available:</p>
 <table>
 <thead>
 <tr>
@@ -536,6 +545,11 @@
 <td style="text-align: left;">Set Quick Machine Recovery Settings</td>
 <td style="text-align: center;">During System Configuration</td>
 <td style="text-align: left;">This script configures a target system's Quick Machine Recovery settings on Windows 11 24H2 and later.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Display Bugcheck Parameters</td>
+<td style="text-align: center;">During System Configuration</td>
+<td style="text-align: left;">This script configures a system's blue screen to display additional parameters useful for troubleshooting purposes.</td>
 </tr>
 <tr>
 <td style="text-align: left;">Configure folders for Git integration</td>
@@ -577,6 +591,16 @@
 <td style="text-align: center;">When users log on for the first time</td>
 <td style="text-align: left;">This script disables user-specified notification sources in the target system.</td>
 </tr>
+<tr>
+<td style="text-align: left;">Show File Extensions</td>
+<td style="text-align: center;">When users log on for the first time</td>
+<td style="text-align: left;">This script makes the File Explorer show file extensions.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Disable Drag Tray</td>
+<td style="text-align: center;">When users log on for the first time</td>
+<td style="text-align: left;">This script disables the drag tray in recent versions of Windows 11 24H2 and 25H2.</td>
+</tr>
 </tbody>
 </table>
 <p>In DISMTools 0.7.2, you can view more information about these starter scripts more easily by using the new <strong>Starter Script Browser</strong>:</p>
@@ -584,6 +608,7 @@
     <img src="../../res/img_tasks/unattend/unatt_creator/unatt_script_browser.png" />
 </p>
 
+<p>You can also create your own starter scripts by using the <a href="../exttools/sse.html">Starter Script Editor</a>.</p>
 <p>Some scripts allow you to configure settings after you import them:</p>
 <h3 id="close-first-logon-animation">Close First Logon Animation</h3>
 <p><strong>Script language</strong>: Batch</p>
@@ -675,6 +700,9 @@
 <li>Cloud Remediation allows the system to scan for solutions on WinRE launch</li>
 <li>Auto Remediation allows the system to continue scanning for solutions if the first attempt fails</li>
 </ul>
+<h3 id="display-bugcheck-parameters">Display Bugcheck Parameters</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
 <h3 id="configure-folders-for-git-integration">Configure folders for Git integration</h3>
 <p><strong>Script language</strong>: PowerShell</p>
 <p>To add new entries to the list of folders for which to show VCS information, add them to the following array, like this:</p>
@@ -804,6 +832,12 @@
 <ul>
 <li>If your source contains spaces, surround it with quotes</li>
 </ul>
+<h3 id="show-file-extensions">Show File Extensions</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
+<h3 id="disable-drag-tray">Disable Drag Tray</h3>
+<p><strong>Script language</strong>: Batch</p>
+<p>No settings available.</p>
 <h3 id="change-history">Change History</h3>
 <ul>
 <li>DISMTools 0.7.2 Preview 3:<ul>
