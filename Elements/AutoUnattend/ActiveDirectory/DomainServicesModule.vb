@@ -241,12 +241,6 @@ Module DomainServicesModule
     Private Const ADS_UF_ACCOUNTDISABLE As Integer = &H2
 
     ''' <summary>
-    ''' The user account is locked out
-    ''' </summary>
-    ''' <remarks></remarks>
-    Private Const ADS_UF_LOCKOUT As Integer = &H10
-
-    ''' <summary>
     ''' Determines whether an account in a domain is enabled
     ''' </summary>
     ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
@@ -283,45 +277,6 @@ Module DomainServicesModule
 
         DynaLog.LogMessage("Account Enabled? (Bitwise-AND): " & enabledStatus)
         Return enabledStatus
-    End Function
-
-    ''' <summary>
-    ''' Determines whether an account in a domain is locked out
-    ''' </summary>
-    ''' <param name="dsDomainDnsName">The name of the domain in DNS (eg: dismtools.local)</param>
-    ''' <param name="accName">The SAM (Windows NT) representation of the account</param>
-    ''' <returns>Whether the account is locked out based on a property flag</returns>
-    ''' <remarks></remarks>
-    Public Function DSAccountIsLockedOut(dsDomainDnsName As String, accName As String) As Boolean
-        DynaLog.LogMessage("Preparing to determine if the specified account is locked out...")
-        DynaLog.LogMessage("- Domain Name (DNS/Windows 2000+): " & dsDomainDnsName)
-        DynaLog.LogMessage("- SAM account name: " & accName)
-        If dsDomainDnsName = "" Or accName = "" Then Return False
-        Dim lockedOutStatus As Boolean = False
-
-        DynaLog.LogMessage("Getting LDAP representation of DNS name for query...")
-        Dim ldapPath As String = GetLdapPathFromDnsName(dsDomainDnsName)
-
-        Try
-            DynaLog.LogMessage("Beginning to search user...")
-            Dim startingPoint As DirectoryEntry = New DirectoryEntry(String.Format("LDAP://{0}", ldapPath))
-            Dim searcher As DirectorySearcher = New DirectorySearcher(startingPoint)
-            searcher.Filter = String.Format("(&(objectCategory=user)(objectClass=user)(samAccountName={0}))", accName)
-
-            For Each result As SearchResult In searcher.FindAll()
-                DynaLog.LogMessage("Getting a directory entry of the user...")
-                Dim dirEntry As DirectoryEntry = result.GetDirectoryEntry()
-                If dirEntry.NativeGuid = "" Then Return False
-
-                lockedOutStatus = Not Convert.ToBoolean(CInt(dirEntry.Properties("userAccountControl").Value) And ADS_UF_LOCKOUT)
-            Next
-            searcher.Dispose()
-        Catch ex As Exception
-
-        End Try
-
-        DynaLog.LogMessage("Account Locked Out? (Bitwise-AND): " & lockedOutStatus)
-        Return lockedOutStatus
     End Function
 
 End Module
