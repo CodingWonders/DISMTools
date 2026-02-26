@@ -1284,6 +1284,9 @@
     <None Include="Helpers\extbatch\cmdhelp.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extbatch\copy_cur_wallpaper_to_userdata.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extbatch\nt6_online_pnputil_recurse.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
