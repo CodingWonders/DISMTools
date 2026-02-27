@@ -2181,16 +2181,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Bugfixes:
+        '''  Busca una cadena traducida similar a Overall changes:
         '''
-        '''- Fixed issues with recursive driver addition on Windows 8 hosts not working correctly
-        '''- Fixed an issue where the PE Helper would not go back to the disk selection screen when pressing B
-        '''- Fixed an issue where the image capture script would take longer to start the image capture process after having used the Sysprep Preparation Tool
-        '''- To get &quot;%TEMP%&quot; more accurately, the PE Helper and its components now use .NET APIs as opposed to relying on &quot;$env:TEMP&quot;
+        '''-- Bugfixes
         '''
-        '''New features:
-        '''
-        '''- The PE Helper an [resto de la cadena truncado]&quot;;.
+        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
+        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
+        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
+        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
+        '''- Fixed issues with recursive driver addition on Windo [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

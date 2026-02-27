@@ -156,6 +156,7 @@ Public Class MainForm
     End Sub
 
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        OpenFileDialog2.FilterIndex = ComboBox1.SelectedIndex + 1
         OpenFileDialog2.ShowDialog(Me)
     End Sub
 
@@ -169,7 +170,7 @@ Public Class MainForm
         End If
 
         Dim scriptFileName As String = OpenFileDialog2.FileName
-        Dim scriptExtension As String = Path.GetExtension(scriptFileName)
+        Dim scriptExtension As String = Path.GetExtension(scriptFileName).ToLower()
 
         Dim expectedBatchExtensions As New List(Of String)
         expectedBatchExtensions.AddRange(New String(2) {".bat", ".cmd", ".nt"})
@@ -185,6 +186,7 @@ Public Class MainForm
         Try
             Dim scriptContents As String = File.ReadAllText(scriptFileName)
             TextBox3.Text = scriptContents
+            UpdateCaretPosition()
         Catch ex As Exception
             MessageBox.Show("The contents of the script could not be loaded.", "Could not read file contents", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

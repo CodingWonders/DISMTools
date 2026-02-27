@@ -89,6 +89,9 @@ Partial Class ProjProperties
         Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.ProjPropertiesTLP = New System.Windows.Forms.TableLayoutPanel()
         Me.ImagePropertiesTLP = New System.Windows.Forms.TableLayoutPanel()
+        Me.RWRemountBtn = New System.Windows.Forms.Button()
+        Me.imgRW = New System.Windows.Forms.Label()
+        Me.Label62 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.imgInstType = New System.Windows.Forms.Label()
@@ -98,9 +101,6 @@ Partial Class ProjProperties
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.Label62 = New System.Windows.Forms.Label()
-        Me.imgRW = New System.Windows.Forms.Label()
-        Me.RWRemountBtn = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -230,7 +230,7 @@ Partial Class ProjProperties
         Me.Label12.Location = New System.Drawing.Point(198, 60)
         Me.Label12.Name = "Label12"
         Me.Label12.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label12.Size = New System.Drawing.Size(767, 19)
+        Me.Label12.Size = New System.Drawing.Size(772, 19)
         Me.Label12.TabIndex = 5
         Me.Label12.Text = "projGuid"
         '
@@ -242,7 +242,7 @@ Partial Class ProjProperties
         Me.Label11.Location = New System.Drawing.Point(198, 41)
         Me.Label11.Name = "Label11"
         Me.Label11.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label11.Size = New System.Drawing.Size(767, 19)
+        Me.Label11.Size = New System.Drawing.Size(772, 19)
         Me.Label11.TabIndex = 5
         Me.Label11.Text = "projTZData"
         '
@@ -254,7 +254,7 @@ Partial Class ProjProperties
         Me.Label10.Location = New System.Drawing.Point(198, 22)
         Me.Label10.Name = "Label10"
         Me.Label10.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label10.Size = New System.Drawing.Size(767, 19)
+        Me.Label10.Size = New System.Drawing.Size(772, 19)
         Me.Label10.TabIndex = 5
         Me.Label10.Text = "projPath"
         '
@@ -266,7 +266,7 @@ Partial Class ProjProperties
         Me.Label9.Location = New System.Drawing.Point(198, 3)
         Me.Label9.Name = "Label9"
         Me.Label9.Padding = New System.Windows.Forms.Padding(3)
-        Me.Label9.Size = New System.Drawing.Size(767, 19)
+        Me.Label9.Size = New System.Drawing.Size(772, 19)
         Me.Label9.TabIndex = 5
         Me.Label9.Text = "projName"
         '
@@ -292,7 +292,7 @@ Partial Class ProjProperties
         Me.LanguageList.Location = New System.Drawing.Point(624, 283)
         Me.LanguageList.Name = "LanguageList"
         Me.LanguageList.ScrollAlwaysVisible = True
-        Me.LanguageList.Size = New System.Drawing.Size(345, 48)
+        Me.LanguageList.Size = New System.Drawing.Size(349, 48)
         Me.LanguageList.TabIndex = 20
         '
         'RemountImgBtn
@@ -627,111 +627,103 @@ Partial Class ProjProperties
         Me.imgFormat.Location = New System.Drawing.Point(624, 334)
         Me.imgFormat.Name = "imgFormat"
         Me.imgFormat.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgFormat.Size = New System.Drawing.Size(345, 21)
+        Me.imgFormat.Size = New System.Drawing.Size(349, 21)
         Me.imgFormat.TabIndex = 10
         Me.imgFormat.Text = "imgFormat"
         '
         'imgModification
         '
         Me.imgModification.AutoEllipsis = True
-        Me.imgModification.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgModification, 2)
         Me.imgModification.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgModification.Location = New System.Drawing.Point(624, 259)
         Me.imgModification.Name = "imgModification"
         Me.imgModification.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgModification.Size = New System.Drawing.Size(345, 21)
+        Me.imgModification.Size = New System.Drawing.Size(347, 21)
         Me.imgModification.TabIndex = 10
         Me.imgModification.Text = "imgModification"
         '
         'imgCreation
         '
         Me.imgCreation.AutoEllipsis = True
-        Me.imgCreation.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgCreation, 2)
         Me.imgCreation.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgCreation.Location = New System.Drawing.Point(624, 238)
         Me.imgCreation.Name = "imgCreation"
         Me.imgCreation.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgCreation.Size = New System.Drawing.Size(345, 21)
+        Me.imgCreation.Size = New System.Drawing.Size(347, 21)
         Me.imgCreation.TabIndex = 10
         Me.imgCreation.Text = "imgCreation"
         '
         'imgFiles
         '
         Me.imgFiles.AutoEllipsis = True
-        Me.imgFiles.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgFiles, 2)
         Me.imgFiles.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgFiles.Location = New System.Drawing.Point(624, 217)
         Me.imgFiles.Name = "imgFiles"
         Me.imgFiles.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgFiles.Size = New System.Drawing.Size(345, 21)
+        Me.imgFiles.Size = New System.Drawing.Size(347, 21)
         Me.imgFiles.TabIndex = 10
         Me.imgFiles.Text = "imgFiles"
         '
         'imgDirs
         '
         Me.imgDirs.AutoEllipsis = True
-        Me.imgDirs.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgDirs, 2)
         Me.imgDirs.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgDirs.Location = New System.Drawing.Point(624, 196)
         Me.imgDirs.Name = "imgDirs"
         Me.imgDirs.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgDirs.Size = New System.Drawing.Size(345, 21)
+        Me.imgDirs.Size = New System.Drawing.Size(347, 21)
         Me.imgDirs.TabIndex = 10
         Me.imgDirs.Text = "imgDirs"
         '
         'imgSysRoot
         '
         Me.imgSysRoot.AutoEllipsis = True
-        Me.imgSysRoot.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgSysRoot, 2)
         Me.imgSysRoot.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgSysRoot.Location = New System.Drawing.Point(624, 175)
         Me.imgSysRoot.Name = "imgSysRoot"
         Me.imgSysRoot.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgSysRoot.Size = New System.Drawing.Size(345, 21)
+        Me.imgSysRoot.Size = New System.Drawing.Size(347, 21)
         Me.imgSysRoot.TabIndex = 10
         Me.imgSysRoot.Text = "imgSysRoot"
         '
         'imgPSuite
         '
         Me.imgPSuite.AutoEllipsis = True
-        Me.imgPSuite.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgPSuite, 2)
         Me.imgPSuite.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgPSuite.Location = New System.Drawing.Point(624, 154)
         Me.imgPSuite.Name = "imgPSuite"
         Me.imgPSuite.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgPSuite.Size = New System.Drawing.Size(345, 21)
+        Me.imgPSuite.Size = New System.Drawing.Size(347, 21)
         Me.imgPSuite.TabIndex = 10
         Me.imgPSuite.Text = "imgPSuite"
         '
         'imgPType
         '
         Me.imgPType.AutoEllipsis = True
-        Me.imgPType.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgPType, 2)
         Me.imgPType.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgPType.Location = New System.Drawing.Point(624, 133)
         Me.imgPType.Name = "imgPType"
         Me.imgPType.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgPType.Size = New System.Drawing.Size(345, 21)
+        Me.imgPType.Size = New System.Drawing.Size(347, 21)
         Me.imgPType.TabIndex = 10
         Me.imgPType.Text = "imgPType"
         '
         'imgEdition
         '
         Me.imgEdition.AutoEllipsis = True
-        Me.imgEdition.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgEdition, 2)
         Me.imgEdition.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgEdition.Location = New System.Drawing.Point(624, 82)
         Me.imgEdition.Name = "imgEdition"
         Me.imgEdition.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgEdition.Size = New System.Drawing.Size(345, 30)
+        Me.imgEdition.Size = New System.Drawing.Size(347, 30)
         Me.imgEdition.TabIndex = 10
         Me.imgEdition.Text = "imgEdition"
         Me.imgEdition.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -739,46 +731,42 @@ Partial Class ProjProperties
         'imgSPLvl
         '
         Me.imgSPLvl.AutoEllipsis = True
-        Me.imgSPLvl.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgSPLvl, 2)
         Me.imgSPLvl.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgSPLvl.Location = New System.Drawing.Point(624, 61)
         Me.imgSPLvl.Name = "imgSPLvl"
         Me.imgSPLvl.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgSPLvl.Size = New System.Drawing.Size(345, 21)
+        Me.imgSPLvl.Size = New System.Drawing.Size(347, 21)
         Me.imgSPLvl.TabIndex = 10
         Me.imgSPLvl.Text = "imgSPLvl"
         '
         'imgSPBuild
         '
         Me.imgSPBuild.AutoEllipsis = True
-        Me.imgSPBuild.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgSPBuild, 2)
         Me.imgSPBuild.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgSPBuild.Location = New System.Drawing.Point(624, 40)
         Me.imgSPBuild.Name = "imgSPBuild"
         Me.imgSPBuild.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgSPBuild.Size = New System.Drawing.Size(345, 21)
+        Me.imgSPBuild.Size = New System.Drawing.Size(347, 21)
         Me.imgSPBuild.TabIndex = 10
         Me.imgSPBuild.Text = "imgSPBuild"
         '
         'imgHal
         '
         Me.imgHal.AutoEllipsis = True
-        Me.imgHal.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgHal, 2)
         Me.imgHal.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgHal.Location = New System.Drawing.Point(624, 19)
         Me.imgHal.Name = "imgHal"
         Me.imgHal.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgHal.Size = New System.Drawing.Size(345, 21)
+        Me.imgHal.Size = New System.Drawing.Size(347, 21)
         Me.imgHal.TabIndex = 10
         Me.imgHal.Text = "imgHal"
         '
         'imgMountDir
         '
         Me.imgMountDir.AutoEllipsis = True
-        Me.imgMountDir.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgMountDir, 2)
         Me.imgMountDir.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgMountDir.Location = New System.Drawing.Point(195, 61)
@@ -791,7 +779,6 @@ Partial Class ProjProperties
         'imgArch
         '
         Me.imgArch.AutoEllipsis = True
-        Me.imgArch.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgArch, 2)
         Me.imgArch.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgArch.Location = New System.Drawing.Point(195, 217)
@@ -804,7 +791,6 @@ Partial Class ProjProperties
         'imgWimBootStatus
         '
         Me.imgWimBootStatus.AutoEllipsis = True
-        Me.imgWimBootStatus.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgWimBootStatus, 2)
         Me.imgWimBootStatus.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgWimBootStatus.Location = New System.Drawing.Point(195, 196)
@@ -817,7 +803,6 @@ Partial Class ProjProperties
         'imgMountedStatus
         '
         Me.imgMountedStatus.AutoEllipsis = True
-        Me.imgMountedStatus.AutoSize = True
         Me.imgMountedStatus.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgMountedStatus.Location = New System.Drawing.Point(195, 82)
         Me.imgMountedStatus.Name = "imgMountedStatus"
@@ -830,7 +815,6 @@ Partial Class ProjProperties
         'imgSize
         '
         Me.imgSize.AutoEllipsis = True
-        Me.imgSize.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgSize, 2)
         Me.imgSize.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgSize.Location = New System.Drawing.Point(195, 175)
@@ -843,7 +827,6 @@ Partial Class ProjProperties
         'imgMountedDesc
         '
         Me.imgMountedDesc.AutoEllipsis = True
-        Me.imgMountedDesc.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgMountedDesc, 2)
         Me.imgMountedDesc.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgMountedDesc.Location = New System.Drawing.Point(195, 154)
@@ -857,7 +840,6 @@ Partial Class ProjProperties
         'imgMountedName
         '
         Me.imgMountedName.AutoEllipsis = True
-        Me.imgMountedName.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgMountedName, 2)
         Me.imgMountedName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgMountedName.Location = New System.Drawing.Point(195, 133)
@@ -871,7 +853,6 @@ Partial Class ProjProperties
         'imgVersion
         '
         Me.imgVersion.AutoEllipsis = True
-        Me.imgVersion.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgVersion, 2)
         Me.imgVersion.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgVersion.Location = New System.Drawing.Point(195, 112)
@@ -884,7 +865,6 @@ Partial Class ProjProperties
         'imgIndex
         '
         Me.imgIndex.AutoEllipsis = True
-        Me.imgIndex.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgIndex, 2)
         Me.imgIndex.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgIndex.Location = New System.Drawing.Point(195, 40)
@@ -897,7 +877,6 @@ Partial Class ProjProperties
         'imgName
         '
         Me.imgName.AutoEllipsis = True
-        Me.imgName.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgName, 2)
         Me.imgName.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgName.Location = New System.Drawing.Point(195, 19)
@@ -965,7 +944,7 @@ Partial Class ProjProperties
         Me.ProjPropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ProjPropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ProjPropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ProjPropertiesTLP.Size = New System.Drawing.Size(971, 82)
+        Me.ProjPropertiesTLP.Size = New System.Drawing.Size(976, 82)
         Me.ProjPropertiesTLP.TabIndex = 6
         '
         'ImagePropertiesTLP
@@ -978,7 +957,7 @@ Partial Class ProjProperties
         Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3444405!))
         Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 138.0!))
         Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.3277893!))
-        Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 206.0!))
+        Me.ImagePropertiesTLP.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 208.0!))
         Me.ImagePropertiesTLP.Controls.Add(Me.RWRemountBtn, 5, 15)
         Me.ImagePropertiesTLP.Controls.Add(Me.LanguageList, 4, 13)
         Me.ImagePropertiesTLP.Controls.Add(Me.imgRW, 4, 15)
@@ -1051,8 +1030,45 @@ Partial Class ProjProperties
         Me.ImagePropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ImagePropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
         Me.ImagePropertiesTLP.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.ImagePropertiesTLP.Size = New System.Drawing.Size(971, 384)
+        Me.ImagePropertiesTLP.Size = New System.Drawing.Size(976, 384)
         Me.ImagePropertiesTLP.TabIndex = 21
+        '
+        'RWRemountBtn
+        '
+        Me.RWRemountBtn.AutoSize = True
+        Me.RWRemountBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.RWRemountBtn.Location = New System.Drawing.Point(769, 358)
+        Me.RWRemountBtn.Name = "RWRemountBtn"
+        Me.RWRemountBtn.Size = New System.Drawing.Size(200, 23)
+        Me.RWRemountBtn.TabIndex = 18
+        Me.RWRemountBtn.Text = "Remount with write permissions"
+        Me.RWRemountBtn.UseVisualStyleBackColor = True
+        Me.RWRemountBtn.Visible = False
+        '
+        'imgRW
+        '
+        Me.imgRW.AutoEllipsis = True
+        Me.imgRW.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.imgRW.Location = New System.Drawing.Point(624, 355)
+        Me.imgRW.MaximumSize = New System.Drawing.Size(256, 48)
+        Me.imgRW.Name = "imgRW"
+        Me.imgRW.Padding = New System.Windows.Forms.Padding(4)
+        Me.imgRW.Size = New System.Drawing.Size(139, 29)
+        Me.imgRW.TabIndex = 10
+        Me.imgRW.Text = "imgRW"
+        '
+        'Label62
+        '
+        Me.Label62.AutoEllipsis = True
+        Me.Label62.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label62.Location = New System.Drawing.Point(486, 355)
+        Me.Label62.MaximumSize = New System.Drawing.Size(256, 48)
+        Me.Label62.Name = "Label62"
+        Me.Label62.Padding = New System.Windows.Forms.Padding(4)
+        Me.Label62.Size = New System.Drawing.Size(132, 29)
+        Me.Label62.TabIndex = 7
+        Me.Label62.Text = "Image R/W permissions:"
+        Me.Label62.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Panel2
         '
@@ -1080,13 +1096,12 @@ Partial Class ProjProperties
         'imgInstType
         '
         Me.imgInstType.AutoEllipsis = True
-        Me.imgInstType.AutoSize = True
         Me.ImagePropertiesTLP.SetColumnSpan(Me.imgInstType, 2)
         Me.imgInstType.Dock = System.Windows.Forms.DockStyle.Fill
         Me.imgInstType.Location = New System.Drawing.Point(624, 112)
         Me.imgInstType.Name = "imgInstType"
         Me.imgInstType.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgInstType.Size = New System.Drawing.Size(345, 21)
+        Me.imgInstType.Size = New System.Drawing.Size(347, 21)
         Me.imgInstType.TabIndex = 10
         Me.imgInstType.Text = "imgInstType"
         '
@@ -1106,7 +1121,7 @@ Partial Class ProjProperties
         Me.TableLayoutPanel2.RowCount = 1
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 13.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(966, 13)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(970, 13)
         Me.TableLayoutPanel2.TabIndex = 26
         '
         'Label20
@@ -1117,7 +1132,7 @@ Partial Class ProjProperties
         Me.Label20.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
         Me.Label20.Location = New System.Drawing.Point(3, 0)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(477, 13)
+        Me.Label20.Size = New System.Drawing.Size(479, 13)
         Me.Label20.TabIndex = 15
         Me.Label20.Text = "Image present on project?"
         Me.Label20.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -1128,9 +1143,9 @@ Partial Class ProjProperties
         Me.Label19.AutoSize = True
         Me.Label19.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Label19.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.Label19.Location = New System.Drawing.Point(486, 0)
+        Me.Label19.Location = New System.Drawing.Point(488, 0)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(477, 13)
+        Me.Label19.Size = New System.Drawing.Size(479, 13)
         Me.Label19.TabIndex = 14
         Me.Label19.Text = "imgStatus"
         '
@@ -1169,43 +1184,6 @@ Partial Class ProjProperties
     "u mount it, detailed information will be shown here. Click here to mount an imag" & _
     "e"
         Me.LinkLabel2.UseCompatibleTextRendering = True
-        '
-        'Label62
-        '
-        Me.Label62.AutoEllipsis = True
-        Me.Label62.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label62.Location = New System.Drawing.Point(486, 355)
-        Me.Label62.MaximumSize = New System.Drawing.Size(256, 48)
-        Me.Label62.Name = "Label62"
-        Me.Label62.Padding = New System.Windows.Forms.Padding(4)
-        Me.Label62.Size = New System.Drawing.Size(132, 21)
-        Me.Label62.TabIndex = 7
-        Me.Label62.Text = "Image R/W permissions:"
-        Me.Label62.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'imgRW
-        '
-        Me.imgRW.AutoEllipsis = True
-        Me.imgRW.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.imgRW.Location = New System.Drawing.Point(624, 355)
-        Me.imgRW.MaximumSize = New System.Drawing.Size(256, 48)
-        Me.imgRW.Name = "imgRW"
-        Me.imgRW.Padding = New System.Windows.Forms.Padding(4)
-        Me.imgRW.Size = New System.Drawing.Size(139, 21)
-        Me.imgRW.TabIndex = 10
-        Me.imgRW.Text = "imgRW"
-        '
-        'RWRemountBtn
-        '
-        Me.RWRemountBtn.AutoSize = True
-        Me.RWRemountBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.RWRemountBtn.Location = New System.Drawing.Point(769, 358)
-        Me.RWRemountBtn.Name = "RWRemountBtn"
-        Me.RWRemountBtn.Size = New System.Drawing.Size(200, 23)
-        Me.RWRemountBtn.TabIndex = 18
-        Me.RWRemountBtn.Text = "Remount with write permissions"
-        Me.RWRemountBtn.UseVisualStyleBackColor = True
-        Me.RWRemountBtn.Visible = False
         '
         'ProjProperties
         '

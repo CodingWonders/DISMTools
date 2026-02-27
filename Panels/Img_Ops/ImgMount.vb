@@ -879,7 +879,7 @@ Public Class ImgMount
             If mountLetter = Chr(0) Then Exit Sub
             ProgressReporter.SetMessage("Scanning mounted ISO file for Windows images...")
             IsoExtractorBW.ReportProgress(25)
-            Dim WindowsImageFiles As String() = Directory.EnumerateFiles(String.Format("{0}:\", mountLetter), "*.*", SearchOption.AllDirectories).Where(Function(fileInDisc) {".wim", ".esd"}.Contains(Path.GetExtension(fileInDisc))).ToArray()
+            Dim WindowsImageFiles As String() = Directory.EnumerateFiles(String.Format("{0}:\", mountLetter), "*.*", SearchOption.AllDirectories).Where(Function(fileInDisc) {".wim", ".esd"}.Contains(Path.GetExtension(fileInDisc).ToLowerInvariant())).ToArray()
             For Each WindowsImageFile In WindowsImageFiles
                 ProgressReporter.SetMessage(String.Format("Copying file {0} to your project...", Quote & Path.GetFileName(WindowsImageFile) & Quote))
                 IsoExtractorBW.ReportProgress(50)

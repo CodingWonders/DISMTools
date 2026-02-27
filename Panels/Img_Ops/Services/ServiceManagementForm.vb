@@ -23,61 +23,64 @@ Public Class ServiceManagementForm
     Private Sub DisplayServiceInformation(Index As Integer)
         If (Index < 0) OrElse (Index > ServiceList.Count - 1) Then Exit Sub
 
-        TextBox1.Text = ServiceList(Index).Name
-        TextBox2.Text = ServiceList(Index).DisplayName
-        TextBox3.Text = ServiceList(Index).Description
-        TextBox4.Text = ServiceList(Index).ImagePath
-        TextBox5.Text = ServiceList(Index).ObjectName
-        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
-        ComboBox1.SelectedIndex = ServiceList(Index).StartType
-        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
-        TextBox6.Text = ServiceList(Index).Group
-        TextBox7.Text = ServiceList(Index).TypeToString()
-        TextBox8.Text = ServiceList(Index).ErrorControlToString()
-        TextBox9.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.FirstFailure)
-        TextBox10.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.SecondFailure)
-        TextBox11.Text = ServiceList(Index).FailureActionToString(ServiceList(Index).FailureActions.SubsequentFailure)
-        TextBox12.Text = String.Format("{0} minute(s)", (ServiceList(Index).FailureActions.ResetDelayInSeconds / 60))
-        TextBox13.Text = String.Format("{0} minute(s) ({1} seconds) after first failure, {2} minute(s) ({3} seconds) after second failure, {4} minute(s) ({5} seconds) after subsequent failures",
-                                       Math.Round((ServiceList(Index).FailureActions.FirstDelayInMillis / 60000), 2),
-                                       Math.Round((ServiceList(Index).FailureActions.FirstDelayInMillis / 1000), 2),
-                                       Math.Round((ServiceList(Index).FailureActions.SecondDelayInMillis / 60000), 2),
-                                       Math.Round((ServiceList(Index).FailureActions.SecondDelayInMillis / 1000), 2),
-                                       Math.Round((ServiceList(Index).FailureActions.SubsequentDelaysInMillis / 60000), 2),
-                                       Math.Round((ServiceList(Index).FailureActions.SubsequentDelaysInMillis / 1000), 2))
+        Dim selectedService As WindowsService = ServiceList.ElementAtOrDefault(Index)
+        If selectedService Is Nothing Then Exit Sub
 
-        CheckBox1.Checked = If(ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic, ServiceList(Index).DelayedStart, False)
-        CheckBox1.Enabled = ServiceList(Index).StartType = WindowsService.ServiceStartType.Automatic
+        TextBox1.Text = selectedService.Name
+        TextBox2.Text = selectedService.DisplayName
+        TextBox3.Text = selectedService.Description
+        TextBox4.Text = selectedService.ImagePath
+        TextBox5.Text = selectedService.ObjectName
+        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ComboBox1.SelectedIndex = selectedService.StartType
+        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        TextBox6.Text = selectedService.Group
+        TextBox7.Text = selectedService.TypeToString()
+        TextBox8.Text = selectedService.ErrorControlToString()
+        TextBox9.Text = selectedService.FailureActionToString(selectedService.FailureActions.FirstFailure)
+        TextBox10.Text = selectedService.FailureActionToString(selectedService.FailureActions.SecondFailure)
+        TextBox11.Text = selectedService.FailureActionToString(selectedService.FailureActions.SubsequentFailure)
+        TextBox12.Text = String.Format("{0} minute(s)", (selectedService.FailureActions.ResetDelayInSeconds / 60))
+        TextBox13.Text = String.Format("{0} minute(s) ({1} seconds) after first failure, {2} minute(s) ({3} seconds) after second failure, {4} minute(s) ({5} seconds) after subsequent failures",
+                                       Math.Round((selectedService.FailureActions.FirstDelayInMillis / 60000), 2),
+                                       Math.Round((selectedService.FailureActions.FirstDelayInMillis / 1000), 2),
+                                       Math.Round((selectedService.FailureActions.SecondDelayInMillis / 60000), 2),
+                                       Math.Round((selectedService.FailureActions.SecondDelayInMillis / 1000), 2),
+                                       Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 60000), 2),
+                                       Math.Round((selectedService.FailureActions.SubsequentDelaysInMillis / 1000), 2))
+
+        CheckBox1.Checked = If(selectedService.StartType = WindowsService.ServiceStartType.Automatic, selectedService.DelayedStart, False)
+        CheckBox1.Enabled = selectedService.StartType = WindowsService.ServiceStartType.Automatic
 
         ' Only enable user service flags with certain service types
-        Label19.Enabled = {80, 96}.Contains(ServiceList(Index).Type)
-        TextBox14.Enabled = {80, 96}.Contains(ServiceList(Index).Type)
+        Label19.Enabled = {80, 96}.Contains(selectedService.Type)
+        TextBox14.Enabled = {80, 96}.Contains(selectedService.Type)
 
-        If {80, 96}.Contains(ServiceList(Index).Type) Then
-            If ServiceList(Index).UserServiceFlags = Integer.MinValue Then
+        If {80, 96}.Contains(selectedService.Type) Then
+            If selectedService.UserServiceFlags = Integer.MinValue Then
                 TextBox14.Text = "Undefined"
             Else
-                TextBox14.Text = ServiceList(Index).UserServiceFlags
+                TextBox14.Text = selectedService.UserServiceFlags
             End If
         Else
             TextBox14.Text = "Not a per-user service"
         End If
 
         ListView2.Items.Clear()
-        ListView2.Items.AddRange(ServiceList(Index).RequiredPrivileges.Select(Function(RequiredPrivilege) New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription})).ToArray())
+        ListView2.Items.AddRange(selectedService.RequiredPrivileges.Select(Function(RequiredPrivilege) New ListViewItem(New String() {RequiredPrivilege.ConstantNameText, RequiredPrivilege.ConstantUserRight, RequiredPrivilege.ConstantDescription})).ToArray())
 
         ListView3.Items.Clear()
         ListView4.Items.Clear()
         ListView5.Items.Clear()
 
-        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) ServiceList(Index).Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName)
-        Dim dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(ServiceList(Index).Name)).OrderBy(Function(service) service.DisplayName)
+        Dim dependencies As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) selectedService.Dependencies.Contains(service.Name)).OrderBy(Function(service) service.DisplayName)
+        Dim dependents As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Dependencies.Contains(selectedService.Name)).OrderBy(Function(service) service.DisplayName)
 
         ListView3.Items.AddRange(dependencies.Select(Function(dependency) New ListViewItem(New String() {dependency.Name, dependency.DisplayName, dependency.TypeToString()})).ToArray())
         ListView4.Items.AddRange(dependents.Select(Function(dependent) New ListViewItem(New String() {dependent.Name, dependent.DisplayName, dependent.TypeToString()})).ToArray())
 
-        If ServiceList(Index).Group <> "" Then
-            Dim servicesInGroup As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Group.Equals(ServiceList(Index).Group, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(service) service.DisplayName)
+        If selectedService.Group <> "" Then
+            Dim servicesInGroup As IEnumerable(Of WindowsService) = ServiceList.Where(Function(service) service.Group.Equals(selectedService.Group, StringComparison.InvariantCultureIgnoreCase)).OrderBy(Function(service) service.DisplayName)
             ListView5.Items.AddRange(servicesInGroup.Select(Function(serviceInGroup) New ListViewItem(New String() {serviceInGroup.Name, serviceInGroup.DisplayName, serviceInGroup.TypeToString()})).ToArray())
             ListView5.Visible = True
         Else

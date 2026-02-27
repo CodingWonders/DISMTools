@@ -39,22 +39,22 @@ Partial Class AddDrivers
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -247,6 +247,26 @@ Partial Class AddDrivers
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Driver folders"
         '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.CheckedListBox1)
+        Me.Panel1.Location = New System.Drawing.Point(10, 59)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(414, 395)
+        Me.Panel1.TabIndex = 2
+        '
+        'CheckedListBox1
+        '
+        Me.CheckedListBox1.CheckOnClick = True
+        Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckedListBox1.FormattingEnabled = True
+        Me.CheckedListBox1.Location = New System.Drawing.Point(0, 0)
+        Me.CheckedListBox1.Name = "CheckedListBox1"
+        Me.CheckedListBox1.Size = New System.Drawing.Size(414, 395)
+        Me.CheckedListBox1.TabIndex = 0
+        '
         'Label3
         '
         Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -257,15 +277,6 @@ Partial Class AddDrivers
         Me.Label3.TabIndex = 1
         Me.Label3.Text = "You can let the program scan the driver folders present on the list below recursi" & _
     "vely and add them as well. To do so, tick the entries you'd like to be scanned:"
-        '
-        'CheckedListBox1
-        '
-        Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.Location = New System.Drawing.Point(0, 0)
-        Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(414, 395)
-        Me.CheckedListBox1.TabIndex = 0
         '
         'GroupBox3
         '
@@ -309,16 +320,6 @@ Partial Class AddDrivers
     "f it needs to be scanned recursively:"
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.CheckedListBox1)
-        Me.Panel1.Location = New System.Drawing.Point(10, 59)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(414, 395)
-        Me.Panel1.TabIndex = 2
-        '
         'AddDrivers
         '
         Me.AcceptButton = Me.OK_Button
@@ -346,9 +347,9 @@ Partial Class AddDrivers
         Me.GroupBox1.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.GroupBox2.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

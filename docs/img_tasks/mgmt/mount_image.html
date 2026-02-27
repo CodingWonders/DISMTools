@@ -76,6 +76,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#swm-and-esd-processing">SWM and ESD processing</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#iso-file-processing">ISO file processing</a>
+    </li>
     </ul>
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="remount_image.html">Remounting an image</a>
@@ -253,6 +255,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Viewing diagnostic logs</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -289,8 +293,8 @@
 <p>One essential task to perform is mounting a Windows image, and DISMTools can assist you in performing this process.</p>
 <h2 id="usage">Usage</h2>
 <ol>
-<li>Specify the source image file to mount. It can be a WIM, VHD, ESD or SWM file. However, SWM and ESD files require prior processing before mounting them</li>
-<li>Specify the index to mount in the Options group. You can easily view all indexes of an image in the list on the right</li>
+<li>Specify the source image file to mount. It can be a WIM, VHD, ESD, SWM, or ISO file. However, SWM, ESD and ISO files require prior processing before mounting them</li>
+<li>Specify the index to mount in the Options group. You can easily view all indexes of an image in the list on the right, and select an index from there too</li>
 <li>Specify the directory to mount the image to. If you want to use the mount directory provided by the project, click "Use defaults"</li>
 </ol>
 <h2 id="swm-and-esd-processing">SWM and ESD processing</h2>
@@ -300,6 +304,8 @@
 <li>If the source image is an ESD file, the program loads the <a href="../tools/wim2esd.html">image conversion</a> dialog and populates all required fields</li>
 </ul>
 <p>In either case, you can simply click OK to begin the required process, or can review all options. After performing said process, this dialog is shown again with the source image field populated.</p>
+<h2 id="iso-file-processing">ISO file processing</h2>
+<p>If all you have is an ISO file, you can still use it with DISMTools in versions 0.7.3 and higher. Use it as a file picker filter, and the program will automatically grab all WIM and ESD files from there. The files that it grabs are copied to your project, in a folder called <code>IsoFileContents</code>. After the ISO file is processed, you must set the source image to one of the resulting files, and perform additional processing steps described earlier, if necessary.</p>
               
             </div>
           </div><footer>

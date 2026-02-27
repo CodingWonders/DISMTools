@@ -288,6 +288,7 @@ function Start-PEGeneration
                 New-Item -Path "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -ItemType Directory | Out-Null
                 Copy-Item -Path "$((Get-Location).Path)\tools\DIM\*" -Destination "$((Get-Location).Path)\ISOTEMP\media\Tools\DIM" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 Copy-Item -Path "$((Get-Location).Path)\files\*.sh" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
+                Copy-Item -Path "$((Get-Location).Path)\files\boot_image_to_wds.bat" -Destination "$((Get-Location).Path)\ISOTEMP\media" -Verbose -Force -Recurse -Container -ErrorAction SilentlyContinue
                 if (($unattendFile -ne "") -and (Test-Path "$unattendFile" -PathType Leaf))
                 {
                     Write-Host "Unattended answer file has been detected. Copying to ISO file..."
@@ -1130,7 +1131,8 @@ function Start-OSApplication
         Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
         Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
         Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
-        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/N)"
+        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/n)"
+        if ($bootOptn -eq "") { $bootOptn = "Y" }
         $usebootex = ($bootOptn -eq "Y")
     }
     Write-Host "Applying Windows image. This can take some time..."

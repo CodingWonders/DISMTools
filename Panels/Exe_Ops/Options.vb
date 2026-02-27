@@ -3220,7 +3220,8 @@ Public Class Options
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         If File.Exists(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")) Then
-            Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"))
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"),
+                          String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "themes") & ControlChars.Quote))
         End If
     End Sub
 
@@ -3275,6 +3276,13 @@ Public Class Options
                                                 "- {1}Let me control the AI features in my search engine{1} will let you pick from the former selection, plus search engines that do have AI features turned on by default, but configured via URL parameters or other engine settings{0}" &
                                                 "- {1}Turn on as many AI features as possible{1} will let you pick from all available search engines, including those that are based on AI or have dedicated modes for AI that are being advertised too much.{0}{0}" &
                                                 "Normally, the second option is what you can go with, as it gives you greater control. If you prefer a more privacy-focused experience, you can turn these features off.", Environment.NewLine, Quote)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        Dim qhMessage As String = String.Format("Background processes allow DISMTools to get information about the Windows image that you are working on and let you perform the majority of tasks. " &
+                                                "Examples of such information are the operating system packages, or features in a Windows image.{0}{0}" &
+                                                "These processes are not just run when getting information about image files, but when managing online, or offline, installations as well.", Environment.NewLine)
         QuickHelpModule.ShowQuickHelp(qhMessage)
     End Sub
 End Class

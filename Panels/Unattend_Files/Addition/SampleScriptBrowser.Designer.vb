@@ -22,6 +22,7 @@ Partial Class SampleScriptBrowser
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SampleScriptBrowser))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
@@ -36,6 +37,7 @@ Partial Class SampleScriptBrowser
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ScriptDetailsContainerPanel = New System.Windows.Forms.Panel()
         Me.ScriptDetailsPanel = New System.Windows.Forms.Panel()
+        Me.ExportScriptCodeBtn = New System.Windows.Forms.Button()
         Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -45,8 +47,8 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
-        Me.ExportScriptCodeBtn = New System.Windows.Forms.Button()
         Me.ScriptCodeExporterSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
@@ -195,8 +197,19 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsPanel.TabIndex = 1
         Me.ScriptDetailsPanel.Visible = False
         '
+        'ExportScriptCodeBtn
+        '
+        Me.ExportScriptCodeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ExportScriptCodeBtn.Location = New System.Drawing.Point(446, 158)
+        Me.ExportScriptCodeBtn.Name = "ExportScriptCodeBtn"
+        Me.ExportScriptCodeBtn.Size = New System.Drawing.Size(192, 23)
+        Me.ExportScriptCodeBtn.TabIndex = 7
+        Me.ExportScriptCodeBtn.Text = "Export script code to a file..."
+        Me.ExportScriptCodeBtn.UseVisualStyleBackColor = True
+        '
         'RichTextBox1
         '
+        Me.RichTextBox1.DetectUrls = False
         Me.RichTextBox1.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.RichTextBox1.Location = New System.Drawing.Point(53, 192)
         Me.RichTextBox1.Name = "RichTextBox1"
@@ -291,19 +304,12 @@ Partial Class SampleScriptBrowser
         Me.Label8.Text = resources.GetString("Label8.Text")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
-        'ExportScriptCodeBtn
-        '
-        Me.ExportScriptCodeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.ExportScriptCodeBtn.Location = New System.Drawing.Point(446, 158)
-        Me.ExportScriptCodeBtn.Name = "ExportScriptCodeBtn"
-        Me.ExportScriptCodeBtn.Size = New System.Drawing.Size(192, 23)
-        Me.ExportScriptCodeBtn.TabIndex = 7
-        Me.ExportScriptCodeBtn.Text = "Export script code to a file..."
-        Me.ExportScriptCodeBtn.UseVisualStyleBackColor = True
-        '
         'ScriptCodeExporterSFD
         '
         Me.ScriptCodeExporterSFD.Title = "Export Script Code"
+        '
+        'SSETimer
+        '
         '
         'SampleScriptBrowser
         '
@@ -359,5 +365,6 @@ Partial Class SampleScriptBrowser
     Friend WithEvents CreateStarterScriptBtn As System.Windows.Forms.Button
     Friend WithEvents ExportScriptCodeBtn As System.Windows.Forms.Button
     Friend WithEvents ScriptCodeExporterSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents SSETimer As System.Windows.Forms.Timer
 
 End Class

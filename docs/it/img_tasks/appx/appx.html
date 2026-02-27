@@ -255,6 +255,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Visualizzazione dei log di diagnostica</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -339,6 +341,7 @@
 <pre><code class="language-xml">&lt;MainBundle Name=&quot;Microsoft.WinDbg&quot; Version=&quot;1.2306.12001.0&quot; Publisher=&quot;CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US&quot; Uri=&quot;https://windbg.download.prss.microsoft.com/dbazure/prod/1-2306-12001-0/windbg.msixbundle&quot; /&gt;
 </code></pre>
 <p>The <code>Uri</code> property is what matters. DISMTools versions from 0.3.2 onwards read these files, detect a URL, and perform a file download.</p>
+<p>If there is no <code>&lt;MainBundle&gt;</code> section, but there is a <code>&lt;MainPackage&gt;</code> section, the same properties are obtained. The <code>Uri</code> property still matters in that case.</p>
 <p align="center">
     <img src="../../res/img_tasks/appx/appinstaller_down.png" />
 </p>

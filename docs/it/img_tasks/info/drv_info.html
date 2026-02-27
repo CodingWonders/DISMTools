@@ -100,7 +100,7 @@
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#saving-this-information">Saving this information</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#additional-search-functionality">Additional search functionality</a>
+    <li class="toctree-l4"><a class="reference internal" href="#search-filters">Search filters</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
     </li>
@@ -259,6 +259,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Visualizzazione dei log di diagnostica</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -337,8 +339,130 @@
 <h2 id="saving-this-information">Saving this information</h2>
 <p>You can save this information to a report file by clicking the Save button on the bottom right and specifying a target file. Do note that this option is disabled in the driver file view if no drivers were specified.</p>
 <p>Also note that, if you have background processes configured to not detect all drivers, you will be asked if you want to save the information of all of them.</p>
-<h2 id="additional-search-functionality">Additional search functionality</h2>
-<p>With the Search functionality introduced in DISMTools 0.5 you can search through your installed drivers more easily. This will default to the first column. However, if you want to search through installed drivers based on their original file names (second column), you can <strong>prepend your search query with <code>og:</code></strong>.</p>
+<h2 id="search-filters">Search filters</h2>
+<p>DISMTools 0.5 introduced search filters and functionality to search through installed drivers. When performing your search queries, you can use the following filters to specify where you want to search, depending on which version of DISMTools you are using:</p>
+<table>
+<thead>
+<tr>
+<th>Filter</th>
+<th>Description</th>
+<th>Version introduced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>og:</code></td>
+<td>Search through the original file names of the drivers</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>prov:</code></td>
+<td>Filter by the provider name of a driver</td>
+<td>0.7.3 Preview 2</td>
+</tr>
+<tr>
+<td><code>cn:</code>, <code>classname:</code></td>
+<td>Filter by the class name of a driver</td>
+<td>0.7.3 Preview 2</td>
+</tr>
+<tr>
+<td><code>inbox:</code>, <code>noinbox:</code></td>
+<td>Filter by driver inbox status</td>
+<td>0.7.3 Preview 2</td>
+</tr>
+<tr>
+<td><code>bc:</code>, <code>nobc:</code></td>
+<td>Filter by driver boot critical status</td>
+<td>0.7.3 Preview 2</td>
+</tr>
+<tr>
+<td><code>date:</code></td>
+<td>Filter by driver release date</td>
+<td>0.7.3 Preview 4</td>
+</tr>
+<tr>
+<td><code>sig:</code>, <code>nosig:</code></td>
+<td>Filter by driver signature status</td>
+<td>0.7.3 Preview 4</td>
+</tr>
+</tbody>
+</table>
+<p>When filtering drivers by <em>date</em>, you have to use one of the following PowerShell-like sub-operators in this format:</p>
+<pre><code>date:&lt;sub-operator&gt;[comparer]-&lt;field&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Sub-operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>eq[comparer]-&lt;field&gt;</code></td>
+<td>Search for drivers released in the specified <code>&lt;field&gt;</code> value</td>
+</tr>
+<tr>
+<td><code>ne[comparer]-&lt;field&gt;</code></td>
+<td>Search for drivers not released in the specified <code>&lt;field&gt;</code> value</td>
+</tr>
+<tr>
+<td><code>lt[comparer]-&lt;field&gt;</code></td>
+<td>Search for drivers released before the specified <code>&lt;field&gt;</code> value</td>
+</tr>
+<tr>
+<td><code>le[comparer]-&lt;field&gt;</code></td>
+<td>Search for drivers released before or on the specified <code>&lt;field&gt;</code> value</td>
+</tr>
+<tr>
+<td><code>gt[comparer]-&lt;field&gt;</code></td>
+<td>Search for drivers released after the specified <code>&lt;field&gt;</code> value</td>
+</tr>
+<tr>
+<td><code>ge[comparer]-&lt;field&gt;</code></td>
+<td>Search for drivers released after or on the specified <code>&lt;field&gt;</code> value</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>[comparer]</code> value can be one of the following:</p>
+<ul>
+<li><code>y</code> to compare by year</li>
+<li><code>m</code> to compare by month</li>
+<li>No value to compare by date</li>
+</ul>
+<p>When comparing by date, the field value has to be in European format (<em>dd/MM/yyyy</em>), but you can use shorter variants of that format. Some examples of driver search queries are the following:</p>
+<!-- sorry Americans for not using your date format -->
+
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Query</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Show installed drivers with original file names that contain "iaStor" (<em>Intel RST/VMD storage controllers</em>)</td>
+<td><code>og:iaStor</code></td>
+</tr>
+<tr>
+<td>Show installed drivers provided by NVIDIA</td>
+<td><code>prov:nvidia</code></td>
+</tr>
+<tr>
+<td>Show installed SCSI adapters and other storage controllers</td>
+<td><code>cn:scsiadapter</code> or <code>classname:scsiadapter</code></td>
+</tr>
+<tr>
+<td>Show installed drivers released before 2020</td>
+<td><code>date:lt-01/01/2020</code> or <code>date:lty-2020</code></td>
+</tr>
+<tr>
+<td>Show installed drivers released in the month of September</td>
+<td><code>date:eqm-9</code></td>
+</tr>
+</tbody>
+</table>
 <h2 id="related-content">Related content</h2>
 <ul>
 <li><a href="infodlgs.html">Image information dialogs</a></li>

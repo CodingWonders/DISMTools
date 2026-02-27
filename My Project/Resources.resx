@@ -981,32 +981,82 @@ SET ID="de94bba4-06d1-4d40-a16a-bfd50179d6ac"
 GPT ATTRIBUTES=0x8000000000000001</value>
   </data>
   <data name="WhatsNew" xml:space="preserve">
-    <value>Bugfixes:
+    <value>Overall changes:
 
+-- Bugfixes
+
+- The unattended answer file creation wizard no longer goes to the Finish page when it can't find UnattendGen
+- Fixed an issue in the capability removal dialog where the incorrect items would be shown
+- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
+- Scaling issues have been fixed. The program should look nicer at 125% scaling
 - Fixed issues with recursive driver addition on Windows 8 hosts not working correctly
 - Fixed an issue where the PE Helper would not go back to the disk selection screen when pressing B
 - Fixed an issue where the image capture script would take longer to start the image capture process after having used the Sysprep Preparation Tool
 - To get "%TEMP%" more accurately, the PE Helper and its components now use .NET APIs as opposed to relying on "$env:TEMP"
 
-New features:
+-- New features
 
+- A menu option has been added to the DISMTools Preinstallation Environment to change the keyboard layout to use
+- Desktop background overrides have been implemented for the DISMTools Preinstallation Environment, so that you can give it your touch
+- The Driver Installation Module now has improved HiDPI awareness
+- CODE: the Driver Installation Module now uses modern C++ standards when using supported compilers
+- CODE: the build script of the Driver Installation Module no longer requires version 11 of the platform toolset (for VS2012) and fully uses version 19.5 (VS2026)
+- The PE Helper now lets you reload disk and partition listings
+- The WDS Helper client now lets you reload disk and partition listings, as well as the installation images and groups in the WDS server. It also performs validation of your input now
+- The PE Helper now supports partition table overrides
+- The Sysprep Preparation Tool has been updated to the latest release, with support for exporting and adding SCSI adapters and other storage controllers to the DT PE image, improved DPI handling, and more
+- The DISMTools Preinstallation Environment now contains a script to create boot entries depending on the system's firmware type
+- You can now access the DiskPart command line from the image capture script. You can also change the keyboard layout from that script. The image capture script will also append ".wim" to the destination file name if you hadn't given it a (valid) file extension
 - The PE Helper and the WDS Helper client now let you pick the EFI boot binary to use, whether it is the Microsoft Windows Production PCA 2011 or the Windows UEFI CA 2023 boot binary
-- HotInstall now detects the presence of the RAMDisk Options (`{ramdiskoptions}`) BCD object
-- PXE Helper Servers can now be started on Windows Server Core. Still, running DISMTools or any of its components on Server Core is not recommended
-- The Driver Installation Module now handles DPI scaling better
-- The Sysprep Preparation Tool has been updated
-- The Starter Script Editor now lets you import Batch and PowerShell script files to make them part of your starter script. It also lets you toggle word wrap, and you'll now see the position of the caret in the script code. It also handles DPI scaling much better
+- HotInstall now detects the presence of the RAMDisk Options ("{ramdiskoptions}") BCD object
+- PXE Helper Servers can now be started on Windows Server Core
+- The "Show File Extensions" starter script has been introduced
+- The "Display Bugcheck Parameters" starter script has been introduced
+- A new Starter Script Editor lets you easily create your own starter scripts
 - When configuring regional settings, you can now switch to Ireland (a EEA member) automatically
 - When browsing through starter scripts you can now export the script code so that you can use it anywhere
-- Services of types 80 and 96 are now shown as per-user services. User service flags will be shown for such types of services
-- Environment variables in the user scope now show on Windows PE images
-- You can now filter drivers by release date and signature status
+- When selecting a service host (svchost) group, services in that group are now sorted alphabetically by display name
+- Services of types 0x50 and 0x60 are now shown as per-user services. User service flags will be shown for such types of services
+- New search filters have been added to the driver information dialog when working with installed drivers. Check out the Help documentation to learn more about these filters
+- You can now save the HTML image information reports to any location
+- Custom property viewers in the package and feature information dialogs now follow user-preferred font settings
+- You can now search AppX package information when the extended AppX package getter is run
+- DISMTools now detects Windows PE images in disguise, such as Sergei Strelec's WinPE. These images spoof the edition IDs to resemble something else, such as "Professional". This makes DISM and any program that queries the edition ID think it's not a Windows PE image
+- When a background process fails, DISMTools will now continue running the remaining processes, as opposed to abruptly stopping them. After finishing, you can now see which failed and why
+- When mounting an image, you can now specify an ISO file. DISMTools will mount the ISO file and grab the installation images that you can use from it
+- DISMTools can now show you the names of the AppX packages that you see from your Start menu (*friendly display names*) when removing them
+- New search engines and engine modes are available, and you can now filter them based on how much you tolerate AI features in them
 - You can now import drivers from the online installation management mode
 - A script is now included to help you add drivers recursively on Windows NT 6.x systems (Windows Vista-8.1, including Server 2008-2012 R2)
 - You can now select items in the image index overview list of the image mount dialog to specify the image index
-- A new tool has been added to detect UEFI CA 2023 readiness
+- CODE: many item visualization procedures now use LINQ
+- The program now stores user-created data (themes, starter scripts, and DT PE backgrounds) in a safe location, so they're no longer deleted by updates
+- CODE: large parts of the codebase have been refactored to improve speed and reliability
+- Inno Setup has been updated to version 6.7
+- DISMTools now handles HiDPI displays much better
+- The managed DISM API has been updated to version 4.0.7
+- WindowsAPICodePack has been updated to version 8.0.14
 - Markdig has been updated to version 0.45.0
-- 7-Zip has been updated to version 26.00</value>
+- A new tool has been added to detect UEFI CA 2023 readiness
+
+- 7-Zip has been updated to version 26.00
+
+Changes made since last preview:
+
+-- Bugfixes
+
+- Fixed some visualization issues in the properties dialog if name and/or description fields were long enough
+- Fixed an issue where the WDS Helper Client would not remove the temporary "NetInstall" directory
+- The starter script editor now verifies extensions of scripts to import in a case-insensitive manner
+- Microsoft Windows Production PCA 2011 is now referred to correctly as such when performing UEFI CA 2023 readiness evaluation
+
+-- New features
+
+- App Installer packages that download standalone application packages are now supported
+- UEFI CA 2023 is now chosen as the default boot binary version when deploying an operating system with either the PE Helper or the WDS Helper Client
+- Starter scripts are now reloaded when closing the starter script editor
+- A script is now added to ISO files that allows you to automatically copy the boot image to your WDS server
+- The "Disable Drag Tray" starter script has been introduced</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

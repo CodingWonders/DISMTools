@@ -1274,6 +1274,7 @@
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Update Microsoft Store Apps.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Drag Tray.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Show Extensions for Known File Types.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Second Chance OOBE.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Windows Notification Sources.dtss" />
@@ -1281,6 +1282,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extbatch\cmdhelp.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extbatch\copy_cur_wallpaper_to_userdata.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extbatch\nt6_online_pnputil_recurse.bat">
@@ -1293,6 +1297,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\mImgMgr.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\boot_image_to_wds.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\dim_start\dimstart.bat">

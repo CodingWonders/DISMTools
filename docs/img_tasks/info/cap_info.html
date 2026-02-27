@@ -94,8 +94,6 @@
     <ul class="current">
     <li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a>
     </li>
-    <li class="toctree-l4"><a class="reference internal" href="#information-regarding-download-and-install-sizes">Information regarding download and install sizes</a>
-    </li>
     <li class="toctree-l4"><a class="reference internal" href="#additional-search-functionality">Additional search functionality</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#related-content">Related content</a>
@@ -257,6 +255,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Viewing diagnostic logs</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -299,9 +299,6 @@
 <li>When no capabilities are selected or when the dialog is launched for the first time in the execution of the program, you'll only see brief information about all capabilities, which includes the capability identity and its state</li>
 <li>To get information about a specific capability, <strong>select it from the list</strong>. You'll then see that information on the right</li>
 </ul>
-<h2 id="information-regarding-download-and-install-sizes">Information regarding download and install sizes</h2>
-<p>In DISMTools versions from the 0.3 series that support this action (0.3.1-0.3.3) have an issue where the download and install sizes could overflow, returning negative values. This issue is caused by the managed DISM API library. </p>
-<p>DISMTools 0.4 is not affected by this issue due to it having an updated version of that library that fixes this issue.</p>
 <h2 id="additional-search-functionality">Additional search functionality</h2>
 <p>With the state filter functionality introduced in DISMTools 0.6 you can get the information you want based on a capability's state. To filter capabilities by state, <strong>type <code>state:</code> and provide one of the following state values</strong>:</p>
 <ul>

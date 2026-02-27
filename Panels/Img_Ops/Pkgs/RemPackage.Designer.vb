@@ -29,23 +29,23 @@ Partial Class RemPackage
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.CheckedListBox2 = New System.Windows.Forms.CheckedListBox()
-        Me.CheckedListBox1 = New System.Windows.Forms.CheckedListBox()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
-        Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -134,6 +134,47 @@ Partial Class RemPackage
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Package removal"
         '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.CheckedListBox2)
+        Me.Panel2.Location = New System.Drawing.Point(42, 283)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(684, 118)
+        Me.Panel2.TabIndex = 6
+        '
+        'CheckedListBox2
+        '
+        Me.CheckedListBox2.CheckOnClick = True
+        Me.CheckedListBox2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckedListBox2.Enabled = False
+        Me.CheckedListBox2.FormattingEnabled = True
+        Me.CheckedListBox2.IntegralHeight = False
+        Me.CheckedListBox2.Location = New System.Drawing.Point(0, 0)
+        Me.CheckedListBox2.Name = "CheckedListBox2"
+        Me.CheckedListBox2.Size = New System.Drawing.Size(684, 118)
+        Me.CheckedListBox2.TabIndex = 1
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.CheckedListBox1)
+        Me.Panel1.Location = New System.Drawing.Point(42, 55)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(684, 171)
+        Me.Panel1.TabIndex = 5
+        '
+        'CheckedListBox1
+        '
+        Me.CheckedListBox1.CheckOnClick = True
+        Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.CheckedListBox1.FormattingEnabled = True
+        Me.CheckedListBox1.IntegralHeight = False
+        Me.CheckedListBox1.Location = New System.Drawing.Point(0, 0)
+        Me.CheckedListBox1.Name = "CheckedListBox1"
+        Me.CheckedListBox1.Size = New System.Drawing.Size(684, 171)
+        Me.CheckedListBox1.TabIndex = 1
+        '
         'Button1
         '
         Me.Button1.Enabled = False
@@ -173,27 +214,6 @@ Partial Class RemPackage
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "Package source:"
         '
-        'CheckedListBox2
-        '
-        Me.CheckedListBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckedListBox2.Enabled = False
-        Me.CheckedListBox2.FormattingEnabled = True
-        Me.CheckedListBox2.IntegralHeight = False
-        Me.CheckedListBox2.Location = New System.Drawing.Point(0, 0)
-        Me.CheckedListBox2.Name = "CheckedListBox2"
-        Me.CheckedListBox2.Size = New System.Drawing.Size(684, 118)
-        Me.CheckedListBox2.TabIndex = 1
-        '
-        'CheckedListBox1
-        '
-        Me.CheckedListBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckedListBox1.FormattingEnabled = True
-        Me.CheckedListBox1.IntegralHeight = False
-        Me.CheckedListBox1.Location = New System.Drawing.Point(0, 0)
-        Me.CheckedListBox1.Name = "CheckedListBox1"
-        Me.CheckedListBox1.Size = New System.Drawing.Size(684, 171)
-        Me.CheckedListBox1.TabIndex = 1
-        '
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
@@ -222,24 +242,6 @@ Partial Class RemPackage
         Me.FolderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = False
         '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.CheckedListBox1)
-        Me.Panel1.Location = New System.Drawing.Point(42, 55)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(684, 171)
-        Me.Panel1.TabIndex = 5
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.CheckedListBox2)
-        Me.Panel2.Location = New System.Drawing.Point(42, 283)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(684, 118)
-        Me.Panel2.TabIndex = 6
-        '
         'RemPackage
         '
         Me.AcceptButton = Me.OK_Button
@@ -264,8 +266,8 @@ Partial Class RemPackage
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

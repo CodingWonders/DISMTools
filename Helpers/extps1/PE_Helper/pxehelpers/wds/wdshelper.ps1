@@ -701,7 +701,8 @@ function Start-OSApplication {
         Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
         Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
         Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
-        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/N)"
+        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/n)"
+        if ($bootOptn -eq "") { $bootOptn = "Y" }
         $usebootex = ($bootOptn -eq "Y")
     }
 
@@ -779,6 +780,11 @@ function Start-OSApplication {
     if (Test-Path "$($driveLetter):\`$DISMTOOLS.~LS")
     {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
+    }
+
+    # NetInstall apparently isn't removed after this function ends, so we move it here.
+    if (Test-Path "$($driveLetter):\NetInstall") {
+        Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
     }
 
     New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter -bootEx $usebootex
