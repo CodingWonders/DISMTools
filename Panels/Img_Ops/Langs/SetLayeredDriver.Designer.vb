@@ -35,9 +35,11 @@ Partial Class SetLayeredDriverDialog
         Me.Label5 = New System.Windows.Forms.Label()
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.Label6 = New System.Windows.Forms.Label()
+        Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TableLayoutPanel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'TableLayoutPanel1
@@ -111,6 +113,8 @@ Partial Class SetLayeredDriverDialog
         '
         'Label2
         '
+        Me.Label2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label2.AutoEllipsis = True
         Me.Label2.Location = New System.Drawing.Point(12, 55)
         Me.Label2.Name = "Label2"
@@ -121,9 +125,10 @@ Partial Class SetLayeredDriverDialog
         'Label3
         '
         Me.Label3.AutoEllipsis = True
-        Me.Label3.Location = New System.Drawing.Point(36, 103)
+        Me.Label3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label3.Location = New System.Drawing.Point(3, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(202, 43)
+        Me.Label3.Size = New System.Drawing.Size(144, 38)
         Me.Label3.TabIndex = 10
         Me.Label3.Text = "Current keyboard layered driver:"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -131,9 +136,10 @@ Partial Class SetLayeredDriverDialog
         'Label4
         '
         Me.Label4.AutoEllipsis = True
-        Me.Label4.Location = New System.Drawing.Point(244, 103)
+        Me.Label4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Label4.Location = New System.Drawing.Point(153, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(345, 43)
+        Me.Label4.Size = New System.Drawing.Size(444, 38)
         Me.Label4.TabIndex = 11
         '
         'Label5
@@ -164,18 +170,31 @@ Partial Class SetLayeredDriverDialog
         Me.Label6.Text = "This driver has already been set"
         Me.Label6.Visible = False
         '
+        'TableLayoutPanel2
+        '
+        Me.TableLayoutPanel2.ColumnCount = 2
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.Label3, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.Label4, 1, 0)
+        Me.TableLayoutPanel2.Location = New System.Drawing.Point(12, 101)
+        Me.TableLayoutPanel2.Name = "TableLayoutPanel2"
+        Me.TableLayoutPanel2.RowCount = 1
+        Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(600, 38)
+        Me.TableLayoutPanel2.TabIndex = 14
+        '
         'SetLayeredDriverDialog
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(624, 241)
+        Me.Controls.Add(Me.TableLayoutPanel2)
         Me.Controls.Add(Me.ComboBox1)
         Me.Controls.Add(Me.Label6)
         Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Win10Title)
         Me.Controls.Add(Me.TableLayoutPanel1)
@@ -191,6 +210,7 @@ Partial Class SetLayeredDriverDialog
         Me.Win10Title.ResumeLayout(False)
         Me.Win10Title.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TableLayoutPanel2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -206,5 +226,6 @@ Partial Class SetLayeredDriverDialog
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
     Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents TableLayoutPanel2 As System.Windows.Forms.TableLayoutPanel
 
 End Class

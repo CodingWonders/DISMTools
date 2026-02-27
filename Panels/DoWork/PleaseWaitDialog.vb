@@ -7,16 +7,6 @@ Imports Microsoft.Dism
 
 Public Class PleaseWaitDialog
 
-    Public Sup_CommandArgs As String
-
-    ' OperationNum: 993
-    Public pkgSourceImgStr As String
-
-    Public featOpType As Integer    ' 0: enable; 1: disable
-
-    ' OperationNum: 994
-    Public featSourceImg As String
-
     ' OperationNum: 995
     Public indexesSourceImg As String
     Public imgIndexes As Integer
@@ -36,7 +26,7 @@ Public Class PleaseWaitDialog
                 Label1.Visible = False
                 Label2.TextAlign = ContentAlignment.MiddleCenter
                 Label2.Location = New Point(8, 8)
-                Label2.Size = New Size(343, 43)
+                Label2.Size = New Size(WindowHelper.ScaleLogical(343), WindowHelper.ScaleLogical(43))
                 Label2.Font = New Font("Segoe UI", 11.25)
         End Select
         Select Case MainForm.Language

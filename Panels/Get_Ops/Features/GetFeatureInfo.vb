@@ -6,7 +6,6 @@ Imports DISMTools.Utilities
 
 Public Class GetFeatureInfoDlg
 
-    Public InstalledFeatureInfo As DismFeatureCollection
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetFeatureInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -21,6 +20,7 @@ Public Class GetFeatureInfoDlg
         ListView1.ForeColor = ForeColor
         cPropPathView.ForeColor = ForeColor
         cPropValue.ForeColor = ForeColor
+        cPropValue.Font = New Font(MainForm.LogFont, MainForm.LogFontSize, If(MainForm.LogFontIsBold, FontStyle.Bold, FontStyle.Regular))
         SearchPic.Image = GetGlyphResource("search")
         Select Case MainForm.Language
             Case 0
@@ -191,8 +191,11 @@ Public Class GetFeatureInfoDlg
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        If SplitContainer2.SplitterDistance = 440 Then
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
@@ -200,10 +203,14 @@ Public Class GetFeatureInfoDlg
         DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting features...")
-        For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-        Next
+        If MainForm.CurrentImage.ImageFeatures Is Nothing OrElse MainForm.CurrentImage.ImageFeatures.Count = 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures_Backup.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.FeatureState, True)})).ToArray())
+        Else
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
+        End If
         SearchBox1.Text = ""
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -569,7 +576,7 @@ Public Class GetFeatureInfoDlg
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If MainForm.ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving feature information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
@@ -581,7 +588,8 @@ Public Class GetFeatureInfoDlg
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 4
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
@@ -612,14 +620,18 @@ Public Class GetFeatureInfoDlg
                     expectedFeatureState = DismPackageFeatureState.PartiallyInstalled
             End Select
         End If
-        If InstalledFeatureInfo.Count > 0 Then
-            Dim finalFeatureLookup = InstalledFeatureInfo.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+        If MainForm.CurrentImage.ImageFeatures Is Nothing OrElse MainForm.CurrentImage.ImageFeatures.Count = 0 Then
+            Dim finalFeatureLookup As IEnumerable(Of ImageFeature) = MainForm.CurrentImage.ImageFeatures_Backup.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If featureState <> "" Then      ' We filter them again based on the state
+                finalFeatureLookup = finalFeatureLookup.Where(Function(feature) feature.FeatureState = expectedFeatureState)
+            End If
+            ListView1.Items.AddRange(finalFeatureLookup.Select(Function(filteredFeature) New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.FeatureState, True)})).ToArray())
+        Else
+            Dim finalFeatureLookup As IEnumerable(Of DismFeature) = MainForm.CurrentImage.ImageFeatures.Where(Function(feature) feature.FeatureName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
             If featureState <> "" Then      ' We filter them again based on the state
                 finalFeatureLookup = finalFeatureLookup.Where(Function(feature) feature.State = expectedFeatureState)
             End If
-            For Each filteredFeature In finalFeatureLookup
-                ListView1.Items.Add(New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)}))
-            Next
+            ListView1.Items.AddRange(finalFeatureLookup.Select(Function(filteredFeature) New ListViewItem(New String() {filteredFeature.FeatureName, Casters.CastDismFeatureState(filteredFeature.State, True)})).ToArray())
         End If
     End Sub
 
@@ -634,9 +646,11 @@ Public Class GetFeatureInfoDlg
             End If
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledFeature As DismFeature In InstalledFeatureInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)}))
-            Next
+            If MainForm.CurrentImage.ImageFeatures Is Nothing OrElse MainForm.CurrentImage.ImageFeatures.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures_Backup.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.FeatureState, True)})).ToArray())
+            Else
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageFeatures.Select(Function(InstalledFeature) New ListViewItem(New String() {InstalledFeature.FeatureName, Casters.CastDismFeatureState(InstalledFeature.State, True)})).ToArray())
+            End If
         End If
     End Sub
 

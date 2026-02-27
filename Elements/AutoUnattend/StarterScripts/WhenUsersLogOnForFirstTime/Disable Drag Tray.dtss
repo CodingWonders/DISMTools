@@ -1,0 +1,10 @@
+﻿Language: Batch
+Name: Disable Drag Tray
+Description: This script disables the Drag Tray feature introduced with the latest builds of Windows 11 24H2 and 25H2 
+
+@echo off
+
+REM This script turns off the drag tray of 24H2 and 25H2. This will not
+REM do anything on 23H2 and earlier. You can re-enable the drag tray by
+REM going to Settings -> System -> Nearby sharing.
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CDP" /f /v DragTrayEnabled /t REG_DWORD /d 0

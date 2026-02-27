@@ -25,7 +25,7 @@ Public Class ImgSwmToWim
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -33,7 +33,7 @@ Public Class ImgSwmToWim
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        SaveFileDialog1.ShowDialog()
+        SaveFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
@@ -244,8 +244,13 @@ Public Class ImgSwmToWim
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(44)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(256)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(128)
     End Sub
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
@@ -265,9 +270,7 @@ Public Class ImgSwmToWim
                 Dim imgInfoCollection As DismImageInfoCollection = DismApi.GetImageInfo(TextBox1.Text)
                 DynaLog.LogMessage("Information collection count: " & imgInfoCollection.Count)
                 NumericUpDown1.Maximum = imgInfoCollection.Count
-                For Each imgInfo As DismImageInfo In imgInfoCollection
-                    ListView1.Items.Add(New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()}))
-                Next
+                ListView1.Items.AddRange(imgInfoCollection.Select(Function(imgInfo) New ListViewItem(New String() {imgInfo.ImageIndex, imgInfo.ImageName, imgInfo.ImageDescription, imgInfo.ProductVersion.ToString()})).ToArray())
             Catch ex As Exception
                 DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
                 MsgBox("Could not get index information for this image file", vbOKOnly + vbCritical, Label1.Text)

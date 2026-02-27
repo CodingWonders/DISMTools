@@ -1,4 +1,4 @@
-![Product image](https://github.com/CodingWonders/DISMTools/blob/stable/res/product_overview.png)
+![Product image](./res/product_overview.png)
 
 <!-- Tags (powered by Shields.io) -->
 
@@ -275,9 +275,9 @@ If you want to contribute to this project, you can do so in many ways:
 
 ## Testing the latest
 
-We continue the development of the next version in the Preview branch. To go to it, select "dt_pre_0.7.2" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
+We continue the development of the next version in the Preview branch. To go to it, select "dt_pre_0.7.3" from the branch list. Commits are done every day, and new builds are released every 2 weeks.
 
-<!-- **NOTE:** this branch contains release candidate builds of DISMTools 0.7.2, and will be deleted once this version gets published as a stable release -->
+**NOTE:** this branch contains release candidate builds of DISMTools 0.7.3, and will be deleted once this version gets published as a stable release
 
 ## Stay in touch
 

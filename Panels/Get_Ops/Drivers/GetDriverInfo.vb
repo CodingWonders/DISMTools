@@ -8,7 +8,6 @@ Imports DISMTools.Utilities
 Public Class GetDriverInfo
 
     Dim DriverInfoList As New List(Of DismDriverCollection)
-    Public InstalledDriverInfo As DismDriverPackageCollection
     Dim InstalledDriverList As New List(Of DismDriverPackage)
     Dim SearchedDriverList As New List(Of DismDriverPackage)
 
@@ -16,9 +15,21 @@ Public Class GetDriverInfo
     Dim CurrentHWFile As Integer = -1        ' This variable gets updated every time an element is selected in the driver packages list box
     Dim JumpTo As Integer = -1               ' This variable gets updated every time a target is specified in the Jump To panel
 
-    Dim ButtonTT As New ToolTip()
-
     Dim IsInDrvPkgs As Boolean
+
+    Enum SearchMode As Integer
+        OriginalFileName
+        ProviderName
+        ClassName
+        NoInBox
+        InBox
+        NoBootCritical
+        BootCritical
+        DateField
+        NotSigned
+        Signed
+        None
+    End Enum
 
     Private Sub GetDriverInfo_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Select Case MainForm.Language
@@ -488,18 +499,24 @@ Public Class GetDriverInfo
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        If SplitContainer1.SplitterDistance = 440 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DynaLog.LogMessage("Updating items in list...")
         InstalledDriverList.Clear()
         SearchedDriverList.Clear()
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting installed drivers...")
-        If InstalledDriverInfo.Count > 0 Then
-            For Each DriverPackage As DismDriverPackage In InstalledDriverInfo
-                InstalledDriverList.Add(DriverPackage)
-                ListView1.Items.Add(New ListViewItem(New String() {DriverPackage.PublishedName, Path.GetFileName(DriverPackage.OriginalFileName)}))
-            Next
+        If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
+            SearchPanel.Visible = False
+        Else
+            InstalledDriverList.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) driver))
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            SearchPanel.Visible = True
         End If
 
         ' Detect if the "Detect all drivers" option is checked and act accordingly
@@ -518,10 +535,12 @@ Public Class GetDriverInfo
         NoDrvPanel.Visible = True
 
         SearchBox1.Text = ""
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(188)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(220)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -741,74 +760,71 @@ Public Class GetDriverInfo
         DynaLog.LogMessage("Selected Hardware Target: " & HWTarget)
         Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
         DynaLog.LogMessage("Driver collection has " & CurrentDriverCollection.Count & " hardware target(s) available.")
-        For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
-            If CurrentDriverCollection.IndexOf(DriverPackageInfo) = HWTarget - 1 Then
-                DynaLog.LogMessage("We have the appropriate hardware target. Displaying information...")
-                Label9.Text = DriverPackageInfo.HardwareDescription
-                Label11.Text = DriverPackageInfo.HardwareId
-                Label14.Text = DriverPackageInfo.CompatibleIds
-                Label15.Text = DriverPackageInfo.ExcludeIds
-                Label18.Text = DriverPackageInfo.ManufacturerName
-                Label19.Text = Casters.CastDismArchitecture(DriverPackageInfo.Architecture, True)
-                If Label14.Text = "" Then
-                    DynaLog.LogMessage("There are no Compatible IDs declared by the device manufacturer (" & Quote & DriverPackageInfo.ManufacturerName & Quote & ")")
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label14.Text = "None declared by the hardware manufacturer"
-                                Case "ESN"
-                                    Label14.Text = "Ninguno declarado por el fabricante del hardware"
-                                Case "FRA"
-                                    Label14.Text = "Aucune déclarée par le fabricant du matériel"
-                                Case "PTB", "PTG"
-                                    Label14.Text = "Nenhum declarado pelo fabricante do hardware"
-                                Case "ITA"
-                                    Label14.Text = "Nessuno dichiarato dal produttore hardware"
-                            End Select
-                        Case 1
+        Dim selectedDriver As DismDriver = CurrentDriverCollection.ElementAtOrDefault(HWTarget - 1)
+        If selectedDriver Is Nothing Then Exit Sub
+        DynaLog.LogMessage("We have the appropriate hardware target. Displaying information...")
+        Label9.Text = selectedDriver.HardwareDescription
+        Label11.Text = selectedDriver.HardwareId
+        Label14.Text = selectedDriver.CompatibleIds
+        Label15.Text = selectedDriver.ExcludeIds
+        Label18.Text = selectedDriver.ManufacturerName
+        Label19.Text = Casters.CastDismArchitecture(selectedDriver.Architecture, True)
+        If Label14.Text = "" Then
+            DynaLog.LogMessage("There are no Compatible IDs declared by the device manufacturer (" & Quote & selectedDriver.ManufacturerName & Quote & ")")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
                             Label14.Text = "None declared by the hardware manufacturer"
-                        Case 2
+                        Case "ESN"
                             Label14.Text = "Ninguno declarado por el fabricante del hardware"
-                        Case 3
+                        Case "FRA"
                             Label14.Text = "Aucune déclarée par le fabricant du matériel"
-                        Case 4
+                        Case "PTB", "PTG"
                             Label14.Text = "Nenhum declarado pelo fabricante do hardware"
-                        Case 5
+                        Case "ITA"
                             Label14.Text = "Nessuno dichiarato dal produttore hardware"
                     End Select
-                End If
-                If Label15.Text = "" Then
-                    DynaLog.LogMessage("There are no Exclude IDs declared by the device manufacturer (" & Quote & DriverPackageInfo.ManufacturerName & Quote & ")")
-                    Select Case MainForm.Language
-                        Case 0
-                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                Case "ENU", "ENG"
-                                    Label15.Text = "None declared by the hardware manufacturer"
-                                Case "ESN"
-                                    Label15.Text = "Ninguno declarado por el fabricante del hardware"
-                                Case "FRA"
-                                    Label15.Text = "Aucune déclarée par le fabricant du matériel"
-                                Case "PTB", "PTG"
-                                    Label15.Text = "Nenhum declarado pelo fabricante do hardware"
-                                Case "ITA"
-                                    Label15.Text = "Nessuno dichiarato dal produttore hardware"
-                            End Select
-                        Case 1
+                Case 1
+                    Label14.Text = "None declared by the hardware manufacturer"
+                Case 2
+                    Label14.Text = "Ninguno declarado por el fabricante del hardware"
+                Case 3
+                    Label14.Text = "Aucune déclarée par le fabricant du matériel"
+                Case 4
+                    Label14.Text = "Nenhum declarado pelo fabricante do hardware"
+                Case 5
+                    Label14.Text = "Nessuno dichiarato dal produttore hardware"
+            End Select
+        End If
+        If Label15.Text = "" Then
+            DynaLog.LogMessage("There are no Exclude IDs declared by the device manufacturer (" & Quote & selectedDriver.ManufacturerName & Quote & ")")
+            Select Case MainForm.Language
+                Case 0
+                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                        Case "ENU", "ENG"
                             Label15.Text = "None declared by the hardware manufacturer"
-                        Case 2
+                        Case "ESN"
                             Label15.Text = "Ninguno declarado por el fabricante del hardware"
-                        Case 3
+                        Case "FRA"
                             Label15.Text = "Aucune déclarée par le fabricant du matériel"
-                        Case 4
+                        Case "PTB", "PTG"
                             Label15.Text = "Nenhum declarado pelo fabricante do hardware"
-                        Case 5
+                        Case "ITA"
                             Label15.Text = "Nessuno dichiarato dal produttore hardware"
                     End Select
-                End If
-                Exit For
-            End If
-        Next
+                Case 1
+                    Label15.Text = "None declared by the hardware manufacturer"
+                Case 2
+                    Label15.Text = "Ninguno declarado por el fabricante del hardware"
+                Case 3
+                    Label15.Text = "Aucune déclarée par le fabricant du matériel"
+                Case 4
+                    Label15.Text = "Nenhum declarado pelo fabricante do hardware"
+                Case 5
+                    Label15.Text = "Nessuno dichiarato dal produttore hardware"
+            End Select
+        End If
     End Sub
 
     Sub DisplayHardwareTargetOverview()
@@ -823,9 +839,7 @@ Public Class GetDriverInfo
             ComboBox1.Text = ""
             Dim CurrentDriverCollection As DismDriverCollection = DriverInfoList(ListBox1.SelectedIndex)
             DynaLog.LogMessage("Showing " & CurrentDriverCollection.Count & " entry/ies...")
-            For Each DriverPackageInfo As DismDriver In CurrentDriverCollection
-                ComboBox1.Items.Add(CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1 & " - " & DriverPackageInfo.HardwareDescription & " (" & DriverPackageInfo.HardwareId & ")")
-            Next
+            ComboBox1.Items.AddRange(CurrentDriverCollection.Select(Function(DriverPackageInfo) String.Format("{0} - {1} ({2})", CurrentDriverCollection.IndexOf(DriverPackageInfo) + 1, DriverPackageInfo.HardwareDescription, DriverPackageInfo.HardwareId)).ToArray())
         End If
     End Sub
 
@@ -837,11 +851,7 @@ Public Class GetDriverInfo
 
     Private Sub ListBox1_DragDrop(sender As Object, e As DragEventArgs) Handles ListBox1.DragDrop
         Dim PackageFiles() As String = e.Data.GetData(DataFormats.FileDrop)
-        For Each PackageFile In PackageFiles
-            If Path.GetExtension(PackageFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase) Then
-                ListBox1.Items.Add(PackageFile)
-            End If
-        Next
+        ListBox1.Items.AddRange(PackageFiles.Where(Function(PackageFile) Path.GetExtension(PackageFile).EndsWith("inf", StringComparison.OrdinalIgnoreCase)).Select(Function(PackageFile) PackageFile).ToArray())
         Button3.Enabled = True
         Button8.Enabled = True
         GetDriverInformation()
@@ -1037,7 +1047,7 @@ Public Class GetDriverInfo
             Case 5
                 msg = "Destinazione hardware precedente"
         End Select
-        ButtonTT.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 
     Private Sub Button5_MouseHover(sender As Object, e As EventArgs) Handles Button5.MouseHover
@@ -1067,7 +1077,7 @@ Public Class GetDriverInfo
             Case 5
                 msg = "Destinazione hardware sucecssiva"
         End Select
-        ButtonTT.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 
     Private Sub Button6_MouseHover(sender As Object, e As EventArgs) Handles Button6.MouseHover
@@ -1097,7 +1107,7 @@ Public Class GetDriverInfo
             Case 5
                 msg = "Salta ad una destinazione hardware specifica"
         End Select
-        ButtonTT.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -1244,7 +1254,11 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Label25_MouseHover(sender As Object, e As EventArgs) Handles Label25.MouseHover
-        ButtonTT.SetToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        If SearchBox1.Text = "" Then
+            WindowHelper.DisplayToolTip(sender, InstalledDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        Else
+            WindowHelper.DisplayToolTip(sender, SearchedDriverList(ListView1.FocusedItem.Index).OriginalFileName)
+        End If
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
@@ -1254,7 +1268,7 @@ Public Class GetDriverInfo
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If MainForm.ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving installed device driver information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             If ImgInfoSaveDlg.DriverPkgs.Count > 0 Then ImgInfoSaveDlg.DriverPkgs.Clear()
@@ -1273,29 +1287,97 @@ Public Class GetDriverInfo
                     If File.Exists(drvFile) Then ImgInfoSaveDlg.DriverPkgs.Add(drvFile)
                 Next
             End If
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button9_Click(sender As Object, e As EventArgs) Handles Button9.Click
-        DriverFileInfoDlg.ShowDialog()
+        DriverFileInfoDlg.ShowDialog(Me)
     End Sub
 
-    Sub SearchDrivers(sQuery As String, OriginalNames As Boolean)
+    Sub SearchDrivers(sQuery As String, Optional driverSearchMode As SearchMode = SearchMode.None)
         DynaLog.LogMessage("Search query: " & sQuery)
-        DynaLog.LogMessage("Will original file names be searched instead of published names? " & If(OriginalNames, "Yes", "No"))
-        If InstalledDriverInfo.Count > 0 Then
-            Dim FilteredDrivers
-            If OriginalNames Then
-                FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
-            Else
-                FilteredDrivers = InstalledDriverInfo.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+        If MainForm.CurrentImage.ImageDrivers Is Nothing Then Exit Sub
+        If MainForm.CurrentImage.ImageDrivers.Count > 0 Then
+            Dim FilteredDrivers As IEnumerable(Of DismDriverPackage) = Nothing
+            Select Case driverSearchMode
+                Case SearchMode.OriginalFileName
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Path.GetFileName(Driver.OriginalFileName).ToLower().Contains(sQuery.Replace("og:", "").ToLower()))
+                Case SearchMode.ProviderName
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ProviderName.ToLower().Contains(sQuery.Replace("prov:", "").ToLower()))
+                Case SearchMode.ClassName
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.ClassName.ToLower().Contains(sQuery.Replace("classname:", "").Replace("cn:", "").ToLower()))
+                Case SearchMode.InBox
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.InBox)
+                Case SearchMode.NoInBox
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.InBox)
+                Case SearchMode.BootCritical
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.BootCritical)
+                Case SearchMode.NoBootCritical
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Not Driver.BootCritical)
+                Case SearchMode.DateField
+                    ' We guess the SUBMODE by the operator used
+                    Try
+                        Dim dateComparatorFormats() As String = {"dd/MM/yyyy", "dd/M/yyyy", "d/M/yyyy", "d/MM/yyyy", "dd/MM/yy", "dd/M/yy", "d/M/yy", "d/MM/yy"}
+
+                        Dim fullField As String = sQuery.Replace("date:", "")
+                        ' Syntax: Operator-Field
+                        Dim fieldParts() As String = fullField.Split("-")
+                        Dim searchOperator As String = fieldParts(0),
+                            field As String = If(fieldParts.ElementAtOrDefault(1), "")
+                        Dim convertedField As Object = Nothing
+                        If {"eq", "ne", "gt", "ge", "lt", "le"}.Contains(searchOperator.ToLower()) Then
+                            ' Perform date conversion
+                            If Not Date.TryParseExact(field, dateComparatorFormats, Nothing, Globalization.DateTimeStyles.None, convertedField) Then
+                                convertedField = New Date(1970, 1, 1, 0, 0, 0)
+                            End If
+                        Else
+                            ' Perform integer conversion
+                            If Not Integer.TryParse(field, convertedField) Then
+                                If searchOperator.EndsWith("y", StringComparison.OrdinalIgnoreCase) Then
+                                    convertedField = 1970
+                                Else
+                                    convertedField = 1
+                                End If
+                            End If
+                        End If
+                        Select Case searchOperator.ToLower()
+                            Case "eqy" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year = CInt(convertedField))
+                            Case "eqm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month = CInt(convertedField))
+                            Case "eq" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date = CType(convertedField, Date))
+                            Case "ney" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year <> CInt(convertedField))
+                            Case "nem" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month <> CInt(convertedField))
+                            Case "ne" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date <> CType(convertedField, Date))
+                            Case "gty" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year > CInt(convertedField))
+                            Case "gtm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month > CInt(convertedField))
+                            Case "gt" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date > CType(convertedField, Date))
+                            Case "gey" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year >= CInt(convertedField))
+                            Case "gem" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month >= CInt(convertedField))
+                            Case "ge" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date >= CType(convertedField, Date))
+                            Case "lty" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year < CInt(convertedField))
+                            Case "ltm" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month < CInt(convertedField))
+                            Case "lt" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date < CType(convertedField, Date))
+                            Case "ley" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Year <= CInt(convertedField))
+                            Case "lem" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date.Month <= CInt(convertedField))
+                            Case "le" : FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.Date <= CType(convertedField, Date))
+                            Case Else : Throw New Exception()
+                        End Select
+                    Catch ex As Exception
+                        FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+                    End Try
+                Case SearchMode.NotSigned
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature <> DismDriverSignature.Signed)
+                Case SearchMode.Signed
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.DriverSignature = DismDriverSignature.Signed)
+                Case Else
+                    FilteredDrivers = MainForm.CurrentImage.ImageDrivers.Where(Function(Driver) Driver.PublishedName.ToLower().Contains(sQuery.ToLower()))
+            End Select
+            If FilteredDrivers IsNot Nothing Then
+                ListView1.Items.AddRange(FilteredDrivers.Select(Function(FilteredDriver) New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)})).ToArray())
+                SearchedDriverList.AddRange(FilteredDrivers.Select(Function(FilteredDriver) FilteredDriver))
             End If
-            For Each FilteredDriver As DismDriverPackage In FilteredDrivers
-                ListView1.Items.Add(New ListViewItem(New String() {FilteredDriver.PublishedName, Path.GetFileName(FilteredDriver.OriginalFileName)}))
-                SearchedDriverList.Add(FilteredDriver)
-            Next
         End If
     End Sub
 
@@ -1303,12 +1385,39 @@ Public Class GetDriverInfo
         ListView1.Items.Clear()
         SearchedDriverList.Clear()
         If SearchBox1.Text <> "" Then
-            SearchDrivers(SearchBox1.Text, SearchBox1.Text.StartsWith("og:", StringComparison.OrdinalIgnoreCase))
+            Dim modeToUse As SearchMode
+            If SearchBox1.Text.StartsWith("og:") Then
+                modeToUse = SearchMode.OriginalFileName
+            ElseIf SearchBox1.Text.StartsWith("prov:") Then
+                modeToUse = SearchMode.ProviderName
+            ElseIf SearchBox1.Text.StartsWith("classname:") Or SearchBox1.Text.StartsWith("cn:") Then
+                modeToUse = SearchMode.ClassName
+            ElseIf SearchBox1.Text.StartsWith("inbox:") Then
+                modeToUse = SearchMode.InBox
+            ElseIf SearchBox1.Text.StartsWith("noinbox:") Then
+                modeToUse = SearchMode.NoInBox
+            ElseIf SearchBox1.Text.StartsWith("bc:") Then
+                modeToUse = SearchMode.BootCritical
+            ElseIf SearchBox1.Text.StartsWith("nobc:") Then
+                modeToUse = SearchMode.NoBootCritical
+            ElseIf SearchBox1.Text.StartsWith("date:") Then
+                modeToUse = SearchMode.DateField
+            ElseIf SearchBox1.Text.StartsWith("nosig:") Then
+                modeToUse = SearchMode.NotSigned
+            ElseIf SearchBox1.Text.StartsWith("sig:") Then
+                modeToUse = SearchMode.Signed
+            Else
+                modeToUse = SearchMode.None
+            End If
+            SearchDrivers(SearchBox1.Text, modeToUse)
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledDriver As DismDriverPackage In InstalledDriverInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledDriver.PublishedName, Path.GetFileName(InstalledDriver.OriginalFileName)}))
-            Next
+            If MainForm.CurrentImage.ImageDrivers Is Nothing OrElse MainForm.CurrentImage.ImageDrivers.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers_Backup.Select(Function(driver) New ListViewItem(New String() {driver.DriverPublishedName, Path.GetFileName(driver.DriverOriginalFileName)})).ToArray())
+            Else
+                InstalledDriverList.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) driver))
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageDrivers.Select(Function(driver) New ListViewItem(New String() {driver.PublishedName, Path.GetFileName(driver.OriginalFileName)})).ToArray())
+            End If
         End If
     End Sub
 

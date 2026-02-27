@@ -2,7 +2,7 @@
 //                                         .'^""""""^.            
 //      '^`'.                            '^"""""""^.              
 //     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-//      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+//      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
 //       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 //         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 //            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Driver Installation Module (DIM)	      |
@@ -27,7 +27,12 @@
 
 #include "DT-DIM.h"
 
-enum installationStatus {
+// You will find that certain lines or blocks of code have preprocessor conditions set. This is to
+// keep compatibility with older versions of Visual Studio, whose MSVC compilers don't comply with C++
+// standards (eg: constexpr appeared in C++11 yet VS2012 MSVC does not support it.) The lower threshold
+// for modern C++ standards is MSVC v19.5, in VS2026.
+
+enum installationStatus : int8_t {
     // The device driver has been added to the queue and is ready to be installed
     ReadyToInstall = 0,
     // The device driver is being installed
@@ -39,6 +44,8 @@ enum installationStatus {
     // The status of the device driver could not be obtained
     StatusUnknown = 4
 };
+
+float dpiMultiplier = 0.f;
 
 std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const wchar_t* valueName) {
     HKEY hKey;
@@ -62,8 +69,12 @@ std::wstring GetRegistryValue(HWND hwnd, HKEY key, const wchar_t* subKey, const 
     return result;
 }
 
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR lpCmdLine, int nShowCmd) {
+#if (_MSC_VER < 1950)
     const wchar_t CLASS_NAME[] = L"Driver Installation Module";
+#else
+    constexpr wchar_t CLASS_NAME[] = L"Driver Installation Module";
+#endif
 
     WNDCLASS wc = {};
     wc.lpfnWndProc = WindowProc;
@@ -79,24 +90,48 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
     MONITORINFO monInfo = { sizeof(monInfo) };
     GetMonitorInfo(hMon, &monInfo);
 
+#if (_MSC_VER >= 1950)
+    SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+#endif
+    SetProcessDPIAware();
+
     int WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - 640) / 2;
     int WndY = monInfo.rcMonitor.top + ((monInfo.rcMonitor.bottom - monInfo.rcMonitor.top) - 400) / 2;
 
     HWND hwnd = CreateWindowEx(0, CLASS_NAME, L"Driver Installation Module", 
                                WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX),
-                               WndX, WndY, 640, 400, NULL, NULL, hInstance, NULL);
+                               WndX, WndY, 640, 400, nullptr, nullptr, hInstance, nullptr);
 
-    HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
-    SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)icon);
+    UINT dpiX = 0;
 
-    if (hwnd == NULL) {
+    dpiX = GetDpiForWindow(hwnd);
+    dpiMultiplier = (dpiX / 96.f);
+    if (dpiMultiplier <= 0) {
+        // If we couldn't grab the DPI multiplier we set it to 1
+        dpiMultiplier = 1;
+    }
+
+    HICON icon = LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_ICON1));
+    SendMessage(hwnd, WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
+
+    if (hwnd == nullptr) {
         return 0;
     }
 
-    ShowWindow(hwnd, nCmdShow);
+    RECT rc = { 0, 0, 640.f * dpiMultiplier, 400.f * dpiMultiplier };
+    AdjustWindowRectEx(&rc, GetWindowLong(hwnd, GWL_STYLE), FALSE, GetWindowLong(hwnd, GWL_EXSTYLE));
+    WndX = monInfo.rcMonitor.left + ((monInfo.rcMonitor.right - monInfo.rcMonitor.left) - (640.f * dpiMultiplier)) / 2;
+    WndY = monInfo.rcMonitor.top + ((monInfo.rcMonitor.bottom - monInfo.rcMonitor.top) - (400.f * dpiMultiplier)) / 2;
+
+    SetWindowPos(hwnd, nullptr, WndX, WndY, 
+                 rc.right - abs(rc.left), 
+                 (rc.bottom - abs(rc.top) < 400 ? 400 : rc.bottom - abs(rc.top)), 
+                 SWP_NOMOVE | SWP_NOZORDER);
+
+    ShowWindow(hwnd, nShowCmd);
 
     MSG msg = {};
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
@@ -104,8 +139,27 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow) {
     return 0;
 }
 
+static float GetDpiMultiplier(HWND window) {
+    float dpiMult = 0.f;
+
+    UINT dpiX = 0;
+
+    dpiX = GetDpiForWindow(window);
+    dpiMult = (dpiX / 96.f);
+    if (dpiMult <= 0) {
+        // If we couldn't grab the DPI multiplier we set it to 1
+        dpiMult = 1;
+    }
+
+    return dpiMult;
+}
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    // ReSharper disable CppEntityAssignedButNoRead
     static HWND hwndList, hAddButton, hEditButton, hRemoveButton, hInstallButton, hExitButton, hAboutButton, hInstructionLabel;
+    // ReSharper restore CppEntityAssignedButNoRead
+
+    dpiMultiplier = GetDpiMultiplier(hwnd);
 
     switch (uMsg) {
         case WM_CREATE: {
@@ -113,7 +167,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             hwndList = CreateWindow(WC_LISTVIEW, L"",
                                     WS_CHILD | WS_VISIBLE | LVS_REPORT,
-                                    10, 10, 600, 274, hwnd, (HMENU)IDC_DRIVER_LIST, NULL, NULL);
+                                    10, 10, 600.f * dpiMultiplier, 274.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_DRIVER_LIST), nullptr, nullptr);
 
             // Set some more styles
             DWORD lvStyles = ListView_GetExtendedListViewStyle(hwndList);
@@ -122,35 +176,35 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             LVCOLUMN lvColumn;
             lvColumn.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
-            lvColumn.cx = 384;
+            lvColumn.cx = 384.f * dpiMultiplier;
             lvColumn.pszText = L"Path";
             ListView_InsertColumn(hwndList, 0, &lvColumn);
 
-            lvColumn.cx = 150;
+            lvColumn.cx = 150.f * dpiMultiplier;
             lvColumn.pszText = L"Status";
             ListView_InsertColumn(hwndList, 1, &lvColumn);
 
             hAddButton = CreateWindow(L"BUTTON", L"Add...", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                      10, 320, 100, 30, hwnd, (HMENU)IDC_ADD_BUTTON, NULL, NULL);
+                                      10, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_ADD_BUTTON), nullptr, nullptr);
 
             hEditButton = CreateWindow(L"BUTTON", L"Change...", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                       120, 320, 100, 30, hwnd, (HMENU)IDC_EDIT_BUTTON, NULL, NULL);
+                                       120.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_EDIT_BUTTON), nullptr, nullptr);
 
             hRemoveButton = CreateWindow(L"BUTTON", L"Remove", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                         230, 320, 100, 30, hwnd, (HMENU)IDC_REMOVE_BUTTON, NULL, NULL);
+                                         230.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_REMOVE_BUTTON), nullptr, nullptr);
 
             hInstallButton = CreateWindow(L"BUTTON", L"Install", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                          340, 320, 100, 30, hwnd, (HMENU)IDC_INSTALL_BUTTON, NULL, NULL);
+                                          340.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_INSTALL_BUTTON), nullptr, nullptr);
 
             hExitButton = CreateWindow(L"BUTTON", L"Exit", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
-                                       450, 320, 100, 30, hwnd, (HMENU)IDC_EXIT_BUTTON, NULL, NULL);
+                                       450.f * dpiMultiplier, 320.f * dpiMultiplier, 100.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_EXIT_BUTTON), nullptr, nullptr);
 
             hAboutButton = CreateWindow(L"BUTTON", L"i", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON, 
-                                        560, 320, 48, 30, hwnd, (HMENU)IDC_ABOUT_BUTTON, NULL, NULL);
+                                        560.f * dpiMultiplier, 320.f * dpiMultiplier, 48.f * dpiMultiplier, 30.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(IDC_ABOUT_BUTTON), nullptr, nullptr);
 
             hInstructionLabel = CreateWindowEx(WS_EX_TRANSPARENT, L"static", L"ST_U", 
                 WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-                10, 298, 600, 16, hwnd, (HMENU)(501), (HINSTANCE)GetWindowLong(hwnd, GWLP_HINSTANCE), NULL);
+                10, 298.f * dpiMultiplier, 600.f * dpiMultiplier, 16.f * dpiMultiplier, hwnd, reinterpret_cast<HMENU>(501), reinterpret_cast<HINSTANCE>(GetWindowLong(hwnd, GWLP_HINSTANCE)), nullptr);
 
             UpdateInstructionLabel(hInstructionLabel, INSTR_DRIVER_BEGIN);
 
@@ -163,20 +217,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             break;
         }
         case WM_ERASEBKGND: {
-            HDC hdc = (HDC)wParam;
+            HDC hdc = reinterpret_cast<HDC>(wParam);
             RECT rect;
             GetClientRect(hwnd, &rect);
             HBRUSH hBrush = CreateSolidBrush(RGB(255, 255, 255)); // Create a white brush
             FillRect(hdc, &rect, hBrush); // Fill the background with the white brush
             DeleteObject(hBrush); // Delete the brush to release resources
-            return (LRESULT)1; // Indicate that background has been handled
-            break;
+            return 1; // Indicate that background has been handled
         }
         case WM_CTLCOLORSTATIC: {
-            HDC hdcStatic = (HDC)wParam;
+            HDC hdcStatic = reinterpret_cast<HDC>(wParam);
             SetBkMode(hdcStatic, TRANSPARENT);
-            return (LRESULT)GetStockObject(NULL_BRUSH);
-            break;
+            return reinterpret_cast<LRESULT>(GetStockObject(NULL_BRUSH));
         }
         case WM_COMMAND: {
             switch (LOWORD(wParam)) {
@@ -187,7 +239,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                         AppendMenu(drvMenu, MF_STRING, IDC_ADD_DRV_FOLDER, L"Add driver package folder...");
                         RECT rc;
                         GetWindowRect(hAddButton, &rc);
-                        TrackPopupMenu(drvMenu, TPM_RIGHTBUTTON, rc.left, rc.bottom, 0, hwnd, NULL);
+                        TrackPopupMenu(drvMenu, TPM_RIGHTBUTTON, rc.left, rc.bottom, 0, hwnd, nullptr);
                         DestroyMenu(drvMenu);
                     }
                     break;
@@ -245,14 +297,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     break;
                 case IDC_ABOUT_BUTTON:
                     wchar_t aboutMessageBuffer[512];
-                    swprintf(aboutMessageBuffer, 512, DIM_ABOUT_MESSAGE, DIM_VERSION);
+                    (void)swprintf(aboutMessageBuffer, 512, DIM_ABOUT_MESSAGE, DIM_VERSION);
                     MessageBox(hwnd, aboutMessageBuffer, L"About the Driver Installation Module", MB_OK | MB_ICONINFORMATION);
+                    break;
+                default:
                     break;
             }
             break;
         }
         case WM_NOTIFY: {
-            if (((LPNMHDR)lParam)->idFrom == IDC_DRIVER_LIST && ((LPNMHDR)lParam)->code == LVN_ITEMCHANGED) {
+            if (reinterpret_cast<LPNMHDR>(lParam)->idFrom == IDC_DRIVER_LIST && reinterpret_cast<LPNMHDR>(lParam)->code == LVN_ITEMCHANGED) {
                 UpdateButtonStates(hwnd);
             }
             break;
@@ -260,6 +314,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         case WM_DESTROY: {
             PostQuitMessage(0);
             return 0;
+        }
+        default: {
+            break;
         }
     }
 
@@ -271,12 +328,12 @@ void UpdateInstructionLabel(HWND instructionLabel, LPCWSTR message) {
     
     RECT rect;
     GetWindowRect(instructionLabel, &rect);
-    MapWindowPoints(HWND_DESKTOP, GetParent(instructionLabel), (LPPOINT)&rect, 2);
+    MapWindowPoints(HWND_DESKTOP, GetParent(instructionLabel), reinterpret_cast<LPPOINT>(&rect), 2);
     InvalidateRect(GetParent(instructionLabel), &rect, TRUE);
     UpdateWindow(GetParent(instructionLabel));
 }
 
-std::wstring GetStatusFromEnumeration(installationStatus status) {
+static std::wstring GetStatusFromEnumeration(installationStatus status) {
     switch (status) {
         case ReadyToInstall: return L"Ready to install";
         case Installing: return L"Installing...";
@@ -292,10 +349,10 @@ void AddDriver(HWND hwndList, const std::wstring& driverPath, HWND hEditButton, 
     lvItem.mask = LVIF_TEXT;
     lvItem.iItem = ListView_GetItemCount(hwndList);
     lvItem.iSubItem = 0;
-    lvItem.pszText = (LPWSTR)driverPath.c_str();
+    lvItem.pszText = const_cast<LPWSTR>(driverPath.c_str());
     std::wstring state = GetStatusFromEnumeration(ReadyToInstall);
     ListView_InsertItem(hwndList, &lvItem);
-    ListView_SetItemText(hwndList, lvItem.iItem, 1, (LPWSTR)state.c_str());
+    ListView_SetItemText(hwndList, lvItem.iItem, 1, const_cast<LPWSTR>(state.c_str()));
     UpdateButtonStates(hwndList);
 }
 
@@ -304,7 +361,7 @@ void EditDriver(HWND hwndList, HWND mainHwnd) {
     if (iSelected != -1) {
         std::wstring newFilePath = OpenFileDialog(mainHwnd);
         if (!newFilePath.empty()) {
-            ListView_SetItemText(hwndList, iSelected, 0, (LPWSTR)newFilePath.c_str());
+            ListView_SetItemText(hwndList, iSelected, 0, const_cast<LPWSTR>(newFilePath.c_str()));
         }
     }
 }
@@ -321,7 +378,7 @@ void RemoveDriver(HWND hwndList, HWND hEditButton, HWND hRemoveButton, HWND hIns
     UpdateButtonStates(hwndList);
 }
 
-std::wstring GetBootDriveRoot() {
+static std::wstring GetBootDriveRoot() {
     WCHAR systemDir[MAX_PATH];
     if (GetSystemDirectory(systemDir, MAX_PATH)) {
         std::wstring sysPath(systemDir);
@@ -330,7 +387,7 @@ std::wstring GetBootDriveRoot() {
     return L"C:\\";
 }
 
-void AppendToFile(const std::wstring& filePath, const std::wstring& content) {
+static void AppendToFile(const std::wstring& filePath, const std::wstring& content) {
     try {
         std::wofstream outFile(filePath, std::ios::app);
         if (!outFile.is_open()) {
@@ -345,20 +402,28 @@ void AppendToFile(const std::wstring& filePath, const std::wstring& content) {
     }
 }
 
-installationStatus GetStatusFromLVI(HWND hwndList, int itemIndex) {
+static installationStatus GetStatusFromLVI(HWND hwndList, int itemIndex) {
     try {
+#if (_MSC_VER < 1950)
         WCHAR buffer[256];
+#else
+        WCHAR buffer[256]{};
+#endif
         LVITEM lvItem = {0};
         lvItem.iSubItem = 1;
         lvItem.pszText = buffer;
         lvItem.mask = LVIF_TEXT;
+#if (_MSC_VER < 1950)
         lvItem.cchTextMax = sizeof(buffer) / sizeof(buffer[0]);
+#else
+        lvItem.cchTextMax = std::size(buffer);
+#endif
         lvItem.iItem = itemIndex;
 
         // Retrieve the text from the ListView item
-        SendMessage(hwndList, LVM_GETITEMTEXT, itemIndex, (LPARAM)&lvItem);
+        SendMessage(hwndList, LVM_GETITEMTEXT, itemIndex, reinterpret_cast<LPARAM>(&lvItem));
 
-        std::wstring status(buffer);
+        std::wstring status(buffer, 256);
 
         if (status == L"Ready to install") return ReadyToInstall;
         if (status == L"Installing...") return Installing;
@@ -377,18 +442,14 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
     // Disable Close button
     HMENU menu;
     menu = GetSystemMenu(mainHwnd, FALSE);
-    if (menu != NULL) {
+    if (menu != nullptr) {
         EnableMenuItem(menu, SC_CLOSE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
     }
 
-    HCURSOR hCursor = LoadCursor(NULL, IDC_WAIT);
+    HCURSOR hCursor = LoadCursor(nullptr, IDC_WAIT);
     SetCursor(hCursor);
 
     std::wstring state;
-
-    int successfulInstallations = 0;
-    int failedInstallations = 0;
-    int unknownStatuses = 0;
 
     // Detect if program is being run on Windows PE
     std::wstring edition = GetRegistryValue(mainHwnd, HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows NT\\CurrentVersion", L"EditionID");
@@ -396,10 +457,14 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
         std::wstring bDriveRoot = GetBootDriveRoot();
         std::wstring logPath = bDriveRoot + L"DT_InstDrvs.txt";
 
+        int successfulInstallations = 0;
+        int failedInstallations = 0;
+        int unknownStatuses = 0;
+
         // Install drivers
         for (int i = 0; i < ListView_GetItemCount(hwndList); ++i) {
             wchar_t installationProgressBuffer[1024];
-            swprintf(installationProgressBuffer, 1024, INSTR_DRIVER_INSTALL_PROGRESS, i + 1, ListView_GetItemCount(hwndList));
+            (void)swprintf(installationProgressBuffer, 1024, INSTR_DRIVER_INSTALL_PROGRESS, i + 1, ListView_GetItemCount(hwndList));
             UpdateInstructionLabel(instructionHwnd, installationProgressBuffer);
             installationStatus currentStatus = GetStatusFromLVI(hwndList, i);
 
@@ -408,14 +473,18 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
             }
 
             state = GetStatusFromEnumeration(Installing);
-            ListView_SetItemText(hwndList, i, 1, (LPWSTR)state.c_str());
+            ListView_SetItemText(hwndList, i, 1, const_cast<LPWSTR>(state.c_str()));
             // Initiate command
             STARTUPINFO startInfo = { sizeof(startInfo) };
             PROCESS_INFORMATION procInfo;
             TCHAR systemDir[MAX_PATH];
             if (GetSystemDirectory(systemDir, MAX_PATH)) {
                 std::wstring appPath = std::wstring(systemDir) + L"\\drvload.exe";
+#if (_MSC_VER < 1950)
                 WCHAR buffer[256];
+#else
+                WCHAR buffer[256]{};
+#endif
                 LVITEM lvItem = {0};
                 lvItem.mask = LVIF_TEXT;
                 lvItem.iSubItem = 0;
@@ -430,9 +499,9 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
 
                     // Convert cmdLine to a writable array of WCHAR
                     std::vector<WCHAR> cmdLineVec(cmdLine.begin(), cmdLine.end());
-                    cmdLineVec.push_back(0); // Ensure null-termination
+                    cmdLineVec.push_back(0); // Ensure nullptr-termination
 
-                    if (CreateProcess(NULL, cmdLineVec.data(), NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &startInfo, &procInfo)) {
+                    if (CreateProcess(nullptr, cmdLineVec.data(), nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &startInfo, &procInfo)) {
                         WaitForSingleObject(procInfo.hProcess, INFINITE);
                         DWORD exitCode;
                         if (GetExitCodeProcess(procInfo.hProcess, &exitCode)) {
@@ -451,7 +520,7 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
                                 // Map exit code to system error message
                                 LPWSTR errorText = nullptr;
                                 FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                                               NULL, exitCode, 0, (LPWSTR)&errorText, 0, NULL);
+                                               nullptr, exitCode, 0, reinterpret_cast<LPWSTR>(&errorText), 0, nullptr);
                                 if (errorText) {
                                     errorMsg += std::wstring(errorText) + L" ";
                                     LocalFree(errorText);
@@ -487,7 +556,7 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
         }
         MessageBox(mainHwnd, resultMsg.c_str(), L"Driver Installation Module", MB_OK | MB_ICONINFORMATION);
         wchar_t installationSummaryBuffer[512];
-        swprintf(installationSummaryBuffer, 512, INSTR_DRIVER_INSTALL_SUMMARY, ListView_GetItemCount(hwndList), successfulInstallations);
+        (void)swprintf(installationSummaryBuffer, 512, INSTR_DRIVER_INSTALL_SUMMARY, ListView_GetItemCount(hwndList), successfulInstallations);
         UpdateInstructionLabel(instructionHwnd, installationSummaryBuffer);
     }
     else {
@@ -499,12 +568,12 @@ void InstallDrivers(HWND hwndList, HWND mainHwnd, HWND instructionHwnd) {
     EnableWindow(GetDlgItem(mainHwnd, IDC_INSTALL_BUTTON), (ListView_GetItemCount(hwndList) > 0));
     EnableWindow(GetDlgItem(mainHwnd, IDC_EXIT_BUTTON), TRUE);
 
-    hCursor = LoadCursor(NULL, IDC_ARROW);
+    hCursor = LoadCursor(nullptr, IDC_ARROW);
     SetCursor(hCursor);
 
     // Enable Close button
     menu = GetSystemMenu(mainHwnd, FALSE);
-    if (menu != NULL) {
+    if (menu != nullptr) {
         EnableMenuItem(menu, SC_CLOSE, MF_BYCOMMAND | MF_ENABLED);
     }
 }
@@ -517,8 +586,6 @@ void UpdateButtonStates(HWND hwnd) {
 
     int selectedCount = ListView_GetSelectedCount(listView);
     if (selectedCount == 1) {
-        int selectedIndex = ListView_GetNextItem(listView, -1, LVNI_SELECTED);
-        installationStatus status = GetStatusFromLVI(listView, selectedIndex);
         EnableWindow(editButton, TRUE);
     }
     else {
@@ -532,9 +599,9 @@ void UpdateButtonStates(HWND hwnd) {
     if (selectedCount == 1) {
         int selectedIndex = ListView_GetNextItem(listView, -1, LVNI_SELECTED);
         installationStatus status = GetStatusFromLVI(listView, selectedIndex);
-        EnableWindow(installButton, (!(status == Installed) && !(status == Installing)));
-        EnableWindow(editButton, (!(status == Installed) && !(status == Installing)));
-        EnableWindow(removeButton, (status != Installing));
+        EnableWindow(installButton, status != Installed && (status != Installing));
+        EnableWindow(editButton, (status != Installed) && (status != Installing));
+        EnableWindow(removeButton, status != Installing);
     }
 }
 
@@ -548,9 +615,9 @@ std::wstring OpenFileDialog(HWND hwnd) {
     ofn.nMaxFile = sizeof(szFile);
     ofn.lpstrFilter = L"Driver INF Files\0*.inf\0All Files\0*.*\0";;
     ofn.nFilterIndex = 1;
-    ofn.lpstrFileTitle = NULL;
+    ofn.lpstrFileTitle = nullptr;
     ofn.nMaxFileTitle = 0;
-    ofn.lpstrInitialDir = NULL;
+    ofn.lpstrInitialDir = nullptr;
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_EXPLORER;
 
     if (GetOpenFileName(&ofn)) {
@@ -559,16 +626,16 @@ std::wstring OpenFileDialog(HWND hwnd) {
     return L"";
 }
 
-int CALLBACK ComputerCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) {
+static int CALLBACK ComputerCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) {
     if (uMsg == BFFM_INITIALIZED) {
         // Set the initial folder to "My Computer"
-        ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM)L"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}");
+        ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, reinterpret_cast<LPARAM>(L"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}"));
     }
     return 0;
 }
 
 std::wstring OpenFolderDialog(HWND hwnd) {
-    BROWSEINFO bi = {0};
+    BROWSEINFO bi = {nullptr};
     bi.lpszTitle = L"Select a folder containing driver files:";
     bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NONEWFOLDERBUTTON | BIF_USENEWUI;
     bi.hwndOwner = hwnd;
@@ -577,7 +644,7 @@ std::wstring OpenFolderDialog(HWND hwnd) {
 
     PIDLIST_ABSOLUTE pidl = SHBrowseForFolder(&bi);
 
-    if (pidl != 0) {
+    if (pidl != nullptr) {
         wchar_t path[MAX_PATH];
         SHGetPathFromIDList(pidl, path);
         CoTaskMemFree(pidl);
@@ -613,6 +680,6 @@ void SearchDirectoryForDrivers(HWND hwndList, const std::wstring& folderPath, HW
 }
 
 void SetWindowCursor(LPCTSTR cursor) {
-    HCURSOR hCursor = LoadCursor(NULL, cursor);
+    HCURSOR hCursor = LoadCursor(nullptr, cursor);
     SetCursor(hCursor);
 }

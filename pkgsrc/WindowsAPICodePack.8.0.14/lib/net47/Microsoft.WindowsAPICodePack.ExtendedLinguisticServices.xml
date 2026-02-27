@@ -1,0 +1,843 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.WindowsAPICodePack.ExtendedLinguisticServices</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1">
+            <summary>
+            Defines an interface with which the low-level data contained inside
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> and
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see>
+            objects can be formatted into .NET objects.
+            </summary>
+            <typeparam name="T">The type of the objects into which the low-level data should be converted.</typeparam>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">
+            <summary>
+            Formats a single <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> into the type specified by T.
+            </summary>
+            <param name="dataRange">The <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> object to format.</param>
+            <returns>The formatted object constructed with the data contained inside the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1.FormatAll(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag)">
+            <summary>
+            Formats all <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRanges</see> contained inside the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see>.
+            </summary>
+            <param name="bag">The <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> to format.</param>
+            <returns>An array of T objects which represent the data contained inside each <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> of the
+            provided <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> object.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException">
+            <summary>
+            This exception is thrown by the managed wrappers of ELS when the underlying
+            unmanaged implementation returns an HResult which is not S_OK (0).
+            This exception is also thrown when the managed wrapper detects an exceptional
+            condition which causes it to fail. Please note that other .NET exceptions are also
+            possible to be thrown from the ELS managed wrappers.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException">LinguisticException</see> class
+            with the last Win32 error that occurred.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException">LinguisticException</see> class
+             with the specified context and the serialization information.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo">SerializationInfo</see> associated with this exception.</param>
+            <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext">StreamingContext</see> that represents the context of this exception.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException">LinguisticException</see> 
+            class with the specified detailed description.
+            </summary>
+            <param name="message">A detailed description of the error.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException">LinguisticException</see> class
+            with the specified detailed description and the specified exception.
+            </summary>
+            <param name="message">A detailed description of the error.</param>
+            <param name="innerException">A reference to the inner exception that is the cause of this exception.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException.ResultState">
+            <summary>
+            Gets the MappingResultState describing the error condition for this exception.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingActionAsyncResult">
+            <summary>
+            A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult">MappingAsyncResult</see> subclass to be used only for asynchronous calls to service actions.
+            <seealso cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String,System.AsyncCallback,System.Object)">MappingService.BeginDoAction</seealso>
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingActionAsyncResult.RangeIndex">
+            <summary>
+            Gets the range index parameter for <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.DoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String)">MappingService.DoAction</see> or <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String,System.AsyncCallback,System.Object)">MappingService.BeginDoAction</see>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingActionAsyncResult.ActionId">
+            <summary>
+            Gets the action ID parameter for <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.DoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String)">MappingService.DoAction</see> or <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String,System.AsyncCallback,System.Object)">MappingService.BeginDoAction</see>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult">
+            <summary>
+            <see cref="T:System.IAsyncResult">IAsyncResult</see> implementation for use with asynchronous calls to ELS.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.Succeeded">
+            <summary>
+            Queries whether the operation completed successfully.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.PropertyBag">
+            <summary>
+            Gets the resulting <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> (if it exists).
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.ResultState">
+            <summary>
+            Returns the current result state associated with this operation.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.CallerData">
+            <summary>
+            Returns the caller data associated with this operation.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.AsyncState">
+            <summary>
+            Returns the result state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.AsyncWaitHandle">
+            <summary>
+            Gets the WaitHandle which will be notified when
+            the opration completes (successfully or not).
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.CompletedSynchronously">
+            <summary>
+            From MSDN:
+            Most implementers of the IAsyncResult interface
+            will not use this property and should return false.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.IsCompleted">
+            <summary>
+            Queries whether the operation has completed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.Dispose">
+            <summary>
+            Dispose the MappingAsyncresult
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose the MappingAsyncresult
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices">
+            <summary>
+            This class contains constants describing the existing ELS services for Windows 7.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.LanguageDetection">
+            <summary>
+            The guid of the Microsoft Language Detection service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.ScriptDetection">
+            <summary>
+            The guid of the Microsoft Script Detection service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.TransliterationHantToHans">
+            <summary>
+            The guid of the Microsoft Traditional Chinese to Simplified Chinese Transliteration service.
+            </summary>        
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.TransliterationHansToHant">
+            <summary>
+            The guid of the Microsoft Simplified Chinese to Traditional Chinese Transliteration service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.TransliterationMalayalamToLatin">
+            <summary>
+            The guid of the Microsoft Malayalam to Latin Transliteration service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.TransliterationDevanagariToLatin">
+            <summary>
+            The guid of the Microsoft Devanagari to Latin Transliteration service.
+            </summary>        
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.TransliterationCyrillicToLatin">
+            <summary>
+            The guid of the Microsoft Cyrillic to Latin Transliteration service.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices.TransliterationBengaliToLatin">
+            <summary>
+            The guid of the Microsoft Bengali to Latin Transliteration service.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">
+            <summary>
+            Contains text recognition results for a recognized text subrange. An array of structures of this type
+            is retrieved by an ELS service in a <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> structure.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.StartIndex">
+            <summary>
+            Index of the beginning of the subrange in the text, where 0 indicates the first character of the string
+            passed to MappingService.RecognizeText or
+            MappingService.BeginRecognizeText, instead of an offset to the
+            index passed to the function in the index parameter. The value should be less than the entire length
+            of the text.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.EndIndex">
+            <summary>
+            Index of the end of the subrange in the text, where 0 indicates the first character at of the string
+            passed to MappingService.RecognizeText or
+            MappingService.BeginRecognizeText, instead of an offset to the
+            index passed to the function in the index parameter. The value should be less than the entire length
+            of the text.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.GetData">
+            <summary>
+            The data retrieved as service output associated with the subrange. This data must be of the format indicated
+            by the content type supplied in the <see cref="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.ContentType">ContentType</see> property.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.ContentType">
+             <summary>
+             A string specifying the MIME content type of the data returned by <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.GetData">GetData()</see>. Examples of
+             content types are "text/plain", "text/html", and "text/css".
+            
+             <note>In Windows 7, the ELS services support only the content type "text/plain". A content type specification
+             can be found at the IANA website: http://www.iana.org/assignments/media-types/text/ </note>
+             </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.ActionIds">
+             <summary>
+             Available action IDs for this data range. Usable for calling <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.DoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String)">MappingService.DoAction</see> or
+             <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String,System.AsyncCallback,System.Object)">MappingService.BeginDoAction</see>.
+            
+             <note>In Windows 7, the ELS services do not expose any actions.</note>
+             </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.ActionDisplayNames">
+             <summary>
+             Available action display names for this data range. These strings can be localized.
+            
+             <note>In Windows 7, the ELS services do not expose any actions.</note>
+             </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange.FormatData``1(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter{``0})">
+            <summary>
+            Formats the low-level data contained in this <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> using an implementation of the
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1">IMappingFormatter</see> interface.
+            </summary>
+            <typeparam name="T">The type with which <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1">IMappingFormatter</see> is parameterized.</typeparam>
+            <param name="formatter">The formatter to be used in the formatting.</param>
+            <returns>A formatted version of this <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see>.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions">
+            <summary>
+            Contains options used to enumerate ELS services.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.#ctor">
+            <summary>
+            Public constructor. Initializes an empty instance of <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions">MappingEnumOptions</see>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.Category">
+            <summary>
+            Optional. A service category, for example, "Transliteration". The application must set this member to null
+            if the service category is not a search criterion.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.InputLanguage">
+            <summary>
+            Optional. An input language string, following the IETF naming convention, that identifies the input language
+            that services should accept. The application can set this member to null if the supported input language is
+            not a search criterion.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.OutputLanguage">
+            <summary>
+            Optional. An output language string, following the IETF naming convention, that identifies the output language
+            that services use to retrieve results. The application can set this member to null if the output language is
+            not a search criterion.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.InputScript">
+            <summary>
+            Optional. A standard Unicode script name that can be accepted by services. The application set this member to
+            null if the input script is not a search criterion.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.OutputScript">
+            <summary>
+            Optional. A standard Unicode script name used by services. The application can set this member to
+            null if the output script is not a search criterion.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.InputContentType">
+             <summary>
+             Optional. A string, following the format of the MIME content types, that identifies the format that the
+             services should be able to interpret when the application passes data. Examples of content types are
+             "text/plain", "text/html", and "text/css". The application can set this member to null if the input content
+             type is not a search criterion.
+            
+             <note>In Windows 7, the ELS services support only the content type "text/plain". A content type specification
+             can be found at the IANA website: http://www.iana.org/assignments/media-types/text/ </note>
+             </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.OutputContentType">
+            <summary>
+            Optional. A string, following the format of the MIME content types, that identifies the format in which the
+            services retrieve data. The application can set this member to null if the output content type is not a search
+            criterion.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions.Guid">
+            <summary>
+            Optional. A globally unique identifier (guid) structure for a specific service. The application must
+            avoid setting this member at all if the guid is not a search criterion.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions">
+            <summary>
+            Contains options for text recognition. The values stored in this structure affect the behavior and results
+            of MappingRecognizeText.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.#ctor">
+            <summary>
+            Public constructor. Initializes an empty instance of MappingOptions.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.InputLanguage">
+            <summary>
+            Optional. An input language string, following the IETF naming convention, that identifies the input language
+            that the service should be able to accept. The application can set this member to null to indicate that
+            the service is free to interpret the input as any input language it supports.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.OutputLanguage">
+            <summary>
+            Optional. An output language string, following the IETF naming convention, that identifies the output language
+            that the service should be able to use to produce results. The application can set this member to null if
+            the service should decide the output language.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.InputScript">
+            <summary>
+            Optional. A standard Unicode script name that should be accepted by the service. The application can set this
+            member to null to let the service decide how handle the input.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.OutputScript">
+            <summary>
+            Optional. A standard Unicode script name that the service should use to retrieve results. The application can
+            set this member to null to let the service decide the output script.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.InputContentType">
+             <summary>
+             Optional. A string, following the format of the MIME content types, that identifies the format that the service
+             should be able to interpret when the application passes data. Examples of content types are "text/plain",
+             "text/html", and "text/css". The application can set this member to null to indicate the "text/plain"
+             content type.
+            
+             <note>In Windows 7, the ELS services support only the content type "text/plain". A content type specification
+             can be found at the IANA website: http://www.iana.org/assignments/media-types/text/ </note>
+             </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.OutputContentType">
+            <summary>
+            Optional. A string, following the format of the MIME content types, that identifies the format in which the
+            service should retrieve data. The application can set this member to NULL to let the service decide the output
+            content type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions.ServiceFlag">
+             <summary>
+             Optional. Private flag that a service provider defines to affect service behavior. Services can interpret this
+             flag as they require.
+            
+             <note>For Windows 7, none of the available ELS services support flags.</note>
+             </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">
+            <summary>
+            Contains the text recognition data properties retrieved by MappingService.RecognizeText or
+            MappingService.BeginRecognizeText.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag.Finalize">
+            <summary>
+            Frees all unmanaged resources allocated for the property bag, if needed.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag.GetResultRanges">
+            <summary>
+            An array of <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> objects containing all recognized text range results. This member is populated
+            by MappingService.RecognizeText or asynchronously with
+            MappingService.BeginRecognizeText.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag.FormatData``1(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter{``0})">
+            <summary>
+            Formats the low-level data contained in this <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> using an implementation of the
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1">IMappingFormatter</see> interface.
+            </summary>
+            <typeparam name="T">The type with which <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.IMappingFormatter`1">IMappingFormatter</see> is parameterized.</typeparam>
+            <param name="formatter">The formatter to be used in the formatting.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag.Dispose">
+            <summary>
+            Frees all unmanaged resources allocated for the property bag.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag.Dispose(System.Boolean)">
+            <summary>
+            Clean up both managed and native resources.
+            </summary>
+            <param name="disposed"></param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">
+            <summary>
+            A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAsyncResult">MappingAsyncResult</see> subclass to be used only for asynchronous calls to text recognition.
+            <seealso cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String,System.AsyncCallback,System.Object)">MappingService.BeginDoAction</seealso>
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult.Text">
+            <summary>
+            Gets the text parameter for MappingService.RecognizeText or MappingService.BeginRecognizeText.
+            </summary>        
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult.Length">
+            <summary>
+            Gets the length parameter for MappingService.RecognizeText or MappingService.BeginRecognizeText.
+            </summary>        
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult.Index">
+            <summary>
+            Gets the index parameter for MappingService.RecognizeText or MappingService.BeginRecognizeText.
+            </summary>        
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult.Options">
+            <summary>
+            Gets the options parameter for MappingService.RecognizeText or MappingService.BeginRecognizeText.
+            </summary>        
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">
+            <summary>
+            This class serves as the result status of asynchronous calls to ELS and
+            as the result status of linguistic exceptions.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.ErrorMessage">
+            <summary>
+            Gets a human-readable description of the HResult error code,
+            as constructed by <see cref="T:System.ComponentModel.Win32Exception">Win32Exception</see>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.HResult">
+            <summary>
+            Gets the HResult error code associated with this structure.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.GetHashCode">
+            <summary>
+            Uses the HResult param as the object hashcode.
+            </summary>
+            <returns>An integer hashcode</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.Equals(System.Object)">
+            <summary>
+            Compares an Object for value equality.
+            </summary>
+            <param name="obj">Object to compare.</param>
+            <returns>True if obj is equal to this instance, false otherwise.</returns>
+            <summary>
+            Compares an Object for value equality.
+            </summary>
+            <returns>True if obj is equal to this instance, false otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.Equals(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState)">
+            <summary>
+            Compares a <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> obj for value equality.
+            </summary>
+            <param name="obj"><see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> to compare.</param>
+            <returns>True if obj is equal to this instance, false otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.op_Equality(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState,Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState)">
+            <summary>
+            Compares two <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> objs for value equality.
+            </summary>
+            <param name="one">First <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> to compare.</param>
+            <param name="two">Second <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> to compare.</param>
+            <returns>True if the two <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultStates</see> are equal, false otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState.op_Inequality(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState,Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState)">
+            <summary>
+            Compares two <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> objs against value equality.
+            </summary>
+            <param name="one">First <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> to compare.</param>
+            <param name="two">Second <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultState</see> to compare.</param>
+            <returns>True if the two <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingResultState">MappingResultStates</see> are not equal, false otherwise.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService">
+            <summary>
+            Represents an ELS service.
+            A detailed overview of the Extended Linguistic Services platform is available at:
+            http://msdn.microsoft.com/en-us/library/dd317839(VS.85).aspx
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.#ctor(System.Guid)">
+             <summary>
+             Constructs a new <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService">MappingService</see> object by instanciating an ELS service
+             by its guid. For Windows 7, the only supported GUIDs are provided as
+             readonly members of the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingAvailableServices">MappingAvailableServices</see> class.
+            
+             If the service
+             with the specified guid doesn't exist, a <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.LinguisticException">LinguisticException</see> is thrown.
+             </summary>
+             <param name="serviceIdentifier">The guid of the service to instantiate.</param>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.GetServices(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions)">
+            <summary>
+            Retrieves a list of available ELS platform-supported services, along with associated
+            information, according to application-specified criteria.
+            </summary>
+            <param name="options">Optional. A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingEnumOptions">MappingEnumOptions</see> object containing criteria to use during
+            enumeration of services. The application specifies null for this parameter to retrieve all
+            installed services.</param>
+            <returns>An array of <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService">MappingService</see> objects matching the criteria supplied in the options
+            parameter.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.RecognizeText(System.String,Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions)">
+            <summary>
+            Calls an ELS service to recognize text. For example, the Microsoft Language Detection service
+            will attempt to recognize the language in which the input text is written.
+            </summary>
+            <param name="text">The text to recognize. The text must be UTF-16, but some services have additional
+            requirements for the input format. This parameter cannot be set to null.</param>
+            <param name="options">Optional. A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions">MappingOptions</see> object containing options that affect the result and
+            behavior of text recognition. The application does not have to specify values for all object members.
+            This parameter can be set to null to use the default mapping options.</param>
+            <returns>A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> object in which the service has stored its results. The structure is filled
+            with information produced by the service during text recognition.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.RecognizeText(System.String,System.Int32,System.Int32,Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions)">
+            <summary>
+            Calls an ELS service to recognize text. For example, the Microsoft Language Detection service
+            will attempt to recognize the language in which the input text is written.
+            </summary>
+            <param name="text">The text to recognize. The text must be UTF-16, but some services have additional
+            requirements for the input format. This parameter cannot be set to null.</param>
+            <param name="length">Length, in characters, of the text specified in text.</param>
+            <param name="index">Index inside the specified text to be used by the service. This value should be
+            between 0 and length-1. If the application wants to process the entire text, it should set this
+            parameter to 0.</param>
+            <param name="options">Optional. A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions">MappingOptions</see> object containing options that affect the result and
+            behavior of text recognition. The application does not have to specify values for all object members.
+            This parameter can be set to null to use the default mapping options.</param>
+            <returns>A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> object in which the service has stored its results. The structure is filled
+            with information produced by the service during text recognition.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginRecognizeText(System.String,Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions,System.AsyncCallback,System.Object)">
+            <summary>
+            Calls an ELS service to recognize text. For example, the Microsoft Language Detection service
+            will attempt to recognize the language in which the input text is written. The execution will be
+            handled in a thread from the managed thread pool, and the asynchronous wait handle of the returned
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object will be notified when the operation completes. The results of
+            the call will be stored inside the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object.
+            </summary>
+            <param name="text">The text to recognize. The text must be UTF-16, but some services have additional
+            requirements for the input format. This parameter cannot be set to null.</param>
+            <param name="options">Optional. A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions">MappingOptions</see> object containing options that affect the result and
+            behavior of text recognition. The application does not have to specify values for all object members.
+            This parameter can be set to null to use the default mapping options.</param>
+            <param name="asyncCallback">An application callback delegate to receive callbacks with the results from
+            the recognize operation. Cannot be set to null.</param>
+            <param name="callerData">Optional. Private application object passed to the callback function
+            by a service after text recognition is complete. The application must set this parameter to null to
+            indicate no private application data.</param>
+            <returns>A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object describing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginRecognizeText(System.String,System.Int32,System.Int32,Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions,System.AsyncCallback,System.Object)">
+            <summary>
+            Calls an ELS service to recognize text. For example, the Microsoft Language Detection service
+            will attempt to recognize the language in which the input text is written. The execution will be
+            handled in a thread from the managed thread pool, and the asynchronous wait handle of the returned
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object will be notified when the operation completes. The results of
+            the call will be stored inside the <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object.
+            </summary>
+            <param name="text">The text to recognize. The text must be UTF-16, but some services have additional
+            requirements for the input format. This parameter cannot be set to null.</param>
+            <param name="length">Length, in characters, of the text specified in text.</param>
+            <param name="index">Index inside the specified text to be used by the service. This value should be
+            between 0 and length-1. If the application wants to process the entire text, it should set this
+            parameter to 0.</param>
+            <param name="options">Optional. A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingOptions">MappingOptions</see> object containing options that affect the result and
+            behavior of text recognition. The application does not have to specify values for all object members.
+            This parameter can be set to null to use the default mapping options.</param>
+            <param name="asyncCallback">An application callback delegate to receive callbacks with the results from
+            the recognize operation. Cannot be set to null.</param>
+            <param name="callerData">Optional. Private application object passed to the callback function
+            by a service after text recognition is complete. The application must set this parameter to null to
+            indicate no private application data.</param>
+            <returns>A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object describing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.EndRecognizeText(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult)">
+            <summary>
+            Waits for the asynchronous operation to complete.
+            </summary>
+            <param name="asyncResult">The <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingRecognizeAsyncResult">MappingRecognizeAsyncResult</see> object associated with the operation.</param>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.DoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String)">
+            <summary>
+            Causes an ELS service to perform an action after text recognition has occurred. For example,
+            a phone dialer service first must recognize phone numbers and then can perform the "action"
+            of dialing a number.
+            </summary>
+            <param name="bag">A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> object containing the results of a previous call to
+            MappingService.MappingRecognizeText. This parameter cannot be set to null.</param>
+            <param name="rangeIndex">A starting index inside the text recognition results for a recognized
+            text range. This value should be between 0 and the range count.</param>
+            <param name="actionId">The identifier of the action to perform.
+            This parameter cannot be set to null.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BeginDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag,System.Int32,System.String,System.AsyncCallback,System.Object)">
+            <summary>
+            Causes an ELS service to perform an action after text recognition has occurred. For example,
+            a phone dialer service first must recognize phone numbers and then can perform the "action"
+            of dialing a number.
+            </summary>
+            <param name="bag">A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see> object containing the results of a previous call to
+            MappingService.MappingRecognizeText. This parameter cannot be set to null.</param>
+            <param name="rangeIndex">A starting index inside the text recognition results for a recognized
+            text range. This value should be between 0 and the range count.</param>
+            <param name="actionId">The identifier of the action to perform.
+            This parameter cannot be set to null.</param>
+            <param name="asyncCallback">An application callback delegate to receive callbacks with the results from
+            the action operation. Cannot be set to null.</param>
+            <param name="callerData">Optional. Private application object passed to the callback function
+            by a service after the action operation is complete. The application must set this parameter to null
+            to indicate no private application data.</param>
+            <returns>A <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingActionAsyncResult">MappingActionAsyncResult</see> object describing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.EndDoAction(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingActionAsyncResult)">
+            <summary>
+            Waits for the asynchronous operation to complete.
+            </summary>
+            <param name="asyncResult">The MappingActionAsyncResult object associated with the operation.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.Copyright">
+            <summary>
+            Copyright information about the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.MajorVersion">
+            <summary>
+            Major version number that is used to track changes to the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.MinorVersion">
+            <summary>
+            Minor version number that is used to track changes to the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.BuildVersion">
+            <summary>
+            Build version that is used to track changes to the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.StepVersion">
+            <summary>
+            Step version that is used to track changes to the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.InputContentTypes">
+            <summary>
+            Optional. A collection of input content types, following the format of the MIME content types, that
+            identify the format that the service interprets when the application passes data. Examples of
+            content types are "text/plain", "text/html" and "text/css".
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.OutputContentTypes">
+            <summary>
+            Optional. A collection of output content types, following the format of the MIME content types, that
+            identify the format in which the service retrieves data.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.InputLanguages">
+            <summary>
+            A collection of the input languages, following the IETF naming convention, that the service accepts. This
+            member is set to null if the service can work with any input language.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.OutputLanguages">
+            <summary>
+            A collection of output languages, following the IETF naming convention, in which the service can retrieve
+            results. This member is set to null if the service can retrieve results in any language, or if the service
+            ignores the output language.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.InputScripts">
+            <summary>
+            A collection of input scripts, with Unicode standard script names, that are supported by the service.
+            This member is set to null if the service can work with any scripts, or if the service ignores the
+            input scripts.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.OutputScripts">
+            <summary>
+            A collection of output scripts supported by the service. This member is set to null if the service can work with
+            any scripts, or the service ignores the output scripts.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.Guid">
+            <summary>
+            Globally unique identifier (guid) for the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.Category">
+            <summary>
+            The service category for the service, for example, "Transliteration".
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.Description">
+            <summary>
+            The service description. This text can be localized.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.IsOneToOneLanguageMapping">
+            <summary>
+            Flag indicating the language mapping between input language and output language that is supported
+            by the service. Possible values are shown in the following table.
+            0 - The input and output languages are not paired and the service can receive data in any of the
+            input languages and render data in any of the output languages.
+            1 - The arrays of the input and output languages for the service are paired. In other words, given
+            a particular input language, the service retrieves results in the paired language defined in the
+            output language array. Use of the language pairing can be useful, for example, in bilingual
+            dictionary scenarios.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.IsPlatformSupported">
+            <summary>
+            Indicates whether this feature is supported on the current platform.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.RunningOnWin7">
+            <summary>
+            Determines if the application is running on Windows 7
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingService.ThrowIfNotWin7">
+            <summary>
+            Throws PlatformNotSupportedException if the application is not running on Windows 7
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.NullTerminatedStringFormatter">
+            <summary>
+            Converts byte arrays containing Unicode null-terminated strings into .NET string objects.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.NullTerminatedStringFormatter.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">
+            <summary>
+            Converts a single <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> into a string, stripping the trailing null character.
+            If the string doesn't contain null characters, the empty string is returned.
+            </summary>
+            <param name="dataRange">The <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> to convert</param>
+            <returns>The resulting string</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.NullTerminatedStringFormatter.FormatAll(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag)">
+            <summary>
+            Uses <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.NullTerminatedStringFormatter.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">Format</see> to format all the ranges of the supplied
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see>.
+            </summary>
+            <param name="bag">The property bag to convert.</param>
+            <returns>An array of strings, one per <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see>.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.Resources.LocalizedMessages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.Resources.LocalizedMessages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.Resources.LocalizedMessages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.Resources.LocalizedMessages.SupportedWindows7">
+            <summary>
+              Looks up a localized string similar to Only supported on Windows 7 or newer..
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringArrayFormatter">
+            <summary>
+            Converts registry-formatted data into string arrays.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringArrayFormatter.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">
+            <summary>
+            Converts a single <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> into a string array by splitting on each null character and
+            removing the empty entries.
+            </summary>
+            <param name="dataRange">The <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> to convert</param>
+            <returns>The resulting string array</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringArrayFormatter.FormatAll(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag)">
+            <summary>
+            Uses <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringArrayFormatter.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">Format</see> to format all the ranges of the supplied
+            <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag">MappingPropertyBag</see>.
+            </summary>
+            <param name="bag">The property bag to convert.</param>
+            <returns>An array of string arrays, one per <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see>.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringFormatter">
+            <summary>
+            Converts byte arrays into Unicode (UTF-16) strings.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringFormatter.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">
+            <summary>
+            Converts a single <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> into a string.
+            </summary>
+            <param name="dataRange">The <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see> to convert</param>
+            <returns>The resulting string</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringFormatter.FormatAll(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingPropertyBag)">
+            <summary>
+            Uses <see cref="M:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.StringFormatter.Format(Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange)">Format</see> to format all the ranges of the supplied
+            MappingPropertyBag.
+            </summary>
+            <param name="bag">The property bag to convert.</param>
+            <returns>An array of strings, one per <see cref="T:Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.MappingDataRange">MappingDataRange</see>.</returns>
+        </member>
+    </members>
+</doc>

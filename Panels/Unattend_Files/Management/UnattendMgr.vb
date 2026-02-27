@@ -9,7 +9,7 @@ Public Class UnattendMgr
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             If FolderBrowserDialog1.SelectedPath.Contains("unattend_xml") Then
                 TextBox1.Text = FolderBrowserDialog1.SelectedPath
             Else
@@ -259,7 +259,12 @@ Public Class UnattendMgr
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         TextBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(431)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(168)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(144)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(144)
     End Sub
 End Class

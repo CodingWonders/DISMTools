@@ -67,7 +67,7 @@ Public Class SetImageKey
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         Dim msg As String = ""
-        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
+        If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Then
             DynaLog.LogMessage("Image edition is WindowsPE. This is a Windows PE image.")
             Select Case MainForm.Language
                 Case 0
@@ -198,6 +198,6 @@ Public Class SetImageKey
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = CurrentTheme.SectionBackgroundColor
         TextBox1.ForeColor = CurrentTheme.ForegroundColor
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(Handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(Handle, CurrentTheme.IsDark)
     End Sub
 End Class

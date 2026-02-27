@@ -64,8 +64,6 @@ Partial Class AppInstallerDownloader
         '
         'ProgressBar1
         '
-        Me.ProgressBar1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ProgressBar1.Location = New System.Drawing.Point(55, 220)
         Me.ProgressBar1.Name = "ProgressBar1"
         Me.ProgressBar1.Size = New System.Drawing.Size(637, 23)
@@ -78,12 +76,10 @@ Partial Class AppInstallerDownloader
         '
         'StatusLbl
         '
-        Me.StatusLbl.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.StatusLbl.AutoEllipsis = True
         Me.StatusLbl.Location = New System.Drawing.Point(52, 199)
         Me.StatusLbl.Name = "StatusLbl"
-        Me.StatusLbl.Size = New System.Drawing.Size(600, 18)
+        Me.StatusLbl.Size = New System.Drawing.Size(640, 14)
         Me.StatusLbl.TabIndex = 1
         Me.StatusLbl.Text = "Status"
         '
@@ -94,9 +90,6 @@ Partial Class AppInstallerDownloader
         '
         'GroupBox1
         '
-        Me.GroupBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.downUriLbl)
         Me.GroupBox1.Controls.Add(Me.downETALbl)
         Me.GroupBox1.Controls.Add(Me.downSpdLbl)
@@ -153,7 +146,6 @@ Partial Class AppInstallerDownloader
         '
         'Cancel_Button
         '
-        Me.Cancel_Button.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Cancel_Button.Enabled = False
         Me.Cancel_Button.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.Cancel_Button.Location = New System.Drawing.Point(617, 249)
@@ -165,8 +157,6 @@ Partial Class AppInstallerDownloader
         '
         'Label3
         '
-        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.AutoEllipsis = True
         Me.Label3.Location = New System.Drawing.Point(52, 254)
         Me.Label3.Name = "Label3"
@@ -177,8 +167,9 @@ Partial Class AppInstallerDownloader
         '
         'AppInstallerDownloader
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
+        Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.ClientSize = New System.Drawing.Size(704, 281)
         Me.ControlBox = False
         Me.Controls.Add(Me.Cancel_Button)

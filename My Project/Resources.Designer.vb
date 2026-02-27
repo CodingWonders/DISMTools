@@ -183,6 +183,26 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property assistant_dark() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("assistant_dark", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property assistant_light() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("assistant_light", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property backbox() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("backbox", resourceCulture)
@@ -526,6 +546,16 @@ Namespace My.Resources
         Friend ReadOnly Property CS_ProgressPanel_Green() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("CS_ProgressPanel_Green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property cws_discord() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("cws_discord", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -2155,11 +2185,11 @@ Namespace My.Resources
         '''
         '''-- Bugfixes
         '''
-        '''- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
-        '''- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
-        '''- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
-        '''- Fixed a crash when opening the popup mounted image picker in some cases
-        '''- When picking a starter script using the predefined collection, language highlighting  [resto de la cadena truncado]&quot;;.
+        '''- The unattended answer file creation wizard no longer goes to the Finish page when it can&apos;t find UnattendGen
+        '''- Fixed an issue in the capability removal dialog where the incorrect items would be shown
+        '''- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
+        '''- Scaling issues have been fixed. The program should look nicer at 125% scaling
+        '''- Fixed issues with recursive driver addition on Windo [resto de la cadena truncado]&quot;;.
         '''</summary>
         Friend ReadOnly Property WhatsNew() As String
             Get

@@ -86,6 +86,7 @@ Partial Class WimScriptEditor
         'Scintilla1
         '
         Me.Scintilla1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Scintilla1.LexerName = Nothing
         Me.Scintilla1.Location = New System.Drawing.Point(0, 0)
         Me.Scintilla1.Name = "Scintilla1"
         Me.Scintilla1.Size = New System.Drawing.Size(502, 477)
@@ -113,6 +114,7 @@ Partial Class WimScriptEditor
         'SplitContainer1
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
         '
@@ -471,8 +473,8 @@ Partial Class WimScriptEditor
         '
         'WimScriptEditor
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)

@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Helper        |
@@ -190,6 +190,7 @@ function Get-Disks
 
     # Show additional tools
     Write-Host "- To load drivers, type `"DIM`" and press ENTER"
+    Write-Host "- To reload results, press R"
     Write-Host ""
 
     $destDisk = Read-Host -Prompt "Please choose the disk to apply the image to"
@@ -220,6 +221,10 @@ function Get-Disks
                         Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
                     }
                 }
+                Get-Disks
+            }
+            "R" {
+                # Refresh results
                 Get-Disks
             }
             default {
@@ -255,6 +260,7 @@ function Get-Partitions
     diskpart /s "$env:SYSTEMDRIVE\files\diskpart\dp_listpart.dp" | Out-Host
     Write-Host ""
     Write-Host "- If the selected disk contains no partitions, press ENTER. Otherwise, type a partition number."
+    Write-Host "- To reload results, press R"
     Write-Host "- If you have selected the wrong disk, type `"B`" now and press ENTER`n"
     $part = Read-Host -Prompt "Please choose the partition to apply the image to"
     if ($part -eq -1)
@@ -264,6 +270,10 @@ function Get-Partitions
     elseif ($part -eq "B")
     {
         return $part
+    }
+    elseif ($part -eq "R")
+    {
+        Get-Partitions $driveNum
     }
     else
     {
@@ -671,6 +681,30 @@ function Start-OSApplication {
     Show-SectionMessage -sectionTitle "Select the Windows image to install"
     $wimFile = Get-WimIndexes
     $serviceableArchitecture = (((Get-CimInstance -Class Win32_Processor | Where-Object { $_.DeviceID -eq "CPU0" }).Architecture) -eq (Get-WindowsImage -ImagePath "$($wimFile.wimPath)" -Index $wimFile.index).Architecture)
+    
+    $usebootex = $false
+    if (((Get-Command Confirm-SecureBootUEFI -ErrorAction SilentlyContinue) -ne $null) -and ($env:FIRMWARE_TYPE -eq "UEFI") -and (Confirm-SecureBootUEFI) -and ((bcdboot /? | Select-String "/bootex") -ne $null)) {
+        Show-SectionMessage -sectionTitle "Select UEFI boot binary" -sectionDescription "Setup has detected that UEFI and Secure Boot are enabled on your computer. You can pick from 2 versions of the EFI boot binary that will later be used when creating boot files:"
+        # Quick run-down: we only ask for EFI boot binary when we find Secure Boot on the system, AND
+        # if the provided bcdboot supports bootex.
+        Write-Host " - Boot binaries signed with the Microsoft Windows Production PCA 2011 certificate allow for broader"
+        Write-Host "   compatibility with UEFI systems that have not yet received the latest Secure Boot DB and DBX updates. These"
+        Write-Host "   will expire in June 2026."
+        Write-Host " - Boot binaries signed with the Windows UEFI CA 2023 certificate allow for compatibility with modern systems"
+        Write-Host "   that have already received the latest Secure Boot DB and DBX updates. Systems that have not yet received these"
+        Write-Host "   updates will not work using these boot binaries.`n"
+        if (([System.Text.Encoding]::ASCII.GetString((Get-SecureBootUEFI DB).Bytes) -match 'Windows UEFI CA 2023') -eq $true) {
+            Write-Host "You may be able to use the UEFI CA 2023 binaries on this system."
+        } else {
+            Write-Host "You may not be able to use the UEFI CA 2023 binaries on this system."
+        }
+        Write-Host "`nYou need to make sure that the target image contains the required boot files if you decide to use"
+        Write-Host "the new version of such files. Failure to do so can cause boot file creation issues. These usually occur"
+        Write-Host "if you are deploying an image that has not yet received updated UEFI CA 2023 binaries."
+        $bootOptn = Read-Host -Prompt "Do you want to use the updated UEFI CA 2023 binaries? (Y/n)"
+        if ($bootOptn -eq "") { $bootOptn = "Y" }
+        $usebootex = ($bootOptn -eq "Y")
+    }
 
     Show-SectionMessage -sectionTitle "Collecting information and copying files needed for Setup" -sectionDescription "Please wait while Setup applies the Windows image. This can take some time, depending on the speed of your computer's disks."
     if ((Start-DismCommand -Verb Apply -ImagePath "$($driveLetter):\" -WimFile "$($wimFile.wimPath)" -WimIndex $wimFile.index) -eq $true)
@@ -748,7 +782,12 @@ function Start-OSApplication {
         Remove-Item -Path "$($driveLetter):\`$DISMTOOLS.~LS" -Recurse -Force -ErrorAction SilentlyContinue | Out-Null
     }
 
-    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter
+    # NetInstall apparently isn't removed after this function ends, so we move it here.
+    if (Test-Path "$($driveLetter):\NetInstall") {
+        Remove-Item "$($driveLetter):\NetInstall" -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
+    New-BootFiles -drLetter $driveLetter -bootPart "auto" -diskId $drive -cleanDrive $($partition -eq 0) -espLetter $bootLetter -bootEx $usebootex
 }
 
 function Start-DismCommand
@@ -1044,6 +1083,8 @@ function New-BootFiles
             Determine whether to run detections for specific boot scenarios
         .PARAMETER espLetter
             The letter of the EFI System Partition volume. By default, it's W if not specified
+        .PARAMETER bootEx
+            Determine whether to use the Windows UEFI CA 2023 or the Microsoft Windows Production PCA 2011 boot binaries
         .EXAMPLE
             New-BootFiles -drLetter "C:" -bootPart "auto" -diskId 0 -cleanDrive $false
         .EXAMPLE
@@ -1054,8 +1095,18 @@ function New-BootFiles
         [Parameter(Mandatory = $true, Position = 1)] [string]$bootPart,
         [Parameter(Mandatory = $true, Position = 2)] [int]$diskId,
         [Parameter(Mandatory = $true, Position = 3)] [bool]$cleanDrive,
-        [Parameter(Position = 4)] [string]$espLetter = "W"
+        [Parameter(Position = 4)] [string]$espLetter = "W",
+        [Parameter(Position = 5)] [bool]$bootEx = $false
     )
+    
+    # Old Windows images don't come with the required UEFI CA 2023 binaries, causing bcdboot
+    # to fail. The files in question are in \WINDOWS\Boot\EFI_EX. So, if we can't find the _EX
+    # variants of the boot files we disable UEFI CA 2023 support and inform.
+    if (($bootEx -eq $true) -and (-not (Test-Path -Path "$($drLetter):\WINDOWS\Boot\EFI_EX"))) {
+        Write-Warning "UEFI CA 2023 boot binaries not found on the target installation. Falling back to Microsoft Windows Production PCA 2011..."
+        $bootEx = $false
+    }
+    
     if ($env:firmware_type -eq "UEFI")
     {
         # Make boot files for both BIOS and UEFI firmwares
@@ -1088,11 +1139,33 @@ function New-BootFiles
                     }
                 }
             }
-            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+            if ($bootEx) {
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+            } else {
+                # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                # we said we didn't want to.
+                if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                } else {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                }
+            }
         }
         else
         {
-            bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+            if ($bootEx) {
+                bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /bootex
+            } else {
+                # Depending on the version of BCDBOOT there may be a /offline option. If so, use it
+                # as not using it causes bcdboot to keep using the UEFI CA 2023 binary, even though
+                # we said we didn't want to.
+                if ((bcdboot /? | Select-String "/offline") -eq $null) {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL
+                } else {
+                    bcdboot "$($drLetter):\Windows" /s "$($espLetter):" /f ALL /offline
+                }
+            }
         }
     }
     else
@@ -1297,8 +1370,77 @@ if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($in
 Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
 $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
 
-$installationImageToDeploy = Read-Host -Prompt "Please type the file name of the installation image and press ENTER"
-$installationImageGroup = Read-Host -Prompt "Please type the group the desired image is in"
+$installationImageToDeploy = ""
+$installationImageGroup = ""
+
+$imageFileValidated = $false
+$imageGroupValidated = $false
+
+do {
+    $installationImageToDeploy = Read-Host -Prompt "Please type the file name of the installation image and press ENTER. Press R to refresh"
+    
+    if ($installationImageToDeploy -eq "R") {
+        Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
+        $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
+
+        if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
+            Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+            Start-Sleep -Seconds 5
+            wpeutil reboot
+        }
+
+        Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
+        $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
+        continue
+    }
+    
+    $installationImageGroup = Read-Host -Prompt "Please type the group the desired image is in. Type `"--refresh`" to refresh the list"
+    
+    if ($installationImageGroup -eq "--refresh") {
+        Show-CenteredTextBox -Text "Getting images from install groups in the WDS server . . ." -MaxWidth 100 -CenterOfAll
+        $installImages = Invoke-RestMethod -Method Get -Uri "http://$($authInfo.serverIP):$($authInfo.serverPort)/api/installimages"
+
+        if (($installImages -eq $null) -or ($installImages.success -eq $false) -or (($installImages.images | Select-Object -ExpandProperty FileName).Count -le 0)) {
+            Show-CenteredTextBox -Text "Could not get installation images. The server may have imposed a block of 2 minutes for this device. Wait 2 minutes, then try again." -MaxWidth 70 -CenterOfAll -ForegroundColor DarkRed
+            Start-Sleep -Seconds 5
+            wpeutil reboot
+        }
+
+        Show-SectionMessage -sectionTitle "Choose an installation image" -sectionDescription "Please choose an installation image to apply to this device. Type its file name and press ENTER"
+        $installImages | Select-Object -ExpandProperty images | Group-Object -Property ImageGroup | Select-Object -ExpandProperty Group | Out-Host
+        continue
+    }
+    
+    # Perform the validation to make sure the selected image file and group values exist in the server.
+    $imageFiles = $installImages.images | Select-Object -ExpandProperty FileName
+    $imageGroups = $installImages.images | Select-Object -ExpandProperty ImageGroup
+    
+    # Check if the image file exists in the overall list of images.
+    if (-not ($imageFiles.Contains("$installationImageToDeploy"))) {
+        Write-Host "The installation image does not exist in the server. Press ENTER to specify the file and group again."
+        Read-Host | Out-Null
+        continue
+    }
+    
+    # Check if the image group exist in the overall list of groups.
+    if (-not ($imageGroups.Contains("$installationImageGroup"))) {
+        Write-Host "The specified installation image group does not exist in the server. Press ENTER to specify the file and group again."
+        Read-Host | Out-Null
+        continue
+    }
+    
+    # Check if the selected image belongs to the selected group.
+    $image = $installImages.images | Where-Object { $_.FileName -eq "$installationImageToDeploy" -and $_.ImageGroup -eq "$installationImageGroup" }
+    if ($image -eq $null) {
+        Write-Host "The specified installation image, `"$installationImageToDeploy`", does not appear to be in the specified installation image group, `"$installationImageGroup`"."
+        Write-Host "Press ENTER to specify the file and group again."
+        Read-Host | Out-Null
+        continue
+    }
+    
+    $imageFileValidated = $true
+    $imageGroupValidated = $true
+} until (($imageFileValidated -eq $true) -and ($imageGroupValidated -eq $true))
 
 if (($installationImageToDeploy -ne "") -and ($installationImageGroup -ne "")) {
     Show-CenteredTextBox -Text "Preparing the deployment of the selected image file . . ." -MaxWidth 100 -CenterOfAll

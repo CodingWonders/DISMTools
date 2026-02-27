@@ -163,6 +163,8 @@ Partial Class ImgUMount
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Enabled = False
         Me.Label4.Location = New System.Drawing.Point(19, 96)
@@ -248,6 +250,8 @@ Partial Class ImgUMount
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoEllipsis = True
         Me.Label7.Location = New System.Drawing.Point(19, 37)
         Me.Label7.Name = "Label7"
@@ -264,8 +268,8 @@ Partial Class ImgUMount
         'ImgUMount
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(624, 441)
         Me.Controls.Add(Me.GroupBox2)

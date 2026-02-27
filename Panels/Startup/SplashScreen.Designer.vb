@@ -75,8 +75,8 @@ Partial Class SplashScreen
         '
         'SplashScreen
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.BackgroundImage = Global.DISMTools.My.Resources.Resources.startup_bg
         Me.ClientSize = New System.Drawing.Size(800, 200)
         Me.ControlBox = False

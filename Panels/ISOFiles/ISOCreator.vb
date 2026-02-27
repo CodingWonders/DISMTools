@@ -347,13 +347,13 @@ Public Class ISOCreator
         GroupBox1.ForeColor = ForeColor
         GroupBox2.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
         If MainForm.SourceImg = "N/A" Or Not File.Exists(MainForm.SourceImg) Or MainForm.OnlineManagement Or MainForm.OfflineManagement Then
             Button4.Enabled = False
         Else
             Button4.Enabled = True
         End If
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
             Win10Title.Visible = True
@@ -451,6 +451,12 @@ Public Class ISOCreator
         CheckBox3.Checked = MainForm.PEHelper_Use2023EFI
 
         AddHandler CheckBox3.CheckedChanged, AddressOf CheckBox3_CheckedChanged
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(29)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(265)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(343)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(103)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(130)
     End Sub
 
     Private Sub DownloadADK()
@@ -509,11 +515,11 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        SaveFileDialog1.ShowDialog()
+        SaveFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -533,15 +539,11 @@ Public Class ISOCreator
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
-                For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                    ListView1.Items.Add(New ListViewItem(New String() {
-                                                         (ImageInfoCollection.IndexOf(ImageInfo) + 1),
-                                                         ImageInfo.ImageName,
-                                                         ImageInfo.ImageDescription,
-                                                         ImageInfo.ProductVersion.ToString(),
-                                                         Casters.CastDismArchitecture(ImageInfo.Architecture)
-                                                     }))
-                Next
+                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {(ImageInfoCollection.IndexOf(ImageInfo) + 1),
+                                                                                                                       imageinfo.ImageName,
+                                                                                                                       imageinfo.ImageDescription,
+                                                                                                                       imageinfo.ProductVersion.ToString(),
+                                                                                                                       casters.CastDismArchitecture(ImageInfo.Architecture)})).ToArray())
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
@@ -739,6 +741,17 @@ Public Class ISOCreator
         If Not CheckBox1.Checked Then
             unattFile = ""
         End If
+
+        ' get build time to show on watermark
+        If File.Exists(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "let_it_rain")) Then
+            Try
+                Dim buildTime As String = BuildGetter.RetrieveLinkerTimestamp().ToString("yyMMdd-HHmm")
+                File.WriteAllText(Path.Combine(Application.StartupPath, "bin", "extps1", "PE_Helper", "version"), buildTime)
+            Catch ex As Exception
+
+            End Try
+        End If
+
         ISOCreator.StartInfo.Arguments = "-noprofile -nologo -executionpolicy unrestricted -file " & Quote & Application.StartupPath & "\bin\extps1\PE_Helper\PE_Helper.ps1" & Quote & " -cmd StartPEGen -arch " & ComboBox1.SelectedItem & " -imgFile " & Quote & TextBox1.Text & Quote & " -isoPath " & Quote & TextBox3.Text & Quote & " -unattendFile " & Quote & unattFile & Quote & " -copyToVentoy " & If(CheckBox2.Checked, "true", "false") & " -bootex " & If(CheckBox3.Checked, "true", "false")
         ISOCreator.Start()
         ISOCreator.WaitForExit()
@@ -821,10 +834,10 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
-            DynaLog.LogMessage("Selected image: " & selectedImage.ImageFilePath)
-            TextBox1.Text = selectedImage.ImageFilePath
+            DynaLog.LogMessage("Selected image: " & selectedImage.ImageFile)
+            TextBox1.Text = selectedImage.ImageFile
         End If
     End Sub
 
@@ -876,7 +889,7 @@ Public Class ISOCreator
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        OpenFileDialog2.ShowDialog()
+        OpenFileDialog2.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog2_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog2.FileOk

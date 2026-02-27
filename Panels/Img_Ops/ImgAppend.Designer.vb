@@ -22,7 +22,6 @@ Partial Class ImgAppend
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
@@ -32,6 +31,7 @@ Partial Class ImgAppend
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Button4 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.CheckBox6 = New System.Windows.Forms.CheckBox()
         Me.CheckBox7 = New System.Windows.Forms.CheckBox()
@@ -55,8 +55,6 @@ Partial Class ImgAppend
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        Me.Button4 = New System.Windows.Forms.Button()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -182,6 +180,16 @@ Partial Class ImgAppend
         Me.Label2.Size = New System.Drawing.Size(135, 13)
         Me.Label2.TabIndex = 12
         Me.Label2.Text = "Path of configuration file:"
+        '
+        'Button4
+        '
+        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.Button4.Location = New System.Drawing.Point(822, 23)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(156, 23)
+        Me.Button4.TabIndex = 4
+        Me.Button4.Text = "Grab from last image"
+        Me.Button4.UseVisualStyleBackColor = True
         '
         'Button3
         '
@@ -394,21 +402,11 @@ Partial Class ImgAppend
         Me.OpenFileDialog1.Filter = "WimScript.ini|WimScript.ini"
         Me.OpenFileDialog1.Title = "Specify a WimScript.ini configuration file"
         '
-        'Button4
-        '
-        Me.Button4.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.Button4.Location = New System.Drawing.Point(822, 23)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(156, 23)
-        Me.Button4.TabIndex = 4
-        Me.Button4.Text = "Grab from last image"
-        Me.Button4.UseVisualStyleBackColor = True
-        '
         'ImgAppend
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 473)
         Me.Controls.Add(Me.GroupBox2)
@@ -467,6 +465,5 @@ Partial Class ImgAppend
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents CheckBox7 As System.Windows.Forms.CheckBox
     Friend WithEvents Button4 As System.Windows.Forms.Button
-    Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
 
 End Class

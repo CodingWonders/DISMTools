@@ -68,7 +68,7 @@ Public Class RemCapabilities
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows10OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case MainForm.Language
                 Case 0
@@ -105,21 +105,10 @@ Public Class RemCapabilities
             Return False
         End If
         DynaLog.LogMessage("Adding capabilities to arrays...")
-        If MainForm.imgCapabilities.Count > 0 Then
-            For Each imgCapability In MainForm.imgCapabilities.Where(Function(capability) Not New DismPackageFeatureState() {DismPackageFeatureState.Removed, DismPackageFeatureState.NotPresent, DismPackageFeatureState.Staged}.Contains(capability.State)).ToList()
-                ListView1.Items.Add(New ListViewItem(New String() {imgCapability.Name, Casters.CastDismFeatureState(imgCapability.State, True)}))
-            Next
+        If MainForm.CurrentImage.ImageCapabilities IsNot Nothing AndAlso MainForm.CurrentImage.ImageCapabilities.Count > 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Where(Function(capability) New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.State)).Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismFeatureState(capability.State, True)})).ToArray())
         Else
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgCapabilityIds, MainForm.imgCapabilityIds.Last)
-                    If MainForm.imgCapabilityState(x) = "Removed" Or MainForm.imgCapabilityState(x) = "Not present" Or MainForm.imgCapabilityState(x) = "Uninstalled" Then
-                        Continue For
-                    End If
-                    ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgCapabilityIds(x), MainForm.imgCapabilityState(x)}))
-                Next
-            Catch ex As Exception
-                Exit Try
-            End Try
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities_Backup.Where(Function(capability) New DismPackageFeatureState() {DismPackageFeatureState.Installed, DismPackageFeatureState.InstallPending}.Contains(capability.CapabilityState)).Select(Function(capability) New ListViewItem(New String() {capability.CapabilityName, Casters.CastDismFeatureState(capability.CapabilityState, True)})).ToArray())
         End If
         Return True
     End Function
@@ -212,7 +201,9 @@ Public Class RemCapabilities
         ForeColor = CurrentTheme.ForegroundColor
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(524)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(199)
     End Sub
 End Class

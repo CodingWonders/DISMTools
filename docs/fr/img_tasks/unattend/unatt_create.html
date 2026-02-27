@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Créateur de fichiers de réponse sans assistance - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Cr\u00e9ateur de fichiers de r\u00e9ponse sans assistance";
+        var mkdocs_page_input_path = "img_tasks\\unattend\\unatt_create.fr.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navigation">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start.html">Commencer</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights.html">Nouveautés</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tâches d'image</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../img_tasks.html">Aperçu</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../online_inst_mgmt.html">Mode de gestion de l'installation en ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../offline_inst_mgmt.html">Mode de gestion de l'installation hors ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gestion des images</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image.html">Ajouter à une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image.html">Appliquer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image.html">Capturer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image.html">Supprimer les images de volume d'un fichier image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image.html">Exporter une image Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/list_image.html">Lister le contenu des images Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image.html">Monter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/remount_image.html">Remonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/split_image.html">Fractionner une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/unmount_image.html">Démonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Boîtes de dialogue d'informations d'image</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../info/infodlgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/img_info.html">Informations du fichier image</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/pkg_info.html">Informations sur les packages</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/feat_info.html">Informations sur les fonctionnalités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/appxpkg_info.html">Informations sur les packages AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/cap_info.html">Informations sur les capacités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/drv_info.html">Informations sur les pilotes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/winpe_info.html">Informations de configuration de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/pkgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/add_package.html">Ajout de packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/remove_package.html">Suppression de packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fonctionnalités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../features/features.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/enable_feature.html">Activation des fonctionnalités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/disable_feature.html">Désactivation des fonctionnalités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/appx.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/add_provisionedappxpackage.html">Ajout de packages AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/remove_provisionedappxpackage.html">Suppression de packages AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des éditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/editions.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_edition.html">Mettre à niveau une image vers une édition supérieure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_productkey.html">Définir la clé de produit</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des langues et régionales</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../langs/set_layereddriver.html">Définir les pilotes de clavier en couches</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/caps.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/add_capability.html">Ajout de capacités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/remove_capability.html">Suppression de capacités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pilotes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/drvs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/add_driver.html">Ajout de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver.html">Export de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver.html">Import de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver.html">Suppression de pilotes</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Outils</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/mimgmgr.html">Gestionnaire d'images montées</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/wim2esd.html">Conversion d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/swm2wim.html">Fusion de fichiers SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/configlisteditor.html">Éditeur de liste de configuration DISM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils de création d'ISO</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/isocreate.html">Création de fichiers ISO</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installation du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../tools/isocreator/install/localinstall.html">Installations locales</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Installations basées sur le réseau</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/pxehelpers.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/wds.html">Assistant des services de déploiement Windows (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dim.html">Module d'installation des pilotes</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dtpe_es.html">Suite d'extensibilité</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/sysprep.html">Outil de préparation SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/cmdline.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/regcpl.html">Panneau de contrôle du registre d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/servicemgr.html">Gestionnaire de services système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/envvarmgr.html">Gestionnaire de variables d'environnement système</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Fichiers de réponse sans assistance</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="unattend.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="unatt_man.html">Gestionnaire de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Créateur de fichiers de réponse sans assistance</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#modos-del-creador">Modos del creador</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#modo-express">Modo Express</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#modo-editor">Modo Editor</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#requisitos">Requisitos</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#union-a-dominios-active-directory">Unión a dominios Active Directory</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#referencia-de-scripts-iniciales">Referencia de Scripts Iniciales</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#cerrar-animacion-de-primer-inicio-de-sesion">Cerrar Animación de Primer Inicio de Sesión</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#establecer-informacion-oem">Establecer Información OEM</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#establecer-ajustes-de-recuperacion-rapida-de-maquina">Establecer Ajustes de Recuperación Rápida de Máquina</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#configurar-carpetas-para-integracion-de-git">Configurar carpetas para integración de Git</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#invocar-configuracion-winutil">Invocar Configuración WinUtil</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#establecer-ajustes-de-personalizacion">Establecer Ajustes de Personalización</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#establecer-propietario-registrado-y-organizacion">Establecer Propietario Registrado y Organización</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#configurar-un-fondo-de-pantalla-personalizado">Configurar un fondo de pantalla personalizado</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#actualizar-aplicaciones-de-microsoft-store">Actualizar aplicaciones de Microsoft Store</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#deshabilitar-oobe-de-segunda-oportunidad">Deshabilitar OOBE de Segunda Oportunidad</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#deshabilitar-fuentes-de-notificacion-de-windows">Deshabilitar Fuentes de Notificación de Windows</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#historial-de-cambios">Historial de Cambios</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#agradecimientos">Agradecimientos</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="unatt_apply.html">Application des fichiers de réponse sans assistance</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils externes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/themedesigner.html">Création de vos thèmes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Affichage des journaux de diagnostic</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menu de navigation sur mobile">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Documents"></a></li>
+          <li class="breadcrumb-item">Outils</li>
+          <li class="breadcrumb-item">Fichiers de réponse sans assistance</li>
+      <li class="breadcrumb-item active">Créateur de fichiers de réponse sans assistance</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="creador-de-archivos-de-respuesta-desatendida">Creador de archivos de respuesta desatendida</h1>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/unatt_creator_express.png" />
+</p>
+
+<p>El Creador de archivos de respuesta desatendida te permite generar archivos de respuesta compatibles con Windows 10 y 11 de dos formas: mediante un asistente (modo Express) o usando un editor de texto (modo Editor).</p>
+<p><em>Esta herramienta está disponible en DISMTools 0.5.1 y posteriores.</em></p>
+<h2 id="modos-del-creador">Modos del creador</h2>
+<p>El creador incluye dos modos: <strong>Express</strong> y <strong>Editor</strong>. Puedes cambiar entre ambos mediante los botones situados en las esquinas izquierda de la ventana.</p>
+<h3 id="modo-express">Modo Express</h3>
+<p>El modo Express es útil para quienes no han creado archivos de respuesta antes o prefieren evitar editores de texto. Sigue los pasos del asistente y generarás el archivo en pocos minutos.</p>
+<p>Si tienes un proyecto cargado, DISMTools permitirá guardar el archivo de respuesta directamente en la carpeta del proyecto sin tener que cambiar de directorio. También puedes guardarlo en cualquier otra ubicación.</p>
+<h4 id="pasos-del-asistente">Pasos del asistente</h4>
+<p>En la página de <strong>Configuración regional</strong> puedes establecer el idioma, la configuración regional del sistema, la distribución del teclado y la ubicación del equipo. Ajusta estos valores según tus necesidades, o déjalos para configurarlos durante la instalación del sistema operativo.</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_regional_settings.png" />
+</p>
+
+<p>En la página de <strong>Configuración del sistema</strong> puedes fijar el nombre del equipo, las arquitecturas objetivo del archivo de respuesta y otros parámetros:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_system_configuration.png" />
+</p>
+
+<p>Opciones adicionales:</p>
+<ul>
+<li><strong>Usar un configuration set o distribution share</strong>: un configuration set permite precargar aplicaciones y controladores en la imagen objetivo. Puedes crear estos conjuntos con Windows System Image Manager. Asegúrate de que exista un conjunto en la ISO a la que copies el archivo de respuesta.</li>
+<li><strong>Ajustes de Windows 11</strong>: opciones que ayudan a evitar requisitos de hardware y configuración de red. Configura la segunda opción si el equipo objetivo no tiene capacidades de red. Si buscas evitar la conexión para crear cuentas locales, puedes crear las cuentas desde este asistente.</li>
+</ul>
+<p>En la página <strong>Zona horaria</strong> puedes establecer la zona horaria del sistema objetivo:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_timezone.png" />
+</p>
+
+<p>En la página <strong>Configuración de disco</strong> puedes definir la partición del sistema. Puedes dejar que Setup gestione las particiones o automatizarlo mediante scripts DiskPart:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_disk_config.png" />
+</p>
+
+<p>En la página <strong>Clave de producto</strong> puedes especificar la clave del sistema: usar una clave genérica asociada a la edición o escribir una clave personalizada:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_product_key.png" />
+</p>
+
+<p>Notas:</p>
+<ul>
+<li>Si eliges una clave genérica, ten en cuenta que solo sirven para la instalación y no activan el sistema.</li>
+<li>Si usas una clave personalizada, asegúrate de que sea válida para la edición de la imagen; DISMTools solo valida la sintaxis.</li>
+</ul>
+<p>En la página <strong>Cuentas de usuario</strong> puedes crear hasta 5 cuentas locales y definir sus contraseñas:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_user_accounts.png" />
+</p>
+
+<p>Desde aquí también puedes habilitar el inicio de sesión automático. Si prefieres que el instalador pregunte, puedes omitir este paso.</p>
+<p>No se recomienda configurar la caducidad de contraseñas por defecto; consulta las guías de seguridad (por ejemplo, NIST) antes de hacerlo.</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_user_accounts_pw_expiry.png" />
+</p>
+
+<p>Puedes configurar políticas de bloqueo de cuenta, aunque desactivarlas no es recomendable por motivos de seguridad:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_user_accounts_lockout.png" />
+</p>
+
+<p>Nota: al menos una cuenta debe pertenecer al grupo Administradores.</p>
+<p>En la página <strong>Compatibilidad con máquinas virtuales</strong> puedes indicar si deseas instalar las herramientas de integración del proveedor (VirtualBox Guest Additions, VMware Tools, etc.):</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_vm_support.png" />
+</p>
+
+<p>En la página <strong>Configuración de red</strong> puedes indicar si el equipo objetivo se conectará a una red inalámbrica:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_network_config.png" />
+</p>
+
+<p>Notas:</p>
+<ul>
+<li>La autenticación inalámbrica debe ser compatible tanto con el router como con el adaptador del equipo objetivo.</li>
+<li>Si no quieres configurar la red inalámbrica, elige <em>Skip configuration</em>.</li>
+</ul>
+<p>En la página <strong>Telemetría del sistema</strong> puedes decidir si enviar información a Microsoft o terceros:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_telemetry.png" />
+</p>
+
+<p>Desactivar la telemetría no elimina todas las fuentes de recopilación de datos; se requieren pasos adicionales para reducirla.</p>
+<p>En la página <strong>Scripts post-instalación</strong> puedes añadir scripts PowerShell que se ejecutarán durante la instalación o al primer inicio de sesión:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_postinst_scripts.png" />
+</p>
+
+<p>Puedes escribir los scripts desde cero o importar existentes. Tras ejecutar scripts, es común reiniciar el Explorador para aplicar personalizaciones.</p>
+<p>Consulta la referencia de componentes si necesitas añadir entradas específicas en pases concretos.</p>
+<p>Finalmente, revisa la configuración antes de generar el archivo. Si es necesario, vuelve a las páginas correspondientes:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/steps/unatt_creator_review.png" />
+</p>
+
+<p>Después de crear el archivo, puedes generar otro, abrir la ubicación del archivo, aplicarlo o editarlo en el modo Editor o con Windows System Image Manager.</p>
+<h3 id="modo-editor">Modo Editor</h3>
+<p>El modo Editor permite personalizaciones avanzadas del archivo de respuesta, como añadir componentes o reglas. Usa los botones de la barra de herramientas para operar el editor.</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/unatt_creator_editor.png" />
+</p>
+
+<p>DISMTools 0.6.1 añade la capacidad de normalizar el espaciado del archivo de respuesta para mantener consistencia:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/unatt_creator_editor_normalize.gif" />
+</p>
+
+<h2 id="requisitos">Requisitos</h2>
+<p>El creador de archivos de respuesta requiere el runtime .NET 9 para ejecutar el generador. Si DISMTools detecta que no está instalado, se ofrecerá una versión autocontenida que incluye el runtime:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/unattendgen_selfcontained.png" />
+</p>
+
+<p>Si eliges usar la versión autocontenida, DISMTools guardará esta preferencia hasta que la versión autocontenida sea eliminada o sustituida por una actualización.</p>
+<p>La descarga puede tardar según la velocidad de la conexión y el rendimiento del equipo; al finalizar verás una notificación en el área de sistema.</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/unattendgen_notify.png" />
+</p>
+
+<p>También puedes usar el generador de forma independiente; consulta su repositorio <a href="https://github.com/CodingWonders/UnattendGen">aquí</a></p>
+<h2 id="union-a-dominios-active-directory">Unión a dominios Active Directory</h2>
+<p>Si el archivo de respuesta y la imagen van destinados a equipos de un dominio, puedes configurar la unión a dominio mediante el <strong>Domain Services Wizard</strong>.</p>
+<p>Accede al asistente con el botón <strong>Join target device to domain...</strong> que aparece en las siguientes páginas:</p>
+<ul>
+<li>System Configuration</li>
+<li>User Accounts</li>
+<li>Component Settings</li>
+</ul>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/dsw/dswizard_jointargetdevice.png" />
+</p>
+
+<p>Deberás configurar primero la información DNS objetivo: sufijo de dominio, alias de interfaz de red (Interface Alias) y direcciones de servidor DNS.</p>
+<p>Puedes especificar el alias de interfaz de dos maneras:</p>
+<ul>
+<li>Seleccionándolo de la lista de adaptadores disponibles en el sistema actual. Recomendado si ejecutas DISMTools en el equipo del dominio y existe un adaptador con el mismo nombre que en los equipos objetivo.</li>
+<li>Escribiendo manualmente el nombre del adaptador (Interface Alias).</li>
+</ul>
+<p>Cuando selecciones el adaptador, los campos relacionados (PDS, DNS) se rellenarán automáticamente, aunque podrás modificarlos si es necesario.</p>
+<p>Cuando seleccionas el adaptador de red de la lista, todos los demás campos (PDS, direcciones de servidor DNS) se rellenarán automáticamente dada la configuración actual del adaptador de red. Sin embargo, aún puedes cambiar estos campos si necesitas usar valores diferentes.</p>
+<p>Para direcciones de servidor DNS, necesitas poner una dirección por línea. Si quieres verificar si la sintaxis de las direcciones es correcta, haz clic en <strong>Verificar Sintaxis de Dirección DNS</strong>.</p>
+<p>Un ejemplo de información rellenada se muestra a continuación:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/dsw/dswizard_dnsinfo.png" />
+</p>
+
+<p>Después de configurar la información del servidor DNS, necesitarás configurar información relacionada con el usuario inicial con el que el dispositivo objetivo se unirá al dominio.</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/dsw/dswizard_dsinfo.png" />
+</p>
+
+<ul>
+<li>Si el dispositivo es parte de un dominio, el nombre del dominio se rellenará automáticamente y podrás elegir usuarios de unidades organizativas disponibles (OU) en el dominio. Sin embargo, aún puedes especificar información diferente manualmente.</li>
+<li>Si el dispositivo no es parte de un dominio, necesitarás especificar toda la información manualmente.</li>
+</ul>
+<p>Para elegir un usuario del dominio:</p>
+<ol>
+<li>Selecciona la OU de la lista desplegable. Después de seleccionar la OU, la lista de usuarios en la OU se poblará automáticamente</li>
+<li>Selecciona el usuario de la lista</li>
+</ol>
+<p>Tanto los nombres de cuenta UPN como SAM se rellenarán automáticamente. Al especificar esta información manualmente, necesitarás especificar la parte de usuario del UPN. Por ejemplo, <code>johndoe</code>.</p>
+<p>Finalmente, especifica la contraseña del usuario. Dado que DISMTools <strong>NO</strong> verificará si la contraseña es correcta, asegúrate de escribirla correctamente.</p>
+<p>Has terminado el Asistente de Servicios de Dominio. Cuando llegues a la pantalla de componentes, verás que los componentes y configuraciones necesarios se han añadido a tu archivo de respuesta.</p>
+<h2 id="referencia-de-scripts-iniciales">Referencia de Scripts Iniciales</h2>
+<p>Actualmente, hay 12 scripts iniciales disponibles:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Nombre del Script</th>
+<th style="text-align: center;">Etapa</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Cerrar Animación de Primer Inicio de Sesión</td>
+<td style="text-align: center;">Durante Configuración del Sistema</td>
+<td style="text-align: left;">Este script cierra el proceso de Animación de Primer Inicio de Sesión y permite que un sistema llegue al escritorio más pronto. Funciona en Windows 10 y 11.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Habilitar Mensajes de Estado Detallados</td>
+<td style="text-align: center;">Durante Configuración del Sistema</td>
+<td style="text-align: left;">Este script habilita los mensajes de estado detallados que están habilitados por defecto en Windows Server. Esto puede ayudar a reportar el estado de inicio/parada de servicios.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Establecer Información OEM</td>
+<td style="text-align: center;">Durante Configuración del Sistema</td>
+<td style="text-align: left;">Este script configura ajustes OEM como el fabricante o el modelo para personalizar aún más una instalación de Windows.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Establecer Ajustes de Recuperación Rápida de Máquina</td>
+<td style="text-align: center;">Durante Configuración del Sistema</td>
+<td style="text-align: left;">Este script configura los ajustes de Recuperación Rápida de Máquina del sistema objetivo en Windows 11 24H2 y posteriores.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Configurar carpetas para integración de Git</td>
+<td style="text-align: center;">Cuando el primer usuario inicia sesión</td>
+<td style="text-align: left;">Este script configura una carpeta, o un conjunto de carpetas, para integración de control de fuente Git en el Explorador de Archivos. Git y las últimas versiones de componentes del sistema necesitan estar instalados en el sistema objetivo para aprovechar todas las características.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Invocar Configuración WinUtil</td>
+<td style="text-align: center;">Cuando el primer usuario inicia sesión</td>
+<td style="text-align: left;">Este script configura un sistema objetivo usando un archivo de configuración exportado de la Utilidad de Windows.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Establecer Ajustes de Personalización</td>
+<td style="text-align: center;">Cuando el primer usuario inicia sesión</td>
+<td style="text-align: left;">Este script configura ajustes relacionados con modos de color y colores de acento en el entorno de usuario del sistema objetivo.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Establecer Propietario Registrado y Organización</td>
+<td style="text-align: center;">Cuando el primer usuario inicia sesión</td>
+<td style="text-align: left;">Este script configura el propietario registrado y la organización del sistema objetivo.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Configurar un fondo de pantalla personalizado</td>
+<td style="text-align: center;">Cuando el primer usuario inicia sesión</td>
+<td style="text-align: left;">Este script configura un fondo de pantalla en el entorno del sistema objetivo.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Actualizar aplicaciones de Microsoft Store</td>
+<td style="text-align: center;">Cuando el primer usuario inicia sesión</td>
+<td style="text-align: left;">Este script invoca una actualización de todas las aplicaciones de Microsoft Store. Se requiere una red para que funcione.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Deshabilitar OOBE de Segunda Oportunidad</td>
+<td style="text-align: center;">Cuando los usuarios inician sesión por primera vez</td>
+<td style="text-align: left;">Este script deshabilita la Experiencia Fuera de Caja de Segunda Oportunidad en el sistema objetivo. Funciona en Windows 10 y 11.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Deshabilitar Fuentes de Notificación de Windows</td>
+<td style="text-align: center;">Cuando los usuarios inician sesión por primera vez</td>
+<td style="text-align: left;">Este script deshabilita fuentes de notificación especificadas por el usuario en el sistema objetivo.</td>
+</tr>
+</tbody>
+</table>
+<p>En DISMTools 0.7.2, puedes ver más información sobre estos scripts iniciales más fácilmente usando el nuevo <strong>Navegador de Scripts Iniciales</strong>:</p>
+<p align="center">
+    <img src="/res/img_tasks/unattend/unatt_creator/unatt_script_browser.png" />
+</p>
+
+<p>Algunos scripts permiten configurar ajustes después de importarlos:</p>
+<h3 id="cerrar-animacion-de-primer-inicio-de-sesion">Cerrar Animación de Primer Inicio de Sesión</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<p>No hay ajustes disponibles.</p>
+<h3 id="establecer-informacion-oem">Establecer Información OEM</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Opción</th>
+<th style="text-align: center;">¿Requerida?</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>OEM_Manufacturer</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">El fabricante del sistema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_Model</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">El modelo del sistema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_SupportURL</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">La URL de soporte del sistema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_SupportPhone</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">El número de teléfono de soporte del sistema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_SupportHours</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">Las horas de soporte del sistema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>OEM_Logo</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">La ruta al logo OEM del sistema. Debe ser un archivo BMP</td>
+</tr>
+</tbody>
+</table>
+<h3 id="establecer-ajustes-de-recuperacion-rapida-de-maquina">Establecer Ajustes de Recuperación Rápida de Máquina</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Opción</th>
+<th style="text-align: center;">¿Requerida?</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>QMR_CloudRemediation</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">Habilita (1) o deshabilita (0) la remediación en la nube para QMR</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_AutoRemediation</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">Habilita (1) o deshabilita (0) la remediación automática para QMR</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_NextCheckMinutes</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">Establece el número de minutos antes de la siguiente verificación QMR</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_NextRebootHours</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">Establece el número de horas antes del siguiente reinicio</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>QMR_Headless</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">Habilita (1) o deshabilita (0) el modo sin cabeza para QMR</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notas:</strong></p>
+<ul>
+<li>Las opciones 3 y 4 solo se aplicarán si la remediación automática está habilitada</li>
+<li>La Remediación en la Nube permite al sistema escanear soluciones en el lanzamiento de WinRE</li>
+<li>La Remediación Automática permite al sistema continuar escaneando soluciones si el primer intento falla</li>
+</ul>
+<h3 id="configurar-carpetas-para-integracion-de-git">Configurar carpetas para integración de Git</h3>
+<p><strong>Lenguaje del script</strong>: PowerShell</p>
+<p>Para añadir nuevas entradas a la lista de carpetas para las que mostrar información VCS, añádelas al siguiente array, como esto:</p>
+<pre><code class="language-powershell">$gitFolders = @(
+    &quot;$env:SYSTEMDRIVE\dev\repo1&quot;,
+    &quot;$env:SYSTEMDRIVE\dev\repo2&quot;
+)
+</code></pre>
+<p>Ten en cuenta que, para que la vista de Git se muestre, el sistema necesita la aplicación <em>Configuración Avanzada de Windows</em>.</p>
+<h3 id="invocar-configuracion-winutil">Invocar Configuración WinUtil</h3>
+<p><strong>Lenguaje del script</strong>: PowerShell</p>
+<p>Necesitas añadir tu archivo de configuración a la raíz del directorio de montaje de la imagen, como <code>winutil-config.json</code>. Puedes aprender más sobre archivos de configuración <a href="https://winutil.christitus.com/userguide/automation/">aquí</a>.</p>
+<h3 id="establecer-ajustes-de-personalizacion">Establecer Ajustes de Personalización</h3>
+<p><strong>Lenguaje del script</strong>: PowerShell</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Opción</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>$lightThemeSystem</code></td>
+<td style="text-align: left;">Si 0, establece el tema del sistema en modo oscuro. Si 1, lo establece en modo claro</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$lightThemeApps</code></td>
+<td style="text-align: left;">Si 0, establece el tema de las aplicaciones en modo oscuro. Si 1, lo establece en modo claro</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$accentColorOnStart</code></td>
+<td style="text-align: left;">Si 0, deshabilita el color de acento en Inicio, barra de tareas y centro de acción. Si 1, lo habilita</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$enableTransparency</code></td>
+<td style="text-align: left;">Si 0, deshabilita efectos de transparencia (Acrylic/Mica). Si 1, los habilita</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>$htmlAccentColor</code></td>
+<td style="text-align: left;">Establece el color de acento del sistema. Debe ser un valor hex</td>
+</tr>
+</tbody>
+</table>
+<h3 id="establecer-propietario-registrado-y-organizacion">Establecer Propietario Registrado y Organización</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Opción</th>
+<th style="text-align: center;">¿Requerida?</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>AutoUserInfo</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">Determina si establecer el propietario registrado como el nombre del usuario actualmente firmado (0 o 1)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>RegisteredUser</code></td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: left;">El propietario registrado del sistema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>RegisteredOrg</code></td>
+<td style="text-align: center;">No</td>
+<td style="text-align: left;">La organización registrada del sistema</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Notas:</strong></p>
+<ul>
+<li>Si <code>AutoUserInfo</code> se establece en 1 y se usa una cuenta Microsoft, el propietario registrado se establecerá en las primeras 5 letras de la dirección de email</li>
+<li>Este script no debería usarse cuando los usuarios inician sesión por primera vez porque la información del usuario cambiará cada vez que un nuevo usuario inicie sesión por primera vez si se cumplen las siguientes condiciones:<ul>
+<li><code>AutoUserInfo</code> se establece en 1</li>
+<li>Se crea más de una cuenta de usuario, ya sea desde el archivo de respuesta o después de OOBE</li>
+</ul>
+</li>
+</ul>
+<h3 id="configurar-un-fondo-de-pantalla-personalizado">Configurar un fondo de pantalla personalizado</h3>
+<p><strong>Lenguaje del script</strong>: PowerShell</p>
+<p>Coloca el fondo de pantalla en cualquier ruta dentro de la imagen de Windows. Luego, reemplaza <code>&lt;path to your wallpaper here&gt;</code> con la ruta actual a tu fondo de pantalla empezando desde el directorio de montaje de la imagen de Windows. Por ejemplo:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Ruta en directorio de montaje</th>
+<th style="text-align: center;">Ruta Actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>C:\mount\wallpaper.jpg</code></td>
+<td style="text-align: center;"><code>$env:SYSTEMDRIVE\wallpaper.jpg</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>C:\mount\Pictures\wallpaper.png</code></td>
+<td style="text-align: center;"><code>$env:SYSTEMDRIVE\Pictures\wallpaper.png</code></td>
+</tr>
+</tbody>
+</table>
+<p>Si el archivo de imagen no existe en la imagen objetivo y continúas con el script, verás un fondo de escritorio negro.</p>
+<h3 id="actualizar-aplicaciones-de-microsoft-store">Actualizar aplicaciones de Microsoft Store</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<p>No hay ajustes disponibles.</p>
+<h3 id="deshabilitar-oobe-de-segunda-oportunidad">Deshabilitar OOBE de Segunda Oportunidad</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<p>No hay ajustes disponibles.</p>
+<h3 id="deshabilitar-fuentes-de-notificacion-de-windows">Deshabilitar Fuentes de Notificación de Windows</h3>
+<p><strong>Lenguaje del script</strong>: Batch</p>
+<p>Por defecto, el script deshabilitará las siguientes fuentes de notificación:</p>
+<ul>
+<li>Sugerido</li>
+<li>Notificación de Aplicación de Inicio</li>
+<li>OneDrive</li>
+<li>Salud de Cuenta Microsoft</li>
+<li>Copilot (paquete AppX)</li>
+</ul>
+<p>Estas entradas se añadirán a la lista de fuentes de notificación, en Configuración -&gt; Sistema -&gt; Notificaciones. Para añadir más entradas a la lista, haz lo siguiente:</p>
+<pre><code class="language-batch">FOR %%a IN (Windows.SystemToast.Suggested ... Windows.SystemToast.AccountHealth &lt;tu fuente aquí&gt;) DO (
+    reg add &quot;HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a&quot; /f
+    reg add &quot;HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\%%a&quot; /v Enabled /t REG_DWORD /d 0 /f
+)
+</code></pre>
+<p>Notas para tu fuente:</p>
+<ul>
+<li>Si tu fuente contiene espacios, enciérrala entre comillas</li>
+</ul>
+<h3 id="historial-de-cambios">Historial de Cambios</h3>
+<ul>
+<li>DISMTools 0.7.2 Preview 3:<ul>
+<li>Añadido:<ul>
+<li>Configurar carpetas Git para Explorador de Archivos</li>
+</ul>
+</li>
+<li>Modificado:<ul>
+<li>Añadidos campos de nombre y descripción a scripts iniciales para navegador de scripts</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DISMTools 0.7.2 Preview 2:<ul>
+<li>Añadido:<ul>
+<li>Mensajes de Estado Detallados</li>
+</ul>
+</li>
+<li>Modificado:<ul>
+<li>Deshabilitar Fuentes de Notificación de Windows: añadidas notificaciones Copilot a lista negra</li>
+<li>Establecer Ajustes de Recuperación Rápida de Máquina: añadido verificación de valor</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DISMTools 0.7.1 Preview 4:<ul>
+<li>Añadido:<ul>
+<li>Deshabilitar Fuentes de Notificación de Windows</li>
+<li>Deshabilitar OOBE de Segunda Oportunidad</li>
+<li>Establecer Información OEM</li>
+<li>Establecer Propietario Registrado y Organización</li>
+<li>Establecer Ajustes de Recuperación Rápida de Máquina</li>
+</ul>
+</li>
+<li>Modificado:<ul>
+<li>Invocar Configuración WinUtil: reducido conteo de ping al servidor</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DISMTools 0.7.1 Preview 3:<ul>
+<li>Añadido:<ul>
+<li>Saltar Animación de Primer Inicio de Sesión OOBE</li>
+<li>Personalizar Entorno de Usuario</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DISMTools 0.7.1 Preview 2:<ul>
+<li>Añadido:<ul>
+<li>Configurar un fondo de pantalla personalizado</li>
+<li>Actualizar aplicaciones de Microsoft Store</li>
+<li>Invocar Configuración WinUtil</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="agradecimientos">Agradecimientos</h2>
+<p>Agradecimientos especiales a Christoph Schneegans por crear la biblioteca que hace posible este creador.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Générée avec <a href="https://www.mkdocs.org/">MkDocs</a> avec un <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a> fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="unatt_man.html" style="color: #fcfcfc">&laquo; Précédent</a></span>
+    
+    
+      <span><a href="unatt_apply.html" style="color: #fcfcfc">Suivant &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

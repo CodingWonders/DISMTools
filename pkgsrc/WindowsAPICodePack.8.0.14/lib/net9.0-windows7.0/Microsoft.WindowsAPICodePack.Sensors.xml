@@ -1,0 +1,1869 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.WindowsAPICodePack.Sensors</name>
+    </assembly>
+    <members>
+        <member name="T:MS.WindowsAPICodePack.Internal.CoreErrorHelper">
+            <summary>
+            Provide Error Message Helper Methods.
+            This is intended for Library Internal use only.
+            </summary>
+        </member>
+        <member name="F:MS.WindowsAPICodePack.Internal.CoreErrorHelper.FacilityWin32">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+        </member>
+        <member name="F:MS.WindowsAPICodePack.Internal.CoreErrorHelper.Ignored">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+        </member>
+        <member name="M:MS.WindowsAPICodePack.Internal.CoreErrorHelper.HResultFromWin32(System.Int32)">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+            <param name="win32ErrorCode">The Windows API error code.</param>
+            <returns>The equivalent HRESULT.</returns>
+        </member>
+        <member name="M:MS.WindowsAPICodePack.Internal.CoreErrorHelper.Succeeded(System.Int32)">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+            <param name="result">The error code.</param>
+            <returns>True if the error code indicates success.</returns>
+        </member>
+        <member name="M:MS.WindowsAPICodePack.Internal.CoreErrorHelper.Succeeded(MS.WindowsAPICodePack.Internal.HResult)">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+            <param name="result">The error code.</param>
+            <returns>True if the error code indicates success.</returns>
+        </member>
+        <member name="M:MS.WindowsAPICodePack.Internal.CoreErrorHelper.Failed(MS.WindowsAPICodePack.Internal.HResult)">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+            <param name="result">The error code.</param>
+            <returns>True if the error code indicates failure.</returns>
+        </member>
+        <member name="M:MS.WindowsAPICodePack.Internal.CoreErrorHelper.Failed(System.Int32)">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+            <param name="result">The error code.</param>
+            <returns>True if the error code indicates failure.</returns>
+        </member>
+        <member name="M:MS.WindowsAPICodePack.Internal.CoreErrorHelper.Matches(System.Int32,System.Int32)">
+            <summary>
+            This is intended for Library Internal use only.
+            </summary>
+            <param name="result">The COM error code.</param>
+            <param name="win32ErrorCode">The Win32 error code.</param>
+            <returns>Inticates that the Win32 error code corresponds to the COM error code.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.ISensor">
+            <summary>
+            A COM interop wrapper for the ISensor interface.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetID(System.Guid@)">
+            <summary>
+            Unique ID of sensor within the sensors platform
+            </summary>
+            <param name="id">The unique ID to be returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetCategory(System.Guid@)">
+            <summary>
+            Category of sensor Ex: Location
+            </summary>
+            <param name="sensorCategory">The sensor category to be returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetType(System.Guid@)">
+            <summary>
+            Specific type of sensor: Ex: IPLocationSensor
+            </summary>
+            <param name="sensorType">The sensor Type to be returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetFriendlyName(System.String@)">
+            <summary>
+            Human readable name for sensor
+            </summary>
+            <param name="friendlyName">The friendly name for the sensor</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetProperty(Microsoft.WindowsAPICodePack.Shell.PropertySystem.PropertyKey@,MS.WindowsAPICodePack.Internal.PropVariant)">
+            <summary>
+            Sensor metadata: make, model, serial number, etc
+            </summary>
+            <param name="key">The PROPERTYKEY for the property to be retrieved</param>
+            <param name="property">The property returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetProperties(Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceKeyCollection,Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues@)">
+            <summary>
+            Bulk Sensor metadata query: make, model, serial number, etc
+            </summary>
+            <param name="keys">The PROPERTYKEY collection for the properties to be retrieved</param>
+            <param name="properties">The properties returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetSupportedDataFields(Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceKeyCollection@)">
+            <summary>
+            Get the array of SensorDataField objects that describe the individual values that can be reported by the sensor
+            </summary>
+            <param name="dataFields">A collection of PROPERTYKEY structures representing the data values reported by the sensor</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.SetProperties(Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues,Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues@)">
+            <summary>
+            Bulk Sensor metadata set for settable properties
+            </summary>
+            <param name="properties">The properties to be set</param>
+            <param name="results">The PROPERTYKEY/HRESULT pairs indicating success/failure for each property set</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.SupportsDataField(Microsoft.WindowsAPICodePack.Shell.PropertySystem.PropertyKey,System.Boolean@)">
+            <summary>
+            Reports whether or not a sensor can deliver the requested data type
+            </summary>
+            <param name="key">The GUID to find matching PROPERTYKEY structures for</param>
+            <param name="isSupported">A collection of PROPERTYKEY structures representing the data values</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetState(Microsoft.WindowsAPICodePack.Sensors.NativeSensorState@)">
+            <summary>
+            Get the sensor state
+            </summary>
+            <param name="state">The SensorState returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetData(Microsoft.WindowsAPICodePack.Sensors.ISensorDataReport@)">
+            <summary>
+            Get the most recent ISensorDataReport for the sensor
+            </summary>
+            <param name="dataReport">The data report returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.SupportsEvent(System.Guid,System.Boolean@)">
+            <summary>
+            Reports whether or not a sensor supports the specified event.
+            </summary>
+            <param name="eventGuid">The event identifier</param>
+            <param name="isSupported">true if the event is supported, otherwise false</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.GetEventInterest(System.IntPtr@,System.UInt32@)">
+            <summary>
+            Reports the set of event interests.
+            </summary>
+            <param name="pValues"></param>
+            <param name="count"></param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.SetEventInterest(System.Guid[],System.UInt32)">
+            <summary>
+            Sets the set of event interests
+            </summary>
+            <param name="pValues">The array of GUIDs representing sensor events of interest</param>
+            <param name="count">The number of guids included</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensor.SetEventSink(Microsoft.WindowsAPICodePack.Sensors.ISensorEvents)">
+            <summary>
+            Subscribe to ISensor events
+            </summary>
+            <param name="pEvents">An interface pointer to the callback object created for events</param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection">
+            <summary>
+            A COM interop wrapper for the ISensorCollection interface
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection.GetAt(System.UInt32,Microsoft.WindowsAPICodePack.Sensors.ISensor@)">
+            <summary>
+            Get a sensor by index
+            </summary>
+            <param name="ulIndex">The index for the sensor to retrieve</param>
+            <param name="ppSensor">The sensor retrieved</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection.GetCount(System.UInt32@)">
+            <summary>
+            Get the sensor count for the collection
+            </summary>
+            <param name="pCount">The count returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection.Add(Microsoft.WindowsAPICodePack.Sensors.ISensor)">
+            <summary>
+            Add a sensor to the collection
+            </summary>
+            <param name="pSensor">The sensor to add</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection.Remove(Microsoft.WindowsAPICodePack.Sensors.ISensor)">
+            <summary>
+            Remove a sensor from the collection
+            </summary>
+            <param name="pSensor">The sensor to remove</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection.RemoveByID(System.Guid)">
+            <summary>
+            Remove a sensor from the collection
+            </summary>
+            <param name="sensorID">Remove sensor by ID</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorCollection.Clear">
+            <summary>
+            Clear the collection
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorCollection">
+            <summary>
+            A COM interop wrapper for the SensorCollection class
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SystemTime">
+            <summary>
+            The SystemTime structure represents a date and time using individual members for 
+            the month, day, year, weekday, hour, minute, second, and millisecond.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SystemTime.DateTime">
+            <summary>
+            Gets the <see cref="P:Microsoft.WindowsAPICodePack.Sensors.SystemTime.DateTime"/> representation of this object.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.ISensorDataReport">
+            <summary>
+            COM interop wrapper for the ISensorDataReport interface.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorDataReport.GetTimestamp(Microsoft.WindowsAPICodePack.Sensors.SystemTime@)">
+            <summary>
+            Get the timestamp for the data report
+            </summary>
+            <param name="timeStamp">The timestamp returned for the data report</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorDataReport.GetSensorValue(Microsoft.WindowsAPICodePack.Shell.PropertySystem.PropertyKey@,MS.WindowsAPICodePack.Internal.PropVariant)">
+            <summary>
+            Get a single value reported by the sensor
+            </summary>
+            <param name="propKey">The data field ID of interest</param>
+            <param name="propValue">The data returned</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.ISensorDataReport.GetSensorValues(Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceKeyCollection,Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues@)">
+            <summary>
+            Get multiple values reported by a sensor
+            </summary>
+            <param name="keys">The collection of keys for values to obtain data for</param>
+            <param name="values">The values returned by the query</param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.NativeSensorManager">
+            <summary>
+            A COM interop wrapper for the SensorsManager class
+            </summary>
+            <remarks>
+            See Sensor API documentation in Windows 7 SDK
+            </remarks>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.NativeISensorManager">
+            <summary>
+            A COM interop wrapper for the ISensorsManager interface
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.NativeISensorManager.GetSensorsByCategory(System.Guid,Microsoft.WindowsAPICodePack.Sensors.ISensorCollection@)">
+            <summary>
+            Get a collection of related sensors by category, Ex: Light
+            </summary>
+            <param name="sensorCategory">The category of sensors to find</param>
+            <param name="ppSensorsFound">The collection of sensors found</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.NativeISensorManager.GetSensorsByType(System.Guid,Microsoft.WindowsAPICodePack.Sensors.ISensorCollection@)">
+            <summary>
+            Get sensors by type, Ex: Ambient Light
+            </summary>
+            <param name="sensorType">The type of sensors to find</param>
+            <param name="ppSensorsFound">The collection of sensors found</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.NativeISensorManager.GetSensorByID(System.Guid,Microsoft.WindowsAPICodePack.Sensors.ISensor@)">
+            <summary>
+            Get a unique instance of a sensor
+            </summary>
+            <param name="sensorID">The unique ID of a sensor installed on a system</param>
+            <param name="ppSensor">The ISensor interface pointer for the sensor found, or null if no sensor was found</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.NativeISensorManager.SetEventSink(Microsoft.WindowsAPICodePack.Sensors.ISensorManagerEvents)">
+            <summary>
+            Subscribe to ISensors events
+            </summary>
+            <param name="pEvents">An interface pointer to the callback object created</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.NativeISensorManager.RequestPermissions(System.IntPtr,Microsoft.WindowsAPICodePack.Sensors.ISensorCollection,System.Boolean)">
+            <summary>
+            Opens a system dialog box to request user permission to access sensor data
+            </summary>
+            <param name="parent">HWND handle to a window that can act as a parent to the permissions dialog box</param>
+            <param name="sensors">Pointer to the ISensorCollection interface that contains the list of sensors for which permission is being requested</param>
+            <param name="modal">BOOL that specifies the dialog box mode</param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState">
+            <summary>
+            Represents the state of the sensor device.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState.Ready">
+            <summary>
+            The device is ready.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState.NotAvailable">
+            <summary>
+            The device is not available.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState.NoData">
+            <summary>
+            No data is available.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState.Initializing">
+            <summary>
+            The device is initializing.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState.AccessDenied">
+            <summary>
+            No permissions exist to access the device.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.NativeSensorState.Error">
+            <summary>
+            The device has encountered an error.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.ISensorManagerEvents">
+            <summary>
+            A COM interop events interface for the ISensorManager object
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.ISensorEvents">
+            <summary>
+            A COM interop events interface for the ISensor object
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceKeyCollection">
+            <summary>
+            Holds a collection of PROPERTYKEY values. This interface can be retrieved from a method 
+            or, if a new object is required, call CoCreate with CLSID_PortableDeviceKeyCollection.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues">
+            <summary>
+            The nativeIPortableDeviceValues interface holds a collection of PROPERTYKEY/PropVariant pairs. 
+            Values in the collection do not need to be all the same VARTYPE. Values are stored as key-value 
+            pairs; each key must be unique in the collection. Clients can search for items by PROPERTYKEY 
+            or zero-based index. Data values are stored as PropVariant structures. You can add or retrieve 
+            values of any type by using the generic methods SetValue and GetValue, or you add items by using 
+            the method specific to the type of data added. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValuesCollection">
+            <summary>
+            Holds a collection of indexed nativeIPortableDeviceValues interfaces. This interface can be 
+            retrieved from a method, or if a new object is required, call CoCreate with 
+            CLSID_PortableDeviceValuesCollection.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValuesCollection.GetCount(System.UInt32@)">
+            <summary>
+            Retrieves the number of items in the collection.
+            </summary>
+            <param name="pcElems">Pointer to a DWORD that contains the number of nativeIPortableDeviceValues interfaces in the collection.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValuesCollection.GetAt(System.UInt32,Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues@)">
+            <summary>
+            Retrieves an item from the collection by a zero-based index.
+            </summary>
+            <param name="dwIndex">DWORD that specifies a zero-based index in the collection.</param>
+            <param name="ppValues">Address of a variable that receives a pointer to an nativeIPortableDeviceValues interface from the collection. The caller is responsible for calling Release on this interface when done with it</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValuesCollection.Add(Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValues)">
+            <summary>
+            Adds an item to the collection.
+            </summary>
+            <param name="pValues">Pointer to an nativeIPortableDeviceValues interface to add to the collection. The interface is not actually copied, but AddRef is called on it</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValuesCollection.Clear">
+            <summary>
+            Releases all items from the collection.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.IPortableDeviceValuesCollection.RemoveAt(System.UInt32)">
+            <summary>
+            Removes an item from the collection by a zero-based index.
+            </summary>
+            <param name="dwIndex">DWORD that specifies a zero-based index in the collection.</param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.IPortableDevicePropVariantCollection">
+            <summary>
+            Holds a collection of PropVariant values of the same VARTYPE. The VARTYPE of the first item 
+            that is added to the collection determines the VARTYPE of the collection. An attempt to add 
+            an item of a different VARTYPE may fail if the PropVariant value cannot be changed to the 
+            collection?s current VARTYPE. To change the VARTYPE of the collection manually, call ChangeType
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.IPropertyStore">
+            <summary>
+            Exposes methods for enumerating, getting, and setting property values.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.EventInterestTypes">
+            <summary>
+            Contains a list of well known event interest types. This class will be removed once wrappers are developed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.EventInterestTypes.DataUpdated">
+            <summary>
+            Register for asynchronous sensor data updates. This has power management implications.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.EventInterestTypes.StateChanged">
+            <summary>
+            Register for sensor state change notifications.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorCategories">
+            <summary>
+            Contains a list of well known sensor categories.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.All">
+            <summary>
+            The sensor categoryId for all categories.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Location">
+            <summary>
+            The sensor location categoryId property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Environmental">
+            <summary>
+            The environmental sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Motion">
+            <summary>
+            The motion sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Orientation">
+            <summary>
+            The orientation sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Mechanical">
+            <summary>
+            The mechanical sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Electrical">
+            <summary>
+            The electrical sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Biometric">
+            <summary>
+            The bio-metric sensor cagetory property key.
+            </summary>        
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Light">
+            <summary>
+            The light sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorCategories.Scanner">
+            <summary>
+            The scanner sensor cagetory property key.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorConnectionType">
+            <summary>
+            Defines types of sensor device connections.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorConnectionType.Invalid">
+            <summary>
+            Invalid value for this enumeration.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorConnectionType.Integrated">
+            <summary>
+            Indicates that the sensor is built into the computer. 
+            </summary>        
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorConnectionType.Attached">
+            <summary>
+            Indicates that the sensor is attached to the computer, such as through a peripheral device. 
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorConnectionType.External">
+            <summary>
+            Indicates that the sensor is connected by external means, such as through a network connection. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorDescriptionAttribute">
+            <summary>
+            An attribute which is applied on <see cref="T:Microsoft.WindowsAPICodePack.Sensors.Sensor"/>-derived types. Provides essential metadata
+            such as the GUID of the sensor type for which this wrapper was written.
+            </summary>    
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorDescriptionAttribute.#ctor(System.String)">
+            <summary>
+            Constructs the attribue with a string represening the sensor type GUID and the type of the data report class.
+            </summary>
+            <param name="sensorType">String representing the sensor type GUID.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorDescriptionAttribute.SensorType">
+            <summary>
+            Gets a string representing the sensor type GUID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorDescriptionAttribute.SensorTypeGuid">
+            <summary>
+            Gets the GUID of the sensor type.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys">
+            <summary>
+            Sensor Property Key identifiers. This class will be removed once wrappers are developed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyCommonGuid">
+            <summary>
+            The common Guid used by the property keys.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyType">
+            <summary>
+            The sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyState">
+            <summary>
+            The sensor state property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertySamplingRate">
+            <summary>
+            The sensor sampling rate property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyPersistentUniqueId">
+            <summary>
+            The sensor persistent unique id property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyManufacturer">
+            <summary>
+            The sensor manufacturer property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyModel">
+            <summary>
+            The sensor model property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertySerialNumber">
+            <summary>
+            The sensor serial number property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyFriendlyName">
+            <summary>
+            The sensor friendly name property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyDescription">
+            <summary>
+            The sensor description property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyConnectionType">
+            <summary>
+            The sensor connection type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyMinReportInterval">
+            <summary>
+            The sensor min report interval property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyCurrentReportInterval">
+            <summary>
+            The sensor current report interval property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyChangeSensitivity">
+            <summary>
+            The sensor change sensitivity property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyDeviceId">
+            <summary>
+            The sensor device id property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyAccuracy">
+            <summary>
+            The sensor accuracy property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyResolution">
+            <summary>
+            The sensor resolution property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorPropertyLightResponseCurve">
+            <summary>
+            The sensor light response curve property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeTimestamp">
+            <summary>
+            The sensor date time property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeLatitudeDegrees">
+            <summary>
+            The sensor latitude in degrees property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeLongitudeDegrees">
+            <summary>
+            The sensor longitude in degrees property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAltitudeSeaLevelMeters">
+            <summary>
+            The sensor altitude from sea level in meters property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAltitudeEllipsoidMeters">
+            <summary>
+            The sensor altitude in meters property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSpeedKnots">
+            <summary>
+            The sensor speed in knots property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeTrueHeadingDegrees">
+            <summary>
+            The sensor true heading in degrees property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeMagneticHeadingDegrees">
+            <summary>
+            The sensor magnetic heading in degrees property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeMagneticVariation">
+            <summary>
+            The sensor magnetic variation property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeFixQuality">
+            <summary>
+            The sensor data fix quality property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeFixType">
+            <summary>
+            The sensor data fix type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypePositionDilutionOfPrecision">
+            <summary>
+            The sensor position dilution of precision property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeHorizontalDilutionOfPrecision">
+            <summary>
+            The sensor horizontal dilution of precision property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeVerticalDilutionOfPrecision">
+            <summary>
+            The sensor vertical dilution of precision property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesUsedCount">
+            <summary>
+            The sensor number of satelites used property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesUsedPrns">
+            <summary>
+            The sensor number of satelites used property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesInView">
+            <summary>
+            The sensor view property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesInViewPrns">
+            <summary>
+            The sensor view property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesInViewElevation">
+            <summary>
+            The sensor elevation property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesInViewAzimuth">
+            <summary>
+            The sensor azimuth value for satelites in view property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeSatellitesInViewStnRatio">
+            <summary>
+            The sensor signal to noise ratio for satelites in view property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeTemperatureCelsius">
+            <summary>
+            The sensor temperature in celsius property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAccelerationXG">
+            <summary>
+            The sensor gravitational acceleration (X-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAccelerationYG">
+            <summary>
+            The sensor gravitational acceleration (Y-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAccelerationZG">
+            <summary>
+            The sensor gravitational acceleration (Z-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAngularAccelerationXDegreesPerSecond">
+            <summary>
+            The sensor angular acceleration per second (X-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAngularAccelerationYDegreesPerSecond">
+            <summary>
+            The sensor angular acceleration per second (Y-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAngularAccelerationZDegreesPerSecond">
+            <summary>
+            The sensor angular acceleration per second (Z-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAngleXDegrees">
+            <summary>
+            The sensor angle in degrees (X-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAngleYDegrees">
+            <summary>
+            The sensor angle in degrees (Y-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeAngleZDegrees">
+            <summary>
+            The sensor angle in degrees (Z-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeMagneticHeadingXDegrees">
+            <summary>
+            The sensor magnetic heading (X-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeMagneticHeadingYDegrees">
+            <summary>
+            The sensor magnetic heading (Y-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeMagneticHeadingZDegrees">
+            <summary>
+            The sensor magnetic heading (Z-axis) property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeDistanceXMeters">
+            <summary>
+            The sensor distance (X-axis) data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeDistanceYMeters">
+            <summary>
+            The sensor distance (Y-axis) data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeDistanceZMeters">
+            <summary>
+            The sensor distance (Z-axis) data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeBooleanSwitchState">
+            <summary>
+            The sensor boolean switch data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeMultivalueSwitchState">
+            <summary>
+            The sensor multi-value switch data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeBooleanSwitchArrayState">
+            <summary>
+            The sensor boolean switch array state data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeForceNewtons">
+            <summary>
+            The sensor force (in newtons) data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeWeightKilograms">
+            <summary>
+            The sensor weight (in kilograms) data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypePressurePascal">
+            <summary>
+            The sensor pressure data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeStrain">
+            <summary>
+            The sensor strain data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeHumanPresence">
+            <summary>
+            The sensor human presence data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeHumanProximity">
+            <summary>
+            The sensor human proximity data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeLightLux">
+            <summary>
+            The sensor light data property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorPropertyKeys.SensorDataTypeRfidTag40Bit">
+            <summary>
+            The sensor 40-bit RFID tag data property key.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorState">
+            <summary>
+            The state of the sensor
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.Removed">
+            <summary>
+            The device has been removed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.Ready">
+            <summary>
+            The device is ready.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.NotAvailable">
+            <summary>
+            The device is not available.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.NoData">
+            <summary>
+            No data is available.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.Initializing">
+            <summary>
+            The device is initializing.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.AccessDenied">
+            <summary>
+            No permissions exist to access the device.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorState.Error">
+            <summary>
+            The device has encountered an error.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorTypes">
+            <summary>
+            Contains a list of well known sensor types. This class will be removed once wrappers are developed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.LocationGps">
+            <summary>
+            The GPS location sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.EnvironmentalTemperature">
+            <summary>
+            The environmental temperature sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.EnvironmentalAtmosphericPressure">
+            <summary>
+            The environmental atmostpheric pressure sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.EnvironmentalHumidity">
+            <summary>
+            The environmental humidity sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.EnvironmentalWindSpeed">
+            <summary>
+            The environmental wind speed sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.EnvironmentalWindDirection">
+            <summary>
+            The environmental wind direction sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Accelerometer1D">
+            <summary>
+            The accelerometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Accelerometer2D">
+            <summary>
+            The 2D accelerometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Accelerometer3D">
+            <summary>
+            The 3D accelerometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.MotionDetector">
+            <summary>
+            The motion sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Gyrometer1D">
+            <summary>
+            The gyrometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Gyrometer2D">
+            <summary>
+            The 2D gyrometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Gyrometer3D">
+            <summary>
+            The 3D gyrometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Speedometer">
+            <summary>
+            The speedometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Compass1D">
+            <summary>
+            The compass sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Compass2D">
+            <summary>
+            The 2D compass sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Compass3D">
+            <summary>
+            The 3D compass sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Inclinometer1D">
+            <summary>
+            The inclinometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Inclinometer2D">
+            <summary>
+            The 2D inclinometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Inclinometer3D">
+            <summary>
+            The 3D inclinometer sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Distance1D">
+            <summary>
+            The distance sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Distance2D">
+            <summary>
+            The 2D sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Distance3D">
+            <summary>
+            The 3D distance sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Voltage">
+            <summary>
+            The electrical voltage sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Current">
+            <summary>
+            The electrical current sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.BooleanSwitch">
+            <summary>
+            The boolean switch sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.BooleanSwitchArray">
+            <summary>
+            The boolean switch array sensor property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.MultivalueSwitch">
+            <summary>
+            The multiple value switch sensor type property key.
+            </summary>       
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Force">
+            <summary>
+            The force sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Scale">
+            <summary>
+            The scale sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Pressure">
+            <summary>
+            The pressure sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Strain">
+            <summary>
+            The strain sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.HumanPresence">
+            <summary>
+            The Human presence sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.HumanProximity">
+            <summary>
+            The human proximity sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.Touch">
+            <summary>
+            The touch sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.AmbientLight">
+            <summary>
+            The ambient light sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.RfidScanner">
+            <summary>
+            The RFID sensor type property key.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorTypes.BarcodeScanner">
+            <summary>
+            The bar code scanner sensor type property key.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo">
+            <summary>
+            Defines a structure that contains the property ID (key) and value.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.#ctor(Microsoft.WindowsAPICodePack.Shell.PropertySystem.PropertyKey,System.Object)">
+            <summary>
+            Initializes the structure.
+            </summary>
+            <param name="propKey">A property ID (key).</param>
+            <param name="value">A property value. The type must be valid for the property ID.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.Key">
+            <summary>
+            Gets the property's key.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.Value">
+            <summary>
+            Gets the property's value.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.GetHashCode">
+            <summary>
+            Returns the hash code for a particular DataFieldInfo structure.
+            </summary>
+            <returns>A hash code.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.Equals(System.Object)">
+            <summary>
+            Determines if this object and another object are equal.
+            </summary>
+            <param name="obj">The object to compare.</param>
+            <returns><b>true</b> if this instance and another object are equal; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.Equals(Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo)">
+            <summary>
+            Determines if this key and value pair and another key and value pair are equal.
+            </summary>
+            <param name="other">The item to compare.</param>
+            <returns><b>true</b> if equal; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.op_Equality(Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo,Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo)">
+            <summary>
+            DataFieldInfo == operator overload
+            </summary>
+            <param name="first">The first item to compare.</param>
+            <param name="second">The second item to compare.</param>
+            <returns><b>true</b> if equal; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo.op_Inequality(Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo,Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo)">
+            <summary>
+            DataFieldInfo != operator overload
+            </summary>
+            <param name="first">The first item to compare.</param>
+            <param name="second">The second item to comare.</param>
+            <returns><b>true</b> if not equal; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.DataReportChangedEventHandler">
+            <summary>
+            Represents the method that will handle the DataReportChanged event.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.Sensor">
+            <summary>
+            Defines a general wrapper for a sensor.
+            </summary>
+        </member>
+        <member name="E:Microsoft.WindowsAPICodePack.Sensors.Sensor.DataReportChanged">
+            <summary>
+            Occurs when the DataReport member changes.
+            </summary>
+        </member>
+        <member name="E:Microsoft.WindowsAPICodePack.Sensors.Sensor.StateChanged">
+            <summary>
+            Occurs when the State member changes.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.DataReport">
+            <summary>
+            Gets a value that specifies the most recent data reported by the sensor.
+            </summary>        
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.SensorId">
+            <summary>
+            Gets a value that specifies the GUID for the sensor instance.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.CategoryId">
+            <summary>
+            Gets a value that specifies the GUID for the sensor category.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.TypeId">
+            <summary>
+            Gets a value that specifies the GUID for the sensor type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.FriendlyName">
+            <summary>
+            Gets a value that specifies the sensor's friendly name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.State">
+            <summary>
+            Gets a value that specifies the sensor's current state.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.ReportInterval">
+            <summary>
+            Gets or sets a value that specifies the report interval.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.MinimumReportInterval">
+            <summary>
+            Gets a value that specifies the minimum report interval.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.Manufacturer">
+            <summary>
+            Gets a value that specifies the manufacturer of the sensor.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.Model">
+            <summary>
+            Gets a value that specifies the sensor's model.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.SerialNumber">
+            <summary>
+            Gets a value that specifies the sensor's serial number.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.Description">
+            <summary>
+            Gets a value that specifies the sensor's description.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.ConnectionType">
+            <summary>
+            Gets a value that specifies the sensor's connection type.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.DevicePath">
+            <summary>
+            Gets a value that specifies the sensor's device path.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Sensor.AutoUpdateDataReport">
+            <summary>
+            Gets or sets a value that specifies whether the data should be automatically updated.   
+            If the value is not set, call TryUpdateDataReport or UpdateDataReport to update the DataReport member.
+            </summary>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.TryUpdateData">
+            <summary>
+            Attempts a synchronous data update from the sensor.
+            </summary>
+            <returns><b>true</b> if the request was successful; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.UpdateData">
+            <summary>
+            Requests a synchronous data update from the sensor. The method throws an exception if the request fails.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.ToString">
+            <summary>
+            Returns a string that represents the current object.
+            </summary>
+            <returns>A string that represents the current object.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.GetProperty(Microsoft.WindowsAPICodePack.Shell.PropertySystem.PropertyKey)">
+            <summary>
+            Retrieves a property value by the property key.
+            </summary>
+            <param name="propKey">A property key.</param>
+            <returns>A property value.</returns>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.GetProperty(System.Int32)">
+            <summary>
+            Retrieves a property value by the property index.
+            Assumes the GUID component in the property key takes the sensor's type GUID.
+            </summary>
+            <param name="propIndex">A property index.</param>
+            <returns>A property value.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.GetProperties(Microsoft.WindowsAPICodePack.Shell.PropertySystem.PropertyKey[])">
+            <summary>
+            Retrieves the values of multiple properties by property key.
+            </summary>
+            <param name="propKeys">An array of properties to retrieve.</param>
+            <returns>A dictionary that contains the property keys and values.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.GetSupportedProperties">
+            <summary>
+            Returns a list of supported properties for the sensor.
+            </summary>
+            <returns>A strongly typed list of supported properties.</returns>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.GetProperties(System.Int32[])">
+            <summary>
+            Retrieves the values of multiple properties by their index.
+            Assumes that the GUID component of the property keys is the sensor's type GUID.
+            </summary>
+            <param name="propIndexes">The indexes of the properties to retrieve.</param>
+            <returns>An array that contains the property values.</returns>
+            <remarks>
+            The returned array will contain null values for some properties if the values could not be retrieved.
+            </remarks>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.SetProperties(Microsoft.WindowsAPICodePack.Sensors.DataFieldInfo[])">
+            <summary>
+            Sets the values of multiple properties.
+            </summary>
+            <param name="data">An array that contains the property keys and values.</param>
+            <returns>A dictionary of the new values for the properties. Actual values may not match the requested values.</returns>                
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.Initialize">
+            <summary>
+            Initializes the Sensor wrapper after it has been bound to the native ISensor interface
+            and is ready for subsequent initialization.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.SetEventInterest(System.Guid)">
+            <summary>
+            Informs the sensor driver of interest in a specific type of event.
+            </summary>
+            <param name="eventType">The type of event of interest.</param>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.ClearEventInterest(System.Guid)">
+            <summary>
+             Informs the sensor driver to clear a specific type of event.
+            </summary>
+            <param name="eventType">The type of event of interest.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Sensor.IsEventInterestSet(System.Guid)">
+            <summary>
+            Determines whether the sensor driver will file events for a particular type of event.
+            </summary>
+            <param name="eventType">The type of event, as a GUID.</param>
+            <returns><b>true</b> if the sensor will report interest in the specified event.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorAvailabilityChange">
+            <summary>
+            Specifies the types of change in sensor availability.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorAvailabilityChange.Addition">
+            <summary>
+            A sensor has been added.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorAvailabilityChange.Removal">
+            <summary>
+            A sensor has been removed.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorData">
+            <summary>
+            Defines a mapping of data field identifiers to the data returned in a sensor report.
+            </summary>    
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.Add(System.Guid,System.Collections.Generic.IList{System.Object})">
+            <summary>
+            Adds a data item to the dictionary.
+            </summary>
+            <param name="key">The data field identifier.</param>
+            <param name="value">The data list.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.ContainsKey(System.Guid)">
+            <summary>
+            Determines if a particular data field identifier is present in the collection.
+            </summary>
+            <param name="key">The data field identifier.</param>
+            <returns><b>true</b> if the data field identifier is present.</returns>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorData.Keys">
+            <summary>
+            Gets the list of the data field identifiers in this collection.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.Remove(System.Guid)">
+            <summary>
+            Removes a particular data field identifier from the collection.
+            </summary>
+            <param name="key">The data field identifier.</param>
+            <returns><b>true</b> if the item was removed.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.TryGetValue(System.Guid,System.Collections.Generic.IList{System.Object}@)">
+            <summary>
+            Attempts to get the value of a data item.
+            </summary>
+            <param name="key">The data field identifier.</param>
+            <param name="value">The data list.</param>
+            <returns><b>true</b> if able to obtain the value; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorData.Values">
+            <summary>
+            Gets the list of data values in the dictionary.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorData.Item(System.Guid)">
+            <summary>
+            Gets or sets the index operator for the dictionary by key.
+            </summary>
+            <param name="key">A GUID.</param>
+            <returns>The item at the specified index.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.Add(System.Collections.Generic.KeyValuePair{System.Guid,System.Collections.Generic.IList{System.Object}})">
+            <summary>
+            Adds a specified key/value data pair to the collection.
+            </summary>
+            <param name="item">The item to add.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.Clear">
+            <summary>
+            Clears the items from the collection.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.Contains(System.Collections.Generic.KeyValuePair{System.Guid,System.Collections.Generic.IList{System.Object}})">
+            <summary>
+            Determines if the collection contains the specified key/value pair. 
+            </summary>
+            <param name="item">The item to locate.</param>
+            <returns><b>true</b> if the collection contains the key/value pair; otherwise false.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.CopyTo(System.Collections.Generic.KeyValuePair{System.Guid,System.Collections.Generic.IList{System.Object}}[],System.Int32)">
+            <summary>
+            Copies an element collection to another collection.
+            </summary>
+            <param name="array">The destination collection.</param>
+            <param name="arrayIndex">The index of the item to copy.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorData.Count">
+            <summary>
+            Returns the number of items in the collection.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorData.IsReadOnly">
+            <summary>
+            Gets a value that determines if the collection is read-only.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.Remove(System.Collections.Generic.KeyValuePair{System.Guid,System.Collections.Generic.IList{System.Object}})">
+            <summary>
+            Removes a particular item from the collection.
+            </summary>
+            <param name="item">The item to remove.</param>
+            <returns><b>true</b> if successful; otherwise <b>false</b></returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.GetEnumerator">
+            <summary>
+            Returns an enumerator for the collection.
+            </summary>
+            <returns>An enumerator.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorData.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator for the collection.
+            </summary>
+            <returns>An enumerator.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorList`1">
+            <summary>
+            Defines a strongly typed list of sensors.
+            </summary>
+            <typeparam name="TSensor">The type of sensor in the list.</typeparam>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.IndexOf(`0)">
+            <summary>
+            Returns a sensor at a particular index.
+            </summary>
+            <param name="item">The sensor item.</param>
+            <returns>The index of the sensor.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Insert(System.Int32,`0)">
+            <summary>
+            Inserts a sensor at a specific location in the list.
+            </summary>
+            <param name="index">The index to insert the sensor.</param>
+            <param name="item">The sensor to insert.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.RemoveAt(System.Int32)">
+            <summary>
+            Removes a sensor at a specific location in the list.
+            </summary>
+            <param name="index">The index of the sensor to remove.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Item(System.Int32)">
+            <summary>
+            Gets or sets a sensor at a specified location in the list.
+            </summary>
+            <param name="index">The index of the sensor in the list.</param>
+            <returns>The sensor.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Add(`0)">
+            <summary>
+            Adds a sensor to the end of the list.
+            </summary>
+            <param name="item">The sensor item.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Clear">
+            <summary>
+            Clears the list of sensors.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Contains(`0)">
+            <summary>
+            Determines if the list contains a specified sensor.
+            </summary>
+            <param name="item">The sensor to locate.</param>
+            <returns><b>true</b> if the list contains the sensor; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            Copies a sensor to a new list.
+            </summary>
+            <param name="array">The destination list.</param>
+            <param name="arrayIndex">The index of the item to copy.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Count">
+            <summary>
+            Gets the number of items in the list.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.IsReadOnly">
+            <summary>
+            Gets a value that determines if the list is read-only.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.Remove(`0)">
+            <summary>
+            Removes a specific sensor from the list.
+            </summary>
+            <param name="item">The sensor to remove.</param>
+            <returns><b>true</b> if the sensor was removed from the list; otherwise <b>false</b>.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.GetEnumerator">
+            <summary>
+            Returns an enumerator for the list.
+            </summary>
+            <returns>An enumerator.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorList`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator for the list.
+            </summary>
+            <returns>An enumerator.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorManager">
+            <summary>
+            Manages the sensors conected to the system.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.GetAllSensors">
+            <summary>
+            Retireves a collection of all sensors.
+            </summary>
+            <returns>A list of all sensors.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.GetSensorsByCategoryId(System.Guid)">
+            <summary>
+            Retrieves a collection of sensors filtered by category ID.
+            </summary>
+            <param name="category">The category ID of the requested sensors.</param>
+            <returns>A list of sensors of the specified category ID.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.GetSensorsByTypeId(System.Guid)">
+            <summary>
+            Returns a collection of sensors filtered by type ID.
+            </summary>
+            <param name="typeId">The type ID of the sensors requested.</param>
+            <returns>A list of sensors of the spefified type ID.</returns>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.GetSensorsByTypeId``1">
+            <summary>
+            Returns a strongly typed collection of specific sensor types.
+            </summary>
+            <typeparam name="T">The type of the sensors to retrieve.</typeparam>
+            <returns>A strongly types list of sensors.</returns>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.GetSensorBySensorId``1(System.Guid)">
+            <summary>
+            Returns a specific sensor by sensor ID.
+            </summary>
+            <typeparam name="T">A strongly typed sensor.</typeparam>
+            <param name="sensorId">The unique identifier of the sensor.</param>
+            <returns>A particular sensor.</returns>        
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.RequestPermission(System.IntPtr,System.Boolean,Microsoft.WindowsAPICodePack.Sensors.SensorList{Microsoft.WindowsAPICodePack.Sensors.Sensor})">
+            <summary>
+            Opens a system dialog box to request user permission to access sensor data.
+            </summary>
+            <param name="parentWindowHandle">The handle to a window that can act as a parent to the permissions dialog box.</param>
+            <param name="modal">Specifies whether the window should be modal.</param>
+            <param name="sensors">The sensors for which to request permission.</param>
+        </member>
+        <member name="E:Microsoft.WindowsAPICodePack.Sensors.SensorManager.SensorsChanged">
+            <summary>
+            Occurs when the system's list of sensors changes.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorManager._guidToSensorDescr">
+            <summary>
+            Sensor type GUID -> .NET Type + report type
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.SensorManager._sensorTypeToGuid">
+            <summary>
+            .NET type -> type GUID.
+            </summary>      
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.OnSensorsChanged(System.Guid,Microsoft.WindowsAPICodePack.Sensors.SensorAvailabilityChange)">
+            <summary>
+            Notification that the list of sensors has changed
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.BuildSensorTypeMap">
+            <summary>
+            Interrogates assemblies currently loaded into the AppDomain for classes deriving from <see cref="T:Microsoft.WindowsAPICodePack.Sensors.Sensor"/>.
+            Builds data structures which map those types to sensor type GUIDs. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorManager.GetSensorWrapperInstance``1(Microsoft.WindowsAPICodePack.Sensors.ISensor)">
+            <summary>
+            Returns an instance of a sensor wrapper appropritate for the given sensor COM interface.
+            If no appropriate sensor wrapper type could be found, the object created will be of the base-class type <see cref="T:Microsoft.WindowsAPICodePack.Sensors.Sensor"/>.
+            </summary>
+            <param name="nativeISensor">The underlying sensor COM interface.</param>
+            <returns>A wrapper instance.</returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException">
+            <summary>
+            Defines an exception specific to the sensors.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException class
+             with the specified context and the serialization information.
+            </summary>
+            <param name="info">The System.Runtime.Serialization.SerializationInfo associated with this exception.</param>
+            <param name="context">A System.Runtime.Serialization.StreamingContext that represents the context of this exception.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException 
+            class with the specified detailed description.
+            </summary>
+            <param name="message">A detailed description of the error.</param>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException.#ctor">
+            <summary>
+            Initializes a new instance of the Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException class
+            with the last Win32 error that occurred.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the Microsoft.WindowsAPICodePack.Sensors.SensorPlatformException class
+            with the specified detailed description and the specified exception.
+            </summary>
+            <param name="message">A detailed description of the error.</param>
+            <param name="innerException">A reference to the inner exception that is the cause of this exception.</param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorReport">
+            <summary>
+            Represents all the data from a single sensor data report.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorReport.TimeStamp">
+            <summary>
+            Gets the time when the data report was generated.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorReport.Values">
+            <summary>
+            Gets the data values in the report.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorReport.Source">
+            <summary>
+            Gets the sensor that is the source of this data report.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorsChangedEventArgs">
+            <summary>
+            Defines the data passed to the SensorsChangedHandler.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorsChangedEventArgs.Change">
+            <summary>
+            The type of change. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.SensorsChangedEventArgs.SensorId">
+            <summary>
+            The ID of the sensor that changed.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorsChangedEventHandler">
+            <summary>
+            Represents the method that will handle the system sensor list change.
+            </summary>
+            <param name="e">The event data.</param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.SensorTypeData">
+            <summary>
+            Data associated with a sensor type GUID.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.StateChangedEventHandler">
+            <summary>
+            Represents the method that will handle the StatChanged event.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorEmptyData">
+            <summary>
+              Looks up a localized string similar to Data field array cannot be null or empty..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorEmptyProperties">
+            <summary>
+              Looks up a localized string similar to Property keys array cannot be null or empty..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorGetString">
+            <summary>
+              Looks up a localized string similar to Sensor id=&apos;{0}&apos; type=&apos;{1}&apos; category=&apos;{2}&apos; name=&apos;{3}&apos;..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorManagerEmptySensorsCollection">
+            <summary>
+              Looks up a localized string similar to Sensors collection cannot be null or empty..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorNotInitialized">
+            <summary>
+              Looks up a localized string similar to Sensor not initialized..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorNullValueAtIndex">
+            <summary>
+              Looks up a localized string similar to Data contains a null value at index {0}..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorPropertyNotFound">
+            <summary>
+              Looks up a localized string similar to Could not find property..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorsNotFound">
+            <summary>
+              Looks up a localized string similar to No sensors found. Are any sensor drivers installed?.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorUnableToGetReport">
+            <summary>
+              Looks up a localized string similar to Unable to get report from sensor..
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Resources.LocalizedMessages.SensorUnexpectedPointerSize">
+            <summary>
+              Looks up a localized string similar to Unexpected pointer size..
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.AmbientLightSensor">
+            <summary>
+            Represents a generic ambient light sensor.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.AmbientLightSensor.GetLightResponseCurve">
+            <summary>
+            Gets an array representing the light response curve.
+            </summary>
+            <returns>Array representing the light response curve.</returns>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.AmbientLightSensor.CurrentLuminousIntensity">
+            <summary>
+            Gets the current luminous intensity of the sensor.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.LuminousIntensity">
+            <summary>
+            Defines a luminous intensity measurement. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.LuminousIntensity.#ctor(Microsoft.WindowsAPICodePack.Sensors.SensorReport)">
+            <summary>
+            Initializes a sensor report to obtain a luminous intensity value.
+            </summary>
+            <param name="report">The report name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.LuminousIntensity.Intensity">
+            <summary>
+            Gets the intensity of the light in lumens.
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.Acceleration3D">
+            <summary>
+            Creates an acceleration measurement from the data in the report.
+            </summary>
+        </member>
+        <member name="M:Microsoft.WindowsAPICodePack.Sensors.Acceleration3D.#ctor(Microsoft.WindowsAPICodePack.Sensors.SensorReport)">
+            <summary>
+            Creates a new instance of this class.
+            </summary>
+            <param name="report">The sensor report to evaluate.</param>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Acceleration3D.Item(Microsoft.WindowsAPICodePack.Sensors.AccelerationAxis)">
+            <summary>
+            Gets the acceleration reported by the sensor.
+            </summary>
+            <param name="axis">The axis of the acceleration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.AccelerationAxis">
+            <summary>
+            Specifies the axis of the acceleration measurement.
+            </summary>
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.AccelerationAxis.XAxis">
+            <summary>
+            The x-axis.
+            </summary>        
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.AccelerationAxis.YAxis">
+            <summary>
+            The y-axis.
+            </summary>        
+        </member>
+        <member name="F:Microsoft.WindowsAPICodePack.Sensors.AccelerationAxis.ZAxis">
+            <summary>
+            THe z-axis.
+            </summary>        
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.Accelerometer3D">
+            <summary>
+            Represents a 3D accelerometer.
+            </summary>
+        </member>
+        <member name="P:Microsoft.WindowsAPICodePack.Sensors.Accelerometer3D.CurrentAcceleration">
+            <summary>
+            Gets the current acceleration in G's. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.WindowsAPICodePack.Sensors.UnknownSensor">
+            <summary>
+            Sensor type used for sensors for which there is no specific implementation.
+            </summary>
+        </member>
+    </members>
+</doc>

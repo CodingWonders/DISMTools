@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../../../../img/favicon.ico" />
+    <title>Creating a basic network setup (Hyper-V) - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Creating a basic network setup (Hyper-V)";
+        var mkdocs_page_input_path = "img_tasks\\tools\\isocreator\\install\\netinst\\setup.fr.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../../../../index.html">
+          <img src="../../../../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navigation">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../../index.html">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started/start.html">Commencer</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../../whats_new/highlights.html">Nouveautés</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tâches d'image</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../../img_tasks.html">Aperçu</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../../online_inst_mgmt.html">Mode de gestion de l'installation en ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../../offline_inst_mgmt.html">Mode de gestion de l'installation hors ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gestion des images</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/append_image.html">Ajouter à une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/apply_image.html">Appliquer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/capture_image.html">Capturer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/delete_image.html">Supprimer les images de volume d'un fichier image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/export_image.html">Exporter une image Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/list_image.html">Lister le contenu des images Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/mount_image.html">Monter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/remount_image.html">Remonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/split_image.html">Fractionner une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../mgmt/unmount_image.html">Démonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Boîtes de dialogue d'informations d'image</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/infodlgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/img_info.html">Informations du fichier image</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/pkg_info.html">Informations sur les packages</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/feat_info.html">Informations sur les fonctionnalités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/appxpkg_info.html">Informations sur les packages AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/cap_info.html">Informations sur les capacités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/drv_info.html">Informations sur les pilotes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../../info/winpe_info.html">Informations de configuration de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../packages/pkgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../packages/add_package.html">Ajout de packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../packages/remove_package.html">Suppression de packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fonctionnalités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../features/features.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../features/enable_feature.html">Activation des fonctionnalités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../features/disable_feature.html">Désactivation des fonctionnalités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../appx/appx.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../appx/add_provisionedappxpackage.html">Ajout de packages AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../appx/remove_provisionedappxpackage.html">Suppression de packages AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des éditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../editions/editions.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../editions/set_edition.html">Mettre à niveau une image vers une édition supérieure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../editions/set_productkey.html">Définir la clé de produit</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des langues et régionales</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../langs/set_layereddriver.html">Définir les pilotes de clavier en couches</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../capabilities/caps.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../capabilities/add_capability.html">Ajout de capacités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../capabilities/remove_capability.html">Suppression de capacités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pilotes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/drvs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/add_driver.html">Ajout de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/export_driver.html">Export de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/import_driver.html">Import de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../drivers/remove_driver.html">Suppression de pilotes</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Outils</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../../mimgmgr.html">Gestionnaire d'images montées</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../wim2esd.html">Conversion d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../swm2wim.html">Fusion de fichiers SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../configlisteditor.html">Éditeur de liste de configuration DISM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Outils de création d'ISO</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../../isocreator.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../isocreate.html">Création de fichiers ISO</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" >Installation du système d'exploitation</a>
+    <ul class="current">
+                <li class="toctree-l3"><a class="reference internal" href="../localinstall.html">Installations locales</a>
+                </li>
+                <li class="toctree-l3 current"><a class="reference internal current" >Installations basées sur le réseau</a>
+    <ul class="current">
+                <li class="toctree-l4"><a class="reference internal" href="pxehelpers.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4 current"><a class="reference internal current" href="#">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="wds.html">Assistant des services de déploiement Windows (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../exttools/dim.html">Module d'installation des pilotes</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../exttools/dtpe_es.html">Suite d'extensibilité</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../exttools/sysprep.html">Outil de préparation SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../../cmdline/cmdline.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../../cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../regcpl.html">Panneau de contrôle du registre d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../servicemgr.html">Gestionnaire de services système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../envvarmgr.html">Gestionnaire de variables d'environnement système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fichiers de réponse sans assistance</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unattend.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unatt_man.html">Gestionnaire de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unatt_create.html">Créateur de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../unattend/unatt_apply.html">Application des fichiers de réponse sans assistance</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils externes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../exttools/themedesigner.html">Création de vos thèmes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../exttools/dynaviewer.html">Affichage des journaux de diagnostic</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../exttools/sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menu de navigation sur mobile">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Documents"></a></li>
+          <li class="breadcrumb-item">Outils</li>
+          <li class="breadcrumb-item">Outils de création d'ISO</li>
+          <li class="breadcrumb-item">Installation du système d'exploitation</li>
+          <li class="breadcrumb-item">Installations basées sur le réseau</li>
+      <li class="breadcrumb-item active">Creating a basic network setup (Hyper-V)</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="preparar-el-servidor">Preparar el servidor</h1>
+<p>El primer paso es preparar el servidor para el arranque PXE y, si no está configurada, la infraestructura de red. Esta sección cubre ambas tareas.</p>
+<h2 id="comprobacion-de-roles-del-servidor">Comprobación de roles del servidor</h2>
+<p>Para desplegar sistemas operativos por red necesitarás los siguientes roles en el servidor:</p>
+<ul>
+<li>DHCP (Dynamic Host Configuration Protocol)</li>
+<li>Windows Deployment Services (WDS)</li>
+</ul>
+<p><strong>NOTA:</strong> puedes disponer de un servidor distinto que actúe como servidor DHCP. En ese caso, sólo necesitas el rol WDS.</p>
+<p>Deberías poder comprobar si están instalados buscando las herramientas de administración:</p>
+<p><img alt="DHCP Requirement" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_req.png" /></p>
+<p><img alt="WDS Requirement" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/wds_req.png" /></p>
+<p><strong>NOTA:</strong> si no usas WDS, no instales el rol WDS. Esta guía asume que usarás WDS. Sin embargo, DHCP sigue siendo obligatorio para el arranque PXE.</p>
+<p>Si no están presentes, evalúa la situación actual del servidor. Para ello:</p>
+<ol>
+<li>Abre Administrador del servidor</li>
+<li>Haz clic en "Añadir roles y características" y ejecuta una instalación basada en roles o en características</li>
+<li>
+<p>Selecciona tu servidor y comprueba qué roles están presentes. Ambos deben estar instalados:</p>
+<p><img alt="Server Roles" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/roles.png" /></p>
+</li>
+</ol>
+<p>Según el caso:</p>
+<ul>
+<li>
+<p><em>Si no están instalados:</em></p>
+<ol>
+<li>Marca DHCP y WDS e incluye las herramientas de administración</li>
+<li>Continúa sin modificar características a menos que necesites habilitar/deshabilitar alguna</li>
+<li>Lee las instrucciones para DHCP con atención</li>
+<li>En la configuración del rol WDS, deja marcados los roles de implementación y transporte</li>
+<li>Continúa con la instalación. Tras la instalación, verás que uno de los roles necesita configuración: el rol DHCP.</li>
+<li>
+<p>Realiza la configuración del servidor DHCP según las indicaciones:</p>
+<p><img alt="DHCP Configuration" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_config.png" /></p>
+</li>
+<li>
+<p>Haz clic en "Commit" y después en "Close":</p>
+<p><img alt="DHCP Configuration 2" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_postconfig_commit.png" /></p>
+</li>
+</ol>
+</li>
+<li>
+<p><em>Si están instalados, pero faltan las herramientas de administración:</em></p>
+<p>Habilita las características <code>DHCPServer-Tools</code> y <code>Microsoft-Windows-Deployment-Services-Admin-Pack</code>. Puedes hacerlo <a href="../../../../features/enable_feature.html">habilitando las características</a> desde el <a href="../../../../online_inst_mgmt.html">modo de gestión de instalaciones en línea</a>.</p>
+<p>Es posible que debas reiniciar el servidor tras habilitar las características.</p>
+</li>
+</ul>
+<h2 id="preparar-la-infraestructura-de-red">Preparar la infraestructura de red</h2>
+<p>Si ya cuentas con una infraestructura de red preparada para despliegues remotos, puedes omitir este paso. Si quieres practicar despliegues remotos en casa con conexión inalámbrica, sigue estos pasos para crear un conmutador virtual (<em>vSwitch</em>).</p>
+<p><strong>Notas:</strong></p>
+<ul>
+<li>Estos pasos funcionan sólo con Hyper‑V</li>
+<li>Tras reiniciar el equipo anfitrión, las máquinas virtuales conectadas al conmutador pueden perder acceso a Internet. Aun así, el conmutador seguirá funcionando para la instalación remota</li>
+<li>Puede haber consumo adicional de datos</li>
+</ul>
+<p>Para crear el conmutador virtual:</p>
+<ol>
+<li>
+<p>En Hyper‑V Manager, abre el Virtual Switch Manager y crea un conmutador <strong>interno</strong>. Asigna el nombre que desees y haz clic en OK. Deberías ver algo así:</p>
+<p><img alt="vSwitch" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_new_vswitch.png" /></p>
+</li>
+<li>
+<p>Tras crear el conmutador, pulsa <kbd>Win</kbd> + <kbd>R</kbd> y ejecuta <code>ncpa.cpl</code>. Haz doble clic en la interfaz inalámbrica y abre las propiedades del adaptador</p>
+</li>
+<li>Habilita Internet Connection Sharing (ICS) usando el conmutador recién creado. La IP resultante de ICS suele ser <code>192.168.137.1</code></li>
+</ol>
+<p>Por último, configura el servidor para usar el nuevo conmutador:</p>
+<p><img alt="Connect To Switch" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_connect_to_switch.png" /></p>
+<p>Enciende la VM del servidor y ejecuta <code>ipconfig /all</code> para comprobar que el adaptador de red virtual detecta la dirección utilizada por ICS como puerta de enlace predeterminada. Si es así, prueba a hacer ping:</p>
+<p><img alt="Connect To Switch" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_ipconfig.png" /></p>
+<p><strong>Consejo:</strong> si quieres que la dirección IP del servidor no cambie (sea estática), o si no puede obtener la puerta de enlace por DHCP, ve a las propiedades IPv4 del adaptador virtual y configura los valores manualmente:</p>
+<p><img alt="Static IP" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/viridian_server_static_ip.png" /></p>
+<p>Si el servidor puede hacer ping al equipo anfitrión, tienes un vSwitch funcional. Conecta el resto de máquinas virtuales al mismo conmutador para usarlas.</p>
+<h2 id="configurar-los-ambitos-scopes-de-dhcp">Configurar los ámbitos (scopes) de DHCP</h2>
+<p><strong>NOTA:</strong> el contenido de esta sección, introducido en las primeras previews de la versión 0.7, se movió a la guía de WDS para mostrar configuraciones que funcionan con otros proveedores. Esta guía solo trata cómo crear ámbitos DHCP para PXE.</p>
+<p>Un servidor DHCP necesita ámbitos con capacidad suficiente para albergar el número máximo de clientes previstos. Si ya configuraste ámbitos, puedes omitir este paso; en caso contrario, sigue leyendo.</p>
+<p>Abre la consola de DHCP, selecciona el servidor y ve a IPv4. Crearemos un ámbito IPv4 básico usando transmisiones unicast (lo más habitual).</p>
+<p><img alt="DHCPv4 panel" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_panel.png" /></p>
+<p>Haz clic derecho en IPv4 y selecciona New Scope. En el asistente, sigue estos pasos:</p>
+<ol>
+<li>
+<p>Asigna un nombre al ámbito y una descripción opcional:</p>
+<p><img alt="Scope Identification" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_name.png" /></p>
+</li>
+<li>
+<p>Proporciona un rango de direcciones IP para clientes (la <strong>pool</strong>). Debe coincidir con la máscara de subred configurada en el servidor. En esta guía crearemos un ámbito para 51 clientes:</p>
+<p><img alt="Address Pool" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_addressrange.png" /></p>
+</li>
+<li>
+<p>Si no quieres asignar direcciones dentro de cierto rango, añade exclusiones. En esta guía no añadiremos exclusiones:</p>
+<p><img alt="Address Pool Exclusions" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_excludedrange.png" /></p>
+</li>
+<li>
+<p>Configura la duración del lease. El valor por defecto (8 días) suele ser suficiente:</p>
+<p><img alt="Address Lease Duration" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_leases.png" /></p>
+</li>
+<li>
+<p>Cuando se te pregunte si quieres configurar más detalles del ámbito, selecciona Yes y pulsa Siguiente. Indica la puerta de enlace predeterminada para el ámbito. Si seguiste la guía del vSwitch, la puerta de enlace será la IP que gestiona ICS en el equipo anfitrión. Este valor también suele ser la dirección DNS si la configuraste anteriormente:</p>
+<p><img alt="Gateway" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_gateway.png" /></p>
+</li>
+<li>
+<p>Tras configurar la puerta de enlace y el DNS, deja WINS tal cual y pulsa Siguiente. Cuando te pregunten si activar el ámbito, selecciona No y pulsa Siguiente:</p>
+<p><img alt="Activation" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_ipv4_scope_activate.png" /></p>
+</li>
+<li>
+<p>En el ámbito recién creado, haz clic derecho en Opciones del ámbito y selecciona "Configure Opciones...":</p>
+<p><img alt="Configure Opciones" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_scope_options_menu_item.png" /></p>
+</li>
+<li>
+<p>Configura las siguientes opciones según tu solución de despliegue:</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Option</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><all></td>
+<td>66</td>
+<td>IP del servidor TFTP</td>
+</tr>
+<tr>
+<td>WDS</td>
+<td>67</td>
+<td><code>boot\\&lt;arch&gt;\\wdsnbp.com</code></td>
+</tr>
+<tr>
+<td>FOG</td>
+<td>67</td>
+<td><code>ipxe.efi</code> (u otros binarios NBP de <a href="https://ipxe.org/">iPXE</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Por ejemplo, para WDS:</p>
+<p><img alt="Required scopes" src="../../../../../../res/img_tasks/tools/isocreator/netinstall/wds/dhcp_scope_options_required.png" /></p>
+</li>
+<li>
+<p>Finalmente, haz clic derecho sobre el ámbito y selecciona "Activate"</p>
+</li>
+</ol>
+<h2 id="observaciones-finales">Observaciones finales</h2>
+<p>Puedes aplicar las configuraciones anteriores a nivel de ámbito o de forma global. Si vas a usar ambas plataformas, prepara scripts que automaticen estas tareas. Ejemplo:</p>
+<pre><code class="language-powershell">Set-DhcpServerv4OptionValue [-ScopeId &quot;&lt;IP Scope&gt;&quot;] -OptionId 66 -Value &quot;&lt;TFTP Server IP&gt;&quot;
+Set-DhcpServerv4OptionValue [-ScopeId &quot;&lt;IP Scope&gt;&quot;] -OptionId 67 -Value &quot;&lt;TFTP NBP for provider&gt;&quot;
+</code></pre>
+<p>Solo incluye el parámetro <code>-ScopeId</code> si quieres configurar la opción para un ámbito concreto.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Générée avec <a href="https://www.mkdocs.org/">MkDocs</a> avec un <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a> fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="pxehelpers.html" style="color: #fcfcfc">&laquo; Précédent</a></span>
+    
+    
+      <span><a href="wds.html" style="color: #fcfcfc">Suivant &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../../../../..";</script>
+    <script src="../../../../../../js/theme_extra.js"></script>
+    <script src="../../../../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

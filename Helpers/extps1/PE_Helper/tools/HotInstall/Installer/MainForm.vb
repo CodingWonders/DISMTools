@@ -564,6 +564,8 @@ Public Class MainForm
         End Try
     End Sub
 
+    Private ReadOnly GUID_WINDOWS_SETUP_RAMDISK_OPTIONS As New Guid("AE5534E0-A924-466C-B836-758539A3EE3A")
+
     ''' <summary>
     ''' Runs BCDEdit with the provided arguments
     ''' </summary>
@@ -585,6 +587,25 @@ Public Class MainForm
             Throw
         End Try
     End Sub
+
+    Private Function BcdObjectExists(objectId As Guid) As Boolean
+        DynaLog.LogMessage("Determining if BCD boot entry with object ID " & objectId.ToString() & " exists in the system BCD store...")
+
+        Dim bcdEntryCollectionRk As RegistryKey = Nothing
+        Dim objectEntryExists As Boolean = False
+
+        Try
+            bcdEntryCollectionRk = Registry.LocalMachine.OpenSubKey("BCD00000000\Objects")
+            objectEntryExists = bcdEntryCollectionRk.GetSubKeyNames().Any(Function(entry) entry.Equals(String.Format("{{{0}}}", objectId.ToString()), StringComparison.OrdinalIgnoreCase))
+        Catch ex As Exception
+            DynaLog.LogMessage("Could not get presence of BCD boot entry object. Error message: " & ex.Message)
+        Finally
+            If bcdEntryCollectionRk IsNot Nothing Then bcdEntryCollectionRk.Close()
+        End Try
+
+        DynaLog.LogMessage("Boot entry object exists? " & If(objectEntryExists, "Yes", "No"))
+        Return objectEntryExists
+    End Function
 
     ''' <summary>
     ''' Performs modifications to the Boot Configuration Data (BCD) of the system
@@ -608,7 +629,7 @@ Public Class MainForm
             ProgressMessage = GetValueFromLanguageData("MainForm.BCDEditProcess_RAMDiskConfig")
             InstallerBW.ReportProgress(25)
             DynaLog.LogMessage("Creating RAMDISK drive for WinPE...")
-            RunBCDConfigurator("/create {ramdiskoptions}", True)
+            If Not BcdObjectExists(GUID_WINDOWS_SETUP_RAMDISK_OPTIONS) Then RunBCDConfigurator("/create {ramdiskoptions}")
             RunBCDConfigurator("/set {ramdiskoptions} ramdisksdidevice partition=" & Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)).Replace("\", "").Trim())
             RunBCDConfigurator("/set {ramdiskoptions} ramdisksdipath \$DISMTOOLS.~BT\Boot\Boot.sdi")
 

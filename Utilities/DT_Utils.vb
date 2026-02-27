@@ -88,6 +88,22 @@ Namespace Utilities
             Return Nothing
         End Function
 
+        Shared Function CastDismArchitectureString(ArchitectureString As String) As DismProcessorArchitecture
+            Select Case ArchitectureString.ToLower()
+                Case "x86"
+                    Return DismProcessorArchitecture.Intel
+                Case "x64"
+                    Return DismProcessorArchitecture.AMD64
+                Case "arm"
+                    Return DismProcessorArchitecture.ARM
+                Case "arm64"
+                    Return DismProcessorArchitecture.ARM64
+                Case "neutral"
+                    Return DismProcessorArchitecture.Neutral
+            End Select
+            Return DismProcessorArchitecture.None
+        End Function
+
         Shared Function CastDismSignatureStatus(Signature As DismDriverSignature, Optional Translate As Boolean = False) As String
             Select Case Signature
                 Case DismDriverSignature.Unknown
@@ -428,6 +444,28 @@ Namespace Utilities
                     End If
             End Select
             Return Nothing
+        End Function
+
+        Shared Function CastDismPackageStateString(StateString As String) As DismPackageFeatureState
+            Dim obtainedState As DismPackageFeatureState = DismPackageFeatureState.NotPresent
+            If StateString = "Not Present" Then
+                obtainedState = DismPackageFeatureState.NotPresent
+            ElseIf StateString = "Uninstall Pending" Then
+                obtainedState = DismPackageFeatureState.UninstallPending
+            ElseIf StateString = "Staged" Then
+                obtainedState = DismPackageFeatureState.Staged
+            ElseIf StateString = "Removed" Then
+                obtainedState = DismPackageFeatureState.Removed
+            ElseIf StateString = "Installed" Then
+                obtainedState = DismPackageFeatureState.Installed
+            ElseIf StateString = "Install Pending" Then
+                obtainedState = DismPackageFeatureState.InstallPending
+            ElseIf StateString = "Superseded" Then
+                obtainedState = DismPackageFeatureState.Superseded
+            ElseIf StateString = "Partially Installed" Then
+                obtainedState = DismPackageFeatureState.PartiallyInstalled
+            End If
+            Return obtainedState
         End Function
 
         Shared Function CastDismFeatureState(State As DismPackageFeatureState, Optional Translate As Boolean = False) As String
@@ -1292,6 +1330,42 @@ Namespace Utilities
                     End If
             End Select
             Return Nothing
+        End Function
+
+        Shared Function CastDismReleaseTypeString(ReleaseTypeString As String) As DismReleaseType
+            Dim obtainedReleaseType As DismReleaseType = DismReleaseType.Other
+            If ReleaseTypeString = "Critical Update" Then
+                obtainedReleaseType = DismReleaseType.CriticalUpdate
+            ElseIf ReleaseTypeString = "Driver" Then
+                obtainedReleaseType = DismReleaseType.Driver
+            ElseIf ReleaseTypeString = "Feature Pack" Then
+                obtainedReleaseType = DismReleaseType.FeaturePack
+            ElseIf ReleaseTypeString = "Hotfix" Then
+                obtainedReleaseType = DismReleaseType.Hotfix
+            ElseIf ReleaseTypeString = "Security Update" Then
+                obtainedReleaseType = DismReleaseType.SecurityUpdate
+            ElseIf ReleaseTypeString = "Software Update" Then
+                obtainedReleaseType = DismReleaseType.SoftwareUpdate
+            ElseIf ReleaseTypeString = "Update" Then
+                obtainedReleaseType = DismReleaseType.Update
+            ElseIf ReleaseTypeString = "Update Rollup" Then
+                obtainedReleaseType = DismReleaseType.UpdateRollup
+            ElseIf ReleaseTypeString = "Language Pack" Then
+                obtainedReleaseType = DismReleaseType.LanguagePack
+            ElseIf ReleaseTypeString = "Foundation" Then
+                obtainedReleaseType = DismReleaseType.Foundation
+            ElseIf ReleaseTypeString = "Service Pack" Then
+                obtainedReleaseType = DismReleaseType.ServicePack
+            ElseIf ReleaseTypeString = "Product" Then
+                obtainedReleaseType = DismReleaseType.Product
+            ElseIf ReleaseTypeString = "Local Pack" Then
+                obtainedReleaseType = DismReleaseType.LocalPack
+            ElseIf ReleaseTypeString = "Other" Then
+                obtainedReleaseType = DismReleaseType.Other
+            ElseIf ReleaseTypeString = "OnDemand Pack" Then
+                obtainedReleaseType = DismReleaseType.OnDemandPack
+            End If
+            Return obtainedReleaseType
         End Function
 
         Shared Function CastDismFullyOfflineInstallationType(foiType As DismFullyOfflineInstallableType, Optional Translate As Boolean = False) As String

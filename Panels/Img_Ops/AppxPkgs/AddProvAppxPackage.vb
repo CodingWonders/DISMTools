@@ -26,7 +26,6 @@ Public Class AddProvAppxPackage
 
     Dim LogoAssetPopupForm As New Form()
     Dim LogoAssetPreview As New PictureBox()
-    Dim previewer As New ToolTip()
 
     Dim Packages As New List(Of AppxPackage)
 
@@ -264,7 +263,7 @@ Public Class AddProvAppxPackage
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If Not MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If Not MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) And MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("All requirements are met. Continuing with the task...")
             Return True
         Else
@@ -726,20 +725,20 @@ Public Class AddProvAppxPackage
             Win10Title.Visible = True
         End If
         CheckBox2.Enabled = If(MainForm.OnlineManagement Or MainForm.OfflineManagement, False, True)
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         Try
             DynaLog.LogMessage("Detecting conditions imposed by DISM version and Windows image for AppX regions and stub package preferences...")
             If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductBuildPart >= 17134) And
-                (MainForm.imgVersionInfo.Major >= 10 And MainForm.imgVersionInfo.Build >= 17134) Then
+                (MainForm.CurrentImage.ImageVersion.Major >= 10 And MainForm.CurrentImage.ImageVersion.Build >= 17134) Then
                 DynaLog.LogMessage("All conditions met for AppX regions (image version >= 10.0.17134; DISM version >= 10.0.17134.)")
                 GroupBox3.Enabled = True
             Else
                 DynaLog.LogMessage("Not all or no conditions met for AppX regions.")
                 GroupBox3.Enabled = False
             End If
-            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10 Then
+            If FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.CurrentImage.ImageVersion.Major >= 10 Then
                 DynaLog.LogMessage("All conditions met for stub package preferences (image version >= 10.0; DISM version >= 10.0.)")
                 Panel2.Enabled = True
             Else
@@ -751,10 +750,16 @@ Public Class AddProvAppxPackage
             GroupBox3.Enabled = False
             Panel2.Enabled = False
         End Try
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(343)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(120)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(139)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(275)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(162)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        AppxFileOFD.ShowDialog()
+        AppxFileOFD.ShowDialog(Me)
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -772,7 +777,7 @@ Public Class AddProvAppxPackage
         Button9.Enabled = False
         NoAppxFilePanel.Visible = True
         AppxFilePanel.Visible = False
-        AppxDetailsPanel.Height = 520
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(520)
         FlowLayoutPanel1.Visible = False
     End Sub
 
@@ -803,7 +808,7 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
-        AppxDependencyOFD.ShowDialog()
+        AppxDependencyOFD.ShowDialog(Me)
     End Sub
 
     Private Sub AppxFileOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles AppxFileOFD.FileOk
@@ -1824,7 +1829,7 @@ Public Class AddProvAppxPackage
 
             NoAppxFilePanel.Visible = (ListView1.SelectedItems.Count <= 0)
             AppxFilePanel.Visible = Not (ListView1.SelectedItems.Count <= 0)
-            AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+            AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
             FlowLayoutPanel1.Visible = Not (ListView1.SelectedItems.Count <= 0)
         End If
     End Sub
@@ -1892,7 +1897,7 @@ Public Class AddProvAppxPackage
         End Try
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         If ListView1.SelectedItems.Count = 1 Then
             Try
@@ -1997,7 +2002,7 @@ Public Class AddProvAppxPackage
                     CheckBox4.Checked = False
                 End If
                 DynaLog.LogMessage("Detecting conditions imposed by DISM and the Windows image for stub package preferences...")
-                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.imgVersionInfo.Major >= 10) And
+                If (FileVersionInfo.GetVersionInfo(MainForm.DismExe).ProductMajorPart >= 10 And MainForm.CurrentImage.ImageVersion.Major >= 10) And
                     Packages(ListView1.FocusedItem.Index).SupportsStub Then
                     DynaLog.LogMessage("All requirements are met.")
                     Panel2.Enabled = True
@@ -2018,7 +2023,7 @@ Public Class AddProvAppxPackage
         Catch ex As Exception
             NoAppxFilePanel.Visible = True
             AppxFilePanel.Visible = False
-            AppxDetailsPanel.Height = 520
+            AppxDetailsPanel.Height = WindowHelper.ScaleLogical(520)
             FlowLayoutPanel1.Visible = False
         End Try
     End Sub
@@ -2026,7 +2031,7 @@ Public Class AddProvAppxPackage
     Sub DetectMultiSelectionCommonProperties()
         NoAppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, True, False)
         AppxFilePanel.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
-        AppxDetailsPanel.Height = If(ListView1.SelectedItems.Count <= 0, 520, 83)
+        AppxDetailsPanel.Height = WindowHelper.ScaleLogical(If(ListView1.SelectedItems.Count <= 0, 520, 83))
         FlowLayoutPanel1.Visible = If(ListView1.SelectedItems.Count <= 0, False, True)
         Select Case MainForm.Language
             Case 0
@@ -2275,52 +2280,52 @@ Public Class AddProvAppxPackage
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
                         Case "ESN"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
                         Case "FRA"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
                         Case "PTB", "PTG"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
                         Case "ITA"
-                            previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
+                            WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
                     End Select
                 Case 1
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "The logo assets for this file could not be detected", "Click here to enlarge the view"))
                 Case 2
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Los recursos de este archivo no pudieron ser detectados", "Haga clic para agrandar la vista"))
                 Case 3
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Le logo de ce fichier n'a pas pu être détecté.", "Cliquez ici pour agrandir la vue"))
                 Case 4
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Não foi possível detetar os activos do logótipo para este ficheiro", "Clique aqui para ampliar a vista"))
                 Case 5
-                    previewer.SetToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
+                    WindowHelper.DisplayToolTip(sender, If(My.Computer.FileSystem.GetFiles(Application.StartupPath & "\temp\storeassets\" & ListView1.FocusedItem.SubItems(2).Text).Count <= 0, "Non è stato possibile rilevare le risorse del logo per questo file", "Fare clic qui per ingrandire la visualizzazione"))
             End Select
         Catch ex As Exception
             Select Case MainForm.Language
                 Case 0
                     Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                         Case "ENU", "ENG"
-                            previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
+                            WindowHelper.DisplayToolTip(sender, "The logo assets for this file could not be detected")
                         Case "ESN"
-                            previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
+                            WindowHelper.DisplayToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
                         Case "FRA"
-                            previewer.SetToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
+                            WindowHelper.DisplayToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
                         Case "PTB", "PTG"
-                            previewer.SetToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
+                            WindowHelper.DisplayToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
                         Case "ITA"
-                            previewer.SetToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
+                            WindowHelper.DisplayToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
                     End Select
                 Case 1
-                    previewer.SetToolTip(sender, "The logo assets for this file could not be detected")
+                    WindowHelper.DisplayToolTip(sender, "The logo assets for this file could not be detected")
                 Case 2
-                    previewer.SetToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
+                    WindowHelper.DisplayToolTip(sender, "Los recursos de este archivo no pudieron ser detectados")
                 Case 3
-                    previewer.SetToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
+                    WindowHelper.DisplayToolTip(sender, "Le logo de ce fichier n'a pas pu être détecté.")
                 Case 4
-                    previewer.SetToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
+                    WindowHelper.DisplayToolTip(sender, "Não foi possível detetar os activos do logótipo para este ficheiro")
                 Case 5
-                    previewer.SetToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
+                    WindowHelper.DisplayToolTip(sender, "Non è stato possibile rilevare le risorse del logo per questo file")
             End Select
         End Try
     End Sub
@@ -2354,6 +2359,8 @@ Public Class AddProvAppxPackage
         Cursor = Cursors.WaitCursor
         DynaLog.LogMessage("Interpreting items to add to queue...")
         For Each PackageFile In PackageFiles
+            ' Force the indication of waiting
+            Cursor = Cursors.WaitCursor
             If Path.GetExtension(PackageFile).Equals(".appx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msix", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".appxbundle", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".msixbundle", StringComparison.OrdinalIgnoreCase) Or
                 Path.GetExtension(PackageFile).Equals(".eappx", StringComparison.OrdinalIgnoreCase) Or Path.GetExtension(PackageFile).Equals(".emsix", StringComparison.OrdinalIgnoreCase) Or
@@ -2469,11 +2476,11 @@ Public Class AddProvAppxPackage
     End Sub
 
     Private Sub Button7_Click(sender As Object, e As EventArgs) Handles Button7.Click
-        LicenseFileOFD.ShowDialog()
+        LicenseFileOFD.ShowDialog(Me)
     End Sub
 
     Private Sub Button8_Click(sender As Object, e As EventArgs) Handles Button8.Click
-        CustomDataFileOFD.ShowDialog()
+        CustomDataFileOFD.ShowDialog(Me)
     End Sub
 
     Private Sub ListBox1_DragEnter(sender As Object, e As DragEventArgs) Handles ListBox1.DragEnter

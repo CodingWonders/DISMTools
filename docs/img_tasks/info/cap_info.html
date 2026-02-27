@@ -32,11 +32,7 @@
       <div class="wy-side-nav-search">
           <a href="../../index.html">
           <img src="../../logo.png" class="logo" alt="Logo"/>
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
+        </a>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -97,8 +93,6 @@
                 <li class="toctree-l3 current"><a class="reference internal current" href="#">Capability information</a>
     <ul class="current">
     <li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#information-regarding-download-and-install-sizes">Information regarding download and install sizes</a>
     </li>
     <li class="toctree-l4"><a class="reference internal" href="#additional-search-functionality">Additional search functionality</a>
     </li>
@@ -261,6 +255,8 @@
                 </li>
                 <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Viewing diagnostic logs</a>
                 </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
     </ul>
                   </li>
               </ul>
@@ -303,9 +299,6 @@
 <li>When no capabilities are selected or when the dialog is launched for the first time in the execution of the program, you'll only see brief information about all capabilities, which includes the capability identity and its state</li>
 <li>To get information about a specific capability, <strong>select it from the list</strong>. You'll then see that information on the right</li>
 </ul>
-<h2 id="information-regarding-download-and-install-sizes">Information regarding download and install sizes</h2>
-<p>In DISMTools versions from the 0.3 series that support this action (0.3.1-0.3.3) have an issue where the download and install sizes could overflow, returning negative values. This issue is caused by the managed DISM API library. </p>
-<p>DISMTools 0.4 is not affected by this issue due to it having an updated version of that library that fixes this issue.</p>
 <h2 id="additional-search-functionality">Additional search functionality</h2>
 <p>With the state filter functionality introduced in DISMTools 0.6 you can get the information you want based on a capability's state. To filter capabilities by state, <strong>type <code>state:</code> and provide one of the following state values</strong>:</p>
 <ul>
@@ -354,7 +347,6 @@
     <script src="../../js/theme_extra.js"></script>
     <script src="../../js/theme.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script src="../../search/main.js"></script>
     <script>
         jQuery(function () {
             SphinxRtdTheme.Navigation.enable(false);

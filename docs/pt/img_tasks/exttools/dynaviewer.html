@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Visualizando logs de diagnóstico - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Visualizando logs de diagn\u00f3stico";
+        var mkdocs_page_input_path = "img_tasks\\exttools\\dynaviewer.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Início</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start.html">Iniciando</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights.html">Novidades</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tarefas de imagem</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../img_tasks.html">Visão geral</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../online_inst_mgmt.html">Modo de gerenciamento de instalação on-line</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../offline_inst_mgmt.html">Modo de gerenciamento de instalação off-line</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gerenciamento de imagem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image.html">Anexar a uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image.html">Aplicar uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image.html">Capturando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image.html">Removendo imagens de volume de um arquivo de imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image.html">Exportando uma imagem do Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/list_image.html">Listando o conteúdo das imagens do Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image.html">Montando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/remount_image.html">Remontando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/split_image.html">Dividindo uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/unmount_image.html">Desmontando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Caixas de diálogo de informações de imagem</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../info/infodlgs.html">Visão geral</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/img_info.html">Informações de arquivo de imagem</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/pkg_info.html">Informações do pacote</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/feat_info.html">Informações de recursos</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/appxpkg_info.html">Informações do pacote AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/cap_info.html">Informações de capacidade</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/drv_info.html">Informações do driver</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/winpe_info.html">Informações de configuração do Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pacotes do sistema operacional</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/pkgs.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/add_package.html">Adicionando pacotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/remove_package.html">Removendo pacotes</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Recursos</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../features/features.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/enable_feature.html">Habilitando recursos</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/disable_feature.html">Desabilitando recursos</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pacotes AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/appx.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/add_provisionedappxpackage.html">Adicionando pacotes AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/remove_provisionedappxpackage.html">Removendo pacotes AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Manutenção de edição</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/editions.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_edition.html">Atualizando uma imagem para uma edição superior</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_productkey.html">Definindo a chave do produto</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Manutenção de idiomas e regional</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../langs/set_layereddriver.html">Configurando drivers de teclado em camadas</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacidades</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/caps.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/add_capability.html">Adicionando capacidades</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/remove_capability.html">Removendo capacidades</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Drivers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/drvs.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/add_driver.html">Adicionando drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver.html">Exportando drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver.html">Importando drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver.html">Removendo drivers</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Ferramentas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/mimgmgr.html">Gerenciador de imagem montada</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/wim2esd.html">Conversão de imagem</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/swm2wim.html">Fusão de arquivo SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/configlisteditor.html">Editor de lista de configuração DISM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Ferramentas de criação de ISO</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/isocreate.html">Criando arquivos ISO</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Instalando o sistema operacional</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../tools/isocreator/install/localinstall.html">Instalações locais</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Instalações baseadas em rede</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/pxehelpers.html">Visão geral</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/wds.html">Assistente do Windows Deployment Services (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dim.html">Módulo de instalação do driver</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dtpe_es.html">Suite de extensibilidade</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/sysprep.html">Ferramenta de preparação do SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/cmdline.html">Visão geral</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/regcpl.html">Painel de controle do registro de imagem</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/servicemgr.html">Gerenciador de serviço do sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/envvarmgr.html">Gerenciador de variável de ambiente do sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Arquivos de resposta autônoma</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unattend.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_man.html">Gerenciador de arquivo de resposta autônoma</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_create.html">Criador de arquivo de resposta autônoma</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_apply.html">Aplicando arquivos de resposta autônoma</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Ferramentas externas</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="themedesigner.html">Criando seus temas</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Visualizando logs de diagnóstico</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#running-on-older-versions-of-windows">Running on older versions of Windows</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#command-line-usage">Command line usage</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#options">Options</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dynalog-logging">DynaLog Logging</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#format-version-history">Format Version History</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Ferramentas</li>
+          <li class="breadcrumb-item">Ferramentas externas</li>
+      <li class="breadcrumb-item active">Visualizando logs de diagnóstico</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="the-dynalog-log-viewer">The DynaLog Log Viewer</h1>
+<p>The DynaLog Log Viewer (<em>DynaViewer</em>) is a tool that allows you to view and analyze diagnostic logs generated by DISMTools. It can be accessed from one of the following locations:</p>
+<ul>
+<li>By going to <strong>Help &gt; Open diagnostic logs in log viewer</strong></li>
+<li>Independently, by opening <code>DynaViewer.exe</code> located in <code>&lt;program directory&gt;\tools\DynaLogViewer</code></li>
+</ul>
+<p>You should see the following window:</p>
+<p align="center">
+    <img src="../../res/img_tasks/exttools/dynaviewer/DynaViewer.png" />
+</p>
+
+<h2 id="usage">Usage</h2>
+<p>When you launch the DynaLog Log Viewer, you will be able to open a log file. Use the "Open" button on the window to select a log file to view.</p>
+<p>The main log file is <code>DT_DynaLog.log</code>. DynaLog will back up log files that are older than 2 weeks. Both the main log file and the backups are located in <code>&lt;program directory&gt;\logs</code>.</p>
+<p>You can also invoke the DynaLog Log Viewer from the command line. More about that in the <a href="#command-line-usage">Command line usage</a> section.</p>
+<p>After the log file is loaded, you can get the following information:</p>
+<ul>
+<li><strong>Timestamps of each log entry in UTC</strong></li>
+<li><strong>Process ID</strong> to help tell multiple processes apart</li>
+<li><strong>Main/Parent Method Callers</strong></li>
+<li><strong>Message</strong> that contains what happened</li>
+</ul>
+<p>You can get more information about each entry by double-clicking it. This will open a new window with the following information:</p>
+<p align="center">
+    <img src="../../res/img_tasks/exttools/dynaviewer/DynaViewer_EventProps.png" />
+</p>
+
+<p>If the file was externally modified, you can refresh the log file by clicking the "Refresh" button.</p>
+<p>It's recommended that you use the DynaLog Log Viewer in the event of a problem. In the case of an internal program error, DISMTools will attempt to copy the latest log file to your desktop. DynaLog log files are recommended to be sent to us to help us diagnose the issue even further.</p>
+<p>DynaLog Log Viewer can also be used to view logs from other programs that use the DynaLog logging framework, that can easily be implemented in your preferred programming language.</p>
+<h2 id="running-on-older-versions-of-windows">Running on older versions of Windows</h2>
+<p>DISMTools includes 2 versions of the Log Viewer that contain the same feature set but target different frameworks:</p>
+<ul>
+<li>The main version targets .NET 4.8 and works on Windows 7 SP1 and later (except Windows 10 1507/1511). The source code of this version is available on the GitHub repository</li>
+<li>An alternative version targets .NET 2 and works on operating systems as old as Windows 98 Second Edition. The source code of this version is available as a ZIP file in the repository</li>
+</ul>
+<h2 id="command-line-usage">Command line usage</h2>
+<p>The command line arguments of the DynaLog Log Viewer are as follows:</p>
+<pre><code>DynaViewer.exe &quot;file&quot; [options]
+</code></pre>
+<h3 id="options">Options</h3>
+<ul>
+<li><code>/selectfirst=&lt;n&gt;</code> - Selects the first <em>n</em> entries of the log file</li>
+<li><code>/selectlast=&lt;n&gt;</code> - Selects the last <em>n</em> entries of the log file. In the event of an internal error, DISMTools will use this option to select enough entries to include error information and the last entries before it</li>
+</ul>
+<h2 id="dynalog-logging">DynaLog Logging</h2>
+<p>In DynaLog, an event includes the following information:</p>
+<pre><code>[Timestamp] [Process ID] [Main Method Caller (Parent Method)] Message
+</code></pre>
+<p>In the DISMTools repository, you can find the source code of DynaLog. Then, you can port it to your preferred language. The DynaLog logging format may change in the future, so it is recommended that you adapt your reporting code to work correctly with the Log Viewer when it parses new items.</p>
+<p>To log an event, call the <code>LogMessage</code> method like this:</p>
+<pre><code class="language-csharp">DynaLog.LogMessage(&quot;This is a log message&quot;);
+</code></pre>
+<p>The parent method can be explicitly ignored in the event by setting the second parameter in <code>LogMessage</code> to <code>false</code>:</p>
+<pre><code class="language-csharp">DynaLog.LogMessage(&quot;This is a log message with parent ignored&quot;, false);
+</code></pre>
+<p>DynaLog can also be temporarily disabled by calling <code>DisableLogging</code> and re-enabled by calling <code>EnableLogging</code>. Use or present this option to the end-user only if the system is experiencing performance issues.</p>
+<h3 id="format-version-history">Format Version History</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Version</th>
+<th style="text-align: center;">Used by DISMTools versions</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1.0.2</td>
+<td style="text-align: center;">0.7 Preview 5+, 0.6.2 Update 2+</td>
+<td>Added process ID (PID) field</td>
+</tr>
+<tr>
+<td style="text-align: center;">1.0.1</td>
+<td style="text-align: center;">0.7 Preview 1 - Preview 4, 0.6.2 Update 1</td>
+<td>Invariant culture for date representations, DynaViewer added</td>
+</tr>
+<tr>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">0.6.1 - 0.6.2 (Release)</td>
+<td>Logging added to entire codebase, write speeds improved from previous version</td>
+</tr>
+<tr>
+<td style="text-align: center;">0.6</td>
+<td style="text-align: center;">0.6</td>
+<td>Initial version to implement the foundations; not used in many places</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="themedesigner.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="sse.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

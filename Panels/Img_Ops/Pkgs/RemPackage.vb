@@ -141,22 +141,10 @@ Public Class RemPackage
             Return False
         End If
         DynaLog.LogMessage("Adding packages to arrays...")
-        If MainForm.imgPackages.Count > 0 Then
-            For Each imgPackage In MainForm.imgPackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).ToList()
-                CheckedListBox1.Items.Add(imgPackage.PackageName)
-            Next
+        If MainForm.CurrentImage.ImagePackages IsNot Nothing AndAlso MainForm.CurrentImage.ImagePackages.Count > 0 Then
+            CheckedListBox1.Items.AddRange(MainForm.CurrentImage.ImagePackages.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).Select(Function(package) package.PackageName).ToArray())
         Else
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgPackageNames, MainForm.imgPackageNames.Last)
-                    If MainForm.imgPackageNames(x) = "" Then
-                        Continue For
-                    End If
-                    CheckedListBox1.Items.Add(MainForm.imgPackageNames(x))
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-                Exit Try
-            End Try
+            CheckedListBox1.Items.AddRange(MainForm.CurrentImage.ImagePackages_Backup.Where(Function(package) Not New DismPackageFeatureState() {DismPackageFeatureState.NotPresent, DismPackageFeatureState.Removed, DismPackageFeatureState.UninstallPending}.Contains(package.PackageState)).Select(Function(package) package.PackageName).ToArray())
         End If
         Return True
     End Function
@@ -304,8 +292,8 @@ Public Class RemPackage
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 
     Private Sub RadioButton1_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButton1.CheckedChanged
@@ -327,7 +315,7 @@ Public Class RemPackage
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        FolderBrowserDialog1.ShowDialog()
+        FolderBrowserDialog1.ShowDialog(Me)
         If DialogResult.OK Then
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
         Else

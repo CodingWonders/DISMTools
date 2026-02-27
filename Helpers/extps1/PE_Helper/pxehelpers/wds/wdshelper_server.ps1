@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Helper Server |
@@ -81,12 +81,14 @@ function Get-WindowsRole {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7.2"
+$version = "0.7.3"
 
 Clear-Host
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 # Start logging stuff
-Start-Transcript -Path "$env:TEMP\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
+Start-Transcript -Path "$tempDir\DT_WDSHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - Windows Deployment Services Helper Server"
 Write-Host "(c) 2025-2026. CodingWonders Software"
@@ -101,7 +103,7 @@ if ([Environment]::OSVersion.Platform -ne "Win32NT") {
 }
 
 $compInfo = Get-ComputerInfo
-if ($compInfo.WindowsInstallationType -ne "Server") {
+if ($compInfo.WindowsInstallationType -notlike "Server*") {
     Write-LogMessage -message "This computer is not running Windows Server."
     return $false
 }
@@ -232,6 +234,11 @@ function Deploy-WimImage {
     if ($shareGuid -eq "") {
         throw "The Share GUID cannot be empty."
     }
+    try {
+        $conv = [Guid]$shareGuid
+    } catch {
+        throw "Invalid format for GUID."
+    }
     Write-Progress -Activity "WDS Deployment Preparation Work" -Status "Please wait..." -PercentComplete 0
     Write-LogMessage -message "Preparing the deployment of a WIM file..."
     try {
@@ -284,6 +291,11 @@ function Remove-SharedFolderByGuid {
         [Parameter(Mandatory)] [string]$guid
     )
     if ($guid -eq "") {
+        return $false
+    }
+    try {
+        $conv = [Guid]$guid
+    } catch {
         return $false
     }
     Remove-Item -Path "$tmpImageFolderPath\$guid" -Recurse -Force -Verbose -ErrorAction SilentlyContinue
@@ -696,7 +708,7 @@ try {
                 }
             }
             "/api/viewlogs" {
-                notepad "$env:TEMP\DT_WDSHS_Log.log"
+                notepad "$tempDir\DT_WDSHS_Log.log"
             }
             "/api/exit" {
                 $sendJson.Invoke(@{ success = $true })

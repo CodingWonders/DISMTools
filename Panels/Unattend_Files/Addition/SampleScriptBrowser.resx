@@ -124,4 +124,10 @@ To get started, select a starter script from the list on the left.
 
 If you have a starter script that isn't included in this set of scripts, you can load it from the file system instead.</value>
   </data>
+  <metadata name="ScriptCodeExporterSFD.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="SSETimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>195, 17</value>
+  </metadata>
 </root>

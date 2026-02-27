@@ -24,6 +24,8 @@ Public Class AppInstallerDownloader
     Private sw As Stopwatch = New Stopwatch()
     Private time As TimeSpan = New TimeSpan()
 
+    Private originalTitle As String
+
     Private Sub AppInstallerDownloader_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Enabled = True
         downUriLbl.Text = ""
@@ -137,9 +139,11 @@ Public Class AppInstallerDownloader
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         GroupBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Language = MainForm.Language
+        Height = WindowHelper.ScaleLogical(320)
+        originalTitle = Text
         Visible = True
         DynaLog.LogMessage("App Installer file passed: " & Quote & Path.GetFileName(AppInstallerFile) & Quote)
         If AppInstallerFile IsNot Nothing And File.Exists(AppInstallerFile) Then
@@ -147,33 +151,33 @@ Public Class AppInstallerDownloader
             TaskbarHelper.SetIndicatorState(0, Windows.Shell.TaskbarItemProgressState.Indeterminate, MainForm.Handle)
             ' Create a reader and get the URL information, since .appinstaller files are XML
             Try
-                Dim reader As New RichTextBox()
-                reader.Text = File.ReadAllText(AppInstallerFile, UTF8)
-                If reader.Text <> "" Then
+                Dim reader As String() = File.ReadAllLines(AppInstallerFile, UTF8)
+                Dim readerContents As String = String.Join(CrLf, reader)
+                If reader.Any() Then
                     ' Detect if a URL property is present
-                    If reader.Text.Contains("MainBundle") Then
+                    If readerContents.Contains("MainBundle") Then
                         ' Go through each line and find the URL
-                        For x = 0 To reader.Lines.Count - 1
-                            If reader.Lines(x).Contains("MainBundle") Then
+                        For x = 0 To reader.Count - 1
+                            If reader(x).Contains("MainBundle") Then
                                 DynaLog.LogMessage("Line " & x + 1 & " contains main package information. Parsing...")
-                                Dim serializer As New XmlSerializer(GetType(AppInstallers))
-                                Using tReader As TextReader = New StringReader(reader.Lines(x))
+                                Dim serializer As New XmlSerializer(GetType(AppInstallerBundle))
+                                Using tReader As TextReader = New StringReader(reader(x))
                                     Dim propertyLine As String = ""
-                                    If Not reader.Lines(x).EndsWith(" />") Then
+                                    If Not reader(x).EndsWith(" />") Then
                                         DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
                                         Dim Properties As New List(Of String)
-                                        Properties.Add(If(reader.Lines(x).EndsWith("MainBundle"), reader.Lines(x).Replace(" ", "").Trim(), reader.Lines(x)))
-                                        Properties.Add(reader.Lines(x + 1).Replace(" ", "").Trim())
-                                        Properties.Add(reader.Lines(x + 2).Replace(" ", "").Trim())
-                                        Properties.Add(reader.Lines(x + 3).Replace(" ", "").Trim())
-                                        Properties.Add(reader.Lines(x + 4).Replace(" ", "").Trim())
+                                        Properties.Add(If(reader(x).EndsWith("MainBundle"), reader(x).Replace(" ", "").Trim(), reader(x)))
+                                        Properties.Add(reader(x + 1).Replace(" ", "").Trim())
+                                        Properties.Add(reader(x + 2).Replace(" ", "").Trim())
+                                        Properties.Add(reader(x + 3).Replace(" ", "").Trim())
+                                        Properties.Add(reader(x + 4).Replace(" ", "").Trim())
                                         propertyLine = String.Join(" ", Properties)
-                                        Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallers)
+                                        Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallerBundle)
                                         AppInstallerUri = id.MainBundleUri
                                     Else
                                         DynaLog.LogMessage("Line ends with XML tag end.")
                                         Using ContentReader As XmlReader = XmlReader.Create(tReader)
-                                            Dim id = CType(serializer.Deserialize(ContentReader), AppInstallers)
+                                            Dim id = CType(serializer.Deserialize(ContentReader), AppInstallerBundle)
                                             AppInstallerUri = id.MainBundleUri
                                         End Using
                                     End If
@@ -181,6 +185,31 @@ Public Class AppInstallerDownloader
                                 Exit For
                             End If
                         Next
+                    ElseIf readerContents.Contains("MainPackage") Then
+                        Dim startingIndex As Integer = reader.ToList().FindIndex(Function(line) line.Contains("MainPackage"))
+                        Dim serializer As New XmlSerializer(GetType(AppInstallerStandalone))
+                        Using tReader As TextReader = New StringReader(reader(startingIndex))
+                            Dim propertyLine As String = ""
+                            If Not reader(startingIndex).EndsWith(" />") Then
+                                DynaLog.LogMessage("Line does not end with XML tag end. Joining line with next 4 lines...")
+                                Dim Properties As New List(Of String)
+                                Properties.Add(If(reader(startingIndex).EndsWith("MainPackage"), reader(startingIndex).Replace(" ", "").Trim(), reader(startingIndex)))
+                                Properties.Add(reader(startingIndex + 1).Replace(" ", "").Trim())
+                                Properties.Add(reader(startingIndex + 2).Replace(" ", "").Trim())
+                                Properties.Add(reader(startingIndex + 3).Replace(" ", "").Trim())
+                                Properties.Add(reader(startingIndex + 4).Replace(" ", "").Trim())
+                                Properties.Add(reader(startingIndex + 5).Replace(" ", "").Trim())
+                                propertyLine = String.Join(" ", Properties)
+                                Dim id = CType(serializer.Deserialize(New StringReader(propertyLine)), AppInstallerStandalone)
+                                AppInstallerUri = id.MainPackageUri
+                            Else
+                                DynaLog.LogMessage("Line ends with XML tag end.")
+                                Using ContentReader As XmlReader = XmlReader.Create(tReader)
+                                    Dim id = CType(serializer.Deserialize(ContentReader), AppInstallerStandalone)
+                                    AppInstallerUri = id.MainPackageUri
+                                End Using
+                            End If
+                        End Using
                     End If
                 End If
 
@@ -193,6 +222,9 @@ Public Class AppInstallerDownloader
                     Cancel_Button.Enabled = True
                     Label3.Visible = False
                     BackgroundWorker1.RunWorkerAsync()
+                Else
+                    DynaLog.LogMessage("We don't have a link. Cancelling...")
+                    Throw New Exception()
                 End If
             Catch ex As Exception
                 Close()
@@ -328,6 +360,7 @@ Public Class AppInstallerDownloader
         End Select
         If ProgressBar1.Value <= ProgressBar1.Maximum Then
             TaskbarHelper.SetIndicatorState(ProgressBar1.Value, Windows.Shell.TaskbarItemProgressState.Normal, MainForm.Handle)
+            Text = String.Format("[{0}%] {1}", Math.Round(ProgressBar1.Value, 0), originalTitle)
         End If
     End Sub
 

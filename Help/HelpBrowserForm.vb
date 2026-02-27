@@ -32,8 +32,8 @@ Public Class HelpBrowserForm
             Case 5
                 TitleMsg = "Argomenti guida di DISMTools"
         End Select
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Text = TitleMsg
 
         TitleChangerTimer.Enabled = True
@@ -73,7 +73,7 @@ Public Class HelpBrowserForm
                     Case 5
                         languageCode = "it"
                 End Select
-                
+
                 MainForm.tourServer.StartServer()
                 If MainForm.tourServer.IsListenerAlive() Then
                     Process.Start(String.Format("http://localhost:2022/{0}/tour-start.html", languageCode))
@@ -93,8 +93,8 @@ Public Class HelpBrowserForm
 
     Private Sub HelpBrowserForm_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
         If Visible Then
-            Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+            Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+            WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
     End Sub
 

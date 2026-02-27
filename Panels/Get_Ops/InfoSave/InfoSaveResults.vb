@@ -22,50 +22,60 @@ Public Class InfoSaveResults
                         Text = "Image information report results"
                         Label1.Text = "The report has been saved to the location you had specified, and its contents will be shown below."
                         Button1.Text = "OK"
+                        Button2.Text = "Save report..."
                     Case "ESN"
                         Text = "Resultados del informe de información de la imagen"
                         Label1.Text = "El informe ha sido guardado en la ubicación que especificó, y sus contenidos serán mostrados abajo."
                         Button1.Text = "Aceptar"
+                        Button2.Text = "Guardar informe..."
                     Case "FRA"
                         Text = "Résultats du rapport d'information de l'image"
                         Label1.Text = "Le rapport a été sauvegardé à l'emplacement que vous aviez indiqué et son contenu s'affiche ci-dessous."
                         Button1.Text = "OK"
+                        Button2.Text = "Enregistrer le rapport..."
                     Case "PTB", "PTG"
                         Text = "Resultados do relatório de informações sobre imagens"
                         Label1.Text = "O relatório foi guardado na localização que especificou e o seu conteúdo será apresentado abaixo."
                         Button1.Text = "OK"
+                        Button2.Text = "Guardar relatório..."
                     Case "ITA"
                         Text = "Risultati del rapporto sulle informazioni sull'immagine"
                         Label1.Text = "Il rapporto è stato salvato nella posizione specificata e il suo contenuto viene visualizzato sottostante."
                         Button1.Text = "OK"
+                        Button2.Text = "Salva rapporto..."
                 End Select
             Case 1
                 Text = "Image information report results"
                 Label1.Text = "The report has been saved to the location you had specified, and its contents will be shown below."
                 Button1.Text = "OK"
+                Button2.Text = "Save report..."
             Case 2
                 Text = "Resultados del informe de información de la imagen"
                 Label1.Text = "El informe ha sido guardado en la ubicación que especificó, y sus contenidos serán mostrados abajo."
                 Button1.Text = "Aceptar"
+                Button2.Text = "Guardar informe..."
             Case 3
                 Text = "Résultats du rapport d'information de l'image"
                 Label1.Text = "Le rapport a été sauvegardé à l'emplacement que vous aviez indiqué et son contenu s'affiche ci-dessous."
                 Button1.Text = "OK"
+                Button2.Text = "Enregistrer le rapport..."
             Case 4
                 Text = "Resultados do relatório de informações sobre imagens"
                 Label1.Text = "O relatório foi guardado na localização que especificou e o seu conteúdo será apresentado abaixo."
                 Button1.Text = "OK"
+                Button2.Text = "Guardar relatório..."
             Case 5
                 Text = "Risultati del rapporto sulle informazioni sull'immagine"
                 Label1.Text = "Il rapporto è stato salvato nella posizione specificata e il suo contenuto viene visualizzato sottostante."
                 Button1.Text = "OK"
+                Button2.Text = "Salva rapporto..."
         End Select
         BackColor = CurrentTheme.SectionBackgroundColor
         ForeColor = CurrentTheme.ForegroundColor
         TextBox1.BackColor = BackColor
         TextBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         TextBox1.Clear()
         DynaLog.LogMessage("Checking if the report exists...")
         If File.Exists(ImgInfoSaveDlg.SaveTarget) Then
@@ -101,8 +111,7 @@ Public Class InfoSaveResults
                                        "                border-bottom: 1px solid #222" & CrLf &
                                        "            }" & CrLf &
                                        "            code {" & CrLf &
-                                       "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & ";" & CrLf &
-                                       "                font-size: 16px" & CrLf &
+                                       "                font-family: Inconsolata, " & Quote & "Cascadia Code" & Quote & ", Consolas, " & Quote & "Courier New" & Quote & CrLf &
                                        "            }" & CrLf &
                                        "            #sidebar {" & CrLf &
                                        "                width: 200px;" & CrLf &
@@ -257,6 +266,21 @@ Public Class InfoSaveResults
             DynaLog.LogMessage("An external link has been clicked. Opening it in the default browser...")
             Process.Start(e.Url.AbsoluteUri)
             WebBrowser1.Navigate("file:///" & Application.StartupPath.Replace("\", "/").Trim() & "/report.html")
+        End If
+    End Sub
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        SaveFileDialog1.ShowDialog(Me)
+    End Sub
+
+    Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
+        If File.Exists(Application.StartupPath & "\report.html") Then
+            DynaLog.LogMessage("Attempting to save report to destination...")
+            Try
+                File.Copy(Path.Combine(Application.StartupPath, "report.html"), SaveFileDialog1.FileName, True)
+            Catch ex As Exception
+
+            End Try
         End If
     End Sub
 End Class

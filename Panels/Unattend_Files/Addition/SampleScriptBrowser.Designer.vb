@@ -22,11 +22,13 @@ Partial Class SampleScriptBrowser
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SampleScriptBrowser))
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.OK_Button = New System.Windows.Forms.Button()
         Me.Cancel_Button = New System.Windows.Forms.Button()
         Me.ActionPanel = New System.Windows.Forms.Panel()
+        Me.CreateStarterScriptBtn = New System.Windows.Forms.Button()
         Me.ScriptListPanel = New System.Windows.Forms.Panel()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -35,6 +37,8 @@ Partial Class SampleScriptBrowser
         Me.Label1 = New System.Windows.Forms.Label()
         Me.ScriptDetailsContainerPanel = New System.Windows.Forms.Panel()
         Me.ScriptDetailsPanel = New System.Windows.Forms.Panel()
+        Me.ExportScriptCodeBtn = New System.Windows.Forms.Button()
+        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -42,8 +46,9 @@ Partial Class SampleScriptBrowser
         Me.Label3 = New System.Windows.Forms.Label()
         Me.ScriptDetailsNoSelectedPanel = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
         Me.Label8 = New System.Windows.Forms.Label()
+        Me.ScriptCodeExporterSFD = New System.Windows.Forms.SaveFileDialog()
+        Me.SSETimer = New System.Windows.Forms.Timer(Me.components)
         Me.TableLayoutPanel1.SuspendLayout()
         Me.ActionPanel.SuspendLayout()
         Me.ScriptListPanel.SuspendLayout()
@@ -92,12 +97,24 @@ Partial Class SampleScriptBrowser
         '
         'ActionPanel
         '
+        Me.ActionPanel.Controls.Add(Me.CreateStarterScriptBtn)
         Me.ActionPanel.Controls.Add(Me.TableLayoutPanel1)
         Me.ActionPanel.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.ActionPanel.Location = New System.Drawing.Point(0, 513)
         Me.ActionPanel.Name = "ActionPanel"
         Me.ActionPanel.Size = New System.Drawing.Size(1008, 48)
         Me.ActionPanel.TabIndex = 1
+        '
+        'CreateStarterScriptBtn
+        '
+        Me.CreateStarterScriptBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.CreateStarterScriptBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CreateStarterScriptBtn.Location = New System.Drawing.Point(12, 10)
+        Me.CreateStarterScriptBtn.Name = "CreateStarterScriptBtn"
+        Me.CreateStarterScriptBtn.Size = New System.Drawing.Size(205, 23)
+        Me.CreateStarterScriptBtn.TabIndex = 1
+        Me.CreateStarterScriptBtn.Text = "Create your own starter scripts..."
+        Me.CreateStarterScriptBtn.UseVisualStyleBackColor = True
         '
         'ScriptListPanel
         '
@@ -139,7 +156,7 @@ Partial Class SampleScriptBrowser
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time"})
+        Me.ComboBox1.Items.AddRange(New Object() {"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
         Me.ComboBox1.Location = New System.Drawing.Point(15, 36)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(291, 21)
@@ -150,9 +167,9 @@ Partial Class SampleScriptBrowser
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(86, 13)
+        Me.Label1.Size = New System.Drawing.Size(153, 13)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Choose a stage:"
+        Me.Label1.Text = "Choose a stage or script type:"
         '
         'ScriptDetailsContainerPanel
         '
@@ -166,6 +183,7 @@ Partial Class SampleScriptBrowser
         '
         'ScriptDetailsPanel
         '
+        Me.ScriptDetailsPanel.Controls.Add(Me.ExportScriptCodeBtn)
         Me.ScriptDetailsPanel.Controls.Add(Me.RichTextBox1)
         Me.ScriptDetailsPanel.Controls.Add(Me.Label7)
         Me.ScriptDetailsPanel.Controls.Add(Me.Label6)
@@ -178,6 +196,29 @@ Partial Class SampleScriptBrowser
         Me.ScriptDetailsPanel.Size = New System.Drawing.Size(688, 513)
         Me.ScriptDetailsPanel.TabIndex = 1
         Me.ScriptDetailsPanel.Visible = False
+        '
+        'ExportScriptCodeBtn
+        '
+        Me.ExportScriptCodeBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.ExportScriptCodeBtn.Location = New System.Drawing.Point(446, 158)
+        Me.ExportScriptCodeBtn.Name = "ExportScriptCodeBtn"
+        Me.ExportScriptCodeBtn.Size = New System.Drawing.Size(192, 23)
+        Me.ExportScriptCodeBtn.TabIndex = 7
+        Me.ExportScriptCodeBtn.Text = "Export script code to a file..."
+        Me.ExportScriptCodeBtn.UseVisualStyleBackColor = True
+        '
+        'RichTextBox1
+        '
+        Me.RichTextBox1.DetectUrls = False
+        Me.RichTextBox1.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RichTextBox1.Location = New System.Drawing.Point(53, 192)
+        Me.RichTextBox1.Name = "RichTextBox1"
+        Me.RichTextBox1.ReadOnly = True
+        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
+        Me.RichTextBox1.Size = New System.Drawing.Size(585, 273)
+        Me.RichTextBox1.TabIndex = 6
+        Me.RichTextBox1.Text = ""
+        Me.RichTextBox1.WordWrap = False
         '
         'Label7
         '
@@ -251,18 +292,6 @@ Partial Class SampleScriptBrowser
         Me.Label2.Text = "Select a script to view its information."
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'RichTextBox1
-        '
-        Me.RichTextBox1.Font = New System.Drawing.Font("Consolas", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RichTextBox1.Location = New System.Drawing.Point(53, 192)
-        Me.RichTextBox1.Name = "RichTextBox1"
-        Me.RichTextBox1.ReadOnly = True
-        Me.RichTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth
-        Me.RichTextBox1.Size = New System.Drawing.Size(585, 273)
-        Me.RichTextBox1.TabIndex = 6
-        Me.RichTextBox1.Text = ""
-        Me.RichTextBox1.WordWrap = False
-        '
         'Label8
         '
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -275,11 +304,18 @@ Partial Class SampleScriptBrowser
         Me.Label8.Text = resources.GetString("Label8.Text")
         Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
+        'ScriptCodeExporterSFD
+        '
+        Me.ScriptCodeExporterSFD.Title = "Export Script Code"
+        '
+        'SSETimer
+        '
+        '
         'SampleScriptBrowser
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(1008, 561)
         Me.Controls.Add(Me.ScriptDetailsContainerPanel)
@@ -326,5 +362,9 @@ Partial Class SampleScriptBrowser
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents RichTextBox1 As System.Windows.Forms.RichTextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents CreateStarterScriptBtn As System.Windows.Forms.Button
+    Friend WithEvents ExportScriptCodeBtn As System.Windows.Forms.Button
+    Friend WithEvents ScriptCodeExporterSFD As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents SSETimer As System.Windows.Forms.Timer
 
 End Class

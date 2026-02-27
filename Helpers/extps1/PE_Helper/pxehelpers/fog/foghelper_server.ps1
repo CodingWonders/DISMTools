@@ -4,7 +4,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - FOG Helper Web-based API for Servers      |
@@ -128,12 +128,14 @@ function Get-FogHosts {
 
 [Console]::TreatControlCAsInput = $true
 
-$version = "0.7.2"
+$version = "0.7.3"
 
 Clear-Host
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 # Start logging stuff
-Start-Transcript -Path "$env:TEMP\DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
+Start-Transcript -Path "$tempDir\DT_FOGHS_Log.log" -Append -NoClobber | Out-Null
 
 Write-Host "DISMTools $version - FOG Helper Server"
 Write-Host "(c) 2025-2026. CodingWonders Software"
@@ -141,7 +143,7 @@ Write-Host "-----------------------------------------------------------"
 
 Write-LogMessage -message "Checking operating environment..."
 $compInfo = Get-ComputerInfo
-if ($compInfo.WindowsInstallationType -ne "Server") {
+if ($compInfo.WindowsInstallationType -notlike "Server*") {
     Write-LogMessage -message "This computer is not running Windows Server."
     return $false
 }
@@ -658,7 +660,7 @@ try {
                 }
             }
             "/api/viewlogs" {
-                notepad "$env:TEMP\DT_FOGHS_Log.log"
+                notepad "$tempDir\DT_FOGHS_Log.log"
             }
             "/api/exit" {
                 $sendJson.Invoke(@{ success = $true })

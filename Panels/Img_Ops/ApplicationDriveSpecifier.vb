@@ -25,9 +25,7 @@ Public Class ApplicationDriveSpecifier
         Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("SELECT DeviceID, Model, Partitions, Size FROM Win32_DiskDrive")
         Dim dskResults As ManagementObjectCollection = searcher.Get()
         DynaLog.LogMessage("Management object searcher returned " & dskResults.Count & " result(s)")
-        For Each result As ManagementObject In dskResults
-            ListView1.Items.Add(New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"}))
-        Next
+        ListView1.Items.AddRange(dskResults.Cast(Of ManagementObject)().Select(Function(result) New ListViewItem(New String() {result("DeviceID"), result("Model"), result("Partitions"), result("Size") & " (~" & Converters.BytesToReadableSize(result("Size")) & ")"})).ToArray())
     End Sub
 
     Private Sub ApplicationDriveSpecifier_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -144,10 +142,15 @@ Public Class ApplicationDriveSpecifier
         RichTextBox1.ForeColor = ForeColor
         ListView1.BackColor = BackColor
         ListView1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ListDisks()
         BringToFront()
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(246)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(347)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(127)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(179)
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click

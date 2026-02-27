@@ -437,12 +437,12 @@ Public Class ImgAppend
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             ' WIMBoot is only compatible with Windows 8.1
             DynaLog.LogMessage("Detecting if the Windows image that is being serviced supports WIMBoot...")
-            If MainForm.imgVersionInfo IsNot Nothing And MainForm.imgVersionInfo.Build = 9600 Then
+            If MainForm.CurrentImage.ImageVersion IsNot Nothing And MainForm.CurrentImage.ImageVersion.Build = 9600 Then
                 ' We are dealing with Windows 8.1
                 DynaLog.LogMessage("The image that is being serviced contains Windows 8.1. It supports WIMBoot.")
                 CheckBox2.Enabled = True
@@ -457,14 +457,14 @@ Public Class ImgAppend
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If FolderBrowserDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Selected source directory: " & Quote & FolderBrowserDialog1.SelectedPath & Quote)
             TextBox1.Text = FolderBrowserDialog1.SelectedPath
         End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        SaveFileDialog1.ShowDialog()
+        SaveFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
@@ -487,7 +487,7 @@ Public Class ImgAppend
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -566,6 +566,6 @@ Public Class ImgAppend
             Case 5
                 msg = "Ottenere il nome dell'ultimo indice dell'immagine di destinazione"
         End Select
-        ToolTip1.SetToolTip(sender, msg)
+        WindowHelper.DisplayToolTip(sender, msg)
     End Sub
 End Class

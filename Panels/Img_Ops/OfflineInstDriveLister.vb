@@ -176,21 +176,42 @@ Public Class OfflineInstDriveLister
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        For Each DI As DriveInfo In DIList
-            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-        Next
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
+                                                                                           DI.VolumeLabel,
+                                                                                           Casters.CastDriveType(DI.DriveType, True),
+                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
+                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
+                                                                                           DI.DriveFormat,
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Timer1.Enabled = True
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(68)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(128)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(70)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(94)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(110)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(77)
+        ColumnHeader7.Width = WindowHelper.ScaleLogical(110)
+        ColumnHeader8.Width = WindowHelper.ScaleLogical(104)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        For Each DI As DriveInfo In DIList
-            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-        Next
+        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
+                                                                                           DI.VolumeLabel,
+                                                                                           Casters.CastDriveType(DI.DriveType, True),
+                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
+                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
+                                                                                           DI.DriveFormat,
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged

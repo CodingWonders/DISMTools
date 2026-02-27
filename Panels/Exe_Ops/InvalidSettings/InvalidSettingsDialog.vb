@@ -278,7 +278,7 @@ Public Class InvalidSettingsDialog
                     Label6.Text = "L'impostazione della cartella temporanea sembra essere corretta"
             End Select
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
     End Sub
 End Class

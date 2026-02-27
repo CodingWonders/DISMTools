@@ -10,6 +10,7 @@ Public Class SampleScriptBrowser
     Private SysConfigScripts As New List(Of StarterScript)
     Private FirstUserLogonScripts As New List(Of StarterScript)
     Private UserFirstLogonScripts As New List(Of StarterScript)
+    Private UserScripts As New List(Of StarterScript)
 
     Private Sub OK_Button_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK_Button.Click
         Me.DialogResult = System.Windows.Forms.DialogResult.OK
@@ -75,6 +76,20 @@ Public Class SampleScriptBrowser
             UserFirstLogonScripts.Add(ParseStarterScript(UserFirstLogonScript))
         Next
 
+        ' Now we consider all user scripts
+        If Directory.Exists(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts", "UserScripts")) Then
+            For Each UserScript In Directory.GetFiles(Path.Combine(Application.StartupPath, "AutoUnattend", "StarterScripts", "UserScripts"), "*.dtss")
+                UserScripts.Add(ParseStarterScript(UserScript))
+            Next
+        Else
+            ' The userdata part does not exist. Remove user-defined scripts option from the list
+            Try
+                ComboBox1.Items.RemoveAt(3)
+            Catch ex As Exception
+
+            End Try
+        End If
+
         Return True
     End Function
 
@@ -82,17 +97,13 @@ Public Class SampleScriptBrowser
         ListView1.Items.Clear()
         Select Case StageContext
             Case 0
-                For Each scriptObj In SysConfigScripts.Where(Function(script) script IsNot Nothing).ToList()
-                    ListView1.Items.Add(scriptObj.Name)
-                Next
+                ListView1.Items.AddRange(SysConfigScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
             Case 1
-                For Each scriptObj In FirstUserLogonScripts.Where(Function(script) script IsNot Nothing).ToList()
-                    ListView1.Items.Add(scriptObj.Name)
-                Next
+                ListView1.Items.AddRange(FirstUserLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
             Case 2
-                For Each scriptObj In UserFirstLogonScripts.Where(Function(script) script IsNot Nothing).ToList()
-                    ListView1.Items.Add(scriptObj.Name)
-                Next
+                ListView1.Items.AddRange(UserFirstLogonScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
+            Case 3
+                ListView1.Items.AddRange(UserScripts.Where(Function(script) script IsNot Nothing).Select(Function(script) New ListViewItem(New String() {script.Name})).ToArray())
         End Select
         FinalScriptStage = StageContext
     End Sub
@@ -101,11 +112,13 @@ Public Class SampleScriptBrowser
         Try
             Select Case FinalScriptStage
                 Case 0
-                    Return SysConfigScripts(index)
+                    Return SysConfigScripts.ElementAtOrDefault(index)
                 Case 1
-                    Return FirstUserLogonScripts(index)
+                    Return FirstUserLogonScripts.ElementAtOrDefault(index)
                 Case 2
-                    Return UserFirstLogonScripts(index)
+                    Return UserFirstLogonScripts.ElementAtOrDefault(index)
+                Case 3
+                    Return UserScripts.ElementAtOrDefault(index)
             End Select
         Catch ex As Exception
 
@@ -118,6 +131,7 @@ Public Class SampleScriptBrowser
         SysConfigScripts.Clear()
         FirstUserLogonScripts.Clear()
         UserFirstLogonScripts.Clear()
+        UserScripts.Clear()
 
         ' Reset screens and get rid of listview items
         ScriptDetailsPanel.Visible = False
@@ -141,8 +155,8 @@ Public Class SampleScriptBrowser
         RichTextBox1.BackColor = BackColor
         RichTextBox1.ForeColor = ForeColor
         ComboBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
         If ComboBox1.SelectedIndex = FinalScriptStage Then
             ' force showing again
@@ -150,6 +164,8 @@ Public Class SampleScriptBrowser
         Else
             ComboBox1.SelectedIndex = FinalScriptStage
         End If
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(286)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -187,5 +203,75 @@ Public Class SampleScriptBrowser
         Catch ex As Exception
 
         End Try
+    End Sub
+
+    Private Sub CreateStarterScriptBtn_Click(sender As Object, e As EventArgs) Handles CreateStarterScriptBtn.Click
+        If File.Exists(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe")) Then
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "StarterScriptEditor", "StarterScriptEditor.exe"),
+                          String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "starter_scripts") & ControlChars.Quote))
+            TableLayoutPanel1.Enabled = False
+            WindowHelper.DisableCloseCapability(Handle)
+            SSETimer.Enabled = True
+        End If
+    End Sub
+
+    Private Sub ExportScriptCodeBtn_Click(sender As Object, e As EventArgs) Handles ExportScriptCodeBtn.Click
+        ' Modify the filter of the file picker according to the language
+        Dim targetSS As StarterScript = GetScriptFromIndex(ListView1.FocusedItem.Index)
+        If targetSS IsNot Nothing Then
+            Select Case targetSS.Language.ToLower()
+                Case "batch"
+                    ScriptCodeExporterSFD.Filter = "Batch Scripts|*.bat;*.cmd;*.nt"
+                Case "powershell"
+                    ScriptCodeExporterSFD.Filter = "PowerShell Scripts|*.ps1"
+                Case Else
+                    ScriptCodeExporterSFD.Filter = "All Files|*.*"
+            End Select
+        Else
+            ScriptCodeExporterSFD.Filter = "All Files|*.*"
+        End If
+        ScriptCodeExporterSFD.ShowDialog(Me)
+    End Sub
+
+    Private Sub ScriptCodeExporterSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptCodeExporterSFD.FileOk
+        Try
+            DynaLog.LogMessage("Saving script code to destination...")
+            File.WriteAllText(ScriptCodeExporterSFD.FileName, RichTextBox1.Text)
+            DynaLog.LogMessage("Script code was successfully saved to the destination")
+        Catch ex As Exception
+            DynaLog.LogMessage("Script code could not be saved to the destination")
+        End Try
+    End Sub
+
+    Private Sub SSETimer_Tick(sender As Object, e As EventArgs) Handles SSETimer.Tick
+        If Not Process.GetProcessesByName("StarterScriptEditor").Any() Then
+            UserDataManagerModule.CopyUserDataToProgramFiles()
+            TableLayoutPanel1.Enabled = True
+            WindowHelper.EnableCloseCapability(Handle)
+            SSETimer.Enabled = False
+            TriggerStarterScriptEnumRefresh()
+        End If
+    End Sub
+
+    Private Sub TriggerStarterScriptEnumRefresh()
+        ' Clear existing items
+        SysConfigScripts.Clear()
+        FirstUserLogonScripts.Clear()
+        UserFirstLogonScripts.Clear()
+        UserScripts.Clear()
+        ' Show all items in the combobox
+        RemoveHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ComboBox1.Items.Clear()
+        ComboBox1.Items.AddRange({"During System Configuration", "When the first user logs on", "Whenever a user logs on for the first time", "Scripts defined by the user"})
+
+        If Not LoadAllStarterScripts() Then
+            ' starter scripts could not be loaded. stop
+            AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+            MessageBox.Show("The starter scripts could not be refreshed.", Text, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+        AddHandler ComboBox1.SelectedIndexChanged, AddressOf ComboBox1_SelectedIndexChanged
+        ' Force script enumeration for first stage
+        ComboBox1.SelectedIndex = 0
     End Sub
 End Class

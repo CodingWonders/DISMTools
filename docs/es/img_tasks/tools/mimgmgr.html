@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Administrador de imágenes montadas - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Administrador de im\u00e1genes montadas";
+        var mkdocs_page_input_path = "img_tasks\\tools\\mimgmgr.es.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navegación">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Inicio</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start.html">Comienzo</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights.html">Novedades</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Operaciones con imágenes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../img_tasks.html">Resumen</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../online_inst_mgmt.html">Modo de administración de imágenes en línea</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../offline_inst_mgmt.html">Modo de administración de imágenes fuera de línea</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Administración de imágenes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image.html">Anexar a una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image.html">Aplicar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image.html">Capturar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image.html">Eliminar archivos de volumen de un archivo de imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image.html">Exportar una imagen de Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/list_image.html">Listar contenidos de imágenes de Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image.html">Montar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/remount_image.html">Remontar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/split_image.html">Dividir una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/unmount_image.html">Desmontar una imagen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Diálogos de información de imagen</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../info/infodlgs.html">Resumen</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/img_info.html">Información de archivos de imagen</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/pkg_info.html">Información de paquetes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/feat_info.html">Información de características</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/appxpkg_info.html">Información de paquetes AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/cap_info.html">Información de funcionalidades</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/drv_info.html">Información de controladores</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/winpe_info.html">Información de configuración de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Paquetes del sistema operativo</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/pkgs.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/add_package.html">Añadir paquetes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/remove_package.html">Eliminar paquetes</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Características</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../features/features.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/enable_feature.html">Habilitar características</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/disable_feature.html">Deshabilitar características</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Paquetes AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/appx.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/add_provisionedappxpackage.html">Añadir paquetes AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/remove_provisionedappxpackage.html">Eliminar paquetes AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Servicio de ediciones</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/editions.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_edition.html">Actualizar imagen a una edición superior</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_productkey.html">Establecer la clave de producto</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Servicio de idiomas y regional</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../langs/set_layereddriver.html">Establecer controladores de capas de teclado</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Funcionalidades</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/caps.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/add_capability.html">Añadir funcionalidades</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/remove_capability.html">Eliminar funcionalidades</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Controladores</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/drvs.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/add_driver.html">Añadir controladores</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver.html">Exportar controladores</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver.html">Importar controladores</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver.html">Eliminar controladores</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Herramientas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Administrador de imágenes montadas</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#operaciones">Operaciones</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#desmontar-una-imagen-de-windows">Desmontar una imagen de Windows</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recargar-la-sesion-de-mantenimiento-reparar-el-almacen-de-componentes">Recargar la sesión de mantenimiento / reparar el almacén de componentes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#habilitar-permisos-de-escritura">Habilitar permisos de escritura</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acceder-al-directorio-de-montaje">Acceder al directorio de montaje</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#eliminar-imagenes-de-volumen">Eliminar imágenes de volumen</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cargar-imagenes-montadas">Cargar imágenes montadas</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#version-de-linea-de-comandos">Versión de línea de comandos</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#diferencias-respecto-a-la-version-gui">Diferencias respecto a la versión GUI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#acceder-a-esta-version">Acceder a esta versión</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#uso">Uso</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tareas">Tareas</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#desmontar-una-imagen">Desmontar una imagen</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#eliminar-imagenes-de-volumen_1">Eliminar imágenes de volumen</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#cambiar-indices">Cambiar índices</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#habilitar-permisos-de-escritura_1">Habilitar permisos de escritura</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="wim2esd.html">Conversión de imágenes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="swm2wim.html">Combinación de archivos SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="configlisteditor.html">Editor de listas de configuración de DISM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Herramientas de creación de ISO</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="isocreator.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="isocreator/isocreate.html">Creación de archivos ISO</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Instalación del sistema operativo</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="isocreator/install/localinstall.html">Instalaciones locales</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Instalaciones basadas en red</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/install/netinst/pxehelpers.html">Resumen</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/install/netinst/wds.html">Ayudante de WDS</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/exttools/dim.html">Módulo de instalación de controladores</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/exttools/dtpe_es.html">Suite de extensibilidad</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/exttools/sysprep.html">Herramienta de preparación de SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/cmdline/cmdline.html">Resumen</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="isocreator/cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="regcpl.html">Panel de control del registro de imágenes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="servicemgr.html">Administrador de servicios del sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="envvarmgr.html">Administrador de variables de entorno del sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Archivos de respuesta desatendida</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unattend.html">Resumen</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_man.html">Administrador de archivos de respuesta desatendida</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_create.html">Creador de archivos de respuesta desatendida</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_apply.html">Aplicar archivos de respuesta desatendida</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Herramientas externas</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/themedesigner.html">Creando tus temas</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Ver registros de diagnóstico</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menú de navegación en móvil">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Documentos"></a></li>
+          <li class="breadcrumb-item">Herramientas</li>
+      <li class="breadcrumb-item active">Administrador de imágenes montadas</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="gestor-de-imagenes-montadas">Gestor de imágenes montadas</h1>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/mimgmgr.png" />
+</p>
+
+<p>El gestor de imágenes montadas te permite administrar fácilmente las imágenes montadas. Con esta herramienta puedes realizar las siguientes tareas:</p>
+<ul>
+<li>Desmontar una imagen de Windows</li>
+<li>Recargar la sesión de mantenimiento/reparar el almacén de componentes</li>
+<li>Habilitar permisos de escritura en imágenes montadas como solo lectura</li>
+<li>Acceder al directorio de montaje de una imagen</li>
+<li>Eliminar imágenes de volumen (para imágenes con múltiples índices)</li>
+<li>Cargar un directorio de montaje en proyectos sin imágenes cargadas</li>
+<li>Obtener información del archivo de imagen</li>
+<li>Guardar información de la imagen</li>
+<li><a href="isocreator.html">Crear archivos ISO</a></li>
+</ul>
+<h2 id="operaciones">Operaciones</h2>
+<h3 id="desmontar-una-imagen-de-windows">Desmontar una imagen de Windows</h3>
+<p>Puedes desmontar una imagen de Windows guardando los cambios, descartándolos o usando más opciones; esta última abre el diálogo de desmontaje de imagen:</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/img_unmount.png" />
+</p>
+
+<p>Para imágenes montadas como solo lectura, al pulsar este botón se desmontará directamente descartando cambios. Para más información, consulta la página <a href="../mgmt/unmount_image.html">desmontar imagen</a>.</p>
+<h3 id="recargar-la-sesion-de-mantenimiento-reparar-el-almacen-de-componentes">Recargar la sesión de mantenimiento / reparar el almacén de componentes</h3>
+<p>Según el estado de la imagen montada, el programa te permitirá realizar una u otra acción.</p>
+<ul>
+<li>Si su estado es <strong>Necesita recarga</strong>, podrás recargar la sesión de mantenimiento de la imagen montada</li>
+<li>Si su estado es <strong>Inválido</strong>, <strong>puedes</strong> tener la opción de reparar el almacén de componentes de la imagen montada. Esta posibilidad depende de si la imagen es reparable. Si no puede repararse, la única opción será descartarla</li>
+</ul>
+<h3 id="habilitar-permisos-de-escritura">Habilitar permisos de escritura</h3>
+<p>Si quieres realizar cambios en una imagen montada como solo lectura, debes <strong>habilitar permisos de escritura</strong>. Este proceso desmontará la imagen y la montará de nuevo con permisos de escritura. Ten en cuenta que la imagen <strong>debe estar presente en su ubicación</strong> y <strong>no debe estar en un medio de solo lectura</strong> para que el proceso tenga éxito.</p>
+<h3 id="acceder-al-directorio-de-montaje">Acceder al directorio de montaje</h3>
+<p>Esto abrirá el directorio de montaje en el Explorador de archivos, permitiéndote navegar por los ficheros de la imagen de Windows. <strong>Es similar a una instalación activa, así que no elimines archivos si no sabes para qué sirven.</strong></p>
+<h3 id="eliminar-imagenes-de-volumen">Eliminar imágenes de volumen</h3>
+<p>Si la imagen montada contiene más de un índice, puedes eliminar imágenes de volumen fácilmente. Especifica los índices a eliminar y haz clic en OK. Para más información, consulta la página <a href="../mgmt/delete_image.html">eliminar imagen de volumen</a>.</p>
+<h3 id="cargar-imagenes-montadas">Cargar imágenes montadas</h3>
+<p>Si has abierto un proyecto sin imágenes cargadas, puedes cargar fácilmente la imagen montada que quieras en el proyecto.</p>
+<h2 id="version-de-linea-de-comandos">Versión de línea de comandos</h2>
+<p>DISMTools 0.3 introduce una versión en línea de comandos del gestor de imágenes montadas con la que también puedes administrar las imágenes montadas.</p>
+<h3 id="diferencias-respecto-a-la-version-gui">Diferencias respecto a la versión GUI</h3>
+<ul>
+<li>La lista de imágenes montadas no se actualiza automáticamente en la versión CLI</li>
+</ul>
+<h3 id="acceder-a-esta-version">Acceder a esta versión</h3>
+<p>Puedes acceder a la versión CLI del gestor de imágenes montadas desde la Consola de Comandos en el menú Tools escribiendo <code>mimgmgr</code>. Verás un resumen de las imágenes montadas:</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_defaultview.png" />
+</p>
+
+<h3 id="uso">Uso</h3>
+<p>Al cargar esta versión del gestor de imágenes montadas, debes <strong>marcar una imagen para gestionar</strong>. Puedes hacerlo pulsando la tecla M y seleccionando la imagen por su número. Si la lista se ha modificado en segundo plano, verás la lista actualizada.</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_mark_image.png" />
+</p>
+
+<p>Tras marcar una imagen, podrás realizar acciones de gestión sobre ella.</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_marked_image.png" />
+</p>
+
+<h3 id="tareas">Tareas</h3>
+<p>Estas son las tareas que puedes realizar con esta versión del gestor de imágenes montadas:</p>
+<ul>
+<li>Si quieres cambiar a otra imagen, puedes <strong>marcarla</strong> (tecla M)</li>
+<li>
+<p>Dependiendo del estado de la imagen (tecla R):</p>
+<ul>
+<li>Si necesita recargar la sesión de mantenimiento (<code>Status: NeedsRemount</code>), puedes <strong>recargarla</strong></li>
+<li>Si necesita reparar el almacén de componentes (<code>Status: Invalid</code>), puedes <strong>repararla</strong></li>
+</ul>
+</li>
+<li>
+<p>Cuando hayas terminado, puedes <strong>desmontarla</strong> (tecla U)</p>
+</li>
+<li>Puedes <strong>acceder a su directorio de montaje</strong> (tecla A)</li>
+<li>Si la imagen contiene múltiples índices (imágenes de volumen), puedes eliminarlos (tecla V) o cambiar a otro índice (tecla S, <em>DISMTools 0.3.3 y posteriores</em>)</li>
+<li>Si las imágenes fueron montadas o desmontadas por un programa externo, puedes <strong>actualizar la lista de imágenes montadas</strong> (tecla L)</li>
+<li>Si la imagen está montada con privilegios de solo lectura, puedes <strong>habilitar permisos de escritura</strong> (tecla E)</li>
+</ul>
+<p>Luego, pulsa INTRO para ejecutar la acción.</p>
+<h4 id="desmontar-una-imagen">Desmontar una imagen</h4>
+<p><strong>NOTA:</strong> si la imagen está montada con privilegios de solo lectura, esta acción la desmontará directamente descartando cambios</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_unmount_image.png" />
+</p>
+
+<p>En este menú:</p>
+<ul>
+<li>Puedes <strong>confirmar los cambios de una imagen y desmontarla</strong> (tecla C)</li>
+<li>Puedes <strong>descartar los cambios de una imagen y desmontarla</strong> (tecla D)</li>
+<li>Puedes <strong>configurar opciones de desmontaje</strong> (tecla S)</li>
+</ul>
+<p><strong>Opciones de desmontaje</strong></p>
+<p><strong>NOTA:</strong> estas opciones solo aplican a la operación de confirmación. No puedes cambiar opciones para imágenes montadas como solo lectura.</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_unmount_settings.png" />
+</p>
+
+<p>Estas son las mismas opciones que encontrarás en el <a href="../mgmt/unmount_image.html">diálogo de desmontaje de imagen</a>. Configúralas y pulsa INTRO para ejecutar el desmontaje.</p>
+<h4 id="eliminar-imagenes-de-volumen_1">Eliminar imágenes de volumen</h4>
+<p><strong>NOTA:</strong> esta tarea solo aplica a imágenes con múltiples índices</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_delete_image.png" />
+</p>
+
+<p>En este menú puedes <strong>marcar las imágenes de volumen (índices) a eliminar</strong> (tecla M) y <strong>proceder con la operación de eliminación</strong> (tecla P).</p>
+<p>Ten en cuenta que proceder con la operación de volumen desmontará la imagen <strong>descartando cambios</strong>. Asegúrate de haberlos guardado antes de comenzar.</p>
+<p>Durante esta operación puedes ver la imagen que se está eliminando. Al finalizar volverás al menú principal.</p>
+<p align="center">
+    <img src="https://github.com/CodingWonders/DISMTools/assets/101426328/abb6704d-2e2b-493f-a80a-431b04fee453" />
+</p>
+
+<p><strong>Marcar imágenes de volumen para eliminar</strong></p>
+<p>Desde la lista de índices mostrada puedes elegir las imágenes de volumen a eliminar indicando su número. Puedes especificar varios índices separando los números con comas (<code>,</code>) y luego pulsar INTRO:</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_delete_image_indexmark.png" />
+</p>
+
+<h4 id="cambiar-indices">Cambiar índices</h4>
+<p><strong>NOTA:</strong> esta tarea solo aplica a imágenes con múltiples índices</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_switch_image.png" />
+</p>
+
+<p>En este menú puedes <strong>especificar el índice destino a montar</strong> (tecla S), <strong>indicar la operación de desmontaje</strong> (tecla C) y <strong>proceder con la operación de cambio</strong> (tecla P).</p>
+<p><strong>Especificar el índice destino</strong></p>
+<p>Desde la lista de índices mostrada puedes escoger el índice objetivo indicando su número. Finalmente, pulsa INTRO:</p>
+<p align="center">
+    <img src="/res/img_tasks/tools/mimgmgr/cli/mimgmgr_delete_image_indexmark.png" />
+</p>
+
+<h4 id="habilitar-permisos-de-escritura_1">Habilitar permisos de escritura</h4>
+<p>Este es un proceso automatizado que desmonta una imagen montada como solo lectura y la monta de nuevo con permisos de escritura. <strong>Asegúrate de que la ubicación del archivo fuente siga disponible antes de continuar</strong>.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Construído con <a href="https://www.mkdocs.org/">MkDocs</a> usando un <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a> provisto por <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versiones">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../drivers/remove_driver.html" style="color: #fcfcfc">&laquo; Anterior</a></span>
+    
+    
+      <span><a href="wim2esd.html" style="color: #fcfcfc">Siguiente &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

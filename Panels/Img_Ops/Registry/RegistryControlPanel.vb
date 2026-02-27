@@ -168,8 +168,8 @@ Public Class RegistryControlPanel
         TextBox1.ForeColor = ForeColor
         TextBox2.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             DynaLog.LogMessage("Getting last key that was opened in the Registry Editor...")
             Dim LastKeyReg As RegistryKey = Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Applets\Regedit")
@@ -384,7 +384,7 @@ Public Class RegistryControlPanel
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk

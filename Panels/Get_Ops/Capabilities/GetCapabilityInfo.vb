@@ -6,7 +6,6 @@ Imports DISMTools.Utilities
 
 Public Class GetCapabilityInfoDlg
 
-    Public InstalledCapabilityInfo As DismCapabilityCollection
     Dim _lvwColumnSorter As New ListViewColumnSorter()
 
     Private Sub GetCapabilityInfoDlg_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -187,8 +186,11 @@ Public Class GetCapabilityInfoDlg
             Text = ""
             Win10Title.Visible = True
         End If
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        If SplitContainer2.SplitterDistance = 440 Then
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         ' Populate feature information list
         Panel4.Visible = False
         Panel7.Visible = True
@@ -196,10 +198,14 @@ Public Class GetCapabilityInfoDlg
         DynaLog.LogMessage("Updating items in list...")
         ListView1.Items.Clear()
         DynaLog.LogMessage("Getting capabilities...")
-        For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-            ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-        Next
+        If MainForm.CurrentImage.ImageCapabilities Is Nothing OrElse MainForm.CurrentImage.ImageCapabilities.Count = 0 Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities_Backup.Select(Function(capability) New ListViewItem(New String() {capability.CapabilityName, Casters.CastDismPackageState(capability.CapabilityState, True)})).ToArray())
+        Else
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
+        End If
         SearchBox1.Text = ""
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(298)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(118)
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
@@ -454,7 +460,7 @@ Public Class GetCapabilityInfoDlg
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If MainForm.ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Saving capability information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = MainForm.SourceImg
@@ -466,7 +472,8 @@ Public Class GetCapabilityInfoDlg
             ImgInfoSaveDlg.AutoCompleteInfo = MainForm.AutoCompleteInfo
             ImgInfoSaveDlg.ForceAppxApi = False
             ImgInfoSaveDlg.SaveTask = 6
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ImageToGetInfoFrom = MainForm.CurrentImage
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
@@ -497,14 +504,18 @@ Public Class GetCapabilityInfoDlg
                     expectedCapabilityState = DismPackageFeatureState.PartiallyInstalled
             End Select
         End If
-        If InstalledCapabilityInfo.Count > 0 Then
-            Dim finalCapabilityLookup = InstalledCapabilityInfo.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+        If MainForm.CurrentImage.ImageCapabilities Is Nothing OrElse MainForm.CurrentImage.ImageCapabilities.Count = 0 Then
+            Dim finalCapabilityLookup As IEnumerable(Of ImageCapability) = MainForm.CurrentImage.ImageCapabilities_Backup.Where(Function(capability) capability.CapabilityName.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
+            If capState <> "" Then      ' We filter them again based on the state
+                finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.CapabilityState = expectedCapabilityState)
+            End If
+            ListView1.Items.AddRange(finalCapabilityLookup.Select(Function(filteredCapability) New ListViewItem(New String() {filteredCapability.CapabilityName, Casters.CastDismPackageState(filteredCapability.CapabilityState, True)})).ToArray())
+        Else
+            Dim finalCapabilityLookup As IEnumerable(Of DismCapability) = MainForm.CurrentImage.ImageCapabilities.Where(Function(capability) capability.Name.ToLowerInvariant().Contains(sQuery.ToLowerInvariant()))
             If capState <> "" Then      ' We filter them again based on the state
                 finalCapabilityLookup = finalCapabilityLookup.Where(Function(capability) capability.State = expectedCapabilityState)
             End If
-            For Each filteredCapability In finalCapabilityLookup
-                ListView1.Items.Add(New ListViewItem(New String() {filteredCapability.Name, Casters.CastDismPackageState(filteredCapability.State, True)}))
-            Next
+            ListView1.Items.AddRange(finalCapabilityLookup.Select(Function(filteredCapability) New ListViewItem(New String() {filteredCapability.Name, Casters.CastDismPackageState(filteredCapability.State, True)})).ToArray())
         End If
     End Sub
 
@@ -519,9 +530,11 @@ Public Class GetCapabilityInfoDlg
             End If
         Else
             DynaLog.LogMessage("No search query has been specified. Showing all items...")
-            For Each InstalledCapability As DismCapability In InstalledCapabilityInfo
-                ListView1.Items.Add(New ListViewItem(New String() {InstalledCapability.Name, Casters.CastDismPackageState(InstalledCapability.State, True)}))
-            Next
+            If MainForm.CurrentImage.ImageCapabilities Is Nothing OrElse MainForm.CurrentImage.ImageCapabilities.Count = 0 Then
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities_Backup.Select(Function(capability) New ListViewItem(New String() {capability.CapabilityName, Casters.CastDismPackageState(capability.CapabilityState, True)})).ToArray())
+            Else
+                ListView1.Items.AddRange(MainForm.CurrentImage.ImageCapabilities.Select(Function(capability) New ListViewItem(New String() {capability.Name, Casters.CastDismPackageState(capability.State, True)})).ToArray())
+            End If
         End If
     End Sub
 

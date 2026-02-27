@@ -3,7 +3,7 @@
 #                                         .'^""""""^.
 #      '^`'.                            '^"""""""^.
 #     .^"""""`'                       .^"""""""^.                ---------------------------------------------------------
-#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.2                                       |
+#      .^""""""`                      ^"""""""`                  | DISMTools 0.7.3                                       |
 #       ."""""""^.                   `""""""""'           `,`    | The connected place for Windows system administration |
 #         '`""""""`.                 """""""""^         `,,,"    ---------------------------------------------------------
 #            '^"""""`.               ^""""""""""'.   .`,,,,,^    | PE Helper - Windows Deployment Services Preparation   |
@@ -35,7 +35,7 @@ param (
     [Parameter(Mandatory = $true, Position = 0)] [string]$bootImagePath
 )
 
-$version = "0.7.2"
+$version = "0.7.3"
 
 if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) -eq $false)
 {
@@ -57,6 +57,8 @@ if (-not (Test-Path "$winpeToolsPath")) {
     return $false
 }
 
+$tempDir = [IO.Path]::GetTempPath().TrimEnd("\")
+
 function Update-WinPEForWds {
     <#
         .SYNOPSIS
@@ -76,7 +78,7 @@ function Update-WinPEForWds {
     Write-Host "Creating temporary mount directory..."
     try
     {
-        $mountDirectory = "$env:TEMP\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
+        $mountDirectory = "$tempDir\DISMTools_PE_Scratch_$((Get-Date).ToString("MM-dd-yyyy_HH-mm-ss"))_$(Get-Random -Maximum 10000)"
         New-Item "$mountDirectory" -ItemType Directory | Out-Null
     }
     catch
@@ -155,7 +157,7 @@ function Get-PxeOptionStatus {
             - DHCP
     #>
 
-    if ((Get-ComputerInfo).WindowsInstallationType -ne "Server") {
+    if ((Get-ComputerInfo).WindowsInstallationType -notlike "Server*") {
         Write-Host "This computer is not running Windows Server."
         return $false
     }

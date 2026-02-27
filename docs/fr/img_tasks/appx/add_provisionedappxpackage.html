@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Ajout de packages AppX - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Ajout de packages AppX";
+        var mkdocs_page_input_path = "img_tasks\\appx\\add_provisionedappxpackage.fr.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navigation">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start.html">Commencer</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights.html">Nouveautés</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tâches d'image</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../img_tasks.html">Aperçu</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../online_inst_mgmt.html">Mode de gestion de l'installation en ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../offline_inst_mgmt.html">Mode de gestion de l'installation hors ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gestion des images</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image.html">Ajouter à une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image.html">Appliquer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image.html">Capturer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image.html">Supprimer les images de volume d'un fichier image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image.html">Exporter une image Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/list_image.html">Lister le contenu des images Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image.html">Monter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/remount_image.html">Remonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/split_image.html">Fractionner une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/unmount_image.html">Démonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Boîtes de dialogue d'informations d'image</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../info/infodlgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/img_info.html">Informations du fichier image</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/pkg_info.html">Informations sur les packages</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/feat_info.html">Informations sur les fonctionnalités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/appxpkg_info.html">Informations sur les packages AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/cap_info.html">Informations sur les capacités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/drv_info.html">Informations sur les pilotes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/winpe_info.html">Informations de configuration de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/pkgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/add_package.html">Ajout de packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/remove_package.html">Suppression de packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fonctionnalités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../features/features.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/enable_feature.html">Activation des fonctionnalités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/disable_feature.html">Désactivation des fonctionnalités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Packages AppX</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="appx.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Ajout de packages AppX</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#compatibilidad-del-sistema-operativo-destino">Compatibilidad del sistema operativo destino</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#uso">Uso</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#soporte-para-app-installer">Soporte para App Installer</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#soporte-para-aplicaciones-cifradas">Soporte para aplicaciones cifradas</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#opciones">Opciones</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#preguntas-frecuentes">Preguntas frecuentes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#contenido-relacionado">Contenido relacionado</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="remove_provisionedappxpackage.html">Suppression de packages AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des éditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/editions.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_edition.html">Mettre à niveau une image vers une édition supérieure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_productkey.html">Définir la clé de produit</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des langues et régionales</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../langs/set_layereddriver.html">Définir les pilotes de clavier en couches</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/caps.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/add_capability.html">Ajout de capacités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/remove_capability.html">Suppression de capacités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pilotes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/drvs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/add_driver.html">Ajout de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver.html">Export de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver.html">Import de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver.html">Suppression de pilotes</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Outils</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/mimgmgr.html">Gestionnaire d'images montées</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/wim2esd.html">Conversion d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/swm2wim.html">Fusion de fichiers SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/configlisteditor.html">Éditeur de liste de configuration DISM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils de création d'ISO</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/isocreate.html">Création de fichiers ISO</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installation du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../tools/isocreator/install/localinstall.html">Installations locales</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Installations basées sur le réseau</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/pxehelpers.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/wds.html">Assistant des services de déploiement Windows (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dim.html">Module d'installation des pilotes</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dtpe_es.html">Suite d'extensibilité</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/sysprep.html">Outil de préparation SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/cmdline.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/regcpl.html">Panneau de contrôle du registre d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/servicemgr.html">Gestionnaire de services système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/envvarmgr.html">Gestionnaire de variables d'environnement système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fichiers de réponse sans assistance</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unattend.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_man.html">Gestionnaire de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_create.html">Créateur de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_apply.html">Application des fichiers de réponse sans assistance</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils externes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/themedesigner.html">Création de vos thèmes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/dynaviewer.html">Affichage des journaux de diagnostic</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../exttools/sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menu de navigation sur mobile">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Documents"></a></li>
+          <li class="breadcrumb-item">Tâches d'image</li>
+          <li class="breadcrumb-item">Packages AppX</li>
+      <li class="breadcrumb-item active">Ajout de packages AppX</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="anadir-paquetes-appx-aprovisionados">Añadir paquetes AppX aprovisionados</h1>
+<p align="center">
+<img src="/res/img_tasks/appx/add_provisionedappxpackage.png" />
+</p>
+
+<p>Con DISMTools puedes añadir paquetes AppX aprovisionados mediante una interfaz intuitiva. Esta acción se encuentra en Comandos &gt; App packages &gt; Add provisioned app package...</p>
+<h2 id="compatibilidad-del-sistema-operativo-destino">Compatibilidad del sistema operativo destino</h2>
+<p>Esta acción es compatible con las siguientes plataformas:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Plataforma</th>
+<th style="text-align: center;">Compatible?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Windows 7/Server 2008 R2</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8/Server 2012</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 8.1/Server 2012 R2</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 10/Server 2016/2019/2022</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr>
+<td style="text-align: center;">Windows 11/Server 2025</td>
+<td style="text-align: center;">✔</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTA:</strong> si añades paquetes AppX aprovisionados a una instalación en línea, puede ser necesario habilitar la carga lateral (sideloading) de aplicaciones; de lo contrario podrías obtener el código de error <code>0xc1570113</code>. Más información <a href="https://learn.microsoft.com/fr-fr/windows-hardware/manufacture/desktop/sideload-apps-with-dism-s14?view=windows-11#configure-pcs-for-developing-windows-apps">aquí</a>.</p>
+<p><i>Esta acción está soportada en DISMTools 0.2 y posteriores</i></p>
+<h2 id="uso">Uso</h2>
+<ul>
+<li>Añade cualquier archivo de aplicación en formato <code>.appx</code>, <code>.msix</code>, <code>.appxbundle</code> o <code>.msixbundle</code> a la <strong>lista de paquetes AppX</strong>. Esto puede hacerse con los botones en la parte inferior del diálogo o arrastrando los archivos desde una aplicación ejecutada con privilegios elevados.</li>
+<li>Si la aplicación tiene dependencias, añade estas a la <strong>lista de dependencias AppX</strong>, usando los botones o arrastrando los archivos desde una aplicación elevada.</li>
+</ul>
+<h3 id="soporte-para-app-installer">Soporte para App Installer</h3>
+<p>DISMTools 0.3.2 amplía la capacidad de añadir AppX mediante el soporte de archivos App Installer. Especifica un archivo <code>.appinstaller</code> o arrástralo a la lista de paquetes y el programa se encargará de descargar el paquete.</p>
+<p>Más información sobre App Installer en: ./appx.md#app-installer-files</p>
+<h3 id="soporte-para-aplicaciones-cifradas">Soporte para aplicaciones cifradas</h3>
+<p>DISMTools 0.5 permite añadir paquetes de aplicaciones cifradas (<code>.eappx</code>, <code>.emsix</code>, <code>.eappxbundle</code> y <code>.emsixbundle</code>) a <strong>instalaciones activas</strong>. Añádelos igual que las aplicaciones normales.</p>
+<p>Para aplicaciones cifradas estándar (no bundles), puedes ver información básica gracias a una versión modificada de <a href="https://github.com/dalion619/UnpEax">UnpEax</a>:</p>
+<p align="center">
+<img src="/res/img_tasks/appx/eappx_support.png" />
+</p>
+
+<p><em>El soporte para bundles de aplicaciones cifradas llegará en futuras versiones.</em></p>
+<p>Es posible que veas todas las opciones deshabilitadas: el programa utiliza comandos de PowerShell para añadir estas aplicaciones, porque no pueden añadirse con DISM.</p>
+<h2 id="opciones">Opciones</h2>
+<ul>
+<li>Puede requerirse un <strong>archivo de licencia</strong> para instalar una aplicación; especifícalo en el campo correspondiente o selecciona "Omitir licencia".</li>
+<li>Opcionalmente, puedes <strong>proveer un archivo de datos personalizado</strong>.</li>
+<li>Si deseas aprovisionar aplicaciones en ciertas regiones, especifícalas separadas por punto y coma (;), usando los códigos <a href="https://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1 Alpha 2</a> o <a href="https://en.wikipedia.org/wiki/ISO_3166-1">Alpha 3</a>.</li>
+</ul>
+<p><strong>NOTA:</strong> especificar una región requiere DISM para Windows 10 y/o una imagen de Windows 10 o posterior.</p>
+<ul>
+<li><strong>Nuevo en DISMTools 0.5.1 y posteriores:</strong> Puedes configurar <strong>preferencias de paquetes stub</strong> para tus aplicaciones. Piensa en ellos como paquetes temporales que descargan la versión completa. Marcar una aplicación para usar el paquete completo instalará explícitamente la versión completa.</li>
+</ul>
+<p><strong>NOTA:</strong> solo puedes configurar preferencias de stub si se cumplen los siguientes criterios:</p>
+<p>I. La versión de DISM y la imagen Windows objetivo son Windows 10 o posteriores</p>
+<p>II. La aplicación contiene paquetes stub</p>
+<ul>
+<li>Opcionalmente, puedes <strong>confirmar (commit) la imagen después de añadir los paquetes AppX seleccionados</strong>.</li>
+</ul>
+<h2 id="preguntas-frecuentes">Preguntas frecuentes</h2>
+<p><strong>P: ¿Dónde puedo descargar paquetes de aplicaciones?</strong></p>
+<p><strong>R:</strong> Puedes usar el <a href="https://store.rg-adguard.net/">Microsoft Store Generation Project</a> y la versión web de la <a href="https://apps.microsoft.com/store/apps">Microsoft Store</a>. Pasos:</p>
+<ol>
+<li>Abre el sitio Microsoft Apps y busca la aplicación</li>
+<li>Copia el enlace de la aplicación</li>
+<li>Pega el enlace en el sitio del proyecto de generación</li>
+<li>Si el servidor devuelve resultados, descarga la versión deseada del paquete AppX <strong>y sus dependencias</strong></li>
+</ol>
+<p align="center">
+<img src="/res/img_tasks/appx/microsoft_apps.png" />
+</p>
+
+<p align="center">
+<img src="/res/img_tasks/appx/store_rg-adguard.png" />
+</p>
+
+<p>Si el navegador advierte sobre la seguridad de los archivos, confirma la descarga si confías en la fuente.</p>
+<p><strong>P: Instalé una aplicación en una instalación online y no funciona. ¿Por qué?</strong></p>
+<p><strong>R:</strong> Puede que la aplicación no esté registrada correctamente. Usa el Registro y PowerShell:</p>
+<ol>
+<li>Abre el Editor del Registro y ve a <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications</code> y copia el nombre del paquete</li>
+<li>Abre PowerShell como administrador y ejecuta:</li>
+</ol>
+<pre><code class="language-powershell">Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications\*&lt;PackageName&gt;*\' -Name &quot;Path&quot; | Add-AppxPackage -DisableDevelopmentMode -Register
+</code></pre>
+<p>(donde <code>*&lt;PackageName&gt;*</code> es el nombre del paquete a registrar)</p>
+<ul>
+<li>Si el comando muestra <code>%SYSTEMDRIVE%</code> en el valor <code>Path</code>, reemplázalo por la unidad de arranque:</li>
+</ul>
+<pre><code class="language-powershell">(Get-ItemPropertyValue -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications\*&lt;PackageName&gt;*\' -Name &quot;Path&quot;).Replace('%SYSTEMDRIVE%', 'C:').Trim() | Add-AppxPackage -DisableDevelopmentMode -Register
+</code></pre>
+<p>(sustituye "C:" por la unidad de arranque cuando corresponda)</p>
+<ul>
+<li>Si falta una dependencia, descárgala, añádela con DISM y repite el proceso.</li>
+</ul>
+<p>La aplicación debería quedar registrada. Nota: no funcionará si estás en la cuenta de Administrador integrada; crea un usuario normal en ese caso.</p>
+<h2 id="contenido-relacionado">Contenido relacionado</h2>
+<ul>
+<li><a href="https://example.com">Ayuda de línea de comandos</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Générée avec <a href="https://www.mkdocs.org/">MkDocs</a> avec un <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a> fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="appx.html" style="color: #fcfcfc">&laquo; Précédent</a></span>
+    
+    
+      <span><a href="remove_provisionedappxpackage.html" style="color: #fcfcfc">Suivant &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

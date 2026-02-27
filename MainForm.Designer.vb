@@ -107,7 +107,6 @@ Partial Class MainForm
         Me.GetAppPatches = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetAppInfo = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetApps = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Discord = New System.Windows.Forms.ToolStripMenuItem()
         Me.DefaultAppAssociationsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExportDefaultAppAssociations = New System.Windows.Forms.ToolStripMenuItem()
         Me.GetDefaultAppAssociations = New System.Windows.Forms.ToolStripMenuItem()
@@ -210,6 +209,7 @@ Partial Class MainForm
         Me.ToolStripSeparator10 = New System.Windows.Forms.ToolStripSeparator()
         Me.AboutDISMToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator21 = New System.Windows.Forms.ToolStripSeparator()
+        Me.Discord = New System.Windows.Forms.ToolStripMenuItem()
         Me.ReportFeedbackToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenDiagnosticLogsInLogViewerToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator35 = New System.Windows.Forms.ToolStripSeparator()
@@ -342,6 +342,9 @@ Partial Class MainForm
         Me.Button56 = New System.Windows.Forms.Button()
         Me.Button55 = New System.Windows.Forms.Button()
         Me.SpaceLabel = New System.Windows.Forms.Label()
+        Me.BWFailPanel = New System.Windows.Forms.Panel()
+        Me.BWFailLearnMoreBtn = New System.Windows.Forms.Button()
+        Me.BWFailLabel = New System.Windows.Forms.Label()
         Me.ProjectSidePanel = New System.Windows.Forms.Panel()
         Me.ProjectSidePanelContainer = New System.Windows.Forms.Panel()
         Me.SidePanel_ProjectView = New System.Windows.Forms.Panel()
@@ -495,6 +498,8 @@ Partial Class MainForm
         Me.WIEDownloaderBW = New System.ComponentModel.BackgroundWorker()
         Me.VideoGetterBW = New System.ComponentModel.BackgroundWorker()
         Me.MountedImageDetectorBWRestarterTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.ToolStripSeparator47 = New System.Windows.Forms.ToolStripSeparator()
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.HomePanel.SuspendLayout()
         Me.WelcomePanel.SuspendLayout()
@@ -532,6 +537,7 @@ Partial Class MainForm
         Me.GroupBox8.SuspendLayout()
         Me.GroupBox9.SuspendLayout()
         Me.GroupBox10.SuspendLayout()
+        Me.BWFailPanel.SuspendLayout()
         Me.ProjectSidePanel.SuspendLayout()
         Me.ProjectSidePanelContainer.SuspendLayout()
         Me.SidePanel_ProjectView.SuspendLayout()
@@ -1475,7 +1481,7 @@ Partial Class MainForm
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ImageConversionToolStripMenuItem, Me.ToolStripSeparator12, Me.MergeSWM, Me.ToolStripSeparator18, Me.RemountImageWithWritePermissionsToolStripMenuItem, Me.ToolStripSeparator13, Me.CommandShellToolStripMenuItem, Me.ToolStripSeparator16, Me.UnattendedAnswerFileManagerToolStripMenuItem, Me.UnattendedAnswerFileCreatorToolStripMenuItem, Me.ToolStripSeparator42, Me.RegCplToolStripMenuItem, Me.ManageSystemServicesToolStripMenuItem, Me.ManageSystemEnvironmentVariablesToolStripMenuItem, Me.ToolStripSeparator43, Me.WebResourcesToolStripMenuItem, Me.ToolStripSeparator45, Me.PxeHelperServersTSMI, Me.ToolStripSeparator41, Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem, Me.ToolStripSeparator47, Me.ReportManagerToolStripMenuItem, Me.MountedImageManagerTSMI, Me.ToolStripSeparator28, Me.CreateDiscImageToolStripMenuItem, Me.CreateTestingEnvironmentToolStripMenuItem, Me.ToolStripSeparator38, Me.WimScriptEditorCommand, Me.ToolStripSeparator9, Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
@@ -1484,99 +1490,99 @@ Partial Class MainForm
         '
         Me.ImageConversionToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.WIMESDToolStripMenuItem})
         Me.ImageConversionToolStripMenuItem.Name = "ImageConversionToolStripMenuItem"
-        Me.ImageConversionToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ImageConversionToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.ImageConversionToolStripMenuItem.Text = "Image conversion"
         '
         'WIMESDToolStripMenuItem
         '
         Me.WIMESDToolStripMenuItem.Name = "WIMESDToolStripMenuItem"
-        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.WIMESDToolStripMenuItem.Size = New System.Drawing.Size(146, 22)
         Me.WIMESDToolStripMenuItem.Text = "WIM <-> ESD"
         '
         'ToolStripSeparator12
         '
         Me.ToolStripSeparator12.Name = "ToolStripSeparator12"
-        Me.ToolStripSeparator12.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator12.Size = New System.Drawing.Size(370, 6)
         '
         'MergeSWM
         '
         Me.MergeSWM.Name = "MergeSWM"
-        Me.MergeSWM.Size = New System.Drawing.Size(286, 22)
+        Me.MergeSWM.Size = New System.Drawing.Size(373, 22)
         Me.MergeSWM.Text = "Merge SWM files..."
         '
         'ToolStripSeparator18
         '
         Me.ToolStripSeparator18.Name = "ToolStripSeparator18"
-        Me.ToolStripSeparator18.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator18.Size = New System.Drawing.Size(370, 6)
         '
         'RemountImageWithWritePermissionsToolStripMenuItem
         '
         Me.RemountImageWithWritePermissionsToolStripMenuItem.Enabled = False
         Me.RemountImageWithWritePermissionsToolStripMenuItem.Name = "RemountImageWithWritePermissionsToolStripMenuItem"
-        Me.RemountImageWithWritePermissionsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.RemountImageWithWritePermissionsToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.RemountImageWithWritePermissionsToolStripMenuItem.Text = "Remount image with write permissions"
         '
         'ToolStripSeparator13
         '
         Me.ToolStripSeparator13.Name = "ToolStripSeparator13"
-        Me.ToolStripSeparator13.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator13.Size = New System.Drawing.Size(370, 6)
         '
         'CommandShellToolStripMenuItem
         '
         Me.CommandShellToolStripMenuItem.Name = "CommandShellToolStripMenuItem"
-        Me.CommandShellToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.CommandShellToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.CommandShellToolStripMenuItem.Text = "Command Console"
         '
         'ToolStripSeparator16
         '
         Me.ToolStripSeparator16.Name = "ToolStripSeparator16"
-        Me.ToolStripSeparator16.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator16.Size = New System.Drawing.Size(370, 6)
         '
         'UnattendedAnswerFileManagerToolStripMenuItem
         '
         Me.UnattendedAnswerFileManagerToolStripMenuItem.Name = "UnattendedAnswerFileManagerToolStripMenuItem"
-        Me.UnattendedAnswerFileManagerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.UnattendedAnswerFileManagerToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.UnattendedAnswerFileManagerToolStripMenuItem.Text = "Unattended answer file manager"
         '
         'UnattendedAnswerFileCreatorToolStripMenuItem
         '
         Me.UnattendedAnswerFileCreatorToolStripMenuItem.Name = "UnattendedAnswerFileCreatorToolStripMenuItem"
-        Me.UnattendedAnswerFileCreatorToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.UnattendedAnswerFileCreatorToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.UnattendedAnswerFileCreatorToolStripMenuItem.Text = "Unattended answer file creator"
         '
         'ToolStripSeparator42
         '
         Me.ToolStripSeparator42.Name = "ToolStripSeparator42"
-        Me.ToolStripSeparator42.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator42.Size = New System.Drawing.Size(370, 6)
         '
         'RegCplToolStripMenuItem
         '
         Me.RegCplToolStripMenuItem.Name = "RegCplToolStripMenuItem"
-        Me.RegCplToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.RegCplToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.RegCplToolStripMenuItem.Text = "Manage image registry hives..."
         '
         'ManageSystemServicesToolStripMenuItem
         '
         Me.ManageSystemServicesToolStripMenuItem.Name = "ManageSystemServicesToolStripMenuItem"
-        Me.ManageSystemServicesToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ManageSystemServicesToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.ManageSystemServicesToolStripMenuItem.Text = "Manage system services..."
         '
         'ManageSystemEnvironmentVariablesToolStripMenuItem
         '
         Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Name = "ManageSystemEnvironmentVariablesToolStripMenuItem"
-        Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.ManageSystemEnvironmentVariablesToolStripMenuItem.Text = "Manage system environment variables..."
         '
         'ToolStripSeparator43
         '
         Me.ToolStripSeparator43.Name = "ToolStripSeparator43"
-        Me.ToolStripSeparator43.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator43.Size = New System.Drawing.Size(370, 6)
         '
         'WebResourcesToolStripMenuItem
         '
         Me.WebResourcesToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.LanguagesAndOptionalFeaturesISOToolStripMenuItem, Me.LanguagesAndFODWin10ToolStripMenuItem})
         Me.WebResourcesToolStripMenuItem.Name = "WebResourcesToolStripMenuItem"
-        Me.WebResourcesToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.WebResourcesToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.WebResourcesToolStripMenuItem.Text = "Web Resources"
         '
         'LanguagesAndOptionalFeaturesISOToolStripMenuItem
@@ -1594,13 +1600,13 @@ Partial Class MainForm
         'ToolStripSeparator45
         '
         Me.ToolStripSeparator45.Name = "ToolStripSeparator45"
-        Me.ToolStripSeparator45.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator45.Size = New System.Drawing.Size(370, 6)
         '
         'PxeHelperServersTSMI
         '
         Me.PxeHelperServersTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StartWdsHelperTSMI, Me.StartFogHelperTSMI, Me.ToolStripSeparator46, Me.UnixFogInstructionTSMI})
         Me.PxeHelperServersTSMI.Name = "PxeHelperServersTSMI"
-        Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(286, 22)
+        Me.PxeHelperServersTSMI.Size = New System.Drawing.Size(373, 22)
         Me.PxeHelperServersTSMI.Text = "Start PXE Helper Server for..."
         '
         'StartWdsHelperTSMI
@@ -1629,57 +1635,57 @@ Partial Class MainForm
         'ToolStripSeparator41
         '
         Me.ToolStripSeparator41.Name = "ToolStripSeparator41"
-        Me.ToolStripSeparator41.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator41.Size = New System.Drawing.Size(370, 6)
         '
         'ReportManagerToolStripMenuItem
         '
         Me.ReportManagerToolStripMenuItem.Name = "ReportManagerToolStripMenuItem"
-        Me.ReportManagerToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.ReportManagerToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.ReportManagerToolStripMenuItem.Text = "Report manager"
         '
         'MountedImageManagerTSMI
         '
         Me.MountedImageManagerTSMI.Name = "MountedImageManagerTSMI"
-        Me.MountedImageManagerTSMI.Size = New System.Drawing.Size(286, 22)
+        Me.MountedImageManagerTSMI.Size = New System.Drawing.Size(373, 22)
         Me.MountedImageManagerTSMI.Text = "Mounted image manager"
         '
         'ToolStripSeparator28
         '
         Me.ToolStripSeparator28.Name = "ToolStripSeparator28"
-        Me.ToolStripSeparator28.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator28.Size = New System.Drawing.Size(370, 6)
         '
         'CreateDiscImageToolStripMenuItem
         '
         Me.CreateDiscImageToolStripMenuItem.Name = "CreateDiscImageToolStripMenuItem"
-        Me.CreateDiscImageToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.CreateDiscImageToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.CreateDiscImageToolStripMenuItem.Text = "Create disc image..."
         '
         'CreateTestingEnvironmentToolStripMenuItem
         '
         Me.CreateTestingEnvironmentToolStripMenuItem.Name = "CreateTestingEnvironmentToolStripMenuItem"
-        Me.CreateTestingEnvironmentToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.CreateTestingEnvironmentToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.CreateTestingEnvironmentToolStripMenuItem.Text = "Create testing environment..."
         '
         'ToolStripSeparator38
         '
         Me.ToolStripSeparator38.Name = "ToolStripSeparator38"
-        Me.ToolStripSeparator38.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator38.Size = New System.Drawing.Size(370, 6)
         '
         'WimScriptEditorCommand
         '
         Me.WimScriptEditorCommand.Name = "WimScriptEditorCommand"
-        Me.WimScriptEditorCommand.Size = New System.Drawing.Size(286, 22)
+        Me.WimScriptEditorCommand.Size = New System.Drawing.Size(373, 22)
         Me.WimScriptEditorCommand.Text = "Configuration list editor"
         '
         'ToolStripSeparator9
         '
         Me.ToolStripSeparator9.Name = "ToolStripSeparator9"
-        Me.ToolStripSeparator9.Size = New System.Drawing.Size(283, 6)
+        Me.ToolStripSeparator9.Size = New System.Drawing.Size(370, 6)
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'HelpToolStripMenuItem
@@ -1701,12 +1707,6 @@ Partial Class MainForm
         Me.DISMToolsTourToolStripMenuItem.Name = "DISMToolsTourToolStripMenuItem"
         Me.DISMToolsTourToolStripMenuItem.Size = New System.Drawing.Size(286, 22)
         Me.DISMToolsTourToolStripMenuItem.Text = "DISMTools Tour"
-        '
-        'Discord
-        '
-        Me.Discord.Name = "Discord"
-        Me.Discord.Size = New System.Drawing.Size(286, 22)
-        Me.Discord.Text = "Join the discord (opens in web browser)"
         '
         'GlossaryToolStripMenuItem
         '
@@ -1739,6 +1739,12 @@ Partial Class MainForm
         '
         Me.ToolStripSeparator21.Name = "ToolStripSeparator21"
         Me.ToolStripSeparator21.Size = New System.Drawing.Size(283, 6)
+        '
+        'Discord
+        '
+        Me.Discord.Name = "Discord"
+        Me.Discord.Size = New System.Drawing.Size(286, 22)
+        Me.Discord.Text = "Join the discord (opens in web browser)"
         '
         'ReportFeedbackToolStripMenuItem
         '
@@ -2162,7 +2168,7 @@ Partial Class MainForm
         'ColumnHeader2
         '
         Me.ColumnHeader2.Text = "Date"
-        Me.ColumnHeader2.Width = 254
+        Me.ColumnHeader2.Width = 320
         '
         'FeedErrorPanel
         '
@@ -2658,6 +2664,7 @@ Partial Class MainForm
         'Panel11
         '
         Me.Panel11.Controls.Add(Me.FlowLayoutPanel1)
+        Me.Panel11.Controls.Add(Me.BWFailPanel)
         Me.Panel11.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel11.Location = New System.Drawing.Point(300, 48)
         Me.Panel11.Name = "Panel11"
@@ -2678,10 +2685,10 @@ Partial Class MainForm
         Me.FlowLayoutPanel1.Controls.Add(Me.SpaceLabel)
         Me.FlowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanel1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 48)
         Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
         Me.FlowLayoutPanel1.Padding = New System.Windows.Forms.Padding(8)
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(708, 558)
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(708, 510)
         Me.FlowLayoutPanel1.TabIndex = 1
         '
         'GroupBox4
@@ -3209,6 +3216,42 @@ Partial Class MainForm
         Me.SpaceLabel.Name = "SpaceLabel"
         Me.SpaceLabel.Size = New System.Drawing.Size(675, 17)
         Me.SpaceLabel.TabIndex = 1
+        '
+        'BWFailPanel
+        '
+        Me.BWFailPanel.BackColor = System.Drawing.Color.LemonChiffon
+        Me.BWFailPanel.Controls.Add(Me.BWFailLearnMoreBtn)
+        Me.BWFailPanel.Controls.Add(Me.BWFailLabel)
+        Me.BWFailPanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.BWFailPanel.Location = New System.Drawing.Point(0, 0)
+        Me.BWFailPanel.Name = "BWFailPanel"
+        Me.BWFailPanel.Size = New System.Drawing.Size(708, 48)
+        Me.BWFailPanel.TabIndex = 2
+        Me.BWFailPanel.Visible = False
+        '
+        'BWFailLearnMoreBtn
+        '
+        Me.BWFailLearnMoreBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BWFailLearnMoreBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.BWFailLearnMoreBtn.Location = New System.Drawing.Point(551, 13)
+        Me.BWFailLearnMoreBtn.Name = "BWFailLearnMoreBtn"
+        Me.BWFailLearnMoreBtn.Size = New System.Drawing.Size(147, 23)
+        Me.BWFailLearnMoreBtn.TabIndex = 1
+        Me.BWFailLearnMoreBtn.Text = "Learn more..."
+        Me.BWFailLearnMoreBtn.UseVisualStyleBackColor = True
+        '
+        'BWFailLabel
+        '
+        Me.BWFailLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BWFailLabel.AutoEllipsis = True
+        Me.BWFailLabel.ForeColor = System.Drawing.Color.Black
+        Me.BWFailLabel.Location = New System.Drawing.Point(15, 18)
+        Me.BWFailLabel.Name = "BWFailLabel"
+        Me.BWFailLabel.Size = New System.Drawing.Size(530, 13)
+        Me.BWFailLabel.TabIndex = 0
+        Me.BWFailLabel.Text = "One or more background processes did not finish successfully. Some functionality " & _
+    "may not be available."
         '
         'ProjectSidePanel
         '
@@ -4556,10 +4599,21 @@ Partial Class MainForm
         '
         Me.MountedImageDetectorBWRestarterTimer.Interval = 2000
         '
+        'ToolStripSeparator47
+        '
+        Me.ToolStripSeparator47.Name = "ToolStripSeparator47"
+        Me.ToolStripSeparator47.Size = New System.Drawing.Size(370, 6)
+        '
+        'EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem
+        '
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Name = "EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem"
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Size = New System.Drawing.Size(373, 22)
+        Me.EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem.Text = "Evaluate Windows UEFI CA 2023 readiness on this system"
+        '
         'MainForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.ClientSize = New System.Drawing.Size(1264, 681)
         Me.Controls.Add(Me.HomePanel)
         Me.Controls.Add(Me.PrjPanel)
@@ -4617,6 +4671,7 @@ Partial Class MainForm
         Me.GroupBox8.ResumeLayout(False)
         Me.GroupBox9.ResumeLayout(False)
         Me.GroupBox10.ResumeLayout(False)
+        Me.BWFailPanel.ResumeLayout(False)
         Me.ProjectSidePanel.ResumeLayout(False)
         Me.ProjectSidePanelContainer.ResumeLayout(False)
         Me.SidePanel_ProjectView.ResumeLayout(False)
@@ -5137,4 +5192,9 @@ Partial Class MainForm
     Friend WithEvents StartFogHelperTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator46 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents UnixFogInstructionTSMI As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BWFailPanel As System.Windows.Forms.Panel
+    Friend WithEvents BWFailLearnMoreBtn As System.Windows.Forms.Button
+    Friend WithEvents BWFailLabel As System.Windows.Forms.Label
+    Friend WithEvents EvaluateWindowsUEFICA2023ReadinessToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator47 As System.Windows.Forms.ToolStripSeparator
 End Class

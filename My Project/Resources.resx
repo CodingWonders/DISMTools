@@ -985,66 +985,78 @@ GPT ATTRIBUTES=0x8000000000000001</value>
 
 -- Bugfixes
 
-- Fixed some issues regarding absolute paths in some cases (#300, thanks @jekovcar)
-- Fixed an issue where YouTube videos in the DISMTools Tour would not show with video player error 153
-- Fixed an issue where HotInstall would fail to prepare a computer if it already had BOOTMGR legacy view settings configured
-- Fixed a crash when opening the popup mounted image picker in some cases
-- When picking a starter script using the predefined collection, language highlighting is correctly selected now
-- ADK detection has been refactored in both the main program and the PE Helper to detect ADK kits roots, as opposed to a registry value that is no longer added by ADK installers (thanks rayman95 on the My Digital Life forums for spotting)
-- Certain windows that cause freezes when the program is closed are now closed automatically
+- The unattended answer file creation wizard no longer goes to the Finish page when it can't find UnattendGen
+- Fixed an issue in the capability removal dialog where the incorrect items would be shown
+- Fixed an issue where hovering over the original file name of a driver would return an incorrect result if a search query had been typed
+- Scaling issues have been fixed. The program should look nicer at 125% scaling
+- Fixed issues with recursive driver addition on Windows 8 hosts not working correctly
+- Fixed an issue where the PE Helper would not go back to the disk selection screen when pressing B
+- Fixed an issue where the image capture script would take longer to start the image capture process after having used the Sysprep Preparation Tool
+- To get "%TEMP%" more accurately, the PE Helper and its components now use .NET APIs as opposed to relying on "$env:TEMP"
 
 -- New features
 
-- HotInstall has received DynaLog logging
-- The PE Helper will now call OSCDIMG more times if it fails to create the ISO file
-- The Sysprep Preparation Tool has been updated to version 0.7.2
-- The PE Helper now introduces a computer inventory framework that lets you view information about your system, for issue reporting
-- You can now access PXE Helper Servers more quickly from the Tools menu
-- Notes are now included for the FOG Helper Server on UNIX
-- The FOG Helper Server for UNIX now checks presence of FOG and MariaDB systemd service units
-- DISMTools will now warn you when you create ISO files with UEFI CA 2023 support on a system that does not offer such support
-- The PE Helper now adds the WDS Tools optional component to the Preinstallation Environment
-- The image capture script in the DISMTools Preinstallation Environment now lets you launch the Driver Installation Module to load disk controllers, and the WDS image capture wizard to capture your installations for a WDS instance
-- Several improvements were made to the WDS Helper:
-  - The WDS Helper now displays a warning when it's loaded on non-PXE environments
-  - The WDS Helper can now get the IP addresses of the PXE client and the PXE server. You can default to using the server's IP address and the default port as well
-  - The WDS Helper now validates more information when authenticating with the server
-- UnattendGen has been updated to the latest version
-- Self-contained copies of UnattendGen that are older or newer than the expected version will now be removed automatically
-- The Starter Script format now contains name and description fields. Scripts have been updated to offer such fields
-- You can now preview starter scripts before loading them with the new Starter Script browser
-- "Set Quick Machine Recovery Settings" has been modified to add value checking
-- "Enable Verbose Status Messages" has been introduced
-- "Disable Windows Notification Sources" has been modified to block Copilot notifications
-- "Configure folders for Git integration" has been introduced
-- "Set a custom wallpaper" has been modified to move wallpaper path to a variable
-- A product key can now be determined automatically by the wizard based on the edition of the mounted Windows image
-- Web Search engines are now configurable
-- Feature and capability image information dialogs now have links to search for specific items online, using your preferred search engine
-- DynaLog now removes log archives more than a month old
-- The Italian tour has been updated to point to Italian tour videos
-- You can now view service groups
-- You can now view the groups registered in the image's service host
-- Several improvements were made to Italian translations (#294, #296, #298, #301, #307; thanks @bovirus)
-- CODE: web search functionality has been modularized
-- Tinted color themes are now available
-- Inno Setup has been updated to version 6.6
-- The RTF version of the GPLv3 license is now used
-- The installer window size has been increased
-- The popup mounted image picker now loads at the center of the parent window to avoid showing either partially or out of screen bounds
-- The Managed DISM API has been updated to version 4.0.0
-- Scintilla.NET has been updated to 6.1.1
-- Markdig has been updated to 0.44.0
+- A menu option has been added to the DISMTools Preinstallation Environment to change the keyboard layout to use
+- Desktop background overrides have been implemented for the DISMTools Preinstallation Environment, so that you can give it your touch
+- The Driver Installation Module now has improved HiDPI awareness
+- CODE: the Driver Installation Module now uses modern C++ standards when using supported compilers
+- CODE: the build script of the Driver Installation Module no longer requires version 11 of the platform toolset (for VS2012) and fully uses version 19.5 (VS2026)
+- The PE Helper now lets you reload disk and partition listings
+- The WDS Helper client now lets you reload disk and partition listings, as well as the installation images and groups in the WDS server. It also performs validation of your input now
+- The PE Helper now supports partition table overrides
+- The Sysprep Preparation Tool has been updated to the latest release, with support for exporting and adding SCSI adapters and other storage controllers to the DT PE image, improved DPI handling, and more
+- The DISMTools Preinstallation Environment now contains a script to create boot entries depending on the system's firmware type
+- You can now access the DiskPart command line from the image capture script. You can also change the keyboard layout from that script. The image capture script will also append ".wim" to the destination file name if you hadn't given it a (valid) file extension
+- The PE Helper and the WDS Helper client now let you pick the EFI boot binary to use, whether it is the Microsoft Windows Production PCA 2011 or the Windows UEFI CA 2023 boot binary
+- HotInstall now detects the presence of the RAMDisk Options ("{ramdiskoptions}") BCD object
+- PXE Helper Servers can now be started on Windows Server Core
+- The "Show File Extensions" starter script has been introduced
+- The "Display Bugcheck Parameters" starter script has been introduced
+- A new Starter Script Editor lets you easily create your own starter scripts
+- When configuring regional settings, you can now switch to Ireland (a EEA member) automatically
+- When browsing through starter scripts you can now export the script code so that you can use it anywhere
+- When selecting a service host (svchost) group, services in that group are now sorted alphabetically by display name
+- Services of types 0x50 and 0x60 are now shown as per-user services. User service flags will be shown for such types of services
+- New search filters have been added to the driver information dialog when working with installed drivers. Check out the Help documentation to learn more about these filters
+- You can now save the HTML image information reports to any location
+- Custom property viewers in the package and feature information dialogs now follow user-preferred font settings
+- You can now search AppX package information when the extended AppX package getter is run
+- DISMTools now detects Windows PE images in disguise, such as Sergei Strelec's WinPE. These images spoof the edition IDs to resemble something else, such as "Professional". This makes DISM and any program that queries the edition ID think it's not a Windows PE image
+- When a background process fails, DISMTools will now continue running the remaining processes, as opposed to abruptly stopping them. After finishing, you can now see which failed and why
+- When mounting an image, you can now specify an ISO file. DISMTools will mount the ISO file and grab the installation images that you can use from it
+- DISMTools can now show you the names of the AppX packages that you see from your Start menu (*friendly display names*) when removing them
+- New search engines and engine modes are available, and you can now filter them based on how much you tolerate AI features in them
+- You can now import drivers from the online installation management mode
+- A script is now included to help you add drivers recursively on Windows NT 6.x systems (Windows Vista-8.1, including Server 2008-2012 R2)
+- You can now select items in the image index overview list of the image mount dialog to specify the image index
+- CODE: many item visualization procedures now use LINQ
+- The program now stores user-created data (themes, starter scripts, and DT PE backgrounds) in a safe location, so they're no longer deleted by updates
+- CODE: large parts of the codebase have been refactored to improve speed and reliability
+- Inno Setup has been updated to version 6.7
+- DISMTools now handles HiDPI displays much better
+- The managed DISM API has been updated to version 4.0.7
+- WindowsAPICodePack has been updated to version 8.0.14
+- Markdig has been updated to version 0.45.0
+- A new tool has been added to detect UEFI CA 2023 readiness
+
+- 7-Zip has been updated to version 26.00
 
 Changes made since last preview:
 
+-- Bugfixes
+
+- Fixed some visualization issues in the properties dialog if name and/or description fields were long enough
+- Fixed an issue where the WDS Helper Client would not remove the temporary "NetInstall" directory
+- The starter script editor now verifies extensions of scripts to import in a case-insensitive manner
+- Microsoft Windows Production PCA 2011 is now referred to correctly as such when performing UEFI CA 2023 readiness evaluation
+
 -- New features
 
-- The ISO creator now downloads and installs the latest ADKs (10.1.28000.1)
-- The revamped ADK detection procedure has been ported to the Extensibility Suite
-- The image capture script now lets you capture Windows images for local installations to a mapped network share (#313, thanks @Real-MullaC)
-- CODE: The Driver Installation Module has been retargeted to MSVC v145/VS2026
-- A link to the new CWSOFTWARE Discord server has been added to the Help menu (yes there's one now, #317, thanks @Real-MullaC)</value>
+- App Installer packages that download standalone application packages are now supported
+- UEFI CA 2023 is now chosen as the default boot binary version when deploying an operating system with either the PE Helper or the WDS Helper Client
+- Starter scripts are now reloaded when closing the starter script editor
+- A script is now added to ISO files that allows you to automatically copy the boot image to your WDS server
+- The "Disable Drag Tray" starter script has been introduced</value>
   </data>
   <data name="exit_full_screen_glyph" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\menus\exit_full_screen_glyph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1105,5 +1117,14 @@ Changes made since last preview:
 # - Use the Open Script button to load the contents of an existing script file.
 # - To get started with our curated set of Starter Scripts, use the "Import a predefined Starter Script" button
 # - To use a Starter Script that you may have created, use the "Import a Starter script in file system" button</value>
+  </data>
+  <data name="assistant_dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\assistant_dark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="assistant_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\assistant_light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cws_discord" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\about\cws_discord.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

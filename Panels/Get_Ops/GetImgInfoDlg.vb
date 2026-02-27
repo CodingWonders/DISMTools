@@ -349,8 +349,12 @@ Public Class GetImgInfoDlg
         TextBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         LanguageList.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        If SplitContainer2.SplitterDistance = 440 Then
+            SplitContainer2.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer2.SplitterDistance)
+        End If
+
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         DismVersionChecker = FileVersionInfo.GetVersionInfo(MainForm.DismExe)
         If Environment.OSVersion.Version.Major = 10 Then
             Text = ""
@@ -364,10 +368,12 @@ Public Class GetImgInfoDlg
         Else
             RadioButton1.Enabled = True
         End If
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(60)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(344)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs)
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -388,10 +394,8 @@ Public Class GetImgInfoDlg
             DynaLog.LogMessage("Information collection count: " & ImageInfoCollection.Count)
             If ImageInfoCollection.Count > 0 Then
                 DynaLog.LogMessage("This file has images. Updating lists...")
-                For Each ImageInfo As DismImageInfo In ImageInfoCollection
-                    ImageInfoList.Add(ImageInfo)
-                    ListView1.Items.Add(New ListViewItem(New String() {ImageInfo.ImageIndex, ImageInfo.ImageName}))
-                Next
+                ListView1.Items.AddRange(ImageInfoCollection.Select(Function(ImageInfo) New ListViewItem(New String() {ImageInfo.ImageIndex, ImageInfo.ImageName})).ToArray())
+                ImageInfoList.AddRange(ImageInfoCollection.Select(Function(ImageInfo) ImageInfo))
             End If
         Catch ex As Exception
             DynaLog.LogMessage("Could not get image file information. Error message: " & ex.Message)
@@ -737,18 +741,16 @@ Public Class GetImgInfoDlg
         Button2.Enabled = False
         If RadioButton1.Checked Then
             ' Go through the mounted image listings to find the appropriate image
-            If MainForm.MountedImageImgFiles.Count > 0 Then
+            If MainForm.MountedImageList.Count > 0 Then
                 TextBox1.Enabled = False
                 Button1.Enabled = False
                 Button3.Enabled = False
-                For x = 0 To Array.LastIndexOf(MainForm.MountedImageImgFiles, MainForm.MountedImageImgFiles.Last)
-                    If MainForm.MountedImageMountDirs(x) = MainForm.MountDir Then
-                        DynaLog.LogMessage("Getting information about the mounted image...")
-                        GetImageInfo(MainForm.MountedImageImgFiles(x))
-                        Button2.Enabled = True
-                        Exit For
-                    End If
-                Next
+                Dim ActualImage As WindowsImage = MainForm.MountedImageList.FirstOrDefault(Function(image) image.ImageMountDirectory = MainForm.MountDir)
+                If ActualImage IsNot Nothing Then
+                    DynaLog.LogMessage("Getting information about the mounted image...")
+                    GetImageInfo(ActualImage.ImageFile)
+                    Button2.Enabled = True
+                End If
             End If
         Else
             TextBox1.Enabled = True
@@ -780,7 +782,7 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub GetImgInfoDlg_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
@@ -789,7 +791,7 @@ Public Class GetImgInfoDlg
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        If MainForm.ImgInfoSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If MainForm.ImgInfoSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Preparing to save image information...")
             If Not ImgInfoSaveDlg.IsDisposed Then ImgInfoSaveDlg.Dispose()
             ImgInfoSaveDlg.SourceImage = SelectedImageFile
@@ -797,15 +799,15 @@ Public Class GetImgInfoDlg
             ImgInfoSaveDlg.OnlineMode = False
             ImgInfoSaveDlg.OfflineMode = False
             ImgInfoSaveDlg.SaveTask = 1
-            ImgInfoSaveDlg.ShowDialog()
+            ImgInfoSaveDlg.ShowDialog(Me)
             InfoSaveResults.Show()
         End If
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
-            TextBox1.Text = selectedImage.ImageFilePath
+            TextBox1.Text = selectedImage.ImageFile
         End If
     End Sub
 End Class

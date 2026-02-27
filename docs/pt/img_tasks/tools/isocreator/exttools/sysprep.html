@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../../../img/favicon.ico" />
+    <title>Ferramenta de preparação do SysPrep - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Ferramenta de prepara\u00e7\u00e3o do SysPrep";
+        var mkdocs_page_input_path = "img_tasks\\tools\\isocreator\\exttools\\sysprep.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../../../index.html">
+          <img src="../../../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Início</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../getting_started/start.html">Iniciando</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../../whats_new/highlights.html">Novidades</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tarefas de imagem</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../img_tasks.html">Visão geral</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../online_inst_mgmt.html">Modo de gerenciamento de instalação on-line</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../offline_inst_mgmt.html">Modo de gerenciamento de instalação off-line</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gerenciamento de imagem</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/append_image.html">Anexar a uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/apply_image.html">Aplicar uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/capture_image.html">Capturando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/delete_image.html">Removendo imagens de volume de um arquivo de imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/export_image.html">Exportando uma imagem do Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/list_image.html">Listando o conteúdo das imagens do Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/mount_image.html">Montando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/remount_image.html">Remontando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/split_image.html">Dividindo uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../mgmt/unmount_image.html">Desmontando uma imagem</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Caixas de diálogo de informações de imagem</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/infodlgs.html">Visão geral</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/img_info.html">Informações de arquivo de imagem</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/pkg_info.html">Informações do pacote</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/feat_info.html">Informações de recursos</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/appxpkg_info.html">Informações do pacote AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/cap_info.html">Informações de capacidade</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/drv_info.html">Informações do driver</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../../../info/winpe_info.html">Informações de configuração do Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pacotes do sistema operacional</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/pkgs.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/add_package.html">Adicionando pacotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../packages/remove_package.html">Removendo pacotes</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Recursos</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/features.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/enable_feature.html">Habilitando recursos</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../features/disable_feature.html">Desabilitando recursos</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pacotes AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/appx.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/add_provisionedappxpackage.html">Adicionando pacotes AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../appx/remove_provisionedappxpackage.html">Removendo pacotes AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Manutenção de edição</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/editions.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/set_edition.html">Atualizando uma imagem para uma edição superior</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../editions/set_productkey.html">Definindo a chave do produto</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Manutenção de idiomas e regional</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../langs/set_layereddriver.html">Configurando drivers de teclado em camadas</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacidades</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/caps.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/add_capability.html">Adicionando capacidades</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../capabilities/remove_capability.html">Removendo capacidades</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Drivers</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/drvs.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/add_driver.html">Adicionando drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/export_driver.html">Exportando drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/import_driver.html">Importando drivers</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../drivers/remove_driver.html">Removendo drivers</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Ferramentas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../mimgmgr.html">Gerenciador de imagem montada</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../wim2esd.html">Conversão de imagem</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../swm2wim.html">Fusão de arquivo SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../configlisteditor.html">Editor de lista de configuração DISM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Ferramentas de criação de ISO</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../../isocreator.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../isocreate.html">Criando arquivos ISO</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" >Instalando o sistema operacional</a>
+    <ul class="current">
+                <li class="toctree-l3"><a class="reference internal" href="../install/localinstall.html">Instalações locais</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Instalações baseadas em rede</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/pxehelpers.html">Visão geral</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../install/netinst/wds.html">Assistente do Windows Deployment Services (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3 current"><a class="reference internal current" >External Tools</a>
+    <ul class="current">
+                <li class="toctree-l4"><a class="reference internal" href="dim.html">Módulo de instalação do driver</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="dtpe_es.html">Suite de extensibilidade</a>
+                </li>
+                <li class="toctree-l4 current"><a class="reference internal current" href="#">Ferramenta de preparação do SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../cmdline/cmdline.html">Visão geral</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../regcpl.html">Painel de controle do registro de imagem</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../servicemgr.html">Gerenciador de serviço do sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../envvarmgr.html">Gerenciador de variável de ambiente do sistema</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Arquivos de resposta autônoma</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unattend.html">Visão geral</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_man.html">Gerenciador de arquivo de resposta autônoma</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_create.html">Criador de arquivo de resposta autônoma</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../unattend/unatt_apply.html">Aplicando arquivos de resposta autônoma</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Ferramentas externas</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/themedesigner.html">Criando seus temas</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/dynaviewer.html">Visualizando logs de diagnóstico</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../exttools/sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Ferramentas</li>
+          <li class="breadcrumb-item">Ferramentas de criação de ISO</li>
+          <li class="breadcrumb-item">Instalando o sistema operacional</li>
+          <li class="breadcrumb-item">External Tools</li>
+      <li class="breadcrumb-item active">Ferramenta de preparação do SysPrep</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="sysprep-preparation-tool">Sysprep Preparation Tool</h1>
+<p>The Sysprep Preparation Tool is a utility included with DISMTools 0.7.1 and later versions that prepares a reference computer for Sysprep generalization. This is useful for system administrators who are not using Microsoft Configuration Manager, or a similar solution, and want a Windows image with preinstalled applications.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="preparing-a-reference-computer-for-sysprep">Preparing a reference computer for Sysprep</h3>
+<p>To use the Sysprep Preparation Tool, the computer must be in <strong>audit mode</strong>. To enter audit mode at the OOBE, press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F3</kbd>. The computer will restart and boot into audit mode automatically.</p>
+<p><em>Do note that the installation must not be unattended. If it is, you will not be able to enter audit mode. If you had added an answer file, you'll need to remove it before installing the system. To remove answer files, go to Commands -&gt; Unattended answer files -&gt; Remove applied answer file.</em></p>
+<p>You can determine if the OOBE is unattended in the reference computer by determining if you need to interact with it. For example, here:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_InteractiveOOBE.png" />
+</p>
+
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Reboot.png" />
+</p>
+
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AuditMode.png" />
+</p>
+
+<p>If you see the above screen, you have successfully entered audit mode. Don't touch the Sysprep window as you don't need it for now. Either move it out of the way or close it.</p>
+<p>Now, go ahead and install the applications you want to have preinstalled in your Windows image.</p>
+<p><strong>Important notes when installing applications:</strong></p>
+<ul>
+<li>Try to avoid Microsoft Store applications as they cause Sysprep to fail. If a desktop application installs a Microsoft Store application (for example, to provide context menu integration with Windows 11), remove said application before running the tool<ul>
+<li>In that similar vein, avoid using WinGet to install applications. The <code>winget</code> source is a Microsoft Store application</li>
+</ul>
+</li>
+<li>Some applications, like Visual Studio Code, come in both user and machine-wide installation variants. Always use the machine-wide installation variant, if available</li>
+</ul>
+<h3 id="launching-the-sysprep-preparation-tool">Launching the Sysprep Preparation Tool</h3>
+<p>The Sysprep Preparation Tool is automatically added to ISOs by the Preinstallation Environment Helper. To launch the tool, open the Autorun application (usually by double-clicking the ISO in the File Explorer, or by running <code>&lt;ISO letter&gt;:\autorun.exe</code>), and select <em>Prepare System for Image Capture</em>:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AutorunEntry.png" />
+</p>
+
+<p>In DISMTools 0.7.2 and later, you can pick from 2 modes in which the tool can run:</p>
+<ul>
+<li><strong>Automatic mode</strong> will run the tool with minimal user interaction and default settings. If a check fails or returns a warning, the tool will let you pause and review the results before proceeding</li>
+<li><strong>Manual mode</strong> will run the tool with full user interaction</li>
+</ul>
+<p>Whichever mode you choose, you can also prepare the boot image of the installation media for image capture after Sysprep completes by checking <em>Capture image after preparing the system</em>. You can learn more about image capture in the <a href="../cmdline/scriptref.html">administration script reference</a>.</p>
+<p>The guide will continue in manual mode.</p>
+<p>You will arrive at the wizard.</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Home.png" />
+</p>
+
+<p>The tool will perform checks on your computer before proceeding. These range from setup states, to third-party drivers, to domain join; and more. You will see the results of these checks after they complete:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_CheckScreen.png" />
+</p>
+
+<p>To learn more about a check, click on its entry in the list:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_CheckScreenDetails.png" />
+</p>
+
+<p>A check has 3 fields indicating status:</p>
+<ul>
+<li><strong>Compatible</strong>: Indicates whether the check passed or failed</li>
+<li><strong>Details</strong>: Indicates what the check reported</li>
+<li><strong>Severity</strong>: Indicates how severe possible issues can be. There are 3 levels of severity:<ul>
+<li><strong>Information</strong>: The check is informational only. You will see an <em>Information</em> severity level if a check passes or if it didn't need to be run, or if it reported something but won't cause Sysprep to fail</li>
+<li><strong>Warning</strong>: The check found a possible issue that may cause Sysprep to fail. You can choose to proceed past warnings, but it's not recommended</li>
+<li><strong>Critical</strong>: The check found an issue that will cause Sysprep to fail. You cannot proceed past critical issues. With a critical severity level, a check automatically fails</li>
+</ul>
+</li>
+</ul>
+<p>It is important that none of the checks return a <em>Critical</em> severity level. Check details, when not informational, will often include steps that will help you resolve the issue.</p>
+<p>Continuing with the wizard, you will arrive at this page, where you can configure options that will be passed to Sysprep:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_AdvancedPrepSettings.png" />
+</p>
+
+<p>Normally, you don't need to configure anything here. The default options are suitable for most use cases. However, if you need to customize Sysprep's behavior, you can do so here.</p>
+<p>Finally, wait for the tool to complete its work:</p>
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Preparation.png" />
+</p>
+
+<p align="center">
+    <img src="../../../../res/img_tasks/tools/isocreator/syspreppreparator/SysprepPreparator_Finish.png" />
+</p>
+
+<p>After your computer shuts down, you can capture its image with your preferred method. If you want to make further modifications in an offline manner, boot into the DISMTools Preinstallation Environment and capture the entire drive to an image using the <strong>Image Capture</strong> Administration Script. <a href="../cmdline/scriptref.html">Refer to the Command-line Administration Script Reference for more information on this script</a>.</p>
+<h2 id="related-content">Related content</h2>
+<p>You can download this tool to run it independently here: <a href="https://github.com/CodingWonders/SysprepPreparator">Sysprep Preparator Repository</a>.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="dtpe_es.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../cmdline/cmdline.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../../../..";</script>
+    <script src="../../../../../js/theme_extra.js"></script>
+    <script src="../../../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

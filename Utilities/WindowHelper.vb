@@ -1,4 +1,5 @@
 ﻿Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.Control
 
 Public Class WindowHelper
 
@@ -15,13 +16,23 @@ Public Class WindowHelper
         <DllImport("user32.dll", CharSet:=CharSet.Auto)>
         Public Shared Function EnableMenuItem(hMenu As IntPtr, uIDEnableItem As UInteger, uEnable As UInteger) As Boolean
         End Function
+
+        <DllImport("dwmapi.dll")>
+        Public Shared Function DwmSetWindowAttribute(hwnd As IntPtr, attr As Integer, ByRef attrValue As Integer, attrSize As Integer) As Integer
+        End Function
     End Class
 
+    ' USER32 Constants
     Const SC_CLOSE As Integer = &HF060
     Const MF_BYCOMMAND As Long = &H0L
     Const MF_ENABLED As Long = 0
     Const MF_GRAYED As Long = 1
     Const MF_DISABLED As Long = 2
+
+    ' DWMAPI Constants
+    Const DWMWA_USE_IMMERSIVE_DARK_MODE As Integer = 20
+    Const WS_EX_COMPOSITED As Integer = &H2000000
+    Const GWL_EXSTYLE As Integer = -20
 
     Public Shared Sub DisableCloseCapability(wndHandle As IntPtr)
         If Not wndHandle.Equals(IntPtr.Zero) Then
@@ -38,6 +49,58 @@ Public Class WindowHelper
             If Not menu.Equals(IntPtr.Zero) Then
                 NativeMethods.EnableMenuItem(menu, SC_CLOSE, MF_BYCOMMAND Or MF_ENABLED)
             End If
+        End If
+    End Sub
+
+    Public Shared Function GetWindowHandle(ctrl As Control) As IntPtr
+        Return ctrl.Handle
+    End Function
+
+    Const DARKMODE_MINMAJOR As Integer = 10
+    Const DARKMODE_MINMINOR As Integer = 0
+    Const DARKMODE_MINBUILD As Integer = 18362
+
+    Public Shared Sub ToggleDarkTitleBar(hwnd As IntPtr, darkMode As Boolean)
+        Dim attribute As Integer = If(darkMode, 1, 0)
+        If Not IsWindowsVersionOrGreater(DARKMODE_MINMAJOR, DARKMODE_MINMINOR, DARKMODE_MINBUILD) Then Exit Sub
+        Dim result As Integer = NativeMethods.DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, attribute, 4)
+    End Sub
+
+    Private Shared Function IsWindowsVersionOrGreater(majorVersion As Integer, minorVersion As Integer, buildNumber As Integer) As Boolean
+        Dim version = Environment.OSVersion.Version
+        Return version.Major > majorVersion OrElse (version.Major = majorVersion AndAlso version.Minor > minorVersion) OrElse (version.Major = majorVersion AndAlso version.Minor = minorVersion AndAlso version.Build >= buildNumber)
+    End Function
+
+    Public Shared Function ScaleLogical(px As Integer) As Integer
+        Dim dx As Single
+        Dim ctrl As New Control()
+        Dim g As Graphics = ctrl.CreateGraphics()
+
+        Try
+            dx = g.DpiX
+        Finally
+            g.Dispose()
+        End Try
+
+        Return CInt(px * (dx / 96.0))
+    End Function
+
+    Public Shared Function ScalePositionLogical(posX As Integer, posY As Integer) As Point
+        Return New Point(ScaleLogical(posX), ScaleLogical(posY))
+    End Function
+
+    Public Shared Function ScaleSizeLogical(width As Integer, height As Integer) As Size
+        Return New Size(ScaleLogical(width), ScaleLogical(height))
+    End Function
+
+    Public Shared Function GetSystemDpi() As Single
+        Return CSng(ScaleLogical(100))
+    End Function
+
+    Public Shared Sub DisplayToolTip(tooltipSender As Object, toolTipMessage As String)
+        If TypeOf (tooltipSender) Is Control Then
+            Dim displayedToolTip As New ToolTip()
+            displayedToolTip.SetToolTip(tooltipSender, toolTipMessage)
         End If
     End Sub
 

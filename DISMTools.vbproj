@@ -80,26 +80,29 @@
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.44.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Markdig.0.44.0\lib\net462\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.45.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Markdig.0.45.0\lib\net462\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Dism, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5bba90053b345501, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Dism.4.0.0\lib\net40\Microsoft.Dism.dll</HintPath>
+      <HintPath>packages\Microsoft.Dism.4.0.7\lib\net40\Microsoft.Dism.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Core, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Core.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack.Core, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Sensors, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Sensors.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack.Sensors, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.Sensors.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=8.0.6.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=8.0.14.0, Culture=neutral, PublicKeyToken=8afb38e9204fc0a9, processorArchitecture=MSIL">
+      <HintPath>packages\WindowsAPICodePack.8.0.14\lib\net48\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <Private>True</Private>
@@ -186,8 +189,7 @@
     <Reference Include="System.ServiceModel">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\System.Windows.Forms.dll</HintPath>
+    <Reference Include="System.Windows.Forms">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -199,13 +201,14 @@
     <Reference Include="WindowsBase">
       <Private>True</Private>
     </Reference>
-    <Reference Include="WindowsFormsIntegration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack.8.0.6\lib\net48\WindowsFormsIntegration.dll</HintPath>
+    <Reference Include="WindowsFormsIntegration">
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Import Include="DISMTools.Elements.Contemporaneus" />
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.ControlChars" />
     <Import Include="System" />
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
@@ -246,6 +249,15 @@
     <Compile Include="Elements\AutoUnattend\UserAccounts\PasswordExpirationSettings.vb" />
     <Compile Include="Elements\AutoUnattend\UserAccounts\User.vb" />
     <Compile Include="Elements\AutoUnattend\VirtualMachines\VirtualMachineSettings.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageAppxPackage.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageCapability.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageDriver.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageOperations\ImageOperation.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageOperations\MountImageIO.vb" />
+    <Compile Include="Elements\Contemporaneus\PSInterop\PSObjects.vb" />
+    <Compile Include="Elements\Contemporaneus\ImageFeature.vb" />
+    <Compile Include="Elements\Contemporaneus\WindowsImage.vb" />
+    <Compile Include="Elements\Contemporaneus\ImagePackage.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariable.vb" />
     <Compile Include="Elements\EnvVarManagement\EnvironmentVariableHelper.vb" />
     <Compile Include="Elements\KeyboardDrivers.vb" />
@@ -268,6 +280,10 @@
       <DependentUpon>HelpVideoPlayer.vb</DependentUpon>
     </Compile>
     <Compile Include="Help\HelpVideoPlayer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Help\QuickHelpModule.vb" />
+    <Compile Include="MainForm.Events.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.vb">
@@ -478,6 +494,12 @@
       <DependentUpon>BGProcDetails.vb</DependentUpon>
     </Compile>
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.Designer.vb">
+      <DependentUpon>BGProcFailureDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.Designer.vb">
@@ -877,11 +899,13 @@
     <Compile Include="UserControls\ConsoleControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Utilities\AppxUtilities\AppxHelper.vb" />
     <Compile Include="Utilities\BuildGetter.vb" />
     <Compile Include="Utilities\DriverSignerViewer.vb" />
     <Compile Include="Utilities\DT_Utils.vb" />
     <Compile Include="Utilities\DynaLog.vb" />
     <Compile Include="Utilities\ImageWatcher.vb" />
+    <Compile Include="Utilities\IsoFileUtilities\IsoHelper.vb" />
     <Compile Include="Utilities\LanguageUtilities\LanguageHelper.vb" />
     <Compile Include="Utilities\ListViewColumnSorter.vb" />
     <Compile Include="Utilities\MarkdownHelper.vb" />
@@ -897,6 +921,7 @@
     <Compile Include="Utilities\ThemeUtilities\Theme.vb" />
     <Compile Include="Utilities\ThemeUtilities\ThemeHelper.vb" />
     <Compile Include="Utilities\TourServer.vb" />
+    <Compile Include="Utilities\UserDataManagerModule.vb" />
     <Compile Include="Utilities\WebSearchUtilities\SearchEngine.vb" />
     <Compile Include="Utilities\WebSearchUtilities\SearchEngineHelper.vb" />
     <Compile Include="Utilities\WindowHelper.vb" />
@@ -1014,6 +1039,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcDetails.resx">
       <DependentUpon>BGProcDetails.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcFailureDialog.resx">
+      <DependentUpon>BGProcFailureDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Img_Ops\Bg_Processes\BGProcNotify.resx">
       <DependentUpon>BGProcNotify.vb</DependentUpon>
@@ -1236,6 +1264,7 @@
     <None Include="docs\search\search_index.json" />
     <None Include="docs\sitemap.xml.gz" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Display Bugcheck Parameters.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
@@ -1245,12 +1274,20 @@
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Update Microsoft Store Apps.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Invoke WinUtil configuration.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenFirstUserLogsOn\Set up a custom wallpaper.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Drag Tray.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Show Extensions for Known File Types.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Second Chance OOBE.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\WhenUsersLogOnForFirstTime\Disable Windows Notification Sources.dtss" />
     <None Include="Helpers\dthelper.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extbatch\cmdhelp.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extbatch\copy_cur_wallpaper_to_userdata.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extbatch\nt6_online_pnputil_recurse.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extbatch\options.bat">
@@ -1262,6 +1299,9 @@
     <None Include="Helpers\extps1\mImgMgr.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\boot_image_to_wds.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\dim_start\dimstart.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1269,6 +1309,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\HotInstall.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\scripts\createbootfiles.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\scripts\fullcopy.bat">
@@ -1280,10 +1323,16 @@
     <None Include="Helpers\extps1\PE_Helper\files\scripts\initializenetwork.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\ChangeKeyboardLayout.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\DTPE_Inventory.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\menu.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Helpers\extps1\PE_Helper\files\startup\ShowWatermark.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Helpers\extps1\PE_Helper\files\startup\StartInstall.ps1">
@@ -1328,14 +1377,8 @@
     <None Include="Helpers\extps1\PE_Helper\pxehelpers\wds\wdshelper_server.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Installer\Default.isl" />
-    <None Include="Installer\French.isl" />
-    <None Include="Installer\German.isl" />
-    <None Include="Installer\Italian.isl" />
-    <None Include="Installer\Portuguese.isl" />
     <None Include="Installer\Setup.e32" />
     <None Include="Installer\SetupLdr.e32" />
-    <None Include="Installer\Spanish.isl" />
     <None Include="LICENSE">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -1579,6 +1622,9 @@
     <None Include="Resources\remove_element.png" />
     <None Include="Resources\ad_ds.png" />
     <None Include="Resources\envvar_pic_32px.png" />
+    <None Include="Resources\about\cws_discord.png" />
+    <Content Include="Resources\assistant_dark.png" />
+    <Content Include="Resources\assistant_light.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_dark.png" />
     <Content Include="Resources\glyphs\scripts_addfirstscript_light.png" />
     <None Include="Resources\service_pic_32px.png" />
@@ -1673,7 +1719,6 @@
     <None Include="Resources\settings\options_program_light.png" />
     <None Include="Resources\settings\options_scratch_dark.png" />
     <None Include="Resources\settings\options_scratch_light.png" />
-    <None Include="Resources\about\gitter_chat.png" />
     <None Include="Resources\import_driver.png" />
     <None Include="Resources\onedrive_exclusion.png" />
     <None Include="Resources\color_schemes\CS_Idle_Blue.png" />
@@ -1939,6 +1984,7 @@
     <Folder Include="bin\Debug\" />
     <Folder Include="Helpers\extps1\PE_Helper\files\diskpart\" />
     <Folder Include="Helpers\extps1\PE_Helper\tools\HotInstall\" />
+    <Folder Include="Panels\Get_Ops\FilterAssistants\" />
     <Folder Include="Panels\Set_Ops\" />
     <Folder Include="Tools\UnpEax\" />
     <Folder Include="Updater\" />
@@ -1960,9 +2006,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PostBuildEvent>SET DELETELOGDIR="Yes"
-SET ISPREVIEW="No"
+SET ISPREVIEW="Yes"
 SET GEN_INSTALLER="Yes"
 SET COPY_DOCS="Yes"
+SET CREATE_SAMPLE_USERDATA="Yes"
 ECHO Generating program structure...
 IF EXIST "$(SolutionDir)portable" (
 	COPY "$(SolutionDir)portable" . /Y
@@ -2049,6 +2096,12 @@ IF EXIST "$(SolutionDir)Tools\DT_ThemeDesigner\out\*.exe" (
 	del "Tools\ThemeDesigner\*.zip" /F /S /Q
 )
 
+:: Copy Starter Script Editor
+IF EXIST "$(SolutionDir)Tools\StarterScriptEditor\out\*.exe" (
+	xcopy "$(SolutionDir)Tools\StarterScriptEditor\out\*.*" "Tools\StarterScriptEditor" /cehyi
+	del "Tools\StarterScriptEditor\*.zip" /F /S /Q
+)
+
 :: Copy PE Helper Main Menu
 IF EXIST "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.exe" (
 	xcopy "$(SolutionDir)Helpers\extps1\PE_Helper\tools\PEHelperMainMenu\out\*.*" "bin\extps1\PE_Helper\tools\MainMenu" /CEHYI
@@ -2081,6 +2134,13 @@ IF %25COPY_DOCS%25=="Yes" (
 	echo Copying help documentation...
 	xcopy "$(ProjectDir)docs\*" "$(TargetDir)docs" /cehyi
 )
+IF %25CREATE_SAMPLE_USERDATA%25=="Yes" (
+	echo Creating sample userdata structure...
+	IF NOT EXIST "userdata" (md "userdata")
+	FOR %25%25A IN (dtpe_backgrounds themes starter_scripts) DO (
+		IF NOT EXIST "userdata\%25%25A" (md "userdata\%25%25A")
+	)
+)
 IF %25GEN_INSTALLER%25=="Yes" (
 	echo The technology used for creating the installer is subject to a license. Refer to the "LICENSE.TXT" file in the "$(SolutionDir)Installer" directory for more information
 	:: Workaround for DLLs not copying
@@ -2097,7 +2157,10 @@ IF %25GEN_INSTALLER%25=="Yes" (
 		echo Warning: the installer compiler could not be found. Deleting temporary setup files...
 		rd "$(SolutionDir)Installer\files" /s /q
 	)
-)</PostBuildEvent>
+)
+
+REM make it so that DTPE reports version info via watermark
+BREAK &gt; bin\extps1\PE_Helper\let_it_rain</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>ECHO Deleting bin folder...

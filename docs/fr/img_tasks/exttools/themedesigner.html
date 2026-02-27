@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Création de vos thèmes - DISMTools Help Documentation</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Cr\u00e9ation de vos th\u00e8mes";
+        var mkdocs_page_input_path = "img_tasks\\exttools\\themedesigner.fr.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html">
+          <img src="../../../logo.png" class="logo" alt="Logo"/>
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navigation">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/start.html">Commencer</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../whats_new/highlights.html">Nouveautés</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tâches d'image</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../img_tasks.html">Aperçu</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../online_inst_mgmt.html">Mode de gestion de l'installation en ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../offline_inst_mgmt.html">Mode de gestion de l'installation hors ligne</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Gestion des images</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/append_image.html">Ajouter à une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/apply_image.html">Appliquer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/capture_image.html">Capturer une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/delete_image.html">Supprimer les images de volume d'un fichier image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/export_image.html">Exporter une image Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/list_image.html">Lister le contenu des images Windows</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/mount_image.html">Monter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/remount_image.html">Remonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/split_image.html">Fractionner une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../mgmt/unmount_image.html">Démonter une image</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Boîtes de dialogue d'informations d'image</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../info/infodlgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/img_info.html">Informations du fichier image</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/pkg_info.html">Informations sur les packages</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/feat_info.html">Informations sur les fonctionnalités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/appxpkg_info.html">Informations sur les packages AppX</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/cap_info.html">Informations sur les capacités</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/drv_info.html">Informations sur les pilotes</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" href="../info/winpe_info.html">Informations de configuration de Windows PE</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/pkgs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/add_package.html">Ajout de packages</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../packages/remove_package.html">Suppression de packages</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fonctionnalités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../features/features.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/enable_feature.html">Activation des fonctionnalités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../features/disable_feature.html">Désactivation des fonctionnalités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Packages AppX</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/appx.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/add_provisionedappxpackage.html">Ajout de packages AppX</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../appx/remove_provisionedappxpackage.html">Suppression de packages AppX</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des éditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/editions.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_edition.html">Mettre à niveau une image vers une édition supérieure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../editions/set_productkey.html">Définir la clé de produit</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Maintenance des langues et régionales</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../langs/set_layereddriver.html">Définir les pilotes de clavier en couches</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Capacités</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/caps.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/add_capability.html">Ajout de capacités</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../capabilities/remove_capability.html">Suppression de capacités</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Pilotes</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/drvs.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/add_driver.html">Ajout de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/export_driver.html">Export de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/import_driver.html">Import de pilotes</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../drivers/remove_driver.html">Suppression de pilotes</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Outils</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/mimgmgr.html">Gestionnaire d'images montées</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/wim2esd.html">Conversion d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/swm2wim.html">Fusion de fichiers SWM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/configlisteditor.html">Éditeur de liste de configuration DISM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Outils de création d'ISO</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../tools/isocreator/isocreate.html">Création de fichiers ISO</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" >Installation du système d'exploitation</a>
+    <ul>
+                <li class="toctree-l3"><a class="reference internal" href="../tools/isocreator/install/localinstall.html">Installations locales</a>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Installations basées sur le réseau</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/pxehelpers.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/setup.html">Creating a basic network setup (Hyper-V)</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/install/netinst/wds.html">Assistant des services de déploiement Windows (WDS)</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >External Tools</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dim.html">Module d'installation des pilotes</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/dtpe_es.html">Suite d'extensibilité</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/exttools/sysprep.html">Outil de préparation SysPrep</a>
+                </li>
+    </ul>
+                </li>
+                <li class="toctree-l3"><a class="reference internal" >Command-line</a>
+    <ul>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/cmdline.html">Aperçu</a>
+                </li>
+                <li class="toctree-l4"><a class="reference internal" href="../tools/isocreator/cmdline/scriptref.html">Administration Script Reference</a>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/regcpl.html">Panneau de contrôle du registre d'image</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/servicemgr.html">Gestionnaire de services système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tools/envvarmgr.html">Gestionnaire de variables d'environnement système</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Fichiers de réponse sans assistance</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unattend.html">Aperçu</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_man.html">Gestionnaire de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_create.html">Créateur de fichiers de réponse sans assistance</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../unattend/unatt_apply.html">Application des fichiers de réponse sans assistance</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Outils externes</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Création de vos thèmes</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#utilisation">Utilisation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#installer-le-theme">Installer le thème</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#execution-sur-danciennes-versions-de-windows">Exécution sur d'anciennes versions de Windows</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#format-du-theme">Format du thème</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#historique-du-format">Historique du format</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="dynaviewer.html">Affichage des journaux de diagnostic</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="sse.html">Creating your starter scripts</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Menu de navigation sur mobile">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DISMTools Help Documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Documents"></a></li>
+          <li class="breadcrumb-item">Outils</li>
+          <li class="breadcrumb-item">Outils externes</li>
+      <li class="breadcrumb-item active">Création de vos thèmes</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="concepteur-de-themes-dismtools">Concepteur de thèmes DISMTools</h1>
+<p>Le Concepteur de thèmes DISMTools est un outil pour créer et éditer des thèmes. Vous pouvez y accéder depuis :</p>
+<ul>
+<li><code>Tools &gt; Options &gt; Personalization</code> puis cliquez sur "Design your themes"</li>
+<li>Exécuter <code>DT_ThemeDesigner.exe</code> dans <code>&lt;program directory&gt;\tools\ThemeDesigner</code></li>
+</ul>
+<p>Vous verrez cette fenêtre :</p>
+<p align="center">
+    <img src="/res/img_tasks/exttools/themedesigner/ThemeDesigner.png" />
+</p>
+
+<h2 id="utilisation">Utilisation</h2>
+<p>Au démarrage du Concepteur de thèmes, vous pouvez créer, ouvrir et enregistrer des thèmes à l'aide des icônes de la barre d'outils.</p>
+<p>Commencez par choisir un nom pour le thème (par exemple, "The Color of Passion" pour une palette rouge). Puis définissez les couleurs, regroupées en :</p>
+<ul>
+<li><strong>Couleurs d'arrière-plan (sections extérieure et intérieure)</strong></li>
+<li><strong>Couleur de premier plan (foreground)</strong></li>
+<li><strong>Couleurs d'accent</strong> (actuellement 4 couleurs d'accent prises en charge)</li>
+</ul>
+<p>Si vous créez un thème sombre, cochez <strong>DISMTools should use dark mode glyphs</strong> pour que les icônes et glyphes soient visibles.</p>
+<p>Pour modifier les couleurs, cliquez sur "Change" à côté des aperçus ; une prévisualisation en temps réel s'affichera. Si le résultat vous convient, cliquez sur "Save".</p>
+<h2 id="installer-le-theme">Installer le thème</h2>
+<p>Copiez le fichier de thème dans <code>&lt;program directory&gt;\bin\themes</code> et redémarrez l'application. Le thème apparaîtra dans la liste de personnalisation ; sélectionnez le mode (clair/sombre) approprié.</p>
+<p align="center">
+    <img src="/res/img_tasks/exttools/themedesigner/ThemeDesigner_SetCustomTheme.png" />
+</p>
+
+<p>Profitez de votre nouveau thème !</p>
+<p align="center">
+    <img src="/res/img_tasks/exttools/themedesigner/ThemeDesigner_CustomTheme.png" />
+</p>
+
+<p><strong>REMARQUE :</strong> les thèmes créés ne fonctionnent pas dans DISMTools 0.6.2 et versions antérieures en raison de l'absence du moteur de thèmes.</p>
+<h2 id="execution-sur-danciennes-versions-de-windows">Exécution sur d'anciennes versions de Windows</h2>
+<p>DISMTools inclut deux versions du Concepteur de thèmes ciblant différents frameworks :</p>
+<ul>
+<li>Version principale : .NET 4.8 (Windows 7 SP1+ sauf Windows 10 1507/1511)</li>
+<li>Version alternative : .NET 2 (fonctionne sur Windows 98 SE)</li>
+</ul>
+<p align="center">
+    <img src="/res/img_tasks/exttools/themedesigner/ThemeDesigner_Win9x.png" />
+</p>
+
+<h2 id="format-du-theme">Format du thème</h2>
+<p>Les thèmes sont stockés dans des fichiers INI modifiables. Exemple :</p>
+<pre><code class="language-ini">[Theme Information]
+Name=&quot;Example Theme&quot;
+
+[Theme Colors]
+IsDark=0 ; 1 pour mode sombre, 0 pour clair
+BackgroundColor=&quot;#abcdef&quot;
+SectionBackgroundColor=&quot;#abcdef&quot;
+ForegroundColor=&quot;#000000&quot;
+AccentColor1=&quot;#143A10&quot;
+AccentColor2=&quot;#246B1C&quot;
+AccentColor3=&quot;#057F1A&quot;
+AccentColor4=&quot;#005522&quot;
+</code></pre>
+<p>Sur Windows 9X, des artefacts peuvent apparaître lors de l'ouverture de fichiers UTF-8 dans des éditeurs ne supportant que l'ASCII. Les valeurs de couleur sont en hex RGB ; pas de support alpha.</p>
+<p>Pour les éléments désactivés, le moteur calcule une couleur inactive en fonction de la couleur de premier plan selon ce critère :</p>
+<ol>
+<li>
+<p>Déterminer si la couleur est claire ou sombre avec la formule :</p>
+<p>
+<script type="math/tex; mode=display"> (Rouge \times 0.299 + Vert \times 0.587 + Bleu \times 0.114) \geq 128 </script>
+</p>
+<ul>
+<li>Si la couleur est claire, on utilise un facteur 0.7 pour calculer la couleur inactive</li>
+<li>Si la couleur est sombre, on utilise un facteur 1.3 et on évite tout débordement en limitant la valeur à 255</li>
+</ul>
+</li>
+<li>
+<p>La couleur inactive est créée en conservant le canal alpha d'origine et en appliquant la valeur calculée aux canaux R/G/B</p>
+</li>
+</ol>
+<p>Les thèmes ne persistent pas toujours après les mises à jour : sauvegardez-les et réinstallez-les si nécessaire. Le format peut évoluer.</p>
+<h3 id="historique-du-format">Historique du format</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Version</th>
+<th style="text-align: center;">Utilisé par les versions DISMTools</th>
+<th>Remarques</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">0.7</td>
+<td>Version initiale</td>
+</tr>
+</tbody>
+</table>
+<p>Utilisez ce tableau pour suivre les modifications du format.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Générée avec <a href="https://www.mkdocs.org/">MkDocs</a> avec un <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a> fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../unattend/unatt_apply.html" style="color: #fcfcfc">&laquo; Précédent</a></span>
+    
+    
+      <span><a href="dynaviewer.html" style="color: #fcfcfc">Suivant &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(false);
+        });
+    </script>
+
+</body>
+</html>

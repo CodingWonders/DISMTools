@@ -205,7 +205,7 @@ Public Class Options
         If MainForm.VolatileMode Then
             MainForm.SaveDTSettings()
         End If
-        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.imgVersionInfo)
+        If MainForm.IsImageMounted Then MainForm.DetectVersions(FileVersionInfo.GetVersionInfo(MainForm.DismExe), MainForm.CurrentImage.ImageVersion)
         MainForm.SkipQuestions = CheckBox14.Checked
         MainForm.AutoCompleteInfo(0) = CheckBox15.Checked
         MainForm.AutoCompleteInfo(1) = CheckBox16.Checked
@@ -218,6 +218,11 @@ Public Class Options
         MainForm.TimeLabel.Visible = CheckBox21.Checked
 
         MainForm.SearchEngineName = ComboBox7.SelectedItem
+        If SearchEngineHelper.GetAllSearchEngines().ElementAt(ComboBox7.SelectedIndex).AIPermission > ComboBox9.SelectedIndex Then
+            MainForm.SearchEngineAITolerance = SearchEngineHelper.GetAllSearchEngines().ElementAt(ComboBox7.SelectedIndex).AIPermission
+        End If
+
+        MainForm.AppxDisplayNameFormatOnRemoval = ComboBox8.SelectedIndex
     End Sub
 
     Sub GiveErrorExplanation(ErrorCode As Integer)
@@ -1622,6 +1627,10 @@ Public Class Options
         ComboBox6.ForeColor = CurrentTheme.ForegroundColor
         ComboBox7.BackColor = CurrentTheme.SectionBackgroundColor
         ComboBox7.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox8.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox8.ForeColor = CurrentTheme.ForegroundColor
+        ComboBox9.BackColor = CurrentTheme.SectionBackgroundColor
+        ComboBox9.ForeColor = CurrentTheme.ForegroundColor
         DarkThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
         DarkThemesCB.ForeColor = CurrentTheme.ForegroundColor
         LightThemesCB.BackColor = CurrentTheme.SectionBackgroundColor
@@ -1687,8 +1696,8 @@ Public Class Options
 
         End Try
         CheckBox11.Enabled = If(DetectFileAssociations(), False, True)
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         If Not File.Exists(Application.StartupPath & "\portable") Then
             Panel2.Enabled = False
             Panel3.Visible = True
@@ -1698,6 +1707,10 @@ Public Class Options
         End If
         ChangeSections(SectionNum)
         FlowLayoutPanel1.BackColor = Win10Title.BackColor
+
+        If SplitContainer1.SplitterDistance = 256 Then
+            SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
+        End If
     End Sub
 
     Sub GetSystemFonts()
@@ -1822,7 +1835,10 @@ Public Class Options
         CheckBox21.Checked = MainForm.ShowDateAndTime
         CheckBox23.Checked = Not MainForm.NoNTSamMappings
 
+        ComboBox9.SelectedIndex = MainForm.SearchEngineAITolerance      ' This goes first because we need to configure the tolerance; otherwise we get a dialog on launch
         ComboBox7.SelectedItem = MainForm.SearchEngineName
+
+        ComboBox8.SelectedIndex = MainForm.AppxDisplayNameFormatOnRemoval
     End Sub
 
     Private Sub ComboBox5_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox5.SelectedIndexChanged
@@ -1924,11 +1940,11 @@ Public Class Options
             Exit Sub
         End If
         DynaLog.LogMessage("Showing component information...")
-        DismComponents.ShowDialog()
+        DismComponents.ShowDialog(Me)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        DismOFD.ShowDialog()
+        DismOFD.ShowDialog(Me)
     End Sub
 
     Private Sub DismOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles DismOFD.FileOk
@@ -1946,7 +1962,7 @@ Public Class Options
     End Sub
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
-        LogSFD.ShowDialog()
+        LogSFD.ShowDialog(Me)
     End Sub
 
     Private Sub LogSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles LogSFD.FileOk
@@ -1955,7 +1971,7 @@ Public Class Options
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        ScratchFBD.ShowDialog()
+        ScratchFBD.ShowDialog(Me)
         If DialogResult.OK And ScratchFBD.SelectedPath <> "" Then
             TextBox3.Text = ScratchFBD.SelectedPath
         End If
@@ -2681,7 +2697,7 @@ Public Class Options
     End Sub
 
     Private Sub Button10_Click(sender As Object, e As EventArgs) Handles Button10.Click
-        BGProcsAdvSettings.ShowDialog()
+        BGProcsAdvSettings.ShowDialog(Me)
     End Sub
 
     Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
@@ -2734,7 +2750,7 @@ Public Class Options
 
     Private Sub PrefReset_Click(sender As Object, e As EventArgs) Handles PrefReset.Click
         DynaLog.LogMessage("Preparing to reset settings... It will be done if the user wants to do so")
-        SettingsResetDlg.ShowDialog()
+        SettingsResetDlg.ShowDialog(Me)
         If SettingsResetDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("Proceeding to reset settings - User accepted the question.")
             MainForm.ResetDTSettings()
@@ -3191,7 +3207,7 @@ Public Class Options
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
-        EditorOFD.ShowDialog()
+        EditorOFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorOFD.FileOk
@@ -3204,7 +3220,69 @@ Public Class Options
 
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         If File.Exists(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe")) Then
-            Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"))
+            Process.Start(Path.Combine(Application.StartupPath, "tools", "ThemeDesigner", "DT_ThemeDesigner.exe"),
+                          String.Format("/userdata={0}", ControlChars.Quote & Path.Combine(Application.StartupPath, "userdata", "themes") & ControlChars.Quote))
         End If
+    End Sub
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim qhMessage As String = String.Format("DISMTools will enable and/or disable certain features if they are not compatible with either the specified DISM executable, or the current Windows image, or both.{0}{0}" &
+                                                "For instance, if DISMTools detects that you are working with either a Windows 7 image, or with a Windows 7 version of DISM, or both; it will disable all features related to AppX package " &
+                                                "and capability servicing because they are incompatible with the target platform and the tooling used.{0}{0}" &
+                                                "DISMTools can also disable certain features based on other parameters of the Windows image you are servicing, such as the edition. This usually happens " &
+                                                "with Windows PE images.", Environment.NewLine)
+        ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub ComboBox8_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox8.SelectedIndexChanged
+        Dim exampleDisplayName As String = "UbisoftEntertainment.RaymanJungleRun",
+            exampleFriendlyDisplayName As String = "Rayman Jungle Run"
+
+        Select Case ComboBox8.SelectedIndex
+            Case 0
+                Label75.Text = exampleDisplayName
+            Case 1
+                Label75.Text = String.Format("{0} ({1})", exampleDisplayName, exampleFriendlyDisplayName)
+            Case 2
+                Label75.Text = exampleFriendlyDisplayName
+        End Select
+    End Sub
+
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+        Dim qhMessage As String = String.Format("AppX package display names are a portion of package family names that don't contain package-specific application information, such as architectures, versions, or the per-publisher hash.{0}{0}" &
+                                                "AppX package {1}friendly display names{1} are the names that you see when looking at them in your Start menu. These are derived from either application identity information in an application's manifest, " &
+                                                "or from embedded strings in an application's resources file (resources.pri).{0}{0}" &
+                                                "If DISMTools can't get the friendly display name, it will display the application's display name.", Environment.NewLine, Quote)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub ComboBox7_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox7.SelectedIndexChanged
+        If SearchEngineHelper.GetAllSearchEngines().ElementAt(ComboBox7.SelectedIndex).AIPermission > ComboBox9.SelectedIndex Then
+            ' The user has selected a search engine with a higher AI tolerance level.
+            If MessageBox.Show(String.Format("The selected search engine, {1}{2}{1}, exceeds the current AI tolerance setting, {1}{3}{1}. " &
+                                             "If you continue with this search engine, AI tolerance will be increased after applying the settings.{0}{0}" &
+                                             "If you decide not to continue with this search engine, DISMTools will use the first search engine that stays " &
+                                             "within tolerance boundaries.{0}{0}" &
+                                             "Do you want to continue with this search engine?", Environment.NewLine, Quote, ComboBox7.SelectedItem, ComboBox9.SelectedItem),
+                                         "AI Tolerance Exceeded", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+                ComboBox7.SelectedItem = SearchEngineHelper.GetAllSearchEngines().First(Function(engine) engine.AIPermission = ComboBox9.SelectedIndex).Name
+            End If
+        End If
+    End Sub
+
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+        Dim qhMessage As String = String.Format("When specifying search engine settings, you can specify the amount of tolerance of artificial intelligence (AI) features in a search engine.{0}{0}" &
+                                                "- {1}Turn off as many AI features as possible{1} will let you pick from a selection of search engines that have AI features disabled, or not implemented, by default{0}" &
+                                                "- {1}Let me control the AI features in my search engine{1} will let you pick from the former selection, plus search engines that do have AI features turned on by default, but configured via URL parameters or other engine settings{0}" &
+                                                "- {1}Turn on as many AI features as possible{1} will let you pick from all available search engines, including those that are based on AI or have dedicated modes for AI that are being advertised too much.{0}{0}" &
+                                                "Normally, the second option is what you can go with, as it gives you greater control. If you prefer a more privacy-focused experience, you can turn these features off.", Environment.NewLine, Quote)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
+    End Sub
+
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        Dim qhMessage As String = String.Format("Background processes allow DISMTools to get information about the Windows image that you are working on and let you perform the majority of tasks. " &
+                                                "Examples of such information are the operating system packages, or features in a Windows image.{0}{0}" &
+                                                "These processes are not just run when getting information about image files, but when managing online, or offline, installations as well.", Environment.NewLine)
+        QuickHelpModule.ShowQuickHelp(qhMessage)
     End Sub
 End Class

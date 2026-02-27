@@ -91,8 +91,8 @@ Public Class ExceptionForm
         ForeColor = CurrentTheme.ForegroundColor
         ErrorText.BackColor = CurrentTheme.BackgroundColor
         ErrorText.ForeColor = CurrentTheme.ForegroundColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         Try
             Dim data As New DataObject()
             data.SetText(ErrorText.Text, TextDataFormat.Text)

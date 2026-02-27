@@ -53,6 +53,7 @@ Partial Class ImgMount
         Me.Label11 = New System.Windows.Forms.Label()
         Me.FileSpecDialog = New System.Windows.Forms.OpenFileDialog()
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
+        Me.IsoExtractorBW = New System.ComponentModel.BackgroundWorker()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -157,6 +158,8 @@ Partial Class ImgMount
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoEllipsis = True
         Me.Label4.Location = New System.Drawing.Point(16, 58)
         Me.Label4.Name = "Label4"
@@ -196,6 +199,8 @@ Partial Class ImgMount
         '
         'Label3
         '
+        Me.Label3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label3.Location = New System.Drawing.Point(13, 28)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(131, 13)
@@ -234,6 +239,8 @@ Partial Class ImgMount
         '
         'Label6
         '
+        Me.Label6.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.Location = New System.Drawing.Point(13, 28)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(131, 13)
@@ -329,6 +336,8 @@ Partial Class ImgMount
         '
         'Label7
         '
+        Me.Label7.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.Location = New System.Drawing.Point(13, 27)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(131, 13)
@@ -347,13 +356,18 @@ Partial Class ImgMount
         '
         'FileSpecDialog
         '
-        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx;"
+        Me.FileSpecDialog.Filter = "WIM files|*.wim|ESD files|*.esd|SWM files|*.swm|VHD(X) files|*.vhd;*.vhdx|ISO fil" & _
+    "es|*.iso"
+        '
+        'IsoExtractorBW
+        '
+        Me.IsoExtractorBW.WorkerReportsProgress = True
         '
         'ImgMount
         '
         Me.AcceptButton = Me.OK_Button
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CancelButton = Me.Cancel_Button
         Me.ClientSize = New System.Drawing.Size(784, 441)
         Me.Controls.Add(Me.GroupBox3)
@@ -417,5 +431,6 @@ Partial Class ImgMount
     Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Button3 As System.Windows.Forms.Button
+    Friend WithEvents IsoExtractorBW As System.ComponentModel.BackgroundWorker
 
 End Class

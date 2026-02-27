@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
 Imports DISMTools.Utilities
+Imports Microsoft.Dism
 
 Public Class RemProvAppxPackage
     Implements IImageTaskDialog
@@ -68,47 +69,43 @@ Public Class RemProvAppxPackage
                 ' If the image contains a Server Core/Nano Server installation, detect whether the Desktop Experience
                 ' feature is installed
                 DynaLog.LogMessage("Detecting conditions imposed by the Windows image...")
-                If MainForm.imgInstType <> "" And (MainForm.imgInstType.Contains("Nano") Or MainForm.imgInstType.Contains("Core")) Then
+                If MainForm.CurrentImage.ImageInstallationType <> "" And (MainForm.CurrentImage.ImageInstallationType.Contains("Nano") Or MainForm.CurrentImage.ImageInstallationType.Contains("Core")) Then
                     DynaLog.LogMessage("Target Windows image contains Server Core SKU. Detecting state of Desktop Experience feature...")
                     ' Go through every feature and find Desktop Experience
-                    If MainForm.imgFeatureNames.Count > 0 Then
-                        For x = 0 To Array.LastIndexOf(MainForm.imgFeatureNames, MainForm.imgFeatureNames.Last)
-                            If MainForm.imgFeatureNames(x) = "DesktopExperience" Then
-                                ' Detect the state of the feature
-                                If MainForm.imgFeatureState(x) <> "Enabled" Then
-                                    DynaLog.LogMessage("Desktop Experience has been detected as a disabled feature.")
-                                    Dim msg As String = ""
-                                    ' Display incompatibility
-                                    Select Case MainForm.Language
-                                        Case 0
-                                            Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                                                Case "ENU", "ENG"
-                                                    msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
-                                                Case "ESN"
-                                                    msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
-                                                Case "FRA"
-                                                    msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
-                                                Case "PTB", "PTG"
-                                                    msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
-                                                Case "ITA"
-                                                    msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
-                                            End Select
-                                        Case 1
+                    If MainForm.CurrentImage.ImageFeatures.Count > 0 Then
+                        Dim DesktopExperienceEnabled As Boolean = MainForm.CurrentImage.ImageFeatures.Any(Function(feature) feature.FeatureName = "DesktopExperience" AndAlso feature.State = DismPackageFeatureState.Installed)
+                        If Not DesktopExperienceEnabled Then
+                            DynaLog.LogMessage("Desktop Experience has been detected as a disabled feature.")
+                            Dim msg As String = ""
+                            ' Display incompatibility
+                            Select Case MainForm.Language
+                                Case 0
+                                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
+                                        Case "ENU", "ENG"
                                             msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
-                                        Case 2
+                                        Case "ESN"
                                             msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
-                                        Case 3
+                                        Case "FRA"
                                             msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
-                                        Case 4
+                                        Case "PTB", "PTG"
                                             msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
-                                        Case 5
+                                        Case "ITA"
                                             msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
                                     End Select
-                                    MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
-                                    Exit Sub
-                                End If
-                            End If
-                        Next
+                                Case 1
+                                    msg = "The Desktop Experience (DesktopExperience) feature needs to be enabled in order to remove AppX packages in Windows Server Core/Nano Server images." & CrLf & CrLf & "Enable this feature, boot to the image, and try again."
+                                Case 2
+                                    msg = "La característica Experiencia del Escritorio (DesktopExperience) debe estar habilitada para eliminar paquetes AppX en imágenes Windows Server Core/Nano Server." & CrLf & CrLf & "Habilite esta característica, arranque la imagen, e inténtelo de nuevo."
+                                Case 3
+                                    msg = "La caractéristique Expérience du bureau (DesktopExperience) doit être activée afin de supprimer les paquets AppX dans les images Windows Server Core/Nano Server." & CrLf & CrLf & "Activez cette caractéristique, démarrez sur l'image et réessayez."
+                                Case 4
+                                    msg = "A caraterística Área de Trabalho (DesktopExperience) tem de ser ativada para remover pacotes AppX nas imagens do Windows Server Core/Nano Server." & CrLf & CrLf & "Ative esta caraterística, arranque para a imagem e tente novamente."
+                                Case 5
+                                    msg = "Le caratteristiche di Esperienza del Desktop (DesktopExperience) devono essere abilitate per rimuovere i pacchetti AppX nelle immagini di Windows Server Core/Nano Server." & CrLf & CrLf & "Abilitate questa caratteristica, avviate l'immagine e riprovate"
+                            End Select
+                            MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                            Exit Sub
+                        End If
                     End If
                 End If
             End If
@@ -126,8 +123,10 @@ Public Class RemProvAppxPackage
     End Sub
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
+        AppxHelper.ClearRootPaths()
+        AppxHelper.SetRootPaths(MainForm.MountDir)
         DynaLog.LogMessage("Checking edition and version information for any unmet requirements...")
-        If MainForm.imgEdition.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
+        If MainForm.CurrentImage.ImageEditionId.Equals("WindowsPE", StringComparison.OrdinalIgnoreCase) Or Not MainForm.IsWindows8OrHigher(MainForm.MountDir & "\Windows\system32\ntoskrnl.exe") Then
             DynaLog.LogMessage("The image is not supported")
             Select Case MainForm.Language
                 Case 0
@@ -164,40 +163,30 @@ Public Class RemProvAppxPackage
             Return False
         End If
         DynaLog.LogMessage("Adding AppX packages to arrays...")
-        If MainForm.imgAppxPackageNames.Count > MainForm.imgAppxPackages.Count Then
-            Try
-                For x = 0 To Array.LastIndexOf(MainForm.imgAppxPackageNames, MainForm.imgAppxPackageNames.Last)
-                    If MainForm.imgAppxPackageNames(x) = "" Or MainForm.imgAppxPackageNames(x) = "Nothing" Then
-                        Continue For
-                    Else
-                        If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x)) Then
-                            If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & MainForm.imgAppxPackageNames(x), FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "No"}))
-                            Else
-                                ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "Yes"}))
-                            End If
-                        Else
-                            ListView1.Items.Add(New ListViewItem(New String() {MainForm.imgAppxPackageNames(x), MainForm.imgAppxDisplayNames(x), MainForm.imgAppxArchitectures(x), MainForm.imgAppxResourceIds(x), MainForm.imgAppxVersions(x), "No"}))
-                        End If
-                    End If
-                Next
-            Catch ex As Exception
-                ' We should have enough with the entries already added.
-            End Try
+        If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages_Backup.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageFullName,
+                                                                                                                                              String.Format("{0}{1}", If(MainForm.AppxDisplayNameFormatOnRemoval < 2, appxPackage.PackageName, ""),
+                                                                                                                                                            If(MainForm.AppxDisplayNameFormatOnRemoval > 0,
+                                                                                                                                                               If(MainForm.AppxDisplayNameFormatOnRemoval < 2,
+                                                                                                                                                                  " (" & AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageFullName, appxPackage.PackageName) & ")",
+                                                                                                                                                                  AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageFullName, appxPackage.PackageName)
+                                                                                                                                               ), "")),
+                                                                                                                                              Casters.CastDismArchitecture(appxPackage.PackageArchitecture),
+                                                                                                                                              appxPackage.PackageResourceId,
+                                                                                                                                              appxPackage.PackageVersion.ToString(),
+                                                                                                                                              appxPackage.GetLocalizedRegistrationStatus(MainForm.MountDir, MainForm.Language)})).ToArray())
         Else
-            For Each imgAppxPackage In MainForm.imgAppxPackages
-                Dim isRegistered As Boolean
-                If Directory.Exists(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName) Then
-                    If My.Computer.FileSystem.GetFiles(MainForm.MountDir & "\ProgramData\Microsoft\Windows\AppRepository\Packages\" & imgAppxPackage.PackageName, FileIO.SearchOption.SearchTopLevelOnly, "*.pckgdep").Count = 0 Then
-                        isRegistered = False
-                    Else
-                        isRegistered = True
-                    End If
-                Else
-                    isRegistered = False
-                End If
-                ListView1.Items.Add(New ListViewItem(New String() {imgAppxPackage.PackageName, imgAppxPackage.DisplayName, Casters.CastDismArchitecture(imgAppxPackage.Architecture), imgAppxPackage.ResourceId, imgAppxPackage.Version.ToString(), If(isRegistered, "Yes", "No")}))
-            Next
+            ListView1.Items.AddRange(MainForm.CurrentImage.ImageAppxPackages.Select(Function(appxPackage) New ListViewItem(New String() {appxPackage.PackageName,
+                                                                                                                                         String.Format("{0}{1}", If(MainForm.AppxDisplayNameFormatOnRemoval < 2, appxPackage.PackageName, ""),
+                                                                                                                                                       If(MainForm.AppxDisplayNameFormatOnRemoval > 0,
+                                                                                                                                                          If(MainForm.AppxDisplayNameFormatOnRemoval < 2,
+                                                                                                                                                             " (" & AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageName, appxPackage.DisplayName) & ")",
+                                                                                                                                                             AppxHelper.GetPackageDisplayName(MainForm.MountDir, appxPackage.PackageName, appxPackage.DisplayName)
+                                                                                                                                        ), "")),
+                                                                                                                                         Casters.CastDismArchitecture(appxPackage.Architecture),
+                                                                                                                                         appxPackage.ResourceId,
+                                                                                                                                         appxPackage.Version.ToString(),
+                                                                                                                                         If(IsPackageRegistered(MainForm.MountDir, appxPackage), "Yes", "No")})).ToArray())
         End If
         Return True
     End Function
@@ -371,8 +360,15 @@ Public Class RemProvAppxPackage
         ListView1.BackColor = CurrentTheme.SectionBackgroundColor
         ListView1.ForeColor = ForeColor
         MainForm.ViewPackageDirectoryToolStripMenuItem.Image = GetGlyphResource("openfile")
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(243)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(202)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(74)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(74)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(80)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(130)
     End Sub
 
     Private Sub ListView1_MouseClick(sender As Object, e As MouseEventArgs) Handles ListView1.MouseClick
@@ -388,31 +384,58 @@ Public Class RemProvAppxPackage
         If ListView1.SelectedItems.Count = 1 Then
             MainForm.ResViewTSMI.Visible = True
             DynaLog.LogMessage("Updating context menu items...")
+            Dim selectedAppx
+            If MainForm.CurrentImage.ImageAppxPackages Is Nothing OrElse MainForm.CurrentImage.ImageAppxPackages_Backup.Count > MainForm.CurrentImage.ImageAppxPackages.Count Then
+                selectedAppx = MainForm.CurrentImage.ImageAppxPackages_Backup.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            Else
+                selectedAppx = MainForm.CurrentImage.ImageAppxPackages.ElementAtOrDefault(ListView1.FocusedItem.Index)
+            End If
+
+            If selectedAppx Is Nothing Then
+                MainForm.ResViewTSMI.Text = ""
+                MainForm.ResViewTSMI.Visible = False
+            End If
+
+            Dim friendlyDisplayName As String = ""
+            If TypeOf (selectedAppx) Is ImageAppxPackage Then
+                friendlyDisplayName = AppxHelper.GetPackageDisplayName(MainForm.MountDir, CType(selectedAppx, ImageAppxPackage).PackageFullName, CType(selectedAppx, ImageAppxPackage).PackageName)
+            ElseIf TypeOf (selectedAppx) Is DismAppxPackage Then
+                friendlyDisplayName = AppxHelper.GetPackageDisplayName(MainForm.MountDir, CType(selectedAppx, DismAppxPackage).PackageName, CType(selectedAppx, DismAppxPackage).DisplayName)
+            End If
+
+            If friendlyDisplayName.StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase) Then
+                If TypeOf (selectedAppx) Is ImageAppxPackage Then
+                    friendlyDisplayName = CType(selectedAppx, ImageAppxPackage).PackageName
+                ElseIf TypeOf (selectedAppx) Is DismAppxPackage Then
+                    friendlyDisplayName = CType(selectedAppx, DismAppxPackage).DisplayName
+                End If
+            End If
+
             Try
                 Select Case MainForm.Language
                     Case 0
                         Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
                             Case "ENU", "ENG"
-                                MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "View resources of " & friendlyDisplayName
                             Case "ESN"
-                                MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                             Case "FRA"
-                                MainForm.ResViewTSMI.Text = "Voir les ressources de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Voir les ressources de " & friendlyDisplayName
                             Case "PTB", "PTG"
-                                MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                             Case "ITA"
-                                MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                                MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & friendlyDisplayName
                         End Select
                     Case 1
-                        MainForm.ResViewTSMI.Text = "View resources of " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "View resources of " & friendlyDisplayName
                     Case 2
-                        MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                     Case 3
-                        MainForm.ResViewTSMI.Text = "Voir les ressources de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Voir les ressources de " & friendlyDisplayName
                     Case 4
-                        MainForm.ResViewTSMI.Text = "Ver recursos de " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Ver recursos de " & friendlyDisplayName
                     Case 5
-                        MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & If(MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()).ToString().StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase), ListView1.FocusedItem.SubItems(1).Text, MainForm.GetPackageDisplayName(ListView1.FocusedItem.SubItems(0).Text, ListView1.FocusedItem.SubItems(1).Text.Replace(" (Cortana)", "").Trim()))
+                        MainForm.ResViewTSMI.Text = "Visualizza le risorse di " & friendlyDisplayName
                 End Select
             Catch ex As Exception
                 MainForm.ResViewTSMI.Text = ""
@@ -425,6 +448,6 @@ Public Class RemProvAppxPackage
         HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\appx\remove_provisionedappxpackage.html#questions")
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog()
+        HelpBrowserForm.ShowDialog(Me)
     End Sub
 End Class

@@ -19,7 +19,7 @@ Public Class NewUnattendWiz
 
     Dim DotNetRuntimeSupported As Boolean
     Dim PreferSelfContained As Boolean
-    Const UnattendGenReleaseTag As String = "25123"
+    Const UnattendGenReleaseTag As String = "2623"
 
     ' Regional Settings Page
     Dim ImageLanguages As New List(Of ImageLanguage)
@@ -768,8 +768,8 @@ Public Class NewUnattendWiz
         NumericUpDown7.ForeColor = ForeColor
         NumericUpDown8.ForeColor = ForeColor
         GroupBox1.ForeColor = ForeColor
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
 
         SidePanel.BackColor = BackColor
         StepsTreeView.ForeColor = ForeColor
@@ -1127,7 +1127,7 @@ Public Class NewUnattendWiz
                 SaveFileDialog1.InitialDirectory = ""
             End If
             SaveFileDialog1.FileName = "autounattend_" & Now.ToString().Replace("/", "-").Trim().Replace(":", "-").Trim() & ".xml"
-            SaveFileDialog1.ShowDialog()
+            SaveFileDialog1.ShowDialog(Me)
             UnattendGeneratorBW.RunWorkerAsync()
         ElseIf CurrentWizardPage.WizardPage = UnattendedWizardPage.Page.ReviewPage Then
             SaveTarget = ""
@@ -1649,7 +1649,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
-        OpenFileDialog1.ShowDialog()
+        OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -1975,6 +1975,13 @@ Public Class NewUnattendWiz
                 UnattendGen.StartInfo.WorkingDirectory = Path.Combine(Application.StartupPath, "Tools\UnattendGen\win-x86")
             End If
         End If
+
+        If Not File.Exists(UnattendGen.StartInfo.FileName) Then
+            DynaLog.LogMessage("UnattendGen binary does not exist. Cancelling...")
+            e.Cancel = True
+            Exit Sub
+        End If
+
         UnattendGen.StartInfo.Arguments = "--target=" & Quote & SaveTarget & Quote
         If Debugger.IsAttached Then
             DynaLog.LogMessage("A debugger has been attached. Telling UnattendGen to show debug output...")
@@ -2441,7 +2448,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
-        EditorModeOFD.ShowDialog()
+        EditorModeOFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorModeOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeOFD.FileOk
@@ -2456,7 +2463,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
-        EditorModeSFD.ShowDialog()
+        EditorModeSFD.ShowDialog(Me)
     End Sub
 
     Private Sub EditorModeSFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles EditorModeSFD.FileOk
@@ -2474,7 +2481,7 @@ Public Class NewUnattendWiz
         HelpBrowserForm.WebBrowser1.Navigate(Application.StartupPath & "\docs\img_tasks\unattend\unatt_create.html")
         HelpBrowserForm.MinimizeBox = False
         HelpBrowserForm.MaximizeBox = False
-        HelpBrowserForm.ShowDialog()
+        HelpBrowserForm.ShowDialog(Me)
     End Sub
 
     Private Sub NewUnattendWiz_SizeChanged(sender As Object, e As EventArgs) Handles MyBase.SizeChanged
@@ -2653,7 +2660,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        ScriptEditorOFD.ShowDialog()
+        ScriptEditorOFD.ShowDialog(Me)
     End Sub
 
     Private Sub ScriptEditorOFD_FileOk(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles ScriptEditorOFD.FileOk
@@ -2920,7 +2927,7 @@ Public Class NewUnattendWiz
 
     Private Sub LinkLabel10_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel10.LinkClicked
         DynaLog.LogMessage("Preparing to copy non-Windows UnattendGen...")
-        If CPUnattendGenFBD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If CPUnattendGenFBD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             DynaLog.LogMessage("FBD accepted. Copying non-Windows UnattendGen...")
             For Each CrossPlatformZip In Directory.GetFiles(Path.Combine(Application.StartupPath, "Tools", "UnattendGen"), "*.zip", SearchOption.TopDirectoryOnly).
                 Where(Function(zip) Path.GetFileNameWithoutExtension(zip).ToLower().Contains("linux") OrElse
@@ -3056,7 +3063,7 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button19_Click(sender As Object, e As EventArgs) Handles Button19.Click
-        OpenFileDialog2.ShowDialog()
+        OpenFileDialog2.ShowDialog(Me)
     End Sub
 
     Private Sub Button20_Click(sender As Object, e As EventArgs) Handles Button20.Click
@@ -3082,14 +3089,26 @@ Public Class NewUnattendWiz
     End Sub
 
     Private Sub Button21_Click(sender As Object, e As EventArgs) Handles Button21.Click
-        If EditionMapping.ContainsKey(MainForm.imgEdition) Then
-            ComboBox6.SelectedItem = EditionMapping(MainForm.imgEdition)
+        If MainForm.CurrentImage Is Nothing Then Exit Sub
+
+        If EditionMapping.ContainsKey(MainForm.CurrentImage.ImageEditionId) Then
+            ComboBox6.SelectedItem = EditionMapping(MainForm.CurrentImage.ImageEditionId)
         Else
-            MsgBox("There is no product key for the " & Quote & MainForm.imgEdition & Quote & " edition.", vbOKOnly + vbInformation)
+            MsgBox("There is no product key for the " & Quote & MainForm.CurrentImage.ImageEditionId & Quote & " edition.", vbOKOnly + vbInformation)
         End If
     End Sub
 
     Private Sub Button21_MouseHover(sender As Object, e As EventArgs) Handles Button21.MouseHover
         CNameTTip.Show("Click here to attempt to grab the edition of the currently loaded image. This will help you use a suitable product key for said Windows image.", sender)
+    End Sub
+
+    Private Sub Button22_Click(sender As Object, e As EventArgs) Handles Button22.Click
+        ComboBox4.SelectedItem = "Ireland"
+    End Sub
+
+    Private Sub Button22_MouseHover(sender As Object, e As EventArgs) Handles Button22.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Choose this option to automatically configure the target location to one of the countries in the European Economic Area (EEA). This will let you" & CrLf &
+                                    "configure settings in the target system that you would not be able to when using a region outside the EEA. After Setup is complete, you can reconfigure" & CrLf &
+                                    "the region to your current location.")
     End Sub
 End Class

@@ -1,7 +1,7 @@
 @echo off
 setlocal ENABLEDELAYEDEXPANSION
 title DISMTools Preinstallation Environment
-set version=0.7.2
+set version=0.7.3
 set sysdrive=%SYSTEMDRIVE%
 set debug=0
 echo DISMTools %version% - Preinstallation Environment
@@ -24,6 +24,9 @@ if !ERRORLEVEL! equ 1 (
 		powershell -command Set-ExecutionPolicy Unrestricted
 	)
 )
+if exist "%sysdrive%\ShowWatermark.ps1" (
+	start /b powershell -file "%sysdrive%\ShowWatermark.ps1"
+)
 if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 	if exist "%sysdrive%\scripts\imagecapture.bat" (
 		echo An image capture will begin now...
@@ -38,6 +41,9 @@ if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 		powershell -noprofile -file ".\pxehelpers\PXEHelpers.Startup.ps1"
 	) else if exist "%sysdrive%\cmdcons" (
 		set debug=2
+	) else if exist "%sysdrive%\changekeyb" (
+		cd /d "%sysdrive%"\
+		powershell -noprofile -file ".\ChangeKeyboardLayout.ps1"
 	)
 )
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
@@ -74,6 +80,7 @@ if %debug% lss 2 (
 	echo - To restart the system, either close this window or type "wpeutil reboot" and press ENTER
 	echo - To initialize networking, type "netinit" and press ENTER
 	echo - To show hardware and software inventory, type "inv" and press ENTER
+	echo - To change the keyboard layout, type "keyboardchange" and press ENTER
 	echo - For more Windows PE commands, type "wpeutil"
 	echo.
 	echo - To manually start the installation procedure, type "StartInstall" and press ENTER. You need a drive containing a Windows image
@@ -89,5 +96,6 @@ if %debug% lss 2 (
 	doskey StartInstall=powershell -file "%sysdrive%\StartInstall.ps1"
 	doskey StartDim=cmd /c "%sysdrive%\dimstart.bat"
 	doskey netinit=cmd /c "%sysdrive%\scripts\initializenetwork.bat"
+	doskey keyboardchange=powershell -noprofile -file "%sysdrive%\ChangeKeyboardLayout.ps1"
 	exit /b
 )

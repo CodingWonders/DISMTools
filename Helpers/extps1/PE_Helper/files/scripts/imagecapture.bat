@@ -1,5 +1,6 @@
 @echo off
 set sysdrive=%SYSTEMDRIVE%
+set _DEBUG=0
 setlocal enabledelayedexpansion
 
 :main
@@ -17,6 +18,10 @@ set scriptpath=%TEMP%\%RANDOM%.txt
 set configlistpath=%TEMP%\configlist.ini
 set wdscapturepath=%SYSTEMROOT%\system32\wdscapture.inf
 
+IF %_DEBUG% EQU 1 echo Path for diskpart script file : %scriptpath%
+IF %_DEBUG% EQU 1 echo Configuration list file (DISM): %configlistpath%
+IF %_DEBUG% EQU 1 echo Configuration list file (WDS) : %wdscapturepath%
+
 echo lis vol > %scriptpath%
 echo exi >> %scriptpath%
 
@@ -26,6 +31,8 @@ echo.
 echo - To install drivers if you don't see your drives, type "DIM"
 if exist "%SYSTEMROOT%\system32\wdscapture.exe" ( echo - To prepare a capture for a Windows Deployment Services server, type "WDS" )
 echo - To save the image to a network share, type "NET"
+echo - To perform quick disk and partition administration, type "DP"
+echo - To change the keyboard layout to use, type "KBD"
 echo.
 
 set /p sourcedrive=Please enter the letter of the volume to capture, or option to invoke: 
@@ -34,12 +41,12 @@ if not defined sourcedrive (
 	exit /b 1
 )
 
-if "%sourcedrive%" equ "DIM" (
+if /i "%sourcedrive%" equ "DIM" (
 	call :dt_dim_driver_install
 	goto :main
 )
 
-if "%sourcedrive%" equ "WDS" (
+if /i "%sourcedrive%" equ "WDS" (
 	if not exist "%SYSTEMROOT%\system32\wdscapture.exe" ( goto :main )
 	call :create_wdscapture_config_list
 	"%SYSTEMROOT%\system32\wdscapture.exe"
@@ -50,7 +57,7 @@ if "%sourcedrive%" equ "WDS" (
 	exit /b
 )
 
-if "%sourcedrive%" equ "NET" (
+if /i "%sourcedrive%" equ "NET" (
 	cls
 	echo This process will help you map a network drive to which you can save your Windows image. Keep
 	echo in mind, however, that this will NOT produce an installation image compatible with network-based
@@ -64,8 +71,11 @@ if "%sourcedrive%" equ "NET" (
 	set /p destpassword=Please enter the password: 
 
 	echo Connecting to network share...
+	IF %_DEBUG% EQU 1 echo Running net use...
 	REM for results to appear in HKCU\Network, we need to make the share persistent
 	net use * "%destip%" %destpassword% /USER:%destuser% /P:Yes
+	
+	IF %_DEBUG% EQU 1 echo net use exitcode: !errorlevel!
 
 	if !errorlevel! neq 0 (
 		echo Could not map network drive. This can happen if the computer can't contact the destination.
@@ -78,6 +88,7 @@ if "%sourcedrive%" equ "NET" (
 	REM be Z:, so we'll check
 	for /f %%a in ('reg query HKCU\Network') do (
 		for /f "tokens=3" %%b in ('reg query "HKCU\Network\%%~nxa" /v RemotePath') do (
+			IF %_DEBUG% EQU 1 echo Drive letter mapping to evaluate: %%~nxa
 			if "%%b" EQU "%destip%" (set destdrive=%%~nxa)
 		)
 	)
@@ -91,6 +102,18 @@ if "%sourcedrive%" equ "NET" (
 	goto :main
 )
 
+if /i "%sourcedrive%" equ "DP" (
+	echo Entering DiskPart...
+	diskpart
+	goto :main
+)
+
+if /i "%sourcedrive%" equ "KBD" (
+	powershell -noprofile -file "%sysdrive%\ChangeKeyboardLayout.ps1"
+	goto :main
+)
+
+if defined destdrive if %_DEBUG% equ 1 echo Destination drive already set by networking code.
 if not defined destdrive ( set /p destdrive=Please enter the letter of the volume the file will be stored on: )
 if not defined destdrive (
 	echo The letter of the volume where the image will be stored must be specified.
@@ -100,11 +123,18 @@ if not defined destdrive (
 echo.
 set /p destfile=Enter a file name for the target WIM file. Press ENTER without specifying anything to continue with a random name: 
 if not defined destfile (
+	IF %_DEBUG% EQU 1 echo Destination file path not provided. Continuing with random name.
 	set destfile=install_%RANDOM%.wim
+)
+
+REM verify if we typed the correct extension -- if not, add it
+for %%a in (%destfile%) do (
+	if /i not "%%~xa" == ".WIM" set destfile=!destfile!.wim
 )
 
 set /p imagename=Provide a custom name (without quotes) for the resulting Windows image (e.g., "My Amazing Windows installation"): 
 if not defined imagename (
+	IF %_DEBUG% EQU 1 echo Destination name not provided. Continuing with default name.
 	set imagename=Windows
 )
 
@@ -114,6 +144,12 @@ if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
 	call :sysprep_hotinstall_remove_temp_files
 )
 set dismstart=%date% %time%
+IF %_DEBUG% EQU 1 echo DISM start time: %dismstart%
+IF %_DEBUG% EQU 1 echo Launching DISM...
+IF %_DEBUG% EQU 1 echo   Destination file : %destdrive%:\%destfile%
+IF %_DEBUG% EQU 1 echo   Source directory : %sourcedrive%:\
+IF %_DEBUG% EQU 1 echo   Scratch directory: %destdrive%:\
+IF %_DEBUG% EQU 1 echo   Image Name       : %imagename%
 dism /capture-image /imagefile="%destdrive%:\%destfile%" /capturedir=%sourcedrive%:\ /scratchdir=%destdrive%:\ /name="%imagename%" /configfile="%configlistpath%" /compress=max /checkintegrity /bootable /verify
 if %ERRORLEVEL% equ 0 (
 	set succeeded=true
@@ -121,6 +157,7 @@ if %ERRORLEVEL% equ 0 (
 	set succeeded=false
 )
 set dismend=%date% %time%
+IF %_DEBUG% EQU 1 echo DISM end time: %dismend%
 echo.
 echo Capture Run RESULTS:
 echo ======================================================
@@ -140,7 +177,17 @@ exit /b
 
 :sysprep_hotinstall_remove_temp_files
 echo The capture script was invoked by the Sysprep preparation tool. Removing files...
+IF %_DEBUG% EQU 1 echo Removing current BCD entry...
 bcdedit /delete {current} /f
+IF %_DEBUG% EQU 1 echo Removing DT.BT...
+if exist "%sourcedrive%:\$DISMTOOLS.~BT" rd "%sourcedrive%:\$DISMTOOLS.~BT" /s /q >nul 2>&1
+IF %_DEBUG% EQU 1 echo Removing DT.WS...
+if exist "%sourcedrive%:\$DISMTOOLS.~WS" rd "%sourcedrive%:\$DISMTOOLS.~WS" /s /q >nul 2>&1
+IF %_DEBUG% EQU 1 echo Removing SYSPRP temp files...
+if exist "%sourcedrive%:\CWS_SYSPRP" rd "%sourcedrive%:\CWS_SYSPRP" /s /q >nul 2>&1
+IF %_DEBUG% EQU 1 echo Removing sysprep preptool completed marker...
+if exist "%sourcedrive%:\capture_completed" del "%sourcedrive%:\capture_completed" /f /q >nul 2>&1
+IF %_DEBUG% EQU 1 echo Removal complete.
 exit /b
 
 :dt_dim_driver_install
@@ -173,6 +220,8 @@ for /d %%f in (%~1:\Users\*) do (
 if exist "%SYSTEMDRIVE%\SysprepPrepTool" (
 	echo \$DISMTOOLS.~BT >> %configlistpath%
 	echo \$DISMTOOLS.~WS >> %configlistpath%
+	echo \CWS_SYSPRP >> %configlistpath%
+	echo \capture_completed >> %configlistpath%
 )
 echo. >> %configlistpath%
 echo [CompressionExclusionList] >> %configlistpath%
@@ -180,6 +229,7 @@ echo *.mp3 >> %configlistpath%
 echo *.zip >> %configlistpath%
 echo *.cab >> %configlistpath%
 echo \WINDOWS\inf\*.pnf >> %configlistpath%
+IF %_DEBUG% EQU 1 echo ConfigListFile created.
 exit /b
 
 :create_wdscapture_config_list
@@ -204,6 +254,8 @@ echo winpepge.sys >> %wdscapturepath%
 echo %%SYSTEMROOT%%\CSC >> %wdscapturepath%
 echo $DISMTOOLS.~BT >> %wdscapturepath%
 echo $DISMTOOLS.~WS >> %wdscapturepath%
+echo CWS_SYSPRP >> %wdscapturepath%
+echo capture_completed >> %wdscapturepath%
 echo. >> %wdscapturepath%
 echo [WDS] >> %wdscapturepath%
 echo UploadToWDSServer=No >> %wdscapturepath%
@@ -213,4 +265,5 @@ echo Username= >> %wdscapturepath%
 echo Password= >> %wdscapturepath%
 echo DeleteLocalWimOnSuccess=No >> %wdscapturepath%
 echo. >> %wdscapturepath%
+IF %_DEBUG% EQU 1 echo WdsCapture file created.
 exit /b

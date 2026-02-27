@@ -270,6 +270,7 @@ Public Class WimScriptEditor
         For Each fntFamily As FontFamily In FontFamily.Families
             FontFamilyTSCB.Items.Add(fntFamily.Name)
         Next
+        SplitContainer1.SplitterDistance = WindowHelper.ScaleLogical(SplitContainer1.SplitterDistance)
         InitScintilla("Consolas", 11)
         FontFamilyTSCB.SelectedItem = "Consolas"
     End Sub
@@ -590,7 +591,7 @@ Public Class WimScriptEditor
                         End Select
                         Text = titleMsg
                     Else
-                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                        If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                             File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                             ConfigListFile = WimScriptSFD.FileName
                             Select Case MainForm.Language
@@ -664,7 +665,7 @@ Public Class WimScriptEditor
                                 End Select
                                 Text = titleMsg
                             Else
-                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                                     File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                                     ConfigListFile = WimScriptSFD.FileName
                                     Select Case MainForm.Language
@@ -833,7 +834,7 @@ Public Class WimScriptEditor
                         End Select
                         Text = titleMsg
                     Else
-                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                        If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                             File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                             ConfigListFile = WimScriptSFD.FileName
                             Select Case MainForm.Language
@@ -907,7 +908,7 @@ Public Class WimScriptEditor
                                 End Select
                                 Text = titleMsg
                             Else
-                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                                     File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                                     ConfigListFile = WimScriptSFD.FileName
                                     Select Case MainForm.Language
@@ -950,12 +951,12 @@ Public Class WimScriptEditor
                 Exit Try
             End Try
         End If
-        WimScriptOFD.ShowDialog()
+        WimScriptOFD.ShowDialog(Me)
     End Sub
 
     Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
         If ConfigListFile Is Nothing Or Not File.Exists(ConfigListFile) Then
-            If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                 DynaLog.LogMessage("Saving contents to file...")
                 DynaLog.LogMessage("Destination file: " & Quote & WimScriptSFD.FileName & Quote)
                 File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
@@ -1197,7 +1198,7 @@ Public Class WimScriptEditor
         End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox1.Top + 8
-        AddListEntryDlg.ShowDialog()
+        AddListEntryDlg.ShowDialog(Me)
         If AddListEntryDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             ListView1.Items.Add(AddListEntryDlg.TextBox1.Text)
             UpdateConfigListContents()
@@ -1233,7 +1234,7 @@ Public Class WimScriptEditor
         End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox2.Top + 8
-        AddListEntryDlg.ShowDialog()
+        AddListEntryDlg.ShowDialog(Me)
         If AddListEntryDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             ListView2.Items.Add(AddListEntryDlg.TextBox1.Text)
             UpdateConfigListContents()
@@ -1269,7 +1270,7 @@ Public Class WimScriptEditor
         End Select
         AddListEntryDlg.Left = Left + ((SplitContainer1.SplitterDistance + Scintilla1.Width) / 2)
         AddListEntryDlg.Top = Top + Panel2.Top + DarkToolStrip1.Height + SplitContainer1.Top + GroupBox3.Top + 8
-        AddListEntryDlg.ShowDialog()
+        AddListEntryDlg.ShowDialog(Me)
         If AddListEntryDlg.DialogResult = Windows.Forms.DialogResult.OK Then
             ListView3.Items.Add(AddListEntryDlg.TextBox1.Text)
             UpdateConfigListContents()
@@ -1417,7 +1418,7 @@ Public Class WimScriptEditor
                         End Select
                         Text = titleMsg
                     Else
-                        If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                        If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                             File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                             ConfigListFile = WimScriptSFD.FileName
                             Select Case MainForm.Language
@@ -1491,7 +1492,7 @@ Public Class WimScriptEditor
                                 End Select
                                 Text = titleMsg
                             Else
-                                If WimScriptSFD.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                                If WimScriptSFD.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                                     File.WriteAllText(WimScriptSFD.FileName, Scintilla1.Text, ASCII)
                                     ConfigListFile = WimScriptSFD.FileName
                                     Select Case MainForm.Language
@@ -1538,13 +1539,13 @@ Public Class WimScriptEditor
 
     Private Sub WimScriptEditor_VisibleChanged(sender As Object, e As EventArgs) Handles MyBase.VisibleChanged
         If Visible Then
-            Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-            If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+            Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+            WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
         End If
     End Sub
 
     Private Sub NoOneDriveToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NoOneDriveToolStripMenuItem.Click
-        If OneDriveExclusionDlg.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If OneDriveExclusionDlg.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             If OneDriveExclusionDlg.ExcludedFolders.Count > 0 Then
                 For Each ExcludedFolder In OneDriveExclusionDlg.ExcludedFolders
                     ListView1.Items.Add(If(ExcludedFolder.Contains(" "), Quote & ExcludedFolder & Quote, ExcludedFolder))

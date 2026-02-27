@@ -44,6 +44,13 @@ Public Class ImportDrivers
                         MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
                         Exit Sub
                     End If
+                Case 1
+                    DynaLog.LogMessage("Validating import source...")
+                    If MainForm.OnlineManagement Then
+                        msg = "The import target can't be specified as the import source. Choose a different source and try again"
+                        MsgBox(msg, vbOKOnly + vbCritical, Label1.Text)
+                        Exit Sub
+                    End If
                 Case 2
                     DynaLog.LogMessage("Validating import source...")
                     DynaLog.LogMessage("Source: " & TextBox2.Text)
@@ -105,37 +112,7 @@ Public Class ImportDrivers
     End Sub
 
     Function Initialize() As Boolean Implements IImageTaskDialog.Initialize
-        If Not MainForm.OnlineManagement Then
-            DynaLog.LogMessage("The active installation is not being managed right now. Continuing...")
-        Else
-            DynaLog.LogMessage("This image is not supported.")
-            Select Case MainForm.Language
-                Case 0
-                    Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
-                        Case "ENU", "ENG"
-                            MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                        Case "ESN"
-                            MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                        Case "FRA"
-                            MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                        Case "PTB", "PTG"
-                            MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                        Case "ITA"
-                            MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-                    End Select
-                Case 1
-                    MsgBox("This action is not supported on online installations", vbOKOnly + vbCritical, Text)
-                Case 2
-                    MsgBox("Esta acción no está soportada en instalaciones activas", vbOKOnly + vbCritical, Text)
-                Case 3
-                    MsgBox("Cette action n'est pas prise en charge par les installations en ligne", vbOKOnly + vbCritical, Text)
-                Case 4
-                    MsgBox("Esta ação não é suportada em instalações em linha", vbOKOnly + vbCritical, Text)
-                Case 5
-                    MsgBox("Questa azione non è supportata dalle installazioni attive", vbOKOnly + vbCritical, Text)
-            End Select
-        End If
-        Return Not MainForm.OnlineManagement
+        Return True
     End Function
 
     Private Sub ImportDrivers_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -430,11 +407,25 @@ Public Class ImportDrivers
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        For Each DI As DriveInfo In DIList
-            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-        Next
-        Dim handle As IntPtr = MainForm.GetWindowHandle(Me)
-        If MainForm.IsWindowsVersionOrGreater(10, 0, 18362) Then MainForm.EnableDarkTitleBar(handle, CurrentTheme.IsDark)
+        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
+                                                                                           DI.VolumeLabel,
+                                                                                           Casters.CastDriveType(DI.DriveType, True),
+                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
+                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
+                                                                                           DI.DriveFormat,
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
+        Dim handle As IntPtr = WindowHelper.GetWindowHandle(Me)
+        WindowHelper.ToggleDarkTitleBar(handle, CurrentTheme.IsDark)
+        ColumnHeader1.Width = WindowHelper.ScaleLogical(68)
+        ColumnHeader2.Width = WindowHelper.ScaleLogical(128)
+        ColumnHeader3.Width = WindowHelper.ScaleLogical(70)
+        ColumnHeader4.Width = WindowHelper.ScaleLogical(94)
+        ColumnHeader5.Width = WindowHelper.ScaleLogical(110)
+        ColumnHeader6.Width = WindowHelper.ScaleLogical(77)
+        ColumnHeader7.Width = WindowHelper.ScaleLogical(110)
+        ColumnHeader8.Width = WindowHelper.ScaleLogical(104)
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -488,12 +479,12 @@ Public Class ImportDrivers
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim selectedImage As DismMountedImageInfo = PopupMountedImagePicker.PickImage()
+        Dim selectedImage As WindowsImage = PopupMountedImagePicker.PickImage()
         If selectedImage IsNot Nothing Then
             DynaLog.LogMessage("Information will be obtained from the popup mounted image manager...")
-            TextBox1.Text = selectedImage.MountPath
+            TextBox1.Text = selectedImage.ImageMountDirectory
             Label6.Visible = (TextBox1.Text = MainForm.MountDir)
-            Label10.Text = selectedImage.ImageFilePath
+            Label10.Text = selectedImage.ImageFile
             Label10.Visible = (TextBox1.Text <> "" And Directory.Exists(TextBox1.Text))
         End If
     End Sub
@@ -503,9 +494,15 @@ Public Class ImportDrivers
         ListView1.Items.Clear()
         DIList.Clear()
         DIList = DriveInfo.GetDrives().Where(Function(disk) disk.IsReady).ToList()
-        For Each DI As DriveInfo In DIList
-            ListView1.Items.Add(New ListViewItem(New String() {DI.Name, DI.VolumeLabel, Casters.CastDriveType(DI.DriveType, True), Converters.BytesToReadableSize(DI.TotalSize), Converters.BytesToReadableSize(DI.AvailableFreeSpace), DI.DriveFormat, If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"), If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")}))
-        Next
+        ListView1.Items.AddRange(DIList.Select(Function(DI) New ListViewItem(New String() {DI.Name,
+                                                                                           DI.VolumeLabel,
+                                                                                           Casters.CastDriveType(DI.DriveType, True),
+                                                                                           Converters.BytesToReadableSize(DI.TotalSize),
+                                                                                           Converters.BytesToReadableSize(DI.AvailableFreeSpace),
+                                                                                           DI.DriveFormat,
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"), "Yes", "No"),
+                                                                                           If(File.Exists(DI.Name & "\Windows\system32\ntoskrnl.exe"),
+                                                                                              FileVersionInfo.GetVersionInfo(DI.Name & "\Windows\system32\ntoskrnl.exe").ProductVersion, "")})).ToArray())
     End Sub
 
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
