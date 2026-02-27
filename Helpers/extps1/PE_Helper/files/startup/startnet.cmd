@@ -37,6 +37,17 @@ if %debug% lss 2 if exist "%sysdrive%\SysprepPrepTool" (
 if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 	powershell -noprofile -file "%sysdrive%\menu.ps1"
 	if exist "%sysdrive%\netinstall" (
+		REM Determine if we are in a PXE environment
+		reg query "HKLM\SYSTEM\CurrentControlSet\Control\PXE" >nul 2>&1
+		if !ERRORLEVEL! gtr 0 (
+			REM we are NOT in PXE
+			echo We have detected that you are launching the PXE Helpers in a non-PXE environment. This
+			echo set of conditions is not supported by the PXE Helpers and they may not work correctly.
+			echo.
+			echo Press ENTER to continue anyway, otherwise, restart your computer by closing this window.
+			pause > nul
+		)
+		
 		cd /d "%sysdrive%"\
 		powershell -noprofile -file ".\pxehelpers\PXEHelpers.Startup.ps1"
 	) else if exist "%sysdrive%\cmdcons" (
@@ -51,6 +62,17 @@ if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	pause > nul
 )
 if %debug% lss 2 (
+	REM Determine if we are in a PXE environment
+	reg query "HKLM\SYSTEM\CurrentControlSet\Control\PXE" >nul 2>&1
+	if !ERRORLEVEL! equ 0 (
+		REM we are in PXE
+		echo We have detected that you are launching the PE Helper in a PXE environment. This
+		echo environment is not supported by the PE Helper.
+		echo.
+		echo Press ENTER to restart your computer.
+		pause > nul
+		wpeutil reboot
+	)
 	for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 		if exist "%%D:\" (
 			if exist "%%D:\PE_Helper.ps1" (
