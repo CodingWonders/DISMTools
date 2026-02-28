@@ -484,6 +484,8 @@ Public Class ProgressPanel
 
     ' OperationNum: 77
     Public drvExportTarget As String                        ' Path the drivers will be exported to
+    Public drvExportAllDrvs As Boolean                      ' Determines whether to export all drivers, or drivers based on the class name
+    Public drvExportSpecificClassName As String             ' The class name that the drivers to export have set
 
     ' OperationNum: 78
     Public ImportSourceInt As Integer                       ' The import source
@@ -5645,6 +5647,8 @@ Public Class ProgressPanel
     Private Sub ExportDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to export image drivers...")
         DynaLog.LogMessage("Export target: " & Quote & drvExportTarget & Quote)
+        DynaLog.LogMessage("Export all drivers? " & If(drvExportAllDrvs, "Yes", "No"))
+        If Not drvExportAllDrvs Then DynaLog.LogMessage("Class name to use as filter for driver exports: " & Quote & drvExportSpecificClassName & Quote)
         Select Case Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -5681,20 +5685,58 @@ Public Class ProgressPanel
                 currentTask.Text = "Esportazione driver terze parti nella cartella specificata..."
         End Select
         LogView.AppendText(CrLf & "Exporting drivers to specified folder..." & CrLf &
-                           "- Export target: " & Quote & drvExportTarget & Quote)
-        ' Check the DISM version, as the Windows 7 version doesn't allow this action
-        Select Case DismVersionChecker.ProductMajorPart
-            Case 6
-                Select Case DismVersionChecker.ProductMinorPart
-                    Case 1
-                        ' Not supported
-                    Case Is >= 2
-                        CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
-                End Select
-            Case 10
-                CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
-        End Select
-        RunProcess(DismProgram, CommandArgs)
+                           "- Export target: " & Quote & drvExportTarget & Quote & CrLf &
+                           "- Export all drivers, or just those with matching class names? " & If(drvExportAllDrvs, "All Drivers", "Drivers with matching class name") & CrLf &
+                           "- If not all drivers are exported, which class name is used for drivers that will be exported? " & drvExportSpecificClassName & CrLf)
+        If drvExportAllDrvs Then
+            ' Check the DISM version, as the Windows 7 version doesn't allow this action
+            Select Case DismVersionChecker.ProductMajorPart
+                Case 6
+                    Select Case DismVersionChecker.ProductMinorPart
+                        Case 1
+                            ' Not supported
+                        Case Is >= 2
+                            CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+                    End Select
+                Case 10
+                    CommandArgs &= If(OnlineMgmt, " /online", " /image=" & targetImage) & " /export-driver /destination=" & Quote & drvExportTarget & Quote
+            End Select
+            RunProcess(DismProgram, CommandArgs)
+        Else
+            ' Selective driver exports, based on class name, cannot be done with DISM as DISM will export all drivers no matter what.
+            ' We have to get the drivers from the image, which will let us filter by class name, then we copy them manually to the destination.
+            Try
+                LogView.AppendText(CrLf & "Getting image drivers...")
+                DismApi.Initialize(DismLogLevel.LogErrors)
+                Using session As DismSession = If(OnlineMgmt, DismApi.OpenOnlineSession(), DismApi.OpenOfflineSession(MountDir))
+                    DynaLog.LogMessage("Getting drivers with DISMAPI...")
+                    Dim driverPackages As DismDriverPackageCollection = DismApi.GetDrivers(session, False)
+                    If driverPackages Is Nothing Then Exit Try
+                    DynaLog.LogMessage("Filtering driver collection based on class name...")
+                    Dim driversToExport As IEnumerable(Of DismDriverPackage) = driverPackages.Where(Function(driver) driver.ClassName.Equals(drvExportSpecificClassName, StringComparison.OrdinalIgnoreCase))
+                    If driversToExport Is Nothing Then Exit Try
+
+                    DynaLog.LogMessage("Amount of drivers to export: " & driversToExport.Count)
+                    LogView.AppendText(CrLf & driversToExport.Count & " driver(s) will be exported to the destination")
+                    For Each driverToExport In driversToExport
+                        LogView.AppendText(CrLf & "Exporting driver file " & Path.GetFileName(driverToExport.OriginalFileName) & "...")
+                        Dim drvName As String = Path.GetFileName(driverToExport.OriginalFileName)
+                        Dim destinationDriverPath As String = Path.Combine(drvExportTarget, drvName)
+                        CopyRecursive(Path.GetDirectoryName(driverToExport.OriginalFileName), destinationDriverPath)
+                    Next
+                End Using
+                DismExitCode = 0
+            Catch ex As Exception
+                DynaLog.LogMessage("Could not export specific drivers. Error message: " & ex.Message)
+                DismExitCode = ex.HResult
+            Finally
+                Try
+                    DismApi.Shutdown()
+                Catch ex As Exception
+
+                End Try
+            End Try
+        End If
         LogView.AppendText(CrLf & "Getting error level...")
         If Hex(DismExitCode).Length < 8 Then
             errCode = DismExitCode
@@ -5708,6 +5750,53 @@ Public Class ProgressPanel
         End If
         GetErrorCode(False)
     End Sub
+
+    ''' <summary>
+    ''' Copies the contents of a directory, and any subdirectories within the directory,
+    ''' to a given destination.
+    ''' </summary>
+    ''' <param name="SourceDirectory">The directory to copy</param>
+    ''' <param name="DestinationDirectory">The destination of the copied files</param>
+    ''' <returns>Whether the copy succeeded</returns>
+    Private Function CopyRecursive(SourceDirectory As String, DestinationDirectory As String) As Boolean
+        ' We make sure the directory exists, if it doesn't exist, we stop.
+        If Not Directory.Exists(SourceDirectory) Then Return False
+
+        ' If the destination folder does not exist, then we try creating it. If we couldn't,
+        ' we simply give up.
+        If Not Directory.Exists(DestinationDirectory) Then
+            Try
+                Directory.CreateDirectory(DestinationDirectory)
+            Catch ex As Exception
+                Return False
+            End Try
+        End If
+
+        Try
+            ' Now, we create all the directories of the source folder to the destination
+            Dim dirsInSource As String() = Directory.GetDirectories(SourceDirectory, "*", SearchOption.AllDirectories)
+            For Each dirInSource In dirsInSource
+                Dim sourcePath As String = dirInSource.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                If Not Directory.Exists(destinationPath) Then
+                    Directory.CreateDirectory(destinationPath)
+                End If
+            Next
+
+            ' Next, we copy all the files in the source directory to the destination
+            For Each FileToCopy In Directory.GetFiles(SourceDirectory, "*", SearchOption.AllDirectories)
+                Dim sourcePath As String = FileToCopy.Substring(SourceDirectory.Length).TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                Dim destinationPath As String = Path.Combine(DestinationDirectory, sourcePath)
+
+                File.Copy(FileToCopy, destinationPath, True)
+            Next
+        Catch ex As Exception
+            Return False
+        End Try
+
+        Return True
+    End Function
 
     Private Sub ImportDrivers(targetImage As String)
         DynaLog.LogMessage("Preparing to import image drivers...")
