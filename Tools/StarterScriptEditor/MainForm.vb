@@ -10,6 +10,36 @@ Public Class MainForm
 
     Private UserDataScriptFolder As String
 
+    Private Modified As Boolean
+    Private SavedScriptPath As String
+    Private NotWillingToSave As Boolean
+
+    Private Sub GetArguments()
+        Dim args As String() = Environment.GetCommandLineArgs()
+        If args.Length <= 1 Then Exit Sub
+
+        For Each arg As String In args
+            If arg.StartsWith("/userdata", StringComparison.OrdinalIgnoreCase) Then
+                ' This parameter determines the path to a DT UserData folder.
+                Dim userDataPath As String = arg.Replace("/userdata=", "")
+
+                If Directory.Exists(userDataPath) Then
+                    UserDataScriptFolder = userDataPath
+                End If
+            ElseIf arg.StartsWith("/dtss", StringComparison.OrdinalIgnoreCase) Then
+                ' This parameter determines the path to a DTSS
+                Dim dtssPath As String = arg.Replace("/dtss=", "")
+
+                If File.Exists(dtssPath) Then
+                    LoadScriptFile(dtssPath)
+                    UpdateScriptProperties()
+                    ' Loading the script file will make the modification factor true; we don't want that
+                    Modified = False
+                End If
+            End If
+        Next
+    End Sub
+
     Private Function GetNewStarterScript() As StarterScript
         Return New StarterScript("PowerShell")
     End Function
@@ -53,6 +83,8 @@ Public Class MainForm
         Next
         CurrentScript = New StarterScript(scriptName, scriptDescription, scriptLang, String.Join(ControlChars.CrLf, ScriptCodeLines.ToArray()))
 #End If
+        SavedScriptPath = ScriptFile
+        Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
     End Sub
 
     Private Sub SaveScriptFile(ByVal ScriptFile As String)
@@ -69,44 +101,82 @@ Public Class MainForm
             "Name: {2}{1}" & _
             "Description: {3} {1}" & _
             "{4}", CurrentScript.Language, Environment.NewLine, CurrentScript.Name, CurrentScript.Description, CurrentScript.Code), UTF8)
+
+            SavedScriptPath = ScriptFile
+            Text = String.Format("Starter Script Editor - {0}", Path.GetFileName(SavedScriptPath))
+            Modified = False
         Catch ex As Exception
 
         End Try
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
+        NotWillingToSave = False
+        If Modified Then
+            Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                Case Windows.Forms.DialogResult.Yes
+                    ToolStripButton3.PerformClick()
+                    If NotWillingToSave Then Exit Sub
+                Case Windows.Forms.DialogResult.Cancel
+                    Exit Sub
+            End Select
+        End If
+
         OpenFileDialog1.ShowDialog(Me)
     End Sub
 
     Private Sub ToolStripButton3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton3.Click
-        SaveFileDialog1.ShowDialog(Me)
+        NotWillingToSave = False
+        If Not String.IsNullOrEmpty(SavedScriptPath) AndAlso File.Exists(SavedScriptPath) Then
+            Select Case MessageBox.Show(String.Format("You had previously saved this script to the following location:{0}{0}    {1}{0}{0}Do you want to save changes to this file instead of another file?", _
+                                            Environment.NewLine, Path.GetDirectoryName(SavedScriptPath)), _
+                                            "Save Script", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                Case Windows.Forms.DialogResult.Yes
+                    SaveScriptFile(SavedScriptPath)
+                    Exit Sub
+                Case Windows.Forms.DialogResult.Cancel
+                    NotWillingToSave = True
+                    Exit Sub
+            End Select
+        End If
+        If SaveFileDialog1.ShowDialog(Me) <> Windows.Forms.DialogResult.OK Then
+            NotWillingToSave = True
+        End If
     End Sub
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        If Environment.GetCommandLineArgs().Length = 2 Then
-            ' The second parameter (counting the app path) determines
-            ' the path to a DT UserData folder.
-            Dim userDataPath As String = Environment.GetCommandLineArgs()(1).Replace("/userdata=", "")
-
-            If Directory.Exists(userDataPath) Then
-                UserDataScriptFolder = userDataPath
-            End If
-        End If
+        GetArguments()
         SaveFileDialog1.InitialDirectory = UserDataScriptFolder
 
-        SupportedLanguageList.AddRange(New String(1) {"batch", "powershell"})
-        CurrentScript = GetNewStarterScript()
+        SupportedLanguageList.AddRange(New String(3) {"batch", "powershell", "vbscript", "jscript"})
+        If CurrentScript Is Nothing Then CurrentScript = GetNewStarterScript()
+        UpdateScriptProperties()
         UpdateCaretPosition()
+
+        Modified = False
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
+        NotWillingToSave = False
+        If Modified Then
+            Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                Case Windows.Forms.DialogResult.Yes
+                    ToolStripButton3.PerformClick()
+                    If NotWillingToSave Then Exit Sub
+                Case Windows.Forms.DialogResult.Cancel
+                    Exit Sub
+            End Select
+        End If
+
         CurrentScript = GetNewStarterScript()
         UpdateScriptProperties()
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
+        SavedScriptPath = OpenFileDialog1.FileName
         LoadScriptFile(OpenFileDialog1.FileName)
         UpdateScriptProperties()
+        Modified = False
     End Sub
 
     Private Sub SaveFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles SaveFileDialog1.FileOk
@@ -115,18 +185,22 @@ Public Class MainForm
 
     Private Sub TextBox1_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
         CurrentScript.Name = TextBox1.Text
+        Modified = True
     End Sub
 
     Private Sub TextBox2_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox2.TextChanged
         CurrentScript.Description = TextBox2.Text
+        Modified = True
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox1.SelectedIndexChanged
         CurrentScript.Language = ComboBox1.SelectedItem
+        Modified = True
     End Sub
 
     Private Sub TextBox3_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox3.TextChanged
         CurrentScript.Code = TextBox3.Text
+        Modified = True
     End Sub
 
     Private Sub ToolStripButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton4.Click
@@ -172,12 +246,18 @@ Public Class MainForm
         Dim scriptFileName As String = OpenFileDialog2.FileName
         Dim scriptExtension As String = Path.GetExtension(scriptFileName).ToLower()
 
-        Dim expectedBatchExtensions As New List(Of String)
+        Dim expectedBatchExtensions As New List(Of String), expectedVbScriptExtensions As New List(Of String), expectedJScriptExtensions As New List(Of String)
         expectedBatchExtensions.AddRange(New String(2) {".bat", ".cmd", ".nt"})
+        expectedVbScriptExtensions.AddRange(New String(3) {".vbs", ".vbe", ".wsf", ".wsc"})
+        expectedJScriptExtensions.AddRange(New String(1) {".js", ".jse"})
         If expectedBatchExtensions.Contains(scriptExtension) Then
             ComboBox1.SelectedIndex = 0
         ElseIf scriptExtension.ToLower() = ".ps1" Then
             ComboBox1.SelectedIndex = 1
+        ElseIf expectedVbScriptExtensions.Contains(scriptExtension) Then
+            ComboBox1.SelectedIndex = 2
+        ElseIf expectedJScriptExtensions.Contains(scriptExtension) Then
+            ComboBox1.SelectedIndex = 3
         Else
             MessageBox.Show("This script is not supported by the Starter Script Editor.", "Unrecognized script", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
@@ -199,7 +279,7 @@ Public Class MainForm
         UpdateCaretPosition()
     End Sub
 
-    Private Sub TextBox3_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyUp
+    Private Sub TextBox3_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TextBox3.KeyDown
         UpdateCaretPosition()
     End Sub
 
@@ -213,5 +293,23 @@ Public Class MainForm
             column As Integer = caret - TextBox3.GetFirstCharIndexFromLine(line)
 
         Label6.Text = String.Format("Ln {0}, Col {1}", line + 1, column + 1)
+    End Sub
+
+    Private Sub MainForm_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
+        NotWillingToSave = False
+        If Modified Then
+            Select Case MessageBox.Show("Do you want to save the changes to your script file?", "Starter Script Editor", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+                Case Windows.Forms.DialogResult.Yes
+                    ToolStripButton3.PerformClick()
+                    If NotWillingToSave Then
+                        e.Cancel = True
+                        Exit Sub
+                    End If
+                Case Windows.Forms.DialogResult.Cancel
+                    e.Cancel = True
+                    Exit Sub
+            End Select
+        End If
+
     End Sub
 End Class

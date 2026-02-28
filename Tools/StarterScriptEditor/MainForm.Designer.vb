@@ -34,6 +34,8 @@ Partial Class MainForm
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.TextBox3 = New System.Windows.Forms.TextBox
         Me.Panel2 = New System.Windows.Forms.Panel
+        Me.Label6 = New System.Windows.Forms.Label
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox
         Me.Button1 = New System.Windows.Forms.Button
         Me.Label5 = New System.Windows.Forms.Label
         Me.Label4 = New System.Windows.Forms.Label
@@ -45,8 +47,6 @@ Partial Class MainForm
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
         Me.OpenFileDialog2 = New System.Windows.Forms.OpenFileDialog
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox
-        Me.Label6 = New System.Windows.Forms.Label
         Me.ToolStrip1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
@@ -183,6 +183,29 @@ Partial Class MainForm
         Me.Panel2.Size = New System.Drawing.Size(796, 36)
         Me.Panel2.TabIndex = 1
         '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(12, 12)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(78, 13)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "Line, Column"
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.CheckBox1.Location = New System.Drawing.Point(498, 6)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(89, 23)
+        Me.CheckBox1.TabIndex = 1
+        Me.CheckBox1.Text = "Word Wrap"
+        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -259,7 +282,7 @@ Partial Class MainForm
         '
         Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"Batch", "PowerShell"})
+        Me.ComboBox1.Items.AddRange(New Object() {"Batch", "PowerShell", "VBScript (obsolete)", "JScript (obsolete)"})
         Me.ComboBox1.Location = New System.Drawing.Point(195, 57)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(796, 21)
@@ -275,31 +298,9 @@ Partial Class MainForm
         '
         'OpenFileDialog2
         '
-        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd;*.nt|PowerShell scripts|*.ps1"
+        Me.OpenFileDialog2.Filter = "Batch Scripts|*.bat;*.cmd;*.nt|PowerShell scripts|*.ps1|Visual Basic Scripts|*.vb" & _
+            "s;*.vbe;*.wsf;*.wsc|JScript Scripts|*.js;*.jse"
         Me.OpenFileDialog2.Title = "Import Existing Script"
-        '
-        'CheckBox1
-        '
-        Me.CheckBox1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CheckBox1.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox1.FlatStyle = System.Windows.Forms.FlatStyle.System
-        Me.CheckBox1.Location = New System.Drawing.Point(498, 6)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(89, 23)
-        Me.CheckBox1.TabIndex = 1
-        Me.CheckBox1.Text = "Word Wrap"
-        Me.CheckBox1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.CheckBox1.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Tahoma", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(12, 12)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(78, 13)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "Line, Column"
         '
         'MainForm
         '
