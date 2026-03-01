@@ -63,7 +63,7 @@ Partial Class SysprepPreparatorModeDialog
         '
         'LinkLabel3
         '
-        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel3.ActiveLinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel3.AutoSize = True
         Me.LinkLabel3.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel3.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -79,7 +79,7 @@ Partial Class SysprepPreparatorModeDialog
         '
         'LinkLabel2
         '
-        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel2.ActiveLinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel2.AutoSize = True
         Me.LinkLabel2.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel2.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -95,7 +95,7 @@ Partial Class SysprepPreparatorModeDialog
         '
         'LinkLabel1
         '
-        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel1.ActiveLinkColor = System.Drawing.Color.DodgerBlue
         Me.LinkLabel1.AutoSize = True
         Me.LinkLabel1.BackColor = System.Drawing.Color.Transparent
         Me.LinkLabel1.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))

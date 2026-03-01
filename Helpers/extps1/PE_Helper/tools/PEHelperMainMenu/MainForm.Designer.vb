@@ -44,6 +44,11 @@ Partial Class MainForm
         Me.PictureBox6 = New System.Windows.Forms.PictureBox()
         Me.PictureBox8 = New System.Windows.Forms.PictureBox()
         Me.PictureBox9 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
+        Me.LinkLabel6 = New System.Windows.Forms.LinkLabel()
+        Me.Bevel1 = New System.Windows.Forms.Label()
+        Me.PictureBox10 = New System.Windows.Forms.PictureBox()
+        Me.LinkLabel9 = New System.Windows.Forms.LinkLabel()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox3, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -54,6 +59,8 @@ Partial Class MainForm
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBox1
@@ -181,9 +188,11 @@ Partial Class MainForm
         'MainMenuPanel
         '
         Me.MainMenuPanel.BackColor = System.Drawing.Color.Transparent
+        Me.MainMenuPanel.Controls.Add(Me.LinkLabel6)
         Me.MainMenuPanel.Controls.Add(Me.LinkLabel4)
         Me.MainMenuPanel.Controls.Add(Me.LinkLabel3)
         Me.MainMenuPanel.Controls.Add(Me.LinkLabel2)
+        Me.MainMenuPanel.Controls.Add(Me.PictureBox7)
         Me.MainMenuPanel.Controls.Add(Me.LinkLabel1)
         Me.MainMenuPanel.Controls.Add(Me.PictureBox5)
         Me.MainMenuPanel.Controls.Add(Me.PictureBox4)
@@ -240,11 +249,14 @@ Partial Class MainForm
         'PxeHelpersMenu
         '
         Me.PxeHelpersMenu.BackColor = System.Drawing.Color.Transparent
+        Me.PxeHelpersMenu.Controls.Add(Me.Bevel1)
         Me.PxeHelpersMenu.Controls.Add(Me.Label3)
         Me.PxeHelpersMenu.Controls.Add(Me.LinkLabel5)
+        Me.PxeHelpersMenu.Controls.Add(Me.LinkLabel9)
         Me.PxeHelpersMenu.Controls.Add(Me.LinkLabel7)
         Me.PxeHelpersMenu.Controls.Add(Me.LinkLabel8)
         Me.PxeHelpersMenu.Controls.Add(Me.PictureBox6)
+        Me.PxeHelpersMenu.Controls.Add(Me.PictureBox10)
         Me.PxeHelpersMenu.Controls.Add(Me.PictureBox8)
         Me.PxeHelpersMenu.Controls.Add(Me.PictureBox9)
         Me.PxeHelpersMenu.ForeColor = System.Drawing.Color.Black
@@ -348,6 +360,71 @@ Partial Class MainForm
         Me.PictureBox9.TabIndex = 2
         Me.PictureBox9.TabStop = False
         '
+        'PictureBox7
+        '
+        Me.PictureBox7.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox7.Enabled = False
+        Me.PictureBox7.Image = Global.PEHelperMainMenu.My.Resources.Resources.arrow_normal
+        Me.PictureBox7.Location = New System.Drawing.Point(12, 129)
+        Me.PictureBox7.Name = "PictureBox7"
+        Me.PictureBox7.Size = New System.Drawing.Size(62, 24)
+        Me.PictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox7.TabIndex = 2
+        Me.PictureBox7.TabStop = False
+        '
+        'LinkLabel6
+        '
+        Me.LinkLabel6.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel6.AutoSize = True
+        Me.LinkLabel6.BackColor = System.Drawing.Color.Transparent
+        Me.LinkLabel6.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel6.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.LinkLabel6.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel6.Location = New System.Drawing.Point(82, 128)
+        Me.LinkLabel6.Name = "LinkLabel6"
+        Me.LinkLabel6.Size = New System.Drawing.Size(237, 25)
+        Me.LinkLabel6.TabIndex = 3
+        Me.LinkLabel6.TabStop = True
+        Me.LinkLabel6.Text = "Explore contents of this disc"
+        '
+        'Bevel1
+        '
+        Me.Bevel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Bevel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Bevel1.Location = New System.Drawing.Point(12, 105)
+        Me.Bevel1.Name = "Bevel1"
+        Me.Bevel1.Size = New System.Drawing.Size(569, 2)
+        Me.Bevel1.TabIndex = 6
+        '
+        'PictureBox10
+        '
+        Me.PictureBox10.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox10.Image = Global.PEHelperMainMenu.My.Resources.Resources.arrow_normal
+        Me.PictureBox10.Location = New System.Drawing.Point(12, 119)
+        Me.PictureBox10.Name = "PictureBox10"
+        Me.PictureBox10.Size = New System.Drawing.Size(62, 24)
+        Me.PictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.PictureBox10.TabIndex = 2
+        Me.PictureBox10.TabStop = False
+        '
+        'LinkLabel9
+        '
+        Me.LinkLabel9.ActiveLinkColor = System.Drawing.Color.MidnightBlue
+        Me.LinkLabel9.AutoSize = True
+        Me.LinkLabel9.BackColor = System.Drawing.Color.Transparent
+        Me.LinkLabel9.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel9.ForeColor = System.Drawing.Color.Black
+        Me.LinkLabel9.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.LinkLabel9.LinkColor = System.Drawing.Color.Black
+        Me.LinkLabel9.Location = New System.Drawing.Point(82, 118)
+        Me.LinkLabel9.Name = "LinkLabel9"
+        Me.LinkLabel9.Size = New System.Drawing.Size(270, 25)
+        Me.LinkLabel9.TabIndex = 3
+        Me.LinkLabel9.TabStop = True
+        Me.LinkLabel9.Text = "Copy boot image to WDS server"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -382,6 +459,8 @@ Partial Class MainForm
         CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PictureBox9, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox10, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -406,5 +485,10 @@ Partial Class MainForm
     Friend WithEvents PictureBox6 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox8 As System.Windows.Forms.PictureBox
     Friend WithEvents PictureBox9 As System.Windows.Forms.PictureBox
+    Friend WithEvents LinkLabel6 As System.Windows.Forms.LinkLabel
+    Friend WithEvents PictureBox7 As System.Windows.Forms.PictureBox
+    Friend WithEvents Bevel1 As System.Windows.Forms.Label
+    Friend WithEvents LinkLabel9 As System.Windows.Forms.LinkLabel
+    Friend WithEvents PictureBox10 As System.Windows.Forms.PictureBox
 
 End Class
