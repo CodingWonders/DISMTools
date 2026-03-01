@@ -170,6 +170,9 @@ Public Class MainForm
 
         CurrentScript = GetNewStarterScript()
         UpdateScriptProperties()
+        Modified = False
+        SavedScriptPath = ""
+        Text = "Starter Script Editor"
     End Sub
 
     Private Sub OpenFileDialog1_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFileDialog1.FileOk
@@ -311,5 +314,21 @@ Public Class MainForm
             End Select
         End If
 
+    End Sub
+
+    Private Sub MainForm_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If e.Control Then
+            Select Case e.KeyCode
+                Case Keys.N
+                    ' New item
+                    ToolStripButton1.PerformClick()
+                Case Keys.O
+                    ' Open item
+                    ToolStripButton2.PerformClick()
+                Case Keys.S
+                    ' Save item
+                    ToolStripButton3.PerformClick()
+            End Select
+        End If
     End Sub
 End Class

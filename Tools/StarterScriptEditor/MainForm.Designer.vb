@@ -71,7 +71,7 @@ Partial Class MainForm
         Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton1.Name = "ToolStripButton1"
         Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = "New Starter Script"
+        Me.ToolStripButton1.Text = "New Starter Script (Ctrl + N)"
         '
         'ToolStripButton2
         '
@@ -80,7 +80,7 @@ Partial Class MainForm
         Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton2.Text = "Open Starter Script File..."
+        Me.ToolStripButton2.Text = "Open Starter Script File... (Ctrl + O)"
         '
         'ToolStripButton3
         '
@@ -89,7 +89,7 @@ Partial Class MainForm
         Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButton3.Name = "ToolStripButton3"
         Me.ToolStripButton3.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton3.Text = "Save Starter Script File..."
+        Me.ToolStripButton3.Text = "Save Starter Script File... (Ctrl + S)"
         '
         'ToolStripButton4
         '
