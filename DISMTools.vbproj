@@ -1265,6 +1265,7 @@
     <None Include="docs\sitemap.xml.gz" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Close First Logon Animation.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Display Bugcheck Parameters.dtss" />
+    <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Batch script file locks.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Enable Verbose Status Messages.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set Quick Machine Recovery Settings.dtss" />
     <None Include="Elements\AutoUnattend\StarterScripts\DuringSystemConfiguration\Set OEM Information.dtss" />
