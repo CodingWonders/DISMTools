@@ -17,6 +17,7 @@ Public Class GetCapabilityInfoDlg
         SearchBox1.ForeColor = ForeColor
         ListView1.ForeColor = ForeColor
         SearchPic.Image = GetGlyphResource("search")
+        WizardBtn.Image = GetGlyphResource("assistant")
         Select Case MainForm.Language
             Case 0
                 Select Case My.Computer.Info.InstalledUICulture.ThreeLetterWindowsLanguageName
@@ -576,5 +577,15 @@ Public Class GetCapabilityInfoDlg
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         SearchEngineHelper.InvokeSearchQuery(MainForm.SearchEngineName, String.Format("microsoft windows {0}", Quote & Label23.Text & Quote))
+    End Sub
+
+    Private Sub WizardBtn_Click(sender As Object, e As EventArgs) Handles WizardBtn.Click
+        If CapabilityFilterAssistantDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            SearchBox1.Text = CapabilityFilterAssistantDialog.AppliedQuery
+        End If
+    End Sub
+
+    Private Sub WizardBtn_MouseHover(sender As Object, e As EventArgs) Handles WizardBtn.MouseHover
+        WindowHelper.DisplayToolTip(sender, "Build query with the Assistant...")
     End Sub
 End Class

@@ -42,7 +42,7 @@ Public Class ExportDrivers
         {"SecurityAccelerator", "Includes devices that accelerate secure socket layer (SSL) cryptographic processing."},
         {"PCMCIA", "Includes PCMCIA and CardBus host controllers, but not PCMCIA or CardBus peripherals. Drivers for this class are system-supplied."},
         {"Ports", "Includes serial and parallel port devices. See also the MultiportSerial class."},
-        {"Printer", "Includes printers."},
+        {"Printer", "Includes printers. As an IT admin, hit them with a baseball bat."},
         {"PnpPrinters", "Includes SCSI/1394-enumerated printers. Drivers for this class provide printer communication for a specific bus."},
         {"Processor", "Includes processor types."},
         {"SCSIAdapter", "Includes SCSI Host Bus Adapters (HBAs), disk-array, and NVMe controllers."},

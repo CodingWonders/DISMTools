@@ -123,6 +123,7 @@ Partial Class GetDriverInfo
         Me.DriverFileLink = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.WizardBtn = New System.Windows.Forms.Button()
         Me.Win10Title.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.DriverInfoContainerPanel.SuspendLayout()
@@ -371,6 +372,7 @@ Partial Class GetDriverInfo
         '
         'Panel8
         '
+        Me.Panel8.Controls.Add(Me.WizardBtn)
         Me.Panel8.Controls.Add(Me.SearchBox1)
         Me.Panel8.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel8.Location = New System.Drawing.Point(24, 0)
@@ -385,7 +387,7 @@ Partial Class GetDriverInfo
         Me.SearchBox1.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.SearchBox1.Location = New System.Drawing.Point(8, 3)
         Me.SearchBox1.Name = "SearchBox1"
-        Me.SearchBox1.Size = New System.Drawing.Size(405, 18)
+        Me.SearchBox1.Size = New System.Drawing.Size(382, 18)
         Me.SearchBox1.TabIndex = 1
         '
         'SearchPic
@@ -1299,6 +1301,19 @@ Partial Class GetDriverInfo
         Me.OpenFileDialog1.SupportMultiDottedExtensions = True
         Me.OpenFileDialog1.Title = "Locate driver files"
         '
+        'WizardBtn
+        '
+        Me.WizardBtn.Dock = System.Windows.Forms.DockStyle.Right
+        Me.WizardBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+        Me.WizardBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkGray
+        Me.WizardBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.WizardBtn.Image = Global.DISMTools.My.Resources.Resources.assistant_light
+        Me.WizardBtn.Location = New System.Drawing.Point(392, 0)
+        Me.WizardBtn.Name = "WizardBtn"
+        Me.WizardBtn.Size = New System.Drawing.Size(24, 24)
+        Me.WizardBtn.TabIndex = 4
+        Me.WizardBtn.UseVisualStyleBackColor = True
+        '
         'GetDriverInfo
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(96.0!, 96.0!)
@@ -1461,5 +1476,6 @@ Partial Class GetDriverInfo
     Friend WithEvents Panel8 As System.Windows.Forms.Panel
     Friend WithEvents SearchBox1 As DISMTools.SearchBox
     Friend WithEvents SearchPic As System.Windows.Forms.PictureBox
+    Friend WithEvents WizardBtn As System.Windows.Forms.Button
 
 End Class
