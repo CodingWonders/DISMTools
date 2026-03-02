@@ -5,6 +5,7 @@ Public Class SysprepPreparatorModeDialog
 
     Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
         MainForm.AutoCapture = CheckBox1.Checked
+        MainForm.CopyProfile = CheckBox2.Checked
         DialogResult = System.Windows.Forms.DialogResult.Yes
         Close()
     End Sub

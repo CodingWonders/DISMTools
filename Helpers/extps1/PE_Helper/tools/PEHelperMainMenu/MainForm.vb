@@ -8,6 +8,7 @@ Public Class MainForm
     Private RestartMessage As String, ProcessExitCodeMessage As String
 
     Friend AutoCapture As Boolean = False
+    Friend CopyProfile As Boolean = False
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Since we need Windows Server to run PXE Helper Servers, we'll block access to that page
@@ -168,6 +169,7 @@ Public Class MainForm
 
         If SPDlgResult = Windows.Forms.DialogResult.Yes Then args &= "/auto"
         If AutoCapture Then args &= " /dt_capture"
+        If CopyProfile Then args &= " /copyprofile"
 
         RunProcess(Path.Combine(Application.StartupPath, "Tools", "SysprepPreparator", "SysprepPreparator.exe"), args, True)
     End Sub
