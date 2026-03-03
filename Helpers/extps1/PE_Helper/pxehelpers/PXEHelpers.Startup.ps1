@@ -80,6 +80,12 @@ function Show-InstallNetAdapterScreen {
         {
             if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
             {
+                @"
+These are the device IDs of the hardware devices that could not be detected. Please
+install device drivers based on hardware IDs. After installation, please close this window.
+"@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
+                pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
+                notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
                 Clear-Host
                 Show-CenteredTextBox -Text "Starting the Driver Installation Module . . ." -MaxWidth 70 -CenterOfAll
                 Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait

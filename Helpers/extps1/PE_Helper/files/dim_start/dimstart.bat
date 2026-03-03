@@ -2,6 +2,12 @@
 setlocal ENABLEDELAYEDEXPANSION
 set sysdrive=%SYSTEMDRIVE%
 
+REM display hardware IDs that require drivers...
+echo These are the device IDs of the hardware devices that could not be detected. Please > %sysdrive%\unknowndevs.txt
+echo install device drivers based on hardware IDs. After installation, please close this window. >> %sysdrive%\unknowndevs.txt
+pnputil /enum-devices /problem >> %sysdrive%\unknowndevs.txt
+start "" notepad %sysdrive%\unknowndevs.txt
+
 for %%D in (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z) do (
 	if exist "%%D:\" (
 		if exist "%%D:\Tools\DIM" (

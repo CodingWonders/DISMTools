@@ -191,6 +191,11 @@ IF %_DEBUG% EQU 1 echo Removal complete.
 exit /b
 
 :dt_dim_driver_install
+REM display hardware IDs that require drivers...
+echo These are the device IDs of the hardware devices that could not be detected. Please > %sysdrive%\unknowndevs.txt
+echo install device drivers based on hardware IDs. After installation, please close this window. >> %sysdrive%\unknowndevs.txt
+pnputil /enum-devices /problem >> %sysdrive%\unknowndevs.txt
+start "" notepad %sysdrive%\unknowndevs.txt
 echo Starting the Driver Installation Module for architecture %PROCESSOR_ARCHITECTURE%...
 if "%PROCESSOR_ARCHITECTURE%" equ "X86" (
 	"%sysdrive%\Tools\DIM\i386\DT-DIM.exe"

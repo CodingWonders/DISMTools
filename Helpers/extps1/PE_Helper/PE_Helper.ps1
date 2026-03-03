@@ -1219,7 +1219,7 @@ function Start-OSApplication
     }
     Write-Host "If there are any bootable devices, remove those before proceeding, as your system may boot to this environment again."
     if ($partOverride -eq [PartitionTableOverride]::NoOverride) { Write-Host "When your computer restarts, Setup will continue." }
-    Show-Timeout -Seconds 10
+    Show-Timeout -Seconds 10 -override $partOverride
     if ($partOverride -eq [PartitionTableOverride]::NoOverride) {
         wpeutil reboot
     } else {
@@ -1312,6 +1312,12 @@ function Get-Disks
                 {
                     if (Test-Path -Path "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe")
                     {
+                        @"
+These are the device IDs of the hardware devices that could not be detected. Please
+install device drivers based on hardware IDs. After installation, please close this window.
+"@ | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force
+                        pnputil /enum-devices /problem | Out-File -FilePath "$env:SYSTEMDRIVE\unknowndevs.txt" -Force -Append
+                        notepad "$env:SYSTEMDRIVE\unknowndevs.txt"
                         Clear-Host
                         Write-Host "Starting the Driver Installation Module...`n`nYou will go back to the disk selection screen after closing the program."
                         Start-Process -FilePath "$env:SYSTEMDRIVE\Tools\DIM\$systemArchitecture\DT-DIM.exe" -Wait
@@ -2260,14 +2266,23 @@ function Show-Timeout {
             Show-Timeout -seconds 15
     #>
     param (
-        [Parameter(Mandatory = $true, Position = 0)] [int]$seconds
+        [Parameter(Mandatory = $true, Position = 0)] [int]$seconds,
+        [Parameter(Position = 1)] [PartitionTableOverride]$override = [PartitionTableOverride]::NoOverride
     )
     for ($i = 0; $i -lt $seconds; $i++)
     {
-        Write-Progress -Activity "Restarting or shutting down system..." -Status "Your system will restart or shut down in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        if ($override -eq [PartitionTableOverride]::NoOverride) {
+            Write-Progress -Activity "Restarting system..." -Status "Your system will restart in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        } else {
+            Write-Progress -Activity "Shutting down system..." -Status "Your system will shut down in $($seconds - $i) seconds" -PercentComplete (($i / $seconds) * 100)
+        }
         Start-Sleep -Seconds 1
     }
-    Write-Progress -Activity "Restarting or shutting down system..." -Status "Restarting or shutting down your system..." -PercentComplete 100
+    if ($override -eq [PartitionTableOverride]::NoOverride) {
+        Write-Progress -Activity "Restarting system..." -Status "Restarting your system..." -PercentComplete 100
+    } else {
+        Write-Progress -Activity "Shutting down system..." -Status "Shutting down your system..." -PercentComplete 100
+    }
 }
 
 function Start-ProjectDevelopment {
