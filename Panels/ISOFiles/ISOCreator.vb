@@ -1040,4 +1040,8 @@ Public Class ISOCreator
         ProgressReporter.Hide()
         adkDownloadSuccess = e.Error Is Nothing
     End Sub
+
+    Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
+        PECustomizerDialog.ShowDialog(Me)
+    End Sub
 End Class

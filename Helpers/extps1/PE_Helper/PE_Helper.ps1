@@ -817,6 +817,11 @@ function Start-PECustomization
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCConnAttempts /t REG_DWORD /d 5
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v WDSHCGraphoView /t REG_DWORD /d 1
             reg add "HKLM\WINPESOFT\DISMTools\Preinstallation Environment\Policies" /f /v DTDimShowPnputilOut /t REG_DWORD /d 1
+            if (Test-Path -Path "$((Get-Location).Path)\files\CustomPolicy.reg" -PathType Leaf) {
+                Write-Host "Importing custom policies..."
+                reg import "$((Get-Location).Path)\files\CustomPolicy.reg"
+                Remove-Item -Path "$((Get-Location).Path)\files\CustomPolicy.reg" -Force -ErrorAction SilentlyContinue
+            }
             Open-PERegistry -regFile "$imagePath\Windows\system32\config\SOFTWARE" -regName "WINPESOFT" -regLoad $false
             Write-Host "Policy System initialized."
         }
