@@ -67,6 +67,12 @@ if %debug% lss 2 if not exist "%sysdrive%\HotInstall" (
 if %debug% neq 2 if exist "%sysdrive%\HotInstall" (
 	echo Please insert the disc image and press ENTER...
 	pause > nul
+	if exist "%sysdrive%\driver_supplements_added" (
+		echo Supplementary drivers were added to the preinstallation environment to allow it to recognize
+		echo your drives. However, you will need to use the Driver Installation Module to reinstall these
+		echo so they can be carried over to the new installation. The drivers you need are in a folder called
+		echo "CWS_HI_SCSI".
+	)
 )
 if %debug% lss 2 (
 	REM Determine if we are in a PXE environment
